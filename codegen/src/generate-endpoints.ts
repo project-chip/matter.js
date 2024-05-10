@@ -13,9 +13,7 @@ import { InterfaceFile } from "./endpoints/InterfaceFile.js";
 import { TsFile } from "./util/TsFile.js";
 import "./util/setup.js";
 
-const mom = new MatterModel();
-
-const clusters = mom.clusters.filter(cluster => cluster.id !== undefined);
+const clusters = MatterModel.standard.clusters.filter(cluster => cluster.id !== undefined);
 
 for (const cluster of clusters) {
     const variance = ClusterVariance(cluster);
@@ -34,11 +32,11 @@ for (const cluster of clusters) {
 
 EndpointFile.clean();
 const endpointExports = new TsFile("#endpoints/export");
-for (const device of mom.deviceTypes) {
+for (const device of MatterModel.standard.deviceTypes) {
     const file = new EndpointFile(device);
     file.save();
 
-    endpointExports.atom(`export * from "./${file.definitionPath}.js"`);
+    endpointExports.addReexport(file.definitionPath);
 }
 endpointExports.save();
 
@@ -55,5 +53,5 @@ function generateClusterFile(
     const name = `${cluster.name}${type.baseName}`;
     const file = new type(`${dir}/${name}`, cluster, variance);
     file.save();
-    exports.atom(`export * from "./${name}.js"`);
+    exports.addReexport(name);
 }

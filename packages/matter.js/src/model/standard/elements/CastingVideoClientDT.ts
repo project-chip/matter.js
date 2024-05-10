@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const CastingVideoClientDT = DeviceType({
     name: "CastingVideoClient", id: 0x29, classification: "simple",
     details: "This defines conformance to the Casting Video Client device type." +
         "\n" +
@@ -21,7 +21,7 @@ Matter.children.push(DeviceType({
         Requirement({
             name: "Descriptor", id: 0x1d, element: "serverCluster",
             children: [
-                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 41, revision: 1 } ], element: "attribute" })
+                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 41, revision: 2 } ], element: "attribute" })
             ]
         }),
 
@@ -80,6 +80,20 @@ Matter.children.push(DeviceType({
         Requirement({
             name: "AccountLogin", id: 0x50e, conformance: "O", element: "clientCluster",
             xref: { document: "device", section: "10.6.4" }
+        }),
+        Requirement({
+            name: "ContentControl", id: 0x50f, conformance: "P, O", element: "clientCluster",
+            xref: { document: "device", section: "10.6.4" }
+        }),
+        Requirement({
+            name: "ContentAppObserver", id: 0x510, conformance: "O", element: "serverCluster",
+            xref: { document: "device", section: "10.6.4" }
+        }),
+        Requirement({
+            name: "Messages", id: 0x97, conformance: "O", element: "clientCluster",
+            xref: { document: "device", section: "10.6.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(CastingVideoClientDT);

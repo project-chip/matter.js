@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const PumpDT = DeviceType({
     name: "Pump", id: 0x303, classification: "simple",
     details: "A Pump device is a pump that may have variable speed. It may have optional built-in sensors and a " +
         "regulation mechanism. It is typically used for pumping fluids like water.",
@@ -18,7 +18,7 @@ Matter.children.push(DeviceType({
     children: [
         Requirement({
             name: "Descriptor", id: 0x1d, element: "serverCluster",
-            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 771, revision: 2 } ], element: "attribute" })]
+            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 771, revision: 3 } ], element: "attribute" })]
         }),
         Requirement({
             name: "OnOff", id: 0x6, conformance: "M", element: "serverCluster",
@@ -30,19 +30,18 @@ Matter.children.push(DeviceType({
         }),
         Requirement({
             name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "5.3.4" },
-            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
+            xref: { document: "device", section: "5.3.4" }
         }),
         Requirement({
             name: "LevelControl", id: 0x8, conformance: "O", element: "serverCluster",
             xref: { document: "device", section: "5.3.4" }
         }),
         Requirement({
-            name: "Scenes", id: 0x5, conformance: "O", element: "serverCluster",
+            name: "Groups", id: 0x4, conformance: "O", element: "serverCluster",
             xref: { document: "device", section: "5.3.4" }
         }),
         Requirement({
-            name: "Groups", id: 0x4, conformance: "O", element: "serverCluster",
+            name: "ScenesManagement", id: 0x62, conformance: "P, O", element: "serverCluster",
             xref: { document: "device", section: "5.3.4" }
         }),
         Requirement({
@@ -74,4 +73,6 @@ Matter.children.push(DeviceType({
             xref: { document: "device", section: "5.3.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(PumpDT);

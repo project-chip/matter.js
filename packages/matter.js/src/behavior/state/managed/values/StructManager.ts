@@ -6,7 +6,7 @@
 
 import { ImplementationError } from "../../../../common/MatterError.js";
 import { FabricIndex } from "../../../../datatype/FabricIndex.js";
-import { Access, ElementTag, Metatype, ValueModel } from "../../../../model/index.js";
+import { Access, AttributeModel, ElementTag, Metatype, ValueModel } from "../../../../model/index.js";
 import { GeneratedClass } from "../../../../util/GeneratedClass.js";
 import { camelize } from "../../../../util/String.js";
 import { isObject } from "../../../../util/Type.js";
@@ -34,7 +34,7 @@ export function StructManager(owner: RootSupervisor, schema: Schema): ValueSuper
 
     // Scan the schema and configure each member (field or attribute) as a property
     for (const member of schema.members) {
-        if (member.isGlobalAttribute || member.isDeprecated) {
+        if ((member instanceof AttributeModel && member.isGlobal) || member.isDeprecated) {
             continue;
         }
 

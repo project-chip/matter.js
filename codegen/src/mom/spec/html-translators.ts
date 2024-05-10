@@ -52,6 +52,26 @@ export const Integer = (el: HTMLElement) => {
     return Number.parseInt(NoSpace(el));
 };
 
+/** Size in bytes */
+export const ByteSize = (el: HTMLElement): number | string | undefined => {
+    const text = Str(el);
+
+    let match = text.match(/^(\d+) bytes?$/);
+    if (match) {
+        return Number.parseInt(match[1]);
+    }
+
+    match = text.match(/^(\d+) or (\d+) bytes$/);
+    if (match) {
+        return `${match[1]}, ${match[2]}`;
+    }
+
+    match = text.match(/(\d+) to (\d+) bytes$/);
+    if (match) {
+        return `${match[1]} to ${match[2]}`;
+    }
+};
+
 /** Number encoded as BIT(n) */
 export const Bit = (el: HTMLElement) => {
     const text = Str(el).replace(/bit\((\d+)\)/i, "$1");

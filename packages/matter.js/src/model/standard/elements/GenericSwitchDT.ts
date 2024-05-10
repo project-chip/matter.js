@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const GenericSwitchDT = DeviceType({
     name: "GenericSwitch", id: 0xf, classification: "simple",
     details: "This defines conformance for the Generic Switch device type.",
     xref: { document: "device", section: "6.6" },
@@ -18,21 +18,19 @@ Matter.children.push(DeviceType({
         Requirement({
             name: "Descriptor", id: 0x1d, element: "serverCluster",
             children: [
-                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 15, revision: 1 } ], element: "attribute" })
+                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 15, revision: 3 } ], element: "attribute" })
             ]
         }),
 
         Requirement({
-            name: "Identify", conformance: "M", element: "serverCluster",
+            name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "6.6.4" }
         }),
         Requirement({
-            name: "Switch", conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "6.6.4" }
-        }),
-        Requirement({
-            name: "FixedLabel", conformance: "desc", element: "serverCluster",
+            name: "Switch", id: 0x3b, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "6.6.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(GenericSwitchDT);

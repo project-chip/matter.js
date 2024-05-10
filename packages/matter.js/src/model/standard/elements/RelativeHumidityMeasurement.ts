@@ -9,12 +9,11 @@
 import { Matter } from "../Matter.js";
 import { ClusterElement as Cluster, AttributeElement as Attribute } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
+export const RelativeHumidityMeasurement = Cluster({
     name: "RelativeHumidityMeasurement", id: 0x405, classification: "application",
-    description: "Relative Humidity Measurement",
     details: "This is a base cluster. The server cluster provides an interface to water content measurement " +
         "functionality. The measurement is reportable and may be configured for reporting. Water content " +
-        "measurements include, but are not limited to, leaf wetness, relative humidity, and soil moisture.",
+        "measurements currently is, but are not limited to relative humidity.",
     xref: { document: "cluster", section: "2.6" },
 
     children: [
@@ -64,4 +63,6 @@ Matter.children.push(Cluster({
             xref: { document: "cluster", section: "2.6.4.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(RelativeHumidityMeasurement);

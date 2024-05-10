@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Globals, MatterElement } from "../elements/index.js";
+import { MatterElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Matter } from "../standard/index.js";
 import { AttributeModel } from "./AttributeModel.js";
@@ -17,12 +17,24 @@ import { FieldModel } from "./FieldModel.js";
 import { Model } from "./Model.js";
 
 /**
- * The root of a Matter model.
+ * The root of a Matter model.  This is the parent for global models.
  */
 export class MatterModel extends Model implements MatterElement {
     override tag: MatterElement.Tag = MatterElement.Tag;
     override isTypeScope = true;
     version?: string;
+
+    /**
+     * The default instance of the canonical MatterModel.
+     */
+    static standard: MatterModel = new MatterModel(Matter);
+
+    /**
+     * All sub-cluster global elements from the standard model.
+     *
+     * This is the set of utility datatypes required by cluster definitions.
+     */
+    static standardGlobals = MatterModel.standard.children.filter(child => child.isType);
 
     /**
      * Clusters.
@@ -67,9 +79,15 @@ export class MatterModel extends Model implements MatterElement {
         super.children = children;
     }
 
-    constructor(definition: MatterElement.Properties = Matter, globals = Object.values(Globals)) {
-        const children = [...globals, ...(definition.children || [])];
-        super({ ...definition, name: definition.name, children: children });
+    /**
+     * Create a new MatterModel.
+     *
+     * @param definition the MatterElement that defines the model
+     * @param globals predefined globals, usually tiehr
+     */
+    constructor(definition: MatterElement.Properties = Matter) {
+        const children = [...(definition.children || [])];
+        super({ ...definition, name: definition.name, children });
     }
 
     static {
@@ -81,4 +99,4 @@ export namespace MatterModel {
     export type Child = ClusterModel | DeviceTypeModel | FieldModel | DatatypeModel | AttributeModel | FabricModel;
 }
 
-ModelTraversal.defaultRoot = new MatterModel();
+ModelTraversal.fallbackScope = MatterModel.standard;

@@ -111,7 +111,29 @@ function* lex(
         return;
     }
 
-    function tokenizeNumber(base: number, valueOf: (digit: string[1]) => number | undefined): BasicToken {
+    function tokenizeNumber(sign: number) {
+        markStart();
+        if (sign === -1) {
+            // Skip "-" prefix
+            next();
+        }
+
+        if (current.value === "0") {
+            if (peeked.value === "x") {
+                next();
+                next();
+                return tokenizeDigits(16, sign, hexadecimalValueOf);
+            } else if (peeked.value === "b") {
+                next();
+                next();
+                return tokenizeDigits(2, sign, binaryValueOf);
+            }
+        }
+
+        return tokenizeDigits(10, sign, decimalValueOf);
+    }
+
+    function tokenizeDigits(base: number, sign: number, valueOf: (digit: string[1]) => number | undefined): BasicToken {
         // The first digit may not actually be a digit if number is hexadecimal or binary
         let num = valueOf(current.value);
         if (num === undefined) {
@@ -128,6 +150,8 @@ function* lex(
             next();
             num = num * base + digitValue;
         }
+
+        num *= sign;
 
         // Handle specialized suffices for percents and temperatures
         if (peeked.value === "%") {
@@ -157,21 +181,21 @@ function* lex(
             case "(":
             case ")":
             case "+":
+            case "/":
+            case "*":
                 yield { type: current.value, startLine: line, startChar: char };
                 break;
 
-            case "0":
-                markStart();
-                if (peeked.value === "x") {
-                    next();
-                    next();
-                    yield tokenizeNumber(16, hexadecimalValueOf);
-                } else if (peeked.value === "b") {
-                    next();
-                    next();
-                    yield tokenizeNumber(2, binaryValueOf);
+            case "-":
+                if (peeked.value >= "0" || peeked.value <= "0") {
+                    yield tokenizeNumber(-1);
+                } else {
+                    yield { type: current.value, startLine: line, startChar: char };
                 }
-                yield tokenizeNumber(10, decimalValueOf);
+                break;
+
+            case "0":
+                yield tokenizeNumber(1);
                 break;
 
             case "1":
@@ -183,7 +207,7 @@ function* lex(
             case "7":
             case "8":
             case "9":
-                yield tokenizeNumber(10, decimalValueOf);
+                yield tokenizeDigits(10, 1, decimalValueOf);
                 break;
 
             case "!":

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ClusterRevision } from "@project-chip/matter.js/elements/ClusterRevision";
+import { FeatureMap } from "@project-chip/matter.js/elements/FeatureMap";
 import { Diagnostic, Logger } from "@project-chip/matter.js/log";
 import {
     AttributeElement,
@@ -12,7 +14,6 @@ import {
     DatatypeElement,
     EventElement,
     FieldElement,
-    Globals,
 } from "@project-chip/matter.js/model";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
@@ -158,9 +159,9 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
         }
 
         children.push({
-            tag: Globals.ClusterRevision.tag,
-            id: Globals.ClusterRevision.id,
-            name: Globals.ClusterRevision.name,
+            tag: ClusterRevision.tag,
+            id: ClusterRevision.id,
+            name: ClusterRevision.name,
             type: "ClusterRevision",
             default: revision,
         });
@@ -180,7 +181,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             // Must define after description which uses name column
             name: Alias(UpperIdentifier, "code", "feature"),
 
-            // Actual type is numeric but we let Model handle that translation
+            // We let Model handle translation to the proper type
             default: Optional(Alias(NoSpace, "def")),
         });
 
@@ -191,9 +192,9 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
         const values = translateRecordsToMatter("feature", records, FieldElement);
         values &&
             children.push({
-                tag: Globals.FeatureMap.tag,
-                id: Globals.FeatureMap.id,
-                name: Globals.FeatureMap.name,
+                tag: FeatureMap.tag,
+                id: FeatureMap.id,
+                name: FeatureMap.name,
                 type: "FeatureMap",
                 children: values,
                 xref: definition.features?.xref,

@@ -15,9 +15,8 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
+export const NetworkCommissioning = Cluster({
     name: "NetworkCommissioning", id: 0x31, classification: "node",
-    description: "Network Commissioning",
 
     details: "Network commissioning is part of the overall Node commissioning. The main goal of Network " +
         "Commissioning Cluster is to associate a Node with or manage a Node’s one or more network " +
@@ -33,14 +32,14 @@ Matter.children.push(Cluster({
         "instance present. An interface, in this context, is a unique entity that can have an IPv6 address " +
         "assigned to it and ingress and egress IP packets.",
 
-    xref: { document: "core", section: "11.8" },
+    xref: { document: "core", section: "11.9" },
 
     children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
 
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
-            xref: { document: "core", section: "11.8.4" },
+            xref: { document: "core", section: "11.9.4" },
 
             children: [
                 Field({
@@ -62,9 +61,9 @@ Matter.children.push(Cluster({
             name: "MaxNetworks", id: 0x0, type: "uint8", access: "R A", conformance: "M", constraint: "min 1",
             quality: "F",
             details: "This shall indicate the maximum number of network configuration entries that can be added, based on " +
-                "available device resources. The length of the Networks attribute list shall be less than or equal " +
-                "to this value.",
-            xref: { document: "core", section: "11.8.6.1" }
+                "available device resources. The length of the Networks attribute shall be less than or equal to " +
+                "this value.",
+            xref: { document: "core", section: "11.9.6.1" }
         }),
 
         Attribute({
@@ -79,16 +78,15 @@ Matter.children.push(Cluster({
                 "the order as they appear in the list." +
                 "\n" +
                 "The order of list items shall only be modified by the AddOrUpdateThreadNetwork, " +
-                "AddOrUpdateWiFiNetwork and ReorderNetwork commands. In other words, the list shall be stable over" +
-                "\n" +
+                "AddOrUpdateWiFiNetwork and ReorderNetwork commands. In other words, the list shall be stable over " +
                 "time, unless mutated externally." +
                 "\n" +
                 "Ethernet networks shall be automatically populated by the cluster server. Ethernet Network " +
-                "Commissioning Cluster instances shall always have exactly one Section 11.8.5.4, “NetworkInfoStruct” " +
-                "instance in their Networks attribute. There shall be no way to add, update or remove Ethernet " +
-                "network configurations to those Cluster instances.",
+                "Commissioning Cluster instances shall always have exactly one NetworkInfoStruct instance in their " +
+                "Networks attribute. There shall be no way to add, update or remove Ethernet network configurations " +
+                "to those Cluster instances.",
 
-            xref: { document: "core", section: "11.8.6.2" },
+            xref: { document: "core", section: "11.9.6.2" },
             children: [Field({ name: "entry", type: "NetworkInfoStruct" })]
         }),
 
@@ -98,8 +96,8 @@ Matter.children.push(Cluster({
             details: "This attribute shall indicate the maximum duration taken, in seconds, by the network interface on " +
                 "this cluster server instance to provide scan results." +
                 "\n" +
-                "See Section 11.8.7.1, “ScanNetworks Command” for usage.",
-            xref: { document: "core", section: "11.8.6.3" }
+                "See Section 11.9.7.1, “ScanNetworks Command” for usage.",
+            xref: { document: "core", section: "11.9.6.3" }
         }),
 
         Attribute({
@@ -110,7 +108,7 @@ Matter.children.push(Cluster({
                 "maximum time shall account for all operations needed until a successful network connection is " +
                 "deemed to have occurred, including, for example, obtaining IP addresses, or the execution of " +
                 "necessary internal retries.",
-            xref: { document: "core", section: "11.8.6.4" }
+            xref: { document: "core", section: "11.9.6.4" }
         }),
 
         Attribute({
@@ -124,7 +122,7 @@ Matter.children.push(Cluster({
                 "It is undefined what happens if InterfaceEnabled is written to false on the same interface as that " +
                 "which is used to write the value. In that case, it is possible that the Administrator would have to " +
                 "await expiry of the fail-safe, and associated recovery of network configuration to prior safe " +
-                "values, before being able to communicate with the node again (see Section 11.9.6.2, “ArmFailSafe " +
+                "values, before being able to communicate with the node again (see Section 11.10.6.2, “ArmFailSafe " +
                 "Command”)." +
                 "\n" +
                 "It may be possible to disable Ethernet interfaces but it is implementation-defined. If not " +
@@ -135,7 +133,7 @@ Matter.children.push(Cluster({
                 "On Ethernet-only Nodes, there shall always be at least one of the Network Commissioning server " +
                 "cluster instances with InterfaceEnabled set to true.",
 
-            xref: { document: "core", section: "11.8.6.5" }
+            xref: { document: "core", section: "11.9.6.5" }
         }),
 
         Attribute({
@@ -151,7 +149,7 @@ Matter.children.push(Cluster({
                 "This attribute is present to assist with error recovery during Network commissioning and to assist " +
                 "in non-concurrent networking commissioning flows.",
 
-            xref: { document: "core", section: "11.8.6.6" }
+            xref: { document: "core", section: "11.9.6.6" }
         }),
 
         Attribute({
@@ -171,7 +169,7 @@ Matter.children.push(Cluster({
                 "This attribute is present to assist with error recovery during Network commissioning and to assist " +
                 "in non-concurrent networking commissioning flows.",
 
-            xref: { document: "core", section: "11.8.6.7" }
+            xref: { document: "core", section: "11.9.6.7" }
         }),
 
         Attribute({
@@ -179,8 +177,9 @@ Matter.children.push(Cluster({
             default: null, quality: "X",
 
             details: "This attribute shall indicate the ErrorValue used in the last failed attempt to connect to an " +
-                "operational network, using this interface, whether by invocation of the ConnectNetwork command or " +
-                "by autonomous connection after loss of connectivity or during initial establishment. If no such " +
+                "operational network, using this interface, whether by invocation of the ConnectNetwork command or by" +
+                "\n" +
+                "autonomous connection after loss of connectivity or during initial establishment. If no such " +
                 "attempt was made, or no network configurations exist in the Networks attribute, then this attribute " +
                 "shall be set to null." +
                 "\n" +
@@ -190,7 +189,41 @@ Matter.children.push(Cluster({
                 "This attribute is present to assist with error recovery during Network commissioning and to assist " +
                 "in non-concurrent networking commissioning flows.",
 
-            xref: { document: "core", section: "11.8.6.8" }
+            xref: { document: "core", section: "11.9.6.8" }
+        }),
+
+        Attribute({
+            name: "SupportedWiFiBands", id: 0x8, type: "list", access: "R V", conformance: "WI",
+            constraint: "min 1", quality: "F",
+            details: "This attribute shall indicate all the frequency bands supported by the Wi-Fi interface configured " +
+                "by the cluster instance.",
+            xref: { document: "core", section: "11.9.6.9" },
+            children: [Field({ name: "entry", type: "WiFiBandEnum" })]
+        }),
+
+        Attribute({
+            name: "SupportedThreadFeatures", id: 0x9, type: "ThreadCapabilitiesBitmap", access: "R V",
+            conformance: "TH", quality: "F",
+
+            details: "This attribute shall indicate all of the Thread features supported by the Thread interface " +
+                "configured by the cluster instance." +
+                "\n" +
+                "This attribute is primarily used to determine the most important general capabilities of the Thread " +
+                "interface associated with the cluster instance, as opposed to the current runtime dynamic " +
+                "configuration. Note that most run-time details of the actual Thread interface are found in the " +
+                "Thread Network Diagnostics cluster, if supported.",
+
+            xref: { document: "core", section: "11.9.6.10" }
+        }),
+
+        Attribute({
+            name: "ThreadVersion", id: 0xa, type: "uint16", access: "R V", conformance: "TH", quality: "F",
+            details: "This attribute shall indicate the Thread version supported by the Thread interface configured by " +
+                "the cluster instance." +
+                "\n" +
+                "The format shall match the value mapping found in the \"Version TLV\" section of Thread " +
+                "specification. For example, Thread 1.3.0 would have ThreadVersion set to 4.",
+            xref: { document: "core", section: "11.9.6.11" }
         }),
 
         Command({
@@ -212,6 +245,10 @@ Matter.children.push(Cluster({
                 "Wi-Fi SSID) is provided in the command arguments. Directed scanning shall restrict the result set " +
                 "to the specified network only." +
                 "\n" +
+                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
+                "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
+                "initiator." +
+                "\n" +
                 "The client shall NOT expect the server to be done scanning and have responded with " +
                 "ScanNetworksResponse before ScanMaxTimeSeconds seconds have elapsed. Enough transport time " +
                 "affordances for retries SHOULD be expected before a client determines the operation to have " +
@@ -222,19 +259,30 @@ Matter.children.push(Cluster({
                 "interface over which the command was invoked, or if it is currently unable to proceed with such an " +
                 "operation." +
                 "\n" +
-                "Clients shall be resilient to a server that either does not support or cannot proceed with the " +
-                "ScanNetworks command.",
+                "For Wi-Fi-supporting servers (WI feature) the server shall always honor directed scans, and attempt " +
+                "to provide all matching BSSID which are reachable on the bands which would otherwise be attempted " +
+                "if a ConnectNetwork having the specified SSID were to take place. This command is useful for " +
+                "clients to determine reachability capabilities as seen by the server’s own radios." +
+                "\n" +
+                "For Wi-Fi-supporting servers the server shall always scan on all bands supported by the interface" +
+                "\n" +
+                "associated with the cluster instance on which the command was invoked." +
+                "\n" +
+                "If the command was invoked over the same link whose configuration is managed by a given server " +
+                "cluster instance, there may be an impact on other communication from the invoking client, as well " +
+                "as other clients, while the network interface is processing the scan. Clients SHOULD NOT use this " +
+                "command unless actively in the process of re-configuring network connectivity.",
 
-            xref: { document: "core", section: "11.8.7.1" },
+            xref: { document: "core", section: "11.9.7.1" },
 
             children: [
                 Field({
                     name: "Ssid", id: 0x0, type: "octstr", conformance: "[WI]", constraint: "1 to 32", default: null,
                     quality: "X",
                     details: "This field, if present, shall contain the SSID for a directed scan of that particular Wi-Fi SSID. " +
-                        "Otherwise, if the field is absent, or it is null, this shall indicate scanning of all BSSID in " +
+                        "Otherwise, if the field is absent, or if it is null, this shall indicate scanning of all BSSID in " +
                         "range. This field shall be ignored for ScanNetworks invocations on non-Wi-Fi server instances.",
-                    xref: { document: "core", section: "11.8.7.1.1" }
+                    xref: { document: "core", section: "11.9.7.1.1" }
                 }),
 
                 Field({
@@ -242,7 +290,7 @@ Matter.children.push(Cluster({
                     details: "The Breadcrumb field, if present, shall be used to atomically set the Breadcrumb attribute in the " +
                         "General Commissioning cluster on success of the associated command. If the command fails, the " +
                         "Breadcrumb attribute in the General Commissioning cluster shall be left unchanged.",
-                    xref: { document: "core", section: "11.8.7.1.2" }
+                    xref: { document: "core", section: "11.9.7.1.2" }
                 })
             ]
         }),
@@ -258,7 +306,7 @@ Matter.children.push(Cluster({
                 "Before generating a ScanNetworksResponse, the server shall set the LastNetworkingStatus attribute " +
                 "value to the NetworkingStatus matching the response.",
 
-            xref: { document: "core", section: "11.8.7.2" },
+            xref: { document: "core", section: "11.9.7.2" },
 
             children: [
                 Field({
@@ -280,7 +328,7 @@ Matter.children.push(Cluster({
                         "\n" +
                         "  • UnknownError: An internal error occurred during scanning.",
 
-                    xref: { document: "core", section: "11.8.7.2.1" }
+                    xref: { document: "core", section: "11.9.7.2.1" }
                 }),
 
                 Field({
@@ -288,7 +336,7 @@ Matter.children.push(Cluster({
                     details: "This field, if present and non-empty, may contain error information which may be communicated to " +
                         "the user in case the NetworkingStatus was not Success. Its purpose is to help developers in " +
                         "troubleshooting errors and may go into logs or crash reports.",
-                    xref: { document: "core", section: "11.8.7.2.2" }
+                    xref: { document: "core", section: "11.9.7.2.2" }
                 }),
 
                 Field({
@@ -307,7 +355,7 @@ Matter.children.push(Cluster({
                         "decreasing RSSI order, even if RSSI is not reported in the response, to maximize the likelihood " +
                         "that most likely to be reachable elements are included within the size limits of the response.",
 
-                    xref: { document: "core", section: "11.8.7.2.3" },
+                    xref: { document: "core", section: "11.9.7.2.3" },
                     children: [Field({ name: "entry", type: "WiFiInterfaceScanResultStruct" })]
                 }),
 
@@ -326,7 +374,7 @@ Matter.children.push(Cluster({
                         "decreasing LQI order, to maximize the likelihood that most likely to be reachable elements are " +
                         "included within the size limits of the response.",
 
-                    xref: { document: "core", section: "11.8.7.2.4" },
+                    xref: { document: "core", section: "11.9.7.2.4" },
                     children: [Field({ name: "entry", type: "ThreadInterfaceScanResultStruct" })]
                 })
             ]
@@ -338,24 +386,27 @@ Matter.children.push(Cluster({
 
             details: "This command shall be used to add or modify Wi-Fi network configurations." +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.9.6.2, “ArmFailSafe " +
+                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
                 "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
                 "initiator." +
                 "\n" +
                 "The Credentials associated with the network are not readable after execution of this command, as " +
-                "they do not appear in the Networks attribute list, for security reasons." +
+                "they do not appear in the Networks attribute, for security reasons." +
                 "\n" +
-                "See Section 11.8.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” " +
+                "If this command contains a ClientIdentifier, and the Networks list does not contain an entry with a " +
+                "matching ClientIdentifier, then this command shall fail with a status of NOT_FOUND." +
+                "\n" +
+                "See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” " +
                 "for behavior of addition/update.",
 
-            xref: { document: "core", section: "11.8.7.3" },
+            xref: { document: "core", section: "11.9.7.3" },
 
             children: [
                 Field({
                     name: "Ssid", id: 0x0, type: "octstr", conformance: "M", constraint: "max 32",
                     details: "This field shall contain the SSID to which to attempt connection. Specific BSSID selection is not " +
                         "supported by this cluster.",
-                    xref: { document: "core", section: "11.8.7.3.1" }
+                    xref: { document: "core", section: "11.9.7.3.1" }
                 }),
 
                 Field({
@@ -397,13 +448,13 @@ Matter.children.push(Cluster({
                         "security and selects a lower security connectivity type if the link quality is deemed to be too low " +
                         "to achieve successful operation, or if all retry attempts fail.",
 
-                    xref: { document: "core", section: "11.8.7.3.2" }
+                    xref: { document: "core", section: "11.9.7.3.2" }
                 }),
 
                 Field({
                     name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O",
-                    details: "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
-                    xref: { document: "core", section: "11.8.7.3.3" }
+                    details: "See Section 11.9.7.1.2, “Breadcrumb Field” for usage.",
+                    xref: { document: "core", section: "11.9.7.3.3" }
                 })
             ]
         }),
@@ -414,21 +465,21 @@ Matter.children.push(Cluster({
 
             details: "This command shall be used to add or modify Thread network configurations." +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.9.6.2, “ArmFailSafe " +
+                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
                 "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
                 "initiator." +
                 "\n" +
-                "See Section 11.8.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” " +
+                "See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” " +
                 "for behavior of addition/update." +
                 "\n" +
                 "The XPAN ID in the OperationalDataset serves as the NetworkID for the network configuration to be " +
                 "added or updated." +
                 "\n" +
-                "If the Networks attribute list does not contain an entry with the same NetworkID as the one " +
-                "provided in the OperationalDataset, the operation shall be considered an addition, otherwise, it " +
-                "shall be considered an update.",
+                "If the Networks attribute does not contain an entry with the same NetworkID as the one provided in " +
+                "the OperationalDataset, the operation shall be considered an addition, otherwise, it shall be " +
+                "considered an update.",
 
-            xref: { document: "core", section: "11.8.7.4" },
+            xref: { document: "core", section: "11.9.7.4" },
 
             children: [
                 Field({
@@ -438,13 +489,13 @@ Matter.children.push(Cluster({
                         "\n" +
                         "The encoding for the OperationalDataset field is defined in the Thread specification. The client " +
                         "shall pass the OperationalDataset as an opaque octet string.",
-                    xref: { document: "core", section: "11.8.7.4.1" }
+                    xref: { document: "core", section: "11.9.7.4.1" }
                 }),
 
                 Field({
                     name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
-                    details: "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
-                    xref: { document: "core", section: "11.8.7.4.2" }
+                    details: "See Section 11.9.7.1.2, “Breadcrumb Field” for usage.",
+                    xref: { document: "core", section: "11.9.7.4.2" }
                 })
             ]
         }),
@@ -454,10 +505,11 @@ Matter.children.push(Cluster({
             response: "NetworkConfigResponse",
 
             details: "This command shall remove the network configuration from the Cluster if there was already a network " +
-                "configuration with the same NetworkID. The relative order of the entries in the Networks attribute " +
-                "list shall remain unchanged, except for the removal of the requested network configuration." +
+                "configuration with the same NetworkID. The relative order of the entries in the Networks" +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.9.6.2, “ArmFailSafe " +
+                "attribute shall remain unchanged, except for the removal of the requested network configuration." +
+                "\n" +
+                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
                 "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
                 "initiator." +
                 "\n" +
@@ -468,21 +520,20 @@ Matter.children.push(Cluster({
                 "index of the entry in the Networks attribute that was just removed, and a NetworkingStatus status " +
                 "field set to Success.",
 
-            xref: { document: "core", section: "11.8.7.7" },
+            xref: { document: "core", section: "11.9.7.6" },
 
             children: [
                 Field({
                     name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32",
-                    details: "This field shall contain the NetworkID for the entry to remove: the SSID for Wi-Fi and XPAN ID" +
-                        "\n" +
-                        "for Thread.",
-                    xref: { document: "core", section: "11.8.7.7.1" }
+                    details: "This field shall contain the NetworkID for the entry to remove: the SSID for Wi-Fi and XPAN ID for " +
+                        "Thread.",
+                    xref: { document: "core", section: "11.9.7.6.1" }
                 }),
 
                 Field({
                     name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
-                    details: "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
-                    xref: { document: "core", section: "11.8.7.7.2" }
+                    details: "See Section 11.9.7.1.2, “Breadcrumb Field” for usage.",
+                    xref: { document: "core", section: "11.9.7.6.2" }
                 })
             ]
         }),
@@ -501,7 +552,7 @@ Matter.children.push(Cluster({
                 "to the NetworkID that was used in the command for which an invocation caused the response to be " +
                 "generated.",
 
-            xref: { document: "core", section: "11.8.7.8" },
+            xref: { document: "core", section: "11.9.7.7" },
 
             children: [
                 Field({
@@ -516,20 +567,20 @@ Matter.children.push(Cluster({
                         "  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc)." +
                         "\n" +
                         "  • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section " +
-                        "    11.8.6.1, “MaxNetworks Attribute”." +
+                        "    11.9.6.1, “MaxNetworks Attribute”." +
                         "\n" +
                         "  • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the " +
                         "    added network configurations in Networks attribute." +
                         "\n" +
                         "  • UnknownError: An internal error occurred during the operation.",
 
-                    xref: { document: "core", section: "11.8.7.8.1" }
+                    xref: { document: "core", section: "11.9.7.7.1" }
                 }),
 
                 Field({
                     name: "DebugText", id: 0x1, type: "string", conformance: "O", constraint: "max 512",
-                    details: "See Section 11.8.7.2.2, “DebugText Field” for usage.",
-                    xref: { document: "core", section: "11.8.7.8.2" }
+                    details: "See Section 11.9.7.2.2, “DebugText Field” for usage.",
+                    xref: { document: "core", section: "11.9.7.7.2" }
                 }),
 
                 Field({
@@ -537,7 +588,7 @@ Matter.children.push(Cluster({
                     details: "When the NetworkingStatus is Success, this field shall be present. It shall contain the 0-based " +
                         "index of the entry in the Networks attribute that was last added, updated or removed successfully " +
                         "by the associated request command.",
-                    xref: { document: "core", section: "11.8.7.8.3" }
+                    xref: { document: "core", section: "11.9.7.7.3" }
                 })
             ]
         }),
@@ -554,7 +605,7 @@ Matter.children.push(Cluster({
                 "currently unable to proceed with such an operation, such as if it is currently attempting to " +
                 "connect in the background, or is already proceeding with a prior ConnectNetwork." +
                 "\n" +
-                "If this command is received without an armed fail-safe context (see Section 11.9.6.2, “ArmFailSafe " +
+                "If this command is received without an armed fail-safe context (see Section 11.10.6.2, “ArmFailSafe " +
                 "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
                 "initiator." +
                 "\n" +
@@ -580,17 +631,21 @@ Matter.children.push(Cluster({
                 "The precedence order of any entry subject to ConnectNetwork shall NOT change within the Networks " +
                 "attribute." +
                 "\n" +
-                "Even after successfully connecting to a network, the configuration shall revert to the prior state" +
+                "Even after successfully connecting to a network, the configuration shall revert to the prior state " +
+                "of configuration if the CommissioningComplete command (see Section 11.10.6.6, " +
+                "“CommissioningComplete Command”) is not successfully invoked before expiry of the Fail-Safe timer." +
                 "\n" +
-                "of configuration if the CommissioningComplete command (see Section 11.9.6.6, “CommissioningComplete " +
-                "Command”) is not successfully invoked before expiry of the Fail-Safe timer." +
+                "When non-concurrent commissioning is being used by a Commissioner or Administrator, the " +
+                "ConnectNetworkResponse shall be sent with the NetworkingStatus field set to Success prior to " +
+                "closing the commissioning channel, even if not yet connected to the operational network, unless the " +
+                "device would be incapable of joining that network, in which case the usual failure path described " +
+                "in the prior paragraphs shall be followed. Once the commissioning channel is closed, the " +
+                "operational channel will be started. It is possible that the only method to determine success of " +
+                "the operation is operational discovery of the Node on the new operational network. Therefore, " +
+                "before invoking the ConnectNetwork command, the client SHOULD re-invoke the Arm Fail-Safe command " +
+                "with a duration that meets the following:" +
                 "\n" +
-                "When non-concurrent commissioning is being used by a Commissioner or Administrator, it is possible " +
-                "that the only method to determine success of the operation is operational discovery of the Node on " +
-                "the new operational network. Therefore, before invoking the ConnectNetwork command, the client " +
-                "SHOULD re-invoke the Arm Fail-Safe command with a duration that meets the following:" +
-                "\n" +
-                "  1. Sufficient time to meet the minimum required time (see Section 11.8.6.4, " +
+                "  1. Sufficient time to meet the minimum required time (see Section 11.9.6.4, " +
                 "     “ConnectMaxTimeSeconds Attribute”) that may be taken by the server to connect to the desired " +
                 "     network." +
                 "\n" +
@@ -612,20 +667,20 @@ Matter.children.push(Cluster({
                 "in determining the reason for a failure after reconnecting over a Commissioning channel, especially " +
                 "in non-concurrent commissioning situations.",
 
-            xref: { document: "core", section: "11.8.7.9" },
+            xref: { document: "core", section: "11.9.7.8" },
 
             children: [
                 Field({
                     name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32",
                     details: "This field shall contain the NetworkID for the entry used to configure the connection: the SSID for " +
                         "Wi-Fi and XPAN ID for Thread.",
-                    xref: { document: "core", section: "11.8.7.9.1" }
+                    xref: { document: "core", section: "11.9.7.8.1" }
                 }),
 
                 Field({
                     name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
-                    details: "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
-                    xref: { document: "core", section: "11.8.7.9.2" }
+                    details: "See Section 11.9.7.1.2, “Breadcrumb Field” for usage.",
+                    xref: { document: "core", section: "11.9.7.8.2" }
                 })
             ]
         }),
@@ -643,7 +698,7 @@ Matter.children.push(Cluster({
                 "  • Set the LastConnectErrorValue attribute value to the ErrorValue matching the response, " +
                 "    including setting it to null if the ErrorValue is not applicable.",
 
-            xref: { document: "core", section: "11.8.7.10" },
+            xref: { document: "core", section: "11.9.7.9" },
 
             children: [
                 Field({
@@ -666,17 +721,17 @@ Matter.children.push(Cluster({
                         "\n" +
                         "  • UnknownError: An internal error occurred during the operation." +
                         "\n" +
-                        "  • Association errors (see also description of errors in Section 11.8.5.3, " +
-                        "    “NetworkCommissioningStatusEnum”): AuthFailure, UnsupportedSecurity, OtherConnectionFailure, " +
-                        "    IPV6Failed, IPBindFailed",
+                        "  • Association errors (see also description of errors in Section 11.9.5.4, " +
+                        "    “NetworkCommissioningStatusEnum Type”): AuthFailure, UnsupportedSecurity, " +
+                        "    OtherConnectionFailure, IPV6Failed, IPBindFailed",
 
-                    xref: { document: "core", section: "11.8.7.10.1" }
+                    xref: { document: "core", section: "11.9.7.9.1" }
                 }),
 
                 Field({
                     name: "DebugText", id: 0x1, type: "string", conformance: "O",
-                    details: "See Section 11.8.7.2.2, “DebugText Field” for usage.",
-                    xref: { document: "core", section: "11.8.7.10.2" }
+                    details: "See Section 11.9.7.2.2, “DebugText Field” for usage.",
+                    xref: { document: "core", section: "11.9.7.9.2" }
                 }),
 
                 Field({
@@ -702,7 +757,7 @@ Matter.children.push(Cluster({
                         "  • Otherwise, the ErrorValue field shall contain an implementation-dependent value which may be " +
                         "    used by a reader of the structure to record, report or diagnose the failure.",
 
-                    xref: { document: "core", section: "11.8.7.10.3" }
+                    xref: { document: "core", section: "11.9.7.9.3" }
                 })
             ]
         }),
@@ -711,28 +766,28 @@ Matter.children.push(Cluster({
             name: "ReorderNetwork", id: 0x8, access: "A", conformance: "WI | TH", direction: "request",
             response: "NetworkConfigResponse",
             details: "This command shall set the specific order of the network configuration selected by its NetworkID in " +
-                "the Networks attribute list to match the position given by NetworkIndex.",
-            xref: { document: "core", section: "11.8.7.11" },
+                "the Networks attribute to match the position given by NetworkIndex.",
+            xref: { document: "core", section: "11.9.7.10" },
 
             children: [
                 Field({
                     name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32",
                     details: "This field shall contain the NetworkID for the entry to reorder: the SSID for Wi-Fi and XPAN ID for " +
                         "Thread.",
-                    xref: { document: "core", section: "11.8.7.11.1" }
+                    xref: { document: "core", section: "11.9.7.10.1" }
                 }),
 
                 Field({
                     name: "NetworkIndex", id: 0x1, type: "uint8", conformance: "M", constraint: "desc",
                     details: "This field shall contain the 0-based index of the new desired position of the entry in the Networks " +
                         "attribute.",
-                    xref: { document: "core", section: "11.8.7.11.2" }
+                    xref: { document: "core", section: "11.9.7.10.2" }
                 }),
 
                 Field({
                     name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O",
 
-                    details: "See Section 11.8.7.1.2, “Breadcrumb Field” for usage." +
+                    details: "See Section 11.9.7.1.2, “Breadcrumb Field” for usage." +
                         "\n" +
                         "Effect when received" +
                         "\n" +
@@ -756,8 +811,7 @@ Matter.children.push(Cluster({
                         "\n" +
                         "Examples of re-ordering" +
                         "\n" +
-                        "To better illustrate the re-ordering operation, consider this initial state, exemplary of a Wi-Fi" +
-                        "\n" +
+                        "To better illustrate the re-ordering operation, consider this initial state, exemplary of a Wi-Fi " +
                         "device:" +
                         "\n" +
                         "On receiving ReorderNetwork with:" +
@@ -782,16 +836,16 @@ Matter.children.push(Cluster({
                         "In the above outcome, BlueDolphin, Home-Guest and WillowTree moved \"up\" and FancyCat became the " +
                         "lowest priority network in the list.",
 
-                    xref: { document: "core", section: "11.8.7.11.3" }
+                    xref: { document: "core", section: "11.9.7.10.3" }
                 })
             ]
         }),
 
         Datatype({
-            name: "WiFiSecurityBitmap", type: "map8", conformance: "M",
+            name: "WiFiSecurityBitmap", type: "map8",
             details: "WiFiSecurityBitmap encodes the supported Wi-Fi security types present in the Security field of the " +
                 "WiFiInterfaceScanResultStruct.",
-            xref: { document: "core", section: "11.8.5.1" },
+            xref: { document: "core", section: "11.9.5.1" },
 
             children: [
                 Field({ name: "Unencrypted", constraint: "0", description: "Supports unencrypted Wi-Fi" }),
@@ -807,10 +861,46 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "WiFiBandEnum", type: "enum8", conformance: "M",
+            name: "ThreadCapabilitiesBitmap", type: "map16",
+
+            details: "The ThreadCapabilitiesBitmap encodes the supported Thread features and capabilities of a Thread- " +
+                "enabled network interface." +
+                "\n" +
+                "NOTE" +
+                "\n" +
+                "The valid combinations of capabilities are restricted and dependent on Thread version.",
+
+            xref: { document: "core", section: "11.9.5.2" },
+
+            children: [
+                Field({
+                    name: "IsBorderRouterCapable", constraint: "0",
+                    description: "Thread Border Router functionality is present"
+                }),
+                Field({
+                    name: "IsRouterCapable", constraint: "1",
+                    description: "Router mode is supported (interface could be in router or REED mode)"
+                }),
+                Field({
+                    name: "IsSleepyEndDeviceCapable", constraint: "2",
+                    description: "Sleepy end-device mode is supported"
+                }),
+                Field({
+                    name: "IsFullThreadDevice", constraint: "3",
+                    description: "Device is a full Thread device (opposite of Minimal Thread Device)"
+                }),
+                Field({
+                    name: "IsSynchronizedSleepyEndDeviceCapable", constraint: "4",
+                    description: "Synchronized sleepy end-device mode is supported"
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "WiFiBandEnum", type: "enum8",
             details: "WiFiBandEnum encodes a supported Wi-Fi frequency band present in the WiFiBand field of the " +
                 "WiFiInterfaceScanResultStruct.",
-            xref: { document: "core", section: "11.8.5.2" },
+            xref: { document: "core", section: "11.9.5.3" },
 
             children: [
                 Field({
@@ -826,67 +916,53 @@ Matter.children.push(Cluster({
                 }),
                 Field({
                     name: "6G", id: 0x3, conformance: "O.a+",
-                    description: "6GHz - 5.925GHz to7.125GHz (802.11ax / WiFi 6E)"
+                    description: "6GHz - 5.925GHz to7.125GHz (802.11ax / Wi-Fi 6E)"
                 }),
                 Field({
                     name: "60G", id: 0x4, conformance: "O.a+", description: "60GHz - 57.24GHz to70.20GHz (802.11ad/ay)"
-                })
+                }),
+                Field({ name: "1G", id: 0x5, conformance: "O.a+", description: "Sub-1GHz - 755MHz to 931MHz (802.11ah)" })
             ]
         }),
 
         Datatype({
-            name: "NetworkCommissioningStatusEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.8.5.3" },
+            name: "NetworkCommissioningStatusEnum", type: "enum8",
+            xref: { document: "core", section: "11.9.5.4" },
 
             children: [
-                Field({ name: "Success", id: 0x0, conformance: "M", description: "OK, no error" }),
-                Field({ name: "OutOfRange", id: 0x1, conformance: "M", description: "Value Outside Range" }),
+                Field({ name: "Success", id: 0x0, description: "OK, no error" }),
+                Field({ name: "OutOfRange", id: 0x1, description: "Value Outside Range" }),
+                Field({ name: "BoundsExceeded", id: 0x2, description: "A collection would exceed its size limit" }),
                 Field({
-                    name: "BoundsExceeded", id: 0x2, conformance: "M",
-                    description: "A collection would exceed its size limit"
-                }),
-                Field({
-                    name: "NetworkIdNotFound", id: 0x3, conformance: "M",
+                    name: "NetworkIdNotFound", id: 0x3,
                     description: "The NetworkID is not among the collection of added networks"
                 }),
                 Field({
-                    name: "DuplicateNetworkId", id: 0x4, conformance: "M",
+                    name: "DuplicateNetworkId", id: 0x4,
                     description: "The NetworkID is already among the collection of added networks"
                 }),
+                Field({ name: "NetworkNotFound", id: 0x5, description: "Cannot find AP: SSID Not found" }),
                 Field({
-                    name: "NetworkNotFound", id: 0x5, conformance: "M", description: "Cannot find AP: SSID Not found"
-                }),
-                Field({
-                    name: "RegulatoryError", id: 0x6, conformance: "M",
+                    name: "RegulatoryError", id: 0x6,
                     description: "Cannot find AP: Mismatch on band/channels/regulatory domain / 2.4GHz vs 5GHz"
                 }),
+                Field({ name: "AuthFailure", id: 0x7, description: "Cannot associate due to authentication failure" }),
                 Field({
-                    name: "AuthFailure", id: 0x7, conformance: "M",
-                    description: "Cannot associate due to authentication failure"
-                }),
-                Field({
-                    name: "UnsupportedSecurity", id: 0x8, conformance: "M",
+                    name: "UnsupportedSecurity", id: 0x8,
                     description: "Cannot associate due to unsupported security mode"
                 }),
-                Field({
-                    name: "OtherConnectionFailure", id: 0x9, conformance: "M", description: "Other association failure"
-                }),
-                Field({
-                    name: "Ipv6Failed", id: 0xa, conformance: "M", description: "Failure to generate an IPv6 address"
-                }),
-                Field({
-                    name: "IpBindFailed", id: 0xb, conformance: "M",
-                    description: "Failure to bind Wi-Fi <-> IP interfaces"
-                }),
-                Field({ name: "UnknownError", id: 0xc, conformance: "M", description: "Unknown error" })
+                Field({ name: "OtherConnectionFailure", id: 0x9, description: "Other association failure" }),
+                Field({ name: "Ipv6Failed", id: 0xa, description: "Failure to generate an IPv6 address" }),
+                Field({ name: "IpBindFailed", id: 0xb, description: "Failure to bind Wi-Fi <-> IP interfaces" }),
+                Field({ name: "UnknownError", id: 0xc, description: "Unknown error" })
             ]
         }),
 
         Datatype({
-            name: "NetworkInfoStruct", type: "struct", conformance: "M",
+            name: "NetworkInfoStruct", type: "struct",
             details: "NetworkInfoStruct struct describes an existing network configuration, as provided in the Networks " +
                 "attribute.",
-            xref: { document: "core", section: "11.8.5.4" },
+            xref: { document: "core", section: "11.9.5.5" },
 
             children: [
                 Field({
@@ -917,7 +993,7 @@ Matter.children.push(Cluster({
                         "XPAN ID is a big-endian 64-bit unsigned number, represented on the first 8 octets of the octet " +
                         "string.",
 
-                    xref: { document: "core", section: "11.8.5.4.1" }
+                    xref: { document: "core", section: "11.9.5.5.1" }
                 }),
 
                 Field({
@@ -925,15 +1001,15 @@ Matter.children.push(Cluster({
                     details: "This field shall indicate the connected status of the associated network, where \"connected\" means " +
                         "currently linked to the network technology (e.g. Associated for a Wi-Fi network, media connected " +
                         "for an Ethernet network).",
-                    xref: { document: "core", section: "11.8.5.4.2" }
+                    xref: { document: "core", section: "11.9.5.5.2" }
                 })
             ]
         }),
 
         Datatype({
-            name: "WiFiInterfaceScanResultStruct", type: "struct", conformance: "M",
+            name: "WiFiInterfaceScanResultStruct", type: "struct",
             details: "WiFiInterfaceScanResultStruct represents a single Wi-Fi network scan result.",
-            xref: { document: "core", section: "11.8.5.5" },
+            xref: { document: "core", section: "11.9.5.6" },
 
             children: [
                 Field({ name: "Security", id: 0x0, type: "WiFiSecurityBitmap", conformance: "WI" }),
@@ -945,21 +1021,21 @@ Matter.children.push(Cluster({
                     name: "WiFiBand", id: 0x4, type: "WiFiBandEnum", conformance: "[WI]",
                     details: "This field, if present, may be used to differentiate overlapping channel number values across " +
                         "different Wi-Fi frequency bands.",
-                    xref: { document: "core", section: "11.8.5.5.1" }
+                    xref: { document: "core", section: "11.9.5.6.1" }
                 }),
 
                 Field({
                     name: "Rssi", id: 0x5, type: "int8", conformance: "[WI]",
                     details: "This field, if present, shall denote the signal strength in dBm of the associated scan result.",
-                    xref: { document: "core", section: "11.8.5.5.2" }
+                    xref: { document: "core", section: "11.9.5.6.2" }
                 })
             ]
         }),
 
         Datatype({
-            name: "ThreadInterfaceScanResultStruct", type: "struct", conformance: "M",
+            name: "ThreadInterfaceScanResultStruct", type: "struct",
             details: "ThreadInterfaceScanResultStruct represents a single Thread network scan result.",
-            xref: { document: "core", section: "11.8.5.6" },
+            xref: { document: "core", section: "11.9.5.7" },
 
             children: [
                 Field({ name: "PanId", id: 0x0, type: "uint16", conformance: "TH", constraint: "0 to 65534" }),
@@ -970,11 +1046,13 @@ Matter.children.push(Cluster({
                 Field({
                     name: "ExtendedAddress", id: 0x5, type: "hwadr", conformance: "TH",
                     details: "ExtendedAddress stands for an IEEE 802.15.4 Extended Address.",
-                    xref: { document: "core", section: "11.8.5.6.1" }
+                    xref: { document: "core", section: "11.9.5.7.1" }
                 }),
                 Field({ name: "Rssi", id: 0x6, type: "int8", conformance: "TH" }),
                 Field({ name: "Lqi", id: 0x7, type: "uint8", conformance: "TH" })
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(NetworkCommissioning);

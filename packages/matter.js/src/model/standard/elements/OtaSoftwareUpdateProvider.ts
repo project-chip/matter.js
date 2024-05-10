@@ -15,20 +15,19 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
+export const OtaSoftwareUpdateProvider = Cluster({
     name: "OtaSoftwareUpdateProvider", id: 0x29, classification: "node",
-    description: "OTA Software Update Provider",
-    details: "Provides an interface for providing OTA software updates",
-    xref: { document: "core", section: "11.19.6" },
+    xref: { document: "core", section: "11.20.6" },
 
     children: [
         Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
         Command({
-            name: "QueryImage", id: 0x0, conformance: "M", direction: "request", response: "QueryImageResponse",
+            name: "QueryImage", id: 0x0, access: "O", conformance: "M", direction: "request",
+            response: "QueryImageResponse",
             details: "Upon receipt, this command shall trigger an attempt to find an updated Software Image by the OTA " +
                 "Provider to match the OTA Requestor’s constraints provided in the payload fields.",
-            xref: { document: "core", section: "11.19.6.5.1" },
+            xref: { document: "core", section: "11.20.6.5.1" },
 
             children: [
                 Field({ name: "VendorId", id: 0x0, type: "vendor-id", conformance: "M" }),
@@ -47,7 +46,7 @@ Matter.children.push(Cluster({
 
         Command({
             name: "QueryImageResponse", id: 0x1, conformance: "M", direction: "response",
-            xref: { document: "core", section: "11.19.6.5.10" },
+            xref: { document: "core", section: "11.20.6.5.10" },
 
             children: [
                 Field({ name: "Status", id: 0x0, type: "StatusEnum", conformance: "M" }),
@@ -62,9 +61,9 @@ Matter.children.push(Cluster({
         }),
 
         Command({
-            name: "ApplyUpdateRequest", id: 0x2, conformance: "M", direction: "request",
+            name: "ApplyUpdateRequest", id: 0x2, access: "O", conformance: "M", direction: "request",
             response: "ApplyUpdateResponse",
-            xref: { document: "core", section: "11.19.6.5.19" },
+            xref: { document: "core", section: "11.20.6.5.19" },
             children: [
                 Field({ name: "UpdateToken", id: 0x0, type: "octstr", conformance: "M", constraint: "8 to 32" }),
                 Field({ name: "NewVersion", id: 0x1, type: "uint32", conformance: "M" })
@@ -73,7 +72,7 @@ Matter.children.push(Cluster({
 
         Command({
             name: "ApplyUpdateResponse", id: 0x3, conformance: "M", direction: "response",
-            xref: { document: "core", section: "11.19.6.5.22" },
+            xref: { document: "core", section: "11.20.6.5.22" },
             children: [
                 Field({ name: "Action", id: 0x0, type: "ApplyUpdateActionEnum", conformance: "M" }),
                 Field({ name: "DelayedActionTime", id: 0x1, type: "uint32", conformance: "M" })
@@ -81,8 +80,9 @@ Matter.children.push(Cluster({
         }),
 
         Command({
-            name: "NotifyUpdateApplied", id: 0x4, conformance: "M", direction: "request", response: "status",
-            xref: { document: "core", section: "11.19.6.5.25" },
+            name: "NotifyUpdateApplied", id: 0x4, access: "O", conformance: "M", direction: "request",
+            response: "status",
+            xref: { document: "core", section: "11.20.6.5.25" },
             children: [
                 Field({ name: "UpdateToken", id: 0x0, type: "octstr", conformance: "M", constraint: "8 to 32" }),
                 Field({ name: "SoftwareVersion", id: 0x1, type: "uint32", conformance: "M" })
@@ -90,9 +90,9 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "StatusEnum", type: "enum8", conformance: "M",
-            details: "See Section 11.19.3.2, “Querying the OTA Provider” for the semantics of these values.",
-            xref: { document: "core", section: "11.19.6.4.1" },
+            name: "StatusEnum", type: "enum8",
+            details: "See Section 11.20.3.2, “Querying the OTA Provider” for the semantics of these values.",
+            xref: { document: "core", section: "11.20.6.4.1" },
 
             children: [
                 Field({
@@ -115,11 +115,11 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "ApplyUpdateActionEnum", type: "enum8", conformance: "M",
-            details: "See Section 11.19.3.6, “Applying a software update” for the semantics of the values. This " +
+            name: "ApplyUpdateActionEnum", type: "enum8",
+            details: "See Section 11.20.3.6, “Applying a software update” for the semantics of the values. This " +
                 "enumeration is used in the Action field of the ApplyUpdateResponse command. See (Section " +
-                "11.19.6.5.4.1, “Action Field”).",
-            xref: { document: "core", section: "11.19.6.4.2" },
+                "11.20.6.5.4.1, “Action Field”).",
+            xref: { document: "core", section: "11.20.6.4.2" },
 
             children: [
                 Field({ name: "Proceed", id: 0x0, conformance: "M", description: "Apply the update." }),
@@ -135,11 +135,11 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "DownloadProtocolEnum", type: "enum8", conformance: "M",
+            name: "DownloadProtocolEnum", type: "enum8",
             details: "Note that only HTTP over TLS (HTTPS) is supported (see RFC 7230). Using HTTP without TLS shall" +
                 "\n" +
                 "NOT be supported, as there is no way to authenticate the involved participants.",
-            xref: { document: "core", section: "11.19.6.4.3" },
+            xref: { document: "core", section: "11.20.6.4.3" },
 
             children: [
                 Field({
@@ -158,4 +158,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(OtaSoftwareUpdateProvider);

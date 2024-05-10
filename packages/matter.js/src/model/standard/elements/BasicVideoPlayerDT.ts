@@ -13,7 +13,7 @@ import {
     FieldElement as Field
 } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const BasicVideoPlayerDT = DeviceType({
     name: "BasicVideoPlayer", id: 0x28, classification: "simple",
 
     details: "This defines conformance to the Basic Video Player device type." +
@@ -39,7 +39,7 @@ Matter.children.push(DeviceType({
         Requirement({
             name: "Descriptor", id: 0x1d, element: "serverCluster",
             children: [
-                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 40, revision: 1 } ], element: "attribute" })
+                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 40, revision: 2 } ], element: "attribute" })
             ]
         }),
 
@@ -79,6 +79,14 @@ Matter.children.push(DeviceType({
             name: "AudioOutput", id: 0x50b, conformance: "O", element: "serverCluster",
             xref: { document: "device", section: "10.2.4" }
         }),
+        Requirement({
+            name: "ContentControl", id: 0x50f, conformance: "P, O", element: "serverCluster",
+            xref: { document: "device", section: "10.2.4" }
+        }),
+        Requirement({
+            name: "Messages", id: 0x97, conformance: "O", element: "serverCluster",
+            xref: { document: "device", section: "10.2.4" }
+        }),
 
         Field({
             name: "conditions", type: "enum8",
@@ -88,4 +96,6 @@ Matter.children.push(DeviceType({
             })]
         })
     ]
-}));
+});
+
+Matter.children.push(BasicVideoPlayerDT);

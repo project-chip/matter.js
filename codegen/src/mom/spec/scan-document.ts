@@ -17,11 +17,19 @@ function convertTable(el: HTMLTableElement) {
         rows: [],
         notes: [],
     } as Table;
+
+    const rowspans = Array<{ remaining: number; el: HTMLElement }>();
+
     for (const tr of el.querySelectorAll("tr")) {
         const cells = tr.querySelectorAll("td, th");
 
         if (cells.length === 1) {
             table.notes.push(cells[0] as HTMLElement);
+            for (const span of rowspans) {
+                if (span.remaining) {
+                    span.remaining--;
+                }
+            }
             continue;
         }
 
@@ -35,8 +43,28 @@ function convertTable(el: HTMLTableElement) {
         }
 
         const row = {} as Table["rows"][number];
+        let sourceIndex = 0;
         for (let i = 0; i < table.fields.length; i++) {
-            row[table.fields[i]] = cells.item(i) as HTMLElement;
+            if (rowspans[i]?.remaining) {
+                rowspans[i].remaining--;
+                row[table.fields[i]] = rowspans[i].el;
+                continue;
+            }
+
+            const cell = cells.item(sourceIndex++) as HTMLElement | null;
+            if (cell === null) {
+                continue;
+            }
+
+            row[table.fields[i]] = cell;
+
+            const rowspan = (cell as HTMLTableCellElement)?.rowSpan;
+            if (typeof rowspan === "number" && rowspan > 1) {
+                rowspans[i] = {
+                    remaining: rowspan - 1,
+                    el: cell,
+                };
+            }
         }
 
         table.rows.push(row);

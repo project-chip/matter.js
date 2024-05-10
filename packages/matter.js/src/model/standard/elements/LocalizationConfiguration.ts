@@ -13,9 +13,8 @@ import {
     FieldElement as Field
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
+export const LocalizationConfiguration = Cluster({
     name: "LocalizationConfiguration", id: 0x2b, classification: "node",
-    description: "Localization Configuration",
 
     details: "Nodes should be expected to be deployed to any and all regions of the world. These global regions " +
         "may have differing common languages, units of measurements, and numerical formatting standards. As " +
@@ -37,9 +36,10 @@ Matter.children.push(Cluster({
             details: "The ActiveLocale attribute shall represent the locale that the Node is currently configured to use " +
                 "when conveying information. The ActiveLocale attribute shall be a Language Tag as defined by BCP47 " +
                 "[https://tools.ietf.org/rfc/bcp/bcp47.txt]. The ActiveLocale attribute shall have a default value " +
-                "assigned by the Vendor and shall be a value contained within the SupportedLocales attribute list." +
+                "assigned by the Vendor and shall be a value contained within the SupportedLocales attribute." +
                 "\n" +
-                "An attempt to write a value to ActiveLocale that is not present in SupportedLocales shall result in " +
+                "An attempt to write a value to ActiveLocale that is not present in SupportedLocales shall result in" +
+                "\n" +
                 "a CONSTRAINT_ERROR error.",
 
             xref: { document: "core", section: "11.3.4.1" }
@@ -55,4 +55,6 @@ Matter.children.push(Cluster({
             children: [Field({ name: "entry", type: "string" })]
         })
     ]
-}));
+});
+
+Matter.children.push(LocalizationConfiguration);

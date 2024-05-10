@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const WindowCoveringControllerDT = DeviceType({
     name: "WindowCoveringController", id: 0x203, classification: "simple",
     details: "A Window Covering Controller is a device that controls an automatic window covering.",
     xref: { document: "device", section: "8.4" },
@@ -17,30 +17,30 @@ Matter.children.push(DeviceType({
     children: [
         Requirement({
             name: "Descriptor", id: 0x1d, element: "serverCluster",
-            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 515, revision: 2 } ], element: "attribute" })]
+            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 515, revision: 3 } ], element: "attribute" })]
         }),
         Requirement({
             name: "Identify", id: 0x3, conformance: "O", element: "serverCluster",
-            xref: { document: "device", section: "8.4.4" },
-            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
-        }),
-        Requirement({
-            name: "Identify", id: 0x3, conformance: "O", element: "clientCluster",
-            xref: { document: "device", section: "8.4.4" },
-            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
-        }),
-        Requirement({
-            name: "Groups", id: 0x4, conformance: "Awake, O", element: "clientCluster",
             xref: { document: "device", section: "8.4.4" }
         }),
         Requirement({
-            name: "Scenes", id: 0x5, conformance: "Awake, O", element: "clientCluster",
+            name: "Identify", id: 0x3, conformance: "O", element: "clientCluster",
+            xref: { document: "device", section: "8.4.4" }
+        }),
+        Requirement({
+            name: "Groups", id: 0x4, conformance: "Active, O", element: "clientCluster",
+            xref: { document: "device", section: "8.4.4" }
+        }),
+        Requirement({
+            name: "ScenesManagement", id: 0x62, conformance: "P, Active, O", element: "clientCluster",
             xref: { document: "device", section: "8.4.4" }
         }),
         Requirement({
             name: "WindowCovering", id: 0x102, conformance: "M", element: "clientCluster",
             xref: { document: "device", section: "8.4.4" },
-            children: [Requirement({ name: "ABSOLUTEPOSITION", conformance: "!Matter", element: "feature" })]
+            children: [Requirement({ name: "ABSOLUTEPOSITION", conformance: "Zigbee", element: "feature" })]
         })
     ]
-}));
+});
+
+Matter.children.push(WindowCoveringControllerDT);

@@ -227,7 +227,7 @@ function reparentToCanonicalParent(priority: PriorityHandler, variants: VariantD
 
         // If the canonical type is a global type that can have children, variants that reference a local type with
         // children need to be rewritten
-        if (type.base?.global && Metatype.hasChildren(type.effectiveMetatype)) {
+        if (type.base?.isGlobal && Metatype.hasChildren(type.effectiveMetatype)) {
             for (const variantName in variants.map) {
                 // Skip if this is the canonical variant or this variant already has children
                 const variant = variants.map[variantName];

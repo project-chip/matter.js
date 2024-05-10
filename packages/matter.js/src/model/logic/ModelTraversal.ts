@@ -80,7 +80,7 @@ export class ModelTraversal {
             const name = model.name;
             this.visitInheritance(parentOf(model), ancestor => {
                 // If parented by enum or bitmap, infer type as uint of same size
-                if ((ancestor as any).metatype) {
+                if ((ancestor as { effectiveMetatype?: string }).effectiveMetatype) {
                     switch (ancestor.name) {
                         case Globals.enum8.name:
                         case Globals.map8.name:
@@ -136,14 +136,30 @@ export class ModelTraversal {
                 return;
             }
             const type = this.getTypeName(model);
-            if (type !== undefined) {
-                // Allowed tags represent a priority so search each tag
-                // independently
+            if (type === undefined) {
+                return;
+            }
+
+            const path = type.split(".");
+
+            // Unqualified path.  This is the common case
+            if (path.length === 1) {
+                // Allowed tags represent a priority so search each tag independently
                 for (const tag of model.allowedBaseTags) {
-                    const found = this.findType(parentOf(model), type, tag);
+                    const found = this.findType(parentOf(model), path[0], tag);
                     if (found) {
                         return found;
                     }
+                }
+                return;
+            }
+
+            // Qualified path.  Identify the leaf parent then perform name/tag search within.  This is fun because we
+            // have to search scopes until we match the full path
+            for (const tag of model.allowedBaseTags) {
+                const found = this.findQualifiedType(parentOf(model), path, tag);
+                if (found) {
+                    return found;
                 }
             }
         });
@@ -159,7 +175,7 @@ export class ModelTraversal {
         let result: Model | undefined;
 
         this.visitInheritance(model, model => {
-            if (model.global) {
+            if (model.isGlobal) {
                 result = model;
                 return false;
             }
@@ -181,7 +197,7 @@ export class ModelTraversal {
         let result = false;
 
         this.visitInheritance(model, model => {
-            if (model.name === other.name && model.global === other.global) {
+            if (model.name === other.name && model.isGlobal === other.isGlobal) {
                 result = true;
                 return false;
             }
@@ -431,17 +447,82 @@ export class ModelTraversal {
      * Search inherited and structural type scope for a named type.
      */
     findType(scope: Model | undefined, name: string, tag: ElementTag): Model | undefined {
+        if (!scope) {
+            return;
+        }
+
         return this.operation(() => {
-            if (!scope) {
-                return;
-            }
-            const queue = Array<Model>(scope);
+            const queue = Array<Model>(scope as Model);
             for (scope = queue.shift(); scope; scope = queue.shift()) {
                 if (scope.isTypeScope) {
-                    const result = scope.children.select(name, [tag], this.dismissed);
+                    const result = scope.children.select(name, tag, this.dismissed);
                     if (result) {
                         return result;
                     }
+                }
+
+                // Search inherited scope next
+                const inheritedScope = this.findBase(scope);
+                if (inheritedScope) {
+                    queue.unshift(inheritedScope);
+                }
+
+                // Search parent scope once all inherited scope is searched
+                const parent = parentOf(scope);
+                if (parent) {
+                    queue.push(parent);
+                }
+            }
+        });
+    }
+
+    /**
+     * Similar to findType but operates with a qualified type name.
+     *
+     * Unlike findType, a qualified type may reference an element parented by any other, not just those with
+     * parent.isTypeScope === true.
+     *
+     * This is quite complicated and would be painfully slow except in practice we don't use many qualified types and
+     * those we do use resolve with few failing branches in the search once the root qualifier of the name matches.
+     */
+    findQualifiedType(scope: Model | undefined, path: string[], tag: ElementTag): Model | undefined {
+        if (!scope) {
+            return;
+        }
+
+        function resolve(scope: Model, position = 0): Model | undefined {
+            // The last position is the target model and must match tag type
+            if (position === path.length - 1) {
+                return scope.children.select(path[position], tag);
+            }
+
+            // Intermediate positions are just namespaces into which we recurse
+            for (const subscope of scope.children.selectAll(path[position])) {
+                const result = resolve(subscope, position + 1);
+                if (result) {
+                    return result;
+                }
+            }
+
+            // Special case for "Matter" element which normally cannot be referenced.  This allows for creating
+            // "absolute" paths by prefixing with "Matter.".
+            if (position === 0 && scope.tag === ElementTag.Matter && path[0] === "Matter") {
+                const result = resolve(scope, position + 1);
+                if (result) {
+                    return result;
+                }
+            }
+
+            // Path is not resolvable in this scope
+        }
+
+        return this.operation(() => {
+            const queue = Array<Model>(scope as Model);
+            for (scope = queue.shift(); scope; scope = queue.shift()) {
+                // First attempt to resolve in the current scope
+                const resolved = resolve(scope);
+                if (resolved) {
+                    return resolved;
                 }
 
                 // Search inherited scope next
@@ -490,8 +571,7 @@ export class ModelTraversal {
                 return;
             }
 
-            // This is not common but the default value can reference another
-            // field
+            // This is not common but the default value can reference another field
             if (model.isType) {
                 const defaultValue = (model as ValueModel).default;
                 if (FieldValue.is(defaultValue, FieldValue.reference)) {
@@ -559,10 +639,11 @@ export class ModelTraversal {
      * Visit all nodes in the inheritance hierarchy until the visitor returns false.
      */
     visitInheritance(model: Model | undefined, visitor: (model: Model) => boolean | void): boolean | undefined {
+        if (!model) {
+            return;
+        }
+
         return this.operation(() => {
-            if (!model) {
-                return;
-            }
             if (visitor(model) === false) {
                 return false;
             }
@@ -572,15 +653,15 @@ export class ModelTraversal {
     }
 
     /**
-     * If a model is not owned by a MatterModel, global resolution won't work.
-     * This model acts as a fallback to work around this.
+     * If a model is not owned by a MatterModel, global resolution won't work.  This model acts as a fallback to work
+     * around this.
      */
-    static defaultRoot: Model;
+    static fallbackScope: Model | undefined;
 }
 
 function parentOf(model?: Model) {
     if (model?.parent === undefined && model?.tag !== ElementTag.Matter) {
-        return ModelTraversal.defaultRoot;
+        return ModelTraversal.fallbackScope;
     }
     return model?.parent;
 }

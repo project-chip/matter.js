@@ -34,20 +34,26 @@ const args = await yargs(hideBin(process.argv))
     .option("devices", { type: "boolean", describe: "ingest devices" })
     .option("save", { type: "boolean", describe: "writes the generated model to disk" })
     .option("path", { type: "string", describe: "path to spec index or directory of indices" })
+    .option("document", {
+        type: "string",
+        describe: "limit ingestion to a specific document",
+        choices: ["core", "cluster", "device"],
+    })
     .option("revision", { type: "string", describe: "spec version if path is unspecified" })
     .wrap(null) // Grr ESM version word wrap is broken so we just wrap manually to 79 chars
     .strict().argv;
 
 if (!args.clusters && !args.devices) {
     args.clusters = args.devices = true;
-    if (args.save === undefined) {
+    if (args.save === undefined && args.document === undefined) {
         args.save = true;
     }
 }
 
 let version = args.revision;
 
-const files = [...SpecFile.load({ version, path: args.path })];
+const files = [...SpecFile.load({ version, path: args.path, document: args.document })];
+
 for (const file of files) {
     if (version === undefined) {
         version = file.version;
@@ -74,4 +80,6 @@ for (const file of files) {
 
 if (args.save) {
     intermediate.save();
+} else {
+    intermediate.validate();
 }

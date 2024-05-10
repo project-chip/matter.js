@@ -15,9 +15,19 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "AudioOutput", id: 0x50b, classification: "application", description: "Audio Output",
-    details: "This cluster provides an interface for controlling the Output on a Video Player device such as a TV.",
+export const AudioOutput = Cluster({
+    name: "AudioOutput", id: 0x50b, classification: "application",
+
+    details: "This cluster provides an interface for controlling the Output on a Video Player device such as a TV." +
+        "\n" +
+        "This cluster would be supported on a device with audio outputs like a Video Player device (Smart " +
+        "TV, TV Setup Top Box, Smart Speaker, etc)." +
+        "\n" +
+        "This cluster provides the list of available outputs and provides commands for selecting and " +
+        "renaming them." +
+        "\n" +
+        "The cluster server for Audio Output is implemented by a device that has configurable audio output.",
+
     xref: { document: "cluster", section: "6.5" },
 
     children: [
@@ -25,7 +35,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
-            xref: { document: "cluster", section: "6.5.2" },
+            xref: { document: "cluster", section: "6.5.4" },
             children: [Field({
                 name: "NU", constraint: "0", description: "NameUpdates",
                 details: "Supports updates to output names"
@@ -33,23 +43,37 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "OutputList", id: 0x0, type: "list", access: "R V", conformance: "M", constraint: "none",
-            details: "This list provides the outputs supported by the device.",
-            xref: { document: "cluster", section: "6.5.3.1" },
+            name: "OutputList", id: 0x0, type: "list", access: "R V", conformance: "M",
+            details: "This attribute provides the list of outputs supported by the device.",
+            xref: { document: "cluster", section: "6.5.6.1" },
             children: [Field({ name: "entry", type: "OutputInfoStruct" })]
         }),
 
         Attribute({
-            name: "CurrentOutput", id: 0x1, type: "uint8", access: "R V", conformance: "M", default: 0,
-            details: "This field contains the value of the index field of the currently selected OutputInfoStruct.",
-            xref: { document: "cluster", section: "6.5.3.2" }
+            name: "CurrentOutput", id: 0x1, type: "uint8", access: "R V", conformance: "M",
+            details: "This attribute contains the value of the index field of the currently selected OutputInfoStruct.",
+            xref: { document: "cluster", section: "6.5.6.2" }
         }),
 
         Command({
             name: "SelectOutput", id: 0x0, access: "O", conformance: "M", direction: "request",
             response: "status",
-            xref: { document: "cluster", section: "6.5.4" },
-            children: [Field({ name: "Index", type: "uint8", conformance: "M" })]
+
+            details: "Upon receipt, this shall change the output on the device to the output at a specific index in the " +
+                "Output List." +
+                "\n" +
+                "Note that when the current output is set to an output of type HDMI, adjustments to volume via a " +
+                "Speaker endpoint on the same node may cause HDMI volume up/down commands to be sent to the given " +
+                "HDMI output.",
+
+            xref: { document: "cluster", section: "6.5.7.1" },
+
+            children: [Field({
+                name: "Index", id: 0x0, type: "uint8", conformance: "M",
+                details: "This shall indicate the index field of the OutputInfoStruct from the OutputList attribute in which " +
+                    "to change to.",
+                xref: { document: "cluster", section: "6.5.7.1.1" }
+            })]
         }),
 
         Command({
@@ -59,7 +83,7 @@ Matter.children.push(Cluster({
                 "\n" +
                 "Updates to the output name shall appear in the device’s settings menus. Name updates may " +
                 "automatically be sent to the actual device to which the output connects.",
-            xref: { document: "cluster", section: "6.5.4.2" },
+            xref: { document: "cluster", section: "6.5.7.2" },
             children: [
                 Field({ name: "Index", id: 0x0, type: "uint8", conformance: "M" }),
                 Field({ name: "Name", id: 0x1, type: "string", conformance: "M" })
@@ -67,35 +91,9 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "OutputInfoStruct", type: "struct", conformance: "M",
-            details: "This contains information about an output.",
-            xref: { document: "cluster", section: "6.5.5.1" },
-
-            children: [
-                Field({
-                    name: "Index", id: 0x0, type: "uint8", conformance: "M",
-                    details: "This shall indicate the unique index into the list of outputs.",
-                    xref: { document: "cluster", section: "6.5.5.1.1" }
-                }),
-                Field({
-                    name: "OutputType", id: 0x1, type: "OutputTypeEnum", conformance: "M", constraint: "desc",
-                    details: "This shall indicate the type of output",
-                    xref: { document: "cluster", section: "6.5.5.1.2" }
-                }),
-
-                Field({
-                    name: "Name", id: 0x2, type: "string", conformance: "M", constraint: "max 32",
-                    details: "The device defined and user editable output name, such as “Soundbar”, “Speakers”. This field may be " +
-                        "blank, but SHOULD be provided when known.",
-                    xref: { document: "cluster", section: "6.5.5.1.3" }
-                })
-            ]
-        }),
-
-        Datatype({
-            name: "OutputTypeEnum", type: "enum8", conformance: "M",
+            name: "OutputTypeEnum", type: "enum8",
             details: "The type of output, expressed as an enum, with the following values:",
-            xref: { document: "cluster", section: "6.5.5.2" },
+            xref: { document: "cluster", section: "6.5.5.1" },
 
             children: [
                 Field({ name: "Hdmi", id: 0x0, conformance: "M", description: "HDMI" }),
@@ -105,6 +103,34 @@ Matter.children.push(Cluster({
                 Field({ name: "Internal", id: 0x4, conformance: "M" }),
                 Field({ name: "Other", id: 0x5, conformance: "M" })
             ]
+        }),
+
+        Datatype({
+            name: "OutputInfoStruct", type: "struct",
+            details: "This contains information about an output.",
+            xref: { document: "cluster", section: "6.5.5.2" },
+
+            children: [
+                Field({
+                    name: "Index", id: 0x0, type: "uint8", conformance: "M",
+                    details: "This field shall indicate the unique index into the list of outputs.",
+                    xref: { document: "cluster", section: "6.5.5.2.1" }
+                }),
+                Field({
+                    name: "OutputType", id: 0x1, type: "OutputTypeEnum", conformance: "M", constraint: "desc",
+                    details: "This field shall indicate the type of output.",
+                    xref: { document: "cluster", section: "6.5.5.2.2" }
+                }),
+
+                Field({
+                    name: "Name", id: 0x2, type: "string", conformance: "M",
+                    details: "The device defined and user editable output name, such as “Soundbar”, “Speakers”. This field may be " +
+                        "blank, but SHOULD be provided when known.",
+                    xref: { document: "cluster", section: "6.5.5.2.3" }
+                })
+            ]
         })
     ]
-}));
+});
+
+Matter.children.push(AudioOutput);

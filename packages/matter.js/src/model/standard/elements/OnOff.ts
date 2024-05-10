@@ -15,29 +15,49 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "OnOff", id: 0x6, classification: "application", description: "On/Off",
+export const OnOff = Cluster({
+    name: "OnOff", id: 0x6, classification: "application",
     details: "Attributes and commands for turning devices on and off.",
     xref: { document: "cluster", section: "1.5" },
 
     children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 4 }),
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 6 }),
 
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
             xref: { document: "cluster", section: "1.5.4" },
-            children: [Field({
-                name: "LT", constraint: "0", description: "LevelControlForLighting",
-                details: "Behavior that supports lighting applications."
-            })]
+
+            children: [
+                Field({
+                    name: "LT", conformance: "[!OFFONLY]", constraint: "0", description: "Lighting",
+                    details: "Behavior that supports lighting applications."
+                }),
+                Field({
+                    name: "DF", conformance: "[!OFFONLY]", constraint: "1", description: "DeadFrontBehavior",
+                    details: "Device has Dead Front behavior"
+                }),
+
+                Field({
+                    name: "OFFONLY", conformance: "[!LT | DF]", constraint: "2", description: "OffOnly",
+
+                    details: "When this feature is supported, the Off command shall be supported and the On and Toggle commands " +
+                        "shall NOT be supported." +
+                        "\n" +
+                        "This feature is useful for devices which can be turned off via the Off command received by an " +
+                        "instance of this cluster but cannot be turned on via commands received by an instance of this " +
+                        "cluster due to regulatory requirements.",
+
+                    xref: { document: "cluster", section: "1.5.4.3" }
+                })
+            ]
         }),
 
         Attribute({
             name: "OnOff", id: 0x0, type: "bool", access: "R V", conformance: "M", default: true,
             quality: "N S",
-            details: "The OnOff attribute indicates whether the device type implemented on the endpoint is turned off or " +
+            details: "This attribute indicates whether the device type implemented on the endpoint is turned off or " +
                 "turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively.",
-            xref: { document: "cluster", section: "1.5.6.1" }
+            xref: { document: "cluster", section: "1.5.6.2" }
         }),
 
         Attribute({
@@ -49,72 +69,67 @@ Matter.children.push(Cluster({
                 "turned off and recalled when the devices are turned on. The global scene is defined as the scene " +
                 "that is stored with group identifier 0 and scene identifier 0." +
                 "\n" +
-                "The GlobalSceneControl attribute is defined in order to prevent a second Off command storing the " +
-                "all-devices-off situation as a global scene, and to prevent a second On command destroying the " +
-                "current settings by going back to the global scene." +
+                "This attribute is defined in order to prevent a second Off command storing the all-devices-off " +
+                "situation as a global scene, and to prevent a second On command destroying the current settings by " +
+                "going back to the global scene." +
                 "\n" +
-                "The GlobalSceneControl attribute shall be set to TRUE after the reception of a command which causes " +
-                "the OnOff attribute to be set to TRUE, such as a standard On command, a MoveToLevel(WithOnOff) " +
-                "command, a RecallScene command or a OnWithRecallGlobalScene command (see OnWithRecallGlobalScene " +
-                "Command)." +
+                "This attribute shall be set to TRUE after the reception of a command which causes the OnOff " +
+                "attribute to be set to TRUE, such as a standard On command, a MoveToLevel(WithOnOff) command, a " +
+                "RecallScene command or a OnWithRecallGlobalScene command." +
                 "\n" +
-                "The GlobalSceneControl attribute is set to FALSE after reception of a OffWithEffect command.",
+                "This attribute is set to FALSE after reception of a OffWithEffect command.",
 
-            xref: { document: "cluster", section: "1.5.6.2" }
-        }),
-
-        Attribute({
-            name: "OnTime", id: 0x4001, type: "uint16", access: "RW VO", conformance: "LT", default: 0,
-            quality: "X",
-            details: "The OnTime attribute specifies the length of time (in 1/10ths second) that the ‘On’ state shall be " +
-                "maintained before automatically transitioning to the ‘Off’ state when using the OnWithTimedOff " +
-                "command. This attribute can be written at any time, but writing a value only has effect when in the " +
-                "‘Timed On’ state. See OnWithTimedOff Command for more details.",
             xref: { document: "cluster", section: "1.5.6.3" }
         }),
 
         Attribute({
-            name: "OffWaitTime", id: 0x4002, type: "uint16", access: "RW VO", conformance: "LT", default: 0,
-            quality: "X",
-
-            details: "The OffWaitTime attribute specifies the length of time (in 1/10ths second) that the ‘Off’ state " +
-                "shall be guarded to prevent another OnWithTimedOff command turning the server back to its ‘On’ " +
-                "state (e.g., when leaving a room, the lights are turned off but an occupancy sensor detects the " +
-                "leaving person and attempts to turn the lights back on). This attribute can be written at any time, " +
-                "but writing a value only has an effect when in the ‘Timed On’ state followed by a transition to the " +
-                "‘Delayed Off' state, or in the ‘Delayed Off’ state. See OnWithTimedOff Command for more details.",
-
+            name: "OnTime", id: 0x4001, type: "uint16", access: "RW VO", conformance: "LT", default: 0,
+            details: "This attribute specifies the length of time (in 1/10ths second) that the On state shall be " +
+                "maintained before automatically transitioning to the Off state when using the OnWithTimedOff " +
+                "command. This attribute can be written at any time, but writing a value only has effect when in the " +
+                "Timed On state. See OnWithTimedOff for more details.",
             xref: { document: "cluster", section: "1.5.6.4" }
+        }),
+
+        Attribute({
+            name: "OffWaitTime", id: 0x4002, type: "uint16", access: "RW VO", conformance: "LT", default: 0,
+
+            details: "This attribute specifies the length of time (in 1/10ths second) that the Off state shall be guarded " +
+                "to prevent another OnWithTimedOff command turning the server back to its On state (e.g., when " +
+                "leaving a room, the lights are turned off but an occupancy sensor detects the leaving person and " +
+                "attempts to turn the lights back on). This attribute can be written at any time, but writing a " +
+                "value only has an effect when in the Timed On state followed by a transition to the Delayed Off " +
+                "state, or in the Delayed Off state. See OnWithTimedOff for more details.",
+
+            xref: { document: "cluster", section: "1.5.6.5" }
         }),
 
         Attribute({
             name: "StartUpOnOff", id: 0x4003, type: "StartUpOnOffEnum", access: "RW VM", conformance: "LT",
             constraint: "desc", quality: "X N",
 
-            details: "The StartUpOnOff attribute shall define the desired startup behavior of a device when it is " +
-                "supplied with power and this state shall be reflected in the OnOff attribute. If the value is null, " +
-                "the OnOff attribute is set to its previous value. Otherwise, the behavior is defined in the table " +
-                "defining StartUpOnOffEnum." +
+            details: "This attribute shall define the desired startup behavior of a device when it is supplied with power " +
+                "and this state shall be reflected in the OnOff attribute. If the value is null, the OnOff attribute " +
+                "is set to its previous value. Otherwise, the behavior is defined in the table defining " +
+                "StartUpOnOffEnum." +
                 "\n" +
                 "This behavior does not apply to reboots associated with OTA. After an OTA restart, the OnOff " +
                 "attribute shall return to its value prior to the restart.",
 
-            xref: { document: "cluster", section: "1.5.6.5" }
+            xref: { document: "cluster", section: "1.5.6.6" }
         }),
 
         Command({
             name: "Off", id: 0x0, access: "O", conformance: "M", direction: "request", response: "status",
-            details: "This command does not have any data fields.",
             xref: { document: "cluster", section: "1.5.7.1" }
         }),
         Command({
-            name: "On", id: 0x1, access: "O", conformance: "M", direction: "request", response: "status",
-            details: "This command does not have any data fields.",
+            name: "On", id: 0x1, access: "O", conformance: "!OFFONLY", direction: "request", response: "status",
             xref: { document: "cluster", section: "1.5.7.2" }
         }),
         Command({
-            name: "Toggle", id: 0x2, access: "O", conformance: "M", direction: "request", response: "status",
-            details: "This command does not have any data fields.",
+            name: "Toggle", id: 0x2, access: "O", conformance: "!OFFONLY", direction: "request",
+            response: "status",
             xref: { document: "cluster", section: "1.5.7.3" }
         }),
 
@@ -126,21 +141,20 @@ Matter.children.push(Cluster({
 
             children: [
                 Field({
-                    name: "EffectIdentifier", id: 0x0, type: "OnOffEffectIdentifier", conformance: "M",
+                    name: "EffectIdentifier", id: 0x0, type: "EffectIdentifierEnum", conformance: "M",
                     constraint: "desc",
-                    details: "The EffectIdentifier field specifies the fading effect to use when turning the device off. This " +
-                        "field shall contain one of the non-reserved values listed in Values of the EffectIdentifier Field " +
-                        "of the OffWithEffect Command.",
+                    details: "This field specifies the fading effect to use when turning the device off. This field shall contain " +
+                        "one of the non-reserved values listed in EffectIdentifierEnum.",
                     xref: { document: "cluster", section: "1.5.7.4.1" }
                 }),
 
                 Field({
-                    name: "EffectVariant", id: 0x1, type: "uint8", conformance: "M", constraint: "desc",
-                    details: "The EffectVariant field is used to indicate which variant of the effect, indicated in the " +
-                        "EffectIdentifier field, SHOULD be triggered. If the server does not support the given variant, it " +
-                        "shall use the default variant. This field is dependent on the value of the EffectIdentifier field " +
-                        "and shall contain one of the non-reserved values listed in Values of the EffectVariant Field of the " +
-                        "OffWithEffect Command.",
+                    name: "EffectVariant", id: 0x1, type: "enum8", conformance: "M", constraint: "desc", default: 0,
+                    details: "This field is used to indicate which variant of the effect, indicated in the EffectIdentifier " +
+                        "field, SHOULD be triggered. If the server does not support the given variant, it shall use the " +
+                        "default variant. This field is dependent on the value of the EffectIdentifier field and shall " +
+                        "contain one of the non-reserved values listed in either DelayedAllOffEffectVariantEnum or " +
+                        "DyingLightEffectVariantEnum.",
                     xref: { document: "cluster", section: "1.5.7.4.2" }
                 })
             ]
@@ -149,62 +163,50 @@ Matter.children.push(Cluster({
         Command({
             name: "OnWithRecallGlobalScene", id: 0x41, access: "O", conformance: "LT", direction: "request",
             response: "status",
-            details: "The OnWithRecallGlobalScene command allows the recall of the settings when the device was turned " +
-                "off." +
-                "\n" +
-                "The OnWithRecallGlobalScene command shall have no parameters.",
+            details: "This command allows the recall of the settings when the device was turned off.",
             xref: { document: "cluster", section: "1.5.7.5" }
         }),
 
         Command({
             name: "OnWithTimedOff", id: 0x42, access: "O", conformance: "LT", direction: "request",
             response: "status",
-
-            details: "The OnWithTimedOff command allows devices to be turned on for a specific duration with a guarded " +
-                "off duration so that SHOULD the device be subsequently turned off, further OnWithTimedOff commands, " +
-                "received during this time, are prevented from turning the devices back on. Further" +
-                "\n" +
-                "OnWithTimedOff commands received while the server is turned on, will update the period that the " +
-                "device is turned on.",
-
+            details: "This command allows devices to be turned on for a specific duration with a guarded off duration so " +
+                "that SHOULD the device be subsequently turned off, further OnWithTimedOff commands, received during " +
+                "this time, are prevented from turning the devices back on. Further OnWithTimedOff commands received " +
+                "while the server is turned on, will update the period that the device is turned on.",
             xref: { document: "cluster", section: "1.5.7.6" },
 
             children: [
                 Field({
-                    name: "OnOffControl", id: 0x0, type: "map8", conformance: "M",
-
-                    details: "The OnOffControl field contains information on how the server is to be operated. This field shall " +
-                        "be formatted as illustrated in Format of the OnOffControl Field of the OnWithTimedOff Command." +
-                        "\n" +
-                        "The AcceptOnlyWhenOn sub-field is 1 bit in length and specifies whether the OnWithTimedOff command " +
-                        "is to be processed unconditionally or only when the OnOff attribute is equal to TRUE. If this " +
-                        "sub-field is set to 1, the OnWithTimedOff command shall only be accepted if the OnOff attribute is " +
-                        "equal to TRUE. If this sub-field is set to 0, the OnWithTimedOff command shall be processed " +
-                        "unconditionally.",
-
-                    xref: { document: "cluster", section: "1.5.7.6.1" },
-                    children: [
-                        Field({ name: "AcceptOnlyWhenOn", constraint: "0" }),
-                        Field({ name: "Reserved", constraint: "1 to 8" })
-                    ]
+                    name: "OnOffControl", id: 0x0, type: "OnOffControlBitmap", conformance: "M", constraint: "0 to 1",
+                    details: "This field contains information on how the server is to be operated.",
+                    xref: { document: "cluster", section: "1.5.7.6.1" }
                 }),
-
                 Field({
-                    name: "OnTime", id: 0x1, type: "uint16", conformance: "M", quality: "X",
-                    details: "The OnTime field is used to adjust the value of the OnTime attribute.",
+                    name: "OnTime", id: 0x1, type: "uint16", conformance: "M", constraint: "max 65534",
+                    details: "This field is used to adjust the value of the OnTime attribute.",
                     xref: { document: "cluster", section: "1.5.7.6.2" }
                 }),
                 Field({
-                    name: "OffWaitTime", id: 0x2, type: "uint16", conformance: "M", quality: "X",
-                    details: "The OffWaitTime field is used to adjust the value of the OffWaitTime attribute.",
+                    name: "OffWaitTime", id: 0x2, type: "uint16", conformance: "M", constraint: "max 65534",
+                    details: "This field is used to adjust the value of the OffWaitTime attribute.",
                     xref: { document: "cluster", section: "1.5.7.6.3" }
                 })
             ]
         }),
 
         Datatype({
-            name: "StartUpOnOffEnum", type: "enum8", conformance: "M",
+            name: "OnOffControlBitmap", type: "map8",
             xref: { document: "cluster", section: "1.5.5.1" },
+            children: [Field({
+                name: "AcceptOnlyWhenOn", constraint: "0",
+                description: "Indicates a command is only accepted when in On state."
+            })]
+        }),
+
+        Datatype({
+            name: "StartUpOnOffEnum", type: "enum8",
+            xref: { document: "cluster", section: "1.5.5.2" },
 
             children: [
                 Field({ name: "Off", id: 0x0, conformance: "M", description: "Set the OnOff attribute to FALSE" }),
@@ -217,11 +219,37 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "OnOffEffectIdentifier", type: "enum8", conformance: "M",
+            name: "EffectIdentifierEnum", type: "enum8",
+            xref: { document: "cluster", section: "1.5.5.3" },
             children: [
-                Field({ name: "DelayedAllOff", id: 0x0, conformance: "M" }),
-                Field({ name: "DyingLight", id: 0x1, conformance: "M" })
+                Field({ name: "DelayedAllOff", id: 0x0, conformance: "M", description: "Delayed All Off" }),
+                Field({ name: "DyingLight", id: 0x1, conformance: "M", description: "Dying Light" })
             ]
+        }),
+
+        Datatype({
+            name: "DelayedAllOffEffectVariantEnum", type: "enum8",
+            xref: { document: "cluster", section: "1.5.5.4" },
+
+            children: [
+                Field({ name: "DelayedOffFastFade", id: 0x0, conformance: "M", description: "Fade to off in 0.8 seconds" }),
+                Field({ name: "NoFade", id: 0x1, conformance: "M", description: "No fade" }),
+                Field({
+                    name: "DelayedOffSlowFade", id: 0x2, conformance: "M",
+                    description: "50% dim down in 0.8 seconds then fade to off in 12 seconds"
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "DyingLightEffectVariantEnum", type: "enum8",
+            xref: { document: "cluster", section: "1.5.5.5" },
+            children: [Field({
+                name: "DyingLightFadeOff", id: 0x0, conformance: "M",
+                description: "20% dim up in 0.5s then fade to off in 1 second"
+            })]
         })
     ]
-}));
+});
+
+Matter.children.push(OnOff);

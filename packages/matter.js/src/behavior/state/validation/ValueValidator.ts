@@ -202,7 +202,7 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
 
     for (const field of schema.members) {
         // Global fields currently handled in lower levels
-        if (field.isGlobalAttribute || field.isDeprecated) {
+        if (field.isDeprecated) {
             continue;
         }
         const validate = factory.get(field).validate;

@@ -15,8 +15,7 @@ import { convertJsonDataWithModel } from "../util/Json";
 import { camelize } from "../util/String";
 
 function generateAllAttributeHandlersForCluster(yargs: Argv, theNode: MatterNode) {
-    const model = new MatterModel();
-    model.clusters.forEach(cluster => {
+    MatterModel.standard.clusters.forEach(cluster => {
         yargs = generateClusterAttributeHandlers(yargs, cluster, theNode);
     });
 

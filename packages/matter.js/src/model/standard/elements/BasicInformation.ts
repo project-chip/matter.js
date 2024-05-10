@@ -15,9 +15,8 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "BasicInformation", id: 0x28, classification: "node", description: "Basic Information",
-    singleton: true,
+export const BasicInformation = Cluster({
+    name: "BasicInformation", id: 0x28, classification: "node",
     details: "This cluster provides attributes and events for determining basic information about Nodes, which " +
         "supports both Commissioning and operational determination of Node characteristics, such as Vendor " +
         "ID, Product ID and serial number, which apply to the whole Node.",
@@ -27,9 +26,11 @@ Matter.children.push(Cluster({
         Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
 
         Attribute({
-            name: "DataModelRevision", id: 0x0, type: "uint16", access: "R V", conformance: "M", quality: "F",
+            name: "DataModelRevision", id: 0x0, type: "uint16", access: "R V", conformance: "M",
+            constraint: "desc", quality: "F",
             details: "This attribute shall be set to the revision number of the Data Model against which the Node is " +
-                "certified.",
+                "certified. The value of this attribute shall be one of the valid values listed in Section 7.1.1, " +
+                "“Revision History”.",
             xref: { document: "core", section: "11.1.5.1" }
         }),
 
@@ -107,11 +108,14 @@ Matter.children.push(Cluster({
         Attribute({
             name: "SoftwareVersion", id: 0x9, type: "uint32", access: "R V", conformance: "M",
             constraint: "desc", default: 0, quality: "F",
-            details: "This attribute shall contain the current version number for the software running on this Node. The " +
-                "version number can be compared using a total ordering to determine if a version is logically newer " +
-                "than another one. A larger value of SoftwareVersion is newer than a lower value, from the " +
-                "perspective of software updates (see Section 11.19.3.3, “Availability of Software Images”). Nodes " +
+
+            details: "This attribute shall contain the current version number for the software running on this Node." +
+                "\n" +
+                "The version number can be compared using a total ordering to determine if a version is logically " +
+                "newer than another one. A larger value of SoftwareVersion is newer than a lower value, from the " +
+                "perspective of software updates (see Section 11.20.3.3, “Availability of Software Images”). Nodes " +
                 "may query this field to determine the currently running version of software on another given Node.",
+
             xref: { document: "core", section: "11.1.5.10" }
         }),
 
@@ -133,14 +137,11 @@ Matter.children.push(Cluster({
         Attribute({
             name: "ManufacturingDate", id: 0xb, type: "string", access: "R V", conformance: "O",
             constraint: "8 to 16", quality: "F",
-
             details: "This attribute shall specify the date that the Node was manufactured. The first 8 characters shall " +
                 "specify the date of manufacture of the Node in international date notation according to ISO 8601, " +
                 "i.e., YYYYMMDD, e.g., 20060814. The final 8 characters may include country, factory, line, shift or " +
-                "other related information at the option of the vendor. The format of this information is vendor" +
-                "\n" +
+                "other related information at the option of the vendor. The format of this information is vendor " +
                 "defined.",
-
             xref: { document: "core", section: "11.1.5.12" }
         }),
 
@@ -181,7 +182,7 @@ Matter.children.push(Cluster({
         Attribute({
             name: "SerialNumber", id: 0xf, type: "string", access: "R V", conformance: "O",
             constraint: "max 32", quality: "F",
-            details: "This attributes shall specify a human readable (displayable) serial number.",
+            details: "This attribute shall specify a human readable (displayable) serial number.",
             xref: { document: "core", section: "11.1.5.16" }
         }),
 
@@ -248,8 +249,69 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "ProductAppearance", id: 0x14, type: "ProductAppearanceStruct", conformance: "O",
-            quality: "F"
+            name: "ProductAppearance", id: 0x14, type: "ProductAppearanceStruct", access: "R V",
+            conformance: "O", quality: "F",
+            details: "This attribute shall provide information about the appearance of the product, which could be useful " +
+                "to a user trying to locate or identify the node.",
+            xref: { document: "core", section: "11.1.5.21" }
+        }),
+
+        Attribute({
+            name: "SpecificationVersion", id: 0x15, type: "uint32", access: "R V", conformance: "M",
+            constraint: "desc", default: 0, quality: "F",
+
+            details: "This attribute shall contain the current version number for the specification version this Node was " +
+                "certified against. The version number can be compared using a total ordering to determine if a " +
+                "version is logically newer than another one. A larger value of SpecificationVersion is newer than a " +
+                "lower value." +
+                "\n" +
+                "Nodes may query this field to determine the currently supported version of the specification on " +
+                "another given Node." +
+                "\n" +
+                "The format of this number is segmented as its four component bytes. Bit positions for the fields " +
+                "are as follows:" +
+                "\n" +
+                "For example, a SpecificationVersion value of 0x0102AA00 is composed of 4 version components, " +
+                "representing a version 1.2.170.0." +
+                "\n" +
+                "In the example above:" +
+                "\n" +
+                "  • Major version is the uppermost byte (0x01)." +
+                "\n" +
+                "  • Minor version is the following byte (0x02)." +
+                "\n" +
+                "  • Patch version is 170/0xAA." +
+                "\n" +
+                "  • Reserved1 value is 0." +
+                "\n" +
+                "The initial revision (1.0) of this specification (1.0) was 0x01000000. Matter Spring 2024 release " +
+                "(1.3) was 0x01030000." +
+                "\n" +
+                "If the SpecificationVersion is absent or zero, such as in Basic Information cluster revisions prior " +
+                "to Revision 3, the specification version cannot be properly inferred unless other heuristics are " +
+                "employed." +
+                "\n" +
+                "Comparison of SpecificationVersion shall always include the total value over 32 bits, without " +
+                "masking reserved parts.",
+
+            xref: { document: "core", section: "11.1.5.22" }
+        }),
+
+        Attribute({
+            name: "MaxPathsPerInvoke", id: 0x16, type: "uint16", access: "R V", conformance: "M",
+            constraint: "min 1", default: 1, quality: "F",
+
+            details: "This attribute shall indicate the maximum number of elements in a single InvokeRequests list (see " +
+                "Section 8.8.2, “Invoke Request Action”) that the Node is able to process. Note that since this " +
+                "attribute may change over time, both increasing and decreasing, as software versions change for a " +
+                "given Node, clients SHOULD take care not to assume forever unchanging values and SHOULD NOT" +
+                "\n" +
+                "cache this value permanently at Commissioning time." +
+                "\n" +
+                "If the MaxPathsPerInvoke attribute is absent or zero, such as in Basic Information cluster " +
+                "revisions prior to Revision 3, clients shall assume a value of 1.",
+
+            xref: { document: "core", section: "11.1.5.23" }
         }),
 
         Event({
@@ -258,11 +320,9 @@ Matter.children.push(Cluster({
                 "reboot process. The StartUp event SHOULD be the first Data Model event recorded by the Node after " +
                 "it completes a boot or reboot process.",
             xref: { document: "core", section: "11.1.6.1" },
-
             children: [Field({
                 name: "SoftwareVersion", id: 0x0, type: "uint32", conformance: "M",
-                details: "This field shall be set to the same value as the one available in the Software Version attribute of " +
-                    "the Basic Information Cluster.",
+                details: "This field shall be set to the same value as the one available in the SoftwareVersion attribute.",
                 xref: { document: "core", section: "11.1.6.1.1" }
             })]
         }),
@@ -286,7 +346,8 @@ Matter.children.push(Cluster({
                 "Leave event is generated, it SHOULD be assumed that the fabric recorded in the event is no longer " +
                 "usable, and subsequent interactions targeting that fabric will most likely fail." +
                 "\n" +
-                "Upon receipt of Leave Event on a subscription, the receiving Node may update other nodes in the " +
+                "Upon receipt of Leave Event on a subscription, the receiving Node may update other nodes in the" +
+                "\n" +
                 "fabric by removing related bindings, access control list entries and other data referencing the " +
                 "leaving Node.",
 
@@ -314,10 +375,81 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "CapabilityMinimaStruct", type: "struct", conformance: "M",
+            name: "ProductFinishEnum", type: "enum8",
+            details: "The data type of ProductFinishEnum is derived from enum8.",
+            xref: { document: "core", section: "11.1.4.1" },
+
+            children: [
+                Field({
+                    name: "Other", id: 0x0, conformance: "M",
+                    description: "Product has some other finish not listed below."
+                }),
+                Field({ name: "Matte", id: 0x1, conformance: "M", description: "Product has a matte finish." }),
+                Field({ name: "Satin", id: 0x2, conformance: "M", description: "Product has a satin finish." }),
+                Field({
+                    name: "Polished", id: 0x3, conformance: "M", description: "Product has a polished or shiny finish."
+                }),
+                Field({ name: "Rugged", id: 0x4, conformance: "M", description: "Product has a rugged finish." }),
+                Field({ name: "Fabric", id: 0x5, conformance: "M", description: "Product has a fabric finish." })
+            ]
+        }),
+
+        Datatype({
+            name: "ColorEnum", type: "enum8",
+            details: "The data type of ColorEnum is derived from enum8.",
+            xref: { document: "core", section: "11.1.4.2" },
+
+            children: [
+                Field({ name: "Black", id: 0x0, conformance: "M", description: "Approximately RGB #000000." }),
+                Field({ name: "Navy", id: 0x1, conformance: "M", description: "Approximately RGB #000080." }),
+                Field({ name: "Green", id: 0x2, conformance: "M", description: "Approximately RGB #008000." }),
+                Field({ name: "Teal", id: 0x3, conformance: "M", description: "Approximately RGB #008080." }),
+                Field({ name: "Maroon", id: 0x4, conformance: "M", description: "Approximately RGB #800080." }),
+                Field({ name: "Purple", id: 0x5, conformance: "M", description: "Approximately RGB #800080." }),
+                Field({ name: "Olive", id: 0x6, conformance: "M", description: "Approximately RGB #808000." }),
+                Field({ name: "Gray", id: 0x7, conformance: "M", description: "Approximately RGB #808080." }),
+                Field({ name: "Blue", id: 0x8, conformance: "M", description: "Approximately RGB #0000FF." }),
+                Field({ name: "Lime", id: 0x9, conformance: "M", description: "Approximately RGB #00FF00." }),
+                Field({ name: "Aqua", id: 0xa, conformance: "M", description: "Approximately RGB #00FFFF." }),
+                Field({ name: "Red", id: 0xb, conformance: "M", description: "Approximately RGB #FF0000." }),
+                Field({ name: "Fuchsia", id: 0xc, conformance: "M", description: "Approximately RGB #FF00FF." }),
+                Field({ name: "Yellow", id: 0xd, conformance: "M", description: "Approximately RGB #FFFF00." }),
+                Field({ name: "White", id: 0xe, conformance: "M", description: "Approximately RGB #FFFFFF." }),
+                Field({ name: "Nickel", id: 0xf, conformance: "M", description: "Typical hardware \"Nickel\" color." }),
+                Field({ name: "Chrome", id: 0x10, conformance: "M", description: "Typical hardware \"Chrome\" color." }),
+                Field({ name: "Brass", id: 0x11, conformance: "M", description: "Typical hardware \"Brass\" color." }),
+                Field({ name: "Copper", id: 0x12, conformance: "M", description: "Typical hardware \"Copper\" color." }),
+                Field({ name: "Silver", id: 0x13, conformance: "M", description: "Typical hardware \"Silver\" color." }),
+                Field({ name: "Gold", id: 0x14, conformance: "M", description: "Typical hardware \"Gold\" color." })
+            ]
+        }),
+
+        Datatype({
+            name: "ProductAppearanceStruct", type: "struct",
+            details: "This structure provides a description of the product’s appearance.",
+            xref: { document: "core", section: "11.1.4.3" },
+
+            children: [
+                Field({
+                    name: "Finish", id: 0x0, type: "ProductFinishEnum", conformance: "M",
+                    details: "This field shall indicate the visible finish of the product.",
+                    xref: { document: "core", section: "11.1.4.3.1" }
+                }),
+
+                Field({
+                    name: "PrimaryColor", id: 0x1, type: "ColorEnum", conformance: "M", quality: "X",
+                    details: "This field indicates the representative color of the visible parts of the product. If the product " +
+                        "has no representative color, the field shall be null.",
+                    xref: { document: "core", section: "11.1.4.3.2" }
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "CapabilityMinimaStruct", type: "struct",
             details: "This structure provides constant values related to overall global capabilities of this Node, that " +
                 "are not cluster-specific.",
-            xref: { document: "core", section: "11.1.4.1" },
+            xref: { document: "core", section: "11.1.4.4" },
 
             children: [
                 Field({
@@ -326,9 +458,9 @@ Matter.children.push(Cluster({
                     details: "This field shall indicate the actual minimum number of concurrent CASE sessions that are supported " +
                         "per fabric." +
                         "\n" +
-                        "This value shall NOT be smaller than the required minimum indicated in Section 4.13.2.8, “Minimal " +
+                        "This value shall NOT be smaller than the required minimum indicated in Section 4.14.2.8, “Minimal " +
                         "Number of CASE Sessions”.",
-                    xref: { document: "core", section: "11.1.4.1.1" }
+                    xref: { document: "core", section: "11.1.4.4.1" }
                 }),
 
                 Field({
@@ -339,58 +471,11 @@ Matter.children.push(Cluster({
                         "\n" +
                         "This value shall NOT be smaller than the required minimum indicated in Section 8.5.1, “Subscribe " +
                         "Transaction”.",
-                    xref: { document: "core", section: "11.1.4.1.2" }
+                    xref: { document: "core", section: "11.1.4.4.2" }
                 })
-            ]
-        }),
-
-        Datatype({
-            name: "ProductAppearanceStruct", type: "struct", conformance: "M",
-            children: [
-                Field({ name: "Finish", id: 0x0, type: "ProductFinishEnum", conformance: "M" }),
-                Field({ name: "PrimaryColor", id: 0x1, type: "ColorEnum", conformance: "M", quality: "X" })
-            ]
-        }),
-
-        Datatype({
-            name: "ProductFinishEnum", type: "enum8", conformance: "M",
-
-            children: [
-                Field({ name: "Other", id: 0x0, conformance: "M" }),
-                Field({ name: "Matte", id: 0x1, conformance: "M" }),
-                Field({ name: "Satin", id: 0x2, conformance: "M" }),
-                Field({ name: "Polished", id: 0x3, conformance: "M" }),
-                Field({ name: "Rugged", id: 0x4, conformance: "M" }),
-                Field({ name: "Fabric", id: 0x5, conformance: "M" })
-            ]
-        }),
-
-        Datatype({
-            name: "ColorEnum", type: "enum8", conformance: "M",
-
-            children: [
-                Field({ name: "Black", id: 0x0, conformance: "M" }),
-                Field({ name: "Navy", id: 0x1, conformance: "M" }),
-                Field({ name: "Green", id: 0x2, conformance: "M" }),
-                Field({ name: "Teal", id: 0x3, conformance: "M" }),
-                Field({ name: "Maroon", id: 0x4, conformance: "M" }),
-                Field({ name: "Purple", id: 0x5, conformance: "M" }),
-                Field({ name: "Olive", id: 0x6, conformance: "M" }),
-                Field({ name: "Gray", id: 0x7, conformance: "M" }),
-                Field({ name: "Blue", id: 0x8, conformance: "M" }),
-                Field({ name: "Lime", id: 0x9, conformance: "M" }),
-                Field({ name: "Aqua", id: 0xa, conformance: "M" }),
-                Field({ name: "Red", id: 0xb, conformance: "M" }),
-                Field({ name: "Fuchsia", id: 0xc, conformance: "M" }),
-                Field({ name: "Yellow", id: 0xd, conformance: "M" }),
-                Field({ name: "White", id: 0xe, conformance: "M" }),
-                Field({ name: "Nickel", id: 0xf, conformance: "M" }),
-                Field({ name: "Chrome", id: 0x10, conformance: "M" }),
-                Field({ name: "Brass", id: 0x11, conformance: "M" }),
-                Field({ name: "Copper", id: 0x12, conformance: "M" }),
-                Field({ name: "Silver", id: 0x13, conformance: "M" }),
-                Field({ name: "Gold", id: 0x14, conformance: "M" })
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(BasicInformation);

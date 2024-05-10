@@ -7,8 +7,18 @@
 // Generates the runtime Matter model
 
 import { LocalMatter } from "@project-chip/matter.js-intermediate-models";
+import { InternalError } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
-import { AnyElement, ElementTag, MatterElement, MatterModel, MergedModel } from "@project-chip/matter.js/model";
+import {
+    AttributeModel,
+    DatatypeModel,
+    ElementTag,
+    MatterElement,
+    MatterModel,
+    MergedModel,
+    Model,
+    TraverseMap,
+} from "@project-chip/matter.js/model";
 import { camelize } from "@project-chip/matter.js/util";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
@@ -32,34 +42,53 @@ const args = await yargs(hideBin(process.argv))
     })
     .strict().argv;
 
-function elementFilename(element: AnyElement) {
+function elementIdentifierName(element: Model) {
     if (element.tag === ElementTag.DeviceType) {
         return `${element.name}DT`;
     }
     return element.name;
 }
 
-function generateElementFile(element: AnyElement) {
+function generateElementFile(element: Model) {
     logger.debug(element.name);
 
-    const file = new TsFile(`#elements/${elementFilename(element)}`);
+    const name = elementIdentifierName(element);
+
+    const file = new TsFile(`#elements/${name}`);
 
     file.addImport(`../Matter.js`, `Matter`);
 
-    generateElement(file, "../../elements/index.js", element, `Matter.children.push(`, ")");
+    const exportName = name.indexOf("-") !== -1 ? camelize(name, false) : name;
+
+    generateElement(file, "../../elements/index.js", element, `export const ${exportName} = `);
+
+    file.atom(`Matter.children.push(${exportName})`);
 
     if (args.save) {
         file.save();
     }
 }
 
-function generateIndex(elements: AnyElement[]) {
+function generateIndex(elements: Model[]) {
     const file = new TsFile(`#elements/index`);
-    elements.forEach(element => {
-        if (!element.global) {
-            file.addImport(`./${elementFilename(element)}.js`);
+    for (const element of elements) {
+        if (!element.isGlobal) {
+            file.addImport(`./${elementIdentifierName(element)}.js`);
         }
-    });
+    }
+
+    if (args.save) {
+        file.save();
+    }
+}
+
+function generateExport(elements: Model[]) {
+    const file = new TsFile(`#elements/export`);
+    for (const element of elements) {
+        if (!element.isGlobal) {
+            file.addReexport(elementIdentifierName(element));
+        }
+    }
 
     if (args.save) {
         file.save();
@@ -72,29 +101,48 @@ async function importModel(source: string) {
     ] as MatterElement;
 }
 
-const spec = await importModel("spec");
-const chip = await importModel("chip");
+const inputs = {} as TraverseMap;
 
-const merged = MergedModel({ spec, chip, local: LocalMatter });
+inputs.spec = await importModel("spec");
+
+// We merged in CHIP data in our 1.1 implementation but going forward just rely on the spec and our overrides
+if (args.revision === "1.1") {
+    inputs.chip = await importModel("chip");
+}
+
+inputs.local = LocalMatter;
+
+const merged = MergedModel(inputs);
 
 const matter = new MatterModel(merged as MatterElement);
 
 const validationResult = finalizeModel(matter);
 
+if (
+    !matter.get(DatatypeModel, "bool") ||
+    !matter.get(DatatypeModel, "date") ||
+    !matter.get(AttributeModel, "FeatureMap")
+) {
+    throw new InternalError("Model is missing key elements that would break codebase, aborting");
+}
+
 logger.info("remove matter model elements");
-clean("#elements");
+if (args.save) {
+    clean("#elements");
+}
 
 logger.info("generate matter model");
 Logger.nest(() => {
     for (const child of matter.children) {
-        if (child.global) {
+        if (child.isGlobal) {
             continue;
         }
-        Logger.nest(() => generateElementFile(child as AnyElement));
+        Logger.nest(() => generateElementFile(child));
     }
 
     logger.info("index");
-    generateIndex(matter.children);
+    generateIndex(matter.children as Model[]);
+    generateExport(matter.children as Model[]);
 });
 
 validationResult.report();

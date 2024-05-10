@@ -15,22 +15,27 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
+export const AdministratorCommissioning = Cluster({
     name: "AdministratorCommissioning", id: 0x3c, classification: "node",
-    description: "Administrator Commissioning",
+
     details: "This cluster is used to trigger a Node to allow a new Administrator to commission it. It defines " +
         "Attributes, Commands and Responses needed for this purpose." +
         "\n" +
+        "There are two methods of commissioning, Basic Commissioning which may be supported and is described " +
+        "in Section 5.6.2, “Basic Commissioning Method (BCM)” and Enhanced Commissioning which shall be " +
+        "supported and is described in Section 5.6.3, “Enhanced Commissioning Method (ECM)”." +
+        "\n" +
         "For the management of Operational Credentials and Trusted Root Certificates, the Node Operational " +
         "Credentials cluster is used.",
-    xref: { document: "core", section: "11.18" },
+
+    xref: { document: "core", section: "11.19" },
 
     children: [
         Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
-            xref: { document: "core", section: "11.18.4" },
+            xref: { document: "core", section: "11.19.4" },
             children: [Field({
                 name: "BC", constraint: "0", description: "Basic",
                 details: "Node supports Basic Commissioning Method."
@@ -49,7 +54,7 @@ Matter.children.push(Cluster({
                 "Note that an initial commissioning window is not opened using either the OCW command or the OBCW " +
                 "command, and therefore this attribute shall be set to WindowNotOpen on initial commissioning.",
 
-            xref: { document: "core", section: "11.18.7.1" }
+            xref: { document: "core", section: "11.19.7.1" }
         }),
 
         Attribute({
@@ -65,7 +70,7 @@ Matter.children.push(Cluster({
                 "\n" +
                 "When the WindowStatus attribute is set to WindowNotOpen, this attribute shall be set to null.",
 
-            xref: { document: "core", section: "11.18.7.2" }
+            xref: { document: "core", section: "11.19.7.2" }
         }),
 
         Attribute({
@@ -80,7 +85,7 @@ Matter.children.push(Cluster({
                 "\n" +
                 "When the WindowStatus attribute is set to WindowNotOpen, this attribute shall be set to null.",
 
-            xref: { document: "core", section: "11.18.7.3" }
+            xref: { document: "core", section: "11.19.7.3" }
         }),
 
         Command({
@@ -102,9 +107,9 @@ Matter.children.push(Cluster({
                 "\n" +
                 "A current Administrator may invoke this command to put a node in commissioning mode for the next " +
                 "Administrator. On completion, the command shall return a cluster specific status code from the " +
-                "enumeration below reflecting success or reasons for failure of the operation. The new Administrator " +
-                "shall discover the Node on the IP network using DNS-based Service Discovery (DNS-SD) for " +
-                "commissioning." +
+                "Section 11.19.6, “Status Codes” below reflecting success or reasons for failure of the operation. " +
+                "The new Administrator shall discover the Node on the IP network using DNS-based Service Discovery " +
+                "(DNS-SD) for commissioning." +
                 "\n" +
                 "If any format or validity errors related to the PAKEPasscodeVerifier, Iterations or Salt arguments " +
                 "arise, this command shall fail with a cluster specific status code of PAKEParameterError." +
@@ -118,7 +123,7 @@ Matter.children.push(Cluster({
                 "\n" +
                 "In case of any other parameter error, this command shall fail with a status code of COMMAND_INVALID.",
 
-            xref: { document: "core", section: "11.18.8.1" },
+            xref: { document: "core", section: "11.19.8.1" },
 
             children: [
                 Field({
@@ -126,12 +131,12 @@ Matter.children.push(Cluster({
 
                     details: "This field shall specify the time in seconds during which commissioning session establishment is " +
                         "allowed by the Node. This is known as Open Commissioning Window (OCW). This timeout value shall " +
-                        "follow guidance as specified in Announcement Duration. The CommissioningTimeout applies only to " +
-                        "cessation of any announcements and to accepting of new commissioning sessions; it does not apply to " +
-                        "abortion of connections, i.e., a commissioning session SHOULD NOT abort prematurely upon expiration " +
-                        "of this timeout.",
+                        "follow guidance as specified in the initial Announcement Duration. The CommissioningTimeout applies " +
+                        "only to cessation of any announcements and to accepting of new commissioning sessions; it does not " +
+                        "apply to abortion of connections, i.e., a commissioning session SHOULD NOT abort prematurely upon " +
+                        "expiration of this timeout.",
 
-                    xref: { document: "core", section: "11.18.8.1.1" }
+                    xref: { document: "core", section: "11.19.8.1.1" }
                 }),
 
                 Field({
@@ -145,7 +150,7 @@ Matter.children.push(Cluster({
                         "deleted by the Node at the end of commissioning or expiration of OCW, and shall be deleted by the " +
                         "existing Administrator after sending it to the Node(s).",
 
-                    xref: { document: "core", section: "11.18.8.1.2" }
+                    xref: { document: "core", section: "11.19.8.1.2" }
                 }),
 
                 Field({
@@ -154,36 +159,42 @@ Matter.children.push(Cluster({
                         "Commissioning Discriminator) for discovery by the new Administrator. The new Administrator can find " +
                         "and filter DNS-SD records by long discriminator to locate and initiate commissioning with the " +
                         "appropriate Node.",
-                    xref: { document: "core", section: "11.18.8.1.3" }
+                    xref: { document: "core", section: "11.19.8.1.3" }
                 }),
 
                 Field({
                     name: "Iterations", id: 0x3, type: "uint32", conformance: "M", constraint: "1000 to 100000",
+
                     details: "This field shall be used by the Node as the PAKE iteration count associated with the ephemeral PAKE " +
                         "passcode verifier to be used for this commissioning, which shall be sent by the Node to the new " +
-                        "Administrator’s software as response to the PBKDFParamRequest during PASE negotiation. The " +
-                        "permitted range of values shall match the range specified in Section 3.9, “Password-Based Key " +
+                        "Administrator’s software as response to the PBKDFParamRequest during PASE negotiation." +
+                        "\n" +
+                        "The permitted range of values shall match the range specified in Section 3.9, “Password-Based Key " +
                         "Derivation Function (PBKDF)”, within the definition of the Crypto_PBKDFParameterSet.",
-                    xref: { document: "core", section: "11.18.8.1.4" }
+
+                    xref: { document: "core", section: "11.19.8.1.4" }
                 }),
 
                 Field({
                     name: "Salt", id: 0x4, type: "octstr", conformance: "M", constraint: "16 to 32",
 
                     details: "This field shall be used by the Node as the PAKE Salt associated with the ephemeral PAKE passcode " +
-                        "verifier to be used for this commissioning, which shall be sent by the Node to the new" +
-                        "\n" +
+                        "verifier to be used for this commissioning, which shall be sent by the Node to the new " +
                         "Administrator’s software as response to the PBKDFParamRequest during PASE negotiation. The " +
                         "constraints on the value shall match those specified in Section 3.9, “Password-Based Key Derivation " +
                         "Function (PBKDF)”, within the definition of the Crypto_PBKDFParameterSet." +
                         "\n" +
                         "When a Node receives the Open Commissioning Window command, it shall begin advertising on DNS-SD as " +
                         "described in Section 4.3.1, “Commissionable Node Discovery” and for a time period as described in " +
-                        "Section 11.18.8.1.1, “CommissioningTimeout Field”. When the command is received by a SED, it shall " +
-                        "enter into active mode and set its fast-polling interval to SLEEPY_ACTIVE_INTERVAL for at least the " +
-                        "entire duration of the CommissioningTimeout.",
+                        "Section 11.19.8.1.1, “CommissioningTimeout Field”. When the command is received by a ICD, it shall " +
+                        "enter into active mode. The ICD shall remain in Active Mode as long as one of these conditions is " +
+                        "met:" +
+                        "\n" +
+                        "  • A commissioning window is open." +
+                        "\n" +
+                        "  • There is an armed fail-safe timer.",
 
-                    xref: { document: "core", section: "11.18.8.1.5" }
+                    xref: { document: "core", section: "11.19.8.1.5" }
                 })
             ]
         }),
@@ -210,23 +221,26 @@ Matter.children.push(Cluster({
                 "CommissioningComplete command, see Section 5.5, “Commissioning Flows”. The new Administrator shall " +
                 "discover the Node on the IP network using DNS-based Service Discovery (DNS-SD) for commissioning.",
 
-            xref: { document: "core", section: "11.18.8.2" },
+            xref: { document: "core", section: "11.19.8.2" },
 
             children: [Field({
                 name: "CommissioningTimeout", id: 0x0, type: "uint16", conformance: "M", constraint: "desc",
 
                 details: "This field shall specify the time in seconds during which commissioning session establishment is " +
                     "allowed by the Node. This is known as Open Basic Commissioning Window (OBCW). This timeout shall " +
-                    "follow guidance as specified in Announcement Duration." +
+                    "follow guidance as specified in the initial Announcement Duration." +
                     "\n" +
                     "When a Node receives the Open Basic Commissioning Window command, it shall begin advertising on " +
                     "DNS-SD as described in Section 4.3.1, “Commissionable Node Discovery” and for a time period as " +
-                    "described in Section 11.18.8.2.1, “CommissioningTimeout Field”. When the command is received by a " +
-                    "SED, it shall enter into active mode and set its fast-polling interval to SLEEPY_AC" +
+                    "described in Section 11.19.8.2.1, “CommissioningTimeout Field”. When the command is received by a " +
+                    "ICD, it shall enter into active mode. The ICD shall remain in Active Mode as long as one of these " +
+                    "conditions is met:" +
                     "\n" +
-                    "TIVE_INTERVAL for at least the entire duration of the CommissioningTimeout.",
+                    "  • A commissioning window is open." +
+                    "\n" +
+                    "  • There is an armed fail-safe timer.",
 
-                xref: { document: "core", section: "11.18.8.2.1" }
+                xref: { document: "core", section: "11.19.8.2.1" }
             })]
         }),
 
@@ -241,36 +255,18 @@ Matter.children.push(Cluster({
                 "Commissioning Window command, see Section 4.3.1, “Commissionable Node Discovery”." +
                 "\n" +
                 "If no commissioning window was open at time of receipt, this command shall fail with a cluster " +
-                "specific status code of WindowNotOpen.",
+                "specific status code of WindowNotOpen." +
+                "\n" +
+                "If the commissioning window was open and the fail-safe was armed when this command is received, the " +
+                "device shall immediately expire the fail-safe and perform the cleanup steps outlined in Section " +
+                "11.10.6.2.2, “Behavior on expiry of Fail-Safe timer”.",
 
-            xref: { document: "core", section: "11.18.8.3" }
+            xref: { document: "core", section: "11.19.8.3" }
         }),
 
         Datatype({
-            name: "StatusCode", type: "status",
-
-            children: [
-                Field({
-                    name: "Busy", id: 0x2,
-                    details: "Could not be completed because another commissioning is in progress",
-                    xref: { document: "core", section: "11.18.6" }
-                }),
-                Field({
-                    name: "PakeParameterError", id: 0x3,
-                    details: "Provided PAKE parameters were incorrectly formatted or otherwise invalid",
-                    xref: { document: "core", section: "11.18.6" }
-                }),
-                Field({
-                    name: "WindowNotOpen", id: 0x4,
-                    details: "No commissioning window was currently open",
-                    xref: { document: "core", section: "11.18.6" }
-                })
-            ]
-        }),
-
-        Datatype({
-            name: "CommissioningWindowStatusEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.18.5.1" },
+            name: "CommissioningWindowStatusEnum", type: "enum8",
+            xref: { document: "core", section: "11.19.5.1" },
 
             children: [
                 Field({ name: "WindowNotOpen", id: 0x0, conformance: "M", description: "Commissioning window not open" }),
@@ -285,4 +281,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(AdministratorCommissioning);

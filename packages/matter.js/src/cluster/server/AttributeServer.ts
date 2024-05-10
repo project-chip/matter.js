@@ -13,7 +13,7 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 import { Endpoint as EndpointInterface } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
-import { Globals } from "../../model/index.js";
+import { FabricIndex } from "../../model/standard/elements/FabricIndex.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
@@ -857,7 +857,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         // Inject fabric index into structures in general if undefined, if set it will be used
         value = this.schema.injectField(
             value,
-            <number>Globals.FabricIndex.id,
+            <number>FabricIndex.id,
             session.associatedFabric.fabricIndex,
             () => !preserveFabricIndex, // Noone should send any index and if we simply SHALL ignore it,  biuut internally we might need it
         );

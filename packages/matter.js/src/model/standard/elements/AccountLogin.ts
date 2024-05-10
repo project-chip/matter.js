@@ -10,23 +10,62 @@ import { Matter } from "../Matter.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
-    CommandElement as Command,
-    FieldElement as Field
+    EventElement as Event,
+    FieldElement as Field,
+    CommandElement as Command
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "AccountLogin", id: 0x50e, classification: "application", description: "Account Login",
+export const AccountLogin = Cluster({
+    name: "AccountLogin", id: 0x50e, classification: "application",
+
     details: "This cluster provides commands that facilitate user account login on a Content App or a node. For " +
         "example, a Content App running on a Video Player device, which is represented as an endpoint (see " +
         "Device Type Library document), can use this cluster to help make the user account on the Content " +
-        "App match the user account on the Client.",
+        "App match the user account on the Client." +
+        "\n" +
+        "Often a fabric administrator will facilitate commissioning of a Client (such as a Casting Video " +
+        "Client), and invoke commands on the AccountLogin cluster on the Content App associated with that " +
+        "client. Specifically:" +
+        "\n" +
+        "  1. GetSetupPIN in order to attempt to obtain the Passcode for commissioning." +
+        "\n" +
+        "  2. Login in order to let the Content App know that commissioning has completed. The Content App " +
+        "     can use information provided in this command in order to determine the user account associated " +
+        "     with the client, and potentially assume that user account." +
+        "\n" +
+        "  3. Logout in order to let the Content App know that client access has been removed, and " +
+        "     potentially clear the current user account." +
+        "\n" +
+        "The cluster server for this cluster may be supported on each endpoint that represents a Content App " +
+        "on a Video Player device." +
+        "\n" +
+        "See Device Type Library document for details of how a Content App, represented as an endpoint on" +
+        "\n" +
+        "the Video Player device, may implement the cluster server for this cluster to simplify account " +
+        "login for its users.",
+
     xref: { document: "cluster", section: "6.2" },
 
     children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
+
+        Event({
+            name: "LoggedOut", id: 0x0, access: "S A", conformance: "O", priority: "critical",
+            details: "This event can be used by the Content App to indicate that the current user has logged out. In " +
+                "response to this event, the Fabric Admin shall remove access to this Content App by the specified " +
+                "Node. If no Node is provided, then the Fabric Admin shall remove access to all non-Admin Nodes.",
+            xref: { document: "cluster", section: "6.2.5.1" },
+
+            children: [Field({
+                name: "Node", id: 0x0, type: "node-id", conformance: "O",
+                details: "This field shall provide the Node ID corresponding to the user account that has logged out, if that " +
+                    "Node ID is available. If it is NOT available, this field shall NOT be present in the event.",
+                xref: { document: "cluster", section: "6.2.5.1.1" }
+            })]
+        }),
 
         Command({
-            name: "GetSetupPin", id: 0x0, access: "A T", conformance: "M", direction: "request",
+            name: "GetSetupPin", id: 0x0, access: "F A T", conformance: "M", direction: "request",
             response: "GetSetupPinResponse",
 
             details: "The purpose of this command is to determine if the active user account of the given Content App " +
@@ -35,7 +74,8 @@ Matter.children.push(Cluster({
                 "\n" +
                 "For example, a Video Player with a Content App Platform may invoke this command on one of its " +
                 "Content App endpoints to facilitate commissioning of a Phone App made by the same vendor as the " +
-                "Content App. If the accounts match, then the Content App may return a setup code that can be used " +
+                "Content App. If the accounts match, then the Content App may return a setup code that can be used" +
+                "\n" +
                 "by the Video Player to commission the Phone App without requiring the user to physically input a " +
                 "setup code." +
                 "\n" +
@@ -58,16 +98,16 @@ Matter.children.push(Cluster({
                 "\n" +
                 "The Temporary Account Identifier for a Commissionee may be populated with the Rotating ID field of " +
                 "the client’s commissionable node advertisement (see Rotating Device Identifier section in " +
-                "[MatterCore] ) encoded as an octet string where the octets of the Rotating Device Identifier are " +
+                "[MatterCore]) encoded as an octet string where the octets of the Rotating Device Identifier are " +
                 "encoded as 2-character sequences by representing each octet’s value as a 2-digit hexadecimal " +
                 "number, using uppercase letters." +
                 "\n" +
-                "The Setup PIN is an 11 character string so that it can accommodate different future formats, " +
-                "including alpha-numeric encodings. For a Commissionee it shall be populated with the Manual Pairing" +
+                "The Setup PIN is a character string so that it can accommodate different future formats, including " +
+                "alpha-numeric encodings. For a Commissionee it shall be populated with the Manual Pairing Code (see " +
+                "Manual Pairing Code section in [MatterCore]) encoded as a string (11 characters) or the Passcode " +
+                "portion of the Manual Pairing Code (when less than 11 characters) ." +
                 "\n" +
-                "Code (see Manual Pairing Code section in [MatterCore] ) encoded as a string." +
-                "\n" +
-                "The Server shall implement rate limiting to prevent brute force attacks. No more than 10 unique " +
+                "The server shall implement rate limiting to prevent brute force attacks. No more than 10 unique " +
                 "requests in a 10 minute period shall be allowed; a command response status of FAILURE should sent " +
                 "for additional commands received within the 10 minute period. Because access to this command is " +
                 "limited to nodes with Admin-level access, and the user is prompted for consent prior to " +
@@ -78,30 +118,37 @@ Matter.children.push(Cluster({
             xref: { document: "cluster", section: "6.2.4.1" },
 
             children: [Field({
-                name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M", constraint: "max 100",
-                details: "This attribute shall specify the client’s Temporary Account Identifier. The length of this field " +
-                    "shall be at least 16 characters to protect the account holder against password guessing attacks.",
+                name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M", constraint: "16 to 100",
+                details: "This field shall specify the client’s Temporary Account Identifier. The length of this field shall " +
+                    "be at least 16 characters to protect the account holder against password guessing attacks.",
                 xref: { document: "cluster", section: "6.2.4.1.1" }
             })]
         }),
 
         Command({
-            name: "GetSetupPinResponse", id: 0x1, conformance: "M", direction: "response",
+            name: "GetSetupPinResponse", id: 0x1, access: "F", conformance: "M", direction: "response",
             details: "This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or " +
                 "null when the account identified in the request does not match the active account of the running " +
                 "Content App.",
             xref: { document: "cluster", section: "6.2.4.2" },
 
             children: [Field({
-                name: "SetupPin", id: 0x0, type: "string", conformance: "M", constraint: "min 11", quality: "X",
-                details: "This field shall provide the setup PIN code as a text string at least 11 characters in length or " +
-                    "null to indicate that the accounts do not match.",
+                name: "SetupPin", id: 0x0, type: "string", conformance: "M", constraint: "desc",
+
+                details: "This field shall provide the setup PIN code as a text string at least 8 characters in length or " +
+                    "empty string to indicate that the accounts do not match." +
+                    "\n" +
+                    "NOTE" +
+                    "\n" +
+                    "Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit " +
+                    "minimum length.",
+
                 xref: { document: "cluster", section: "6.2.4.2.1" }
             })]
         }),
 
         Command({
-            name: "Login", id: 0x2, access: "A T", conformance: "M", direction: "request", response: "status",
+            name: "Login", id: 0x2, access: "F A T", conformance: "M", direction: "request", response: "status",
 
             details: "The purpose of this command is to allow the Content App to assume the user account of a given " +
                 "Commissionee by leveraging the Setup PIN code input by the user during the commissioning process." +
@@ -132,9 +179,10 @@ Matter.children.push(Cluster({
                 "as a 2-digit hexadecimal number, using uppercase letters." +
                 "\n" +
                 "The Setup PIN for a Commissionee may be populated with the Manual Pairing Code encoded as a string " +
-                "of decimal numbers." +
+                "of decimal numbers (11 characters) or the Passcode portion of the Manual Pairing Code encoded as a " +
+                "string of decimal numbers (8 characters) ." +
                 "\n" +
-                "The Server shall implement rate limiting to prevent brute force attacks. No more than 10 unique " +
+                "The server shall implement rate limiting to prevent brute force attacks. No more than 10 unique " +
                 "requests in a 10 minute period shall be allowed; a command response status of FAILURE should sent " +
                 "for additional commands received within the 10 minute period. Because access to this command is " +
                 "limited to nodes with Admin-level access, and the user is involved when obtaining the SetupPIN, " +
@@ -146,23 +194,49 @@ Matter.children.push(Cluster({
 
             children: [
                 Field({
-                    name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M", constraint: "max 100",
+                    name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M", constraint: "16 to 100",
                     details: "This field shall specify the client’s temporary account identifier.",
                     xref: { document: "cluster", section: "6.2.4.3.1" }
                 }),
+
                 Field({
-                    name: "SetupPin", id: 0x1, type: "string", conformance: "M", constraint: "min 11",
-                    details: "This field shall provide the setup PIN code as a text string at least 11 characters in length.",
+                    name: "SetupPin", id: 0x1, type: "string", conformance: "M", constraint: "min 8",
+
+                    details: "This field shall provide the setup PIN code as a text string at least 8 characters in length." +
+                        "\n" +
+                        "NOTE" +
+                        "\n" +
+                        "Newer cluster clients should be aware that AccountLogin cluster version 1 specified an 11 digit " +
+                        "minimum length.",
+
                     xref: { document: "cluster", section: "6.2.4.3.2" }
+                }),
+
+                Field({
+                    name: "Node", id: 0x2, type: "node-id", conformance: "O",
+                    details: "This optional field shall provide the Node ID of the Client. This field can be used by the Content " +
+                        "App to keep track of Nodes which currently have access to it.",
+                    xref: { document: "cluster", section: "6.2.4.3.3" }
                 })
             ]
         }),
 
         Command({
-            name: "Logout", id: 0x3, access: "O T", conformance: "M", direction: "request", response: "status",
+            name: "Logout", id: 0x3, access: "F O T", conformance: "M", direction: "request",
+            response: "status",
             details: "The purpose of this command is to instruct the Content App to clear the current user account. This " +
                 "command SHOULD be used by clients of a Content App to indicate the end of a user session.",
-            xref: { document: "cluster", section: "6.2.4.4" }
+            xref: { document: "cluster", section: "6.2.4.4" },
+
+            children: [Field({
+                name: "Node", id: 0x0, type: "node-id", conformance: "O",
+                details: "This optional field shall provide the Node ID of the Client. This field can be used by the Content" +
+                    "\n" +
+                    "App to keep track of Nodes which currently have access to it.",
+                xref: { document: "cluster", section: "6.2.4.4.1" }
+            })]
         })
     ]
-}));
+});
+
+Matter.children.push(AccountLogin);

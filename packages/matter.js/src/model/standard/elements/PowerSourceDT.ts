@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const PowerSourceDT = DeviceType({
     name: "PowerSource", id: 0x11, classification: "utility",
     xref: { document: "device", section: "2.2" },
 
@@ -26,4 +26,6 @@ Matter.children.push(DeviceType({
             xref: { document: "device", section: "2.2.3" }
         })
     ]
-}));
+});
+
+Matter.children.push(PowerSourceDT);

@@ -15,31 +15,37 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "PowerSource", id: 0x2f, classification: "node", description: "Power Source",
+export const PowerSource = Cluster({
+    name: "PowerSource", id: 0x2f, classification: "node",
     details: "This cluster is used to describe the configuration and capabilities of a physical power source that " +
-        "provides power to the Node. In case the Node has multiple power sources, each is described by its " +
-        "own Power Source cluster. The Power Source Configuration cluster referenced by the Root Node device " +
-        "type for the Node provides the overview of the power source(s) of the Node.",
+        "provides power to one or more endpoints on a node. In case the node has multiple power sources, " +
+        "each is described by its own cluster instance. Each instance of this cluster may be associated with " +
+        "one or more endpoints or the entire node.",
     xref: { document: "core", section: "11.7" },
 
     children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
 
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
             xref: { document: "core", section: "11.7.4" },
 
             children: [
-                Field({ name: "WIRED", constraint: "0", description: "Wired", details: "A wired power source" }),
-                Field({ name: "BAT", constraint: "1", description: "Battery", details: "A battery power source" }),
                 Field({
-                    name: "RECHG", constraint: "2", description: "Rechargeable",
-                    details: "A rechargeable battery power source (requires Battery feature)"
+                    name: "WIRED", conformance: "O", constraint: "0", description: "Wired",
+                    details: "A wired power source"
                 }),
                 Field({
-                    name: "REPLC", constraint: "3", description: "Replaceable",
-                    details: "A replaceable battery power source (requires Battery feature)"
+                    name: "BAT", conformance: "O", constraint: "1", description: "Battery",
+                    details: "A battery power source"
+                }),
+                Field({
+                    name: "RECHG", conformance: "[BAT]", constraint: "2", description: "Rechargeable",
+                    details: "A rechargeable battery power source"
+                }),
+                Field({
+                    name: "REPLC", conformance: "[BAT]", constraint: "3", description: "Replaceable",
+                    details: "A replaceable battery power source"
                 })
             ]
         }),
@@ -49,7 +55,7 @@ Matter.children.push(Cluster({
             constraint: "desc",
             details: "This attribute shall indicate the participation of this power source in providing power to the Node " +
                 "as specified in PowerSourceStatusEnum.",
-            xref: { document: "core", section: "11.7.6.1" }
+            xref: { document: "core", section: "11.7.7.1" }
         }),
 
         Attribute({
@@ -62,7 +68,7 @@ Matter.children.push(Cluster({
                 "Note, Order is read-only and therefore NOT intended to allow clients control over power source " +
                 "selection.",
 
-            xref: { document: "core", section: "11.7.6.2" }
+            xref: { document: "core", section: "11.7.7.2" }
         }),
 
         Attribute({
@@ -71,7 +77,7 @@ Matter.children.push(Cluster({
             details: "This attribute shall provide a user-facing description of this source, used to distinguish it from " +
                 "other power sources, e.g. \"DC Power\", \"Primary Battery\" or \"Battery back-up\". This attribute shall " +
                 "NOT be used to convey information such as battery form factor, or chemistry.",
-            xref: { document: "core", section: "11.7.6.3" }
+            xref: { document: "core", section: "11.7.7.3" }
         }),
 
         Attribute({
@@ -81,7 +87,7 @@ Matter.children.push(Cluster({
                 "source, in mV (millivolts). A value of NULL shall indicate the Node is currently unable to assess " +
                 "the value. If the wired source is not connected, but the Node is still able to assess a value, then " +
                 "the assessed value may be reported.",
-            xref: { document: "core", section: "11.7.6.4" }
+            xref: { document: "core", section: "11.7.7.4" }
         }),
 
         Attribute({
@@ -91,7 +97,7 @@ Matter.children.push(Cluster({
                 "hard-wired source, in Hz. A value of NULL shall indicate the Node is currently unable to assess the " +
                 "value. If the wired source is not connected, but the Node is still able to assess a value, then the " +
                 "assessed value may be reported.",
-            xref: { document: "core", section: "11.7.6.5" }
+            xref: { document: "core", section: "11.7.7.5" }
         }),
 
         Attribute({
@@ -99,7 +105,7 @@ Matter.children.push(Cluster({
             conformance: "WIRED", constraint: "desc", quality: "F",
             details: "This attribute shall indicate the type of current the Node expects to be provided by the hard- " +
                 "wired source as specified in WiredCurrentTypeEnum.",
-            xref: { document: "core", section: "11.7.6.6" }
+            xref: { document: "core", section: "11.7.7.6" }
         }),
 
         Attribute({
@@ -109,7 +115,7 @@ Matter.children.push(Cluster({
                 "wired source, in mA (milliamps). A value of NULL shall indicate the Node is currently unable to " +
                 "assess the value. If the wired source is not connected, but the Node is still able to assess a " +
                 "value, then the assessed value may be reported.",
-            xref: { document: "core", section: "11.7.6.7" }
+            xref: { document: "core", section: "11.7.7.7" }
         }),
 
         Attribute({
@@ -117,7 +123,7 @@ Matter.children.push(Cluster({
             quality: "F",
             details: "This attribute shall indicate the nominal voltage, printed as part of the Node’s regulatory " +
                 "compliance label in mV (millivolts), expected to be provided by the hard-wired source.",
-            xref: { document: "core", section: "11.7.6.8" }
+            xref: { document: "core", section: "11.7.7.8" }
         }),
 
         Attribute({
@@ -125,19 +131,19 @@ Matter.children.push(Cluster({
             quality: "F",
             details: "This attribute shall indicate the maximum current, printed as part of the Node’s regulatory " +
                 "compliance label in mA (milliamps), expected to be provided by the hard-wired source.",
-            xref: { document: "core", section: "11.7.6.9" }
+            xref: { document: "core", section: "11.7.7.9" }
         }),
 
         Attribute({
             name: "WiredPresent", id: 0x9, type: "bool", access: "R V", conformance: "[WIRED]",
             details: "This attribute shall indicate if the Node detects that the hard-wired power source is properly " +
                 "connected.",
-            xref: { document: "core", section: "11.7.6.10" }
+            xref: { document: "core", section: "11.7.7.10" }
         }),
 
         Attribute({
             name: "ActiveWiredFaults", id: 0xa, type: "list", access: "R V", conformance: "[WIRED]",
-            constraint: "8",
+            constraint: "max 8",
 
             details: "This attribute shall indicate the set of wired faults currently detected by the Node on this power " +
                 "source. This set is represented as a list of WiredFaultEnum. When the Node detects a fault has been " +
@@ -149,7 +155,7 @@ Matter.children.push(Cluster({
                 "interested in monitoring changes in active faults may subscribe to this attribute, or they may " +
                 "subscribe to WiredFaultChange.",
 
-            xref: { document: "core", section: "11.7.6.11" },
+            xref: { document: "core", section: "11.7.7.11" },
             children: [Field({ name: "entry", type: "WiredFaultEnum" })]
         }),
 
@@ -157,7 +163,7 @@ Matter.children.push(Cluster({
             name: "BatVoltage", id: 0xb, type: "uint32", access: "R V", conformance: "[BAT]", quality: "X C",
             details: "This attribute shall indicate the currently measured output voltage of the battery in mV " +
                 "(millivolts). A value of NULL shall indicate the Node is currently unable to assess the value.",
-            xref: { document: "core", section: "11.7.6.12" }
+            xref: { document: "core", section: "11.7.7.12" }
         }),
 
         Attribute({
@@ -167,7 +173,7 @@ Matter.children.push(Cluster({
                 "battery will no longer be able to provide power to the Node. Values are expressed in half percent " +
                 "units, ranging from 0 to 200. E.g. a value of 48 is equivalent to 24%. A value of NULL shall " +
                 "indicate the Node is currently unable to assess the value.",
-            xref: { document: "core", section: "11.7.6.13" }
+            xref: { document: "core", section: "11.7.7.13" }
         }),
 
         Attribute({
@@ -176,7 +182,7 @@ Matter.children.push(Cluster({
             details: "This attribute shall indicate the estimated time in seconds before the battery will no longer be " +
                 "able to provide power to the Node. A value of NULL shall indicate the Node is currently unable to " +
                 "assess the value.",
-            xref: { document: "core", section: "11.7.6.14" }
+            xref: { document: "core", section: "11.7.7.14" }
         }),
 
         Attribute({
@@ -184,7 +190,7 @@ Matter.children.push(Cluster({
             constraint: "desc",
             details: "This attribute shall indicate a coarse ranking of the charge level of the battery, used to indicate " +
                 "when intervention is required as specified in BatChargeLevelEnum.",
-            xref: { document: "core", section: "11.7.6.15" }
+            xref: { document: "core", section: "11.7.7.15" }
         }),
 
         Attribute({
@@ -192,7 +198,7 @@ Matter.children.push(Cluster({
             details: "This attribute shall indicate if the battery needs to be replaced. Replacement may be simple " +
                 "routine maintenance, such as with a single use, non-rechargeable cell. Replacement, however, may " +
                 "also indicate end of life, or serious fault with a rechargeable or even non-replaceable cell.",
-            xref: { document: "core", section: "11.7.6.16" }
+            xref: { document: "core", section: "11.7.7.16" }
         }),
 
         Attribute({
@@ -200,18 +206,18 @@ Matter.children.push(Cluster({
             conformance: "BAT", quality: "F",
             details: "This attribute shall indicate the replaceability of the battery as specified in " +
                 "BatReplaceabilityEnum.",
-            xref: { document: "core", section: "11.7.6.17" }
+            xref: { document: "core", section: "11.7.7.17" }
         }),
 
         Attribute({
             name: "BatPresent", id: 0x11, type: "bool", access: "R V", conformance: "[BAT]",
             details: "This attribute shall indicate whether the Node detects that the batteries are properly installed.",
-            xref: { document: "core", section: "11.7.6.18" }
+            xref: { document: "core", section: "11.7.7.18" }
         }),
 
         Attribute({
             name: "ActiveBatFaults", id: 0x12, type: "list", access: "R V", conformance: "[BAT]",
-            constraint: "8",
+            constraint: "max 8",
 
             details: "This attribute shall indicate the set of battery faults currently detected by the Node on this " +
                 "power source. This set is represented as a list of BatFaultEnum. When the Node detects a fault has " +
@@ -221,9 +227,9 @@ Matter.children.push(Cluster({
                 "corresponding BatFaultEnum value shall be removed from this list. An empty list shall indicate " +
                 "there are currently no active faults. The order of this list SHOULD have no significance. Clients " +
                 "interested in monitoring changes in active faults may subscribe to this attribute, or they may " +
-                "subscribe to Section 11.7.7.2, “BatFaultChange Event”.",
+                "subscribe to BatFaultChange.",
 
-            xref: { document: "core", section: "11.7.6.19" },
+            xref: { document: "core", section: "11.7.7.19" },
             children: [Field({ name: "entry", type: "BatFaultEnum" })]
         }),
 
@@ -233,7 +239,7 @@ Matter.children.push(Cluster({
             details: "This attribute shall provide a user-facing description of this battery, which SHOULD contain " +
                 "information required to identify a replacement, such as form factor, chemistry or preferred " +
                 "manufacturer.",
-            xref: { document: "core", section: "11.7.6.20" }
+            xref: { document: "core", section: "11.7.7.20" }
         }),
 
         Attribute({
@@ -241,7 +247,7 @@ Matter.children.push(Cluster({
             conformance: "[REPLC]", constraint: "desc", quality: "F",
             details: "This attribute shall indicate the ID of the common or colloquial designation of the battery, as " +
                 "specified in BatCommonDesignationEnum.",
-            xref: { document: "core", section: "11.7.6.21" }
+            xref: { document: "core", section: "11.7.7.21" }
         }),
 
         Attribute({
@@ -249,7 +255,7 @@ Matter.children.push(Cluster({
             constraint: "max 20", quality: "F",
             details: "This attribute shall indicate the string representing the ANSI designation for the battery as " +
                 "specified in ANSI C18.",
-            xref: { document: "core", section: "11.7.6.22" }
+            xref: { document: "core", section: "11.7.7.22" }
         }),
 
         Attribute({
@@ -257,7 +263,7 @@ Matter.children.push(Cluster({
             constraint: "max 20", quality: "F",
             details: "This attribute shall indicate the string representing the IEC designation for the battery as " +
                 "specified in IEC 60086.",
-            xref: { document: "core", section: "11.7.6.23" }
+            xref: { document: "core", section: "11.7.7.23" }
         }),
 
         Attribute({
@@ -265,21 +271,22 @@ Matter.children.push(Cluster({
             conformance: "[REPLC]", constraint: "desc", quality: "F",
             details: "This attribute shall indicate the ID of the preferred chemistry of the battery source as specified " +
                 "in BatApprovedChemistryEnum.",
-            xref: { document: "core", section: "11.7.6.24" }
+            xref: { document: "core", section: "11.7.7.24" }
         }),
 
         Attribute({
-            name: "BatCapacity", id: 0x18, type: "uint32", access: "R V", conformance: "[REPLC]", quality: "F",
+            name: "BatCapacity", id: 0x18, type: "uint32", access: "R V", conformance: "[REPLC | RECHG]",
+            quality: "F",
             details: "This attribute shall indicate the preferred minimum charge capacity rating in mAh of individual, " +
                 "user- or factory-serviceable battery cells or packs in the battery source.",
-            xref: { document: "core", section: "11.7.6.25" }
+            xref: { document: "core", section: "11.7.7.25" }
         }),
 
         Attribute({
             name: "BatQuantity", id: 0x19, type: "uint8", access: "R V", conformance: "REPLC", quality: "F",
             details: "This attribute shall indicate the quantity of individual, user- or factory-serviceable battery " +
                 "cells or packs in the battery source.",
-            xref: { document: "core", section: "11.7.6.26" }
+            xref: { document: "core", section: "11.7.7.26" }
         }),
 
         Attribute({
@@ -287,7 +294,7 @@ Matter.children.push(Cluster({
             constraint: "desc",
             details: "This attribute shall indicate the current state of the battery source with respect to charging as " +
                 "specified in BatChargeStateEnum.",
-            xref: { document: "core", section: "11.7.6.27" }
+            xref: { document: "core", section: "11.7.7.27" }
         }),
 
         Attribute({
@@ -295,14 +302,14 @@ Matter.children.push(Cluster({
             quality: "X C",
             details: "This attribute shall indicate the estimated time in seconds before the battery source will be at " +
                 "full charge. A value of NULL shall indicate the Node is currently unable to assess the value.",
-            xref: { document: "core", section: "11.7.6.28" }
+            xref: { document: "core", section: "11.7.7.28" }
         }),
 
         Attribute({
             name: "BatFunctionalWhileCharging", id: 0x1c, type: "bool", access: "R V", conformance: "RECHG",
             details: "This attribute shall indicate whether the Node can remain operational while the battery source is " +
                 "charging.",
-            xref: { document: "core", section: "11.7.6.29" }
+            xref: { document: "core", section: "11.7.7.29" }
         }),
 
         Attribute({
@@ -310,12 +317,12 @@ Matter.children.push(Cluster({
             quality: "X C",
             details: "This attribute shall indicate assessed current in mA (milliamps) presently supplied to charge the " +
                 "battery source. A value of NULL shall indicate the Node is currently unable to assess the value.",
-            xref: { document: "core", section: "11.7.6.30" }
+            xref: { document: "core", section: "11.7.7.30" }
         }),
 
         Attribute({
             name: "ActiveBatChargeFaults", id: 0x1e, type: "list", access: "R V", conformance: "[RECHG]",
-            constraint: "16",
+            constraint: "max 16",
 
             details: "This attribute shall indicate the set of charge faults currently detected by the Node on this power " +
                 "source. This set is represented as a list of BatChargeFaultEnum. When the Node detects a fault has " +
@@ -327,8 +334,45 @@ Matter.children.push(Cluster({
                 "significance. Clients interested in monitoring changes in active faults may subscribe to this " +
                 "attribute, or they may subscribe to the BatFaultChange event.",
 
-            xref: { document: "core", section: "11.7.6.31" },
+            xref: { document: "core", section: "11.7.7.31" },
             children: [Field({ name: "entry", type: "BatChargeFaultEnum" })]
+        }),
+
+        Attribute({
+            name: "EndpointList", id: 0x1f, type: "list", access: "R V", conformance: "M",
+
+            details: "This attribute shall indicate a list of endpoints that are powered by the source defined by this " +
+                "cluster. Multiple instances of this cluster may list the same endpoint, because it is possible for " +
+                "power for an endpoint to come from multiple sources. In that case the Order attribute indicates " +
+                "their priority." +
+                "\n" +
+                "For each power source on a node, there shall only be one instance of this cluster." +
+                "\n" +
+                "A cluster instance with an empty list shall indicate that the power source is for the entire node, " +
+                "which includes all endpoints." +
+                "\n" +
+                "A cluster instance with a non-empty list shall include the endpoint, upon which the cluster " +
+                "instance resides." +
+                "\n" +
+                "The above rules allow that some endpoints can have an unknown power source, and therefore would not " +
+                "be indicated by any instance of this cluster." +
+                "\n" +
+                "Empty list examples" +
+                "\n" +
+                "Typically, there is one power source for the node. Also common is mains power for the node with " +
+                "battery backup power for the node. In both these common cases, for each cluster instance described, " +
+                "the list is empty." +
+                "\n" +
+                "Populated list example" +
+                "\n" +
+                "A node has a mains power source with Order as 0 (zero), but some application endpoints (not all) " +
+                "have a battery back up source with Order as 1, which means this list is empty for the Power Source " +
+                "cluster associated with the mains power, because it indicates the entire node, but the Power Source " +
+                "cluster instance associated with the battery backup would list the endpoints that have a battery " +
+                "backup.",
+
+            xref: { document: "core", section: "11.7.7.32" },
+            children: [Field({ name: "entry", type: "endpoint-no" })]
         }),
 
         Event({
@@ -336,22 +380,21 @@ Matter.children.push(Cluster({
             details: "The WiredFaultChange Event shall be generated when the set of wired faults currently detected by " +
                 "the Node on this wired power source changes. This event shall correspond to a change in value of " +
                 "ActiveWiredFaults.",
-            xref: { document: "core", section: "11.7.7.1" },
+            xref: { document: "core", section: "11.7.8.1" },
 
             children: [
                 Field({
                     name: "Current", id: 0x0, type: "list", conformance: "M", constraint: "max 8", default: [],
-                    details: "This field shall represent the set of faults currently detected, as per Section 11.7.6.11, " +
-                        "“ActiveWiredFaults Attribute”.",
-                    xref: { document: "core", section: "11.7.7.1.1" },
+                    details: "This field shall represent the set of faults currently detected, as per ActiveWiredFaults.",
+                    xref: { document: "core", section: "11.7.8.1.1" },
                     children: [Field({ name: "entry", type: "WiredFaultEnum" })]
                 }),
 
                 Field({
                     name: "Previous", id: 0x1, type: "list", conformance: "M", constraint: "max 8", default: [],
-                    details: "This field shall represent the set of faults detected prior to this change event, as per Section " +
-                        "11.7.6.11, “ActiveWiredFaults Attribute”.",
-                    xref: { document: "core", section: "11.7.7.1.2" },
+                    details: "This field shall represent the set of faults detected prior to this change event, as per " +
+                        "ActiveWiredFaults.",
+                    xref: { document: "core", section: "11.7.8.1.2" },
                     children: [Field({ name: "entry", type: "WiredFaultEnum" })]
                 })
             ]
@@ -362,22 +405,21 @@ Matter.children.push(Cluster({
             details: "The BatFaultChange Event shall be generated when the set of battery faults currently detected by " +
                 "the Node on this battery power source changes. This event shall correspond to a change in value of " +
                 "ActiveBatFaults.",
-            xref: { document: "core", section: "11.7.7.2" },
+            xref: { document: "core", section: "11.7.8.2" },
 
             children: [
                 Field({
                     name: "Current", id: 0x0, type: "list", conformance: "M", constraint: "max 8", default: [],
-                    details: "This field shall represent the set of faults currently detected, as per Section 11.7.6.19, " +
-                        "“ActiveBatFaults Attribute”.",
-                    xref: { document: "core", section: "11.7.7.2.1" },
+                    details: "This field shall represent the set of faults currently detected, as per ActiveBatFaults.",
+                    xref: { document: "core", section: "11.7.8.2.1" },
                     children: [Field({ name: "entry", type: "BatFaultEnum" })]
                 }),
 
                 Field({
                     name: "Previous", id: 0x1, type: "list", conformance: "M", constraint: "max 8", default: [],
-                    details: "This field shall represent the set of faults detected prior to this change event, as per Section " +
-                        "11.7.6.19, “ActiveBatFaults Attribute”.",
-                    xref: { document: "core", section: "11.7.7.2.2" },
+                    details: "This field shall represent the set of faults detected prior to this change event, as per " +
+                        "ActiveBatFaults.",
+                    xref: { document: "core", section: "11.7.8.2.2" },
                     children: [Field({ name: "entry", type: "BatFaultEnum" })]
                 })
             ]
@@ -385,34 +427,32 @@ Matter.children.push(Cluster({
 
         Event({
             name: "BatChargeFaultChange", id: 0x2, access: "V", conformance: "[RECHG]", priority: "info",
-            details: "The BatChargeFaultChange Event shall be generated when the set of charge faults currently" +
-                "\n" +
-                "detected by the Node on this battery power source changes. This event shall correspond to a change " +
-                "in value of ActiveBatChargeFaults.",
-            xref: { document: "core", section: "11.7.7.3" },
+            details: "The BatChargeFaultChange Event shall be generated when the set of charge faults currently detected " +
+                "by the Node on this battery power source changes. This event shall correspond to a change in value " +
+                "of ActiveBatChargeFaults.",
+            xref: { document: "core", section: "11.7.8.3" },
 
             children: [
                 Field({
                     name: "Current", id: 0x0, type: "list", conformance: "M", constraint: "max 16", default: [],
-                    details: "This field shall represent the set of faults currently detected, as per Section 11.7.6.31, " +
-                        "“ActiveBatChargeFaults Attribute”.",
-                    xref: { document: "core", section: "11.7.7.3.1" },
+                    details: "This field shall represent the set of faults currently detected, as per ActiveBatChargeFaults.",
+                    xref: { document: "core", section: "11.7.8.3.1" },
                     children: [Field({ name: "entry", type: "BatChargeFaultEnum" })]
                 }),
 
                 Field({
                     name: "Previous", id: 0x1, type: "list", conformance: "M", constraint: "max 16", default: [],
-                    details: "This field shall represent the set of faults detected prior to this change event, as per Section " +
-                        "11.7.6.31, “ActiveBatChargeFaults Attribute”.",
-                    xref: { document: "core", section: "11.7.7.3.2" },
+                    details: "This field shall represent the set of faults detected prior to this change event, as per " +
+                        "ActiveBatChargeFaults.",
+                    xref: { document: "core", section: "11.7.8.3.2" },
                     children: [Field({ name: "entry", type: "BatChargeFaultEnum" })]
                 })
             ]
         }),
 
         Datatype({
-            name: "WiredFaultEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.7.5.1" },
+            name: "WiredFaultEnum", type: "enum8",
+            xref: { document: "core", section: "11.7.6.1" },
 
             children: [
                 Field({
@@ -431,8 +471,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "BatFaultEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.7.5.2" },
+            name: "BatFaultEnum", type: "enum8",
+            xref: { document: "core", section: "11.7.6.2" },
 
             children: [
                 Field({
@@ -451,8 +491,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "BatChargeFaultEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.7.5.3" },
+            name: "BatChargeFaultEnum", type: "enum8",
+            xref: { document: "core", section: "11.7.6.3" },
 
             children: [
                 Field({
@@ -503,8 +543,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "PowerSourceStatusEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.7.5.4" },
+            name: "PowerSourceStatusEnum", type: "enum8",
+            xref: { document: "core", section: "11.7.6.4" },
 
             children: [
                 Field({
@@ -527,8 +567,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "WiredCurrentTypeEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.7.5.5" },
+            name: "WiredCurrentTypeEnum", type: "enum8",
+            xref: { document: "core", section: "11.7.6.5" },
             children: [
                 Field({ name: "Ac", id: 0x0, conformance: "M", description: "Indicates AC current" }),
                 Field({ name: "Dc", id: 0x1, conformance: "M", description: "Indicates DC current" })
@@ -536,8 +576,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "BatChargeLevelEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.7.5.6" },
+            name: "BatChargeLevelEnum", type: "enum8",
+            xref: { document: "core", section: "11.7.6.6" },
 
             children: [
                 Field({ name: "Ok", id: 0x0, conformance: "M", description: "Charge level is nominal" }),
@@ -553,8 +593,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "BatReplaceabilityEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.7.5.7" },
+            name: "BatReplaceabilityEnum", type: "enum8",
+            xref: { document: "core", section: "11.7.6.7" },
 
             children: [
                 Field({
@@ -576,8 +616,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "BatCommonDesignationEnum", type: "enum16", conformance: "M",
-            xref: { document: "core", section: "11.7.5.8" },
+            name: "BatCommonDesignationEnum", type: "enum16",
+            xref: { document: "core", section: "11.7.6.8" },
 
             children: [
                 Field({
@@ -668,8 +708,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "BatApprovedChemistryEnum", type: "enum16", conformance: "M",
-            xref: { document: "core", section: "11.7.5.9" },
+            name: "BatApprovedChemistryEnum", type: "enum16",
+            xref: { document: "core", section: "11.7.6.9" },
 
             children: [
                 Field({
@@ -758,8 +798,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "BatChargeStateEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.7.5.10" },
+            name: "BatChargeStateEnum", type: "enum8",
+            xref: { document: "core", section: "11.7.6.10" },
 
             children: [
                 Field({
@@ -771,4 +811,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(PowerSource);

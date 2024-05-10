@@ -15,6 +15,16 @@ const logger = Logger.get("load-clusters");
 
 const FAKE_CLUSTER_NAMES = ["New", "Sample", "Disco Ball", "Super Disco Ball"];
 
+const GlobalTypeSections: Partial<Record<Specification, Record<string, GlobalReference["format"]>>> = {
+    core: {
+        "Base Data Types": "datatypes",
+        "Derived Data Types": "datatypes",
+        "Global Elements": "elements",
+        "Time of Day": "standalone",
+        "Status Code Table": "statusCodes",
+    },
+};
+
 interface SubsectionCollector {
     subsection: string;
     collector: (ref: HtmlReference) => void;
@@ -316,16 +326,18 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
     }
 
     function identifyGlobal(ref: HtmlReference): GlobalReference | undefined {
+        const format = GlobalTypeSections[ref.xref.document]?.[ref.name];
         if (
-            // Special case for global element definitions in core doc
-            (ref.name === "Global Elements" && ref.xref.document === "core") ||
+            // Lists
+            format ||
             // Most standalone types are designated like this
             ref.name.endsWith(" Type") ||
             // Some don't have the "Type" suffix
-            ref.name.match(/\S+(?:Bitmap|Enum)/i)
+            ref.name.match(/\S+(?:Bitmap|Enum|Struct)$/i)
         ) {
             return {
                 type: "global",
+                format: format ?? "standalone",
                 ...ref,
                 name: ref.name.replace(/\s+type$/i, ""),
             };

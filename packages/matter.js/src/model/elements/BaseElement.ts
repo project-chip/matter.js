@@ -55,10 +55,9 @@ export interface BaseElement {
     children?: AnyElement[];
 
     /**
-     * Is this a global element?  Global elements are defined in Globals.ts
-     * and are available in-scope for every cluster.
+     * Is this a global element?  Global elements are available in-scope for every cluster.
      */
-    global?: boolean;
+    isGlobal?: boolean;
 }
 
 export function BaseElement(tag: ElementTag, definition: BaseElement) {

@@ -11,13 +11,12 @@ import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
     EventElement as Event,
-    FieldElement as Field,
-    DatatypeElement as Datatype
+    FieldElement as Field
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
+export const BridgedDeviceBasicInformation = Cluster({
     name: "BridgedDeviceBasicInformation", id: 0x39, type: "BasicInformation",
-    classification: "endpoint", description: "Bridged Device Basic Information",
+    classification: "endpoint",
 
     details: "This Cluster serves two purposes towards a Node communicating with a Bridge:" +
         "\n" +
@@ -53,153 +52,94 @@ Matter.children.push(Cluster({
             name: "DataModelRevision", id: 0x0, conformance: "X",
             xref: { document: "core", section: "9.13.4" }
         }),
-        Attribute({
-            name: "VendorName", id: 0x1, type: "string", conformance: "O", constraint: "max 32",
-            xref: { document: "core", section: "9.13.4" }
-        }),
-        Attribute({
-            name: "VendorId", id: 0x2, type: "vendor-id", conformance: "O",
-            xref: { document: "core", section: "9.13.4" }
-        }),
-        Attribute({
-            name: "ProductName", id: 0x3, type: "string", conformance: "O", constraint: "max 32",
-            xref: { document: "core", section: "9.13.4" }
-        }),
+        Attribute({ name: "VendorName", id: 0x1, conformance: "O", xref: { document: "core", section: "9.13.4" } }),
+        Attribute({ name: "VendorId", id: 0x2, conformance: "O", xref: { document: "core", section: "9.13.4" } }),
+        Attribute({ name: "ProductName", id: 0x3, conformance: "O", xref: { document: "core", section: "9.13.4" } }),
         Attribute({ name: "ProductId", id: 0x4, conformance: "X", xref: { document: "core", section: "9.13.4" } }),
-        Attribute({
-            name: "NodeLabel", id: 0x5, type: "string", access: "RW", conformance: "O", constraint: "max 32",
-            default: "",
-            xref: { document: "core", section: "9.13.4" }
-        }),
+        Attribute({ name: "NodeLabel", id: 0x5, conformance: "O", xref: { document: "core", section: "9.13.4" } }),
         Attribute({ name: "Location", id: 0x6, conformance: "X", xref: { document: "core", section: "9.13.4" } }),
         Attribute({
-            name: "HardwareVersion", id: 0x7, type: "uint16", conformance: "O", default: 0,
+            name: "HardwareVersion", id: 0x7, conformance: "O",
             xref: { document: "core", section: "9.13.4" }
         }),
         Attribute({
-            name: "HardwareVersionString", id: 0x8, type: "string", conformance: "O", constraint: "max 64",
+            name: "HardwareVersionString", id: 0x8, conformance: "O",
             xref: { document: "core", section: "9.13.4" }
         }),
         Attribute({
-            name: "SoftwareVersion", id: 0x9, type: "uint32", conformance: "O", default: 0,
+            name: "SoftwareVersion", id: 0x9, conformance: "O",
             xref: { document: "core", section: "9.13.4" }
         }),
         Attribute({
-            name: "SoftwareVersionString", id: 0xa, type: "string", conformance: "O", constraint: "max 64",
+            name: "SoftwareVersionString", id: 0xa, conformance: "O",
             xref: { document: "core", section: "9.13.4" }
         }),
         Attribute({
-            name: "ManufacturingDate", id: 0xb, type: "string", conformance: "O", constraint: "max 16",
+            name: "ManufacturingDate", id: 0xb, conformance: "O",
             xref: { document: "core", section: "9.13.4" }
         }),
-        Attribute({
-            name: "PartNumber", id: 0xc, type: "string", conformance: "O", constraint: "max 32",
-            xref: { document: "core", section: "9.13.4" }
-        }),
-        Attribute({
-            name: "ProductUrl", id: 0xd, type: "string", conformance: "O", constraint: "max 256",
-            xref: { document: "core", section: "9.13.4" }
-        }),
-        Attribute({
-            name: "ProductLabel", id: 0xe, type: "string", conformance: "O", constraint: "max 64",
-            xref: { document: "core", section: "9.13.4" }
-        }),
-        Attribute({
-            name: "SerialNumber", id: 0xf, type: "string", conformance: "O", constraint: "max 32",
-            xref: { document: "core", section: "9.13.4" }
-        }),
+        Attribute({ name: "PartNumber", id: 0xc, conformance: "O", xref: { document: "core", section: "9.13.4" } }),
+        Attribute({ name: "ProductUrl", id: 0xd, conformance: "O", xref: { document: "core", section: "9.13.4" } }),
+        Attribute({ name: "ProductLabel", id: 0xe, conformance: "O", xref: { document: "core", section: "9.13.4" } }),
+        Attribute({ name: "SerialNumber", id: 0xf, conformance: "O", xref: { document: "core", section: "9.13.4" } }),
         Attribute({
             name: "LocalConfigDisabled", id: 0x10, conformance: "X",
             xref: { document: "core", section: "9.13.4" }
         }),
-        Attribute({
-            name: "Reachable", id: 0x11, type: "bool", conformance: "M", default: true,
-            xref: { document: "core", section: "9.13.4" }
-        }),
-        Attribute({
-            name: "UniqueId", id: 0x12, type: "string", conformance: "O", constraint: "max 32",
-            xref: { document: "core", section: "9.13.4" }
-        }),
+        Attribute({ name: "Reachable", id: 0x11, conformance: "M", xref: { document: "core", section: "9.13.4" } }),
+        Attribute({ name: "UniqueId", id: 0x12, conformance: "O", xref: { document: "core", section: "9.13.4" } }),
         Attribute({
             name: "CapabilityMinima", id: 0x13, conformance: "X",
             xref: { document: "core", section: "9.13.4" }
         }),
         Attribute({
             name: "ProductAppearance", id: 0x14, type: "ProductAppearanceStruct", conformance: "O",
-            quality: "F"
+            quality: "F",
+            xref: { document: "core", section: "9.13.4" }
+        }),
+        Attribute({
+            name: "SpecificationVersion", id: 0x15, conformance: "X",
+            xref: { document: "core", section: "9.13.4" }
+        }),
+        Attribute({
+            name: "MaxPathsPerInvoke", id: 0x16, conformance: "X",
+            xref: { document: "core", section: "9.13.4" }
         }),
         Event({
             name: "StartUp", id: 0x0, conformance: "O", priority: "critical",
-            xref: { document: "core", section: "9.13.5" },
-            children: [Field({ name: "SoftwareVersion", id: 0x0, type: "uint32", conformance: "M" })]
+            xref: { document: "core", section: "9.13.5" }
         }),
         Event({
             name: "ShutDown", id: 0x1, conformance: "O", priority: "critical",
             xref: { document: "core", section: "9.13.5" }
         }),
+
         Event({
-            name: "Leave", id: 0x2, conformance: "O", priority: "info",
-            xref: { document: "core", section: "9.13.5" }
+            name: "Leave", id: 0x2, conformance: "O", priority: "critical",
+
+            details: "The Leave event SHOULD be generated by the bridge when it detects that the associated device has " +
+                "left the non-Matter network." +
+                "\n" +
+                "NOTE" +
+                "\n" +
+                "The FabricIndex field has the X conformance, indicating it shall NOT be present. This event, in the " +
+                "context of Bridged Device Basic Information cluster, has no usable fields, but the original Basic " +
+                "Information cluster’s field definition is kept for completeness.",
+
+            xref: { document: "core", section: "9.13.5.1" },
+            children: [Field({ name: "FabricIndex", id: 0x0, conformance: "X" })]
         }),
 
         Event({
-            name: "ReachableChanged", id: 0x3, conformance: "M", priority: "info",
+            name: "ReachableChanged", id: 0x3, conformance: "M", priority: "critical",
             details: "This event shall be generated when there is a change in the Reachable attribute. Its purpose is to " +
                 "provide an indication towards interested parties that the reachability of a bridged device (over " +
                 "the non-Matter network) has changed, so they may take appropriate action." +
                 "\n" +
                 "After (re)start of a bridge this event may be generated.",
-            xref: { document: "core", section: "9.13.5.1" },
-            children: [Field({ name: "ReachableNewValue", id: 0x0, type: "bool", conformance: "M" })]
-        }),
-
-        Datatype({
-            name: "ProductAppearanceStruct", type: "struct", conformance: "M",
-            children: [
-                Field({ name: "Finish", id: 0x0, type: "ProductFinishEnum", conformance: "M" }),
-                Field({ name: "PrimaryColor", id: 0x1, type: "ColorEnum", conformance: "M", quality: "X" })
-            ]
-        }),
-
-        Datatype({
-            name: "ProductFinishEnum", type: "enum8", conformance: "M",
-
-            children: [
-                Field({ name: "Other", id: 0x0, conformance: "M" }),
-                Field({ name: "Matte", id: 0x1, conformance: "M" }),
-                Field({ name: "Satin", id: 0x2, conformance: "M" }),
-                Field({ name: "Polished", id: 0x3, conformance: "M" }),
-                Field({ name: "Rugged", id: 0x4, conformance: "M" }),
-                Field({ name: "Fabric", id: 0x5, conformance: "M" })
-            ]
-        }),
-
-        Datatype({
-            name: "ColorEnum", type: "enum8", conformance: "M",
-
-            children: [
-                Field({ name: "Black", id: 0x0, conformance: "M" }),
-                Field({ name: "Navy", id: 0x1, conformance: "M" }),
-                Field({ name: "Green", id: 0x2, conformance: "M" }),
-                Field({ name: "Teal", id: 0x3, conformance: "M" }),
-                Field({ name: "Maroon", id: 0x4, conformance: "M" }),
-                Field({ name: "Purple", id: 0x5, conformance: "M" }),
-                Field({ name: "Olive", id: 0x6, conformance: "M" }),
-                Field({ name: "Gray", id: 0x7, conformance: "M" }),
-                Field({ name: "Blue", id: 0x8, conformance: "M" }),
-                Field({ name: "Lime", id: 0x9, conformance: "M" }),
-                Field({ name: "Aqua", id: 0xa, conformance: "M" }),
-                Field({ name: "Red", id: 0xb, conformance: "M" }),
-                Field({ name: "Fuchsia", id: 0xc, conformance: "M" }),
-                Field({ name: "Yellow", id: 0xd, conformance: "M" }),
-                Field({ name: "White", id: 0xe, conformance: "M" }),
-                Field({ name: "Nickel", id: 0xf, conformance: "M" }),
-                Field({ name: "Chrome", id: 0x10, conformance: "M" }),
-                Field({ name: "Brass", id: 0x11, conformance: "M" }),
-                Field({ name: "Copper", id: 0x12, conformance: "M" }),
-                Field({ name: "Silver", id: 0x13, conformance: "M" }),
-                Field({ name: "Gold", id: 0x14, conformance: "M" })
-            ]
+            xref: { document: "core", section: "9.13.5.2" }
         })
     ]
-}))
+})
+
+Matter.children.push(BridgedDeviceBasicInformation);

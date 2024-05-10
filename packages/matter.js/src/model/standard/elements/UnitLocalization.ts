@@ -14,11 +14,12 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "UnitLocalization", id: 0x2d, classification: "node", description: "Unit Localization",
+export const UnitLocalization = Cluster({
+    name: "UnitLocalization", id: 0x2d, classification: "node",
 
     details: "Nodes should be expected to be deployed to any and all regions of the world. These global regions " +
-        "may have differing preferences for the units in which values are conveyed in communication to a " +
+        "may have differing preferences for the units in which values are conveyed in communication to a" +
+        "\n" +
         "user. As such, Nodes that visually or audibly convey measurable values to the user need a mechanism " +
         "by which they can be configured to use a user’s preferred unit." +
         "\n" +
@@ -41,7 +42,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "TemperatureUnit", id: 0x0, type: "TempUnitEnum", access: "RW VM", conformance: "TEMP",
-            default: null, quality: "X N",
+            quality: "N",
             details: "The TemperatureUnit attribute shall indicate the unit for the Node to use only when conveying " +
                 "temperature in communication to the user. If provided, this value shall take priority over any unit " +
                 "implied through the ActiveLocale Attribute.",
@@ -49,7 +50,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "TempUnitEnum", type: "enum8", conformance: "M",
+            name: "TempUnitEnum", type: "enum8",
             xref: { document: "core", section: "11.5.5.1" },
             children: [
                 Field({ name: "Fahrenheit", id: 0x0, conformance: "M", description: "Temperature conveyed in Fahrenheit" }),
@@ -58,4 +59,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(UnitLocalization);

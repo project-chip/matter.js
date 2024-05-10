@@ -5,6 +5,7 @@
  */
 
 import {
+    AttributeElement,
     AttributeModel,
     ClusterModel,
     DatatypeModel,
@@ -15,6 +16,34 @@ import {
 } from "../../../src/model/index.js";
 
 describe("Model", () => {
+    describe("parent", () => {
+        it("sets before reification", () => {
+            const child = new AttributeModel({ id: 1, name: "Foo" });
+            const cluster = new ClusterModel({ id: 1, name: "Bar", children: [child] });
+
+            // Cluster is not reified but child should have parent set
+            expect(child.parent).equals(cluster);
+        });
+
+        it("sets during reification", () => {
+            const child = AttributeElement({ id: 1, name: "Foo" });
+            const cluster = new ClusterModel({ id: 1, name: "Bar", children: [child] });
+
+            // Force reification and thus instantiation of child
+            expect(cluster.children[0].parent).equals(cluster);
+        });
+
+        it("sets due to forced reification", () => {
+            const grandchild = new FieldModel({ name: "Hmm" });
+            const child = AttributeElement({ id: 1, name: "Foo", type: "struct", children: [grandchild] });
+            const cluster = new ClusterModel({ id: 1, name: "Bar", children: [child] });
+
+            // The attribute should have been upgraded when added with a model descendent
+            expect(grandchild.parent).instanceof(AttributeModel);
+            expect(grandchild.parent?.parent).equals(cluster);
+        });
+    });
+
     describe("children", () => {
         it("can be added", () => {
             const parent = new ClusterModel({ name: "Foo" });
@@ -114,9 +143,7 @@ describe("Model", () => {
     describe("all", () => {
         it("finds all models by type", () => {
             expect(Fixtures.matter.all(ClusterModel).length).equal(3);
-
-            // 66 standard datatypes + 3 defined in our fake model
-            expect(Fixtures.matter.all(DatatypeModel).length).equal(71);
+            expect(Fixtures.matter.all(DatatypeModel).length).equal(83);
         });
     });
 
@@ -128,6 +155,16 @@ describe("Model", () => {
 
         it("finds by name", () => {
             expect(Fixtures.matter.get(ClusterModel, "Cluster1")).equal(Fixtures.cluster1);
+        });
+    });
+
+    describe("effectiveType", () => {
+        it("uses explicit type", () => {
+            expect(Fixtures.cluster1StructAttr.effectiveType).equals("ClusterDatatype");
+        });
+
+        it("infers type from parent", () => {
+            expect(Fixtures.feature.effectiveType).equals("uint32");
         });
     });
 
@@ -144,7 +181,7 @@ describe("Model", () => {
             expect(Fixtures.cluster2StructField.base).equal(Fixtures.cluster1StructType);
         });
 
-        it("is inferred from inherited base", () => {
+        it("is inferred from implied base", () => {
             expect(Fixtures.feature.base?.name).equal(Globals.uint32.name);
         });
 
@@ -154,6 +191,38 @@ describe("Model", () => {
 
         it("is inferred from struct attribute override", () => {
             expect(Fixtures.cluster2Attr2.base).equal(Fixtures.cluster1StructType);
+        });
+    });
+
+    describe("qualified type names", () => {
+        it("resolves reference to attribute in another cluster", () => {
+            expect(Fixtures.cluster2Attr3.base).equals(Fixtures.cluster1StructAttr);
+        });
+
+        it("resolves absolute reference to datatype in another cluster", () => {
+            expect(Fixtures.cluster2Attr4.base).equals(Fixtures.cluster1.get(DatatypeModel, "ClusterDatatype"));
+        });
+
+        it("resolves reference to field of global struct", () => {
+            expect(Fixtures.cluster2Attr5.base).equals(
+                Fixtures.matter.get(DatatypeModel, "Tod")?.get(FieldModel, "hour"),
+            );
+        });
+    });
+
+    describe("metabase", () => {
+        it("is discovered via direct inheritance", () => {
+            const map32 = Fixtures.matter.get(DatatypeModel, "map32");
+            expect(map32).not.undefined;
+            const featureMap = Fixtures.matter.get(AttributeModel, "FeatureMap");
+            expect(featureMap).not.undefined;
+            expect(featureMap?.metabase).equals(map32);
+        });
+
+        it("is discovered via parent inheritance", () => {
+            const map32 = Fixtures.matter.get(DatatypeModel, "map32");
+            expect(map32).not.undefined;
+            expect(Fixtures.cluster1.featureMap.metabase).equals(map32);
         });
     });
 
@@ -170,7 +239,7 @@ describe("Model", () => {
             expect(Fixtures.cluster2StructField.effectiveMetatype).equal(Metatype.object);
         });
 
-        it("is inferred from inherited base type", () => {
+        it("is inferred from implied base type", () => {
             expect(Fixtures.enumValue2.effectiveMetatype).equal(Metatype.integer);
         });
     });
@@ -261,19 +330,31 @@ namespace Fixtures {
     });
     export const cluster2Attr1 = new AttributeModel({ id: 1, name: "byteAttr" });
     export const cluster2Attr2 = new AttributeModel({ id: 3, name: "structAttr2" });
+    export const cluster2Attr3 = new AttributeModel({ id: 4, name: "qualifiedAttr1", type: "Cluster1.structAttr2" });
+    export const cluster2Attr4 = new AttributeModel({
+        id: 5,
+        name: "qualifiedAttr2",
+        type: "Matter.Cluster1.ClusterDatatype.numField2",
+    });
+    export const cluster2Attr5 = new AttributeModel({
+        id: 6,
+        name: "qualifiedAttr3",
+        type: "Tod.hour",
+    });
 
     export const enumValue2 = new FieldModel({ name: "Value2" });
 
     export const matter = new MatterModel({
         name: "Fake Matter",
         children: [
+            ...MatterModel.standardGlobals,
             cluster1,
             {
                 tag: "cluster",
                 id: 2,
                 name: "Cluster2",
                 type: "Cluster1",
-                children: [cluster2StructField, cluster2Attr1, cluster2Attr2],
+                children: [cluster2StructField, cluster2Attr1, cluster2Attr2, cluster2Attr3, cluster2Attr4],
             },
             { tag: "cluster", id: 3, name: "Cluster3" },
             globalAttr,

@@ -11,11 +11,12 @@ import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
     FieldElement as Field,
-    CommandElement as Command
+    CommandElement as Command,
+    DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "Groups", id: 0x4, classification: "endpoint", description: "Groups",
+export const Groups = Cluster({
+    name: "Groups", id: 0x4, classification: "endpoint",
 
     details: "The Groups cluster manages, per endpoint, the content of the node-wide Group Table that is part of " +
         "the underlying interaction layer." +
@@ -50,16 +51,13 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "NameSupport", id: 0x0, type: "map8", access: "R V", conformance: "M", constraint: "desc",
-            default: 0, quality: "F",
+            name: "NameSupport", id: 0x0, type: "NameSupportBitmap", access: "R V", conformance: "M",
+            constraint: "desc", default: 0, quality: "F",
             details: "This attribute provides legacy, read-only access to whether the Group Names feature is supported. " +
-                "The most significant bit, bit 7, shall be equal to bit 0 of the FeatureMap attribute. All other " +
-                "bits shall be 0.",
+                "The most significant bit, bit 7 (GroupNames), shall be equal to bit 0 of the FeatureMap attribute " +
+                "(GN Feature). All other bits shall be 0.",
             xref: { document: "cluster", section: "1.3.6.1" },
-            children: [Field({
-                name: "NameSupport", constraint: "7", default: 1,
-                description: "The ability to store a name for a group."
-            })]
+            children: [Field({ name: "NameSupport", constraint: "7", default: 1 })]
         }),
 
         Command({
@@ -68,9 +66,23 @@ Matter.children.push(Cluster({
             details: "The AddGroup command allows a client to add group membership in a particular group for the server " +
                 "endpoint.",
             xref: { document: "cluster", section: "1.3.7.1" },
+
             children: [
-                Field({ name: "GroupId", id: 0x0, type: "group-id", conformance: "M", constraint: "min 1" }),
-                Field({ name: "GroupName", id: 0x1, type: "string", conformance: "M", constraint: "max 16" })
+                Field({
+                    name: "GroupId", id: 0x0, type: "group-id", conformance: "M", constraint: "min 1",
+                    details: "This field shall be used to identify the group and any associated key material to which the server " +
+                        "endpoint is to be added.",
+                    xref: { document: "cluster", section: "1.3.7.1.1" }
+                }),
+
+                Field({
+                    name: "GroupName", id: 0x1, type: "string", conformance: "M", constraint: "max 16",
+                    details: "This field may be set to a human-readable name for the group. If the client has no name for the " +
+                        "group, the GroupName field shall be set to the empty string." +
+                        "\n" +
+                        "Support of group names is optional and is indicated by the FeatureMap and NameSupport attribute.",
+                    xref: { document: "cluster", section: "1.3.7.1.2" }
+                })
             ]
         }),
 
@@ -108,9 +120,7 @@ Matter.children.push(Cluster({
             name: "RemoveAllGroups", id: 0x4, access: "F M", conformance: "M", direction: "request",
             response: "status",
             details: "The RemoveAllGroups command allows a client to direct the server to remove all group associations " +
-                "for the server endpoint." +
-                "\n" +
-                "The RemoveAllGroups command has no data fields.",
+                "for the server endpoint.",
             xref: { document: "cluster", section: "1.3.7.5" }
         }),
 
@@ -120,15 +130,32 @@ Matter.children.push(Cluster({
 
             details: "The AddGroupIfIdentifying command allows a client to add group membership in a particular group for " +
                 "the server endpoint, on condition that the endpoint is identifying itself. Identifying " +
-                "functionality is controlled using the Identify cluster, (see Identify)." +
+                "functionality is controlled using the Identify cluster, (see Identify Cluster)." +
+                "\n" +
+                "For correct operation of the AddGroupIfIdentifying command, any endpoint that supports the Groups " +
+                "server cluster shall also support the Identify server cluster." +
                 "\n" +
                 "This command might be used to assist configuring group membership in the absence of a commissioning " +
                 "tool.",
 
             xref: { document: "cluster", section: "1.3.7.6" },
+
             children: [
-                Field({ name: "GroupId", id: 0x0, type: "group-id", conformance: "M", constraint: "min 1" }),
-                Field({ name: "GroupName", id: 0x1, type: "string", conformance: "M", constraint: "max 16" })
+                Field({
+                    name: "GroupId", id: 0x0, type: "group-id", conformance: "M", constraint: "min 1",
+                    details: "This field shall be used to identify the group and any associated key material to which the server " +
+                        "endpoint is to be added.",
+                    xref: { document: "cluster", section: "1.3.7.6.1" }
+                }),
+
+                Field({
+                    name: "GroupName", id: 0x1, type: "string", conformance: "M", constraint: "max 16",
+                    details: "This field may be set to a human-readable name for the group. If the client has no name for the " +
+                        "group, the GroupName field shall be set to the empty string." +
+                        "\n" +
+                        "Support of group names is optional and is indicated by the FeatureMap and NameSupport attribute.",
+                    xref: { document: "cluster", section: "1.3.7.6.2" }
+                })
             ]
         }),
 
@@ -136,9 +163,18 @@ Matter.children.push(Cluster({
             name: "AddGroupResponse", id: 0x0, conformance: "M", direction: "response",
             details: "The AddGroupResponse is sent by the Groups cluster server in response to an AddGroup command.",
             xref: { document: "cluster", section: "1.3.7.7" },
+
             children: [
-                Field({ name: "Status", id: 0x0, type: "status", conformance: "M", constraint: "desc" }),
-                Field({ name: "GroupId", id: 0x1, type: "group-id", conformance: "M", constraint: "min 1" })
+                Field({
+                    name: "Status", id: 0x0, type: "status", conformance: "M", constraint: "desc",
+                    details: "This field is set according to the Effect on Receipt section of the AddGroup command.",
+                    xref: { document: "cluster", section: "1.3.7.7.1" }
+                }),
+                Field({
+                    name: "GroupId", id: 0x1, type: "group-id", conformance: "M", constraint: "min 1",
+                    details: "This field is set to the GroupID field of the received AddGroup command.",
+                    xref: { document: "cluster", section: "1.3.7.7.2" }
+                })
             ]
         }),
 
@@ -147,48 +183,66 @@ Matter.children.push(Cluster({
             details: "The ViewGroupResponse command is sent by the Groups cluster server in response to a ViewGroup " +
                 "command.",
             xref: { document: "cluster", section: "1.3.7.8" },
+
             children: [
-                Field({ name: "Status", id: 0x0, type: "status", conformance: "M", constraint: "desc" }),
-                Field({ name: "GroupId", id: 0x1, type: "group-id", conformance: "M", constraint: "min 1" }),
-                Field({ name: "GroupName", id: 0x2, type: "string", conformance: "M", constraint: "max 16" })
+                Field({
+                    name: "Status", id: 0x0, type: "status", conformance: "M", constraint: "desc",
+                    details: "This field is according to the Effect on Receipt section of the ViewGroup command.",
+                    xref: { document: "cluster", section: "1.3.7.8.1" }
+                }),
+                Field({
+                    name: "GroupId", id: 0x1, type: "group-id", conformance: "M", constraint: "min 1",
+                    details: "This field is set to the GroupID field of the received ViewGroup command.",
+                    xref: { document: "cluster", section: "1.3.7.8.2" }
+                }),
+
+                Field({
+                    name: "GroupName", id: 0x2, type: "string", conformance: "M", constraint: "max 16",
+                    details: "If the status is SUCCESS, and group names are supported, this field is set to the group name " +
+                        "associated with that group in the Group Table; otherwise it is set to the empty string.",
+                    xref: { document: "cluster", section: "1.3.7.8.3" }
+                })
             ]
         }),
 
         Command({
             name: "GetGroupMembershipResponse", id: 0x2, conformance: "M", direction: "response",
-
             details: "The GetGroupMembershipResponse command is sent by the Groups cluster server in response to a " +
-                "GetGroupMembership command." +
-                "\n" +
-                "The fields of the GetGroupMembershipResponse command have the following semantics:" +
-                "\n" +
-                "The Capacity field shall contain the remaining capacity of the Group Table of the node. The " +
-                "following values apply:" +
-                "\n" +
-                "  • 0 - No further groups may be added." +
-                "\n" +
-                "  • 0 < Capacity < 0xfe - Capacity holds the number of groups that may be added." +
-                "\n" +
-                "  • 0xfe - At least 1 further group may be added (exact number is unknown)." +
-                "\n" +
-                "  • null - It is unknown if any further groups may be added." +
-                "\n" +
-                "The GroupList field shall contain either the group IDs of all the groups in the Group Table for " +
-                "which the server endpoint is a member of the group (in the case where the GroupList field of the " +
-                "received GetGroupMembership command was empty), or the group IDs of all the groups in the Group " +
-                "Table for which the server endpoint is a member of the group and for which the group ID was " +
-                "included in the the GroupList field of the received GetGroupMembership command (in the case where " +
-                "the GroupList field of the received GetGroupMembership command was not empty)." +
-                "\n" +
-                "Zigbee: If the total number of groups will cause the maximum payload length of a frame to be " +
-                "exceeded, then the GroupList field shall contain only as many groups as will fit.",
-
+                "GetGroupMembership command.",
             xref: { document: "cluster", section: "1.3.7.9" },
 
             children: [
-                Field({ name: "Capacity", id: 0x0, type: "uint8", conformance: "M", quality: "X" }),
+                Field({
+                    name: "Capacity", id: 0x0, type: "uint8", conformance: "M", quality: "X",
+
+                    details: "This field shall contain the remaining capacity of the Group Table of the node. The following " +
+                        "values apply:" +
+                        "\n" +
+                        "  • 0 - No further groups may be added." +
+                        "\n" +
+                        "  • 0 < Capacity < 0xFE - Capacity holds the number of groups that may be added." +
+                        "\n" +
+                        "  • 0xFE - At least 1 further group may be added (exact number is unknown)." +
+                        "\n" +
+                        "  • null - It is unknown if any further groups may be added.",
+
+                    xref: { document: "cluster", section: "1.3.7.9.1" }
+                }),
+
                 Field({
                     name: "GroupList", id: 0x1, type: "list", conformance: "M", constraint: "all[min 1]",
+
+                    details: "The GroupList field shall contain either the group IDs of all the groups in the Group Table for " +
+                        "which the server endpoint is a member of the group (in the case where the GroupList field of the " +
+                        "received GetGroupMembership command was empty), or the group IDs of all the groups in the Group " +
+                        "Table for which the server endpoint is a member of the group and for which the group ID was " +
+                        "included in the the GroupList field of the received GetGroupMembership command (in the case where " +
+                        "the GroupList field of the received GetGroupMembership command was not empty)." +
+                        "\n" +
+                        "Zigbee: If the total number of groups will cause the maximum payload length of a frame to be " +
+                        "exceeded, then the GroupList field shall contain only as many groups as will fit.",
+
+                    xref: { document: "cluster", section: "1.3.7.9.2" },
                     children: [Field({ name: "entry", type: "group-id" })]
                 })
             ]
@@ -199,10 +253,29 @@ Matter.children.push(Cluster({
             details: "The RemoveGroupResponse command is generated by the server in response to the receipt of a " +
                 "RemoveGroup command.",
             xref: { document: "cluster", section: "1.3.7.10" },
+
             children: [
-                Field({ name: "Status", id: 0x0, type: "status", conformance: "M", constraint: "desc" }),
-                Field({ name: "GroupId", id: 0x1, type: "group-id", conformance: "M", constraint: "min 1" })
+                Field({
+                    name: "Status", id: 0x0, type: "status", conformance: "M", constraint: "desc",
+                    details: "This field is according to the Effect on Receipt section of the RemoveGroup command.",
+                    xref: { document: "cluster", section: "1.3.7.10.1" }
+                }),
+                Field({
+                    name: "GroupId", id: 0x1, type: "group-id", conformance: "M", constraint: "min 1",
+                    details: "This field is set to the GroupID field of the received RemoveGroup command.",
+                    xref: { document: "cluster", section: "1.3.7.10.2" }
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "NameSupportBitmap", type: "map8",
+            xref: { document: "cluster", section: "1.3.5.1" },
+            children: [
+                Field({ name: "GroupNames", constraint: "7", description: "The ability to store a name for a group." })
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(Groups);

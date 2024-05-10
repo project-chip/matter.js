@@ -28,11 +28,6 @@ export abstract class Model {
     #name: string;
 
     /**
-     * Flag set on elements loaded from Globals.
-     */
-    global?: boolean;
-
-    /**
      * Indicates that an element may have type definitions as children.
      */
     isTypeScope?: boolean;
@@ -80,6 +75,13 @@ export abstract class Model {
         } else {
             return this.name;
         }
+    }
+
+    /**
+     * Determine if this model resides in the global namespace.
+     */
+    get isGlobal() {
+        return this.tag === "matter" || this.parent?.tag === "matter";
     }
 
     /**
@@ -278,9 +280,6 @@ export abstract class Model {
      */
     get<T extends Model>(type: Model.Type<T>, key: number | string): T | undefined {
         return this.children.get(type, key);
-        // return this.children.find(c =>
-        //     c instanceof type && typeof key === "number" ? c.effectiveId === key : c.name === key,
-        // ) as T | undefined;
     }
 
     /**
@@ -382,11 +381,7 @@ export abstract class Model {
         // Copy all definition properties.  Types will be wrong for some of them but constructors correct this.
         // Properties for which type is correct are suffixed with "!" to indicate no further initialization is necessary
         for (const [k, v] of Object.entries(definition)) {
-            if (k === "id" || k === "name" || k === "parent") {
-                continue;
-            }
-
-            if (isClone && k === "children") {
+            if (k === "id" || k === "name" || k === "parent" || k === "isGlobal") {
                 continue;
             }
 

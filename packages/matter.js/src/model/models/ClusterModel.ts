@@ -7,7 +7,9 @@
 import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
 import { Access } from "../aspects/Access.js";
 import { FeatureSet, Metatype } from "../definitions/index.js";
-import { ClusterElement, Globals } from "../elements/index.js";
+import { ClusterElement } from "../elements/index.js";
+import { ClusterRevision } from "../standard/elements/ClusterRevision.js";
+import { FeatureMap } from "../standard/elements/FeatureMap.js";
 import { AttributeModel } from "./AttributeModel.js";
 import { Children } from "./Children.js";
 import { CommandModel } from "./CommandModel.js";
@@ -47,7 +49,7 @@ export class ClusterModel extends Model {
 
     get revision() {
         let revision = 1;
-        const revisionAttr = this.get(AttributeModel, Globals.ClusterRevision.id);
+        const revisionAttr = this.get(AttributeModel, ClusterRevision.id);
         if (typeof revisionAttr?.default === "number") {
             revision = revisionAttr.default;
         }
@@ -59,7 +61,7 @@ export class ClusterModel extends Model {
     }
 
     get featureMap() {
-        return this.get(AttributeModel, Globals.FeatureMap.id) ?? new AttributeModel(Globals.FeatureMap);
+        return this.get(AttributeModel, FeatureMap.id) ?? new AttributeModel(FeatureMap);
     }
 
     override get children(): Children<ClusterModel.Child, ClusterElement.Child> {

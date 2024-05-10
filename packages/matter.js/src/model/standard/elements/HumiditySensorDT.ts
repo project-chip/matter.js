@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const HumiditySensorDT = DeviceType({
     name: "HumiditySensor", id: 0x307, classification: "simple",
     details: "A humidity sensor (in most cases a Relative humidity sensor) reports humidity measurements.",
     xref: { document: "device", section: "7.7" },
@@ -21,12 +21,13 @@ Matter.children.push(DeviceType({
         }),
         Requirement({
             name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "7.7.4" },
-            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
+            xref: { document: "device", section: "7.7.4" }
         }),
         Requirement({
             name: "RelativeHumidityMeasurement", id: 0x405, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "7.7.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(HumiditySensorDT);

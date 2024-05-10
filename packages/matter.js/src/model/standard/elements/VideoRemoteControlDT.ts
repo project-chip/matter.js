@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const VideoRemoteControlDT = DeviceType({
     name: "VideoRemoteControl", id: 0x2a, classification: "simple",
     details: "This defines conformance to the Video Remote Control device type." +
         "\n" +
@@ -21,7 +21,7 @@ Matter.children.push(DeviceType({
         Requirement({
             name: "Descriptor", id: 0x1d, element: "serverCluster",
             children: [
-                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 42, revision: 1 } ], element: "attribute" })
+                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 42, revision: 2 } ], element: "attribute" })
             ]
         }),
 
@@ -76,6 +76,12 @@ Matter.children.push(DeviceType({
         Requirement({
             name: "AccountLogin", id: 0x50e, conformance: "O", element: "clientCluster",
             xref: { document: "device", section: "10.7.4" }
+        }),
+        Requirement({
+            name: "ContentControl", id: 0x50f, conformance: "P, O", element: "clientCluster",
+            xref: { document: "device", section: "10.7.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(VideoRemoteControlDT);

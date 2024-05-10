@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const TemperatureSensorDT = DeviceType({
     name: "TemperatureSensor", id: 0x302, classification: "simple",
     details: "A Temperature Sensor device reports measurements of temperature.",
     xref: { document: "device", section: "7.4" },
@@ -28,4 +28,6 @@ Matter.children.push(DeviceType({
             xref: { document: "device", section: "7.4.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(TemperatureSensorDT);

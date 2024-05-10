@@ -16,11 +16,9 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
+export const OtaSoftwareUpdateRequestor = Cluster({
     name: "OtaSoftwareUpdateRequestor", id: 0x2a, classification: "node",
-    description: "OTA Software Update Requestor",
-    details: "Provides an interface for downloading and applying OTA software updates",
-    xref: { document: "core", section: "11.19.7" },
+    xref: { document: "core", section: "11.20.7" },
 
     children: [
         Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
@@ -29,8 +27,8 @@ Matter.children.push(Cluster({
             name: "DefaultOtaProviders", id: 0x0, type: "list", access: "RW F VA", conformance: "M",
             constraint: "desc", default: [],
 
-            details: "This field is a list of ProviderLocationStruct whose entries shall be set by Administrators, either " +
-                "during Commissioning or at a later time, to set the Provider Location for the default OTA Provider " +
+            details: "This field is a list of ProviderLocation whose entries shall be set by Administrators, either " +
+                "during Commissioning or at a later time, to set the ProviderLocation for the default OTA Provider " +
                 "Node to use for software updates on a given Fabric." +
                 "\n" +
                 "There shall NOT be more than one entry per Fabric. On a list update that would introduce more than " +
@@ -39,8 +37,8 @@ Matter.children.push(Cluster({
                 "Provider Locations obtained using the AnnounceOTAProvider command shall NOT overwrite values set in " +
                 "the DefaultOTAProviders attribute.",
 
-            xref: { document: "core", section: "11.19.7.5.1" },
-            children: [Field({ name: "entry", type: "ProviderLocationStruct" })]
+            xref: { document: "core", section: "11.20.7.5.1" },
+            children: [Field({ name: "entry", type: "ProviderLocation" })]
         }),
 
         Attribute({
@@ -49,16 +47,16 @@ Matter.children.push(Cluster({
                 "shall be set to False in case of any condition preventing update being possible, such as " +
                 "insufficient capacity of an internal battery. This field is merely informational for diagnostics " +
                 "purposes and shall NOT affect the responses provided by an OTA Provider to an OTA Requestor.",
-            xref: { document: "core", section: "11.19.7.5.2" }
+            xref: { document: "core", section: "11.20.7.5.2" }
         }),
 
         Attribute({
             name: "UpdateState", id: 0x2, type: "UpdateStateEnum", access: "R V", conformance: "M", default: 0,
             details: "This field shall reflect the current state of the OTA Requestor with regards to obtaining software " +
-                "updates. See Section 11.19.7.4.2, “UpdateStateEnum” for possible values." +
+                "updates. See Section 11.20.7.4.2, “UpdateStateEnum Type” for possible values." +
                 "\n" +
                 "This field SHOULD be updated in a timely manner whenever OTA Requestor internal state updates.",
-            xref: { document: "core", section: "11.19.7.5.3" }
+            xref: { document: "core", section: "11.20.7.5.3" }
         }),
 
         Attribute({
@@ -76,14 +74,14 @@ Matter.children.push(Cluster({
                 "This field may be updated infrequently. Some care SHOULD be taken by Nodes to avoid over- reporting " +
                 "progress when this attribute is part of a subscription.",
 
-            xref: { document: "core", section: "11.19.7.5.4" }
+            xref: { document: "core", section: "11.20.7.5.4" }
         }),
 
         Event({
             name: "StateTransition", id: 0x0, access: "V", conformance: "M", priority: "info",
             details: "This event shall be generated when a change of the UpdateState attribute occurs due to an OTA " +
                 "Requestor moving through the states necessary to query for updates.",
-            xref: { document: "core", section: "11.19.7.7.1" },
+            xref: { document: "core", section: "11.20.7.7.1" },
 
             children: [
                 Field({ name: "PreviousState", id: 0x0, type: "UpdateStateEnum", conformance: "M", default: 0 }),
@@ -101,7 +99,7 @@ Matter.children.push(Cluster({
             details: "This event shall be generated whenever a new version starts executing after being applied due to a " +
                 "software update. This event SHOULD be generated even if a software update was done using means " +
                 "outside of this cluster.",
-            xref: { document: "core", section: "11.19.7.7.6" },
+            xref: { document: "core", section: "11.20.7.7.6" },
             children: [
                 Field({ name: "SoftwareVersion", id: 0x0, type: "uint32", conformance: "M" }),
                 Field({ name: "ProductId", id: 0x1, type: "uint16", conformance: "M" })
@@ -111,7 +109,7 @@ Matter.children.push(Cluster({
         Event({
             name: "DownloadError", id: 0x2, access: "V", conformance: "M", priority: "info",
             details: "This event shall be generated whenever an error occurs during OTA Requestor download operation.",
-            xref: { document: "core", section: "11.19.7.7.9" },
+            xref: { document: "core", section: "11.20.7.7.9" },
 
             children: [
                 Field({ name: "SoftwareVersion", id: 0x0, type: "uint32", conformance: "M" }),
@@ -132,7 +130,7 @@ Matter.children.push(Cluster({
                 "This command shall be scoped to the accessing fabric." +
                 "\n" +
                 "If the accessing fabric index is 0, this command shall fail with an UNSUPPORTED_ACCESS status code.",
-            xref: { document: "core", section: "11.19.7.6.1" },
+            xref: { document: "core", section: "11.20.7.6.1" },
 
             children: [
                 Field({ name: "ProviderNodeId", id: 0x0, type: "node-id", access: "F", conformance: "M" }),
@@ -153,8 +151,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "AnnouncementReasonEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.19.7.4.1" },
+            name: "AnnouncementReasonEnum", type: "enum8",
+            xref: { document: "core", section: "11.20.7.4.1" },
 
             children: [
                 Field({
@@ -173,8 +171,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "UpdateStateEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.19.7.4.5" },
+            name: "UpdateStateEnum", type: "enum8",
+            xref: { document: "core", section: "11.20.7.4.5" },
 
             children: [
                 Field({ name: "Unknown", id: 0x0, conformance: "M", description: "Current state is not yet determined." }),
@@ -214,8 +212,8 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "ChangeReasonEnum", type: "enum8", conformance: "M",
-            xref: { document: "core", section: "11.19.7.4.15" },
+            name: "ChangeReasonEnum", type: "enum8",
+            xref: { document: "core", section: "11.20.7.4.15" },
 
             children: [
                 Field({
@@ -242,9 +240,16 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "ProviderLocationStruct", type: "struct", access: "R F", conformance: "M",
-            details: "This structure encodes a fabric-scoped location of an OTA provider on a given fabric.",
-            xref: { document: "core", section: "11.19.7.4.21" },
+            name: "DelayByProvider Value", type: "struct",
+
+            details: "This value shall indicate that the reason for a state change is a request by the OTA Provider to " +
+                "await for a delay." +
+                "\n" +
+                "### ProviderLocation Type" +
+                "\n" +
+                "This structure encodes a fabric-scoped location of an OTA provider on a given fabric.",
+
+            xref: { document: "core", section: "11.20.7.4.20" },
 
             children: [
                 Field({ name: "ProviderNodeId", id: 0x1, type: "node-id", access: "F", conformance: "M" }),
@@ -256,4 +261,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(OtaSoftwareUpdateRequestor);

@@ -14,8 +14,8 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "Binding", id: 0x1e, classification: "endpoint", description: "Binding",
+export const Binding = Cluster({
+    name: "Binding", id: 0x1e, classification: "endpoint",
 
     details: "NOTE" +
         "\n" +
@@ -63,7 +63,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "TargetStruct", type: "struct", access: "R F", conformance: "M",
+            name: "TargetStruct", type: "struct",
             xref: { document: "core", section: "9.6.5.1" },
 
             children: [
@@ -76,6 +76,7 @@ Matter.children.push(Cluster({
 
                 Field({
                     name: "Group", id: 0x2, type: "group-id", access: "F", conformance: "!Endpoint",
+                    constraint: "min 1",
                     details: "This field is the target group ID that represents remote endpoints. If the Endpoint field is " +
                         "present, this field shall NOT be present.",
                     xref: { document: "core", section: "9.6.5.1.2" }
@@ -103,4 +104,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(Binding);

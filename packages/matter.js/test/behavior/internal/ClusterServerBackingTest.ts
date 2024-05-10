@@ -23,7 +23,7 @@ import { VendorId } from "../../../src/datatype/VendorId.js";
 import { OnOffLightDevice } from "../../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { Fabric, FabricBuilder } from "../../../src/fabric/Fabric.js";
 import { FabricManager } from "../../../src/fabric/FabricManager.js";
-import { Globals } from "../../../src/model/index.js";
+import { AcceptedCommandList } from "../../../src/model/standard/elements/AcceptedCommandList.js";
 import { ExchangeManager } from "../../../src/protocol/ExchangeManager.js";
 import { MessageExchange } from "../../../src/protocol/MessageExchange.js";
 import { InteractionServerMessenger, MessageType } from "../../../src/protocol/interaction/InteractionMessenger.js";
@@ -198,7 +198,7 @@ async function readCommandList(node: MockServerNode, cluster: number, endpoint =
     return await performRead(node, await createFabric(node, 1), false, {
         endpointId: EndpointNumber(endpoint),
         clusterId: ClusterId(cluster),
-        attributeId: AttributeId(Globals.AcceptedCommandList.id),
+        attributeId: AttributeId(AcceptedCommandList.id),
     });
 }
 

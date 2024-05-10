@@ -15,10 +15,20 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
+export const ApplicationLauncher = Cluster({
     name: "ApplicationLauncher", id: 0x50c, classification: "application",
-    description: "Application Launcher",
-    details: "This cluster provides an interface for launching applications on a Video Player device such as a TV.",
+
+    details: "This cluster provides an interface for launching applications on a Video Player device such as a TV." +
+        "\n" +
+        "This cluster is supported on endpoints that can launch Applications, such as a Casting Video Player " +
+        "device with a Content App Platform. It supports identifying an Application by global identifier " +
+        "from a given catalog, and launching it. It also supports tracking the currently in-focus " +
+        "Application." +
+        "\n" +
+        "Depending on the support for the Application Platform feature, the cluster can either support " +
+        "launching the application corresponding to the endpoint on which the cluster is supported (AP " +
+        "feature not supported) or it can support launching any application (AP feature supported).",
+
     xref: { document: "cluster", section: "6.4" },
 
     children: [
@@ -26,7 +36,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
-            xref: { document: "cluster", section: "6.4.2" },
+            xref: { document: "cluster", section: "6.4.4" },
             children: [Field({
                 name: "AP", constraint: "0", description: "ApplicationPlatform",
                 details: "Support for attributes and commands required for endpoint to support launching any application " +
@@ -35,8 +45,7 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "CatalogList", id: 0x0, type: "list", access: "R V", conformance: "AP", constraint: "none",
-            quality: "N",
+            name: "CatalogList", id: 0x0, type: "list", access: "R V", conformance: "AP", quality: "N",
 
             details: "This attribute shall specify the list of supported application catalogs, where each entry in the " +
                 "list is the CSA-issued vendor ID for the catalog. The DIAL registry (see [DIAL Registry]) shall use " +
@@ -45,7 +54,7 @@ Matter.children.push(Cluster({
                 "It is expected that Content App Platform providers will have their own catalog vendor ID (set to " +
                 "their own Vendor ID) and will assign an ApplicationID to each Content App.",
 
-            xref: { document: "cluster", section: "6.4.3.1" },
+            xref: { document: "cluster", section: "6.4.6.1" },
             children: [Field({ name: "entry", type: "uint16" })]
         }),
 
@@ -55,7 +64,7 @@ Matter.children.push(Cluster({
             details: "This attribute shall specify the current in-focus application, identified using an Application ID, " +
                 "catalog vendor ID and the corresponding endpoint number when the application is represented by a " +
                 "Content App endpoint. A null shall be used to indicate there is no current in-focus application.",
-            xref: { document: "cluster", section: "6.4.3.2" }
+            xref: { document: "cluster", section: "6.4.6.2" }
         }),
 
         Command({
@@ -70,21 +79,21 @@ Matter.children.push(Cluster({
                 "  • otherwise the application corresponding to the endpoint." +
                 "\n" +
                 "The endpoint shall launch and bring to foreground the requisite application if the application is " +
-                "not already launched and in foreground. The Status attribute shall be updated to " +
-                "ACTIVE_VISIBLE_FOCUS on the Application Basic cluster of the Endpoint corresponding to the launched " +
-                "application. The Status attribute shall be updated on any other application whose Status may have " +
-                "changed as a result of this command. The CurrentApp attribute, if supported, shall be updated to " +
-                "reflect the new application in the foreground." +
+                "not already launched and in foreground. The Status attribute shall be updated to ActiveVisibleFocus " +
+                "on the Application Basic cluster of the Endpoint corresponding to the launched application. The " +
+                "Status attribute shall be updated on any other application whose Status may have changed as a " +
+                "result of this command. The CurrentApp attribute, if supported, shall be updated to reflect the new " +
+                "application in the foreground." +
                 "\n" +
                 "This command returns a Launcher Response.",
 
-            xref: { document: "cluster", section: "6.4.4.1" },
+            xref: { document: "cluster", section: "6.4.7.1" },
 
             children: [
                 Field({
                     name: "Application", id: 0x0, type: "ApplicationStruct", conformance: "AP", constraint: "desc",
                     details: "This field shall specify the Application to launch.",
-                    xref: { document: "cluster", section: "6.4.4.1.1" }
+                    xref: { document: "cluster", section: "6.4.7.1.1" }
                 }),
 
                 Field({
@@ -92,12 +101,14 @@ Matter.children.push(Cluster({
 
                     details: "This field shall specify optional app-specific data to be sent to the app." +
                         "\n" +
-                        "Note: This format and meaning of this value is proprietary and outside the specification. It " +
-                        "provides a transition path for device makers that use other protocols (like DIAL) which allow for " +
-                        "proprietary data. Apps that are not yet Matter aware can be launched via Matter, while retaining " +
-                        "the existing ability to launch with proprietary data.",
+                        "NOTE" +
+                        "\n" +
+                        "This format and meaning of this value is proprietary and outside the specification. It provides a " +
+                        "transition path for device makers that use other protocols (like DIAL) which allow for proprietary " +
+                        "data. Apps that are not yet Matter aware can be launched via Matter, while retaining the existing " +
+                        "ability to launch with proprietary data.",
 
-                    xref: { document: "cluster", section: "6.4.4.1.2" }
+                    xref: { document: "cluster", section: "6.4.7.1.2" }
                 })
             ]
         }),
@@ -113,17 +124,17 @@ Matter.children.push(Cluster({
                 "\n" +
                 "  • otherwise the application corresponding to the endpoint." +
                 "\n" +
-                "The Status attribute shall be updated to STOPPED on the Application Basic cluster of the Endpoint " +
+                "The Status attribute shall be updated to Stopped on the Application Basic cluster of the Endpoint " +
                 "corresponding to the stopped application. The Status attribute shall be updated on any other " +
                 "application whose Status may have changed as a result of this command." +
                 "\n" +
                 "This command returns a Launcher Response.",
 
-            xref: { document: "cluster", section: "6.4.4.2" },
+            xref: { document: "cluster", section: "6.4.7.2" },
             children: [Field({
                 name: "Application", id: 0x0, type: "ApplicationStruct", conformance: "AP", constraint: "desc",
                 details: "This field shall specify the Application to stop.",
-                xref: { document: "cluster", section: "6.4.4.2.1" }
+                xref: { document: "cluster", section: "6.4.7.2.1" }
             })]
         }),
 
@@ -138,42 +149,42 @@ Matter.children.push(Cluster({
                 "  • otherwise the application corresponding to the endpoint." +
                 "\n" +
                 "The endpoint may decide to stop the application based on manufacturer specific behavior or resource " +
-                "constraints if any. The Status attribute shall be updated to ACTIVE_HIDDEN or STOPPED, depending on " +
+                "constraints if any. The Status attribute shall be updated to ActiveHidden or Stopped, depending on " +
                 "the action taken, on the Application Basic cluster of the Endpoint corresponding to the application " +
-                "on which the action was taken. The Status attribute shall be updated on any other application whose " +
-                "Status may have changed as a result of this command." +
+                "on which the action was taken. The Status attribute shall be updated on any other" +
                 "\n" +
-                "This command returns a Launcher Response.",
+                "application whose Status may have changed as a result of this command. This command returns a " +
+                "Launcher Response.",
 
-            xref: { document: "cluster", section: "6.4.4.3" },
+            xref: { document: "cluster", section: "6.4.7.3" },
             children: [Field({
                 name: "Application", id: 0x0, type: "ApplicationStruct", conformance: "AP", constraint: "desc",
                 details: "This field shall specify the Application to hide.",
-                xref: { document: "cluster", section: "6.4.4.3.1" }
+                xref: { document: "cluster", section: "6.4.7.3.1" }
             })]
         }),
 
         Command({
             name: "LauncherResponse", id: 0x3, conformance: "M", direction: "response",
             details: "This command shall be generated in response to LaunchApp/StopApp/HideApp commands.",
-            xref: { document: "cluster", section: "6.4.4.4" },
+            xref: { document: "cluster", section: "6.4.7.4" },
 
             children: [
                 Field({
                     name: "Status", id: 0x0, type: "StatusEnum", conformance: "M",
-                    details: "This shall indicate the status of the command which resulted in this response.",
-                    xref: { document: "cluster", section: "6.4.4.4.1" }
+                    details: "This field shall indicate the status of the command which resulted in this response.",
+                    xref: { document: "cluster", section: "6.4.7.4.1" }
                 }),
                 Field({
                     name: "Data", id: 0x1, type: "octstr", conformance: "O",
-                    details: "This shall specify Optional app-specific data.",
-                    xref: { document: "cluster", section: "6.4.4.4.2" }
+                    details: "This field shall specify Optional app-specific data.",
+                    xref: { document: "cluster", section: "6.4.7.4.2" }
                 })
             ]
         }),
 
         Datatype({
-            name: "StatusEnum", type: "enum8", conformance: "M",
+            name: "StatusEnum", type: "enum8",
             xref: { document: "cluster", section: "6.4.5.1" },
 
             children: [
@@ -189,15 +200,15 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "ApplicationStruct", type: "struct", conformance: "M",
+            name: "ApplicationStruct", type: "struct",
             details: "This indicates a global identifier for an Application given a catalog.",
             xref: { document: "cluster", section: "6.4.5.2" },
 
             children: [
                 Field({
                     name: "CatalogVendorId", id: 0x0, type: "uint16", conformance: "M",
-                    details: "This shall indicate the CSA-issued vendor ID for the catalog. The DIAL registry shall use value " +
-                        "0x0000." +
+                    details: "This field shall indicate the CSA-issued vendor ID for the catalog. The DIAL registry shall use " +
+                        "value 0x0000." +
                         "\n" +
                         "Content App Platform providers will have their own catalog vendor ID (set to their own Vendor ID) " +
                         "and will assign an ApplicationID to each Content App.",
@@ -206,8 +217,8 @@ Matter.children.push(Cluster({
 
                 Field({
                     name: "ApplicationId", id: 0x1, type: "string", conformance: "M",
-                    details: "This shall indicate the application identifier, expressed as a string, such as \"PruneVideo\" or " +
-                        "\"Company X\". This field shall be unique within a catalog." +
+                    details: "This field shall indicate the application identifier, expressed as a string, such as \"PruneVideo\" " +
+                        "or \"Company X\". This field shall be unique within a catalog." +
                         "\n" +
                         "For the DIAL registry catalog, this value shall be the DIAL prefix (see [DIAL Registry]).",
                     xref: { document: "cluster", section: "6.4.5.2.2" }
@@ -216,7 +227,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "ApplicationEPStruct", type: "struct", conformance: "M",
+            name: "ApplicationEPStruct", type: "struct",
             details: "This specifies an app along with its corresponding endpoint.",
             xref: { document: "cluster", section: "6.4.5.3" },
             children: [
@@ -225,4 +236,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(ApplicationLauncher);

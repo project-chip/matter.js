@@ -13,10 +13,9 @@ import { ValueModel } from "../models/index.js";
 /**
  * Obtain a native JS default value for a ValueModel.
  *
- * This code assumes defaults have been previously validated (e.g. by model
- * validator).  It throws errors for a few structural issues but generally
- * returns undefined if the model's default value cannot be converted to the
- * correct type.
+ * This code assumes defaults have been previously validated (e.g. by model validator).  It throws errors for a few
+ * structural issues but generally returns undefined if the model's default value cannot be converted to the correct
+ * type.
  */
 export function DefaultValue(model: ValueModel): any {
     const value = castValue(model);
@@ -103,6 +102,7 @@ function castValue(model: ValueModel) {
             throw new NotImplementedError(`Unsupported metatype "${metatype}"`);
     }
 }
+
 /**
  * When an explicit default value is not present, for some types we generate
  * a default from the structure.

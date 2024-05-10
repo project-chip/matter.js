@@ -134,7 +134,7 @@ export function translateTable<T extends TableSchema>(
             const el = source[name];
             let value;
             if (typeof translator === "function") {
-                value = el === undefined ? undefined : translator(el);
+                value = el === undefined || el === null ? undefined : translator(el);
             } else {
                 value = translator;
             }
@@ -225,7 +225,16 @@ function installPreciseDetails(
             titleSuffix = tag;
         }
 
-        const detail = lookup[`${r.name.toLowerCase()} ${titleSuffix}`] || lookup[`${r.name.toLowerCase()}`];
+        const name = r.name.toLowerCase();
+        let detail = lookup[`${name} ${titleSuffix}`] || lookup[`${name}`];
+
+        if (detail === undefined) {
+            const description = (r as { description?: string }).description?.toLowerCase();
+            if (description !== undefined) {
+                detail = lookup[`${description} ${titleSuffix}`] || lookup[`${description}`];
+            }
+        }
+
         if (detail) {
             r.xref = detail.xref;
 

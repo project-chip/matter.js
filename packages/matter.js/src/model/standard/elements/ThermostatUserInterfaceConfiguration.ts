@@ -10,12 +10,12 @@ import { Matter } from "../Matter.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
+    DatatypeElement as Datatype,
     FieldElement as Field
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
+export const ThermostatUserInterfaceConfiguration = Cluster({
     name: "ThermostatUserInterfaceConfiguration", id: 0x204, classification: "application",
-    description: "Thermostat User Interface Configuration",
     details: "This cluster provides an interface to allow configuration of the user interface for a thermostat, " +
         "or a thermostat controller device, that supports a keypad and LCD screen.",
     xref: { document: "cluster", section: "4.5" },
@@ -24,12 +24,38 @@ Matter.children.push(Cluster({
         Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
 
         Attribute({
-            name: "TemperatureDisplayMode", id: 0x0, type: "enum8", access: "RW VO", conformance: "M",
+            name: "TemperatureDisplayMode", id: 0x0, type: "TemperatureDisplayModeEnum", access: "RW VO",
+            conformance: "M", constraint: "desc", default: 0,
+            details: "This attribute shall indicate the units of the temperature displayed on the thermostat screen.",
+            xref: { document: "cluster", section: "4.5.6.1" }
+        }),
+
+        Attribute({
+            name: "KeypadLockout", id: 0x1, type: "KeypadLockoutEnum", access: "RW VM", conformance: "M",
             constraint: "desc", default: 0,
-            details: "The TemperatureDisplayMode attribute specifies the units of the temperature displayed on the " +
-                "thermostat screen." +
+            details: "This attribute shall indicate the level of functionality that is available to the user via the " +
+                "keypad.",
+            xref: { document: "cluster", section: "4.5.6.2" }
+        }),
+
+        Attribute({
+            name: "ScheduleProgrammingVisibility", id: 0x2, type: "ScheduleProgrammingVisibilityEnum",
+            access: "RW VM", conformance: "O", constraint: "desc", default: 0,
+
+            details: "This attribute is used to hide the weekly schedule programming functionality or menu on a " +
+                "thermostat from a user to prevent local user programming of the weekly schedule. The schedule " +
+                "programming may still be performed via a remote interface, and the thermostat may operate in " +
+                "schedule programming mode." +
                 "\n" +
-                "Table 92. DisplayMode Attribute Values",
+                "This attribute is designed to prevent local tampering with or disabling of schedules that may have " +
+                "been programmed by users or service providers via a more capable remote interface. The programming " +
+                "schedule shall continue to run even though it is not visible to the user locally at the thermostat.",
+
+            xref: { document: "cluster", section: "4.5.6.3" }
+        }),
+
+        Datatype({
+            name: "TemperatureDisplayModeEnum", type: "enum8",
             xref: { document: "cluster", section: "4.5.5.1" },
             children: [
                 Field({ name: "Celsius", id: 0x0, conformance: "M", description: "Temperature displayed in °C" }),
@@ -37,17 +63,9 @@ Matter.children.push(Cluster({
             ]
         }),
 
-        Attribute({
-            name: "KeypadLockout", id: 0x1, type: "enum8", access: "RW VM", conformance: "M",
-            constraint: "desc", default: 0,
-
-            details: "The KeypadLockout attribute specifies the level of functionality that is available to the user via " +
-                "the keypad." +
-                "\n" +
-                "Table 93. KeypadLockout Attribute Values" +
-                "\n" +
-                "The interpretation of the various levels is device-dependent.",
-
+        Datatype({
+            name: "KeypadLockoutEnum", type: "enum8",
+            details: "The interpretation of the various levels is device-dependent.",
             xref: { document: "cluster", section: "4.5.5.2" },
 
             children: [
@@ -66,21 +84,8 @@ Matter.children.push(Cluster({
             ]
         }),
 
-        Attribute({
-            name: "ScheduleProgrammingVisibility", id: 0x2, type: "enum8", access: "RW VM", conformance: "O",
-            constraint: "desc", default: 0,
-
-            details: "The ScheduleProgrammingVisibility attribute is used to hide the weekly schedule programming " +
-                "functionality or menu on a thermostat from a user to prevent local user programming of the weekly " +
-                "schedule. The schedule programming may still be performed via a remote interface, and the " +
-                "thermostat may operate in schedule programming mode." +
-                "\n" +
-                "This attribute is designed to prevent local tampering with or disabling of schedules that may have " +
-                "been programmed by users or service providers via a more capable remote interface. The programming " +
-                "schedule shall continue to run even though it is not visible to the user locally at the thermostat." +
-                "\n" +
-                "Table 94. ScheduleProgrammingVisibility Attribute Values",
-
+        Datatype({
+            name: "ScheduleProgrammingVisibilityEnum", type: "enum8",
             xref: { document: "cluster", section: "4.5.5.3" },
 
             children: [
@@ -95,4 +100,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(ThermostatUserInterfaceConfiguration);

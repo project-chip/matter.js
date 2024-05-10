@@ -630,6 +630,13 @@ export class TsFile extends Block {
         return this;
     }
 
+    addReexport(file: string) {
+        if (file.indexOf("/") === -1) {
+            file = `./${file}`;
+        }
+        this.atom(`export * from "${file}.js"`);
+    }
+
     save() {
         const filename = `${this.name}.ts`;
 

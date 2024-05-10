@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const DimmerSwitchDT = DeviceType({
     name: "DimmerSwitch", id: 0x104, type: "OnOffLightSwitch", classification: "simple",
     details: "A Dimmer Switch is a controller device that, when bound to a lighting device such as a Dimmable " +
         "Light, is capable of being used to switch the device on or off and adjust the intensity of the " +
@@ -19,24 +19,22 @@ Matter.children.push(DeviceType({
     children: [
         Requirement({
             name: "Descriptor", id: 0x1d, element: "serverCluster",
-            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 260, revision: 2 } ], element: "attribute" })]
+            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 260, revision: 3 } ], element: "attribute" })]
         }),
         Requirement({
             name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "6.2.4" },
-            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
+            xref: { document: "device", section: "6.2.4" }
         }),
         Requirement({
             name: "Identify", id: 0x3, conformance: "M", element: "clientCluster",
-            xref: { document: "device", section: "6.2.4" },
-            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
+            xref: { document: "device", section: "6.2.4" }
         }),
         Requirement({
             name: "Groups", id: 0x4, conformance: "O", element: "clientCluster",
             xref: { document: "device", section: "6.2.4" }
         }),
         Requirement({
-            name: "Scenes", id: 0x5, conformance: "O", element: "clientCluster",
+            name: "ScenesManagement", id: 0x62, conformance: "P, O", element: "clientCluster",
             xref: { document: "device", section: "6.2.4" }
         }),
         Requirement({
@@ -48,4 +46,6 @@ Matter.children.push(DeviceType({
             xref: { document: "device", section: "6.2.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(DimmerSwitchDT);

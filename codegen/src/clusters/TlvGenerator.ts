@@ -39,9 +39,8 @@ export class TlvGenerator {
         public cluster: ClusterModel,
         public definitions: Block,
     ) {
-        // Find datatype names that conflict at top-level module scope.
-        // Datatypes at cluster level get to use their own name but for nested
-        // structures we prepend the parent name
+        // Find datatype names that conflict at top-level module scope. Datatypes at cluster level get to use their own
+        // name but for nested structures we prepend the parent name
         const names = new Set<string>();
         this.cluster.visit(model => {
             if ((model instanceof DatatypeModel || model instanceof FieldModel) && model.children.length) {
@@ -144,8 +143,7 @@ export class TlvGenerator {
                     if (dt) {
                         tlv = this.#bitmapTlv(dt, model);
                     } else {
-                        // No fields; revert to the primitive type the bitmap
-                        // derives from
+                        // No fields; revert to the primitive type the bitmap derives from
                         tlv = this.#primitiveTlv(metabase, model);
                     }
                 }
@@ -158,8 +156,7 @@ export class TlvGenerator {
                         this.importTlv("number", "TlvEnum");
                         tlv = `TlvEnum<${dt}>()`;
                     } else {
-                        // No fields; revert to the primitive type the enum
-                        // derives from
+                        // No fields; revert to the primitive type the enum derives from
                         tlv = this.#primitiveTlv(metabase, model);
                     }
                 }
@@ -171,9 +168,8 @@ export class TlvGenerator {
                     if (dt) {
                         tlv = dt;
                     } else {
-                        // This is only legal for commands but we'll fall back
-                        // to it in the (illegal) case where an object has no
-                        // fields
+                        // This is only legal for commands but we'll fall back to it in the (illegal) case where an
+                        // object has no fields
                         return this.importTlv("tlv", "TlvNoArguments");
                     }
                 }
@@ -213,8 +209,7 @@ export class TlvGenerator {
             name += "Event";
         }
 
-        // For enums and bitmaps we create a TypeScript value object, for other
-        // types we create a TLV definition
+        // For enums and bitmaps we create a TypeScript value object, for other types we create a TLV definition
         if (defining.effectiveMetatype === Metatype.enum) {
             if (name.endsWith("Enum")) {
                 // This seems a bit redundant
@@ -389,17 +384,15 @@ export class TlvGenerator {
         if (defining) {
             model = defining;
         } else {
-            // If there's no defining model, the datatype is empty.  Use either
-            // the base or the model directly for naming.  Handling of this is
-            // context specific
+            // If there's no defining model, the datatype is empty.  Use either the base or the model directly for
+            // naming.  Handling of this is context specific
             return;
         }
 
-        // Special case - use StatusCode enum.  The cluster can technically
-        // define cluster-specific status codes so this should probably use
-        // an extension type at some point but AFAICT InteractionProtocol only
-        // allows for codes in its enum to be used currently
-        if (model.global && model.name === Globals.status.name) {
+        // Special case - use StatusCode enum.  The cluster can technically define cluster-specific status codes so this
+        // should probably use an extension type at some point but AFAICT InteractionProtocol only allows for codes in
+        // its enum to be used currently
+        if (model.isGlobal && model.name === Globals.status.name) {
             this.importTlv("protocol/interaction/StatusCode", "StatusCode");
             return "StatusCode";
         }
@@ -418,9 +411,8 @@ export class TlvGenerator {
         // Record name usage
         this.#definedDatatypes.add(model);
 
-        // If the type is defined in a different cluster, load the cluster type
-        // rather than defining.  This will fail if the other cluster does not
-        // actually use the type.  Currently not an issue.
+        // If the type is defined in a different cluster, load the cluster type rather than defining.  This will fail if
+        // the other cluster does not actually use the type.  Currently not an issue.
         const definingScope = defining.owner(ClusterModel);
         if (definingScope && definingScope !== this.cluster) {
             this.file.addImport(`cluster/definitions/${definingScope.name}Cluster.js`, definingScope.name);
@@ -446,8 +438,7 @@ export class TlvGenerator {
                 throw new InternalError(`${model.path}: Top-level ${model.effectiveMetatype} is unsupported`);
         }
 
-        // If all object fields are omitted (disallowed or deprecated) then
-        // no object is defined
+        // If all object fields are omitted (disallowed or deprecated) then no object is defined
         if (!definition) {
             return;
         }
@@ -458,10 +449,8 @@ export class TlvGenerator {
     }
 
     #documentType(model: ValueModel, definition: Entry) {
-        // Document the type.  For standalone definitions documentation is
-        // present on the model.  For other definitions the documentation is
-        // associated with the defining location, so just leave a comment
-        // referencing that
+        // Document the type.  For standalone definitions documentation is present on the model.  For other definitions
+        // the documentation is associated with the defining location, so just leave a comment referencing that
         switch (model.tag) {
             case ElementTag.Attribute:
                 definition.document({

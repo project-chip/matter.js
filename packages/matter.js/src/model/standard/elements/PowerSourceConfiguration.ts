@@ -13,9 +13,8 @@ import {
     FieldElement as Field
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "PowerSourceConfiguration", id: 0x2e, classification: "endpoint",
-    description: "Power Source Configuration",
+export const PowerSourceConfiguration = Cluster({
+    name: "PowerSourceConfiguration", id: 0x2e, classification: "node",
     details: "This cluster is used to describe the configuration and capabilities of a Device’s power system. It " +
         "provides an ordering overview as well as linking to the one or more endpoints each supporting a " +
         "Power Source cluster.",
@@ -42,4 +41,6 @@ Matter.children.push(Cluster({
             children: [Field({ name: "entry", type: "endpoint-no" })]
         })
     ]
-}));
+});
+
+Matter.children.push(PowerSourceConfiguration);

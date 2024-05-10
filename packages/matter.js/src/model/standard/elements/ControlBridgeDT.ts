@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const ControlBridgeDT = DeviceType({
     name: "ControlBridge", id: 0x840, classification: "simple",
     details: "A Control Bridge is a controller device that, when bound to a lighting device such as an Extended " +
         "Color Light, is capable of being used to switch the device on or off, adjust the intensity of the " +
@@ -20,24 +20,22 @@ Matter.children.push(DeviceType({
     children: [
         Requirement({
             name: "Descriptor", id: 0x1d, element: "serverCluster",
-            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 2112, revision: 2 } ], element: "attribute" })]
+            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 2112, revision: 3 } ], element: "attribute" })]
         }),
         Requirement({
             name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "6.4.4" },
-            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
+            xref: { document: "device", section: "6.4.4" }
         }),
         Requirement({
             name: "Identify", id: 0x3, conformance: "M", element: "clientCluster",
-            xref: { document: "device", section: "6.4.4" },
-            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
+            xref: { document: "device", section: "6.4.4" }
         }),
         Requirement({
             name: "Groups", id: 0x4, conformance: "M", element: "clientCluster",
             xref: { document: "device", section: "6.4.4" }
         }),
         Requirement({
-            name: "Scenes", id: 0x5, conformance: "M", element: "clientCluster",
+            name: "ScenesManagement", id: 0x62, conformance: "P, M", element: "clientCluster",
             xref: { document: "device", section: "6.4.4" }
         }),
         Requirement({
@@ -61,4 +59,6 @@ Matter.children.push(DeviceType({
             xref: { document: "device", section: "6.4.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(ControlBridgeDT);

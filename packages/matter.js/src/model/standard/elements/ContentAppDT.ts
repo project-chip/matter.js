@@ -7,9 +7,13 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
-import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
+import {
+    DeviceTypeElement as DeviceType,
+    RequirementElement as Requirement,
+    FieldElement as Field
+} from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const ContentAppDT = DeviceType({
     name: "ContentApp", id: 0x24, classification: "simple",
     details: "This defines conformance to the Content App device type." +
         "\n" +
@@ -21,10 +25,14 @@ Matter.children.push(DeviceType({
         Requirement({
             name: "Descriptor", id: 0x1d, element: "serverCluster",
             children: [
-                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 36, revision: 1 } ], element: "attribute" })
+                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 36, revision: 2 } ], element: "attribute" })
             ]
         }),
 
+        Requirement({
+            name: "Binding", id: 0x1e, conformance: "ObserverClient", element: "serverCluster",
+            xref: { document: "device", section: "10.5.4" }
+        }),
         Requirement({
             name: "Channel", id: 0x504, conformance: "O", element: "serverCluster",
             xref: { document: "device", section: "10.5.4" }
@@ -48,7 +56,7 @@ Matter.children.push(DeviceType({
         Requirement({
             name: "ApplicationLauncher", id: 0x50c, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "10.5.4" },
-            children: [Requirement({ name: "APPLICATIONPLATFORM", conformance: "Shall, NOT, AP", element: "feature" })]
+            children: [Requirement({ name: "APPLICATIONPLATFORM", conformance: "X", element: "feature" })]
         }),
         Requirement({
             name: "ApplicationBasic", id: 0x50d, conformance: "M", element: "serverCluster",
@@ -57,6 +65,20 @@ Matter.children.push(DeviceType({
         Requirement({
             name: "AccountLogin", id: 0x50e, conformance: "O", element: "serverCluster",
             xref: { document: "device", section: "10.5.4" }
+        }),
+        Requirement({
+            name: "ContentAppObserver", id: 0x510, conformance: "ObserverClient", element: "clientCluster",
+            xref: { document: "device", section: "10.5.4" }
+        }),
+
+        Field({
+            name: "conditions", type: "enum8",
+            children: [Field({
+                name: "ObserverClient", description: "The node is a client for ContentAppObservers.",
+                xref: { document: "device", section: "10.5.3" }
+            })]
         })
     ]
-}));
+});
+
+Matter.children.push(ContentAppDT);

@@ -19,12 +19,14 @@ const TYPE_ERRORS: { [badType: string]: string } = {
     SubjectID: "subject-id",
     SignedTemperatureType: "SignedTemperature",
     UnsignedTemperatureType: "UnsignedTemperature",
-    SemanticTagStruct: "semtag",
     "system-us": "systime-us",
     "system-ms": "systime-ms",
+    "Time of Day": "TimeOfDay",
+    SemanticTagStruct: "semtag",
+    "voltage-mW": "voltage-mV",
 };
 
-export function fixTypeIdentifier(type: string | undefined) {
+export function fixTypeIdentifier<T extends string | undefined>(type: T): T {
     if (type === undefined) {
         return type;
     }
@@ -32,13 +34,13 @@ export function fixTypeIdentifier(type: string | undefined) {
     if (type.startsWith("list[") && type.endsWith("]")) {
         const entryType = type.slice(5, type.length - 1);
         if (TYPE_ERRORS[entryType]) {
-            return `list[${TYPE_ERRORS[entryType]}]`;
+            return `list[${TYPE_ERRORS[entryType]}]` as T;
         }
         return type;
     }
 
     if (TYPE_ERRORS[type]) {
-        return TYPE_ERRORS[type];
+        return TYPE_ERRORS[type] as T;
     }
 
     return type;
@@ -90,8 +92,15 @@ export function fixConformanceErrors(record: { conformance?: string }) {
         return false;
     }
 
-    if (conformance === "Matter!Zigbee" || conformance.match(/fabric\s*-\s*scoped/i)) {
+    if (conformance === "Matter!Zigbee") {
         delete record.conformance;
+        return;
+    }
+
+    // This is global FabricScoped attribute.  We only install on fabric-scoped structs so if it's present it's
+    // mandatory
+    if (conformance.match(/fabric\s*-\s*scoped/i)) {
+        record.conformance = "M";
         return;
     }
 
@@ -100,7 +109,7 @@ export function fixConformanceErrors(record: { conformance?: string }) {
     record.conformance = conformance;
 }
 
-export function fixDefaultErrors(record: { default?: string }) {
+export function fixDefaultErrors(record: { default?: string; type?: string }) {
     const { default: def } = record;
     if (def === undefined) {
         return;
@@ -114,6 +123,12 @@ export function fixDefaultErrors(record: { default?: string }) {
             case "-": // Sometimes used for "none"
             case "–": // This is perhaps the dash used for "none"
                 delete record.default;
+                break;
+
+            case "empty":
+                if (record.type?.toLowerCase().startsWith("enum") || record.type?.toLowerCase().endsWith("enum")) {
+                    delete record.default;
+                }
                 break;
 
             case "varied":

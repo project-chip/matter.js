@@ -24,11 +24,10 @@ const ACCESS: unique symbol = Symbol("access");
 const QUALITY: unique symbol = Symbol("quality");
 
 /**
- * Each ValueElement has a corresponding implementation that derives from
- * this class.
+ * Each ValueElement has a corresponding implementation that derives from this class.
  */
 export abstract class ValueModel extends Model implements ValueElement {
-    byteSize?: ValueElement.Size;
+    byteSize?: ValueElement.ByteSize;
     default?: FieldValue;
     metatype?: Metatype;
     override isType? = true;
@@ -82,17 +81,16 @@ export abstract class ValueModel extends Model implements ValueElement {
     }
 
     /**
-     * Metatype is only present on global types with specific semantic meaning.
-     * This model is significant because it gives us information about how to
-     * manipulate the data.  This accessor retrieves this model.
+     * Metatype is only present on global types with specific semantic meaning. This model is significant because it
+     * gives us information about how to manipulate the data.  This accessor retrieves this model.
      */
     get metabase(): ValueModel | undefined {
         return new ModelTraversal().findMetabase(this) as ValueModel | undefined;
     }
 
     /**
-     * Get the primitive type for this value model.  This is an integer type
-     * for enums and bitmaps.  Otherwise it's the metabase.
+     * Get the primitive type for this value model.  This is an integer type for enums and bitmaps.  Otherwise it's the
+     * metabase.
      */
     get primitiveBase(): ValueModel | undefined {
         const metabase = this.metabase;
@@ -136,9 +134,8 @@ export abstract class ValueModel extends Model implements ValueElement {
     }
 
     /**
-     * The value to use as a default.  The "default" field has a manually
-     * supplied value but this property decodes the default and/or generates
-     * a default from subfields.
+     * The value to use as a default.  The "default" field has a manually supplied value but this property decodes the
+     * default and/or generates a default from subfields.
      */
     get effectiveDefault() {
         return DefaultValue(this);
@@ -175,13 +172,11 @@ export abstract class ValueModel extends Model implements ValueElement {
     }
 
     /**
-     * ValueModels may derive from models of the same type or from generic
-     * Datatype models.
+     * ValueModels may derive from models of the same type or from generic Datatype models.
      */
     override get allowedBaseTags() {
         if (this.tag === ElementTag.Field) {
-            // Allow fields to derive from attributes.  We use this for
-            // referencing options in masks and bitmaps
+            // Allow fields to derive from attributes.  We use this for referencing options in masks and bitmaps
             return [ElementTag.Field, ElementTag.Datatype, ElementTag.Attribute];
         }
         return [this.tag, ElementTag.Datatype];

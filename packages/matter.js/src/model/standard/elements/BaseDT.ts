@@ -13,7 +13,7 @@ import {
     RequirementElement as Requirement
 } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const BaseDT = DeviceType({
     name: "Base", classification: "base",
     xref: { document: "device", section: "1.1" },
 
@@ -61,87 +61,47 @@ Matter.children.push(DeviceType({
                     xref: { document: "device", section: "1.1.3.3" }
                 }),
                 Field({
-                    name: "Sleepy", description: "The node is normally asleep and wakes to perform function",
+                    name: "Sit", description: "The node is a short idle time intermittently connected device",
                     xref: { document: "device", section: "1.1.4" }
                 }),
                 Field({
-                    name: "Awake", description: "The node is always able to communicate",
+                    name: "Lit", description: "The node is a long idle time intermittently connected device",
                     xref: { document: "device", section: "1.1.4" }
                 }),
                 Field({
-                    name: "Simplex", description: "One way communication, client to server",
+                    name: "Active", description: "The node is always able to communicate",
                     xref: { document: "device", section: "1.1.4" }
                 }),
-                Field({
-                    name: "Node",
-                    description: "the device type is classified as a Node device type (see Data Model specification)",
-                    xref: { document: "device", section: "1.1.5" }
-                }),
-                Field({
-                    name: "App",
-                    description: "the device type is classified as an Application device type (see Data Model specification)",
-                    xref: { document: "device", section: "1.1.5" }
-                }),
-                Field({
-                    name: "Simple",
-                    description: "the device type is classified as a Simple device type (see Data Model specification)",
-                    xref: { document: "device", section: "1.1.5" }
-                }),
-                Field({
-                    name: "Dynamic",
-                    description: "the device type is classified as a Dynamic device type (see Data Model specification)",
-                    xref: { document: "device", section: "1.1.5" }
-                }),
-                Field({
-                    name: "Client", description: "there exists a client application cluster on the endpoint",
-                    xref: { document: "device", section: "1.1.5" }
-                }),
-                Field({
-                    name: "Server", description: "there exists a server application cluster on the endpoint",
-                    xref: { document: "device", section: "1.1.5" }
-                }),
-                Field({
-                    name: "Composed",
-                    description: "the device type is composed of 2 or more device types (see System Model specification)",
-                    xref: { document: "device", section: "1.1.5" }
-                }),
-                Field({
-                    name: "Multiple",
-                    description: "a Composed device type that is composed of 2 or more endpoints with the same device type (see System Model specification)",
-                    xref: { document: "device", section: "1.1.5" }
-                }),
-                Field({
-                    name: "EzInitiator",
-                    description: "the endpoint is an Initiator for Zigbee EZ-Mode Finding & Binding",
-                    xref: { document: "device", section: "1.1.5" }
-                }),
-                Field({
-                    name: "EzTarget", description: "the endpoint is a Target for Zigbee EZ-Mode Finding & Binding",
-                    xref: { document: "device", section: "1.1.5" }
-                }),
-                Field({
-                    name: "BridgedPowerSourceInfo",
-                    description: "the endpoint represents a Bridged Device, for which information about the state of its power source is available to the Bridge",
-                    xref: { document: "device", section: "1.1.5" }
-                })
+                Field({ name: "Node", xref: { document: "device", section: "1.1.5" } }),
+                Field({ name: "App", xref: { document: "device", section: "1.1.5" } }),
+                Field({ name: "Simple", xref: { document: "device", section: "1.1.5" } }),
+                Field({ name: "Dynamic", xref: { document: "device", section: "1.1.5" } }),
+                Field({ name: "Composed", xref: { document: "device", section: "1.1.5" } }),
+                Field({ name: "Client", xref: { document: "device", section: "1.1.6" } }),
+                Field({ name: "Server", xref: { document: "device", section: "1.1.6" } }),
+                Field({ name: "Duplicate", xref: { document: "device", section: "1.1.6" } }),
+                Field({ name: "BridgedPowerSourceInfo", xref: { document: "device", section: "1.1.6" } })
             ]
         }),
 
         Requirement({
-            name: "Descriptor", conformance: "M", element: "serverCluster",
+            name: "Descriptor", id: 0x1d, conformance: "M", element: "serverCluster",
+            xref: { document: "device", section: "1.1.7" },
+            children: [Requirement({ name: "TAGLIST", conformance: "Duplicate", element: "feature" })]
+        }),
+        Requirement({
+            name: "Binding", id: 0x1e, conformance: "Simple & Client", element: "serverCluster",
             xref: { document: "device", section: "1.1.7" }
         }),
         Requirement({
-            name: "Binding", conformance: "Simple & Client", element: "serverCluster",
+            name: "FixedLabel", id: 0x40, conformance: "O", element: "serverCluster",
             xref: { document: "device", section: "1.1.7" }
         }),
         Requirement({
-            name: "FixedLabel", conformance: "[App & Server & Multiple]", element: "serverCluster",
-            xref: { document: "device", section: "1.1.7" }
-        }),
-        Requirement({
-            name: "UserLabel", conformance: "[App & Server & Multiple]", element: "serverCluster",
+            name: "UserLabel", id: 0x41, conformance: "O", element: "serverCluster",
             xref: { document: "device", section: "1.1.7" }
         })
     ]
-}));
+});
+
+Matter.children.push(BaseDT);

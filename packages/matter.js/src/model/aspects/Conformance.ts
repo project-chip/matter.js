@@ -261,8 +261,7 @@ export namespace Conformance {
     export type ReferenceResolver<T> = (name: string) => T;
 
     /**
-     * Supported ways of expressing conformance (conceptually union should
-     * include Flag but that is covered by string).
+     * Supported ways of expressing conformance (conceptually union should include Flag but that is covered by string).
      */
     export type Definition = string | string[] | { ast: Conformance.Ast } | undefined;
 

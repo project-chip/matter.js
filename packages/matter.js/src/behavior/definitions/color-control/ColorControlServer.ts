@@ -79,46 +79,55 @@ const MAX_CURRENT_LEVEL = 0xfe;
 /**
  * This is the default server implementation of {@link ColorControlBehavior}.
  *
- * This implementation includes all features of {@link ColorControl.Cluster} and implements all mandatory commands.
- * You should use {@link ColorControlServer.with} to specialize the class for the features your implementation supports.
+ * This implementation includes all features of {@link ColorControl.Cluster} and implements all mandatory commands. You
+ * should use {@link ColorControlServer.with} to specialize the class for the features your implementation supports.
  *
- * This default implementation also handles together with the LevelControl cluster the currentLevel dependency as defined
- * by the Matter specification automatically.
+ * This default implementation also handles together with the LevelControl cluster the currentLevel dependency as
+ * defined by the Matter specification automatically.
  *
- * This implementation ignores by default all transition times and sets the new color immediately. Alternatively, you can
- * set the `managedTransitionTimeHandling` state attribute to true to have matter.js manage transition times by
- * changing the level value step-wise every second. This might be an intermediate solution if you develop
- * independently of defined hardware.
+ * This implementation ignores by default all transition times and sets the new color immediately. Alternatively, you
+ * can set the `managedTransitionTimeHandling` state attribute to true to have matter.js manage transition times by
+ * changing the level value step-wise every second. This might be an intermediate solution if you develop independently
+ * of defined hardware.
  *
  * If you develop for a specific hardware you should extend the {@link ColorControlServer} class and implement the
  * following methods to natively use device features to correctly support the transition times. For this the default
  * implementation uses special protected methods which are used by the real commands and are only responsible for the
  * actual value change logic. The benefit of this structure is that basic data validations and options checks are
  * already done and you can focus on the actual hardware interaction:
+ *
  * * {@link ColorControlServerLogic.moveToHueLogic} Logic to move the hue to a defined value in a defined time
  * * {@link ColorControlServerLogic.moveHueLogic} Logic to move the hue by a defined rate/second
  * * {@link ColorControlServerLogic.stepHueLogic} Logic to move the hue one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToSaturationLogic} Logic to move the saturation to a defined value in a defined time
+ * * {@link ColorControlServerLogic.moveToSaturationLogic} Logic to move the saturation to a defined value in a defined
+ *   time
  * * {@link ColorControlServerLogic.moveSaturationLogic} Logic to move the saturation by a defined rate/second
  * * {@link ColorControlServerLogic.stepSaturationLogic} Logic to move the saturation one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToHueAndSaturationLogic} Logic to move the hue and saturation to a defined value in a defined time
+ * * {@link ColorControlServerLogic.moveToHueAndSaturationLogic} Logic to move the hue and saturation to a defined value
+ *   in a defined time
  * * {@link ColorControlServerLogic.moveToColorLogic} Logic to move the x/y color to a defined value in a defined time
  * * {@link ColorControlServerLogic.moveColorLogic} Logic to move the x/y color by a defined rate/second
  * * {@link ColorControlServerLogic.stepColorLogic} Logic to move the x/y color one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToColorTemperatureLogic} Logic to move the color temperature to a defined value in a defined time
- * * {@link ColorControlServerLogic.moveToEnhancedHueAndSaturationLogic} Logic to move the enhanced hue and saturation to a defined value in a defined time
- * * {@link ColorControlServerLogic.moveColorTemperatureLogic} Logic to move the color temperature by a defined rate/second
- * * {@link ColorControlServerLogic.stepColorTemperatureLogic} Logic to move the color temperature one defined step in a defined time
+ * * {@link ColorControlServerLogic.moveToColorTemperatureLogic} Logic to move the color temperature to a defined value
+ *   in a defined time
+ * * {@link ColorControlServerLogic.moveToEnhancedHueAndSaturationLogic} Logic to move the enhanced hue and saturation
+ *   to a defined value in a defined time
+ * * {@link ColorControlServerLogic.moveColorTemperatureLogic} Logic to move the color temperature by a defined
+ *   rate/second
+ * * {@link ColorControlServerLogic.stepColorTemperatureLogic} Logic to move the color temperature one defined step in a
+ *   defined time
  * * {@link ColorControlServerLogic.stopHueAndSaturationMovement} Logic to stop any hue and saturation movements
  * * {@link ColorControlServerLogic.stopAllColorMovement} Logic to stop any color movements
  * * {@link ColorControlServerLogic.startColorLoopLogic} Logic to start the color loop (looping enhanced hue endlessly)
  * * {@link ColorControlServerLogic.stopColorLoopLogic} Logic to stop the color loop
  * * {@link ColorControlServerLogic.stopMoveStepLogic} Logic to stop all movements beside color loops
- * * {@link ColorControlServerLogic.switchColorMode} Logic to switch the color mode and to set the current attributes of the new mode
+ * * {@link ColorControlServerLogic.switchColorMode} Logic to switch the color mode and to set the current attributes of
+ *   the new mode
  *
  * All overridable methods can be implemented sync or async by returning a Promise.
  *
  * For own implementations you can use:
+ *
  * * {@link ColorControlServerLogic#setColorMode} to set the color mode
  * * {@link ColorControlServerLogic#setEnhancedColorMode} to set the enhanced color mode
  *

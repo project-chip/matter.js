@@ -39,6 +39,7 @@ export interface HtmlReference {
  */
 export interface GlobalReference extends HtmlReference {
     type: "global";
+    format: "datatypes" | "elements" | "standalone" | "statusCodes";
 }
 
 /**

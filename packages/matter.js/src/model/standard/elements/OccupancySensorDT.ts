@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const OccupancySensorDT = DeviceType({
     name: "OccupancySensor", id: 0x107, classification: "simple",
     details: "An Occupancy Sensor is a measurement and sensing device that is capable of measuring and reporting " +
         "the occupancy state in a designated area.",
@@ -18,15 +18,10 @@ Matter.children.push(DeviceType({
     children: [
         Requirement({
             name: "Descriptor", id: 0x1d, element: "serverCluster",
-            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 263, revision: 2 } ], element: "attribute" })]
+            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 263, revision: 3 } ], element: "attribute" })]
         }),
         Requirement({
             name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "7.3.4" },
-            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
-        }),
-        Requirement({
-            name: "Groups", id: 0x4, conformance: "O", element: "clientCluster",
             xref: { document: "device", section: "7.3.4" }
         }),
         Requirement({
@@ -34,4 +29,6 @@ Matter.children.push(DeviceType({
             xref: { document: "device", section: "7.3.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(OccupancySensorDT);

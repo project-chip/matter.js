@@ -17,9 +17,8 @@ export class DefaultValueGenerator {
     constructor(private tlv: TlvGenerator) {}
 
     create(model: ValueModel, defaultValue = model.effectiveDefault) {
-        // TODO - don't currently have a way to express "this field should
-        // default to the value of another field" as indicated by
-        // model.default.reference
+        // TODO - don't currently have a way to express "this field should default to the value of another field" as
+        // indicated by model.default.reference
 
         if (defaultValue === undefined || defaultValue === null) {
             return defaultValue;
@@ -45,8 +44,7 @@ export class DefaultValueGenerator {
     }
 
     /**
-     * Simple numbers serialize either as one of our "wrapped ID" things or
-     * just as a numeric literal.
+     * Simple numbers serialize either as one of our "wrapped ID" things or just as a numeric literal.
      */
     private createNumeric(defaultValue: any, model: ValueModel) {
         if (typeof defaultValue !== "number" && typeof defaultValue !== "bigint") return;
@@ -79,9 +77,8 @@ export class DefaultValueGenerator {
     }
 
     /**
-     * Bitmaps are more complicated.  We need to collect bits into individual
-     * fields.  Then we generate a value for each field depending on the field
-     * type.
+     * Bitmaps are more complicated.  We need to collect bits into individual fields.  Then we generate a value for each
+     * field depending on the field type.
      */
     private createBitmap(defaultValue: any, model: ValueModel) {
         if (typeof defaultValue !== "number") {
@@ -146,8 +143,7 @@ export class DefaultValueGenerator {
         for (const member of model.members) {
             const name = camelize(member.name);
 
-            // Members are listed with overrides first so we ignore subsequent
-            // definitions for the same name
+            // Members are listed with overrides first so we ignore subsequent definitions for the same name
             if (alreadyProcessed.has(name)) {
                 continue;
             }

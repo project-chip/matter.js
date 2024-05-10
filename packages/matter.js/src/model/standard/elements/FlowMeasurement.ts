@@ -9,8 +9,8 @@
 import { Matter } from "../Matter.js";
 import { ClusterElement as Cluster, AttributeElement as Attribute } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "FlowMeasurement", id: 0x404, classification: "application", description: "Flow Measurement",
+export const FlowMeasurement = Cluster({
+    name: "FlowMeasurement", id: 0x404, classification: "application",
     details: "This cluster provides an interface to flow measurement functionality, including configuration and " +
         "provision of notifications of flow measurements.",
     xref: { document: "cluster", section: "2.5" },
@@ -21,10 +21,14 @@ Matter.children.push(Cluster({
         Attribute({
             name: "MeasuredValue", id: 0x0, type: "uint16", access: "R V", conformance: "M",
             constraint: "minMeasuredValue to maxMeasuredValue", default: null, quality: "X P",
-            details: "MeasuredValue represents the flow in m/h as follows: MeasuredValue = 10 x Flow" +
+
+            details: "MeasuredValue represents the flow in m/h as follows:" +
+                "\n" +
+                "MeasuredValue = 10 x Flow" +
                 "\n" +
                 "The null value indicates that the flow measurement is unknown, otherwise the range shall be as " +
                 "described in Measured Value.",
+
             xref: { document: "cluster", section: "2.5.4.1" }
         }),
 
@@ -55,4 +59,6 @@ Matter.children.push(Cluster({
             xref: { document: "cluster", section: "2.5.4.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(FlowMeasurement);

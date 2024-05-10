@@ -48,7 +48,7 @@ export const SpecMatter = Matter({
                         "\n" +
                         "If this attribute is set to a value other than 0 then the device shall enter its identification " +
                         "state, in order to indicate to an observer which of several nodes and/or endpoints it is. It is " +
-                        "RECOMMENDED that this state consists of flashing a light with a period of 0.5 seconds. The " +
+                        "recommended that this state consists of flashing a light with a period of 0.5 seconds. The " +
                         "IdentifyTime attribute shall be decremented every second while in this state." +
                         "\n" +
                         "If this attribute reaches or is set to the value 0 then the device shall terminate its " +
@@ -209,7 +209,8 @@ export const SpecMatter = Matter({
                     xref: { document: "cluster", section: "1.3.4" },
                     children: [Field({
                         name: "GN", constraint: "0", description: "GroupNames",
-                        details: "The ability to store a name for a group."
+                        details: "The Group Names feature indicates the ability to store a name for a group when a group is added.",
+                        xref: { document: "cluster", section: "1.3.4.1" }
                     })]
                 }),
 
@@ -466,7 +467,8 @@ export const SpecMatter = Matter({
                     xref: { document: "cluster", section: "1.4.4" },
                     children: [Field({
                         name: "SN", conformance: "O", constraint: "0", description: "SceneNames",
-                        details: "The ability to store a name for a scene."
+                        details: "This feature indicates the ability to store a name for a scene when a scene is added.",
+                        xref: { document: "cluster", section: "1.4.4.1" }
                     })]
                 }),
 
@@ -943,10 +945,7 @@ export const SpecMatter = Matter({
                             xref: { document: "cluster", section: "1.4.7.2.3" }
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -1128,11 +1127,56 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "LT", conformance: "[!OFFONLY]", constraint: "0", description: "Lighting",
-                            details: "Behavior that supports lighting applications."
+
+                            details: "This cluster is used for a lighting application." +
+                                "\n" +
+                                "On receipt of a Level Control cluster command that causes the OnOff attribute to be set to FALSE, " +
+                                "the OnTime attribute shall be set to 0." +
+                                "\n" +
+                                "On receipt of a Level Control cluster command that causes the OnOff attribute to be set to TRUE, if " +
+                                "the value of the OnTime attribute is equal to 0, the server shall set the OffWaitTime attribute to " +
+                                "0.",
+
+                            xref: { document: "cluster", section: "1.5.4.1" }
                         }),
+
                         Field({
                             name: "DF", conformance: "[!OFFONLY]", constraint: "1", description: "DeadFrontBehavior",
-                            details: "Device has Dead Front behavior"
+
+                            details: "When this feature is supported, the device exposing this server cluster exhibits \"dead front\" " +
+                                "behavior when the \"OnOff\" attribute is FALSE (Off). This \"dead front\" behavior includes:" +
+                                "\n" +
+                                "  • clusters other than this cluster that are also exposed may respond with failures to Invoke and " +
+                                "    Write interactions. Such failure responses when in a \"dead front\" shall be with an " +
+                                "    INVALID_IN_STATE status code." +
+                                "\n" +
+                                "  • clusters other than this cluster may change the values of their attributes to best-effort " +
+                                "    values, due to the actual values not being defined or available in this state. Device type " +
+                                "    specifications that require support for the DF feature SHOULD define what these best-effort " +
+                                "    values are." +
+                                "\n" +
+                                "  • Report Transactions shall continue to be generated. Such transactions may include best-effort " +
+                                "    values as noted above." +
+                                "\n" +
+                                "  • Event generation logic for clusters other than this cluster is unchanged (noting possible use " +
+                                "    of best-effort attribute values as in the preceding bullets)." +
+                                "\n" +
+                                "When this feature is supported and the OnOff attribute changes from TRUE to FALSE (e.g. when " +
+                                "receiving an Off Command, or due to a manual interaction on the device), it shall start executing " +
+                                "this \"dead front\" behavior." +
+                                "\n" +
+                                "When this feature is supported and the OnOff attribute changes from FALSE to TRUE (e.g. when " +
+                                "receiving an On Command, or due to a manual interaction on the device), it shall stop executing " +
+                                "this \"dead front\" behavior." +
+                                "\n" +
+                                "When this feature is supported, and any change of the \"dead front\" state leads to changes in " +
+                                "attributes of other clusters due to the \"dead front\" feature, these attribute changes shall NOT be " +
+                                "skipped or omitted from the usual processing associated with attribute changes. For example, if an" +
+                                "\n" +
+                                "attribute changes from value 4 to null on \"dead front\" behavior due to an Off command being " +
+                                "received, this change shall be processed for reporting and subscriptions.",
+
+                            xref: { document: "cluster", section: "1.5.4.2" }
                         }),
 
                         Field({
@@ -1371,14 +1415,28 @@ export const SpecMatter = Matter({
                             name: "OO", conformance: "O", constraint: "0", default: 1, description: "OnOff",
                             details: "Dependency with the On/Off cluster"
                         }),
+
                         Field({
                             name: "LT", conformance: "O", constraint: "1", default: 0, description: "Lighting",
-                            details: "Behavior that supports lighting applications"
+
+                            details: "This feature supports an interface for controlling the level of a light source. For the " +
+                                "CurrentLevel attribute:" +
+                                "\n" +
+                                "A value of 0x00 shall NOT be used." +
+                                "\n" +
+                                "A value of 0x01 shall indicate the minimum level that can be attained on a device. A value of 0xFE " +
+                                "shall indicate the maximum level that can be attained on a device. A value of null shall represent " +
+                                "an undefined value." +
+                                "\n" +
+                                "All other values are application specific gradations from the minimum to the maximum level.",
+
+                            xref: { document: "cluster", section: "1.6.4.2" }
                         }),
+
                         Field({
                             name: "FQ", conformance: "P", constraint: "2", default: 0, description: "Frequency",
-                            details: "Supports frequency attributes and behavior. The Pulse Width Modulation cluster was created for " +
-                                "frequency control."
+                            details: "NOTE The Frequency feature is provisional.",
+                            xref: { document: "cluster", section: "1.6.4.3" }
                         })
                     ]
                 }),
@@ -1731,14 +1789,28 @@ export const SpecMatter = Matter({
                             name: "OO", conformance: "O", constraint: "0", default: 1, description: "OnOff",
                             details: "Dependency with the On/Off cluster"
                         }),
+
                         Field({
                             name: "LT", conformance: "O", constraint: "1", default: 0, description: "Lighting",
-                            details: "Behavior that supports lighting applications"
+
+                            details: "This feature supports an interface for controlling the level of a light source. For the " +
+                                "CurrentLevel attribute:" +
+                                "\n" +
+                                "A value of 0x00 shall NOT be used." +
+                                "\n" +
+                                "A value of 0x01 shall indicate the minimum level that can be attained on a device. A value of 0xFE " +
+                                "shall indicate the maximum level that can be attained on a device. A value of null shall represent " +
+                                "an undefined value." +
+                                "\n" +
+                                "All other values are application specific gradations from the minimum to the maximum level.",
+
+                            xref: { document: "cluster", section: "1.6.4.2" }
                         }),
+
                         Field({
                             name: "FQ", conformance: "P", constraint: "2", default: 0, description: "Frequency",
-                            details: "Supports frequency attributes and behavior. The Pulse Width Modulation cluster was created for " +
-                                "frequency control."
+                            details: "NOTE The Frequency feature is provisional.",
+                            xref: { document: "cluster", section: "1.6.4.3" }
                         })
                     ]
                 }),
@@ -2125,10 +2197,31 @@ export const SpecMatter = Matter({
                             name: "AUD", conformance: "O", constraint: "1", description: "Audible",
                             details: "Supports audible alarms"
                         }),
+
                         Field({
                             name: "SPRS", conformance: "[VIS | AUD]", constraint: "2", description: "AlarmSuppress",
-                            details: "Supports ability to suppress or acknowledge alarms"
+
+                            details: "This feature shall indicate that the device is able to suppress the supported alarm modes, when the " +
+                                "user acknowledges the alarm. This is intended to stop visual and/or audible alarms, when the user " +
+                                "has become aware that the sensor is triggered, but it is no longer desired to have the alarm modes " +
+                                "active on the device, e.g.:" +
+                                "\n" +
+                                "  • The triggering cause have been resolved by the user, but the sensor has not yet stopped " +
+                                "    detecting the triggering cause." +
+                                "\n" +
+                                "  • The user is not able to address the triggering cause, but is aware of the alarm and " +
+                                "    suppress/acknowledge it be addressed at a later point." +
+                                "\n" +
+                                "Acknowledge of alarms will for the remainder of this cluster be referred to as suppress." +
+                                "\n" +
+                                "A suppressed alarm is still considered active and will remain so unless it is actively disabled or " +
+                                "the triggering condition is not longer present. The action of suppressing an alarm mode is only " +
+                                "applicable to and is intended to stop the physical alarming, e.g. emitting a sound or blinking a " +
+                                "light; it does not impact alarm reporting in AlarmsActive.",
+
+                            xref: { document: "cluster", section: "1.8.4.1" }
                         }),
+
                         Field({
                             name: "SENSLVL", conformance: "O", constraint: "3", description: "SensitivityLevel",
                             details: "Supports ability to set sensor sensitivity"
@@ -2359,9 +2452,12 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
                     xref: { document: "cluster", section: "1.9.4" },
+
                     children: [Field({
                         name: "DEPONOFF", constraint: "0", description: "OnOff",
-                        details: "Dependency with the OnOff cluster"
+                        details: "This feature creates a dependency between an OnOff cluster instance and this cluster instance on " +
+                            "the same endpoint. See OnMode for more information.",
+                        xref: { document: "cluster", section: "1.9.4.1" }
                     })]
                 }),
 
@@ -2463,7 +2559,7 @@ export const SpecMatter = Matter({
                 }),
 
                 Datatype({
-                    name: "SemanticTagStruct", type: "struct",
+                    name: "semtag", type: "struct",
                     details: "A Semantic Tag is meant to be interpreted by the client for the purpose the cluster serves.",
                     xref: { document: "cluster", section: "1.9.5.1" },
 
@@ -2567,9 +2663,12 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
                     xref: { document: "cluster", section: "1.10.4" },
+
                     children: [Field({
                         name: "DEPONOFF", constraint: "0", description: "OnOff",
-                        details: "Dependency with the OnOff cluster"
+                        details: "This feature creates a dependency between an OnOff cluster instance and this cluster instance on " +
+                            "the same endpoint. See OnMode for more information.",
+                        xref: { document: "cluster", section: "1.10.4.1" }
                     })]
                 }),
 
@@ -2919,23 +3018,37 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "LS", conformance: "O.a", constraint: "0", description: "LatchingSwitch",
-                            details: "Switch is latching"
+                            details: "This feature is for a switch that maintains its position after being pressed (or turned).",
+                            xref: { document: "cluster", section: "1.13.4.1" }
                         }),
+
                         Field({
                             name: "MS", conformance: "O.a", constraint: "1", description: "MomentarySwitch",
-                            details: "Switch is momentary"
+                            details: "This feature is for a switch that does not maintain its position after being pressed (or turned). " +
+                                "After releasing, it goes back to its idle position.",
+                            xref: { document: "cluster", section: "1.13.4.2" }
                         }),
+
                         Field({
                             name: "MSR", conformance: "[MS]", constraint: "2", description: "MomentarySwitchRelease",
-                            details: "Switch supports release"
+                            details: "This feature is for a momentary switch that can distinguish and report release events. When this " +
+                                "feature flag MSR is present, MS shall be present as well.",
+                            xref: { document: "cluster", section: "1.13.4.3" }
                         }),
+
                         Field({
                             name: "MSL", conformance: "[MS & MSR]", constraint: "3", description: "MomentarySwitchLongPress",
-                            details: "Switch supports long press"
+                            details: "This feature is for a momentary switch that can distinguish and report long presses from short " +
+                                "presses. When this feature flag MSL is present, MS and MSR shall be present as well.",
+                            xref: { document: "cluster", section: "1.13.4.4" }
                         }),
+
                         Field({
                             name: "MSM", conformance: "[MS & MSR]", constraint: "4", description: "MomentarySwitchMultiPress",
-                            details: "Switch supports multi-press"
+                            details: "This feature is for a momentary switch that can distinguish and report double press and potentially " +
+                                "multiple presses with more events, such as triple press, etc. When this feature flag MSM is " +
+                                "present, MS and MSR shall be present as well.",
+                            xref: { document: "cluster", section: "1.13.4.5" }
                         })
                     ]
                 }),
@@ -3719,12 +3832,34 @@ export const SpecMatter = Matter({
                     xref: { document: "cluster", section: "1.16.4" },
 
                     children: [
-                        Field({ name: "CONF", conformance: "O", constraint: "0", description: "ReceivedConfirmation" }),
                         Field({
-                            name: "RESP", conformance: "[CONF]", constraint: "1", description: "ConfirmationResponse"
+                            name: "CONF", conformance: "O", constraint: "0", description: "ReceivedConfirmation",
+                            details: "This feature shall indicate that the device can get confirmation from a user that the message was " +
+                                "received.",
+                            xref: { document: "cluster", section: "1.16.4.1" }
                         }),
-                        Field({ name: "RPLY", conformance: "[CONF]", constraint: "2", description: "ConfirmationReply" }),
-                        Field({ name: "PROT", conformance: "O", constraint: "3", description: "ProtectedMessages" })
+
+                        Field({
+                            name: "RESP", conformance: "[CONF]", constraint: "1", description: "ConfirmationResponse",
+                            details: "This feature shall indicate that the device is capable of presenting a list of responses to the " +
+                                "user and recording the user’s choice of response.",
+                            xref: { document: "cluster", section: "1.16.4.2" }
+                        }),
+
+                        Field({
+                            name: "RPLY", conformance: "[CONF]", constraint: "2", description: "ConfirmationReply",
+                            details: "This feature shall indicate that the device is capable of collecting a free-form text response to a " +
+                                "message.",
+                            xref: { document: "cluster", section: "1.16.4.3" }
+                        }),
+
+                        Field({
+                            name: "PROT", conformance: "O", constraint: "3", description: "ProtectedMessages",
+                            details: "This feature shall indicate that the device is capable of requiring the user to authenticate before " +
+                                "viewing a message; e.g. entering a PIN or password before viewing a message with billing " +
+                                "information.",
+                            xref: { document: "cluster", section: "1.16.4.4" }
+                        })
                     ]
                 }),
 
@@ -3763,10 +3898,7 @@ export const SpecMatter = Matter({
                             details: "This field shall indicate the MessageID for newly added message.",
                             xref: { document: "cluster", section: "1.16.8.1.1" }
                         }),
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -3781,10 +3913,7 @@ export const SpecMatter = Matter({
                             details: "This field shall indicate the MessageID for the message being presented.",
                             xref: { document: "cluster", section: "1.16.8.2.1" }
                         }),
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -3821,10 +3950,7 @@ export const SpecMatter = Matter({
                             name: "FutureMessagesPreference", id: 0x3, type: "FutureMessagePreferenceEnum", access: "S",
                             conformance: "M", default: null, quality: "X"
                         }),
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -4096,10 +4222,7 @@ export const SpecMatter = Matter({
                             children: [Field({ name: "entry", type: "MessageResponseOptionStruct" })]
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -5364,19 +5487,30 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "IMPE", conformance: "O.a+", constraint: "0", description: "ImportedEnergy",
-                            details: "Measurement of energy imported by the server"
+                            details: "The feature indicates the server is capable of measuring how much energy is imported by the server.",
+                            xref: { document: "cluster", section: "2.12.4.1" }
                         }),
                         Field({
                             name: "EXPE", conformance: "O.a+", constraint: "1", description: "ExportedEnergy",
-                            details: "Measurement of energy provided by the server"
+                            details: "The feature indicates the server is capable of measuring how much energy is exported by the server.",
+                            xref: { document: "cluster", section: "2.12.4.2" }
                         }),
+
                         Field({
                             name: "CUME", conformance: "O.b+", constraint: "2", description: "CumulativeEnergy",
-                            details: "Measurements are cumulative"
+                            details: "The feature indicates the server is capable of measuring how much energy has been imported or " +
+                                "exported by the server over the device’s lifetime. This measurement may start from when a device’s " +
+                                "firmware is updated to include this feature, when a device’s firmware is updated to correct " +
+                                "measurement errors, or when a device is factory reset.",
+                            xref: { document: "cluster", section: "2.12.4.3" }
                         }),
+
                         Field({
                             name: "PERE", conformance: "O.b+", constraint: "3", description: "PeriodicEnergy",
-                            details: "Measurements are periodic"
+                            details: "The feature indicates the server is capable of measuring how much energy has been imported or " +
+                                "exported by the server during a certain period of time. The start and end times for measurement " +
+                                "periods shall be determined by the server, and may represent overlapping periods.",
+                            xref: { document: "cluster", section: "2.12.4.4" }
                         })
                     ]
                 }),
@@ -5738,23 +5872,31 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "DIRC", conformance: "O.a+", constraint: "0", description: "DirectCurrent",
-                            details: "Supports measurement of direct current"
+                            details: "This feature indicates the cluster can measure a direct current.",
+                            xref: { document: "cluster", section: "2.13.4.1" }
                         }),
                         Field({
                             name: "ALTC", conformance: "O.a+", constraint: "1", description: "AlternatingCurrent",
-                            details: "Supports measurement of alternating current"
+                            details: "This feature indicates the cluster can measure an alternating current.",
+                            xref: { document: "cluster", section: "2.13.4.2" }
                         }),
+
                         Field({
                             name: "POLY", conformance: "[ALTC]", constraint: "2", description: "PolyphasePower",
-                            details: "Supports polyphase measurements"
+                            details: "This feature indicates the cluster represents the collective measurements for a Polyphase power " +
+                                "supply.",
+                            xref: { document: "cluster", section: "2.13.4.3" }
                         }),
+
                         Field({
                             name: "HARM", conformance: "[ALTC]", constraint: "3", description: "Harmonics",
-                            details: "Supports measurement of AC harmonics"
+                            details: "This feature indicates the cluster can measure the harmonics of an alternating current.",
+                            xref: { document: "cluster", section: "2.13.4.4" }
                         }),
                         Field({
                             name: "PWRQ", conformance: "[ALTC]", constraint: "4", description: "PowerQuality",
-                            details: "Supports measurement of AC harmonic phases"
+                            details: "This feature indicates the cluster can measure the harmonic phases of an alternating current.",
+                            xref: { document: "cluster", section: "2.13.4.5" }
                         })
                     ]
                 }),
@@ -5806,7 +5948,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "Voltage", id: 0x4, type: "voltage-mV", access: "R V", conformance: "O",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    constraint: "-262 to 262", default: "null", quality: "X Q",
 
                     details: "This shall indicate the most recent Voltage reading in millivolts (mV)." +
                         "\n" +
@@ -5963,7 +6105,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "RmsVoltage", id: 0xb, type: "voltage-mV", access: "R V", conformance: "[ALTC]",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    constraint: "-262 to 262", default: "null", quality: "X Q",
 
                     details: "This shall indicate the most recent RMSVoltage reading in millivolts (mV)." +
                         "\n" +
@@ -8512,9 +8654,14 @@ export const SpecMatter = Matter({
                             name: "AUTO", conformance: "O", constraint: "5", description: "AutoMode",
                             details: "Supports a System Mode of Auto"
                         }),
+
                         Field({
                             name: "LTNE", conformance: "O", constraint: "6", description: "LocalTemperatureNotExposed",
-                            details: "Thermostat does not expose the LocalTemperature Value in the LocalTemperature attribute"
+                            details: "This feature indicates that the Calculated Local Temperature used internally is unavailable to " +
+                                "report externally, for example due to the temperature control being done by a separate subsystem " +
+                                "which does not offer a view into the currently measured temperature, but allows setpoints to be " +
+                                "provided.",
+                            xref: { document: "cluster", section: "4.3.4.1" }
                         })
                     ]
                 }),
@@ -8944,7 +9091,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "SetpointChangeSourceTimestamp", id: 0x32, type: "utc", access: "R V", conformance: "O",
-                    default: 0,
+                    default: "0",
                     details: "This attribute shall indicate the time in UTC at which the SetpointChangeAmount attribute change " +
                         "was recorded.",
                     xref: { document: "cluster", section: "4.3.9.37" }
@@ -9861,8 +10008,20 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "SPD", constraint: "0", description: "MultiSpeed",
-                            details: "0-SpeedMax Fan Speeds"
+
+                            details: "Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic " +
+                                "speed control but left it up to the implementer to decide what was supported. Therefore, it is " +
+                                "assumed that legacy client implementations are capable of determining, from the server, the number " +
+                                "of speeds supported between 1, 2, or 3, and whether automatic speed control is supported." +
+                                "\n" +
+                                "The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to " +
+                                "SpeedMax, which has a maximum of 100." +
+                                "\n" +
+                                "See Speed Rules for more details.",
+
+                            xref: { document: "cluster", section: "4.4.4.1" }
                         }),
+
                         Field({
                             name: "AUT", constraint: "1", description: "Auto",
                             details: "Automatic mode supported for fan speed"
@@ -10290,11 +10449,18 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "TS", conformance: "desc", constraint: "0", description: "TimeSync",
-                            details: "UTC time is used for time indications"
+                            details: "This feature shall indicate that the valve uses Time Synchronization and UTC time to indicate " +
+                                "duration and auto close time." +
+                                "\n" +
+                                "This feature shall NOT be supported unless the device supports the Time Synchronization cluster.",
+                            xref: { document: "cluster", section: "4.6.4.1" }
                         }),
+
                         Field({
                             name: "LVL", conformance: "O", constraint: "1", description: "Level",
-                            details: "Device supports setting the specific position of the valve"
+                            details: "This feature shall indicate that the valve is capable of being adjusted to a specific position, as " +
+                                "a percentage, of its full range of motion.",
+                            xref: { document: "cluster", section: "4.6.4.2" }
                         })
                     ]
                 }),
@@ -10586,55 +10752,138 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "PIN", conformance: "O", constraint: "0", description: "PinCredential",
-                            details: "Lock supports PIN credentials (via keypad, or over- the-air)"
+
+                            details: "If the User Feature is also supported then any PIN Code stored in the lock shall be associated with " +
+                                "a User." +
+                                "\n" +
+                                "A lock may support multiple credential types so if the User feature is supported the UserType, " +
+                                "UserStatus and Schedules are all associated with a User index and not directly with a PIN index. A " +
+                                "User index may have several credentials associated with it.",
+
+                            xref: { document: "cluster", section: "5.2.4.1" }
                         }),
+
                         Field({
                             name: "RID", conformance: "O", constraint: "1", description: "RfidCredential",
-                            details: "Lock supports RFID credentials"
+
+                            details: "If the User Feature is also supported then any RFID credential stored in the lock shall be " +
+                                "associated with a User." +
+                                "\n" +
+                                "A lock may support multiple credential types so if the User feature is supported the UserType, " +
+                                "UserStatus and Schedules are all associated with a User index and not directly with a RFID index. A " +
+                                "User" +
+                                "\n" +
+                                "Index may have several credentials associated with it.",
+
+                            xref: { document: "cluster", section: "5.2.4.2" }
                         }),
+
                         Field({
                             name: "FGP", conformance: "P, O", constraint: "2", description: "FingerCredentials",
-                            details: "Lock supports finger related credentials (fingerprint, finger vein)"
+
+                            details: "Currently the cluster only defines the metadata format for notifications when a fingerprint/ finger " +
+                                "vein credential is used to access the lock and doesn’t describe how to create fingerprint/finger " +
+                                "vein credentials. If the Users feature is also supported then the User that a fingerprint/finger " +
+                                "vein is associated with can also have its UserType, UserStatus and Schedule modified." +
+                                "\n" +
+                                "A lock may support multiple credential types so if the User feature is supported the UserType, " +
+                                "UserStatus and Schedules are all associated with a User index and not directly with a Finger index. " +
+                                "A User Index may have several credentials associated with it.",
+
+                            xref: { document: "cluster", section: "5.2.4.3" }
                         }),
+
                         Field({
                             name: "LOG", conformance: "O", constraint: "3", description: "Logging",
-                            details: "Lock supports local/on-lock logging when Events are not supported"
+                            details: "If Events are not supported the logging feature shall replace the Event reporting structure. If " +
+                                "Events are supported the logging feature shall NOT be supported.",
+                            xref: { document: "cluster", section: "5.2.4.4" }
                         }),
+
                         Field({
                             name: "WDSCH", conformance: "O", constraint: "4", description: "WeekDayAccessSchedules",
-                            details: "Lock supports week day user access schedules"
+
+                            details: "If the User feature is supported then Week Day Schedules are applied to a User and not a credential." +
+                                "\n" +
+                                "Week Day Schedules are used to restrict access to a specified time window on certain days of the " +
+                                "week. The schedule is repeated each week. When a schedule is cleared this clears the access " +
+                                "restrictions and grants unrestricted access to the user. The lock may automatically adjust the " +
+                                "UserType when a schedule is created or cleared.",
+
+                            xref: { document: "cluster", section: "5.2.4.5" }
                         }),
+
                         Field({
                             name: "DPS", conformance: "O", constraint: "5", description: "DoorPositionSensor",
-                            details: "Lock supports a door position sensor that indicates door’s state"
+                            details: "If this feature is supported this indicates that the lock has the ability to determine the position " +
+                                "of the door which is separate from the state of the lock.",
+                            xref: { document: "cluster", section: "5.2.4.6" }
                         }),
+
                         Field({
                             name: "FACE", conformance: "P, O", constraint: "6", description: "FaceCredentials",
-                            details: "Lock supports face related credentials (face, iris, retina)"
+
+                            details: "Currently the cluster only defines the metadata format for notifications when a face recognition, " +
+                                "iris, or retina credential is used to access the lock and doesn’t describe how to create face " +
+                                "recognition, iris, or retina credentials. If the Users feature is also supported then the User that " +
+                                "a face recognition, iris, or retina credential is associated with can also have its UserType, " +
+                                "UserStatus and Schedule modified." +
+                                "\n" +
+                                "A lock may support multiple credential types so if the User feature is supported the UserType, " +
+                                "UserStatus and Schedules are all associated with a User and not directly with a credential.",
+
+                            xref: { document: "cluster", section: "5.2.4.7" }
                         }),
+
                         Field({
                             name: "COTA", conformance: "O", constraint: "7", description: "CredentialOverTheAirAccess",
-                            details: "PIN codes over- the-air supported for lock/unlock operations"
+                            details: "If this feature is supported then the lock supports the ability to verify a credential provided in " +
+                                "a lock/unlock command. Currently the cluster only supports providing the PIN credential to the " +
+                                "lock/unlock commands. If this feature is supported then the PIN Credential feature shall also be " +
+                                "supported.",
+                            xref: { document: "cluster", section: "5.2.4.8" }
                         }),
+
                         Field({
                             name: "USR", conformance: "[PIN | RID | FGP | FACE]", constraint: "8", description: "User",
-                            details: "Lock supports the user commands and database"
+                            details: "If the User Feature is supported then a lock employs a User database. A User within the User " +
+                                "database is used to associate credentials and schedules to single user record within the lock. This " +
+                                "also means the UserType and UserStatus fields are associated with a User and not a credential.",
+                            xref: { document: "cluster", section: "5.2.4.9" }
                         }),
+
                         Field({
                             name: "NOT", conformance: "O", constraint: "9", description: "Notification",
-                            details: "Operation and Programming Notifications"
+                            details: "This is a feature used before support of events. This feature supports notification commands and " +
+                                "masks used to filter these notifications.",
+                            xref: { document: "cluster", section: "5.2.4.10" }
                         }),
+
                         Field({
                             name: "YDSCH", conformance: "O", constraint: "10", description: "YearDayAccessSchedules",
-                            details: "Lock supports year day user access schedules"
+                            details: "If the User feature is supported then Year Day Schedules are applied to a User and not a credential." +
+                                "\n" +
+                                "Year Day Schedules are used to restrict access to a specified date and time window. When a schedule " +
+                                "is cleared this clears the access restrictions and grants unrestricted access to the user. The lock " +
+                                "may automatically adjust the UserType when a schedule is created or cleared.",
+                            xref: { document: "cluster", section: "5.2.4.11" }
                         }),
+
                         Field({
                             name: "HDSCH", conformance: "O", constraint: "11", description: "HolidaySchedules",
-                            details: "Lock supports holiday schedules"
+                            details: "This feature is used to setup Holiday Schedule in the lock device. A Holiday Schedule sets a start " +
+                                "and stop end date/time for the lock to use the specified operating mode set by the Holiday Schedule.",
+                            xref: { document: "cluster", section: "5.2.4.12" }
                         }),
+
                         Field({
                             name: "UBOLT", conformance: "O", constraint: "12", description: "Unbolting",
-                            details: "Lock supports unbolting"
+                            details: "Locks that support this feature differentiate between unbolting and unlocking. The Unbolt Door " +
+                                "command retracts the bolt without pulling the latch. The Unlock Door command fully unlocks the door " +
+                                "by retracting the bolt and briefly pulling the latch. While the latch is pulled, the lock state " +
+                                "changes to Unlatched. Locks without unbolting support don’t differentiate between unbolting and " +
+                                "unlocking and perform the same operation for both commands.",
+                            xref: { document: "cluster", section: "5.2.4.13" }
                         })
                     ]
                 }),
@@ -13701,20 +13950,35 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "LF", conformance: "O.a+", constraint: "0", description: "Lift",
-                            details: "Lift control and behavior for lifting/sliding window coverings"
+                            details: "The Lift feature applies to window coverings that lift up and down (e.g. for a roller shade, Up and " +
+                                "Down is lift Open and Close) or slide left to right (e.g. for a sliding curtain, Left and Right is " +
+                                "lift Open and Close).",
+                            xref: { document: "cluster", section: "5.3.4.1" }
                         }),
+
                         Field({
                             name: "TL", conformance: "O.a+", constraint: "1", description: "Tilt",
-                            details: "Tilt control and behavior for tilting window coverings"
+                            details: "The Tilt feature applies to window coverings with vertical or horizontal strips.",
+                            xref: { document: "cluster", section: "5.3.4.2" }
                         }),
                         Field({
                             name: "PA_LF", conformance: "[LF]", constraint: "2", description: "PositionAwareLift",
                             details: "Position aware lift control is supported."
                         }),
+
                         Field({
                             name: "ABS", conformance: "O", constraint: "3", description: "AbsolutePosition",
-                            details: "Absolute positioning is supported."
+
+                            details: "The percentage attributes shall indicate the position as a percentage between the " +
+                                "InstalledOpenLimits and InstalledClosedLimits attributes of the window covering starting at the " +
+                                "open (0.00%)." +
+                                "\n" +
+                                "As a general rule, absolute positioning (in centimeters or tenth of a degrees) SHOULD NOT be " +
+                                "supported for new implementations.",
+
+                            xref: { document: "cluster", section: "5.3.4.4" }
                         }),
+
                         Field({
                             name: "PA_TL", conformance: "[TL]", constraint: "4", description: "PositionAwareTilt",
                             details: "Position aware tilt control is supported."
@@ -15513,7 +15777,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Type", id: 0x6, type: "ChannelTypeEnum", conformance: "O", default: "empty",
+                            name: "Type", id: 0x6, type: "ChannelTypeEnum", conformance: "O",
                             details: "This shall indicate the type or grouping of a specific channel. This field is optional, but SHOULD " +
                                 "be provided when known.",
                             xref: { document: "cluster", section: "6.6.5.5.7" }
@@ -16786,17 +17050,36 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "AS", constraint: "0", description: "AdvancedSeek",
-                            details: "Advanced media seeking"
+                            details: "This feature provides access to the time offset location within current playback media and allows " +
+                                "for jumping to a specific location using time offsets. This enables clients to implement more " +
+                                "advanced media seeking behavior in their user interface, for instance a \"seek bar\".",
+                            xref: { document: "cluster", section: "6.10.4.1" }
                         }),
+
                         Field({
                             name: "VS", constraint: "1", description: "VariableSpeed",
-                            details: "Variable speed playback"
+                            details: "This feature is for a device which supports variable speed playback on media that supports it.",
+                            xref: { document: "cluster", section: "6.10.4.2" }
                         }),
-                        Field({ name: "TT", constraint: "2", description: "TextTracks", details: "Text Tracks" }),
-                        Field({ name: "AT", constraint: "3", description: "AudioTracks", details: "Audio Tracks" }),
+                        Field({
+                            name: "TT", constraint: "2", description: "TextTracks",
+                            details: "This feature is for a device or app that supports Text Tracks.",
+                            xref: { document: "cluster", section: "6.10.4.3" }
+                        }),
+                        Field({
+                            name: "AT", constraint: "3", description: "AudioTracks",
+                            details: "This feature is for a device or app that supports Audio Tracks.",
+                            xref: { document: "cluster", section: "6.10.4.4" }
+                        }),
+
                         Field({
                             name: "AA", constraint: "4", description: "AudioAdvance",
-                            details: "Can play audio during fast and slow playback speeds"
+                            details: "This feature is for a device or app that supports playing audio during fast and slow advance and " +
+                                "rewind (e.g., while playback speed is not 1). A device that supports this feature may only support " +
+                                "playing audio during certain speeds." +
+                                "\n" +
+                                "A cluster implementing AA shall implement AS.",
+                            xref: { document: "cluster", section: "6.10.4.5" }
                         })
                     ]
                 }),
@@ -18689,15 +18972,24 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "TN", conformance: "O.a", constraint: "0", description: "TemperatureNumber",
-                            details: "Use actual temperature numbers"
+                            details: "For devices that use an actual temperature value for the temperature setpoint, such as some water " +
+                                "heaters, the feature TN shall be used. Note that this cluster provides and supports temperatures in " +
+                                "degrees Celsius via the temperature data type.",
+                            xref: { document: "cluster", section: "8.2.4.1" }
                         }),
+
                         Field({
                             name: "TL", conformance: "O.a", constraint: "1", description: "TemperatureLevel",
-                            details: "Use temperature levels"
+                            details: "For devices that use vendor-specific temperature levels for the temperature setpoint, such as some " +
+                                "washers, the feature TL shall be used.",
+                            xref: { document: "cluster", section: "8.2.4.2" }
                         }),
+
                         Field({
                             name: "STEP", conformance: "[TN]", constraint: "2", description: "TemperatureStep",
-                            details: "Use step control with temperature numbers"
+                            details: "For devices that support discrete temperature setpoints that are larger than the temperature " +
+                                "resolution imposed via the temperature data type, the Step feature may be used.",
+                            xref: { document: "cluster", section: "8.2.4.3" }
                         })
                     ]
                 }),
@@ -19473,33 +19765,199 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "PA", conformance: "O.a+", constraint: "0", description: "PowerAdjustment",
-                            details: "Allows an EMS to make a temporary power adjustment (within the limits offered by the ESA)."
+
+                            details: "For Energy Smart Appliances (ESA) the definition of being 'smart' mandates that they can report " +
+                                "their current power adjustment capability and have an EMS request a temporary adjustment. This may " +
+                                "typically be to curtail power requirements during peak periods, but can also be used to turn on an " +
+                                "ESA if there is excess renewable or local generation (Solar PV)." +
+                                "\n" +
+                                "For example, a home may have solar PV which often produces more power than the home requires," +
+                                "\n" +
+                                "resulting in the excess power flowing into the grid. This excess power naturally fluctuates when " +
+                                "clouds pass overhead and other loads in the home are switched on and off." +
+                                "\n" +
+                                "EVSE Example: An EMS may therefore be able to turn on the EVSE (if the vehicle is plugged in) and " +
+                                "can start charging the vehicle, and periodically modify the charging power depending on PV " +
+                                "generation and other home loads, so as to minimize import and export to the grid.",
+
+                            xref: { document: "cluster", section: "9.2.4.1" }
                         }),
+
                         Field({
                             name: "PFR", conformance: "(STA | PAU | FA | CON) & !SFR, O.a+", constraint: "1",
                             description: "PowerForecastReporting",
-                            details: "Allows an ESA to advertise its indicative future power consumption vs time."
+
+                            details: "For Energy Smart Appliances (ESA) the definition of being 'smart' implies that they can report " +
+                                "their indicative forecast power demands or generation, to a greater or lesser extent. For some ESAs " +
+                                "this is highly predictable (in terms of both power and time), in other appliances this is more " +
+                                "challenging and only a basic level of forecast is possible." +
+                                "\n" +
+                                "Forecasts are defined from a current time, using a slot format, where the slot is akin to a " +
+                                "relatively constant operating mode." +
+                                "\n" +
+                                "Washing machine example: a washing machine may have stages of a washing cycle: heating, tumbling, " +
+                                "rinse and spin stages. At each stage, the approximate minimum and maximum power consumption may be " +
+                                "known, as well as the duration of that stage." +
+                                "\n" +
+                                "In some circumstances the ESA may allow the stage to be delayed or paused (subject to safety and " +
+                                "manufacturer’s discretion and user preferences)." +
+                                "\n" +
+                                "Typically, appliances with a heating element cannot have their power consumption adjusted and can " +
+                                "only be paused or delayed." +
+                                "\n" +
+                                "Some ESAs may not be flexible other than a delayed cycle start (for example, once the washing cycle " +
+                                "has been started then they run continuously until the cycle completes)." +
+                                "\n" +
+                                "Appliances that only support the PowerForecastReporting and not any of the adjustment features may " +
+                                "indicate that they are not flexible in the forecast slot format." +
+                                "\n" +
+                                "The PowerForecastReporting and the adjustment features aim to align to the [SAREF4ENER] ontology." +
+                                "\n" +
+                                "Inverter driven ESAs: some inverter driven ESAs can consume or generate a variable amount of power." +
+                                "\n" +
+                                "For example, a single phase EVSE can be adjusted in the range of 6-32Amps in 0.6 Amp steps in EU or " +
+                                "on a hardwired 120V supply in the range of 6-15 Amps in US." +
+                                "\n" +
+                                "For example, a home battery may be adjusted to charge or discharge in steps of 1W." +
+                                "\n" +
+                                "For example, a heat pump may be able to modulate its compressor inverter between 20-100% of its " +
+                                "rated power." +
+                                "\n" +
+                                "The ESA indicates its power adjustment range and its nominal power consumption as part of its " +
+                                "Forecast.",
+
+                            xref: { document: "cluster", section: "9.2.4.2" }
                         }),
+
                         Field({
                             name: "SFR", conformance: "(STA | PAU | FA | CON) & !PFR, O.a+", constraint: "2",
                             description: "StateForecastReporting",
-                            details: "Allows an ESA to advertise its indicative future state vs time."
+
+                            details: "Some ESAs do not know their actual power consumption, but do know the state of operation. Like the " +
+                                "PowerForecastingReporting feature, this uses the same slot structure mechanism to indicate a change " +
+                                "in state vs time." +
+                                "\n" +
+                                "An external observing EMS may have access to real-time meter readings, and could learn the typical " +
+                                "power consumption based on the advertised internal state of the ESA." +
+                                "\n" +
+                                "To enable this capability, the ESA shall report its internal operational state using an " +
+                                "manufacturer specific value." +
+                                "\n" +
+                                "Once the EMS has built a model of the state vs observed power consumption, it may request a " +
+                                "forecast adjustment for particular times of the day, encouraging the ESA to use power at " +
+                                "alternative times.",
+
+                            xref: { document: "cluster", section: "9.2.4.3" }
                         }),
+
                         Field({
                             name: "STA", conformance: "O.a+", constraint: "3", description: "StartTimeAdjustment",
-                            details: "Allows an EMS to delay an ESA’s planned operation."
+
+                            details: "ESAs which support the Start Time Adjustment feature, allow an EMS to recommend a change to the " +
+                                "start time of the energy transfer that the ESA has previously suggested it would use." +
+                                "\n" +
+                                "Washing machine example: A Washing Machine may have been set to start a wash cycle at 9pm when the " +
+                                "variable tariff normally reduces." +
+                                "\n" +
+                                "However, the EMS is aware that a grid event has occurred, making it cheaper to run the cycle at a " +
+                                "later time, but the washing machine is not aware of this." +
+                                "\n" +
+                                "The EMS first requests the Forecast data from each of its registered ESAs. It determines that the " +
+                                "washing machine has a power profile suggesting it will start the wash cycle at 9pm, but the EMS now " +
+                                "knows that the grid event means it will be cheaper to delay the start until 11pm." +
+                                "\n" +
+                                "The EMS can then optimize the cost by asking the washing machine to delay starting the wash cycle " +
+                                "until 11pm." +
+                                "\n" +
+                                "It does this by sending a StartTimeAdjustRequest to the washing machine to request delaying the " +
+                                "start of the washing cycle.",
+
+                            xref: { document: "cluster", section: "9.2.4.4" }
                         }),
+
                         Field({
                             name: "PAU", conformance: "O.a+", constraint: "4", description: "Pausable",
-                            details: "Allows an EMS to pause an ESA’s planned operation."
+
+                            details: "ESAs which support the Pausable feature, allow an EMS to recommend a pause in the middle of a " +
+                                "forecast power profile that the ESA is currently using." +
+                                "\n" +
+                                "Washing machine example: A Washing Machine is in operation, and starting its water heating step." +
+                                "\n" +
+                                "However, the EMS becomes aware from the smart meter that the total home load on the grid is close " +
+                                "to exceeding its allowed total grid load." +
+                                "\n" +
+                                "The EMS first requests the Forecast data from each of its registered ESAs. It determines that the " +
+                                "washing machine has a power profile suggesting its current step in the wash cycle is using power to " +
+                                "heat the water, but that this step can be paused." +
+                                "\n" +
+                                "The EMS can then reduce the grid load by asking the washing machine to pause the wash cycle for a " +
+                                "short duration." +
+                                "\n" +
+                                "It does this by sending a PauseRequest to the washing machine to request pausing the current step " +
+                                "of the forecast power usage for a period to allow other home loads to finish before resuming the " +
+                                "washing cycle.",
+
+                            xref: { document: "cluster", section: "9.2.4.5" }
                         }),
+
                         Field({
                             name: "FA", conformance: "P, O.a+", constraint: "5", description: "ForecastAdjustment",
-                            details: "Allows an EMS to adjust an ESA’s planned operation."
+
+                            details: "ESAs which support the Forecast adjustment feature, allow an EMS to recommend a change to the " +
+                                "start, duration and/or power level limits of the steps of the power profile that the ESA has " +
+                                "previously suggested it would use." +
+                                "\n" +
+                                "Heat pump and Solar PV example: A heat pump may have the ability to heat hot water as well as " +
+                                "heating the home. The heat pump scheduling system may have determined that the home will be " +
+                                "unoccupied during the day, or that the indoor temperature is above the set-point and so it knows " +
+                                "that it will not need to heat the home." +
+                                "\n" +
+                                "However, the hot water tank is likely to need to be reheated before the homeowner comes home in the " +
+                                "evening. The heat pump is not aware that the property also has a solar PV inverter which is also an " +
+                                "ESA that is communicating with the EMS." +
+                                "\n" +
+                                "The EMS first requests the Forecast data from each of its registered ESAs. It determines that the " +
+                                "heat pump has a power profile suggesting it needs to heat hot water around 6pm. The solar PV " +
+                                "inverter has forecast that it will generate 3.6kW of power during the middle of the day and into " +
+                                "the afternoon before the sun goes down." +
+                                "\n" +
+                                "The EMS can then optimize the home considering other non-ESA loads and can ask the heat pump to " +
+                                "heat the hot water around 3pm when it has forecast that excess solar power will be available." +
+                                "\n" +
+                                "It does this by sending a ModifyForecastRequest to the heat pump and asks the heat pump to expect " +
+                                "to run at a lower power consumption (within the solar excess power) which requires the heat pump to " +
+                                "run for a longer duration to achieve its required energy demand.",
+
+                            xref: { document: "cluster", section: "9.2.4.6" }
                         }),
+
                         Field({
                             name: "CON", conformance: "P, O.a+", constraint: "6", description: "ConstraintBasedAdjustment",
-                            details: "Allows an EMS to request constraints to an ESA’s planned operation."
+
+                            details: "ESAs which support the Constraint-Based Adjustment feature allow an EMS to inform the ESA of " +
+                                "periods during which power usage should be modified (for example when the EMS has been made aware " +
+                                "that the grid supplier has requested reduced energy usage due to overall peak grid demand) and may " +
+                                "cause the ESA to modify the intended power profile has previously suggested it would use." +
+                                "\n" +
+                                "EVSE example: An EVSE scheduling system may have determined that the vehicle would be charged " +
+                                "starting at a moderate rate at 1am, so that it has enough charge by the time it is needed later " +
+                                "that morning." +
+                                "\n" +
+                                "However, the DSR service provider has informed the EMS that due to high forecast winds it is now " +
+                                "forecast that there will be very cheap energy available from wind generation between 2am and 3am." +
+                                "\n" +
+                                "The EMS first requests the Forecast data from each of its registered ESAs. It determines that the" +
+                                "\n" +
+                                "EVSE has a power profile suggesting it plans to start charging the vehicle at 1am." +
+                                "\n" +
+                                "The EMS can then try to reduce the cost of charging the EV by informing the EVSE of the desire to " +
+                                "increase the charging between scheduled times." +
+                                "\n" +
+                                "It does this by sending a RequestConstraintBasedForecast to the EVSE and asks it to run at a higher " +
+                                "NominalPower consumption during the constraint period, which may require it to decrease its charge " +
+                                "rate outside the constraint period to achieve its required energy demand.",
+
+                            xref: { document: "cluster", section: "9.2.4.7" }
                         })
                     ]
                 }),
@@ -20638,15 +21096,59 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "PREF", conformance: "P", constraint: "0", description: "ChargingPreferences",
-                            details: "EVSE supports storing user charging preferences"
+
+                            details: "Since some EVSEs cannot obtain the SoC from the vehicle, some EV charging solutions allow the " +
+                                "consumer to specify a daily charging target (for adding energy to the EV’s battery). This feature " +
+                                "allows the consumer to specify how many miles or km of additional range they need for their typical " +
+                                "daily commute. This range requirement can be converted into a daily energy demand with a target " +
+                                "charging completion time." +
+                                "\n" +
+                                "The EVSE itself may use this information (or may allow a controller such as an EMS) to compute an" +
+                                "\n" +
+                                "optimized charging schedule." +
+                                "\n" +
+                                "An EVSE device may implement the Device Energy Management cluster PFR (Power Forecast Reporting) " +
+                                "and FA (Forecast Adjustment) features. This can help a controller (such as an EMS) to optimize the " +
+                                "EVSE against other ESAs. For example, a solar PV ESA may share its Forecast and allow the EVSE to " +
+                                "know the best time to charge so that any excess solar generation is used to charge the EV." +
+                                "\n" +
+                                "EVSE devices that support the Device Energy Management cluster’s FA feature can have their charging " +
+                                "profiles set by a controller device such as an EMS. For example, if the EVSE advertises a simple " +
+                                "power forecast which allows the EMS to adjust over a wide range of power and time durations, then " +
+                                "the EVSE may allow the EMS to propose a revised optimized forecast (which is the charging profile)." +
+                                "\n" +
+                                "See the Device Energy Management Cluster for more details.",
+
+                            xref: { document: "cluster", section: "9.3.4.1" }
                         }),
+
                         Field({
                             name: "SOC", conformance: "P", constraint: "1", description: "SoCReporting",
-                            details: "EVSE supports reporting of vehicle State of Charge (SoC)"
+
+                            details: "Vehicles and EVSEs which support ISO 15118 may allow the vehicle to report its battery size and " +
+                                "state of charge. If the EVSE supports PLC it may have a vehicle connected which optionally supports " +
+                                "reporting of its battery size and current State of Charge (SoC)." +
+                                "\n" +
+                                "If the EVSE supports reporting of State of Charge this feature will only work if a compatible EV is " +
+                                "connected." +
+                                "\n" +
+                                "Note some EVSEs may use other undefined mechanisms to obtain vehicle State of Charge outside the " +
+                                "scope of this cluster.",
+
+                            xref: { document: "cluster", section: "9.3.4.2" }
                         }),
+
                         Field({
                             name: "PNC", conformance: "P", constraint: "2", description: "PlugAndCharge",
-                            details: "EVSE supports PLC to support Plug and Charge"
+
+                            details: "If the EVSE supports PLC, it may be able to support the Plug and Charge feature. e.g. this may " +
+                                "allow the vehicle ID to be obtained which may allow an energy management system to track energy " +
+                                "usage per vehicle (e.g. to give the owner an indicative cost of charging, or for work place " +
+                                "charging)." +
+                                "\n" +
+                                "If the EVSE supports the Plug and Charge feature, it will only work if a compatible EV is connected.",
+
+                            xref: { document: "cluster", section: "9.3.4.3" }
                         }),
 
                         Field({
@@ -21612,11 +22114,17 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "BALA", conformance: "O.a+", constraint: "0", description: "EnergyBalance",
-                            details: "Device can balance energy consumption vs. another priority"
+                            details: "This feature allows a user to select from a list of energy balances with associated descriptions of " +
+                                "which strategies a device will use to target the specified balance.",
+                            xref: { document: "cluster", section: "9.5.4.1" }
                         }),
+
                         Field({
                             name: "LPMS", conformance: "O.a+", constraint: "1", description: "LowPowerModeSensitivity",
-                            details: "Device can adjust the conditions for entering a low power mode"
+                            details: "This feature allows the user to select a condition or set of conditions which will cause the device " +
+                                "to switch to a mode using less power. For example, a device might provide a scale of durations that " +
+                                "must elapse without user interaction before it goes to sleep.",
+                            xref: { document: "cluster", section: "9.5.4.2" }
                         })
                     ]
                 }),
@@ -21912,7 +22420,8 @@ export const SpecMatter = Matter({
         }),
 
         Field({
-            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", constraint: "1 to 254",
+            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
+            constraint: "1 to 254",
 
             details: "This field shall be present for fabric-scoped data. This field does not have to be defined " +
                 "explicitly in the field table for fabric-scoped data." +
@@ -21923,6 +22432,984 @@ export const SpecMatter = Matter({
                 "reported data that is defined as fabric-scoped.",
 
             xref: { document: "core", section: "7.13.7" }
+        }),
+
+        Datatype({
+            name: "bool", description: "Boolean", metatype: "boolean",
+            details: "The Boolean type represents a logical value, either FALSE or TRUE." +
+                "\n" +
+                "  • FALSE shall be equivalent to the value 0 (zero)." +
+                "\n" +
+                "  • TRUE shall be equivalent to the value 1 (one).",
+            xref: { document: "core", section: "7.18.1.1" }
+        }),
+
+        Datatype({
+            name: "map8", byteSize: 1, description: "8-bit bitmap", metatype: "bitmap",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "map16", byteSize: 2, description: "16-bit bitmap", metatype: "bitmap",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "map32", byteSize: 4, description: "32-bit bitmap", metatype: "bitmap",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "map64", byteSize: 8, description: "64-bit bitmap", metatype: "bitmap",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "uint8", byteSize: 1, description: "Unsigned 8-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "uint16", byteSize: 2, description: "Unsigned 16-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "uint24", byteSize: 3, description: "Unsigned 24-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "uint32", byteSize: 4, description: "Unsigned 32-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "uint40", byteSize: 5, description: "Unsigned 40-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "uint48", byteSize: 6, description: "Unsigned 48-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "uint56", byteSize: 7, description: "Unsigned 56-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "uint64", byteSize: 8, description: "Unsigned 64-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "int8", byteSize: 1, description: "Signed 8-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "int16", byteSize: 2, description: "Signed 16-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "int24", byteSize: 3, description: "Signed 24-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "int32", byteSize: 4, description: "Signed 32-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "int40", byteSize: 5, description: "Signed 40-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "int48", byteSize: 6, description: "Signed 48-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "int56", byteSize: 7, description: "Signed 56-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "int64", byteSize: 8, description: "Signed 64-bit integer", metatype: "integer",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+        Datatype({
+            name: "single", byteSize: 4, description: "Single precision", metatype: "float",
+            xref: { document: "core", section: "7.18.1" }
+        }),
+
+        Datatype({
+            name: "double", byteSize: 8, description: "Double precision", metatype: "float",
+
+            details: "The double precision number format is based on the IEEE 754-2019 double precision (64-bit) format " +
+                "for binary floating-point arithmetic." +
+                "\n" +
+                "The format and interpretation of values of this data type follow the same rules as given for the " +
+                "single precision data type, but with wider mantissa and exponent ranges." +
+                "\n" +
+                "See IEEE 754-2019 for more details on the representable values.",
+
+            xref: { document: "core", section: "7.18.1.6" }
+        }),
+
+        Datatype({
+            name: "octstr", description: "Octet string", metatype: "bytes",
+            details: "The octet string data type defines a sequence of octets with a finite octet count from 0 to 65534. " +
+                "It is recommended to define a constraint on the maximum possible count.",
+            xref: { document: "core", section: "7.18.1.7" }
+        }),
+
+        Datatype({
+            name: "list", description: "List", metatype: "array",
+
+            details: "A list is defined as a collection of entries of the same data type, with a finite count from 0 to " +
+                "65534. A cluster specification may define further constraints on the maximum possible count. The " +
+                "list entry data type shall be any defined data type, except a list data type, or any data type " +
+                "derived from a list." +
+                "\n" +
+                "The quality columns for a list definition are for the list." +
+                "\n" +
+                "The list entries are indicated with an index that is an unsigned integer starting at 0 (zero). The " +
+                "maintained order of entries, by index, is defined in the cluster specification, or undefined. Data " +
+                "that is defined as a list is indicated with \"list[X]\" where X is the entry type. The data type of " +
+                "the list entry has its own qualities, constraints, and conformance." +
+                "\n" +
+                "### To define qualities for the list entry data type, make the list entry data type a defined local " +
+                "derived data type, with a table including the columns required to define and constrain the data " +
+                "type." +
+                "\n" +
+                "There is an inline shortcut to define the list entry data type constraints. See List Constraints." +
+                "\n" +
+                "It is recommended to put a maximum constraint on the list and list entry data types." +
+                "\n" +
+                "It is recommended that a list entry data type be a struct, to enable the addition of new fields to " +
+                "the list’s entries in the future." +
+                "\n" +
+                "  • The cluster data version shall be incremented when the list order or entries change." +
+                "\n" +
+                "  • An entry shall NOT be null." +
+                "\n" +
+                "  • The list shall support reading and reporting all entries." +
+                "\n" +
+                "  • The list shall support reporting, updates, and/or deletion of one or more entries." +
+                "\n" +
+                "  • If the list is writable, it shall support writing or deleting the entire list." +
+                "\n" +
+                "  • If the list is writable, it shall support updating one or more individual entries by indicating " +
+                "    an index per updated entry." +
+                "\n" +
+                "  • If the list is writable, it shall support deleting one or more individual entries by indicating " +
+                "    an index per deleted entry." +
+                "\n" +
+                "  • If the list is writable, it shall support adding one or more individual entries." +
+                "\n" +
+                "  • A list may define an entry that is a struct that is fabric-scoped (see Fabric-Scoped Quality)." +
+                "\n" +
+                "### Fabric-Scoped List" +
+                "\n" +
+                "  • A fabric-scoped list shall define an entry data type that is a struct, which shall also be " +
+                "    fabric-scoped (see Fabric-Scoped Struct)." +
+                "\n" +
+                "Each entry in a fabric-scoped list shall be fabric-scoped to a particular fabric or no fabric." +
+                "\n" +
+                "### A fabric-scoped list supports a fabric-filter that filters the view of the list for read and " +
+                "write interactions. This filter simplifies client side logic that does not want to read or write " +
+                "fabric data that is not associated with the accessing fabric." +
+                "\n" +
+                "  • An interaction upon a list with fabric-filtering shall only indicate and access entries where " +
+                "    the associated fabric matches the accessing fabric, and all other entries shall be ignored." +
+                "\n" +
+                "  • Fabric-filtered list entries shall be in the same order as the full list." +
+                "\n" +
+                "  • Fabric-filtered list entries shall be indexed from 0 with no gaps, as if the other entries did " +
+                "    not exist." +
+                "\n" +
+                "  • For a write interaction, fabric-filtering shall be enabled." +
+                "\n" +
+                "  • When writing to a fabric-scoped list, the write interaction shall be on an accessing fabric, " +
+                "    otherwise, the write interaction shall fail (see Interaction Model)." +
+                "\n" +
+                "  • For a read interaction on a list, fabric-filtering may be enabled." +
+                "\n" +
+                "  • For a read interaction on a list, with fabric-filtering disabled, the list shall be reported as " +
+                "    a full list with all entries." +
+                "\n" +
+                "list[1] = [ { FabricIndex = B, Value = 55 } ]" +
+                "\n" +
+                "changes the full list to:" +
+                "\n" +
+                "list = [ { FabricIndex = A, Value = 20 }," +
+                "\n" +
+                "{ FabricIndex = B, Value = 30 }," +
+                "\n" +
+                "{ FabricIndex = A, Value = 40 }," +
+                "\n" +
+                "{ FabricIndex = B, Value = 55 }," +
+                "\n" +
+                "{ FabricIndex = B, Value = 60 } ]",
+
+            xref: { document: "core", section: "7.18.1.8" }
+        }),
+
+        Datatype({
+            name: "struct", description: "Struct", metatype: "object",
+
+            details: "A struct is a sequence of fields of any data type. Individual fields are identified by a field ID " +
+                "of unsigned integer, starting at 0 (zero), for the first field." +
+                "\n" +
+                "  • A struct itself shall have no constraint qualities." +
+                "\n" +
+                "  • Each struct field shall have its own qualities." +
+                "\n" +
+                "  • Access, conformance and persistence qualities, when not explicitly defined, shall be inherited " +
+                "    from the instance of the struct itself." +
+                "\n" +
+                "  • Struct fields may have optional conformance." +
+                "\n" +
+                "  • A struct shall support reading and reporting of all fields." +
+                "\n" +
+                "  • A struct shall support reporting changes to one or more fields." +
+                "\n" +
+                "  • If the struct is writable, it shall support writing the entire struct." +
+                "\n" +
+                "  • If a field of the struct is writable, the struct shall support updating the field." +
+                "\n" +
+                "  • Because of optional struct field conformance, instances of the same struct may support multiple " +
+                "    'flavors' of the same struct data type, but with a different set of optional fields." +
+                "\n" +
+                "### Fabric-Scoped Struct" +
+                "\n" +
+                "  • A fabric-scoped struct shall only be defined and occur as an entry in a fabric-scoped list." +
+                "\n" +
+                "  • A fabric-scoped struct shall support the global FabricIndex field of type fabric-index, which " +
+                "    indicates the associated fabric of the struct, or indicates that there is no associated fabric." +
+                "\n" +
+                "  • The table that defines fields of a fabric-scoped struct shall NOT list the global FabricIndex " +
+                "    field, which is a global field and defined implicitly." +
+                "\n" +
+                "  • The global FabricIndex field of a fabric-scoped struct SHOULD NOT be indicated in a write " +
+                "    interaction." +
+                "\n" +
+                "  • The global FabricIndex field of a fabric-scoped struct shall be ignored in a write interaction." +
+                "\n" +
+                "  • The global FabricIndex field SHOULD NOT be indicated on a fabric-scoped struct contained in the " +
+                "    payload of a command request." +
+                "\n" +
+                "  • The global FabricIndex field shall be ignored on a fabric-scoped struct contained in the " +
+                "    payload of a command request." +
+                "\n" +
+                "  • When a write interaction creates a fabric-scoped struct entry (in a fabric-scoped list), the " +
+                "    server shall implicitly load the accessing fabric-index into the global FabricIndex field of " +
+                "    the struct." +
+                "\n" +
+                "  • When the payload of a command request contains a fabric-scoped struct, the server shall " +
+                "    implicitly load the accessing fabric-index into the global FabricIndex field of the struct." +
+                "\n" +
+                "### • A fabric-scoped struct may be defined with some fields that are fabric-sensitive." +
+                "\n" +
+                "  • For interactions on a fabric-scoped struct that report back data, fabric-sensitive struct " +
+                "    fields shall NOT be indicated when reporting data back to the client, when the struct has an " +
+                "    associated fabric, and it is not the accessing fabric.",
+
+            xref: { document: "core", section: "7.18.1.9" }
+        }),
+
+        Datatype({
+            name: "percent", type: "uint8", description: "Percentage units 1%",
+            xref: { document: "core", section: "7.18.2" }
+        }),
+        Datatype({
+            name: "percent100ths", type: "uint16", description: "Percentage units 0.01%",
+            xref: { document: "core", section: "7.18.2" }
+        }),
+
+        Datatype({
+            name: "tod", type: "struct", description: "Time of day",
+
+            details: "The Time of Day data type shall be a struct with these fields: Hours, Minutes, Seconds, and " +
+                "Hundredths." +
+                "\n" +
+                "The hours field represents hours according to a 24-hour clock. The range is from 0 to 23. The " +
+                "minutes field represents minutes of the current hour. The range is from 0 to 59. The seconds field " +
+                "represents seconds of the current minute. The range is from 0 to 59. The hundredths field " +
+                "represents 100ths of the current second. The range is from 0 to 99. A value of null in any subfield " +
+                "indicates an unused subfield. If all subfields have a value of null, this indicates a null time of " +
+                "day.",
+
+            xref: { document: "core", section: "7.18.2.3" }
+        }),
+
+        Datatype({
+            name: "date", type: "struct", description: "Date",
+            details: "This data type shall be a struct as defined below." +
+                "\n" +
+                "Valid combinations using null fields are",
+            xref: { document: "core", section: "7.18.2.4" },
+
+            children: [
+                Field({
+                    name: "Year", id: 0x0, type: "uint8", conformance: "M", default: null, quality: "X",
+                    details: "The year subfield represents years from 1900 (0) to 2155 (255).",
+                    xref: { document: "core", section: "7.18.2.4.1" }
+                }),
+
+                Field({
+                    name: "Month", id: 0x1, type: "uint8", conformance: "M", constraint: "1 to 12", default: null,
+                    quality: "X",
+                    details: "This field represents months January (1) to December (12).",
+                    xref: { document: "core", section: "7.18.2.4.2" }
+                }),
+
+                Field({
+                    name: "Day", id: 0x2, type: "uint8", conformance: "M", constraint: "1 to 31", default: null,
+                    quality: "X",
+                    details: "This field represents the day of the month. Note that values in the range 29 to 31 may be invalid, " +
+                        "depending on the month and year.",
+                    xref: { document: "core", section: "7.18.2.4.3" }
+                }),
+
+                Field({
+                    name: "DayOfWeek", id: 0x3, type: "uint8", conformance: "M", constraint: "1 to 7", default: null,
+                    quality: "X",
+                    details: "This represents the day of the week from Monday (1) to Sunday (7).",
+                    xref: { document: "core", section: "7.18.2.4.4" }
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "epoch-us", type: "uint64", description: "Epoch Time in microseconds",
+
+            details: "This type represents an offset, in microseconds, from 0 hours, 0 minutes, 0 seconds, on the 1st of " +
+                "January, 2000 UTC (the Epoch), encoded as an unsigned 64-bit scalar value." +
+                "\n" +
+                "This offset is the sum of two parts: time elapsed, not counting leap-seconds, and a local time " +
+                "offset. The local time offset may include a timezone offset and a may include a DST offset." +
+                "\n" +
+                "Any use of this type shall indicate how the associated local time offset is determined in the " +
+                "specific context of that use. This may be done, for example, by simply saying the time is a UTC " +
+                "time, in which case the local time offset is 0." +
+                "\n" +
+                "A given Epoch Time value may be interpreted in at least two ways:" +
+                "\n" +
+                "  1. The value can be converted to a local clock date/time (year, month, day, hours, minutes, " +
+                "     seconds, microseconds) by treating the local time offset as 0 and finding the UTC (year, " +
+                "     month, day, hours, minutes, seconds, microseconds) tuple that corresponds to an elapsed time " +
+                "     since the epoch time equal to the given value. The value then represents that tuple, but " +
+                "     interpreted in the specific timezone and DST situation associated with the value. This " +
+                "     procedure does not require knowing the local time offset of the value." +
+                "\n" +
+                "  2. The value can be converted to a UTC time by subtracting the associated local time offset from " +
+                "     the Epoch Time value and then treating the resulting value as an elapsed count of microseconds " +
+                "     since the epoch time." +
+                "\n" +
+                "For example, an Epoch Time value of 0x0000_0BF1_B7E1_0000 corresponds to an offset of exactly 152 " +
+                "days. This can be interpreted as \"00:00:00 on June 1, 2000\" in whatever local time zone is " +
+                "associated with the value. That corresponds to the following times in ISO 8601 notation:" +
+                "\n" +
+                "  • 2000-06-01T00:00Z if the associated local time offset is 0 (i.e. the value is in UTC)." +
+                "\n" +
+                "  • 2000-05-31T23:00Z if the associated local time offset is +1 hour (e.g. the CET timezone, " +
+                "    without daylight savings)." +
+                "\n" +
+                "  • 2000-06-01T00:00+02 if the associated local time offset is +1 hour." +
+                "\n" +
+                "  • 2000-06-01T04:00Z if the associated local time offset is -4 hours (e.g. the EDT time zone, " +
+                "    which includes daylight savings)." +
+                "\n" +
+                "  • 2000-06-01T00:00-04 if the associated local time offset is -4 hours." +
+                "\n" +
+                "Conversion from NTP timestamps" +
+                "\n" +
+                "Timestamps from NTP also do not count leap seconds, but have a different epoch. NTP 128-bit " +
+                "timestamps consist of a 64-bit seconds portion (NTP(s)) and a 64-bit fractional seconds portion " +
+                "(NTP(frac)). NTP(s) at 00:00:00 can be calculated from the Modified Julian Day (MJD) as follows:" +
+                "\n" +
+                "NTP(s) = (MJD-15020) * (24*60*60)" +
+                "\n" +
+                "where 15020 is the MJD on January 1, 1900 (the NTP epoch)" +
+                "\n" +
+                "NTP(s) on January 1, 2000 00:00:00 UTC (MJD = 51544) is 3155673600 (0xBC17C200)" +
+                "\n" +
+                "Epoch Time has a microsecond precision, and this precision can be achieved by using the most " +
+                "significant 32 bits of the fractional portion (NTP(frac32)). Conversion between the 128-bit NTP " +
+                "timestamps and a UTC Epoch Time in Microseconds is as follows:" +
+                "\n" +
+                "UTC Epoch Time = (NTP(s) - 0xBC17C200)*10^6 + ((NTP(frac32)*10^6) / 2^32) where all numbers are " +
+                "treated as unsigned 64-bit integers and the division is integer division.",
+
+            xref: { document: "core", section: "7.18.2.5" }
+        }),
+
+        Datatype({
+            name: "epoch-s", type: "uint32", description: "Epoch Time in seconds",
+
+            details: "This type has the same semantics as Epoch Time in Microseconds, except that:" +
+                "\n" +
+                "  • the value encodes an offset in seconds, rather than microseconds;" +
+                "\n" +
+                "  • the value is encoded as an unsigned 32-bit scalar, rather than 64-bit." +
+                "\n" +
+                "This type is employed where compactness of representation is important and where the resolution of " +
+                "seconds is still satisfactory.",
+
+            xref: { document: "core", section: "7.18.2.6" }
+        }),
+
+        Datatype({
+            name: "posix-ms", type: "uint64", description: "POSIX Time in milliseconds",
+            details: "This type represents an offset, in milliseconds, from the UNIX epoch (1970-01-01 00:00:00 UTC), " +
+                "encoded as an unsigned 64-bit scalar value." +
+                "\n" +
+                "This type is employed for compatibility reasons.",
+            xref: { document: "core", section: "7.18.2.7" }
+        }),
+
+        Datatype({
+            name: "systime-us", type: "uint64", description: "System Time in microseconds",
+            details: "System time in microseconds is an unsigned 64-bit value representing the number of microseconds " +
+                "since boot.",
+            xref: { document: "core", section: "7.18.2.8" }
+        }),
+
+        Datatype({
+            name: "systime-ms", type: "uint64", description: "System Time in milliseconds",
+            details: "System time in milliseconds is an unsigned 64-bit value representing the number of milliseconds " +
+                "since boot." +
+                "\n" +
+                "This type is employed for compatibility reasons.",
+            xref: { document: "core", section: "7.18.2.9" }
+        }),
+
+        Datatype({
+            name: "elapsed-s", type: "uint32", description: "Elapsed Time in seconds",
+            details: "Elapsed time in seconds is an unsigned 32-bit value representing the time that has elapsed for an " +
+                "operation or other activity, as determined by the definition of the attribute using this type.",
+            xref: { document: "core", section: "7.18.2.10" }
+        }),
+
+        Datatype({
+            name: "temperature", type: "int16", description: "Temperature",
+
+            details: "This type represents a temperature on the Celsius scale with a resolution of 0.01°C." +
+                "\n" +
+                "  • value = (temperature in °C) x 100" +
+                "\n" +
+                "The range is constrained by absolute zero: -273.15°C to 327.67°C." +
+                "\n" +
+                "Conversion of Temperature Values for Display" +
+                "\n" +
+                "When converting temperature values for display manufacturers SHOULD ensure that calculations" +
+                "\n" +
+                "round to the nearest representable value. Particular care is needed when using integer arithmetic." +
+                "\n" +
+                "Sample Conversion Code" +
+                "\n" +
+                "Sample code provided to ensure consistent Fahrenheit to Celsius and vice-versa conversion between " +
+                "devices and across vendors." +
+                "\n" +
+                "For degF: the value is a int8u representing 2x temperature value in Fahrenheit (to get 0.5 " +
+                "resolution)." +
+                "\n" +
+                "For degC: the value is a int16s representing Celsius in" +
+                "\n" +
+                "0.01 resolution as expected by the ZCL format.",
+
+            xref: { document: "core", section: "7.18.2.11" }
+        }),
+
+        Datatype({
+            name: "power-mW", type: "int64", description: "Power",
+            details: "This type represents power measured in milliwatts.",
+            xref: { document: "core", section: "7.18.2.12" }
+        }),
+        Datatype({
+            name: "amperage-mA", type: "int64", description: "Amperage",
+            details: "This type represents amperage measured in milliamps.",
+            xref: { document: "core", section: "7.18.2.13" }
+        }),
+        Datatype({
+            name: "voltage-mW", type: "int64", description: "Voltage",
+            details: "This type represents voltage measured in millivolts.",
+            xref: { document: "core", section: "7.18.2.14" }
+        }),
+        Datatype({
+            name: "energy-mWh", type: "int64", description: "Energy",
+            details: "This type represents energy measured in milliwatt-hours.",
+            xref: { document: "core", section: "7.18.2.15" }
+        }),
+        Datatype({
+            name: "enum8", type: "uint8", description: "8-bit enumeration", metatype: "enum",
+            xref: { document: "core", section: "7.18.2" }
+        }),
+        Datatype({
+            name: "enum16", type: "uint16", description: "16-bit enumeration", metatype: "enum",
+            xref: { document: "core", section: "7.18.2" }
+        }),
+
+        Datatype({
+            name: "priority", type: "enum8", description: "Priority",
+            details: "This is an enumeration of priority used to tag events and possibly other data. The data type does " +
+                "not define any particular ordering among the values. Specific uses of the data type may assign " +
+                "semantics to the values that imply an ordering relationship.",
+            xref: { document: "core", section: "7.18.2.17" },
+
+            children: [
+                Field({ name: "InformationForEngineeringDebuggingTroubleshooting", id: 0x0 }),
+                Field({
+                    name: "InformationThatEitherDrivesCustomerFacingFeaturesOrProvidesInsightsIntoDeviceFunctionsThatAreUsedToDriveAnalyticsUseCases",
+                    id: 0x1
+                }),
+                Field({
+                    name: "InformationOrNotificationThatImpactsSafetyAcriticalFunctionOrOngoingReliableOperationOfTheNodeOrApplicationSupportedOnAnEndpoint",
+                    id: 0x2
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "status", type: "enum8", description: "Status Code",
+
+            details: "An enumeration value that means a success or error status. A status code is indicated as a response " +
+                "to an action in an interaction (see Interaction Model)." +
+                "\n" +
+                "A status code shall be one of:" +
+                "\n" +
+                "  • a common status code from the set defined in the Interaction Model status code table;" +
+                "\n" +
+                "  • a cluster status code that is scoped to a particular cluster." +
+                "\n" +
+                "The following table defines the enumeration ranges for status codes." +
+                "\n" +
+                "Status codes in an undefined range, or status codes undefined within a range are reserved and shall " +
+                "NOT be indicated.",
+
+            xref: { document: "core", section: "7.18.2.18" },
+
+            children: [
+                Field({
+                    name: "Success", id: 0x0, description: "Operation was successful.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "Failure", id: 0x1, description: "Operation was not successful.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "InvalidSubscription", id: 0x7d, description: "Subscription ID is not active.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "UnsupportedAccessnotAuthorized", id: 0x7e,
+                    description: "The sender of the action or command does not have authorization or access.NOT_AUTHORIZED is an obsolete name of this error code.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "UnsupportedEndpoint", id: 0x7f,
+                    description: "The endpoint indicated is unsupported on the node.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "InvalidAction", id: 0x80,
+                    description: "The action is malformed, has missing fields, or fields with invalid values. Action not carried out.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "UnsupportedCommandunsupCommand", id: 0x81,
+                    description: "The indicated command ID is not supported on the cluster instance. Command not carried out.UNSUP_COMMAND is an obsolete name for this error code.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "InvalidCommandinvalidField", id: 0x85,
+                    description: "The cluster command is malformed, has missing fields, or fields with invalid values. Command not carried out.INVALID_FIELD is an obsoletename for this error code.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "UnsupportedAttribute", id: 0x86,
+                    description: "The indicated attribute ID, field ID or list entry does not exist for an attribute path.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "ConstraintErrorinvalidValue", id: 0x87,
+                    description: "Out of range error or set to a reserved value. Attribute keeps its old value. Note that an attribute value may be out of range if an attribute is related to another, e.g. with minimum and maximum attributes. See the individual attribute descriptions for specific details.INVALID_VALUE is an obsoletename for this error code.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "UnsupportedWritereadOnly", id: 0x88,
+                    description: "Attempt to write a read-only attribute.READ_ONLY is an obsoletename for this error code.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "ResourceExhaustedinsufficientSpace", id: 0x89,
+                    description: "An action or operation failed due to insufficient available resources.INSUFFICIENT_SPACE is anobsolete name for this error code.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "NotFound", id: 0x8b, description: "The indicated data field or entry could not be found.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "UnreportableAttribute", id: 0x8c,
+                    description: "Reports cannot be issued for this attribute.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "InvalidDataType", id: 0x8d,
+                    description: "The data type indicated is undefined or invalid for the indicated data field. Command or action not carried out.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "UnsupportedRead", id: 0x8f, description: "Attempt to read a write-only attribute.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "DataVersionMismatch", id: 0x92,
+                    description: "Cluster instance data version did not match request path",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "Timeout", id: 0x94, description: "The transaction was aborted due to time being exceeded.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "UnsupportedNode", id: 0x9b,
+                    description: "The node ID indicated is not supported on the node.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "Busy", id: 0x9c,
+                    description: "The receiver is busy processing another action that prevents the execution of the incoming action.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "UnsupportedCluster", id: 0xc3,
+                    description: "The cluster indicated is not supported on the endpoint.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "NoUpstreamSubscription", id: 0xc5,
+                    description: "Used by proxies to convey to clients the lack of an upstream subscription to a source.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "NeedsTimedInteraction", id: 0xc6,
+                    description: "A Untimed Write or Untimed Invoke interaction was used for an attribute or command that requires a Timed Write or Timed Invoke.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "UnsupportedEvent", id: 0xc7,
+                    description: "The indicated event ID is not supported on the cluster instance.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "PathsExhausted", id: 0xc8,
+                    description: "The receiver has insufficient resources to support the specified number of paths in the request",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "TimedRequestMismatch", id: 0xc9,
+                    description: "A request with TimedRequest field set to TRUE was issued outside a Timed transaction or a request with TimedRequest set to FALSE was issued inside a Timed transaction.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "FailsafeRequired", id: 0xca,
+                    description: "A request requiring a Fail-safe context was invoked without the Fail-Safe context.",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "InvalidInState", id: 0xcb,
+                    description: "The received request cannot be handled due to the current operational state of the device",
+                    xref: { document: "core", section: "8.10.1" }
+                }),
+                Field({
+                    name: "NoCommandResponse", id: 0xcc,
+                    description: "A CommandDataIB is missing a response in the InvokeResponses of an Invoke Response action.",
+                    xref: { document: "core", section: "8.10.1" }
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "group-id", type: "uint16", description: "Group ID",
+            details: "A 16-bit ID for a group scoped to a particular fabric as indicated by an accompanying fabric index " +
+                "adjacent instantiation.",
+            xref: { document: "core", section: "7.18.2.22" }
+        }),
+
+        Datatype({
+            name: "endpoint-no", type: "uint16", description: "Endpoint Number",
+            details: "An unsigned number that indicates an instance of a device type.",
+            xref: { document: "core", section: "7.18.2.23" }
+        }),
+
+        Datatype({
+            name: "vendor-id", type: "uint16", description: "Vendor ID",
+            details: "A Vendor ID." +
+                "\n" +
+                "Vendor IDs may be used as a prefix in a Manufacturer Extensible Identifier format.",
+            xref: { document: "core", section: "7.18.2.24" }
+        }),
+
+        Datatype({
+            name: "devtype-id", type: "uint32", description: "Device Type ID",
+            details: "An identifier that indicates conformance to a device type." +
+                "\n" +
+                "Device Type IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation " +
+                "are described in Data Model Types.",
+            xref: { document: "core", section: "7.18.2.25" }
+        }),
+
+        Datatype({
+            name: "fabric-id", type: "uint64", description: "Fabric ID",
+            details: "A value to identify a fabric.",
+            xref: { document: "core", section: "7.18.2.19" }
+        }),
+
+        Datatype({
+            name: "fabric-idx", type: "uint8", description: "Fabric Index",
+            details: "This is an index that maps to a particular fabric on the node, see Fabric-Index. It is used for:" +
+                "\n" +
+                "  • the accessing fabric index of an interaction" +
+                "\n" +
+                "  • the FabricIndex global field in fabric-scoped data",
+            xref: { document: "core", section: "7.18.2.20" }
+        }),
+
+        Datatype({
+            name: "cluster-id", type: "uint32", description: "Cluster ID",
+            details: "An identifier that indicates conformance to a cluster specification." +
+                "\n" +
+                "Cluster IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation are " +
+                "described in Data Model Types.",
+            xref: { document: "core", section: "7.18.2.26" }
+        }),
+
+        Datatype({
+            name: "attrib-id", type: "uint32", description: "Attribute ID",
+            details: "An identifier that indicates an attribute defined in a cluster specification." +
+                "\n" +
+                "Attribute IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation " +
+                "are described in Data Model Types.",
+            xref: { document: "core", section: "7.18.2.27" }
+        }),
+
+        Datatype({
+            name: "field-id", type: "uint32", description: "Field ID",
+            details: "An identifier that indicates a field defined in a struct." +
+                "\n" +
+                "Field IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation are " +
+                "described in Data Model Types.",
+            xref: { document: "core", section: "7.18.2.28" }
+        }),
+
+        Datatype({
+            name: "event-id", type: "uint32", description: "Event ID",
+            details: "An identifier that indicates an Event defined in a cluster specification." +
+                "\n" +
+                "Event IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation are " +
+                "described in Data Model Types.",
+            xref: { document: "core", section: "7.18.2.29" }
+        }),
+
+        Datatype({
+            name: "command-id", type: "uint32", description: "Command ID",
+            details: "An identifier that indicates a command defined in a cluster specification." +
+                "\n" +
+                "Command IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation are " +
+                "described in Data Model Types.",
+            xref: { document: "core", section: "7.18.2.30" }
+        }),
+
+        Datatype({
+            name: "action-id", type: "uint8", description: "Action ID",
+            details: "An identifier that indicates an action as defined in the Interaction Model specification.",
+            xref: { document: "core", section: "7.18.2.31" }
+        }),
+
+        Datatype({
+            name: "trans-id", type: "uint32", description: "Transaction ID",
+            details: "An identifier for a transaction as defined in the Interaction Model specification, see Transaction " +
+                "ID.",
+            xref: { document: "core", section: "7.18.2.32" }
+        }),
+
+        Datatype({
+            name: "node-id", type: "uint64", description: "Node ID",
+            details: "A 64-bit ID for a node scoped and unique to a particular fabric as indicated by an accompanying " +
+                "fabric-index adjacent instantiation.",
+            xref: { document: "core", section: "7.18.2.21" }
+        }),
+
+        Datatype({
+            name: "entry-idx", type: "uint16", description: "Entry Index",
+            details: "This is an index for a list data type.",
+            xref: { document: "core", section: "7.18.2.33" }
+        }),
+        Datatype({
+            name: "data-ver", type: "uint32", description: "Data Version",
+            details: "An unsigned number that indicates a Data Version.",
+            xref: { document: "core", section: "7.18.2.34" }
+        }),
+        Datatype({
+            name: "event-no", type: "uint64", description: "Event Number",
+            details: "An unsigned number that indicates an Event instance.",
+            xref: { document: "core", section: "7.18.2.35" }
+        }),
+
+        Datatype({
+            name: "string", type: "octstr", description: "Character String", metatype: "string",
+
+            details: "The character string data type is derived from an octet string. The octets shall be characters with " +
+                "UTF-8 encoding. An instance of this data type shall NOT contain truncated code points." +
+                "\n" +
+                "Note that the character string type is a bounded sequence of characters whose size bound format is " +
+                "not specified in the data model, but rather a property of the underlying encoding. Therefore, no " +
+                "assumptions are to be made about the presence or absence of a length prefix or null-terminator " +
+                "byte, or other implementation considerations." +
+                "\n" +
+                "It is recommended to define constraints on the maximum possible string length." +
+                "\n" +
+                "If at least one of the code points within the string has value 31 (0x1F), which is Unicode " +
+                "INFORMATION SEPARATOR 1 and ASCII Unit Separator, then any client making use of the string shall " +
+                "only consider the code points that appear before the first INFORMATION SEPARATOR 1 as being the " +
+                "textual information carried by the string. Any comparison between such a string and other strings " +
+                "shall use the textual component before the first INFORMATION SEPARATOR 1. The remainder of the " +
+                "character string after a first INFORMATION SEPARATOR 1 is reserved for future use by this " +
+                "specification. Implementations of this version of the specification shall NOT produce character " +
+                "strings containing INFORMATION SEPARATOR 1.",
+
+            xref: { document: "core", section: "7.18.2.36" }
+        }),
+
+        Datatype({
+            name: "ipadr", type: "octstr", description: "IP Address",
+            details: "Either an IPv4 or an IPv6 address as defined below.",
+            xref: { document: "core", section: "7.18.2.37" }
+        }),
+
+        Datatype({
+            name: "ipv4adr", type: "octstr", description: "IPv4 Address",
+
+            details: "The IPv4 address data type is derived from an octet string. The octets shall correspond to the four " +
+                "octets in network byte order that comprise an IPv4 address represented utilizing quad-dotted " +
+                "notation." +
+                "\n" +
+                "Examples of encoding:" +
+                "\n" +
+                "  • Address 192.168.2.235 → C0A802EB" +
+                "\n" +
+                "  • Address 10.4.200.75 → 0A04C84B",
+
+            xref: { document: "core", section: "7.18.2.38" }
+        }),
+
+        Datatype({
+            name: "ipv6adr", type: "octstr", description: "IPv6 Address",
+
+            details: "The IPv6 address data type is derived from an octet string. The octets shall correspond to the full " +
+                "16 octets that comprise an IPv6 address as defined by RFC 4291. The octets shall be presented in " +
+                "network byte order." +
+                "\n" +
+                "Examples of encoding:" +
+                "\n" +
+                "  • Address 2001:DB8:0:0:8:800:200C:417A → 20010DB80000000000080800200C417A" +
+                "\n" +
+                "  • Address 2001:0DB8:1122:3344:5566:7788:99AA:BBCC → 20010DB8112233445566778899AABBCC",
+
+            xref: { document: "core", section: "7.18.2.39" }
+        }),
+
+        Datatype({
+            name: "ipv6pre", type: "octstr", description: "IPv6 Prefix",
+
+            details: "The IPv6 prefix data type is derived from an octet string. The octets shall be encoded" +
+                "\n" +
+                "  • The first octet shall encode the prefix length, in bits, in the range of 0 to 128." +
+                "\n" +
+                "    ◦ A value of 0 indicates an absent/invalid prefix." +
+                "\n" +
+                "  • The subsequent octets shall encode the contiguous leftmost bits of the prefix, in network byte " +
+                "    order, with left justification, such that the first bit of the prefix is in the most " +
+                "    significant bit of the first octet. Encoding SHOULD use the least number of bytes to encode the " +
+                "    prefix but may include unused trailing zeroes." +
+                "\n" +
+                "Examples of encoding:" +
+                "\n" +
+                "  • Preferred minimal encoding: Prefix 2001:0DB8:0:CD30::/60 → 9 octets → 3C20010DB80000CD30" +
+                "\n" +
+                "  • Preferred minimal encoding: Prefix 2001:0DB8:BB00::/40 → 6 octets → 2820010DB8BB" +
+                "\n" +
+                "  • Allowed non-minimal encoding: Prefix 2001:0DB8:BB00::/40 → 7 octets → 2820010DB8BB00",
+
+            xref: { document: "core", section: "7.18.2.40" }
+        }),
+
+        Datatype({
+            name: "hwadr", type: "octstr", description: "Hardware Address",
+            details: "The Hardware Address data type shall be either a 48-bit IEEE MAC Address or a 64-bit IEEE MAC " +
+                "Address (e.g. EUI-64). The order of bytes is Big-Endian or display mode, where the first byte in " +
+                "the string is the left most or highest order byte.",
+            xref: { document: "core", section: "7.18.2.41" }
+        }),
+
+        Datatype({
+            name: "semtag", type: "struct", description: "Semantic Tag",
+            details: "This data type shall be represented by the following structure:",
+            xref: { document: "core", section: "7.18.2.42" },
+
+            children: [
+                Field({
+                    name: "MfgCode", id: 0x0, type: "vendor-id", conformance: "M", default: null, quality: "X",
+
+                    details: "If the MfgCode field is not null, it shall be the Vendor ID of the manufacturer who has defined a " +
+                        "certain namespace and the NamespaceID field shall be the ID of a namespace defined by the " +
+                        "manufacturer identified in the MfgCode field." +
+                        "\n" +
+                        "If a manufacturer specific Tag field is indicated in a list of SemanticTagStruct entries, the list " +
+                        "shall include at least one standard tag which is not from any manufacturer’s namespace. A standard " +
+                        "tag is a tag from a common namespace, a derived cluster namespace, or an applicable device-specific " +
+                        "namespace." +
+                        "\n" +
+                        "If MfgCode is null, the NamespaceID field shall indicate a standard namespace.",
+
+                    xref: { document: "core", section: "7.18.2.42.1" }
+                }),
+
+                Field({
+                    name: "NamespaceId", id: 0x1, type: "namespace", conformance: "M",
+                    details: "The NamespaceID field shall identify a namespace." +
+                        "\n" +
+                        "The common and device-specific semantic tag namespaces are listed in StandardNamespaces.",
+                    xref: { document: "core", section: "7.18.2.42.2" }
+                }),
+
+                Field({
+                    name: "Tag", id: 0x2, type: "tag", conformance: "M",
+                    details: "The Tag field shall be the ID of a semantic tag located within the namespace indicated by " +
+                        "NamespaceID." +
+                        "\n" +
+                        "A device may expose tags from the common or device-specific namespaces and from " +
+                        "manufacturer-specific namespaces in a single TagList.",
+                    xref: { document: "core", section: "7.18.2.42.3" }
+                }),
+
+                Field({
+                    name: "Label", id: 0x3, type: "string", conformance: "MfgCode, null, O", constraint: "max 64",
+                    default: null, quality: "X",
+
+                    details: "The Label field, if present, shall contain human-readable text suitable for display on a client. " +
+                        "The content of the Label field is defined by the manufacturer." +
+                        "\n" +
+                        "This field shall be present when the MfgCode is not null. This field SHOULD NOT be used if the Tag " +
+                        "is from a standard namespace, unless the Tag requires further qualification. For example: A Tag " +
+                        "that has the meaning of \"room\" in a location namespace, would require the a label string to qualify " +
+                        "the type of room, such as \"1\", \"2b\", \"Bathroom\", etc.",
+
+                    xref: { document: "core", section: "7.18.2.42.4" }
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "namespace", type: "enum8", description: "Namespace",
+            details: "The Namespace type identifies the namespace used for a semantic tag.",
+            xref: { document: "core", section: "7.18.2.43" }
+        }),
+        Datatype({
+            name: "tag", type: "enum8", description: "Tag",
+            details: "The Tag type shall identify a semantic tag located within a namespace.",
+            xref: { document: "core", section: "7.18.2.44" }
         }),
 
         Datatype({
@@ -22182,10 +23669,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "9.6.5.1.4" }
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 })
             ]
@@ -22420,10 +23904,7 @@ export const SpecMatter = Matter({
                             details: "The type of change as appropriate.",
                             xref: { document: "core", section: "9.10.7.1.3" }
                         }),
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -22466,10 +23947,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "9.10.7.2.2" }
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -22585,10 +24063,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "9.10.4.5.1" }
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -22613,10 +24088,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "9.10.4.6.1" }
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 })
             ]
@@ -23686,15 +25158,23 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "CIP", conformance: "P, LITS, O", constraint: "0", description: "CheckInProtocolSupport",
-                            details: "Device supports attributes and commands for the Check-In Protocol support."
+                            details: "When this feature is supported, the device shall support all the associated commands and attributes " +
+                                "to properly support the Check-In Protocol.",
+                            xref: { document: "core", section: "9.17.4.1" }
                         }),
+
                         Field({
                             name: "UAT", conformance: "P, LITS, O", constraint: "1", description: "UserActiveModeTrigger",
-                            details: "Device supports the user active mode trigger feature."
+                            details: "This feature is supported if and only if the device has a user active mode trigger.",
+                            xref: { document: "core", section: "9.17.4.2" }
                         }),
+
                         Field({
                             name: "LITS", conformance: "P, O", constraint: "2", description: "LongIdleTimeSupport",
-                            details: "Device supports operating as a Long Idle Time ICD."
+                            details: "This feature is supported if and only the device is a Long Idle Time ICD." +
+                                "\n" +
+                                "NOTE In this version of the specification, the support for the feature is provisional.",
+                            xref: { document: "core", section: "9.17.4.3" }
                         })
                     ]
                 }),
@@ -24053,10 +25533,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({ name: "Key", id: 0x3, access: "F", conformance: "D" }),
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -24849,10 +26326,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.2.5.3.2" }
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -24976,10 +26450,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.2.5.5.3" }
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 })
             ]
@@ -27395,7 +28866,7 @@ export const SpecMatter = Matter({
                         "\n" +
                         "  9. Reset the Breadcrumb attribute to zero." +
                         "\n" +
-                        "  10. Optionally: if no factory-reset resulted from the previous steps, it is RECOMMENDED that the" +
+                        "  10. Optionally: if no factory-reset resulted from the previous steps, it is recommended that the" +
                         "\n" +
                         "Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.",
 
@@ -27638,7 +29109,7 @@ export const SpecMatter = Matter({
                                 "which a fail safe timer can be re-armed. See Section 11.10.6.2.1, “Fail Safe Context”." +
                                 "\n" +
                                 "The value of this field shall be greater than or equal to the FailSafeExpiryLengthSeconds. Absent " +
-                                "additional guidelines, it is RECOMMENDED that the value of this field be aligned with the initial " +
+                                "additional guidelines, it is recommended that the value of this field be aligned with the initial " +
                                 "Announcement Duration and default to 900 seconds.",
 
                             xref: { document: "core", section: "11.10.4.3.2" }
@@ -27879,9 +29350,15 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
                     xref: { document: "core", section: "11.12.4" },
+
                     children: [Field({
                         name: "DMTEST", conformance: "desc", constraint: "0", description: "DataModelTest",
-                        details: "Support specific testing needs for extended Data Model features"
+                        details: "This feature indicates support for extended Data Model testing commands, which are required in some " +
+                            "situations." +
+                            "\n" +
+                            "This feature shall be supported if the MaxPathsPerInvoke attribute of the Basic Information Cluster " +
+                            "has a value > 1.",
+                        xref: { document: "core", section: "11.12.4.1" }
                     })]
                 }),
 
@@ -30152,19 +31629,31 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "TZ", constraint: "0", description: "TimeZone",
-                            details: "Server supports time zone."
+                            details: "Allows a server to translate a UTC time to a local time using the time zone and daylight savings " +
+                                "time (DST) offsets. If a server supports the TimeZone feature, it shall support the SetTimeZone and " +
+                                "SetDSTOffset commands, and TimeZone and DSTOffset attributes, and shall expose the local time " +
+                                "through the LocalTime attribute.",
+                            xref: { document: "core", section: "11.17.5.1" }
                         }),
+
                         Field({
                             name: "NTPC", constraint: "1", description: "NtpClient",
-                            details: "Server supports an NTP or SNTP client."
+                            details: "Allows a node to use NTP/SNTP for time synchronization.",
+                            xref: { document: "core", section: "11.17.5.2" }
                         }),
+
                         Field({
                             name: "NTPS", constraint: "2", description: "NtpServer",
-                            details: "Server supports an NTP server role."
+                            details: "Allows a Node to host an NTP server for the network so that other Nodes can achieve a high accuracy " +
+                                "time synchronization within the network. See Section 11.17.15, “Acting as an NTP Server”.",
+                            xref: { document: "core", section: "11.17.5.3" }
                         }),
+
                         Field({
                             name: "TSC", constraint: "3", description: "TimeSyncClient",
-                            details: "Time synchronization client cluster is present."
+                            details: "This node also supports a time synchronization client and can connect to and read time from other " +
+                                "nodes.",
+                            xref: { document: "core", section: "11.17.5.4" }
                         })
                     ]
                 }),
@@ -30493,10 +31982,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.17.9.2.1" }
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -31186,7 +32672,7 @@ export const SpecMatter = Matter({
                                 "\n" +
                                 "  7. The receiver shall create and add a new Access Control Entry using the CaseAdminSubject field " +
                                 "      to grant subsequent Administer access to an Administrator member of the new Fabric. It is " +
-                                "      RECOMMENDED that the Administrator presented in CaseAdminSubject exist within the same entity " +
+                                "      recommended that the Administrator presented in CaseAdminSubject exist within the same entity " +
                                 "      that is currently invoking the AddNOC command, within another of the Fabrics of which it is a " +
                                 "      member." +
                                 "\n" +
@@ -31286,10 +32772,7 @@ export const SpecMatter = Matter({
                         Field({
                             name: "IcacValue", id: 0x1, type: "octstr", access: "F", conformance: "O", constraint: "max 400"
                         }),
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -31378,10 +32861,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.18.6.11.1" }
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -31583,10 +33063,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.18.4.4.2" }
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -31640,10 +33117,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.18.4.5.5" }
                         }),
 
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 })
             ]
@@ -32199,10 +33673,7 @@ export const SpecMatter = Matter({
                             constraint: "max 512"
                         }),
                         Field({ name: "Endpoint", id: 0x4, type: "endpoint-no", access: "F", conformance: "M" }),
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 }),
 
@@ -32308,14 +33779,10 @@ export const SpecMatter = Matter({
                         "This structure encodes a fabric-scoped location of an OTA provider on a given fabric.",
 
                     xref: { document: "core", section: "11.20.7.4.20" },
-
                     children: [
                         Field({ name: "ProviderNodeId", id: 0x1, type: "node-id", access: "F", conformance: "M" }),
                         Field({ name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M" }),
-                        Field({
-                            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                            constraint: "1 to 254"
-                        })
+                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
                     ]
                 })
             ]
@@ -32544,7 +34011,7 @@ export const SpecMatter = Matter({
                     xref: { document: "device", section: "2.1.5" }
                 }),
                 Requirement({
-                    name: "WiFiNetworkDiagnostics", id: 0x36, conformance: "[Wi, Fi]", element: "serverCluster",
+                    name: "WiFiNetworkDiagnostics", id: 0x36, conformance: "[Wi, 0, i]", element: "serverCluster",
                     quality: "I",
                     xref: { document: "device", section: "2.1.5" }
                 }),

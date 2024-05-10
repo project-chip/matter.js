@@ -7,14 +7,8 @@
 import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
 import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
 import { DataModelPath } from "../../../../src/endpoint/DataModelPath.js";
-import {
-    AttributeModel,
-    ClusterModel,
-    FeatureSet,
-    FieldElement,
-    FieldModel,
-    Globals,
-} from "../../../../src/model/index.js";
+import { AttributeModel, ClusterModel, FeatureSet, FieldElement, FieldModel } from "../../../../src/model/index.js";
+import { FeatureMap } from "../../../../src/model/standard/elements/FeatureMap.js";
 import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
 import { Properties } from "../../../../src/util/Type.js";
 
@@ -40,7 +34,7 @@ export function Fields(
 
 export function Features(definition: { [code: string]: string }): AttributeModel {
     return new AttributeModel({
-        ...Globals.FeatureMap,
+        ...FeatureMap,
 
         children: Object.entries(definition).map(
             ([name, description]) =>
@@ -78,7 +72,7 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
         name: "Test",
         supportedFeatures: new FeatureSet(supports),
 
-        children: [features ?? new AttributeModel(Globals.FeatureMap), ...fields],
+        children: [features ?? new AttributeModel(FeatureMap), ...fields],
     });
 
     // Obtain a manager

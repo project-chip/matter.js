@@ -45,7 +45,7 @@ export type ValueElement = BaseElement & {
     /**
      * Applies to numeric types.
      */
-    byteSize?: ValueElement.Size;
+    byteSize?: ValueElement.ByteSize;
 
     /**
      * The default value for the element.
@@ -94,7 +94,7 @@ export namespace ValueElement {
     /**
      * Valid sizes for ints.
      */
-    export type Size = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+    export type ByteSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
     /**
      * Legal bitmap sizes.  The Matter specification defines enums as extensions of int8 or in16 so the size information

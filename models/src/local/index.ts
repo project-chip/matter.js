@@ -15,7 +15,9 @@
 import "./AdministratorCommissioningOverrides.js";
 import "./BasicInformationOverrides.js";
 import "./BridgedDeviceBasicInformationOverrides.js";
+import "./ChannelOverrides.js";
 import "./ColorControlOverrides.js";
+import "./ContentLauncherOverrides.js";
 import "./DoorLockOverrides.js";
 import "./GroupKeyManagementOverrides.js";
 import "./GroupsOverrides.js";
@@ -29,3 +31,4 @@ import "./TemperatureMeasurementOverrides.js";
 import "./TimeFormatLocalizationOverrides.js";
 import "./UserLabelOverrides.js";
 import "./WindowCoveringOverrides.js";
+import "./subject-id.js";

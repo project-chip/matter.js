@@ -13,8 +13,8 @@ import {
     FieldElement as Field
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "UserLabel", id: 0x41, type: "Label", classification: "endpoint", description: "User Label",
+export const UserLabel = Cluster({
+    name: "UserLabel", id: 0x41, type: "Label", classification: "endpoint",
     details: "This cluster provides a feature to tag an endpoint with zero or more labels.",
     xref: { document: "core", section: "9.9" },
 
@@ -30,4 +30,6 @@ Matter.children.push(Cluster({
             children: [Field({ name: "entry", type: "LabelStruct" })]
         })
     ]
-}));
+});
+
+Matter.children.push(UserLabel);

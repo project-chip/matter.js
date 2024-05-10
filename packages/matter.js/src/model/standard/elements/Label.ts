@@ -14,7 +14,7 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
+export const Label = Cluster({
     name: "Label", classification: "endpoint",
     details: "This cluster provides a feature to tag an endpoint with zero or more labels. This is a base cluster " +
         "that requires a derived cluster to create an instance.",
@@ -53,4 +53,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(Label);

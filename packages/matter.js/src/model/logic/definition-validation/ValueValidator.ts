@@ -147,7 +147,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
 
             case Metatype.enum:
             case Metatype.bitmap:
-                if (!this.model.children.length && !this.model.global) {
+                if (!this.model.children.length && !this.model.isGlobal) {
                     this.error(`CHILDLESS_${metatype.toUpperCase()}`, `${this.model.type} with no children`);
                 }
                 if (metatype == Metatype.enum) {

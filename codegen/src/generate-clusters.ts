@@ -10,12 +10,10 @@ import { generateCluster } from "./clusters/generate-cluster.js";
 import { TsFile } from "./util/TsFile.js";
 import "./util/setup.js";
 
-const mom = new MatterModel();
-
 ClusterFile.clean();
 const index = new TsFile(ClusterFile.createFilename("index"));
 
-for (const cluster of mom.clusters) {
+for (const cluster of MatterModel.standard.clusters) {
     const file = new ClusterFile(cluster);
     generateCluster(file);
     file.save();

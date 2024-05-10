@@ -15,11 +15,26 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "KeypadInput", id: 0x509, classification: "application", description: "Keypad Input",
+export const KeypadInput = Cluster({
+    name: "KeypadInput", id: 0x509, classification: "application",
+
     details: "This cluster provides an interface for key code based input and control on a device like a Video " +
         "Player or an endpoint like a Content App. This may include text or action commands such as UP, " +
-        "DOWN, and SELECT.",
+        "DOWN, and SELECT." +
+        "\n" +
+        "This cluster would be supported on Video Player devices as well as devices that support remote " +
+        "control input from a keypad or remote. This cluster provides the list of supported keypad inputs " +
+        "and provides a command for sending them." +
+        "\n" +
+        "The cluster server for Keypad Input is implemented by a device that can receive keypad input, such " +
+        "as a Video Player, or an endpoint that can receive keypad input, such as a Content App." +
+        "\n" +
+        "The key codes used are those defined in the HDMI CEC specification (see HDMI)." +
+        "\n" +
+        "Devices may understand a subset of these key codes. Feature flags are used to indicate a specific " +
+        "subset that is supported. Device may support additional codes beyond what is indicated in feature " +
+        "flags.",
+
     xref: { document: "cluster", section: "6.8" },
 
     children: [
@@ -27,7 +42,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
-            xref: { document: "cluster", section: "6.8.2" },
+            xref: { document: "cluster", section: "6.8.4" },
 
             children: [
                 Field({
@@ -48,49 +63,54 @@ Matter.children.push(Cluster({
         Command({
             name: "SendKey", id: 0x0, access: "O", conformance: "M", direction: "request",
             response: "SendKeyResponse",
-            details: "Upon receipt, this shall process a keycode as input to the media device." +
+
+            details: "Upon receipt, this shall process a keycode as input to the media endpoint." +
                 "\n" +
-                "If a second SendKey request with the same KeyCode value is received within 200ms, then the endpoint " +
-                "will consider the first key press to be a press and hold. When such a repeat KeyCode value is not " +
-                "received within 200ms, then the endpoint will consider the last key press to be a release.",
-            xref: { document: "cluster", section: "6.8.3.1" },
+                "If a device has multiple media endpoints implementing this cluster, such as a casting video player " +
+                "endpoint with one or more content app endpoints, then only the endpoint receiving the command shall " +
+                "process the keycode as input. In other words, a specific content app endpoint shall NOT process a " +
+                "keycode received by a different content app endpoint." +
+                "\n" +
+                "If a second SendKey request with the same KeyCode value is received within 200 ms, then the " +
+                "endpoint will consider the first key press to be a press and hold. When such a repeat KeyCode value " +
+                "is not received within 200 ms, then the endpoint will consider the last key press to be a release.",
+
+            xref: { document: "cluster", section: "6.8.6.1" },
             children: [Field({
-                name: "KeyCode", id: 0x0, type: "CecKeyCode", conformance: "M",
-                details: "This shall indicate the key code to process.",
-                xref: { document: "cluster", section: "6.8.3.1.1" }
+                name: "KeyCode", id: 0x0, type: "CecKeyCodeEnum", conformance: "M",
+                details: "This field shall indicate the key code to process.",
+                xref: { document: "cluster", section: "6.8.6.1.1" }
             })]
         }),
 
         Command({
             name: "SendKeyResponse", id: 0x1, conformance: "M", direction: "response",
             details: "This command shall be generated in response to a SendKey command.",
-            xref: { document: "cluster", section: "6.8.3.2" },
+            xref: { document: "cluster", section: "6.8.6.2" },
             children: [Field({
                 name: "Status", id: 0x0, type: "StatusEnum", conformance: "M",
-                details: "This shall indicate the of the command.",
-                xref: { document: "cluster", section: "6.8.3.2.1" }
+                details: "This field shall indicate the status of the request.",
+                xref: { document: "cluster", section: "6.8.6.2.1" }
             })]
         }),
 
         Datatype({
-            name: "StatusEnum", type: "enum8", conformance: "M",
-            xref: { document: "cluster", section: "6.8.4.1" },
+            name: "StatusEnum", type: "enum8",
+            xref: { document: "cluster", section: "6.8.5.1" },
 
             children: [
-                Field({ name: "Success", id: 0x0, conformance: "M", description: "Command succeeded" }),
-                Field({
-                    name: "UnsupportedKey", id: 0x1, conformance: "M",
-                    description: "Command failed: Key code is not supported."
-                }),
+                Field({ name: "Success", id: 0x0, conformance: "M", description: "Succeeded" }),
+                Field({ name: "UnsupportedKey", id: 0x1, conformance: "M", description: "Key code is not supported." }),
                 Field({
                     name: "InvalidKeyInCurrentState", id: 0x2, conformance: "M",
-                    description: "Command failed: Requested key code is invalid in the context of the responder’s current state."
+                    description: "Requested key code is invalid in the context of the responder’s current state."
                 })
             ]
         }),
 
         Datatype({
-            name: "CecKeyCode", type: "enum8", conformance: "M",
+            name: "CecKeyCodeEnum", type: "enum8",
+            xref: { document: "cluster", section: "6.8.5.2" },
 
             children: [
                 Field({ name: "Select", id: 0x0, conformance: "M" }),
@@ -150,7 +170,6 @@ Matter.children.push(Cluster({
                 Field({ name: "Backward", id: 0x4c, conformance: "M" }),
                 Field({ name: "StopRecord", id: 0x4d, conformance: "M" }),
                 Field({ name: "PauseRecord", id: 0x4e, conformance: "M" }),
-                Field({ name: "Reserved", id: 0x4f, conformance: "M" }),
                 Field({ name: "Angle", id: 0x50, conformance: "M" }),
                 Field({ name: "SubPicture", id: 0x51, conformance: "M" }),
                 Field({ name: "VideoOnDemand", id: 0x52, conformance: "M" }),
@@ -182,4 +201,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(KeypadInput);

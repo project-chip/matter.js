@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { FabricIndex } from "@project-chip/matter.js/elements/FabricIndex";
 import { Logger } from "@project-chip/matter.js/log";
-import { AnyElement, DatatypeElement, FieldElement, Globals, Metatype } from "@project-chip/matter.js/model";
+import { AnyElement, DatatypeElement, FieldElement, Metatype } from "@project-chip/matter.js/model";
 import { addDocumentation } from "./add-documentation.js";
 import {
     fixConformanceErrors,
@@ -32,9 +33,9 @@ const logger = Logger.get("translate-cluster");
  * Translate the HTML description of a datatype into a DatatypeElement.
  */
 export function translateDatatype(definition: HtmlReference): DatatypeElement | undefined {
-    let name = definition.name;
+    let name = fixTypeIdentifier(definition.name);
+
     const text = definition.prose?.[0] ? Str(definition.prose?.[0]) : undefined;
-    let constraint: string | undefined;
     if (!text) {
         logger.warn(`no text to search for base type`);
     }
@@ -55,6 +56,7 @@ export function translateDatatype(definition: HtmlReference): DatatypeElement | 
     }
 
     // And 1.3 throws in this beaut
+    let constraint: string | undefined;
     if (!match) {
         match = text?.match(/This data type is an? ([a-z0-9\-_]+) of fixed length (\d+)/i);
         constraint = match?.[2];
@@ -99,7 +101,13 @@ export function translateDatatype(definition: HtmlReference): DatatypeElement | 
         return;
     }
 
-    const datatype = DatatypeElement({ type: type, name, description, constraint, xref: definition.xref });
+    const datatype = DatatypeElement({
+        type: type,
+        name,
+        description,
+        constraint,
+        xref: definition.xref,
+    });
 
     datatype.children = translateValueChildren("field", datatype, definition);
     addDocumentation(datatype, definition);
@@ -184,8 +192,9 @@ export function translateValueChildren(
         }
     }
 
-    const dt = (Globals as any)[type];
-    switch (dt?.metatype) {
+    const metatype = selectMetatype(type);
+
+    switch (metatype) {
         case Metatype.enum: {
             // Column names are all over the place so examine the table to find a "name" column.
             //
@@ -257,9 +266,8 @@ export function translateValueChildren(
             return translateRecordsToMatter("bit", records, FieldElement);
         }
 
-        case Metatype.object: {
+        case Metatype.object:
             return translateFields(FieldElement, definition);
-        }
     }
 }
 
@@ -267,7 +275,10 @@ export function translateValueChildren(
 // core definitions.  Fix this.
 //
 // We also use the presence of this record to add the implicit FabrixIndex field
-function applyAccessNotes(fields?: HtmlReference, records?: { id: number; access?: string }[]) {
+function applyAccessNotes(
+    fields?: HtmlReference,
+    records?: { id: number; name?: string; type?: string; access?: string; conformance?: string }[],
+) {
     if (!fields?.table?.notes.length || !records) {
         return;
     }
@@ -303,7 +314,7 @@ function applyAccessNotes(fields?: HtmlReference, records?: { id: number; access
         // Update access for each record unless it already has a fabric flag
         let haveFabricIndex = false;
         for (const r of records) {
-            if (r.id === Globals.FabricIndex.id) {
+            if (r.id === FabricIndex.id) {
                 haveFabricIndex = true;
             }
             const access = r.access;
@@ -316,9 +327,53 @@ function applyAccessNotes(fields?: HtmlReference, records?: { id: number; access
 
         // Add the FabricIndex field if not already present
         if (!haveFabricIndex) {
-            const fabricIndex = { ...Globals.FabricIndex };
-            delete fabricIndex.global;
-            records.push(fabricIndex as { id: number; name: string });
+            records.push({
+                id: FabricIndex.id as number,
+                name: FabricIndex.name,
+                type: "FabricIndex",
+            });
         }
+    }
+}
+
+/**
+ * Determine the metatype for a global datatype.
+ */
+export function selectMetatype(typeName: string) {
+    switch (typeName) {
+        case "bool":
+            return Metatype.boolean;
+
+        case "octstr":
+            return Metatype.bytes;
+
+        case "string":
+            return Metatype.string;
+
+        case "list":
+            return Metatype.array;
+
+        case "struct":
+            return Metatype.object;
+
+        case "single":
+        case "double":
+            return Metatype.float;
+    }
+
+    if (typeName.startsWith("uint")) {
+        return Metatype.integer;
+    }
+
+    if (typeName.startsWith("int")) {
+        return Metatype.integer;
+    }
+
+    if (typeName.startsWith("map")) {
+        return Metatype.bitmap;
+    }
+
+    if (typeName.startsWith("enum")) {
+        return Metatype.enum;
     }
 }

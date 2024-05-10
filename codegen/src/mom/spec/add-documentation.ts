@@ -29,6 +29,7 @@ function extractUsefulDocumentation(p: HTMLElement) {
     return Str(p)
         .replace(/SHALL/g, "shall")
         .replace(/MAY/g, "may")
+        .replace(/RECOMMENDED/g, "recommended")
         .replace(/This data type is derived from \S+(?: and has its values listed below)?\./, "")
         .replace(/The data type \S+ is derived from \S+\./, "")
         .replace(/The data type of the(?: \w+)+ is derived from \S+\./, "")

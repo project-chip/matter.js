@@ -16,16 +16,17 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "Actions", id: 0x25, classification: "application", description: "Actions",
+export const Actions = Cluster({
+    name: "Actions", id: 0x25, classification: "application",
 
     details: "This cluster provides a standardized way for a Node (typically a Bridge, but could be any Node) to " +
         "expose" +
         "\n" +
         "  • Information about logical grouping of endpoints on the Node (example: lights in a room)" +
         "\n" +
-        "  • Information about named actions that can be performed on such a group of endpoints (example: " +
-        "    recall a scene for a group of lights by its name)" +
+        "  • Information about named actions that can be performed on such a group of endpoints" +
+        "\n" +
+        "ple: recall a scene for a group of lights by its name)" +
         "\n" +
         "  • Commands to trigger such actions" +
         "\n" +
@@ -442,7 +443,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "CommandBits", type: "map16", conformance: "M",
+            name: "CommandBits", type: "map16",
             details: "Note - The bit allocation of this bitmap shall follow the ID’s of the Commands of this cluster.",
             xref: { document: "core", section: "9.14.4.1" },
 
@@ -482,7 +483,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "ActionTypeEnum", type: "enum8", conformance: "M",
+            name: "ActionTypeEnum", type: "enum8",
             xref: { document: "core", section: "9.14.4.2" },
 
             children: [
@@ -498,9 +499,7 @@ Matter.children.push(Cluster({
                         "InstantActionWithTransition), or to bring these endpoints into a more dynamic state (typically " +
                         "using StartAction), where the endpoints would e.g. gradually cycle through certain colors for a " +
                         "pleasing effect. A voice controller could use \"set\" (to map to InstantAction) or \"play\" (to map to " +
-                        "StartAction) to trig" +
-                        "\n" +
-                        "ger such actions." +
+                        "StartAction) to trigger such actions." +
                         "\n" +
                         "Example: see examples 1 and 2.",
 
@@ -558,7 +557,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "ActionStateEnum", type: "enum8", conformance: "M",
+            name: "ActionStateEnum", type: "enum8",
             details: "Note that some of these states are applicable only for certain actions, as determined by their " +
                 "SupportedCommands.",
             xref: { document: "core", section: "9.14.4.3" },
@@ -572,7 +571,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "ActionErrorEnum", type: "enum8", conformance: "M",
+            name: "ActionErrorEnum", type: "enum8",
             xref: { document: "core", section: "9.14.4.4" },
 
             children: [
@@ -588,7 +587,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "EndpointListTypeEnum", type: "enum8", conformance: "M",
+            name: "EndpointListTypeEnum", type: "enum8",
             details: "The Room and Zone values are provided for the cases where a user (or the system on behalf of the " +
                 "user) has created logical grouping of the endpoints (e.g. bridged devices) based on location.",
             xref: { document: "core", section: "9.14.4.5" },
@@ -619,13 +618,11 @@ Matter.children.push(Cluster({
                     description: "User-configured group of endpoints where an endpoint can be in any number of zones",
 
                     details: "Is a more general concept where an endpoint can be part of multiple zones, e.g. a light in the " +
-                        "living" +
-                        "\n" +
-                        "room can be part of the \"reading corner\" zone (subset of the lights in the living room) but also " +
-                        "part of the \"downstairs\" zone which contains all the lights on a floor, e.g. combining living room, " +
-                        "kitchen and hallway. This indicates that a user has defined this list of endpoints as something " +
-                        "they logically would like to control as a group, so Matter controllers could provide the user with " +
-                        "a way to do as such.",
+                        "living room can be part of the \"reading corner\" zone (subset of the lights in the living room) but " +
+                        "also part of the \"downstairs\" zone which contains all the lights on a floor, e.g. combining living " +
+                        "room, kitchen and hallway. This indicates that a user has defined this list of endpoints as " +
+                        "something they logically would like to control as a group, so Matter controllers could provide the " +
+                        "user with a way to do as such.",
 
                     xref: { document: "core", section: "9.14.4.5.3" }
                 })
@@ -633,7 +630,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "ActionStruct", type: "struct", conformance: "M",
+            name: "ActionStruct", type: "struct",
             details: "This data type holds the details of a single action, and contains the data fields below.",
             xref: { document: "core", section: "9.14.4.6" },
 
@@ -669,10 +666,9 @@ Matter.children.push(Cluster({
 
                 Field({
                     name: "SupportedCommands", id: 0x4, type: "CommandBits", conformance: "M", constraint: "0 to 4095",
-                    details: "This field is a bitmap which shall be used to indicate which of the cluster’s commands are sup" +
-                        "\n" +
-                        "ported for this particular action, with a bit set to 1 for each supported command according to the " +
-                        "table below. Other bits shall be set to 0.",
+                    details: "This field is a bitmap which shall be used to indicate which of the cluster’s commands are " +
+                        "supported for this particular action, with a bit set to 1 for each supported command according to " +
+                        "the table below. Other bits shall be set to 0.",
                     xref: { document: "core", section: "9.14.4.6.5" }
                 }),
 
@@ -685,7 +681,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "EndpointListStruct", type: "struct", conformance: "M",
+            name: "EndpointListStruct", type: "struct",
             details: "This data type holds the details of a single endpoint list, which relates to a set of endpoints " +
                 "that have some logical relation, and contains the data fields below.",
             xref: { document: "core", section: "9.14.4.7" },
@@ -720,4 +716,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(Actions);

@@ -5,7 +5,8 @@
  */
 
 import { InternalError } from "../../common/MatterError.js";
-import { AttributeModel, ClusterModel, FeatureSet, Globals, ValueModel } from "../../model/index.js";
+import { AttributeModel, ClusterModel, FeatureSet, ValueModel } from "../../model/index.js";
+import { FeatureMap } from "../../model/standard/elements/FeatureMap.js";
 import { camelize } from "../../util/String.js";
 import { AccessControl } from "../AccessControl.js";
 import { Val } from "../state/Val.js";
@@ -48,7 +49,7 @@ export class RootSupervisor implements ValueSupervisor {
             this.#featureMap = schema.featureMap;
             this.#supportedFeatures = schema.supportedFeatures ?? new FeatureSet();
         } else {
-            this.#featureMap = new AttributeModel(Globals.FeatureMap);
+            this.#featureMap = new AttributeModel(FeatureMap);
             this.#supportedFeatures = new FeatureSet();
         }
         this.#members = new Set(schema.members);

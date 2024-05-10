@@ -14,8 +14,8 @@ import {
     EventElement as Event
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "Switch", id: 0x3b, classification: "application", description: "Switch",
+export const Switch = Cluster({
+    name: "Switch", id: 0x3b, classification: "application",
 
     details: "This cluster exposes interactions with a switch device, for the purpose of using those interactions " +
         "by other devices." +
@@ -30,92 +30,104 @@ Matter.children.push(Cluster({
         "interactions, and can perform actions based on this, for example by sending commands to perform an " +
         "action such as controlling a light or a window shade.",
 
-    xref: { document: "cluster", section: "1.11" },
+    xref: { document: "cluster", section: "1.13" },
 
     children: [
         Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
-            xref: { document: "cluster", section: "1.11.4" },
+            xref: { document: "cluster", section: "1.13.4" },
 
             children: [
-                Field({ name: "LS", conformance: "O.a", constraint: "0", description: "LatchingSwitch" }),
-                Field({ name: "MS", conformance: "O.a", constraint: "1", description: "MomentarySwitch" }),
-                Field({ name: "MSR", conformance: "[MS]", constraint: "2", description: "MomentarySwitchRelease" }),
-                Field({ name: "MSL", conformance: "[MS & MSR]", constraint: "3", description: "MomentarySwitchLongPress" }),
                 Field({
-                    name: "MSM", conformance: "[MS & MSR]", constraint: "4", description: "MomentarySwitchMultiPress"
+                    name: "LS", conformance: "O.a", constraint: "0", description: "LatchingSwitch",
+                    details: "Switch is latching"
+                }),
+                Field({
+                    name: "MS", conformance: "O.a", constraint: "1", description: "MomentarySwitch",
+                    details: "Switch is momentary"
+                }),
+                Field({
+                    name: "MSR", conformance: "[MS]", constraint: "2", description: "MomentarySwitchRelease",
+                    details: "Switch supports release"
+                }),
+                Field({
+                    name: "MSL", conformance: "[MS & MSR]", constraint: "3", description: "MomentarySwitchLongPress",
+                    details: "Switch supports long press"
+                }),
+                Field({
+                    name: "MSM", conformance: "[MS & MSR]", constraint: "4", description: "MomentarySwitchMultiPress",
+                    details: "Switch supports multi-press"
                 })
             ]
         }),
 
         Attribute({
-            name: "NumberOfPositions", id: 0x0, type: "uint8", conformance: "M", constraint: "min 2",
-            default: 2, quality: "F",
+            name: "NumberOfPositions", id: 0x0, type: "uint8", access: "R V", conformance: "M",
+            constraint: "min 2", default: 2, quality: "F",
             details: "This attribute shall indicate the maximum number of positions the switch has. Any kind of switch " +
-                "has a minimum of 2 positions. Also see Section 1.11.10, “NumberOfPositions > 2” for the case " +
-                "NumberOfPositions>2.",
-            xref: { document: "cluster", section: "1.11.5.1" }
+                "has a minimum of 2 positions. Also see Multi Position Details for the case NumberOfPositions>2.",
+            xref: { document: "cluster", section: "1.13.5.1" }
         }),
 
         Attribute({
-            name: "CurrentPosition", id: 0x1, type: "uint8", conformance: "M",
-            constraint: "0 to numberOfPositions1", default: 0, quality: "N",
+            name: "CurrentPosition", id: 0x1, type: "uint8", access: "R V", conformance: "M",
+            constraint: "max numberOfPositions1", default: 0, quality: "N",
             details: "This attribute shall indicate the position of the switch. The valid range is zero to " +
                 "NumberOfPositions-1. CurrentPosition value 0 shall be assigned to the default position of the " +
                 "switch: for example the \"open\" state of a rocker switch, or the \"idle\" state of a push button " +
                 "switch.",
-            xref: { document: "cluster", section: "1.11.5.2" }
+            xref: { document: "cluster", section: "1.13.5.2" }
         }),
 
         Attribute({
-            name: "MultiPressMax", id: 0x2, type: "uint8", conformance: "MSM", constraint: "min 2", default: 2,
-            quality: "F",
+            name: "MultiPressMax", id: 0x2, type: "uint8", access: "R V", conformance: "MSM",
+            constraint: "min 2", default: 2, quality: "F",
             details: "This attribute shall indicate how many consecutive presses can be detected and reported by a " +
                 "momentary switch which supports multi-press (e.g. it will report the value 3 if it can detect " +
                 "single press, double press and triple press, but not quad press and beyond).",
-            xref: { document: "cluster", section: "1.11.5.3" }
+            xref: { document: "cluster", section: "1.13.5.3" }
         }),
 
         Event({
             name: "SwitchLatched", id: 0x0, access: "V", conformance: "LS", priority: "info",
             details: "This event shall be generated, when the latching switch is moved to a new position. It may have " +
-                "been delayed by debouncing within the switch." +
-                "\n" +
-                "The NewPosition field shall indicate the new value of the CurrentPosition attribute, i.e. after the " +
-                "move.",
-            xref: { document: "cluster", section: "1.11.7.1" },
+                "been delayed by debouncing within the switch.",
+            xref: { document: "cluster", section: "1.13.6.1" },
+
             children: [Field({
                 name: "NewPosition", id: 0x0, type: "uint8", conformance: "M",
-                constraint: "0 to numberOfPositions1"
+                constraint: "0 to numberOfPositions1",
+                details: "This field shall indicate the new value of the CurrentPosition attribute, i.e. after the move.",
+                xref: { document: "cluster", section: "1.13.6.1.1" }
             })]
         }),
 
         Event({
             name: "InitialPress", id: 0x1, access: "V", conformance: "MS", priority: "info",
-            details: "This event shall be generated, when the momentary switch starts to be pressed (after debouncing)." +
-                "\n" +
-                "The NewPosition field shall indicate the new value of the CurrentPosition attribute, i.e. while " +
-                "pressed.",
-            xref: { document: "cluster", section: "1.11.7.2" },
+            details: "This event shall be generated, when the momentary switch starts to be pressed (after debouncing).",
+            xref: { document: "cluster", section: "1.13.6.2" },
+
             children: [Field({
                 name: "NewPosition", id: 0x0, type: "uint8", conformance: "M",
-                constraint: "0 to numberOfPositions1"
+                constraint: "0 to numberOfPositions1",
+                details: "This field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.",
+                xref: { document: "cluster", section: "1.13.6.2.1" }
             })]
         }),
 
         Event({
             name: "LongPress", id: 0x2, access: "V", conformance: "MSL", priority: "info",
             details: "This event shall be generated, when the momentary switch has been pressed for a \"long\" time (this " +
-                "time interval is manufacturer determined (e.g. since it depends on the switch physics))." +
-                "\n" +
-                "The NewPosition field shall indicate the new value of the CurrentPosition attribute, i.e. while " +
-                "pressed.",
-            xref: { document: "cluster", section: "1.11.7.3" },
+                "time interval is manufacturer determined (e.g. since it depends on the switch physics)).",
+            xref: { document: "cluster", section: "1.13.6.3" },
+
             children: [Field({
                 name: "NewPosition", id: 0x0, type: "uint8", conformance: "M",
-                constraint: "0 to numberOfPositions1"
+                constraint: "0 to numberOfPositions1",
+                details: "This field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.",
+                xref: { document: "cluster", section: "1.13.6.3.1" }
             })]
         }),
 
@@ -131,64 +143,63 @@ Matter.children.push(Cluster({
                 "  • If the server does not support the Momentary Switch LongPress (MSL) feature, this event shall " +
                 "    be generated when the switch is released - even when the switch was pressed for a long time." +
                 "\n" +
-                "  • Also see Section 1.11.8, “Sequence of generated events”." +
-                "\n" +
-                "The PreviousPosition field shall indicate the previous value of the CurrentPosition attribute, i.e. " +
-                "just prior to release.",
+                "  • Also see Section 1.13.7, “Sequence of generated events”.",
 
-            xref: { document: "cluster", section: "1.11.7.4" },
+            xref: { document: "cluster", section: "1.13.6.4" },
+
             children: [Field({
                 name: "PreviousPosition", id: 0x0, type: "uint8", conformance: "M",
-                constraint: "0 to numberOfPositions1"
+                constraint: "0 to numberOfPositions1",
+                details: "This field shall indicate the previous value of the CurrentPosition attribute, i.e. just prior to " +
+                    "release.",
+                xref: { document: "cluster", section: "1.13.6.4.1" }
             })]
         }),
 
         Event({
             name: "LongRelease", id: 0x4, access: "V", conformance: "MSL", priority: "info",
-
             details: "This event shall be generated, when the momentary switch has been released (after debouncing) and " +
                 "after having been pressed for a long time, i.e. this event shall be generated when the switch is " +
-                "released if a LongPress event has been generated since since the previous InitialPress event. Also " +
-                "see Section 1.11.8, “Sequence of generated events”." +
-                "\n" +
-                "The PreviousPosition field shall indicate the previous value of the CurrentPosition attribute, i.e. " +
-                "just prior to release.",
+                "released if a LongPress event has been generated since the previous InitialPress event. Also see " +
+                "Section 1.13.7, “Sequence of generated events”.",
+            xref: { document: "cluster", section: "1.13.6.5" },
 
-            xref: { document: "cluster", section: "1.11.7.5" },
             children: [Field({
                 name: "PreviousPosition", id: 0x0, type: "uint8", conformance: "M",
-                constraint: "0 to numberOfPositions1"
+                constraint: "0 to numberOfPositions1",
+                details: "This field shall indicate the previous value of the CurrentPosition attribute, i.e. just prior to " +
+                    "release.",
+                xref: { document: "cluster", section: "1.13.6.5.1" }
             })]
         }),
 
         Event({
             name: "MultiPressOngoing", id: 0x5, access: "V", conformance: "MSM", priority: "info",
-
             details: "This event shall be generated to indicate how many times the momentary switch has been pressed in a " +
-                "multi-press sequence, during that sequence. See Section 1.11.9, “Sequence of events for MultiPress” " +
-                "below." +
-                "\n" +
-                "The NewPosition field shall indicate the new value of the CurrentPosition attribute, i.e. while " +
-                "pressed." +
-                "\n" +
-                "The CurrentNumberOfPressesCounted field shall contain:" +
-                "\n" +
-                "  • a value of 2 when the second press of a multi-press sequence has been detected," +
-                "\n" +
-                "  • a value of 3 when the third press of a multi-press sequence has been detected," +
-                "\n" +
-                "  • a value of N when the Nth press of a multi-press sequence has been detected.",
-
-            xref: { document: "cluster", section: "1.11.7.6" },
+                "multi-press sequence, during that sequence. See Multi Press Details below.",
+            xref: { document: "cluster", section: "1.13.6.6" },
 
             children: [
                 Field({
                     name: "NewPosition", id: 0x0, type: "uint8", conformance: "M",
-                    constraint: "0 to numberOfPositions1"
+                    constraint: "0 to numberOfPositions1",
+                    details: "This field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.",
+                    xref: { document: "cluster", section: "1.13.6.6.1" }
                 }),
+
                 Field({
                     name: "CurrentNumberOfPressesCounted", id: 0x1, type: "uint8", conformance: "M",
-                    constraint: "2 to multiPressMax"
+                    constraint: "2 to multiPressMax",
+
+                    details: "This field shall contain:" +
+                        "\n" +
+                        "  • a value of 2 when the second press of a multi-press sequence has been detected," +
+                        "\n" +
+                        "  • a value of 3 when the third press of a multi-press sequence has been detected," +
+                        "\n" +
+                        "  • a value of N when the Nth press of a multi-press sequence has been detected.",
+
+                    xref: { document: "cluster", section: "1.13.6.6.2" }
                 })
             ]
         }),
@@ -197,8 +208,8 @@ Matter.children.push(Cluster({
             name: "MultiPressComplete", id: 0x6, access: "V", conformance: "MSM", priority: "info",
 
             details: "This event shall be generated to indicate how many times the momentary switch has been pressed in a " +
-                "multi-press sequence, after it has been detected that the sequence has ended. See Section 1.11.9, " +
-                "“Sequence of events for MultiPress” below." +
+                "multi-press sequence, after it has been detected that the sequence has ended. See Multi Press " +
+                "Details." +
                 "\n" +
                 "The PreviousPosition field shall indicate the previous value of the CurrentPosition attribute, i.e. " +
                 "just prior to release." +
@@ -218,7 +229,7 @@ Matter.children.push(Cluster({
                 "  • a value of N when there were exactly N presses in a multi-press sequence (and the sequence has " +
                 "    ended).",
 
-            xref: { document: "cluster", section: "1.11.7.7" },
+            xref: { document: "cluster", section: "1.13.6.7" },
 
             children: [
                 Field({
@@ -232,4 +243,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(Switch);

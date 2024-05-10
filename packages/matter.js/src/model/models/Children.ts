@@ -38,7 +38,12 @@ export interface Children<M extends Model = Model, E extends AnyElement = AnyEle
      * Access a model using a {@link Children.Selector}.  This is an optimized primitive used by various tree traversal
      * algorithms.
      */
-    select(selector: Children.Selector, allowedTags: ElementTag[], except?: Set<Model>): Model | undefined;
+    select(selector: Children.Selector, allowedTags?: Children.TagSelector, except?: Set<Model>): Model | undefined;
+
+    /**
+     * Like {@link select} but retrieves all models for which selection applies.
+     */
+    selectAll(selector: Children.Selector, allowedTags?: Children.TagSelector, except?: Set<Model>): Model[];
 
     /**
      * Models invoke this when their ID changes so we can update internal bookkeeping.
@@ -110,6 +115,33 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
             children[i] = child;
         }
         reified = true;
+    }
+
+    /**
+     * Determine if an element has any Model children.  If so we need to upgrade to a model on insertion.
+     */
+    function hasModel(child: AnyElement) {
+        if (child instanceof Model) {
+            return true;
+        }
+        return child.children?.some(hasModel);
+    }
+
+    /**
+     * Convert a new child to "insertion" form.  The input may be an element or model.  If we are reified, we upgrade
+     * elements to models.  If child or any descendents is a model, we reify so models will have the correct parent
+     * after insertion.
+     */
+    function insertionFormOf(child: Model | AnyElement) {
+        if (child instanceof Model) {
+            return child;
+        }
+
+        if (reified || hasModel(child)) {
+            return Model.create(child);
+        }
+
+        return child;
     }
 
     /**
@@ -228,24 +260,41 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
         return slot.byName[idOrName];
     }
 
-    function indexLookup(
-        selector: number | string,
-        indexName: "byId" | "byName",
-        allowedTags: ElementTag[],
-        except?: Set<Model>,
-    ) {
-        for (const tag of allowedTags) {
+    function selectTypes(tags: Children.TagSelector): Model.Type[] {
+        if (tags === undefined || tags === "*") {
+            return [Model];
+        }
+
+        if (typeof tags === "string") {
+            tags = [tags];
+        }
+
+        const result = Array<Model.Type>();
+        for (const tag of tags) {
             const type = Model.types[tag];
             if (type === undefined) {
                 throw new ImplementationError(`Unknown element tag "${tag}"`);
             }
+            result.push(type);
+        }
 
+        return result;
+    }
+
+    function indexLookup<T>(
+        selector: number | string,
+        indexName: "byId" | "byName",
+        allowedTags: Children.TagSelector,
+        except: Set<Model> | undefined,
+        processor: (model: Model) => T,
+    ) {
+        for (const type of selectTypes(allowedTags)) {
             let slot = indices?.get(type);
             if (slot === undefined) {
                 slot = buildIndex(type);
             }
 
-            const index = slot[indexName] as Record<number | string, Model>;
+            const index = slot[indexName] as Record<number | string, Model | Model[]>;
             const entry = index[selector];
 
             if (Array.isArray(entry)) {
@@ -253,7 +302,10 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
                     if (except?.has(subentry)) {
                         continue;
                     }
-                    return subentry;
+                    const result = processor(subentry);
+                    if (result !== undefined) {
+                        return result;
+                    }
                 }
                 continue;
             }
@@ -262,18 +314,16 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
                 if (except?.has(entry)) {
                     continue;
                 }
-                return entry;
+                const result = processor(entry);
+                if (result) {
+                    return result;
+                }
             }
         }
     }
 
-    function indexApply(selector: (child: Model) => boolean, allowedTags: ElementTag[], except?: Set<Model>) {
-        for (const tag of allowedTags) {
-            const type = Model.types[tag];
-            if (type === undefined) {
-                throw new ImplementationError(`Unknown element tag "${tag}"`);
-            }
-
+    function indexApply(selector: (child: Model) => boolean, allowedTags: Children.TagSelector, except?: Set<Model>) {
+        for (const type of selectTypes(allowedTags)) {
             let index = indices?.get(type)?.byName;
             if (!index) {
                 index = buildIndex(type).byName;
@@ -304,18 +354,40 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
         }
     }
 
-    function select(selector: Children.Selector, allowedTags: ElementTag[], except?: Set<Model>) {
+    function select(selector: Children.Selector, allowedTags?: Children.TagSelector, except?: Set<Model>) {
         reify();
 
         if (typeof selector === "string") {
-            return indexLookup(selector, "byName", allowedTags, except);
+            return indexLookup(selector, "byName", allowedTags, except, model => model);
         }
 
         if (typeof selector === "number") {
-            return indexLookup(selector, "byId", allowedTags, except);
+            return indexLookup(selector, "byId", allowedTags, except, model => model);
         }
 
         return indexApply(selector, allowedTags, except);
+    }
+
+    function selectAll(
+        selector: Exclude<Children.Selector, (args: any) => any>,
+        allowedTags?: Children.TagSelector,
+        except?: Set<Model>,
+    ) {
+        reify();
+
+        const results = Array<Model>();
+
+        if (typeof selector === "string") {
+            indexLookup(selector, "byName", allowedTags, except, model => {
+                results.push(model);
+            });
+        } else {
+            indexLookup(selector, "byId", allowedTags, except, model => {
+                results.push(model);
+            });
+        }
+
+        return results;
     }
 
     function updateId(child: Model, oldId: number | undefined) {
@@ -350,26 +422,22 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
         }
     }
 
-    // We implement "splice" for efficiency...  The default implementation moves elements one at a time, forcing us to search
-    // the array to see if it's already present each time
+    // We implement "splice" for efficiency...  The default implementation moves elements one at a time, forcing us to
+    // search the array to see if it's already present each time
     function splice(index: number, deleteCount?: number, ...toAdd: (AnyElement | Model)[]) {
-        // Upgrade elements to models if reified and adopt any new models
+        // Upgrade elements as necessary and adopt any new models
         toAdd = toAdd.map(child => {
-            if (!(child instanceof Model)) {
-                if (reified) {
-                    child = Model.create(child);
-                } else {
-                    return child;
-                }
+            child = insertionFormOf(child);
+            if (child instanceof Model) {
+                adopt(child);
             }
-            adopt(child);
             return child;
         });
 
         // Perform the actual splice
         const result = children.splice(index, deleteCount ?? 0, ...toAdd);
 
-        // Convert elements to models and disown elements that are already models
+        // Convert deleted elements to models and disown elements that are already models
         return result.map(child => {
             if (child instanceof Model) {
                 disown(child);
@@ -380,7 +448,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
         });
     }
 
-    const result = new Proxy(children, {
+    const self = new Proxy(children, {
         get: (_target, p, receiver) => {
             if (typeof p === "string" && p.match(/^[0-9]+$/)) {
                 let child = children[p as unknown as number];
@@ -399,6 +467,9 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
 
                 case "select":
                     return select;
+
+                case "selectAll":
+                    return selectAll;
 
                 case "updateId":
                     return updateId;
@@ -435,7 +506,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
                 }
             }
 
-            if (newValue.parent?.children === children) {
+            if (newValue.parent?.children === self) {
                 const currentIndex = children.indexOf(newValue);
                 if (currentIndex !== -1) {
                     children.splice(currentIndex, 1);
@@ -443,9 +514,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
                 return true;
             }
 
-            if (reified && !(newValue instanceof Model)) {
-                newValue = Model.create(newValue);
-            }
+            newValue = insertionFormOf(newValue);
 
             children[p as unknown as number] = newValue;
             if (newValue instanceof Model) {
@@ -476,11 +545,20 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
     // Clone child array because if it references a former parent they'll disappear as we add
     initial = [...initial];
 
-    result.push(...initial);
+    self.push(...initial);
 
-    return result as Children<M>;
+    return self as Children<M>;
 }
 
 export namespace Children {
+    /**
+     * A model selector designates models for retrieval.  It may be a model name, number, or a predicate function.
+     */
     export type Selector = string | number | ((child: Model) => boolean);
+
+    /**
+     * A tag selector filters models based on type.  It may be a tag name, a list of tag names, or "*" or undefined to
+     * disable type filtering.
+     */
+    export type TagSelector = undefined | ElementTag | "*" | ElementTag[];
 }

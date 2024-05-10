@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const OtaRequestorDT = DeviceType({
     name: "OtaRequestor", id: 0x12, classification: "utility",
     details: "An OTA Requestor is a device that is capable of receiving an OTA software update.",
     xref: { document: "device", section: "2.3" },
@@ -23,12 +23,14 @@ Matter.children.push(DeviceType({
         }),
 
         Requirement({
-            name: "OtaSoftwareUpdateRequestor", conformance: "M", element: "serverCluster",
+            name: "OtaSoftwareUpdateRequestor", id: 0x2a, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "2.3.3" }
         }),
         Requirement({
-            name: "OtaSoftwareUpdateProvider", conformance: "M", element: "clientCluster",
+            name: "OtaSoftwareUpdateProvider", id: 0x29, conformance: "M", element: "clientCluster",
             xref: { document: "device", section: "2.3.3" }
         })
     ]
-}));
+});
+
+Matter.children.push(OtaRequestorDT);

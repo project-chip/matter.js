@@ -6,10 +6,8 @@
 
 import { Conformance, Constraint } from "../aspects/index.js";
 import { Metatype, StatusCode } from "../definitions/index.js";
-import { AttributeElement } from "./AttributeElement.js";
 import { DatatypeElement } from "./DatatypeElement.js";
 import { EventElement } from "./EventElement.js";
-import { FieldElement } from "./FieldElement.js";
 import { ValueElement } from "./ValueElement.js";
 
 // Constants for all type names used more than once
@@ -28,9 +26,9 @@ export const INT64 = "int64";
 const bool = (name: string, description: string) => DatatypeElement({ name, description, metatype: Metatype.boolean });
 const map = (name: string, description: string, byteSize: ValueElement.BitmapSize) =>
     DatatypeElement({ name, description, byteSize, metatype: Metatype.bitmap });
-const int = (name: string, description: string, byteSize: ValueElement.Size) =>
+const int = (name: string, description: string, byteSize: ValueElement.ByteSize) =>
     DatatypeElement({ name, description, byteSize, metatype: Metatype.integer });
-const float = (name: string, description: string, byteSize: ValueElement.Size) =>
+const float = (name: string, description: string, byteSize: ValueElement.ByteSize) =>
     DatatypeElement({ name, description, byteSize, metatype: Metatype.float });
 const octet = (name: string, description: string) => DatatypeElement({ name, description, metatype: Metatype.bytes });
 const string = (name: string, description: string) => DatatypeElement({ name, description, metatype: Metatype.string });
@@ -47,45 +45,17 @@ const extOctstr = (name: string, description: string, constraint?: Constraint.De
     DatatypeElement({ name, description, type: OCTSTR, constraint });
 const extEnum = (name: string, description: string, values: DatatypeElement.ValueMap) =>
     DatatypeElement({ name, description, type: ENUM8, children: DatatypeElement.ListValues(values) });
-const extStruct = (name: string, description: string, children: FieldElement[]) =>
-    DatatypeElement({ name, description, type: STRUCT, children });
 
-const TodFields = [
-    FieldElement({ type: "uint8", name: "hours" }),
-    FieldElement({ type: "uint8", name: "minutes" }),
-    FieldElement({ type: "uint8", name: "seconds" }),
-    FieldElement({ type: "uint8", name: "hundredths" }),
-];
-
-const DateFields = [
-    FieldElement({ type: "uint8", name: "year" }),
-    FieldElement({ type: "uint8", name: "month" }),
-    FieldElement({ type: "uint8", name: "day" }),
-    FieldElement({ type: "uint8", name: "dow" }),
-];
-
-const SemtagFields = [
-    FieldElement({ type: "vendor-id", name: "MfgCode", quality: "X", default: null, conformance: "M" }),
-    FieldElement({ type: "namespace", name: "NamespaceID", conformance: "M" }),
-    FieldElement({ type: "tag", name: "Tag", conformance: "M" }),
-    FieldElement({
-        type: STRING,
-        name: "Label",
-        constraint: "max 64",
-        quality: "X",
-        default: null,
-        conformance: "MfgCode, O",
-    }),
-];
+// Structs we load from the specification under their CamelCaseName and alias here
+const extStruct = (name: string, type: string, description: string) => DatatypeElement({ name, description, type });
 
 /**
- * These are all of the global elements defined in the Matter Specification.
- * This includes types from the "data types" section and other elements from
- * the "global elements" section.
+ * These are the global types defined in the Matter Specification in the "data types" section.
  *
- * According to the specification, any type that is used by more than one
- * cluster should be defined here.  Various cluster-specific elements reference
- * these types or derive new types.
+ * According to the specification, any type that is used by more than one cluster should be defined here.  Various
+ * cluster-specific elements reference these types or derive new types.
+ *
+ * The specification actually violates above rule.  We handle those on a case-by-case basis.
  */
 export const Globals = {
     // Discrete
@@ -127,8 +97,8 @@ export const Globals = {
     percent100ths: extInt("percent100ths", "Percentage units 0.01%", UINT16),
 
     // Analog time
-    tod: extStruct("tod", "Time of day", TodFields),
-    date: extStruct("date", "Date", DateFields),
+    tod: extStruct("tod", "TimeOfDay", "Time of day"),
+    date: extStruct("date", "Date", "Date"),
     epochUs: extInt("epoch-us", "Epoch time in microseconds", UINT64),
     epochS: extInt("epoch-s", "Epoch time in seconds", UINT32),
     /** @deprecated by Matter specification */
@@ -188,76 +158,13 @@ export const Globals = {
     hwadr: extOctstr("hwadr", "Hardware address", { min: 6, max: 8 }),
 
     // Composite tag
-    semtag: extStruct("semtag", "Semantic tag", SemtagFields),
+    semtag: extStruct("semtag", "SemanticTagStruct", "Semantic tag"),
     namespace: extEnum("namespace", "Namespace", {}),
     tag: extEnum("tag", "Tag", {}),
 
-    // Global elements
-    ClusterRevision: AttributeElement({
-        id: 0xfffd,
-        name: "ClusterRevision",
-        type: "uint16",
-        constraint: { min: 1 },
-        quality: "F",
-        access: "R V",
-        conformance: "M",
-    }),
-    FeatureMap: AttributeElement({
-        id: 0xfffc,
-        name: "FeatureMap",
-        type: "map32",
-        quality: "F",
-        access: "R V",
-        default: 0,
-        conformance: "M",
-    }),
-    AttributeList: AttributeElement({
-        id: 0xfffb,
-        name: "AttributeList",
-        type: "list[attrib-id]",
-        quality: "F",
-        access: "R V",
-        conformance: "M",
-    }),
-    EventList: AttributeElement({
-        id: 0xfffa,
-        name: "EventList",
-        type: "list[event-id]",
-        quality: "F",
-        access: "R V",
-        conformance: "P, M",
-    }),
-    AcceptedCommandList: AttributeElement({
-        id: 0xfff9,
-        name: "AcceptedCommandList",
-        type: "list[command-id]",
-        quality: "F",
-        access: "R V",
-        conformance: "M",
-    }),
-    GeneratedCommandList: AttributeElement({
-        id: 0xfff8,
-        name: "GeneratedCommandList",
-        type: "list[command-id]",
-        quality: "F",
-        access: "R V",
-        conformance: "M",
-    }),
-    FabricIndex: FieldElement({
-        id: 0xfe,
-        name: "FabricIndex",
-        type: "fabric-idx",
-        constraint: "1 to 254",
-        access: "R V F",
-        conformance: "M",
-    }),
-
-    // Not defined as global in the specification but used across multiple
-    // clusters without structured definition
+    // Not defined as global in the specification but used across multiple clusters without structured definition
     subjectId: DatatypeElement({ name: "subject-id", type: "uint64" }),
 
     // Not formal part of specification, indicates field's type may vary
     any: DatatypeElement({ name: "any", description: "Any value", metatype: "any" }),
 };
-
-Object.values(Globals).forEach(g => (g.global = true));

@@ -15,9 +15,8 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
+export const PumpConfigurationAndControl = Cluster({
     name: "PumpConfigurationAndControl", id: 0x200, classification: "application",
-    description: "Pump Configuration and Control",
     details: "The Pump Configuration and Control cluster provides an interface for the setup and control of pump " +
         "devices, and the automatic reporting of pump status information. Note that control of pump speed is " +
         "not included – speed is controlled by the On/Off and Level Control clusters.",
@@ -63,8 +62,8 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "MaxPressure", id: 0x0, type: "int16", access: "R V", conformance: "M", constraint: "min 0",
-            default: null, quality: "X F",
+            name: "MaxPressure", id: 0x0, type: "int16", access: "R V", conformance: "M", default: null,
+            quality: "X F",
             details: "This attribute specifies the maximum pressure the pump can achieve. It is a physical limit, and " +
                 "does not apply to any specific control mode or operation mode." +
                 "\n" +
@@ -74,8 +73,8 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "MaxSpeed", id: 0x1, type: "uint16", access: "R V", conformance: "M", constraint: "max 65534",
-            default: null, quality: "X F",
+            name: "MaxSpeed", id: 0x1, type: "uint16", access: "R V", conformance: "M", default: null,
+            quality: "X F",
             details: "This attribute specifies the maximum speed the pump can achieve. It is a physical limit, and does " +
                 "not apply to any specific control mode or operation mode." +
                 "\n" +
@@ -85,8 +84,8 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "MaxFlow", id: 0x2, type: "uint16", access: "R V", conformance: "M", constraint: "max 65534",
-            default: null, quality: "X F",
+            name: "MaxFlow", id: 0x2, type: "uint16", access: "R V", conformance: "M", default: null,
+            quality: "X F",
             details: "This attribute specifies the maximum flow the pump can achieve. It is a physical limit, and does " +
                 "not apply to any specific control mode or operation mode." +
                 "\n" +
@@ -97,7 +96,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "MinConstPressure", id: 0x3, type: "int16", access: "R V", conformance: "PRSCONST, [AUTO]",
-            constraint: "min 0", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the minimum pressure the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantPressure." +
                 "\n" +
@@ -108,7 +107,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "MaxConstPressure", id: 0x4, type: "int16", access: "R V", conformance: "PRSCONST, [AUTO]",
-            constraint: "min 0", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the maximum pressure the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantPressure." +
                 "\n" +
@@ -119,7 +118,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "MinCompPressure", id: 0x5, type: "int16", access: "R V", conformance: "PRSCOMP, [AUTO]",
-            constraint: "min 0", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the minimum compensated pressure the pump can achieve when it is working " +
                 "with the ControlMode attribute set to ProportionalPressure." +
                 "\n" +
@@ -130,7 +129,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "MaxCompPressure", id: 0x6, type: "int16", access: "R V", conformance: "PRSCOMP, [AUTO]",
-            constraint: "min 0", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the maximum compensated pressure the pump can achieve when it is working " +
                 "with the ControlMode attribute set to ProportionalPressure." +
                 "\n" +
@@ -141,7 +140,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "MinConstSpeed", id: 0x7, type: "uint16", access: "R V", conformance: "SPD, [AUTO]",
-            constraint: "max 65534", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the minimum speed the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantSpeed." +
                 "\n" +
@@ -152,7 +151,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "MaxConstSpeed", id: 0x8, type: "uint16", access: "R V", conformance: "SPD, [AUTO]",
-            constraint: "max 65534", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the maximum speed the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantSpeed." +
                 "\n" +
@@ -163,7 +162,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "MinConstFlow", id: 0x9, type: "uint16", access: "R V", conformance: "FLW, [AUTO]",
-            constraint: "max 65534", default: null, quality: "X F",
+            default: null, quality: "X F",
 
             details: "This attribute specifies the minimum flow the pump can achieve when it is working with the Con" +
                 "\n" +
@@ -177,7 +176,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "MaxConstFlow", id: 0xa, type: "uint16", access: "R V", conformance: "FLW, [AUTO]",
-            constraint: "max 65534", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the maximum flow the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantFlow." +
                 "\n" +
@@ -270,8 +269,8 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "Capacity", id: 0x13, type: "int16", access: "R V", conformance: "M", constraint: "min 0",
-            default: null, quality: "X P",
+            name: "Capacity", id: 0x13, type: "int16", access: "R V", conformance: "M", default: null,
+            quality: "X P",
 
             details: "This attribute specifies the actual capacity of the pump as a percentage of the effective maximum " +
                 "setpoint value. It is updated dynamically as the speed of the pump changes." +
@@ -286,8 +285,8 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "Speed", id: 0x14, type: "uint16", access: "R V", conformance: "O", constraint: "max 65534",
-            default: null, quality: "X",
+            name: "Speed", id: 0x14, type: "uint16", access: "R V", conformance: "O", default: null,
+            quality: "X",
 
             details: "This attribute specifies the actual speed of the pump measured in RPM. It is updated dynamically as " +
                 "the speed of the pump changes." +
@@ -494,7 +493,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "PumpStatusBitmap", type: "map16", conformance: "M",
+            name: "PumpStatusBitmap", type: "map16",
             xref: { document: "cluster", section: "4.2.6.1" },
 
             children: [
@@ -557,7 +556,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "OperationModeEnum", type: "enum8", conformance: "M",
+            name: "OperationModeEnum", type: "enum8",
             xref: { document: "cluster", section: "4.2.6.2" },
 
             children: [
@@ -585,7 +584,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "ControlModeEnum", type: "enum8", conformance: "M",
+            name: "ControlModeEnum", type: "enum8",
             xref: { document: "cluster", section: "4.2.6.3" },
 
             children: [
@@ -647,4 +646,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(PumpConfigurationAndControl);

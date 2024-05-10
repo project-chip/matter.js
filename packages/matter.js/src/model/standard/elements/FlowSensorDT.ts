@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
+export const FlowSensorDT = DeviceType({
     name: "FlowSensor", id: 0x306, classification: "simple",
     details: "A Flow Sensor device measures and reports the flow rate of a fluid.",
     xref: { document: "device", section: "7.6" },
@@ -25,8 +25,9 @@ Matter.children.push(DeviceType({
         }),
         Requirement({
             name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
-            xref: { document: "device", section: "7.6.4" },
-            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
+            xref: { document: "device", section: "7.6.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(FlowSensorDT);

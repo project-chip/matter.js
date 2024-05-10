@@ -9,8 +9,8 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push(DeviceType({
-    name: "Aggregator", id: 0xe, classification: "dynamic",
+export const AggregatorDT = DeviceType({
+    name: "Aggregator", id: 0xe, classification: "simple",
 
     details: "This device type aggregates endpoints as a collection. Clusters on the endpoint indicating this " +
         "device type provide functionality for the collection of descendent endpoints present in the " +
@@ -22,7 +22,7 @@ Matter.children.push(DeviceType({
         "When using this device type as a collection of bridged nodes, please see the \"Bridge\" section in " +
         "the System Model specification.",
 
-    xref: { document: "device", section: "2.5" },
+    xref: { document: "device", section: "11.2" },
 
     children: [
         Requirement({
@@ -33,8 +33,14 @@ Matter.children.push(DeviceType({
         }),
 
         Requirement({
-            name: "Actions", conformance: "O", element: "serverCluster",
-            xref: { document: "device", section: "2.5.4" }
+            name: "Actions", id: 0x25, conformance: "O", element: "serverCluster",
+            xref: { document: "device", section: "11.2.4" }
+        }),
+        Requirement({
+            name: "Identify", id: 0x3, conformance: "O", element: "serverCluster",
+            xref: { document: "device", section: "11.2.4" }
         })
     ]
-}));
+});
+
+Matter.children.push(AggregatorDT);
