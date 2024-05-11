@@ -5,7 +5,6 @@
  */
 
 import { GeneralDiagnostics } from "../../../cluster/definitions/GeneralDiagnosticsCluster.js";
-import { ImplementationError } from "../../../common/MatterError.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
 import { FieldElement } from "../../../model/elements/FieldElement.js";
@@ -81,12 +80,8 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
      * @param faultType The hardware fault to register.
      */
     registerHardwareFault(faultType: GeneralDiagnostics.HardwareFault) {
-        if (this.state.activeHardwareFaults === undefined) {
-            throw new ImplementationError(
-                "activeHardwareFaults attribute not active, please set it when initializing the cluster",
-            );
-        }
-        const list = this.state.activeHardwareFaults.filter(fault => fault !== faultType);
+        const currentFaults = this.requireAttributeEnabled("activeHardwareFaults");
+        const list = currentFaults.filter(fault => fault !== faultType);
         list.push(faultType);
         this.state.activeHardwareFaults = list;
     }
@@ -98,12 +93,8 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
      * @param faultType The hardware fault to clear.
      */
     clearHardwareFault(faultType: GeneralDiagnostics.HardwareFault) {
-        if (this.state.activeHardwareFaults === undefined) {
-            throw new ImplementationError(
-                "activeHardwareFaults attribute not active, please set it when initializing the cluster",
-            );
-        }
-        this.state.activeHardwareFaults = this.state.activeHardwareFaults.filter(fault => fault !== faultType);
+        const currentFaults = this.requireAttributeEnabled("activeHardwareFaults");
+        this.state.activeHardwareFaults = currentFaults.filter(fault => fault !== faultType);
     }
 
     #triggerActiveHardwareFaultsChangedEvent(
@@ -127,12 +118,8 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
      * @param faultType The radio fault to register.
      */
     registerRadioFault(faultType: GeneralDiagnostics.RadioFault) {
-        if (this.state.activeRadioFaults === undefined) {
-            throw new ImplementationError(
-                "activeRadioFaults attribute not active, please set it when initializing the cluster",
-            );
-        }
-        const list = this.state.activeRadioFaults.filter(fault => fault !== faultType);
+        const currentFaults = this.requireAttributeEnabled("activeRadioFaults");
+        const list = currentFaults.filter(fault => fault !== faultType);
         list.push(faultType);
         this.state.activeRadioFaults = list;
     }
@@ -144,12 +131,8 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
      * @param faultType The radio fault to clear.
      */
     clearRadioFault(faultType: GeneralDiagnostics.RadioFault) {
-        if (this.state.activeRadioFaults === undefined) {
-            throw new ImplementationError(
-                "activeRadioFaults attribute not active, please set it when initializing the cluster",
-            );
-        }
-        this.state.activeRadioFaults = this.state.activeRadioFaults.filter(fault => fault !== faultType);
+        const currentFaults = this.requireAttributeEnabled("activeRadioFaults");
+        this.state.activeRadioFaults = currentFaults.filter(fault => fault !== faultType);
     }
 
     #triggerActiveRadioFaultsChangedEvent(
@@ -173,12 +156,8 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
      * @param faultType The network fault to register.
      */
     registerNetworkFault(faultType: GeneralDiagnostics.NetworkFault) {
-        if (this.state.activeNetworkFaults === undefined) {
-            throw new ImplementationError(
-                "activeNetworkFaults attribute not active, please set it when initializing the cluster",
-            );
-        }
-        const list = this.state.activeNetworkFaults.filter(fault => fault !== faultType);
+        const currentFaults = this.requireAttributeEnabled("activeNetworkFaults");
+        const list = currentFaults.filter(fault => fault !== faultType);
         list.push(faultType);
         this.state.activeNetworkFaults = list;
     }
@@ -190,12 +169,8 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
      * @param faultType The network fault to clear.
      */
     clearNetworkFault(faultType: GeneralDiagnostics.NetworkFault) {
-        if (this.state.activeNetworkFaults === undefined) {
-            throw new ImplementationError(
-                "activeNetworkFaults attribute not active, please set it when initializing the cluster",
-            );
-        }
-        this.state.activeNetworkFaults = this.state.activeNetworkFaults.filter(fault => fault !== faultType);
+        const currentFaults = this.requireAttributeEnabled("activeNetworkFaults");
+        this.state.activeNetworkFaults = currentFaults.filter(fault => fault !== faultType);
     }
 
     #triggerActiveNetworkFaultsChangedEvent(

@@ -15,6 +15,7 @@ import { StateType } from "../../../src/behavior/state/StateType.js";
 import { Attribute } from "../../../src/cluster/Cluster.js";
 import { ClusterType } from "../../../src/cluster/ClusterType.js";
 import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";
+import { ImplementationError } from "../../../src/common/MatterError.js";
 import { ClusterId } from "../../../src/datatype/ClusterId.js";
 import { AttributeElement, ClusterModel } from "../../../src/model/index.js";
 import { TlvBoolean } from "../../../src/tlv/TlvBoolean.js";
@@ -129,6 +130,8 @@ describe("ClusterBehavior", () => {
             await endpoint.act(agent => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.reqAttr).equals("hello");
+                expect(behavior.requireAttributeEnabled("reqAttr")).equals("hello");
+                expect(behavior.assertAttributeEnabled("reqAttr")).is.undefined;
                 expect(behavior.reqCmd).is.a("function");
                 expect(behavior.events.reqAttr$Changed).instanceof(BasicObservable);
                 expect(behavior.events.reqEv).instanceof(BasicObservable);
@@ -140,6 +143,26 @@ describe("ClusterBehavior", () => {
             await endpoint.act(agent => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.optAttr).undefined;
+                let errorCount = 0;
+                try {
+                    behavior.requireAttributeEnabled("optAttr");
+                } catch (error) {
+                    expect(error).instanceof(ImplementationError);
+                    expect((error as ImplementationError).message).equals(
+                        "To use this feature, please enable attribute optAttr by setting the value during initialization.",
+                    );
+                    errorCount++;
+                }
+                try {
+                    behavior.assertAttributeEnabled("optAttr");
+                } catch (error) {
+                    expect(error).instanceof(ImplementationError);
+                    expect((error as ImplementationError).message).equals(
+                        "To use this feature, please enable attribute optAttr by setting the value during initialization.",
+                    );
+                    errorCount++;
+                }
+                expect(errorCount).equals(2);
                 expect(behavior.events.optAttr$Changed).instanceof(BasicObservable);
                 expect(behavior.events.optEv).undefined;
             });
