@@ -5,9 +5,17 @@
  */
 
 import { Logger } from "@project-chip/matter.js/log";
-import { Network, NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
+import {
+    InterfaceType,
+    Network,
+    NetworkError,
+    NetworkInterface,
+    NetworkInterfaceDetails,
+    NetworkInterfaceNameToTypeMapping,
+    UdpChannel,
+    UdpChannelOptions,
+} from "@project-chip/matter.js/net";
 import { Cache, isIPv6, onSameNetwork } from "@project-chip/matter.js/util";
-
 import { NetworkInterfaceInfo, networkInterfaces } from "os";
 import { UdpChannelNode } from "./UdpChannelNode.js";
 
@@ -108,22 +116,37 @@ export class NetworkNode extends Network {
             ?.scopeid?.toString();
     }
 
-    getNetInterfaces(): string[] {
-        const result = new Array<string>();
+    /**
+     * Get all network interfaces.
+     * The optional nameTypeMapping parameter allows to map interface names to types if this mapping is known.
+     *
+     * @param nameTypeMapping - An array of objects with the name and type properties.
+     */
+    getNetInterfaces(nameTypeMapping: NetworkInterfaceNameToTypeMapping = []): NetworkInterface[] {
+        const result = new Array<NetworkInterface>();
         const interfaces = networkInterfaces();
         for (const name in interfaces) {
             const netInterfaces = interfaces[name] as NetworkInterfaceInfo[];
             if (netInterfaces.length === 0) continue;
             if (netInterfaces[0].internal) continue;
-            result.push(name);
+            let type = InterfaceType.Unspecified;
+            if (nameTypeMapping.length > 0) {
+                const nameType = nameTypeMapping.find(({ name: mapName }) => name === mapName);
+                if (nameType !== undefined) {
+                    type = nameType.type;
+                }
+            }
+            result.push({ name, type });
         }
         return result;
     }
 
-    getIpMac(netInterface: string): { mac: string; ips: string[] } | undefined {
+    getIpMac(netInterface: string): NetworkInterfaceDetails | undefined {
         const netInterfaceInfo = networkInterfaces()[netInterface];
         if (netInterfaceInfo === undefined) return undefined;
-        return { mac: netInterfaceInfo[0].mac, ips: netInterfaceInfo.map(({ address }) => address) };
+        const ipV4 = netInterfaceInfo.filter(({ family }) => family === "IPv4").map(({ address }) => address);
+        const ipV6 = netInterfaceInfo.filter(({ family }) => family === "IPv6").map(({ address }) => address);
+        return { mac: netInterfaceInfo[0].mac, ipV4, ipV6 };
     }
 
     override createUdpChannel(options: UdpChannelOptions): Promise<UdpChannel> {

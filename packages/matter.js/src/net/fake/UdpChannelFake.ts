@@ -6,7 +6,6 @@
 
 import { Listener } from "../../common/TransportInterface.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { isIPv4 } from "../../util/Ip.js";
 import { NetworkError } from "../Network.js";
 import { UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
 import { NetworkFake } from "./NetworkFake.js";
@@ -17,9 +16,8 @@ export class UdpChannelFake implements UdpChannel {
         network: NetworkFake,
         { listeningAddress, listeningPort, netInterface, type }: UdpChannelOptions,
     ) {
-        const { ips } = network.getIpMac(netInterface ?? FAKE_INTERFACE_NAME);
-        const ipv4 = type === "udp4";
-        const localAddress = ips.filter(ip => isIPv4(ip) || !ipv4)[0];
+        const { ipV4, ipV6 } = network.getIpMac(netInterface ?? FAKE_INTERFACE_NAME);
+        const localAddress = type === "udp4" ? ipV4[0] : ipV6[0] ?? ipV4[0];
         if (localAddress === undefined) {
             throw new NetworkError("No matching IP on the specified interface");
         }

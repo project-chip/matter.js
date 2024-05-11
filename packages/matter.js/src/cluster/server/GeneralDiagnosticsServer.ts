@@ -5,25 +5,18 @@
  */
 
 import { WrapCommandHandler } from "../../device/Device.js";
-import { Network } from "../../net/Network.js";
+import { Network, NetworkInterfaceDetailed } from "../../net/Network.js";
 import { Time } from "../../time/Time.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { iPv4ToByteArray, iPv6ToByteArray, isIPv4, isIPv6 } from "../../util/Ip.js";
+import { iPv4ToByteArray, iPv6ToByteArray } from "../../util/Ip.js";
 import { NamedHandler } from "../../util/NamedHandler.js";
 import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "../definitions/GeneralDiagnosticsCluster.js";
 import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
-type NetworkInterfaceDetails = {
-    [key: string]: {
-        mac: string;
-        ips: string[];
-    };
-};
-
 export const GeneralDiagnosticsClusterHandler: () => ClusterServerHandlers<typeof GeneralDiagnosticsCluster> = () => {
-    const bootUpTime = Time.nowMs();
+    let bootUpTime = 0;
 
     // We update the totalOperationalHours attribute every hour
     let totalOperationalHoursAttribute: AttributeServer<number> | undefined = undefined;
@@ -38,6 +31,7 @@ export const GeneralDiagnosticsClusterHandler: () => ClusterServerHandlers<typeo
 
     return {
         initializeClusterServer: ({ attributes: { totalOperationalHours, networkInterfaces } }) => {
+            bootUpTime = Time.nowMs();
             if (totalOperationalHours?.getLocal() !== undefined) {
                 totalOperationalHoursAttribute = totalOperationalHours;
                 totalOperationalHoursUpdateTimer.start();
@@ -45,36 +39,28 @@ export const GeneralDiagnosticsClusterHandler: () => ClusterServerHandlers<typeo
 
             const network = Network.get();
             const interfaces = network.getNetInterfaces();
-            const systemNetworkInterfaces: NetworkInterfaceDetails = {};
-            interfaces.forEach(name => {
+            const interfaceDetails = new Array<NetworkInterfaceDetailed>();
+            interfaces.forEach(({ name, type }) => {
                 const details = network.getIpMac(name);
                 if (details !== undefined) {
-                    systemNetworkInterfaces[name] = details;
+                    interfaceDetails.push({ name, type, ...details });
                 }
             });
 
-            const networkType = GeneralDiagnostics.InterfaceType.Ethernet;
-
             // Filter all unassigned MACs out, sort operational on top, limit to 8 entries and map to the required format.
             networkInterfaces.setLocal(
-                Object.entries(systemNetworkInterfaces)
-                    .filter(([_, { mac }]) => mac !== "00:00:00:00:00:00")
+                interfaceDetails
+                    .filter(({ mac }) => mac !== "00:00:00:00:00:00")
                     .slice(0, 8)
-                    .map(([name, { mac, ips }]) => ({
+                    .map(({ name, mac, ipV4, ipV6, type }) => ({
                         name,
                         isOperational: true,
                         offPremiseServicesReachableIPv4: null, // null means unknown or not supported
                         offPremiseServicesReachableIPv6: null, // null means unknown or not supported
                         hardwareAddress: ByteArray.fromHex(mac.replace(/[^\da-fA-F]/g, "")),
-                        iPv4Addresses: ips
-                            .filter(ip => isIPv4(ip))
-                            .slice(0, 4)
-                            .map(ip => iPv4ToByteArray(ip)),
-                        iPv6Addresses: ips
-                            .filter(ip => isIPv6(ip))
-                            .slice(0, 8)
-                            .map(ip => iPv6ToByteArray(ip)),
-                        type: networkType,
+                        iPv4Addresses: ipV4.slice(0, 4).map(ip => iPv4ToByteArray(ip)),
+                        iPv6Addresses: ipV6.slice(0, 8).map(ip => iPv6ToByteArray(ip)),
+                        type: type ?? GeneralDiagnostics.InterfaceType.Ethernet,
                     })),
             );
         },

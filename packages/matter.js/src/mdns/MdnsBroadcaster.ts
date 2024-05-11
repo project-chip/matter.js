@@ -168,7 +168,7 @@ export class MdnsBroadcaster {
         await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
             const ipMac = this.#network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
-            const { mac, ips } = ipMac;
+            const { mac, ipV4, ipV6 } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
 
             logger.debug(
@@ -210,7 +210,7 @@ export class MdnsBroadcaster {
                     `ICD=${ICD_SUPPORTED}` /* ICD not supported */,
                 ]),
             ];
-            records.push(...this.getIpRecords(hostname, ips));
+            records.push(...this.getIpRecords(hostname, [...ipV6, ...ipV4]));
             return records;
         });
     }
@@ -243,7 +243,7 @@ export class MdnsBroadcaster {
         await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Operative, netInterface => {
             const ipMac = this.#network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
-            const { mac, ips } = ipMac;
+            const { mac, ipV4, ipV6 } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
 
             const records: DnsRecord<any>[] = [PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_SERVICE_QNAME)];
@@ -277,7 +277,7 @@ export class MdnsBroadcaster {
                 ];
                 records.push(...fabricRecords);
             });
-            records.push(...this.getIpRecords(hostname, ips));
+            records.push(...this.getIpRecords(hostname, [...ipV6, ...ipV4]));
             return records;
         });
     }
@@ -313,7 +313,7 @@ export class MdnsBroadcaster {
         await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
             const ipMac = this.#network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
-            const { mac, ips } = ipMac;
+            const { mac, ipV4, ipV6 } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
             const records = [
                 PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_COMMISSIONER_SERVICE_QNAME),
@@ -336,7 +336,7 @@ export class MdnsBroadcaster {
                 records.push(PtrRecord(deviceTypeQname, deviceQname));
             }
 
-            records.push(...this.getIpRecords(hostname, ips));
+            records.push(...this.getIpRecords(hostname, [...ipV6, ...ipV4]));
             return records;
         });
     }

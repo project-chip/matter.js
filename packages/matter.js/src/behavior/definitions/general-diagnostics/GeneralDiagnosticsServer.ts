@@ -12,7 +12,7 @@ import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { Time, Timer } from "../../../time/Time.js";
 import { ByteArray } from "../../../util/ByteArray.js";
-import { iPv4ToByteArray, iPv6ToByteArray, isIPv4, isIPv6 } from "../../../util/Ip.js";
+import { iPv4ToByteArray, iPv6ToByteArray } from "../../../util/Ip.js";
 import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { NetworkServer } from "../../system/network/NetworkServer.js";
@@ -248,9 +248,9 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
                   };
 
         // Filter all unassigned MACs out, sort operational on top, limit to 8 entries and map to the required format.
-        this.state.networkInterfaces = Object.entries(systemNetworkInterfaces)
-            .filter(([_, { mac }]) => mac !== "00:00:00:00:00:00")
-            .sort(([nameA], [nameB]) => {
+        this.state.networkInterfaces = systemNetworkInterfaces
+            .filter(({ mac }) => mac !== "00:00:00:00:00:00")
+            .sort(({ name: nameA }, { name: nameB }) => {
                 // sort operational entries on top, others to bottom
                 if (isOperationalReachable(nameA) && !isOperationalReachable(nameB)) {
                     return -1;
@@ -261,21 +261,15 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
                 return 0;
             })
             .slice(0, 8)
-            .map(([name, { mac, ips }]) => ({
+            .map(({ name, mac, ipV4, ipV6, type }) => ({
                 name,
                 isOperational: isOperationalReachable(name),
                 offPremiseServicesReachableIPv4: null, // null means unknown or not supported
                 offPremiseServicesReachableIPv6: null, // null means unknown or not supported
                 hardwareAddress: ByteArray.fromHex(mac.replace(/[^\da-fA-F]/g, "")),
-                iPv4Addresses: ips
-                    .filter(ip => isIPv4(ip))
-                    .slice(0, 4)
-                    .map(ip => iPv4ToByteArray(ip)),
-                iPv6Addresses: ips
-                    .filter(ip => isIPv6(ip))
-                    .slice(0, 8)
-                    .map(ip => iPv6ToByteArray(ip)),
-                type: networkType,
+                iPv4Addresses: ipV4.slice(0, 4).map(ip => iPv4ToByteArray(ip)),
+                iPv6Addresses: ipV6.slice(0, 8).map(ip => iPv6ToByteArray(ip)),
+                type: type ?? networkType,
             }));
     }
 

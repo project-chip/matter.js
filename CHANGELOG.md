@@ -37,6 +37,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Allows "fieldName$Changed" and "fieldName$Changing" event handlers to be async
   * Enhancement: Adds Conformance validation for enums, fieldname references and some more cases
   * Enhancement: Makes various config variables apply dynamically
+  * Enhancement: Added environment variable `network.interfaceNameTypeMap' to allow mapping of network interface names to types (Wifi, Thread, Ethernet)
   * Fix: Fixes some issues around event handling in the new API and makes sure events are not de-registered on factory resets
   * Fix: Corrects the returned status error code when an Enum value is set to an invalid value
   * Fix: Fixes a floating promise in FailsafeTimer; it tended to kill a test run without an easy way to identify the cause

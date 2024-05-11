@@ -14,7 +14,7 @@ import { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
 import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
-import { Network } from "../../../net/Network.js";
+import { Network, NetworkInterfaceDetailed, NetworkInterfaceNameToTypeMapping } from "../../../net/Network.js";
 import { UdpInterface } from "../../../net/UdpInterface.js";
 import { ServerNode } from "../../../node/ServerNode.js";
 import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
@@ -24,13 +24,6 @@ import { SessionManager } from "../../../session/SessionManager.js";
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
-
-type NetworkInterfaceDetails = {
-    [key: string]: {
-        mac: string;
-        ips: string[];
-    };
-};
 
 /**
  * Handles network functionality for {@link NodeServer}.
@@ -71,14 +64,18 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#mdnsBroadcaster;
     }
 
-    get networkInterfaces(): NetworkInterfaceDetails {
+    get networkInterfaces(): NetworkInterfaceDetailed[] {
         const network = this.owner.env.get(Network);
-        const interfaces = network.getNetInterfaces();
-        const interfaceDetails: NetworkInterfaceDetails = {};
-        interfaces.forEach(name => {
+        const customInterfaceNameTypeMapping = this.owner.env.vars.get<NetworkInterfaceNameToTypeMapping>(
+            "network.interfaceNameTypeMap",
+            [],
+        );
+        const interfaces = network.getNetInterfaces(customInterfaceNameTypeMapping);
+        const interfaceDetails = new Array<NetworkInterfaceDetailed>();
+        interfaces.forEach(({ name, type }) => {
             const details = network.getIpMac(name);
             if (details !== undefined) {
-                interfaceDetails[name] = details;
+                interfaceDetails.push({ name, type, ...details });
             }
         });
         return interfaceDetails;

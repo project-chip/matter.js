@@ -25,6 +25,7 @@ const logger = Logger.get("Environment");
  * * `log.stack.limit` - Stack trace limit, see https://nodejs.org/api/errors.html#errorstacktracelimit
  * * `mdns.networkInterface` - Network interface to use for MDNS broadcasts and scanning, default are all available interfaces
  * * `mdns.ipv4` - Also announce/scan on IPv4 interfaces
+ * * `network.interfaceNameTypeMap` - Map of interface names to types, expected to be defined as array of `{name: string, type: number}` objects with types: 1=Wifi, 2=Ethernet, 3=Cellular, 4=Thread
  *
  * TODO - could remove global singletons by moving here
  */
