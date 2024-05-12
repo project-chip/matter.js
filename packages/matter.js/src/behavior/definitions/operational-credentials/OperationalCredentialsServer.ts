@@ -89,10 +89,13 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline);
     }
 
-    override attestationRequest({ attestationNonce }: AttestationRequest) {
+    override async attestationRequest({ attestationNonce }: AttestationRequest) {
         if (attestationNonce.length !== 32) {
             throw new StatusResponseError("Invalid attestation nonce length", StatusCode.InvalidCommand);
         }
+
+        await this.#assureCertification();
+
         const elements = TlvAttestation.encode({
             declaration: this.#certification.declaration,
             attestationNonce: attestationNonce,
@@ -104,7 +107,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         };
     }
 
-    override csrRequest({ csrNonce, isForUpdateNoc }: CsrRequest) {
+    override async csrRequest({ csrNonce, isForUpdateNoc }: CsrRequest) {
         if (csrNonce.length !== 32) {
             throw new StatusResponseError("Invalid csr nonce length", StatusCode.InvalidCommand);
         }
@@ -124,6 +127,8 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             );
         }
 
+        await this.#assureCertification();
+
         const certSigningRequest = failsafeContext.createCertificateSigningRequest(
             isForUpdateNoc ?? false,
             this.session.id,
@@ -132,7 +137,9 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         return { nocsrElements, attestationSignature: this.#certification.sign(this.session, nocsrElements) };
     }
 
-    override certificateChainRequest({ certificateType }: CertificateChainRequest) {
+    override async certificateChainRequest({ certificateType }: CertificateChainRequest) {
+        await this.#assureCertification();
+
         switch (certificateType) {
             case OperationalCredentials.CertificateChainType.DacCertificate:
                 return { certificate: this.#certification.certificate };
@@ -423,6 +430,12 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         await this.context.transaction.commit();
     }
 
+    async #assureCertification() {
+        if (!this.#certification.construction.ready) {
+            return this.#certification.construction;
+        }
+    }
+
     get #certification() {
         const certification = this.internal.certification;
         if (certification) {
@@ -475,7 +488,7 @@ export namespace OperationalCredentialsServer {
          * Development devices and those intended for personal use may use a development certificate.  This is the
          * default if you do not provide an official certification in {@link ServerOptions.certification}.
          */
-        certification?: DeviceCertification.Configuration = undefined;
+        certification?: DeviceCertification.Configuration | DeviceCertification.ProviderFunction = undefined;
 
         [Val.properties](_endpoint: any, session: ValueSupervisor.Session) {
             return {
