@@ -148,7 +148,7 @@ The TypeScript typing should exactly tell you which attributes are existing and 
 
 matter.js provides the Device classes with their mandatory clusters included and the defined or basic feature variants. If you want to overwrite this you can do this by modifying the Type definition:
 
-You can overwrite clusters which are defined by own implemetations
+You can overwrite clusters which are defined by own implementations:
 
 ```javascript
 class ReportingOnOffServer extends OnOffLightRequirements.OnOffServer {
@@ -187,6 +187,19 @@ const endpoint = await serverNode.add(
     ExtendedColorLightDevice.with(IdentifyServer.with("Query"), ColorControlServer.with("ColorTemperature")),
 );
 ```
+
+#### Override Cluster handlers and implementations
+
+Matter.js provides default implementations for several clusters. See the [Readme of matter.js project](../packages/matter.js/README.md#included-cluster-default-implementations) for a list of all available clusters, their default implementations and notes for it. The implemented functionality is also described in the cluster implementations themselves that can be found in the [behavior/definitions](../packages/matter.js/src/behavior/definitions) folder (check the *Server.ts files).
+
+You can override the matter commands directly as one option and implement the full required logic as defined by the specification. Most default implementations already do this and provide special logic methods to override to implement just the relevant device/hardware/platform specific logic. In these cases you only need to take care about this and can leave matter specific requirements aside because we already took care about them.
+
+Examples here are e.g. 
+* [LevelControlServer](../packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts)
+* [OnOffServer](../packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts)
+* [ColorControl](../packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts)
+* [Window-Covering](../packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts)
+* ... and several more :-)
 
 ### New:BridgedNodeEndpoint <--> Legacy:ComposedDevice
 To create a Composed device in a bridge context a structure container is needed to encapsulate the endpoints of the composed device. In the new API this is done by the BridgedNodeEndpoint class.

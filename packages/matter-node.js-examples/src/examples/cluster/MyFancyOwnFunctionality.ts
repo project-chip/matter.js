@@ -178,7 +178,7 @@ export const MyFancyOwnFunctionalityBehavior = ClusterBehavior.withInterface<MyF
 );
 
 type MyFancyOwnFunctionalityBehaviorType = InstanceType<typeof MyFancyOwnFunctionalityBehavior>;
-export interface TemperatureMeasurementBehavior extends MyFancyOwnFunctionalityBehaviorType {}
+export interface MyFancyOwnFunctionalityBehavior extends MyFancyOwnFunctionalityBehaviorType {}
 type StateType = InstanceType<typeof MyFancyOwnFunctionalityBehavior.State>;
 export namespace MyFancyOwnFunctionalityBehavior {
     export interface State extends StateType {}
