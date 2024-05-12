@@ -380,7 +380,7 @@ async function almostCommission(node?: MockServerNode, number = 0) {
     });
 
     await node.online(context, async agent => {
-        await agent.operationalCredentials.addTrustedRootCertificate({ rootCaCertificate: params.caCert });
+        agent.operationalCredentials.addTrustedRootCertificate({ rootCaCertificate: params.caCert });
     });
 
     await node.online(context, async agent => {
