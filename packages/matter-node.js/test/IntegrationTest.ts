@@ -7,6 +7,7 @@
 import * as assert from "assert";
 
 import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
+import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
 import {
     AccessControl,
     AdministratorCommissioning,
@@ -87,6 +88,7 @@ describe("Integration Test", () => {
     let commissioningController2: CommissioningController;
     let commissioningServer: CommissioningServer;
     let commissioningServer2: CommissioningServer;
+    let commissioningServer2CertificateProviderCalled = false;
     let onOffLightDeviceServer: OnOffLightDevice;
     let serverMdnsScanner: MdnsScanner;
     let clientMdnsScanner: MdnsScanner;
@@ -1305,6 +1307,19 @@ describe("Integration Test", () => {
                     commissioningChangedCallsServer2.push({ fabricIndex, time: MockTime.nowMs() }),
                 activeSessionsChangedCallback: (fabricIndex: FabricIndex) =>
                     sessionChangedCallsServer2.push({ fabricIndex, time: MockTime.nowMs() }),
+                certificates: async () => {
+                    const paa = new AttestationCertificateManager(vendorId);
+                    const { keyPair: dacKeyPair, dac } = paa.getDACert(productId);
+                    const declaration = CertificationDeclarationManager.generate(vendorId, productId);
+
+                    commissioningServer2CertificateProviderCalled = true;
+                    return {
+                        privateKey: dacKeyPair.privateKey,
+                        certificate: dac,
+                        intermediateCertificate: paa.getPAICert(),
+                        declaration,
+                    };
+                },
             });
 
             onOffLightDeviceServer = new OnOffLightDevice();
@@ -1320,6 +1335,7 @@ describe("Integration Test", () => {
 
             assert.equal(commissioningChangedCallsServer2.length, 0);
             assert.equal(sessionChangedCallsServer2.length, 0);
+            assert.equal(commissioningServer2CertificateProviderCalled, false);
         });
 
         it("the client commissions the second device", async () => {
@@ -1348,6 +1364,7 @@ describe("Integration Test", () => {
 
             assert.deepEqual(commissioningController.getCommissionedNodes(), [...existingNodes, node.nodeId]);
 
+            assert.equal(commissioningServer2CertificateProviderCalled, true);
             assert.equal(commissioningChangedCallsServer2.length, 1);
             assert.equal(sessionChangedCallsServer2.length, 1);
             assert.equal(sessionChangedCallsServer2[0].fabricIndex, FabricIndex(1));

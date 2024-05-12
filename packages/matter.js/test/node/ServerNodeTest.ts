@@ -6,6 +6,8 @@
 
 import { DescriptorBehavior } from "../../src/behavior/definitions/descriptor/DescriptorBehavior.js";
 import { PumpConfigurationAndControlServer } from "../../src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlServer.js";
+import { AttestationCertificateManager } from "../../src/certificate/AttestationCertificateManager.js";
+import { CertificationDeclarationManager } from "../../src/certificate/CertificationDeclarationManager.js";
 import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
 import { PumpConfigurationAndControl } from "../../src/cluster/definitions/PumpConfigurationAndControlCluster.js";
 import { DnsCodec, DnsMessage, DnsRecordType } from "../../src/codec/DnsCodec.js";
@@ -181,6 +183,66 @@ describe("ServerNode", () => {
         await node.close();
     });
 
+    it("commissions with delayed provided certificates", async () => {
+        const vendorId = VendorId(0xfff1);
+        const productId = 0x8000;
+        let commissioningServer2CertificateProviderCalled = false;
+        const node = await MockServerNode.createOnline({
+            config: {
+                type: ServerNode.RootEndpoint,
+                operationalCredentials: {
+                    certification: async () => {
+                        const paa = new AttestationCertificateManager(vendorId);
+                        const { keyPair: dacKeyPair, dac } = paa.getDACert(productId);
+                        const declaration = CertificationDeclarationManager.generate(vendorId, productId);
+
+                        commissioningServer2CertificateProviderCalled = true;
+                        return {
+                            privateKey: dacKeyPair.privateKey,
+                            certificate: dac,
+                            intermediateCertificate: paa.getPAICert(),
+                            declaration,
+                        };
+                    },
+                },
+            },
+        });
+
+        const session = await node.createSession();
+
+        const context = { session, command: true };
+
+        await node.online(context, async agent => {
+            await agent.generalCommissioning.armFailSafe({
+                expiryLengthSeconds: Fixtures.failsafeLengthS,
+                breadcrumb: 4,
+            });
+        });
+        expect(commissioningServer2CertificateProviderCalled).equals(false);
+
+        await node.online(context, async agent => {
+            await agent.generalCommissioning.setRegulatoryConfig({
+                newRegulatoryConfig: 2,
+                countryCode: "XX",
+                breadcrumb: 5,
+            });
+        });
+        expect(commissioningServer2CertificateProviderCalled).equals(false);
+
+        await node.online(context, async agent => {
+            await agent.operationalCredentials.certificateChainRequest({ certificateType: 2 });
+        });
+        expect(commissioningServer2CertificateProviderCalled).equals(true);
+
+        node.cancel();
+
+        if (node.lifecycle.isOnline) {
+            await MockTime.resolve(node.lifecycle.offline);
+        }
+
+        await node.close();
+    });
+
     it("decommissions and recommissions", async () => {
         const { node, context } = await commission();
 
@@ -302,23 +364,23 @@ async function almostCommission(node?: MockServerNode, number = 0) {
     });
 
     await node.online(context, async agent => {
-        agent.operationalCredentials.certificateChainRequest({ certificateType: 2 });
+        await agent.operationalCredentials.certificateChainRequest({ certificateType: 2 });
     });
 
     await node.online(context, async agent => {
-        agent.operationalCredentials.certificateChainRequest({ certificateType: 1 });
+        await agent.operationalCredentials.certificateChainRequest({ certificateType: 1 });
     });
 
     await node.online(context, async agent => {
-        agent.operationalCredentials.attestationRequest({ attestationNonce: params.attestationNonce });
+        await agent.operationalCredentials.attestationRequest({ attestationNonce: params.attestationNonce });
     });
 
     await node.online(context, async agent => {
-        agent.operationalCredentials.csrRequest({ csrNonce: params.csrNonce });
+        await agent.operationalCredentials.csrRequest({ csrNonce: params.csrNonce });
     });
 
     await node.online(context, async agent => {
-        agent.operationalCredentials.addTrustedRootCertificate({ rootCaCertificate: params.caCert });
+        await agent.operationalCredentials.addTrustedRootCertificate({ rootCaCertificate: params.caCert });
     });
 
     await node.online(context, async agent => {
