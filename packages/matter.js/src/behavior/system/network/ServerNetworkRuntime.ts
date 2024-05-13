@@ -26,7 +26,7 @@ import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
 
 function convertNetworkEnvironmentType(type: string | number) {
-    let convertedType: InterfaceType =
+    const convertedType: InterfaceType =
         typeof type === "string" ? InterfaceType[type as keyof typeof InterfaceType] : type;
     if (typeof convertedType !== "number" || convertedType < 1 || convertedType > 4) {
         return undefined;
