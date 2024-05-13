@@ -39,7 +39,7 @@
     "lerna": "^8.1.2",
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "semver": "^7.6.0",
+    "semver": "^7.6.2",
     "typedoc": "^0.25.13",
     "typedoc-plugin-markdown": "^3.17.1",
     "typedoc-plugin-missing-exports": "^2.2.0",
