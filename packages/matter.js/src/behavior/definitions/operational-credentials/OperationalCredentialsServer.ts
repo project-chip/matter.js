@@ -94,16 +94,16 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             throw new StatusResponseError("Invalid attestation nonce length", StatusCode.InvalidCommand);
         }
 
-        await this.#assureCertification();
+        const certification = await this.getCertification();
 
         const elements = TlvAttestation.encode({
-            declaration: this.#certification.declaration,
+            declaration: certification.declaration,
             attestationNonce: attestationNonce,
             timestamp: 0,
         });
         return {
             attestationElements: elements,
-            attestationSignature: this.#certification.sign(this.session, elements),
+            attestationSignature: certification.sign(this.session, elements),
         };
     }
 
@@ -127,24 +127,24 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             );
         }
 
-        await this.#assureCertification();
+        const certification = await this.getCertification();
 
         const certSigningRequest = failsafeContext.createCertificateSigningRequest(
             isForUpdateNoc ?? false,
             this.session.id,
         );
         const nocsrElements = TlvCertSigningRequest.encode({ certSigningRequest, csrNonce });
-        return { nocsrElements, attestationSignature: this.#certification.sign(this.session, nocsrElements) };
+        return { nocsrElements, attestationSignature: certification.sign(this.session, nocsrElements) };
     }
 
     override async certificateChainRequest({ certificateType }: CertificateChainRequest) {
-        await this.#assureCertification();
+        const certification = await this.getCertification();
 
         switch (certificateType) {
             case OperationalCredentials.CertificateChainType.DacCertificate:
-                return { certificate: this.#certification.certificate };
+                return { certificate: certification.certificate };
             case OperationalCredentials.CertificateChainType.PaiCertificate:
-                return { certificate: this.#certification.intermediateCertificate };
+                return { certificate: certification.intermediateCertificate };
             default:
                 throw new StatusResponseError(
                     `Unsupported certificate type: ${certificateType}`,
@@ -430,22 +430,18 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         await this.context.transaction.commit();
     }
 
-    async #assureCertification() {
-        if (!this.#certification.construction.ready) {
-            return this.#certification.construction;
-        }
-    }
+    async getCertification() {
+        const certification =
+            this.internal.certification ??
+            (this.internal.certification = new DeviceCertification(
+                this.state.certification,
+                this.agent.get(ProductDescriptionServer).state,
+            ));
 
-    get #certification() {
-        const certification = this.internal.certification;
-        if (certification) {
-            return certification;
+        if (!certification.construction.ready) {
+            await certification.construction;
         }
-
-        return (this.internal.certification = new DeviceCertification(
-            this.state.certification,
-            this.agent.get(ProductDescriptionServer).state,
-        ));
+        return certification;
     }
 
     async #handleAddedFabric({ fabricIndex }: Fabric) {
@@ -488,7 +484,7 @@ export namespace OperationalCredentialsServer {
          * Development devices and those intended for personal use may use a development certificate.  This is the
          * default if you do not provide an official certification in {@link ServerOptions.certification}.
          */
-        certification?: DeviceCertification.Configuration | DeviceCertification.ProviderFunction = undefined;
+        certification?: DeviceCertification.Definition = undefined;
 
         [Val.properties](_endpoint: any, session: ValueSupervisor.Session) {
             return {

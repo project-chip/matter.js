@@ -7,7 +7,7 @@
 import { MatterDevice } from "../../../MatterDevice.js";
 import { AttestationCertificateManager } from "../../../certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "../../../certificate/CertificationDeclarationManager.js";
-import { ImplementationError } from "../../../common/MatterError.js";
+import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { Crypto } from "../../../crypto/Crypto.js";
 import { PrivateKey } from "../../../crypto/Key.js";
 import { SecureSession } from "../../../session/SecureSession.js";
@@ -41,10 +41,7 @@ export class DeviceCertification {
         return this.#assertInitialized().declaration;
     }
 
-    constructor(
-        config?: DeviceCertification.Configuration | DeviceCertification.ProviderFunction,
-        product?: ProductDescription,
-    ) {
+    constructor(config?: DeviceCertification.Definition, product?: ProductDescription) {
         // Certification Provider function is used to request the certificates delayed
         if (typeof config === "function") {
             const configProvider = config;
@@ -99,7 +96,9 @@ export class DeviceCertification {
             this.#declaration === undefined ||
             this.#privateKey === undefined
         ) {
-            throw new ImplementationError(`Device certification not initialized`);
+            throw new InternalError(
+                `Device certification not initialized while trying to access it. This should never happen.`,
+            );
         }
         return {
             certificate: this.#certificate,
@@ -118,5 +117,5 @@ export namespace DeviceCertification {
         declaration: ByteArray;
     }
 
-    export type ProviderFunction = () => Promise<DeviceCertification.Configuration>;
+    export type Definition = Configuration | (() => Promise<Configuration>);
 }

@@ -60,7 +60,7 @@ OperationalCredentials.Cluster.commands = {
 };
 
 export const OperationalCredentialsClusterHandler: (
-    certificates: DeviceCertification.Configuration | DeviceCertification.ProviderFunction,
+    certificates: DeviceCertification.Definition,
     productDescription?: ProductDescription,
 ) => ClusterServerHandlers<typeof OperationalCredentials.Cluster> = (certificates, productDescription) => {
     let certification: DeviceCertification | undefined = undefined;

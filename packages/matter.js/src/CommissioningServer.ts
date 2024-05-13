@@ -169,7 +169,7 @@ export interface CommissioningServerOptions {
      * Vendor specific certificates to be used for the OperationalCredentials cluster. If not set Test certificates
      * (official Chip tool test Root certificate is used) are generated automatically.
      */
-    certificates?: DeviceCertification.Configuration | DeviceCertification.ProviderFunction;
+    certificates?: DeviceCertification.Definition;
 
     /**
      * Optional configuration for the GeneralCommissioning cluster. If not set the default values are used.
