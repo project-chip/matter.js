@@ -40,7 +40,7 @@
         "@types/chai": "^4.3.12",
         "@types/mocha": "^10.0.6",
         "@types/wtfnode": "^0.7.3",
-        "chai": "^4.4.1",
+        "chai": "^5.1.1",
         "embedme": "^1.22.1",
         "mocha": "^10.4.0",
         "typescript": "~5.4.5"
