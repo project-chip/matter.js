@@ -11,7 +11,6 @@ import {
     NetworkError,
     NetworkInterface,
     NetworkInterfaceDetails,
-    NetworkInterfaceNameToTypeMapping,
     UdpChannel,
     UdpChannelOptions,
 } from "@project-chip/matter.js/net";
@@ -118,21 +117,22 @@ export class NetworkNode extends Network {
 
     /**
      * Get all network interfaces.
-     * The optional nameTypeMapping parameter allows to map interface names to types if this mapping is known.
+     * The optional configuration parameter allows to map interface names to types if this mapping is known.
+     * Each network interface which has no mapped type is returned as Ethernet for now.
      *
-     * @param nameTypeMapping - An array of objects with the name and type properties.
+     * @param configuration - An array of objects with the name and type properties.
      */
-    getNetInterfaces(nameTypeMapping: NetworkInterfaceNameToTypeMapping = []): NetworkInterface[] {
+    getNetInterfaces(configuration: NetworkInterface[] = []): NetworkInterface[] {
         const result = new Array<NetworkInterface>();
         const interfaces = networkInterfaces();
         for (const name in interfaces) {
             const netInterfaces = interfaces[name] as NetworkInterfaceInfo[];
             if (netInterfaces.length === 0) continue;
             if (netInterfaces[0].internal) continue;
-            let type = InterfaceType.Unspecified;
-            if (nameTypeMapping.length > 0) {
-                const nameType = nameTypeMapping.find(({ name: mapName }) => name === mapName);
-                if (nameType !== undefined) {
+            let type = InterfaceType.Ethernet;
+            if (configuration.length > 0) {
+                const nameType = configuration.find(({ name: mapName }) => name === mapName);
+                if (nameType !== undefined && nameType.type !== undefined) {
                     type = nameType.type;
                 }
             }

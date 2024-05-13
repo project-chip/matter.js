@@ -53,15 +53,13 @@ export type NetworkInterfaceDetails = {
 
 export type NetworkInterfaceDetailed = NetworkInterface & NetworkInterfaceDetails;
 
-export type NetworkInterfaceNameToTypeMapping = { name: string; type: InterfaceType }[];
-
 export abstract class Network {
     // TODO - remove this singleton
     static get: () => Network = () => {
         throw new NoProviderError("No provider configured");
     };
 
-    abstract getNetInterfaces(nameTypeMapping?: NetworkInterfaceNameToTypeMapping): NetworkInterface[];
+    abstract getNetInterfaces(configuration?: NetworkInterface[]): NetworkInterface[];
     abstract getIpMac(netInterface: string): NetworkInterfaceDetails | undefined;
     abstract createUdpChannel(options: UdpChannelOptions): Promise<UdpChannel>;
 

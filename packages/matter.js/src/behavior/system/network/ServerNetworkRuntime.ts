@@ -14,7 +14,7 @@ import { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
 import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
-import { Network, NetworkInterfaceDetailed, NetworkInterfaceNameToTypeMapping } from "../../../net/Network.js";
+import { InterfaceType, Network, NetworkInterface, NetworkInterfaceDetailed } from "../../../net/Network.js";
 import { UdpInterface } from "../../../net/UdpInterface.js";
 import { ServerNode } from "../../../node/ServerNode.js";
 import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
@@ -24,6 +24,15 @@ import { SessionManager } from "../../../session/SessionManager.js";
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
+
+function convertNetworkEnvironmentType(type: string | number) {
+    let convertedType: InterfaceType =
+        typeof type === "string" ? InterfaceType[type as keyof typeof InterfaceType] : type;
+    if (typeof convertedType !== "number" || convertedType < 1 || convertedType > 4) {
+        return undefined;
+    }
+    return convertedType;
+}
 
 /**
  * Handles network functionality for {@link NodeServer}.
@@ -64,13 +73,22 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#mdnsBroadcaster;
     }
 
+    get networkInterfaceConfiguration(): NetworkInterface[] {
+        const interfaceConfig = this.owner.env.vars.get<Record<string, { type: string | number }>>(
+            "network.interface",
+            {},
+        );
+
+        return Object.entries(interfaceConfig).map(([name, { type }]) => ({
+            name,
+            type: convertNetworkEnvironmentType(type),
+        }));
+    }
+
     get networkInterfaces(): NetworkInterfaceDetailed[] {
         const network = this.owner.env.get(Network);
-        const customInterfaceNameTypeMapping = this.owner.env.vars.get<NetworkInterfaceNameToTypeMapping>(
-            "network.interfaceNameTypeMap",
-            [],
-        );
-        const interfaces = network.getNetInterfaces(customInterfaceNameTypeMapping);
+
+        const interfaces = network.getNetInterfaces(this.networkInterfaceConfiguration);
         const interfaceDetails = new Array<NetworkInterfaceDetailed>();
         interfaces.forEach(({ name, type }) => {
             const details = network.getIpMac(name);

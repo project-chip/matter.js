@@ -14,6 +14,9 @@ describe("VariableService", () => {
         expect(vars.get("variable.one", false)).equals(true);
         expect(vars.get("variable.two", 2)).equals(4);
         expect(vars.get("user")).deep.equals({ name: "Bob", age: "78" });
+        expect(vars.get("list")).deep.equals({ "0": "entry1" });
+        expect(vars.get("objectlist")).deep.equals({ "0": { entry: "1" } });
+        expect(vars.get("indexedobject")).deep.equals({ entry: { subentry: "Value" } });
     }
 
     it("adds by name", () => {
@@ -21,6 +24,9 @@ describe("VariableService", () => {
             vars.set("variable.one", true);
             vars.set("variable.two", 4);
             vars.set("user", { name: "Bob", age: "78" });
+            vars.set("list", { "0": "entry1" });
+            vars.set("objectlist", { "0": { entry: "1" } });
+            vars.set("indexedobject", { entry: { subentry: "Value" } });
         });
     });
 
@@ -32,12 +38,25 @@ describe("VariableService", () => {
                 MATTER_VARIABLE_TWO: "4",
                 MATTER_USER_NAME: "Bob",
                 MATTER_USER_AGE: "78",
+                MATTER_LIST_0: "entry1",
+                MATTER_OBJECTLIST_0_ENTRY: "1",
+                MATTER_INDEXEDOBJECT_ENTRY_SUBENTRY: "Value",
             }),
         );
     });
 
     it("adds argv style", () => {
-        testVars(vars => vars.addArgvStyle(["--variable-one", "--variable-two=4", "--user-name=Bob", "--user-age=78"]));
+        testVars(vars =>
+            vars.addArgvStyle([
+                "--variable-one",
+                "--variable-two=4",
+                "--user-name=Bob",
+                "--user-age=78",
+                "--list-0=entry1",
+                "--objectlist-0-entry=1",
+                "--indexedobject-entry-subentry=Value",
+            ]),
+        );
     });
 
     it("adds config style", () => {
@@ -51,6 +70,9 @@ describe("VariableService", () => {
                     name: "Bob",
                     age: "78",
                 },
+                list: { "0": "entry1" },
+                objectlist: { "0": { entry: "1" } },
+                indexedobject: { entry: { subentry: "Value" } },
             }),
         );
     });

@@ -70,9 +70,7 @@ export const GeneralDiagnosticsClusterHandler: () => ClusterServerHandlers<typeo
         },
 
         upTimeAttributeGetter: () => {
-            const upTime = Math.round((Time.nowMs() - bootUpTime) / 1000);
-            console.log("upTimeAttributeGetter", upTime);
-            return upTime;
+            return Math.round((Time.nowMs() - bootUpTime) / 1000);
         },
 
         testEventTrigger: () => {},
