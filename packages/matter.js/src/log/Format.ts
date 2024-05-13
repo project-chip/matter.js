@@ -7,6 +7,7 @@
 import { Lifecycle } from "../common/Lifecycle.js";
 import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { serialize } from "../util/String.js";
 import { Diagnostic } from "./Diagnostic.js";
 import { Level } from "./Level.js";
 
@@ -418,6 +419,12 @@ function renderValue(value: unknown, formatter: Formatter, squash: boolean): str
                 return renderDiagnostic(e, formatter);
             })
             .join(squash ? "" : " ");
+    }
+    if (value instanceof Date) {
+        return formatter.text(formatTime(value));
+    }
+    if (typeof value === "object") {
+        return formatter.text(serialize(value) ?? "undefined");
     }
 
     const text = typeof value === "string" || value instanceof String ? value : value.toString().trim();

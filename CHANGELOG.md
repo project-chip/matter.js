@@ -26,9 +26,13 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Adds additional logging information for PASE and CASE to better understand errors without debug logging
   * Enhancement: Adds several Optimizations and adjustments for Obervers (e.g. Observable.isObserved)
   * Fix: Corrects returned errors for two commands on OperationalCredentials cluster 
-* matter.js New API code flows:
+* matter.js Legacy API:
+  * Breaking: The object type for providing custom production certificates has changed to be now in sync with the DeviceCertification class (just the property names changed)
+  * Feature: Added on demand certification determination via an async certificate provider method (alternative to provideing certs directly) to determine certificates on first commissioning request
+* matter.js New API:
   * Breaking: The name of the *$Change Events for attributes and such are changed to *$Changed . Please adjust your code!
   * Breaking: Introduced ExtensionInterface to define extensible/custom methods for behavior/Cluster-Server implementation to be available when extending this class (needed because of a TS bug 27965)
+  * Feature: Added on demand certification determination via an async certificate provider method (alternative to provideing certs directly) to determine certificates on first commissioning request
   * Enhancement: Optimized constraint validations and conformance error messages
   * Enhancement: Conditionally enables the ReachableChanged event on the Root Endpoint BasicInformation cluster if the reachable attribute is defined in the defaults
   * Enhancement: Allow to register events directly when initializing endpoints like in legacy API
