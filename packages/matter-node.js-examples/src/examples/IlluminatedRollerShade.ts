@@ -26,8 +26,6 @@ const LiftingWindowCoveringServer = WindowCoveringServer.with("Lift", "AbsoluteP
 
 /**
  * Implementation of the Matter WindowCovering cluster for the shade motor.
- *
- * TODO - some of this should probably move to WindowCoveringServer
  */
 class RollerShade extends LiftingWindowCoveringServer {
     override async handleMovement(
@@ -41,6 +39,7 @@ class RollerShade extends LiftingWindowCoveringServer {
             direction === MovementDirection.Open ? "Open" : "Close",
             targetPercent100ths !== undefined ? `${targetPercent100ths / 100}%` : "",
         );
+
         // Updates the shade position
         await super.handleMovement(type, reversed, direction, targetPercent100ths);
     }
