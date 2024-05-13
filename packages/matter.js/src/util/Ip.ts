@@ -3,7 +3,6 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-
 import { ByteArray } from "./ByteArray.js";
 
 export function isIPv4(ip: string) {
@@ -15,12 +14,21 @@ export function isIPv6(ip: string) {
 }
 
 export function iPv4ToNumber(ip: string) {
-    const dataView = new ByteArray(4).getDataView();
+    const dataView = iPv4ToArray(ip).getDataView();
+    return dataView.getUint32(0);
+}
+
+export function iPv4ToArray(ip: string) {
+    const array = new Uint8Array(4);
     const ipParts = ip.split(".");
     for (let i = 0; i < 4; i++) {
-        dataView.setUint8(i, parseInt(ipParts[i]));
+        array[i] = parseInt(ipParts[i]);
     }
-    return dataView.getUint32(0);
+    return array;
+}
+
+export function iPv4ToByteArray(ip: string) {
+    return ByteArray.from(iPv4ToArray(ip));
 }
 
 export function iPv6ToArray(ip: string) {
@@ -36,6 +44,10 @@ export function iPv6ToArray(ip: string) {
         array[index++] = parseInt(part, 16);
     });
     return array;
+}
+
+export function iPv6ToByteArray(ip: string) {
+    return ByteArray.from(Array.from(iPv6ToArray(ip)).flatMap(value => [value >> 8, value & 0xff]));
 }
 
 export function onSameNetwork(ip1: string, ip2: string, mask: string) {

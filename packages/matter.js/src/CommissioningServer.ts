@@ -35,6 +35,7 @@ import {
     ClusterServerObj,
 } from "./cluster/server/ClusterServerTypes.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
+import { createDefaultGeneralDiagnosticsClusterServer } from "./cluster/server/GeneralDiagnosticsServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
 import { OperationalCredentialsClusterHandler } from "./cluster/server/OperationalCredentialsServer.js";
 import { ImplementationError, InternalError, NoProviderError } from "./common/MatterError.js";
@@ -198,7 +199,7 @@ export interface CommissioningServerOptions {
 /**
  * Commands exposed by the CommissioningServer
  */
-type CommissioningServerCommands = {
+export type CommissioningServerCommands = {
     /** Provide a means for certification tests to trigger some test-plan-specific events. */
     testEventTrigger: ClusterServerHandlers<typeof GeneralDiagnosticsCluster>["testEventTrigger"];
 };
@@ -405,28 +406,7 @@ export class CommissioningServer extends MatterNode {
         );
 
         // TODO Get the defaults from the cluster meta details
-        this.rootEndpoint.addClusterServer(
-            ClusterServer(
-                GeneralDiagnosticsCluster,
-                {
-                    networkInterfaces: [],
-                    rebootCount: 0,
-                    upTime: 0,
-                    totalOperationalHours: 0,
-                    bootReason: GeneralDiagnostics.BootReason.Unspecified,
-                    activeHardwareFaults: [],
-                    activeRadioFaults: [],
-                    activeNetworkFaults: [],
-                    testEventTriggersEnabled: false,
-                },
-                {
-                    testEventTrigger: async args => await this.commandHandler.executeHandler("testEventTrigger", args),
-                },
-                {
-                    bootReason: true,
-                },
-            ),
-        );
+        this.rootEndpoint.addClusterServer(createDefaultGeneralDiagnosticsClusterServer(this.commandHandler));
 
         this.rootEndpoint.addClusterServer(
             ClusterServer(

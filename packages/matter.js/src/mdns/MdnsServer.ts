@@ -233,7 +233,7 @@ export class MdnsServer {
 
     async announce(announcedNetPort?: number) {
         await Promise.all(
-            this.getMulticastInterfacesForAnnounce().map(async netInterface => {
+            this.getMulticastInterfacesForAnnounce().map(async ({ name: netInterface }) => {
                 const records = this.records.get(netInterface);
                 for (const [portType, portTypeRecords] of records) {
                     if (announcedNetPort !== undefined && !this.isKeyForPort(portType, announcedNetPort)) continue;
@@ -302,7 +302,7 @@ export class MdnsServer {
     }
 
     private getMulticastInterfacesForAnnounce() {
-        return this.netInterface === undefined ? this.network.getNetInterfaces() : [this.netInterface];
+        return this.netInterface === undefined ? this.network.getNetInterfaces() : [{ name: this.netInterface }];
     }
 
     private queryRecords({ name, recordType }: { name: string; recordType: DnsRecordType }, records: DnsRecord<any>[]) {
