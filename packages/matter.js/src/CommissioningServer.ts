@@ -169,12 +169,7 @@ export interface CommissioningServerOptions {
      * Vendor specific certificates to be used for the OperationalCredentials cluster. If not set Test certificates
      * (official Chip tool test Root certificate is used) are generated automatically.
      */
-    certificates?: {
-        devicePrivateKey: ByteArray;
-        deviceCertificate: ByteArray;
-        deviceIntermediateCertificate: ByteArray;
-        certificationDeclaration: ByteArray;
-    };
+    certificates?: DeviceCertification.Definition;
 
     /**
      * Optional configuration for the GeneralCommissioning cluster. If not set the default values are used.
@@ -222,7 +217,6 @@ export class CommissioningServer extends MatterNode {
     private readonly discriminator: number;
     private readonly flowType: CommissioningFlowType;
     private readonly productDescription: ProductDescription;
-    private readonly certification: DeviceCertification;
 
     private storage?: StorageContext<SyncStorage>;
     private endpointStructureStorage?: StorageContext<SyncStorage>;
@@ -319,13 +313,13 @@ export class CommissioningServer extends MatterNode {
         if (certificates == undefined) {
             const paa = new AttestationCertificateManager(vendorId);
             const { keyPair: dacKeyPair, dac } = paa.getDACert(productId);
-            const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
+            const declaration = CertificationDeclarationManager.generate(vendorId, productId);
 
             certificates = {
-                devicePrivateKey: dacKeyPair.privateKey,
-                deviceCertificate: dac,
-                deviceIntermediateCertificate: paa.getPAICert(),
-                certificationDeclaration,
+                privateKey: dacKeyPair.privateKey,
+                certificate: dac,
+                intermediateCertificate: paa.getPAICert(),
+                declaration,
             };
         }
 
@@ -335,16 +329,6 @@ export class CommissioningServer extends MatterNode {
             vendorId: vendorId,
             productId: productId,
         };
-
-        this.certification = new DeviceCertification(
-            {
-                certificate: certificates.deviceCertificate,
-                declaration: certificates.certificationDeclaration,
-                intermediateCertificate: certificates.deviceIntermediateCertificate,
-                privateKey: certificates.devicePrivateKey,
-            },
-            this.productDescription,
-        );
 
         // Add Operational credentials cluster to root directly because it is not allowed to be changed afterward
         // TODO Get the defaults from the cluster meta details
@@ -359,7 +343,7 @@ export class CommissioningServer extends MatterNode {
                     trustedRootCertificates: [],
                     currentFabricIndex: FabricIndex.NO_FABRIC,
                 },
-                OperationalCredentialsClusterHandler(this.certification),
+                OperationalCredentialsClusterHandler(certificates, this.productDescription),
             ),
         );
 
