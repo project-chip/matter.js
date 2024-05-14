@@ -24,6 +24,7 @@ const TYPE_ERRORS: { [badType: string]: string } = {
     "Time of Day": "TimeOfDay",
     SemanticTagStruct: "semtag",
     "voltage-mW": "voltage-mV",
+    utc: "epoch-s",
 };
 
 export function fixTypeIdentifier<T extends string | undefined>(type: T): T {

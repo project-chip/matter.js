@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const SpeakerDT = DeviceType({
+export const SpeakerDt = DeviceType({
     name: "Speaker", id: 0x22, classification: "simple",
 
     details: "This defines conformance to the Speaker device type. This feature controls the speaker volume of " +
@@ -47,4 +47,4 @@ export const SpeakerDT = DeviceType({
     ]
 });
 
-Matter.children.push(SpeakerDT);
+Matter.children.push(SpeakerDt);

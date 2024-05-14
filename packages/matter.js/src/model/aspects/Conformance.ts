@@ -565,6 +565,10 @@ function ParsedAst(conformance: Conformance, definition: string) {
                 return { type: Conformance.Special.Desc };
             }
 
+            if (name === "null") {
+                return { type: Conformance.Special.Value, param: null };
+            }
+
             return { type: Conformance.Special.Name, param: name };
         }
 

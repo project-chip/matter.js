@@ -34,14 +34,28 @@ export const PulseWidthModulation = Cluster({
                     name: "OO", conformance: "O", constraint: "0", default: 1, description: "OnOff",
                     details: "Dependency with the On/Off cluster"
                 }),
+
                 Field({
                     name: "LT", conformance: "O", constraint: "1", default: 0, description: "Lighting",
-                    details: "Behavior that supports lighting applications"
+
+                    details: "This feature supports an interface for controlling the level of a light source. For the " +
+                        "CurrentLevel attribute:" +
+                        "\n" +
+                        "A value of 0x00 shall NOT be used." +
+                        "\n" +
+                        "A value of 0x01 shall indicate the minimum level that can be attained on a device. A value of 0xFE " +
+                        "shall indicate the maximum level that can be attained on a device. A value of null shall represent " +
+                        "an undefined value." +
+                        "\n" +
+                        "All other values are application specific gradations from the minimum to the maximum level.",
+
+                    xref: { document: "cluster", section: "1.6.4.2" }
                 }),
+
                 Field({
                     name: "FQ", conformance: "P", constraint: "2", default: 0, description: "Frequency",
-                    details: "Supports frequency attributes and behavior. The Pulse Width Modulation cluster was created for " +
-                        "frequency control."
+                    details: "NOTE The Frequency feature is provisional.",
+                    xref: { document: "cluster", section: "1.6.4.3" }
                 })
             ]
         }),

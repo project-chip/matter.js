@@ -218,7 +218,7 @@ export namespace Metatype {
                 if (value === "empty" || value === "[]" || value === "{}") {
                     return [];
                 }
-                if (Array.isArray(value) && !value.length) {
+                if (Array.isArray(value)) {
                     return value;
                 }
 

@@ -10,10 +10,10 @@ import {
     ClusterModel,
     DatatypeModel,
     FieldModel,
-    Globals,
     MatterModel,
     Metatype,
 } from "../../../src/model/index.js";
+import * as Elements from "../../../src/model/standard/elements/index.js";
 
 describe("Model", () => {
     describe("parent", () => {
@@ -182,7 +182,7 @@ describe("Model", () => {
         });
 
         it("is inferred from implied base", () => {
-            expect(Fixtures.feature.base?.name).equal(Globals.uint32.name);
+            expect(Fixtures.feature.base?.name).equal(Elements.uint32.name);
         });
 
         it("finds attribute struct", () => {
@@ -250,21 +250,21 @@ describe("Model", () => {
         });
 
         it("infers type", () => {
-            expect(Fixtures.enumValue2.effectiveType).equal(Globals.uint16.name);
+            expect(Fixtures.enumValue2.effectiveType).equal(Elements.uint16.name);
         });
     });
 
     describe("effectiveType", () => {
         it("is inherited on datatype override", () => {
-            expect(Fixtures.cluster1StructFieldOverride.effectiveType).equal(Globals.string.name);
+            expect(Fixtures.cluster1StructFieldOverride.effectiveType).equal(Elements.string.name);
         });
 
         it("is inherited on secondary datatype override", () => {
-            expect(Fixtures.cluster2StructFieldOverride.effectiveType).equal(Globals.string.name);
+            expect(Fixtures.cluster2StructFieldOverride.effectiveType).equal(Elements.string.name);
         });
 
         it("is inherited on attribute override", () => {
-            expect(Fixtures.cluster2Attr1.effectiveType).equal(Globals.uint8.name);
+            expect(Fixtures.cluster2Attr1.effectiveType).equal(Elements.uint8.name);
         });
     });
 });
@@ -347,7 +347,7 @@ namespace Fixtures {
     export const matter = new MatterModel({
         name: "Fake Matter",
         children: [
-            ...MatterModel.standardGlobals,
+            ...MatterModel.seedGlobals,
             cluster1,
             {
                 tag: "cluster",

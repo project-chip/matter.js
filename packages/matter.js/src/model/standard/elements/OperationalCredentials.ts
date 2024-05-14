@@ -383,7 +383,7 @@ export const OperationalCredentials = Cluster({
                         "\n" +
                         "  7. The receiver shall create and add a new Access Control Entry using the CaseAdminSubject field " +
                         "      to grant subsequent Administer access to an Administrator member of the new Fabric. It is " +
-                        "      RECOMMENDED that the Administrator presented in CaseAdminSubject exist within the same entity " +
+                        "      recommended that the Administrator presented in CaseAdminSubject exist within the same entity " +
                         "      that is currently invoking the AddNOC command, within another of the Fabrics of which it is a " +
                         "      member." +
                         "\n" +
@@ -475,14 +475,10 @@ export const OperationalCredentials = Cluster({
                 "field matching the FabricIndex under which the updated NOC is scoped.",
 
             xref: { document: "core", section: "11.18.6.9" },
-
             children: [
                 Field({ name: "NocValue", id: 0x0, type: "octstr", access: "F", conformance: "M", constraint: "max 400" }),
                 Field({ name: "IcacValue", id: 0x1, type: "octstr", access: "F", conformance: "O", constraint: "max 400" }),
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
 
@@ -571,10 +567,7 @@ export const OperationalCredentials = Cluster({
                     xref: { document: "core", section: "11.18.6.11.1" }
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
 
@@ -778,10 +771,7 @@ export const OperationalCredentials = Cluster({
                     xref: { document: "core", section: "11.18.4.4.2" }
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
 
@@ -835,10 +825,7 @@ export const OperationalCredentials = Cluster({
                     xref: { document: "core", section: "11.18.4.5.5" }
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         })
     ]

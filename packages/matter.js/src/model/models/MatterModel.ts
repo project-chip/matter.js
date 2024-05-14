@@ -5,6 +5,7 @@
  */
 
 import { MatterElement } from "../elements/index.js";
+import { Specification } from "../index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Matter } from "../standard/index.js";
 import { AttributeModel } from "./AttributeModel.js";
@@ -22,7 +23,7 @@ import { Model } from "./Model.js";
 export class MatterModel extends Model implements MatterElement {
     override tag: MatterElement.Tag = MatterElement.Tag;
     override isTypeScope = true;
-    version?: string;
+    revision?: Specification.Revision;
 
     /**
      * The default instance of the canonical MatterModel.
@@ -32,9 +33,10 @@ export class MatterModel extends Model implements MatterElement {
     /**
      * All sub-cluster global elements from the standard model.
      *
-     * This is the set of utility datatypes required by cluster definitions.
+     * This is the set of utility datatypes required by cluster definitions.  Clones the return values as we most
+     * commonly use this to initialize empty models for testing or diagnostic purposes
      */
-    static standardGlobals = MatterModel.standard.children.filter(child => child.isType);
+    static seedGlobals = MatterModel.standard.children.filter(child => child.isSeed).map(child => child.clone());
 
     /**
      * Clusters.

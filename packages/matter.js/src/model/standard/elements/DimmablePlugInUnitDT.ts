@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const DimmablePlugInUnitDT = DeviceType({
+export const DimmablePlugInUnitDt = DeviceType({
     name: "DimmablePlugInUnit", id: 0x10b, classification: "simple",
     details: "A Dimmable Plug-In Unit is a device that provides power to another device that is plugged into it, " +
         "and is capable of being switched on or off and have its level adjusted. The Dimmable Plug-in Unit " +
@@ -62,4 +62,4 @@ export const DimmablePlugInUnitDT = DeviceType({
     ]
 });
 
-Matter.children.push(DimmablePlugInUnitDT);
+Matter.children.push(DimmablePlugInUnitDt);

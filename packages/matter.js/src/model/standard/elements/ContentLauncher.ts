@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const ContentLauncher = Cluster({
-    name: "ContentLauncher", id: 0x50a, classification: "application",
+    name: "ContentLauncher", id: 0x50a, asOf: "1.3", classification: "application",
 
     details: "This cluster provides an interface for launching content on a Video Player device such as a " +
         "Streaming Media Player, Smart TV or Smart Screen." +
@@ -613,7 +613,9 @@ export const ContentLauncher = Cluster({
                     xref: { document: "cluster", section: "6.7.5.12.3" }
                 })
             ]
-        })
+        }),
+
+        Datatype({ name: "CharacteristicEnum", type: "MediaPlayback.CharacteristicEnum" })
     ]
 });
 

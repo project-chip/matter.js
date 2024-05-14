@@ -30,9 +30,15 @@ export const GeneralDiagnostics = Cluster({
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
             xref: { document: "core", section: "11.12.4" },
+
             children: [Field({
                 name: "DMTEST", conformance: "desc", constraint: "0", description: "DataModelTest",
-                details: "Support specific testing needs for extended Data Model features"
+                details: "This feature indicates support for extended Data Model testing commands, which are required in some " +
+                    "situations." +
+                    "\n" +
+                    "This feature shall be supported if the MaxPathsPerInvoke attribute of the Basic Information Cluster " +
+                    "has a value > 1.",
+                xref: { document: "core", section: "11.12.4.1" }
             })]
         }),
 

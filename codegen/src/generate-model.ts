@@ -17,6 +17,7 @@ import {
     MatterModel,
     MergedModel,
     Model,
+    Specification,
     TraverseMap,
 } from "@project-chip/matter.js/model";
 import { camelize } from "@project-chip/matter.js/util";
@@ -58,7 +59,7 @@ function generateElementFile(element: Model) {
 
     file.addImport(`../Matter.js`, `Matter`);
 
-    const exportName = name.indexOf("-") !== -1 ? camelize(name, false) : name;
+    const exportName = camelize(name, name[0] < "a" || name[0] > "z");
 
     generateElement(file, "../../elements/index.js", element, `export const ${exportName} = `);
 
@@ -72,9 +73,7 @@ function generateElementFile(element: Model) {
 function generateIndex(elements: Model[]) {
     const file = new TsFile(`#elements/index`);
     for (const element of elements) {
-        if (!element.isGlobal) {
-            file.addImport(`./${elementIdentifierName(element)}.js`);
-        }
+        file.addReexport(`./${elementIdentifierName(element)}`);
     }
 
     if (args.save) {
@@ -85,9 +84,7 @@ function generateIndex(elements: Model[]) {
 function generateExport(elements: Model[]) {
     const file = new TsFile(`#elements/export`);
     for (const element of elements) {
-        if (!element.isGlobal) {
-            file.addReexport(elementIdentifierName(element));
-        }
+        file.addReexport(elementIdentifierName(element));
     }
 
     if (args.save) {
@@ -112,7 +109,7 @@ if (args.revision === "1.1") {
 
 inputs.local = LocalMatter;
 
-const merged = MergedModel(inputs);
+const merged = MergedModel(args.revision as Specification.Revision, inputs);
 
 const matter = new MatterModel(merged as MatterElement);
 
@@ -134,9 +131,6 @@ if (args.save) {
 logger.info("generate matter model");
 Logger.nest(() => {
     for (const child of matter.children) {
-        if (child.isGlobal) {
-            continue;
-        }
         Logger.nest(() => generateElementFile(child));
     }
 

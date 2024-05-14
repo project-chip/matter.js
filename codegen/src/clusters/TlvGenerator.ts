@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { octstr, status } from "@project-chip/matter.js/elements";
 import {
     ClusterModel,
     CommandModel,
@@ -13,7 +14,6 @@ import {
     EventModel,
     FieldModel,
     FieldValue,
-    Globals,
     Metatype,
     Model,
     ValueModel,
@@ -115,7 +115,7 @@ export class TlvGenerator {
                 {
                     tlv = this.importTlv(
                         "tlv/TlvString",
-                        metabase.name === Globals.octstr.name ? "TlvByteString" : "TlvString",
+                        metabase.name === octstr.name ? "TlvByteString" : "TlvString",
                     );
                     const bounds = this.#createLengthBounds(model);
                     if (bounds) {
@@ -392,7 +392,7 @@ export class TlvGenerator {
         // Special case - use StatusCode enum.  The cluster can technically define cluster-specific status codes so this
         // should probably use an extension type at some point but AFAICT InteractionProtocol only allows for codes in
         // its enum to be used currently
-        if (model.isGlobal && model.name === Globals.status.name) {
+        if (model.isGlobal && model.name === status.name) {
             this.importTlv("protocol/interaction/StatusCode", "StatusCode");
             return "StatusCode";
         }

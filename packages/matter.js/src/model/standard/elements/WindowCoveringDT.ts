@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const WindowCoveringDT = DeviceType({
+export const WindowCoveringDt = DeviceType({
     name: "WindowCovering", id: 0x202, classification: "simple",
     details: "This defines conformance to the Window Covering device type.",
     xref: { document: "device", section: "8.3" },
@@ -44,4 +44,4 @@ export const WindowCoveringDT = DeviceType({
     ]
 });
 
-Matter.children.push(WindowCoveringDT);
+Matter.children.push(WindowCoveringDt);

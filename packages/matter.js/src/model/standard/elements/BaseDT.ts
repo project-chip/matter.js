@@ -13,7 +13,7 @@ import {
     RequirementElement as Requirement
 } from "../../elements/index.js";
 
-export const BaseDT = DeviceType({
+export const BaseDt = DeviceType({
     name: "Base", classification: "base",
     xref: { document: "device", section: "1.1" },
 
@@ -104,4 +104,4 @@ export const BaseDT = DeviceType({
     ]
 });
 
-Matter.children.push(BaseDT);
+Matter.children.push(BaseDt);

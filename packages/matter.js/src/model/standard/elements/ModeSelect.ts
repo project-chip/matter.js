@@ -46,9 +46,12 @@ export const ModeSelect = Cluster({
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
             xref: { document: "cluster", section: "1.9.4" },
+
             children: [Field({
                 name: "DEPONOFF", constraint: "0", description: "OnOff",
-                details: "Dependency with the OnOff cluster"
+                details: "This feature creates a dependency between an OnOff cluster instance and this cluster instance on " +
+                    "the same endpoint. See OnMode for more information.",
+                xref: { document: "cluster", section: "1.9.4.1" }
             })]
         }),
 
@@ -150,7 +153,7 @@ export const ModeSelect = Cluster({
         }),
 
         Datatype({
-            name: "SemanticTagStruct", type: "struct",
+            name: "semtag", type: "struct",
             details: "A Semantic Tag is meant to be interpreted by the client for the purpose the cluster serves.",
             xref: { document: "cluster", section: "1.9.5.1" },
 
@@ -166,7 +169,7 @@ export const ModeSelect = Cluster({
                 }),
 
                 Field({
-                    name: "Value", id: 0x1, type: "uint16", conformance: "M", quality: "F",
+                    name: "Value", id: 0x1, type: "enum16", conformance: "M", quality: "F",
                     details: "This field shall indicate the semantic tag within a semantic tag namespace which is either " +
                         "manufacturer specific or standard. For semantic tags in a standard namespace, see Standard " +
                         "Namespace.",
@@ -216,6 +219,14 @@ export const ModeSelect = Cluster({
                     xref: { document: "cluster", section: "1.9.5.2.3" },
                     children: [Field({ name: "entry", type: "semtag" })]
                 })
+            ]
+        }),
+
+        Datatype({
+            name: "SemanticTagStruct", type: "struct",
+            children: [
+                Field({ name: "MfgCode", id: 0x0, type: "vendor-id" }),
+                Field({ name: "Value", id: 0x1, type: "uint16" })
             ]
         })
     ]

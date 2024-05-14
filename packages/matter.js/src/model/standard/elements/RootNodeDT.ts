@@ -13,7 +13,7 @@ import {
     FieldElement as Field
 } from "../../elements/index.js";
 
-export const RootNodeDT = DeviceType({
+export const RootNodeDt = DeviceType({
     name: "RootNode", id: 0x16, classification: "node",
 
     details: "This defines conformance for a root node endpoint (see System Model specification). This endpoint " +
@@ -110,7 +110,7 @@ export const RootNodeDT = DeviceType({
             xref: { document: "device", section: "2.1.5" }
         }),
         Requirement({
-            name: "WiFiNetworkDiagnostics", id: 0x36, conformance: "[Wi, Fi]", element: "serverCluster",
+            name: "WiFiNetworkDiagnostics", id: 0x36, conformance: "[Wi, 0, i]", element: "serverCluster",
             quality: "I",
             xref: { document: "device", section: "2.1.5" }
         }),
@@ -136,4 +136,4 @@ export const RootNodeDT = DeviceType({
     ]
 });
 
-Matter.children.push(RootNodeDT);
+Matter.children.push(RootNodeDt);

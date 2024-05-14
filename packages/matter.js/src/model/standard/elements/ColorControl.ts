@@ -15,13 +15,12 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "ColorControl", id: 0x300, classification: "application", description: "Color Control",
-    details: "Attributes and commands for controlling the color properties of a color-capable light.",
+export const ColorControl = Cluster({
+    name: "ColorControl", id: 0x300, classification: "application",
     xref: { document: "cluster", section: "3.2" },
 
     children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 5 }),
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 6 }),
 
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
@@ -61,7 +60,7 @@ Matter.children.push(Cluster({
                 "If this attribute is implemented then the CurrentSaturation and ColorMode attributes shall also be " +
                 "implemented.",
 
-            xref: { document: "cluster", section: "3.2.7.1" }
+            xref: { document: "cluster", section: "3.2.7.2" }
         }),
 
         Attribute({
@@ -77,7 +76,7 @@ Matter.children.push(Cluster({
                 "If this attribute is implemented then the CurrentHue and ColorMode attributes shall also be " +
                 "implemented.",
 
-            xref: { document: "cluster", section: "3.2.7.2" }
+            xref: { document: "cluster", section: "3.2.7.3" }
         }),
 
         Attribute({
@@ -85,12 +84,12 @@ Matter.children.push(Cluster({
             constraint: "0 to 65535", default: 0,
             details: "The RemainingTime attribute holds the time remaining, in 1/10ths of a second, until the currently " +
                 "active command will be complete.",
-            xref: { document: "cluster", section: "3.2.7.3" }
+            xref: { document: "cluster", section: "3.2.7.4" }
         }),
 
         Attribute({
             name: "CurrentX", id: 0x3, type: "uint16", access: "R V", conformance: "XY",
-            constraint: "0 to 65279", default: 24939, quality: "N S P",
+            constraint: "0 to 65279", default: 1558, quality: "N S P",
 
             details: "The CurrentX attribute contains the current value of the normalized chromaticity value x, as " +
                 "defined in the CIE xyY Color Space. It is updated as fast as practical during commands that change " +
@@ -99,12 +98,12 @@ Matter.children.push(Cluster({
                 "The value of x shall be related to the CurrentX attribute by the relationship x = CurrentX / 65536 " +
                 "(CurrentX in the range 0 to 65279 inclusive)",
 
-            xref: { document: "cluster", section: "3.2.7.4" }
+            xref: { document: "cluster", section: "3.2.7.5" }
         }),
 
         Attribute({
             name: "CurrentY", id: 0x4, type: "uint16", access: "R V", conformance: "XY",
-            constraint: "0 to 65279", default: 24701, quality: "N S P",
+            constraint: "0 to 65279", default: 1543, quality: "N S P",
 
             details: "The CurrentY attribute contains the current value of the normalized chromaticity value y, as " +
                 "defined in the CIE xyY Color Space. It is updated as fast as practical during commands that change " +
@@ -113,7 +112,7 @@ Matter.children.push(Cluster({
                 "The value of y shall be related to the CurrentY attribute by the relationship y = CurrentY / 65536 " +
                 "(CurrentY in the range 0 to 65279 inclusive)",
 
-            xref: { document: "cluster", section: "3.2.7.5" }
+            xref: { document: "cluster", section: "3.2.7.6" }
         }),
 
         Attribute({
@@ -121,8 +120,10 @@ Matter.children.push(Cluster({
             constraint: "0 to 4",
             details: "The DriftCompensation attribute indicates what mechanism, if any, is in use for compensation for " +
                 "color/intensity drift over time. It shall be one of the non-reserved values in Values of the " +
-                "DriftCompensation Attribute.",
-            xref: { document: "cluster", section: "3.2.7.6" },
+                "DriftCompensation Attribute." +
+                "\n" +
+                "### Table 8. Values of the DriftCompensation Attribute",
+            xref: { document: "cluster", section: "3.2.7.7" },
 
             children: [
                 Field({ name: "None", id: 0x0 }),
@@ -136,20 +137,20 @@ Matter.children.push(Cluster({
         Attribute({
             name: "CompensationText", id: 0x6, type: "string", access: "R V", conformance: "O",
             constraint: "max 254",
-            details: "The CompensationText attribute holds a textual indication of what mechanism, if any, is in use to" +
-                "\n" +
+            details: "The CompensationText attribute holds a textual indication of what mechanism, if any, is in use to " +
                 "compensate for color/intensity drift over time.",
-            xref: { document: "cluster", section: "3.2.7.7" }
+            xref: { document: "cluster", section: "3.2.7.8" }
         }),
 
         Attribute({
             name: "ColorTemperatureMireds", id: 0x7, type: "uint16", access: "R V", conformance: "CT",
-            constraint: "colorTempPhysicalMinMireds to colorTempPhysicalMaxMireds", default: 250,
+            constraint: "colorTempPhysicalMinMireds to colorTempPhysicalMaxMireds", default: 0,
             quality: "N S P",
 
             details: "The ColorTemperatureMireds attribute contains a scaled inverse of the current value of the color " +
-                "temperature. The unit of ColorTemperatureMireds is the mired (micro reciprocal degree), AKA mirek " +
-                "(micro reciprocal kelvin). It is updated as fast as practical during commands that change the color." +
+                "temperature. The unit of ColorTemperatureMireds is the mired (micro reciprocal degree), a.k.a. " +
+                "mirek (micro reciprocal kelvin). It is updated as fast as practical during commands that change the " +
+                "color." +
                 "\n" +
                 "The color temperature value in kelvins shall be related to the ColorTemperatureMireds attribute in " +
                 "mireds by the relationship" +
@@ -160,7 +161,7 @@ Matter.children.push(Cluster({
                 "\n" +
                 "If this attribute is implemented then the ColorMode attribute shall also be implemented.",
 
-            xref: { document: "cluster", section: "3.2.7.8" }
+            xref: { document: "cluster", section: "3.2.7.9" }
         }),
 
         Attribute({
@@ -173,9 +174,9 @@ Matter.children.push(Cluster({
                 "The value of the ColorMode attribute cannot be written directly - it is set upon reception of any " +
                 "command in section Commands to the appropriate mode for that command." +
                 "\n" +
-                "Table 39. Values of the ColorMode Attribute",
+                "Table 9. Values of the ColorMode Attribute",
 
-            xref: { document: "cluster", section: "3.2.7.9" },
+            xref: { document: "cluster", section: "3.2.7.10" },
             children: [
                 Field({ name: "CurrentHueAndCurrentSaturation", id: 0x0 }),
                 Field({ name: "CurrentXAndCurrentY", id: 0x1 }),
@@ -196,7 +197,7 @@ Matter.children.push(Cluster({
                 "Below is the format and description of the Options attribute and temporary Options bitmap and the " +
                 "effect on dependent commands." +
                 "\n" +
-                "Table 40. Options Attribute" +
+                "Table 10. Options Attribute" +
                 "\n" +
                 "ExecuteIfOff Options bit: Command execution shall NOT continue beyond the Options processing if all " +
                 "of these criteria are true:" +
@@ -207,8 +208,8 @@ Matter.children.push(Cluster({
                 "\n" +
                 "  • The value of the ExecuteIfOff bit is 0.",
 
-            xref: { document: "cluster", section: "3.2.7.10" },
-            children: [Field({ name: "ExecuteIfOff", id: 0x1, conformance: "M", constraint: "0" })]
+            xref: { document: "cluster", section: "3.2.7.11" },
+            children: [Field({ name: "ExecuteIfOff", constraint: "0" })]
         }),
 
         Attribute({
@@ -225,22 +226,24 @@ Matter.children.push(Cluster({
                 "To provide compatibility with standard ZCL, the CurrentHue attribute shall contain a hue value in " +
                 "the range 0 to 254, calculated from the EnhancedCurrentHue attribute.",
 
-            xref: { document: "cluster", section: "3.2.7.11" }
+            xref: { document: "cluster", section: "3.2.7.12" }
         }),
 
         Attribute({
             name: "EnhancedColorMode", id: 0x4001, type: "enum8", access: "R V", conformance: "M",
-            constraint: "0 to 3", default: 1, quality: "N",
+            constraint: "0 to 3", default: 1, quality: "N S",
 
             details: "The EnhancedColorMode attribute specifies which attributes are currently determining the color of " +
                 "the device, as detailed in Values of the EnhancedColorMode Attribute." +
+                "\n" +
+                "### Table 11. Values of the EnhancedColorMode Attribute" +
                 "\n" +
                 "To provide compatibility with standard ZCL, the original ColorMode attribute shall indicate " +
                 "‘CurrentHue and CurrentSaturation’ when the light uses the EnhancedCurrentHue attribute. If the " +
                 "ColorMode attribute is changed, e.g., due to one of the standard Color Control cluster commands " +
                 "defined in the ZCL, its new value shall be copied to the EnhancedColorMode attribute.",
 
-            xref: { document: "cluster", section: "3.2.7.12" },
+            xref: { document: "cluster", section: "3.2.7.13" },
 
             children: [
                 Field({ name: "CurrentHueAndCurrentSaturation", id: 0x0 }),
@@ -254,11 +257,9 @@ Matter.children.push(Cluster({
             name: "ColorLoopActive", id: 0x4002, type: "enum16", access: "R V", conformance: "CL", default: 0,
             quality: "N S",
             details: "The ColorLoopActive attribute specifies the current active status of the color loop. If this " +
-                "attribute" +
-                "\n" +
-                "has the value 0, the color loop shall not be active. If this attribute has the value 1, the color " +
-                "loop shall be active. All other values (2 to 254) are reserved.",
-            xref: { document: "cluster", section: "3.2.7.13" },
+                "attribute has the value 0, the color loop shall not be active. If this attribute has the value 1, " +
+                "the color loop shall be active. All other values (2 to 254) are reserved.",
+            xref: { document: "cluster", section: "3.2.7.14" },
             children: [Field({ name: "Inactive", id: 0x0 }), Field({ name: "Active", id: 0x1 })]
         }),
 
@@ -269,7 +270,7 @@ Matter.children.push(Cluster({
                 "attribute has the value 0, the EnhancedCurrentHue attribute shall be decremented. If this attribute " +
                 "has the value 1, the EnhancedCurrentHue attribute shall be incremented. All other values (2 to 254) " +
                 "are reserved.",
-            xref: { document: "cluster", section: "3.2.7.14" },
+            xref: { document: "cluster", section: "3.2.7.15" },
             children: [Field({ name: "Decrement", id: 0x0 }), Field({ name: "Increment", id: 0x1 })]
         }),
 
@@ -277,8 +278,8 @@ Matter.children.push(Cluster({
             name: "ColorLoopTime", id: 0x4004, type: "uint16", access: "R V", conformance: "CL", default: 25,
             quality: "N S",
             details: "The ColorLoopTime attribute specifies the number of seconds it shall take to perform a full color " +
-                "loop, i.e., to cycle all values of the EnhancedCurrentHue attribute (between 0 and 0xfffe).",
-            xref: { document: "cluster", section: "3.2.7.15" }
+                "loop, i.e., to cycle all values of the EnhancedCurrentHue attribute (between 0 and 0xFFFE).",
+            xref: { document: "cluster", section: "3.2.7.16" }
         }),
 
         Attribute({
@@ -286,7 +287,7 @@ Matter.children.push(Cluster({
             default: 8960,
             details: "The ColorLoopStartEnhancedHue attribute specifies the value of the EnhancedCurrentHue attribute " +
                 "from which the color loop shall be started.",
-            xref: { document: "cluster", section: "3.2.7.16" }
+            xref: { document: "cluster", section: "3.2.7.17" }
         }),
 
         Attribute({
@@ -295,7 +296,7 @@ Matter.children.push(Cluster({
             details: "The ColorLoopStoredEnhancedHue attribute specifies the value of the EnhancedCurrentHue attribute " +
                 "before the color loop was started. Once the color loop is complete, the EnhancedCurrentHue " +
                 "attribute shall be restored to this value.",
-            xref: { document: "cluster", section: "3.2.7.17" }
+            xref: { document: "cluster", section: "3.2.7.18" }
         }),
 
         Attribute({
@@ -303,7 +304,7 @@ Matter.children.push(Cluster({
             constraint: "0 to 31", default: 0,
             details: "Bits 0-4 of the ColorCapabilities attribute shall have the same values as the corresponding bits of " +
                 "the FeatureMap attribute. All other bits in ColorCapabilities shall be 0.",
-            xref: { document: "cluster", section: "3.2.7.18" },
+            xref: { document: "cluster", section: "3.2.7.19" },
 
             children: [
                 Field({ name: "HueSaturation", constraint: "0" }),
@@ -319,17 +320,17 @@ Matter.children.push(Cluster({
             constraint: "0 to 65279", default: 0,
             details: "The ColorTempPhysicalMinMireds attribute indicates the minimum mired value supported by the " +
                 "hardware. ColorTempPhysicalMinMireds corresponds to the maximum color temperature in kelvins " +
-                "supported by the hardware. ColorTempPhysicalMinMireds ≤ ColorTemperatureMireds.",
-            xref: { document: "cluster", section: "3.2.7.19" }
+                "supported by the hardware. ColorTempPhysicalMinMireds <= ColorTemperatureMireds.",
+            xref: { document: "cluster", section: "3.2.7.20" }
         }),
 
         Attribute({
             name: "ColorTempPhysicalMaxMireds", id: 0x400c, type: "uint16", access: "R V", conformance: "CT",
-            constraint: "0 to 65279", default: 65279,
+            constraint: "0 to 65279", default: 0,
             details: "The ColorTempPhysicalMaxMireds attribute indicates the maximum mired value supported by the " +
                 "hardware. ColorTempPhysicalMaxMireds corresponds to the minimum color temperature in kelvins " +
-                "supported by the hardware. ColorTemperatureMireds ≤ ColorTempPhysicalMaxMireds.",
-            xref: { document: "cluster", section: "3.2.7.20" }
+                "supported by the hardware. ColorTemperatureMireds <= ColorTempPhysicalMaxMireds.",
+            xref: { document: "cluster", section: "3.2.7.21" }
         }),
 
         Attribute({
@@ -341,7 +342,7 @@ Matter.children.push(Cluster({
                 "ColorTemperatureMireds attribute for the purposes of coupling the ColorTemperatureMireds attribute " +
                 "to the CurrentLevel attribute when the CoupleColorTempToLevel bit of the Options attribute of the " +
                 "Level Control cluster is equal to 1. When coupling the ColorTemperatureMireds attribute to the " +
-                "CurrentLevel attribute, this value shall correspond to a CurrentLevel value of 0xfe (100%)." +
+                "CurrentLevel attribute, this value shall correspond to a CurrentLevel value of 0xFE (100%)." +
                 "\n" +
                 "This attribute shall be set such that the following relationship exists: ColorTempPhysicalMinMireds " +
                 "≤ CoupleColorTempToLevelMinMireds ≤ ColorTemperatureMireds" +
@@ -351,12 +352,12 @@ Matter.children.push(Cluster({
                 "CoupleColorTempToLevelMinMireds attribute corresponds to an upper bound on the value of the color " +
                 "temperature in kelvins supported by the device.",
 
-            xref: { document: "cluster", section: "3.2.7.21" }
+            xref: { document: "cluster", section: "3.2.7.22" }
         }),
 
         Attribute({
             name: "StartUpColorTemperatureMireds", id: 0x4010, type: "uint16", access: "RW VM",
-            conformance: "CT & ColorTemperatureMireds", constraint: "0 to 65279", quality: "X",
+            conformance: "CT & ColorTemperatureMireds", constraint: "0 to 65279", quality: "X N",
 
             details: "The StartUpColorTemperatureMireds attribute shall define the desired startup color temperature " +
                 "value a lamp shall use when it is supplied with power and this value shall be reflected in the " +
@@ -364,9 +365,9 @@ Matter.children.push(Cluster({
                 "be set to 0x02 (color temperature). The values of the StartUpColorTemperatureMireds attribute are " +
                 "listed in the table below," +
                 "\n" +
-                "Table 42. Values of the StartUpColorTemperatureMireds attribute",
+                "Table 12. Values of the StartUpColorTemperatureMireds attribute",
 
-            xref: { document: "cluster", section: "3.2.7.22" }
+            xref: { document: "cluster", section: "3.2.7.23" }
         }),
 
         Attribute({
@@ -413,7 +414,7 @@ Matter.children.push(Cluster({
             details: "The Primary1intensity attribute contains a representation of the maximum intensity of this primary " +
                 "as defined in the Dimming Light Curve in the Ballast Configuration cluster (see Ballast " +
                 "Configuration Cluster), normalized such that the primary with the highest maximum intensity " +
-                "contains the value 0xfe." +
+                "contains the value 0xFE." +
                 "\n" +
                 "A value of null shall indicate that this primary is not available.",
 
@@ -510,11 +511,14 @@ Matter.children.push(Cluster({
         Attribute({
             name: "WhitePointY", id: 0x31, type: "uint16", access: "RW VM", conformance: "O",
             constraint: "0 to 65279",
-            details: "The WhitePointY attribute contains the normalized chromaticity value y, as defined in the CIE xyY " +
+
+            details: "The WhitePointY attribute contains the normalized chromaticity value y, as defined in the CIE xyY" +
+                "\n" +
                 "Color Space, of the current white point of the device." +
                 "\n" +
                 "The value of y shall be related to the WhitePointY attribute by the relationship y = WhitePointY / " +
                 "65536 (WhitePointY in the range 0 to 65279 inclusive)",
+
             xref: { document: "cluster", section: "3.2.10.2" }
         }),
 
@@ -547,7 +551,7 @@ Matter.children.push(Cluster({
             details: "The ColorPointRIntensity attribute contains a representation of the relative intensity of the red " +
                 "color point as defined in the Dimming Light Curve in the Ballast Configuration cluster (see Ballast " +
                 "Configuration Cluster), normalized such that the color point with the highest relative intensity " +
-                "contains the value 0xfe." +
+                "contains the value 0xFE." +
                 "\n" +
                 "A value of null shall indicate an invalid value.",
 
@@ -596,9 +600,12 @@ Matter.children.push(Cluster({
                     details: "The Hue field specifies the hue to be moved to.",
                     xref: { document: "cluster", section: "3.2.11.4.1" }
                 }),
+
                 Field({
                     name: "Direction", id: 0x1, type: "Direction", conformance: "M", constraint: "desc",
-                    details: "The Direction field shall be one of the non-reserved values in Values of the Direction Field.",
+                    details: "The Direction field shall be one of the non-reserved values in Values of the Direction Field." +
+                        "\n" +
+                        "### Table 17. Values of the Direction Field",
                     xref: { document: "cluster", section: "3.2.11.4.2" }
                 }),
 
@@ -624,7 +631,9 @@ Matter.children.push(Cluster({
                 Field({
                     name: "MoveMode", id: 0x0, type: "MoveMode", conformance: "M", constraint: "desc",
                     details: "The MoveMode field shall be one of the non-reserved values in Values of the MoveMode Field. If the " +
-                        "MoveMode field is equal to 0 (Stop), the Rate field shall be ignored.",
+                        "MoveMode field is equal to 0 (Stop), the Rate field shall be ignored." +
+                        "\n" +
+                        "### Table 18. Values of the MoveMode Field",
                     xref: { document: "cluster", section: "3.2.11.5.1" }
                 }),
 
@@ -654,7 +663,7 @@ Matter.children.push(Cluster({
                     name: "StepMode", id: 0x0, type: "StepMode", conformance: "M", constraint: "desc",
                     details: "The StepMode field shall be one of the non-reserved values in Values of the StepMode Field." +
                         "\n" +
-                        "Table 50. Values of the StepMode Field",
+                        "### Table 20. Values of the StepMode Field",
                     xref: { document: "cluster", section: "3.2.11.6.1" }
                 }),
 
@@ -666,11 +675,15 @@ Matter.children.push(Cluster({
 
                 Field({
                     name: "TransitionTime", id: 0x2, type: "uint8", conformance: "M",
+
                     details: "The TransitionTime field specifies, in 1/10ths of a second, the time that shall be taken to perform " +
                         "the step. A step is a change in the device’s hue of ‘Step size’ units." +
                         "\n" +
-                        "Note: Here the TransitionTime data field is of data type uint8, where uint16 is more common for " +
+                        "NOTE" +
+                        "\n" +
+                        "Here the TransitionTime data field is of data type uint8, where uint16 is more common for " +
                         "TransitionTime data fields in other clusters / commands.",
+
                     xref: { document: "cluster", section: "3.2.11.6.3" }
                 }),
 
@@ -705,21 +718,19 @@ Matter.children.push(Cluster({
                 Field({
                     name: "MoveMode", id: 0x0, type: "MoveMode", conformance: "M", constraint: "desc",
                     details: "The MoveMode field shall be one of the non-reserved values in Values of the MoveMode Field. If the " +
-                        "MoveMode field is equal to 0 (Stop), the Rate field shall be ignored.",
+                        "MoveMode field is equal to 0 (Stop), the Rate field shall be ignored." +
+                        "\n" +
+                        "### Table 22. Values of the MoveMode Field",
                     xref: { document: "cluster", section: "3.2.11.8.1" }
                 }),
 
                 Field({
                     name: "Rate", id: 0x1, type: "uint8", conformance: "M",
-
                     details: "The Rate field specifies the rate of movement in steps per second. A step is a change in the " +
-                        "device’s" +
-                        "\n" +
-                        "saturation of one unit. If the MoveMode field is set to 1 (up) or 3 (down) and the Rate field has a " +
-                        "value of zero, the command has no effect and a response command shall be sent in response, with the " +
-                        "status code set to INVALID_COMMAND. If the MoveMode field is set to 0 (stop) the Rate field shall " +
-                        "be ignored.",
-
+                        "device’s saturation of one unit. If the MoveMode field is set to 1 (up) or 3 (down) and the Rate " +
+                        "field has a value of zero, the command has no effect and a response command shall be sent in " +
+                        "response, with the status code set to INVALID_COMMAND. If the MoveMode field is set to 0 (stop) the " +
+                        "Rate field shall be ignored.",
                     xref: { document: "cluster", section: "3.2.11.8.2" }
                 }),
 
@@ -738,9 +749,12 @@ Matter.children.push(Cluster({
             children: [
                 Field({
                     name: "StepMode", id: 0x0, type: "StepMode", conformance: "M", constraint: "desc",
-                    details: "The StepMode field shall be one of the non-reserved values in Values of the StepMode Field.",
+                    details: "The StepMode field shall be one of the non-reserved values in Values of the StepMode Field." +
+                        "\n" +
+                        "### Table 24. Values of the StepMode Field",
                     xref: { document: "cluster", section: "3.2.11.9.1" }
                 }),
+
                 Field({
                     name: "StepSize", id: 0x1, type: "uint8", conformance: "M",
                     details: "The change to be added to (or subtracted from) the current value of the device’s saturation.",
@@ -749,11 +763,15 @@ Matter.children.push(Cluster({
 
                 Field({
                     name: "TransitionTime", id: 0x2, type: "uint8", conformance: "M",
+
                     details: "The TransitionTime field specifies, in 1/10ths of a second, the time that shall be taken to perform " +
                         "the step. A step is a change in the device’s saturation of ‘Step size’ units." +
                         "\n" +
-                        "Note: Here the TransitionTime data field is of data type uint8, where uint16 is more common for " +
+                        "NOTE" +
+                        "\n" +
+                        "Here the TransitionTime data field is of data type uint8, where uint16 is more common for " +
                         "TransitionTime data fields in other clusters / commands.",
+
                     xref: { document: "cluster", section: "3.2.11.9.3" }
                 }),
 
@@ -960,8 +978,10 @@ Matter.children.push(Cluster({
                         "to perform the step. A step is a change to the device’s enhanced hue of a magnitude corresponding " +
                         "to the StepSize field." +
                         "\n" +
-                        "Note: Here TransitionTime data field is of data type uint16, while the TransitionTime data field of " +
-                        "the StepHue command is of data type uint8.",
+                        "NOTE" +
+                        "\n" +
+                        "Here TransitionTime data field is of data type uint16, while the TransitionTime data field of the " +
+                        "StepHue command is of data type uint8.",
 
                     xref: { document: "cluster", section: "3.2.11.17.3" }
                 }),
@@ -1024,6 +1044,8 @@ Matter.children.push(Cluster({
                         "started. This field shall be formatted as illustrated in Format of the UpdateFlags Field of the " +
                         "ColorLoopSet Command." +
                         "\n" +
+                        "### Table 28. Format of the UpdateFlags Field of the ColorLoopSet Command" +
+                        "\n" +
                         "The UpdateAction sub-field is 1 bit in length and specifies whether the device shall adhere to the " +
                         "action field in order to process the command. If this sub-field is set to 1, the device shall " +
                         "adhere to the action field. If this sub-field is set to 0, the device shall ignore the Action field." +
@@ -1058,7 +1080,9 @@ Matter.children.push(Cluster({
                     name: "Action", id: 0x1, type: "enum8", conformance: "M", constraint: "desc",
                     details: "The Action field specifies the action to take for the color loop if the UpdateAction sub-field of " +
                         "the UpdateFlags field is set to 1. This field shall be set to one of the non-reserved values listed " +
-                        "in Values of the Action Field of the ColorLoopSet Command.",
+                        "in Values of the Action Field of the ColorLoopSet Command." +
+                        "\n" +
+                        "### Table 29. Values of the Action Field of the ColorLoopSet Command",
                     xref: { document: "cluster", section: "3.2.11.19.2" },
                     children: [
                         Field({ name: "DeActivateTheColorLoop", id: 0x0 }),
@@ -1071,7 +1095,9 @@ Matter.children.push(Cluster({
                     name: "Direction", id: 0x2, type: "enum8", conformance: "M", constraint: "desc",
                     details: "The Direction field specifies the direction for the color loop if the Update Direction field of the " +
                         "UpdateFlags field is set to 1. This field shall be set to one of the non-reserved values listed in " +
-                        "Values of the Direction Field of the ColorLoopSet Command.",
+                        "Values of the Direction Field of the ColorLoopSet Command." +
+                        "\n" +
+                        "### Table 30. Values of the Direction Field of the ColorLoopSet Command",
                     xref: { document: "cluster", section: "3.2.11.19.3" },
                     children: [
                         Field({ name: "DecrementTheHueInTheColorLoop", id: 0x0 }),
@@ -1100,7 +1126,7 @@ Matter.children.push(Cluster({
             details: "The StopMoveStep command is provided to allow MoveTo and Step commands to be stopped. (Note this " +
                 "automatically provides symmetry to the Level Control cluster.)" +
                 "\n" +
-                "Note: the StopMoveStep command has no effect on an active color loop.",
+                "NOTE the StopMoveStep command has no effect on an active color loop.",
             xref: { document: "cluster", section: "3.2.11.20" },
 
             children: [
@@ -1121,8 +1147,7 @@ Matter.children.push(Cluster({
             children: [
                 Field({
                     name: "MoveMode", id: 0x0, type: "MoveMode", conformance: "M", constraint: "desc",
-                    details: "This field is identical to the MoveMode field of the MoveHue command of the Color Control cluster" +
-                        "\n" +
+                    details: "This field is identical to the MoveMode field of the MoveHue command of the Color Control cluster " +
                         "(see sub-clause MoveHue Command). If the MoveMode field is equal to 0 (Stop), the Rate field shall " +
                         "be ignored.",
                     xref: { document: "cluster", section: "3.2.11.21.1" }
@@ -1145,7 +1170,7 @@ Matter.children.push(Cluster({
                     details: "The ColorTemperatureMinimumMireds field specifies a lower bound on the ColorTemperatureMireds " +
                         "attribute (≡ an upper bound on the color temperature in kelvins) for the current move operation" +
                         "\n" +
-                        "ColorTempPhysicalMinMireds ≤ ColorTemperatureMinimumMireds field ≤ ColorTemperatureMireds" +
+                        "ColorTempPhysicalMinMireds <= ColorTemperatureMinimumMireds field <= ColorTemperatureMireds" +
                         "\n" +
                         "As such if the move operation takes the ColorTemperatureMireds attribute towards the value of the " +
                         "ColorTemperatureMinimumMireds field it shall be clipped so that the above invariant is satisfied. " +
@@ -1162,7 +1187,7 @@ Matter.children.push(Cluster({
                     details: "The ColorTemperatureMaximumMireds field specifies an upper bound on the ColorTemperatureMireds " +
                         "attribute (≡ a lower bound on the color temperature in kelvins) for the current move operation" +
                         "\n" +
-                        "ColorTemperatureMireds ≤ ColorTemperatureMaximumMireds field ≤ ColorTempPhysicalMaxMireds" +
+                        "ColorTemperatureMireds <= ColorTemperatureMaximumMireds field <= ColorTempPhysicalMaxMireds" +
                         "\n" +
                         "As such if the move operation takes the ColorTemperatureMireds attribute towards the value of the " +
                         "ColorTemperatureMaximumMireds field it shall be clipped so that the above invariant is satisfied. " +
@@ -1216,7 +1241,7 @@ Matter.children.push(Cluster({
                     details: "The ColorTemperatureMinimumMireds field specifies a lower bound on the ColorTemperatureMireds " +
                         "attribute (≡ an upper bound on the color temperature in kelvins) for the current step operation" +
                         "\n" +
-                        "ColorTempPhysicalMinMireds ≤ ColorTemperatureMinimumMireds field ≤ ColorTemperatureMireds" +
+                        "ColorTempPhysicalMinMireds <= ColorTemperatureMinimumMireds field <= ColorTemperatureMireds" +
                         "\n" +
                         "As such if the step operation takes the ColorTemperatureMireds attribute towards the value of the " +
                         "Color Temperature Minimum Mireds field it shall be clipped so that the above invariant is " +
@@ -1251,51 +1276,33 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "MoveMode", type: "enum8", conformance: "M",
+            name: "MoveMode", type: "enum8",
             xref: { document: "cluster", section: "3.2.11.5.1" },
             children: [
-                Field({ name: "Stop", id: 0x0, conformance: "M" }),
-                Field({ name: "Up", id: 0x1, conformance: "M" }),
-                Field({ name: "Down", id: 0x3, conformance: "M" })
+                Field({ name: "Stop", id: 0x0 }),
+                Field({ name: "Up", id: 0x1 }),
+                Field({ name: "Down", id: 0x3 })
             ]
         }),
 
         Datatype({
-            name: "StepMode", type: "enum8", conformance: "M",
+            name: "StepMode", type: "enum8",
             xref: { document: "cluster", section: "3.2.11.6.1" },
-            children: [
-                Field({ name: "Up", id: 0x1, conformance: "M" }),
-                Field({ name: "Down", id: 0x3, conformance: "M" })
-            ]
+            children: [Field({ name: "Up", id: 0x1 }), Field({ name: "Down", id: 0x3 })]
         }),
 
         Datatype({
-            name: "Direction", type: "enum8", conformance: "M",
+            name: "Direction", type: "enum8",
             xref: { document: "cluster", section: "3.2.11.4.2" },
 
             children: [
-                Field({ name: "ShortestDistance", id: 0x0, conformance: "M" }),
-                Field({ name: "LongestDistance", id: 0x1, conformance: "M" }),
-                Field({ name: "Up", id: 0x2, conformance: "M" }),
-                Field({ name: "Down", id: 0x3, conformance: "M" })
-            ]
-        }),
-
-        Datatype({
-            name: "HueMoveMode", type: "enum8", conformance: "M",
-            children: [
-                Field({ name: "Stop", id: 0x0, conformance: "M" }),
-                Field({ name: "Up", id: 0x1, conformance: "M" }),
-                Field({ name: "Down", id: 0x3, conformance: "M" })
-            ]
-        }),
-
-        Datatype({
-            name: "HueStepMode", type: "enum8", conformance: "M",
-            children: [
-                Field({ name: "Up", id: 0x1, conformance: "M" }),
-                Field({ name: "Down", id: 0x3, conformance: "M" })
+                Field({ name: "ShortestDistance", id: 0x0 }),
+                Field({ name: "LongestDistance", id: 0x1 }),
+                Field({ name: "Up", id: 0x2 }),
+                Field({ name: "Down", id: 0x3 })
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(ColorControl);

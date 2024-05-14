@@ -10,7 +10,7 @@ import { LocalMatter } from "../local.js";
 // Spec lists "Time of Day" fields in prose so we must define manually
 LocalMatter.children.push({
     tag: "datatype",
-    name: "TimeOfDay",
+    name: "tod",
 
     details: "Represents time without a date component.",
 

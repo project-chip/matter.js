@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterModel, Globals, Metatype, ValueModel } from "@project-chip/matter.js/model";
+import { int64, uint64 } from "@project-chip/matter.js/elements";
+import { ClusterModel, Metatype, ValueModel } from "@project-chip/matter.js/model";
 import { TlvGenerator } from "../clusters/TlvGenerator.js";
 import { Block } from "../util/TsFile.js";
 
@@ -49,7 +50,7 @@ export class TypeGenerator {
                 return "ByteArray";
 
             case Metatype.integer:
-                if (metabase === Globals.uint64 || metabase === Globals.int64) {
+                if (metabase.isGlobal && (metabase.name === uint64.name || metabase.name === int64.name)) {
                     return "number | bigint";
                 }
                 return "number";

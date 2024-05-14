@@ -10,6 +10,7 @@ import { LocalMatter } from "../local.js";
 LocalMatter.children.push({
     tag: "cluster",
     name: "Scenes",
+    until: "1.3",
 
     children: [
         // Enable scene names by default.  Not mandated by the specification but a reasonable default

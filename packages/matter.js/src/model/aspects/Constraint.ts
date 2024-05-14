@@ -139,6 +139,9 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
     }
 
     override toString() {
+        if (!this.valid && this.definition) {
+            return this.definition.toString();
+        }
         return Constraint.serialize(this);
     }
 }

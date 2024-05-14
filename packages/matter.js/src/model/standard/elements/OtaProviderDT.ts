@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const OtaProviderDT = DeviceType({
+export const OtaProviderDt = DeviceType({
     name: "OtaProvider", id: 0x14, classification: "utility",
     details: "An OTA Provider is a node that is capable of providing an OTA software update to other nodes on the " +
         "same fabric.",
@@ -34,4 +34,4 @@ export const OtaProviderDT = DeviceType({
     ]
 });
 
-Matter.children.push(OtaProviderDT);
+Matter.children.push(OtaProviderDt);

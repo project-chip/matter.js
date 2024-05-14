@@ -86,6 +86,16 @@
                 "default": "./dist/cjs/endpoint/definitions/device/*.js"
             }
         },
+        "./elements": {
+            "import": {
+                "types": "./dist/esm/model/standard/elements/index.d.ts",
+                "default": "./dist/esm/model/standard/elements/index.js"
+            },
+            "require": {
+                "types": "./dist/cjs/model/standard/elements/index.d.ts",
+                "default": "./dist/cjs/model/standard/elements/index.js"
+            }
+        },
         "./elements/*": {
             "import": {
                 "types": "./dist/esm/model/standard/elements/*.d.ts",

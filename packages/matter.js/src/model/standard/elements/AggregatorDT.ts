@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const AggregatorDT = DeviceType({
+export const AggregatorDt = DeviceType({
     name: "Aggregator", id: 0xe, classification: "simple",
 
     details: "This device type aggregates endpoints as a collection. Clusters on the endpoint indicating this " +
@@ -43,4 +43,4 @@ export const AggregatorDT = DeviceType({
     ]
 });
 
-Matter.children.push(AggregatorDT);
+Matter.children.push(AggregatorDt);

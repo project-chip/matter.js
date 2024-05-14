@@ -585,6 +585,7 @@ export const NetworkCommissioning = Cluster({
 
                 Field({
                     name: "NetworkIndex", id: 0x2, type: "uint8", conformance: "O",
+                    constraint: "0 to (MaxNetworks - 1)",
                     details: "When the NetworkingStatus is Success, this field shall be present. It shall contain the 0-based " +
                         "index of the entry in the Networks attribute that was last added, updated or removed successfully " +
                         "by the associated request command.",

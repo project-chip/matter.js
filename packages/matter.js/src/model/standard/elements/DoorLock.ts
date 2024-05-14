@@ -33,55 +33,138 @@ export const DoorLock = Cluster({
             children: [
                 Field({
                     name: "PIN", conformance: "O", constraint: "0", description: "PinCredential",
-                    details: "Lock supports PIN credentials (via keypad, or over- the-air)"
+
+                    details: "If the User Feature is also supported then any PIN Code stored in the lock shall be associated with " +
+                        "a User." +
+                        "\n" +
+                        "A lock may support multiple credential types so if the User feature is supported the UserType, " +
+                        "UserStatus and Schedules are all associated with a User index and not directly with a PIN index. A " +
+                        "User index may have several credentials associated with it.",
+
+                    xref: { document: "cluster", section: "5.2.4.1" }
                 }),
+
                 Field({
                     name: "RID", conformance: "O", constraint: "1", description: "RfidCredential",
-                    details: "Lock supports RFID credentials"
+
+                    details: "If the User Feature is also supported then any RFID credential stored in the lock shall be " +
+                        "associated with a User." +
+                        "\n" +
+                        "A lock may support multiple credential types so if the User feature is supported the UserType, " +
+                        "UserStatus and Schedules are all associated with a User index and not directly with a RFID index. A " +
+                        "User" +
+                        "\n" +
+                        "Index may have several credentials associated with it.",
+
+                    xref: { document: "cluster", section: "5.2.4.2" }
                 }),
+
                 Field({
                     name: "FGP", conformance: "P, O", constraint: "2", description: "FingerCredentials",
-                    details: "Lock supports finger related credentials (fingerprint, finger vein)"
+
+                    details: "Currently the cluster only defines the metadata format for notifications when a fingerprint/ finger " +
+                        "vein credential is used to access the lock and doesn’t describe how to create fingerprint/finger " +
+                        "vein credentials. If the Users feature is also supported then the User that a fingerprint/finger " +
+                        "vein is associated with can also have its UserType, UserStatus and Schedule modified." +
+                        "\n" +
+                        "A lock may support multiple credential types so if the User feature is supported the UserType, " +
+                        "UserStatus and Schedules are all associated with a User index and not directly with a Finger index. " +
+                        "A User Index may have several credentials associated with it.",
+
+                    xref: { document: "cluster", section: "5.2.4.3" }
                 }),
+
                 Field({
                     name: "LOG", conformance: "O", constraint: "3", description: "Logging",
-                    details: "Lock supports local/on-lock logging when Events are not supported"
+                    details: "If Events are not supported the logging feature shall replace the Event reporting structure. If " +
+                        "Events are supported the logging feature shall NOT be supported.",
+                    xref: { document: "cluster", section: "5.2.4.4" }
                 }),
+
                 Field({
                     name: "WDSCH", conformance: "O", constraint: "4", description: "WeekDayAccessSchedules",
-                    details: "Lock supports week day user access schedules"
+
+                    details: "If the User feature is supported then Week Day Schedules are applied to a User and not a credential." +
+                        "\n" +
+                        "Week Day Schedules are used to restrict access to a specified time window on certain days of the " +
+                        "week. The schedule is repeated each week. When a schedule is cleared this clears the access " +
+                        "restrictions and grants unrestricted access to the user. The lock may automatically adjust the " +
+                        "UserType when a schedule is created or cleared.",
+
+                    xref: { document: "cluster", section: "5.2.4.5" }
                 }),
+
                 Field({
                     name: "DPS", conformance: "O", constraint: "5", description: "DoorPositionSensor",
-                    details: "Lock supports a door position sensor that indicates door’s state"
+                    details: "If this feature is supported this indicates that the lock has the ability to determine the position " +
+                        "of the door which is separate from the state of the lock.",
+                    xref: { document: "cluster", section: "5.2.4.6" }
                 }),
+
                 Field({
                     name: "FACE", conformance: "P, O", constraint: "6", description: "FaceCredentials",
-                    details: "Lock supports face related credentials (face, iris, retina)"
+
+                    details: "Currently the cluster only defines the metadata format for notifications when a face recognition, " +
+                        "iris, or retina credential is used to access the lock and doesn’t describe how to create face " +
+                        "recognition, iris, or retina credentials. If the Users feature is also supported then the User that " +
+                        "a face recognition, iris, or retina credential is associated with can also have its UserType, " +
+                        "UserStatus and Schedule modified." +
+                        "\n" +
+                        "A lock may support multiple credential types so if the User feature is supported the UserType, " +
+                        "UserStatus and Schedules are all associated with a User and not directly with a credential.",
+
+                    xref: { document: "cluster", section: "5.2.4.7" }
                 }),
+
                 Field({
                     name: "COTA", conformance: "O", constraint: "7", description: "CredentialOverTheAirAccess",
-                    details: "PIN codes over- the-air supported for lock/unlock operations"
+                    details: "If this feature is supported then the lock supports the ability to verify a credential provided in " +
+                        "a lock/unlock command. Currently the cluster only supports providing the PIN credential to the " +
+                        "lock/unlock commands. If this feature is supported then the PIN Credential feature shall also be " +
+                        "supported.",
+                    xref: { document: "cluster", section: "5.2.4.8" }
                 }),
+
                 Field({
                     name: "USR", conformance: "[PIN | RID | FGP | FACE]", constraint: "8", description: "User",
-                    details: "Lock supports the user commands and database"
+                    details: "If the User Feature is supported then a lock employs a User database. A User within the User " +
+                        "database is used to associate credentials and schedules to single user record within the lock. This " +
+                        "also means the UserType and UserStatus fields are associated with a User and not a credential.",
+                    xref: { document: "cluster", section: "5.2.4.9" }
                 }),
+
                 Field({
                     name: "NOT", conformance: "O", constraint: "9", description: "Notification",
-                    details: "Operation and Programming Notifications"
+                    details: "This is a feature used before support of events. This feature supports notification commands and " +
+                        "masks used to filter these notifications.",
+                    xref: { document: "cluster", section: "5.2.4.10" }
                 }),
+
                 Field({
                     name: "YDSCH", conformance: "O", constraint: "10", description: "YearDayAccessSchedules",
-                    details: "Lock supports year day user access schedules"
+                    details: "If the User feature is supported then Year Day Schedules are applied to a User and not a credential." +
+                        "\n" +
+                        "Year Day Schedules are used to restrict access to a specified date and time window. When a schedule " +
+                        "is cleared this clears the access restrictions and grants unrestricted access to the user. The lock " +
+                        "may automatically adjust the UserType when a schedule is created or cleared.",
+                    xref: { document: "cluster", section: "5.2.4.11" }
                 }),
+
                 Field({
                     name: "HDSCH", conformance: "O", constraint: "11", description: "HolidaySchedules",
-                    details: "Lock supports holiday schedules"
+                    details: "This feature is used to setup Holiday Schedule in the lock device. A Holiday Schedule sets a start " +
+                        "and stop end date/time for the lock to use the specified operating mode set by the Holiday Schedule.",
+                    xref: { document: "cluster", section: "5.2.4.12" }
                 }),
+
                 Field({
                     name: "UBOLT", conformance: "O", constraint: "12", description: "Unbolting",
-                    details: "Lock supports unbolting"
+                    details: "Locks that support this feature differentiate between unbolting and unlocking. The Unbolt Door " +
+                        "command retracts the bolt without pulling the latch. The Unlock Door command fully unlocks the door " +
+                        "by retracting the bolt and briefly pulling the latch. While the latch is pulled, the lock state " +
+                        "changes to Unlatched. Locks without unbolting support don’t differentiate between unbolting and " +
+                        "unlocking and perform the same operation for both commands.",
+                    xref: { document: "cluster", section: "5.2.4.13" }
                 })
             ]
         }),

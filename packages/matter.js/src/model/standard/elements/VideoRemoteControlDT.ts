@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const VideoRemoteControlDT = DeviceType({
+export const VideoRemoteControlDt = DeviceType({
     name: "VideoRemoteControl", id: 0x2a, classification: "simple",
     details: "This defines conformance to the Video Remote Control device type." +
         "\n" +
@@ -84,4 +84,4 @@ export const VideoRemoteControlDT = DeviceType({
     ]
 });
 
-Matter.children.push(VideoRemoteControlDT);
+Matter.children.push(VideoRemoteControlDt);

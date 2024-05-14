@@ -9,13 +9,14 @@ import { LocalMatter } from "../local.js";
 LocalMatter.children.push({
     tag: "cluster",
     name: "ContentLauncher",
+    asOf: "1.3",
 
     children: [
         // Alias for missing datatype (see similar alias in ChannelOverrides.ts)
         {
             tag: "datatype",
             name: "CharacteristicEnum",
-            type: "MediaPlayback.AdditionalInfoStruct",
+            type: "MediaPlayback.CharacteristicEnum",
         },
     ],
 });

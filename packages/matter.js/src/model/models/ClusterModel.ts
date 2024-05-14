@@ -19,7 +19,7 @@ import type { FieldModel } from "./FieldModel.js";
 import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
 
-export class ClusterModel extends Model {
+export class ClusterModel extends Model implements ClusterElement {
     override tag: ClusterElement.Tag = ClusterElement.Tag;
     override id?: Mei;
     classification?: ClusterElement.Classification;

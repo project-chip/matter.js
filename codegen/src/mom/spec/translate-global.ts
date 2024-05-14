@@ -106,6 +106,7 @@ function* translateDatatypes(ref: GlobalReference): Generator<DatatypeElement> {
                 return;
             }
 
+            name = fixTypeIdentifier(name);
             type = fixTypeIdentifier(type);
 
             const element = DatatypeElement({
@@ -116,6 +117,7 @@ function* translateDatatypes(ref: GlobalReference): Generator<DatatypeElement> {
                 xref,
                 children,
                 metatype: selectMetatype(name),
+                isSeed: true,
             });
 
             switch (element.metatype) {
@@ -171,8 +173,9 @@ function* translateElements(ref: GlobalReference): Generator<AttributeElement | 
     // above.  So we can handle as we would fields of an actual struct-like element
     const elements = translateFields(globalTranslator, ref);
 
-    for (const record of elements) {
-        yield record;
+    for (const element of elements) {
+        element.isSeed = true;
+        yield element;
     }
 }
 

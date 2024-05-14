@@ -5,16 +5,20 @@
  */
 
 import { InternalError } from "../../common/MatterError.js";
-import { ElementTag, Metatype } from "../definitions/index.js";
+import { Constraint } from "../aspects/index.js";
+import { ElementTag, Metatype, Specification } from "../definitions/index.js";
 import { AnyElement } from "../elements/index.js";
-import { Constraint } from "../index.js";
 import { Model, ValueModel } from "../models/index.js";
 import { ModelVariantTraversal, TraverseMap, VariantDetail } from "./ModelVariantTraversal.js";
 
 /**
  * Merge multiple variants of an element into a single element.
  */
-export function MergedModel(variants: TraverseMap, priorities = MergedModel.DefaultPriorities): Model {
+export function MergedModel(
+    revision: Specification.Revision,
+    variants: TraverseMap,
+    priorities = MergedModel.DefaultPriorities,
+): Model {
     const priority = new PriorityHandler(priorities || MergedModel.DefaultPriorities);
     const visitor = new MergeTraversal<Model>(priority, (variants, recurse) => {
         const merged = merge(variants);
@@ -40,7 +44,14 @@ export function MergedModel(variants: TraverseMap, priorities = MergedModel.Defa
             }
         }
 
-        merged.children = recurse();
+        // Kick out any children that are inapplicable given the target Matter revision
+        const children = recurse().filter(
+            child =>
+                (child.asOf === undefined || child.asOf >= revision) &&
+                (child.until === undefined || child.until < revision),
+        );
+
+        merged.children = children;
 
         return merged;
     });
@@ -79,7 +90,7 @@ export function MergedModel(variants: TraverseMap, priorities = MergedModel.Defa
                 }
             }
         }
-
+        if (properties.default === "RV") debugger;
         return Model.create(properties as AnyElement);
     }
 }
@@ -225,9 +236,9 @@ function reparentToCanonicalParent(priority: PriorityHandler, variants: VariantD
             return;
         }
 
-        // If the canonical type is a global type that can have children, variants that reference a local type with
+        // If the canonical type is a seed type that can have children, variants that reference a local type with
         // children need to be rewritten
-        if (type.base?.isGlobal && Metatype.hasChildren(type.effectiveMetatype)) {
+        if (type.base?.isSeed && Metatype.hasChildren(type.effectiveMetatype)) {
             for (const variantName in variants.map) {
                 // Skip if this is the canonical variant or this variant already has children
                 const variant = variants.map[variantName];

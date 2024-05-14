@@ -208,11 +208,6 @@ export abstract class ModelVariantTraversal<S = void> {
             for (let i = 0; i < variant.children.length; i++) {
                 const child = variant.children[i];
 
-                if (child.isGlobal) {
-                    // Ignore globals, they're managed by the MatterModel
-                    continue;
-                }
-
                 const mapping =
                     mappings[child.tag] || (mappings[child.tag] = { slots: [], idToSlot: {}, nameToSlot: {} });
 

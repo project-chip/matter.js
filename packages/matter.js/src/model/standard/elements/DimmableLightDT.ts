@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const DimmableLightDT = DeviceType({
+export const DimmableLightDt = DeviceType({
     name: "DimmableLight", id: 0x101, type: "OnOffLight", classification: "simple",
     details: "A Dimmable Light is a lighting device that is capable of being switched on or off and the intensity " +
         "of its light adjusted by means of a bound controller device such as a Dimmer Switch or a Color " +
@@ -62,4 +62,4 @@ export const DimmableLightDT = DeviceType({
     ]
 });
 
-Matter.children.push(DimmableLightDT);
+Matter.children.push(DimmableLightDt);

@@ -12,6 +12,6 @@ import { MatterElement } from "../elements/index.js";
 export const Matter = MatterElement({
     name: "Matter",
     description: "Matter Object Model",
-    version: "1.3",
+    revision: "1.3",
     children: [],
 });

@@ -7,6 +7,7 @@
 import { Access, Conformance, Constraint, Quality } from "../../aspects/index.js";
 import { DefinitionError, FieldValue, Metatype } from "../../definitions/index.js";
 import { ClusterModel, ValueModel } from "../../models/index.js";
+import * as Elements from "../../standard/elements/index.js";
 import { ModelValidator } from "./ModelValidator.js";
 
 /**
@@ -135,9 +136,11 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
     }
 
     private validateEntries() {
-        // Note - these checks only apply for first-order derived types, so use
-        // direct metatype
-        const metatype = this.model.directMetatype;
+        // Note - these checks only apply for first-order derived types, so use direct metatype
+        const metatype =
+            this.model.type === undefined
+                ? undefined
+                : (Elements as unknown as Record<string, ValueModel>)[this.model.type]?.metatype;
         switch (metatype) {
             case Metatype.object:
                 if (this.model.metatype || !this.model.children.length) {
@@ -147,7 +150,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
 
             case Metatype.enum:
             case Metatype.bitmap:
-                if (!this.model.children.length && !this.model.isGlobal) {
+                if (!this.model.children.length && !this.model.isSeed) {
                     this.error(`CHILDLESS_${metatype.toUpperCase()}`, `${this.model.type} with no children`);
                 }
                 if (metatype == Metatype.enum) {

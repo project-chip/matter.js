@@ -31,20 +31,35 @@ export const WindowCovering = Cluster({
             children: [
                 Field({
                     name: "LF", conformance: "O.a+", constraint: "0", description: "Lift",
-                    details: "Lift control and behavior for lifting/sliding window coverings"
+                    details: "The Lift feature applies to window coverings that lift up and down (e.g. for a roller shade, Up and " +
+                        "Down is lift Open and Close) or slide left to right (e.g. for a sliding curtain, Left and Right is " +
+                        "lift Open and Close).",
+                    xref: { document: "cluster", section: "5.3.4.1" }
                 }),
+
                 Field({
                     name: "TL", conformance: "O.a+", constraint: "1", description: "Tilt",
-                    details: "Tilt control and behavior for tilting window coverings"
+                    details: "The Tilt feature applies to window coverings with vertical or horizontal strips.",
+                    xref: { document: "cluster", section: "5.3.4.2" }
                 }),
                 Field({
                     name: "PA_LF", conformance: "[LF]", constraint: "2", description: "PositionAwareLift",
                     details: "Position aware lift control is supported."
                 }),
+
                 Field({
                     name: "ABS", conformance: "O", constraint: "3", description: "AbsolutePosition",
-                    details: "Absolute positioning is supported."
+
+                    details: "The percentage attributes shall indicate the position as a percentage between the " +
+                        "InstalledOpenLimits and InstalledClosedLimits attributes of the window covering starting at the " +
+                        "open (0.00%)." +
+                        "\n" +
+                        "As a general rule, absolute positioning (in centimeters or tenth of a degrees) SHOULD NOT be " +
+                        "supported for new implementations.",
+
+                    xref: { document: "cluster", section: "5.3.4.4" }
                 }),
+
                 Field({
                     name: "PA_TL", conformance: "[TL]", constraint: "4", description: "PositionAwareTilt",
                     details: "Position aware tilt control is supported."
@@ -161,7 +176,7 @@ export const WindowCovering = Cluster({
 
         Attribute({
             name: "OperationalStatus", id: 0xa, type: "OperationalStatusBitmap", access: "R V",
-            conformance: "M", default: 0, quality: "P",
+            conformance: "M", constraint: "0b00xx xxxx", default: 0, quality: "P",
             details: "This attribute shall indicate the currently ongoing operations and applies to all type of devices.",
             xref: { document: "cluster", section: "5.3.6.16" },
 

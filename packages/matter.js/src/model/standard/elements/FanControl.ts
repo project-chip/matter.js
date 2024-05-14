@@ -28,7 +28,22 @@ export const FanControl = Cluster({
             xref: { document: "cluster", section: "4.4.4" },
 
             children: [
-                Field({ name: "SPD", constraint: "0", description: "MultiSpeed", details: "0-SpeedMax Fan Speeds" }),
+                Field({
+                    name: "SPD", constraint: "0", description: "MultiSpeed",
+
+                    details: "Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic " +
+                        "speed control but left it up to the implementer to decide what was supported. Therefore, it is " +
+                        "assumed that legacy client implementations are capable of determining, from the server, the number " +
+                        "of speeds supported between 1, 2, or 3, and whether automatic speed control is supported." +
+                        "\n" +
+                        "The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to " +
+                        "SpeedMax, which has a maximum of 100." +
+                        "\n" +
+                        "See Speed Rules for more details.",
+
+                    xref: { document: "cluster", section: "4.4.4.1" }
+                }),
+
                 Field({
                     name: "AUT", constraint: "1", description: "Auto",
                     details: "Automatic mode supported for fan speed"

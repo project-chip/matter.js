@@ -30,11 +30,56 @@ export const OnOff = Cluster({
             children: [
                 Field({
                     name: "LT", conformance: "[!OFFONLY]", constraint: "0", description: "Lighting",
-                    details: "Behavior that supports lighting applications."
+
+                    details: "This cluster is used for a lighting application." +
+                        "\n" +
+                        "On receipt of a Level Control cluster command that causes the OnOff attribute to be set to FALSE, " +
+                        "the OnTime attribute shall be set to 0." +
+                        "\n" +
+                        "On receipt of a Level Control cluster command that causes the OnOff attribute to be set to TRUE, if " +
+                        "the value of the OnTime attribute is equal to 0, the server shall set the OffWaitTime attribute to " +
+                        "0.",
+
+                    xref: { document: "cluster", section: "1.5.4.1" }
                 }),
+
                 Field({
                     name: "DF", conformance: "[!OFFONLY]", constraint: "1", description: "DeadFrontBehavior",
-                    details: "Device has Dead Front behavior"
+
+                    details: "When this feature is supported, the device exposing this server cluster exhibits \"dead front\" " +
+                        "behavior when the \"OnOff\" attribute is FALSE (Off). This \"dead front\" behavior includes:" +
+                        "\n" +
+                        "  • clusters other than this cluster that are also exposed may respond with failures to Invoke and " +
+                        "    Write interactions. Such failure responses when in a \"dead front\" shall be with an " +
+                        "    INVALID_IN_STATE status code." +
+                        "\n" +
+                        "  • clusters other than this cluster may change the values of their attributes to best-effort " +
+                        "    values, due to the actual values not being defined or available in this state. Device type " +
+                        "    specifications that require support for the DF feature SHOULD define what these best-effort " +
+                        "    values are." +
+                        "\n" +
+                        "  • Report Transactions shall continue to be generated. Such transactions may include best-effort " +
+                        "    values as noted above." +
+                        "\n" +
+                        "  • Event generation logic for clusters other than this cluster is unchanged (noting possible use " +
+                        "    of best-effort attribute values as in the preceding bullets)." +
+                        "\n" +
+                        "When this feature is supported and the OnOff attribute changes from TRUE to FALSE (e.g. when " +
+                        "receiving an Off Command, or due to a manual interaction on the device), it shall start executing " +
+                        "this \"dead front\" behavior." +
+                        "\n" +
+                        "When this feature is supported and the OnOff attribute changes from FALSE to TRUE (e.g. when " +
+                        "receiving an On Command, or due to a manual interaction on the device), it shall stop executing " +
+                        "this \"dead front\" behavior." +
+                        "\n" +
+                        "When this feature is supported, and any change of the \"dead front\" state leads to changes in " +
+                        "attributes of other clusters due to the \"dead front\" feature, these attribute changes shall NOT be " +
+                        "skipped or omitted from the usual processing associated with attribute changes. For example, if an" +
+                        "\n" +
+                        "attribute changes from value 4 to null on \"dead front\" behavior due to an Off command being " +
+                        "received, this change shall be processed for reporting and subscriptions.",
+
+                    xref: { document: "cluster", section: "1.5.4.2" }
                 }),
 
                 Field({

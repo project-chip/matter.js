@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const DoorLockControllerDT = DeviceType({
+export const DoorLockControllerDt = DeviceType({
     name: "DoorLockController", id: 0xb, classification: "simple",
     details: "A Door Lock Controller is a device capable of controlling a door lock.",
     xref: { document: "device", section: "8.2" },
@@ -41,4 +41,4 @@ export const DoorLockControllerDT = DeviceType({
     ]
 });
 
-Matter.children.push(DoorLockControllerDT);
+Matter.children.push(DoorLockControllerDt);

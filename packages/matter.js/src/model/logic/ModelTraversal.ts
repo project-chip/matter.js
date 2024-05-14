@@ -7,9 +7,10 @@
 import { InternalError } from "../../common/MatterError.js";
 import { Access, Aspect, Constraint } from "../aspects/index.js";
 import { ElementTag, FieldValue, Metatype } from "../definitions/index.js";
-import { AnyElement, Globals } from "../elements/index.js";
+import { AnyElement } from "../elements/index.js";
 import { Children } from "../models/Children.js";
 import { type CommandModel, type Model, type ValueModel } from "../models/index.js";
+import * as Elements from "../standard/elements/index.js";
 
 const OPERATION_DEPTH_LIMIT = 20;
 
@@ -82,22 +83,22 @@ export class ModelTraversal {
                 // If parented by enum or bitmap, infer type as uint of same size
                 if ((ancestor as { effectiveMetatype?: string }).effectiveMetatype) {
                     switch (ancestor.name) {
-                        case Globals.enum8.name:
-                        case Globals.map8.name:
-                            result = Globals.uint8.name;
+                        case Elements.enum8.name:
+                        case Elements.map8.name:
+                            result = Elements.uint8.name;
                             return false;
 
-                        case Globals.enum16.name:
-                        case Globals.map16.name:
-                            result = Globals.uint16.name;
+                        case Elements.enum16.name:
+                        case Elements.map16.name:
+                            result = Elements.uint16.name;
                             return false;
 
-                        case Globals.map32.name:
-                            result = Globals.uint32.name;
+                        case Elements.map32.name:
+                            result = Elements.uint32.name;
                             return false;
 
-                        case Globals.map64.name:
-                            result = Globals.uint64.name;
+                        case Elements.map64.name:
+                            result = Elements.uint64.name;
                             return false;
                     }
                 }

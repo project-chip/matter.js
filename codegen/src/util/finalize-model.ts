@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { status as statusType } from "@project-chip/matter.js/elements";
 import { Logger } from "@project-chip/matter.js/log";
 import {
     AttributeModel,
@@ -11,7 +12,6 @@ import {
     CommandModel,
     DatatypeModel,
     FieldModel,
-    Globals,
     MatterModel,
     Metatype,
     ValidateModel,
@@ -163,7 +163,7 @@ function patchStatusTypes(cluster: ClusterModel) {
             continue;
         }
 
-        status.type = Globals.status.name;
+        status.type = statusType.name;
     }
 }
 

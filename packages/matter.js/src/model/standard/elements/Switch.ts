@@ -42,23 +42,37 @@ export const Switch = Cluster({
             children: [
                 Field({
                     name: "LS", conformance: "O.a", constraint: "0", description: "LatchingSwitch",
-                    details: "Switch is latching"
+                    details: "This feature is for a switch that maintains its position after being pressed (or turned).",
+                    xref: { document: "cluster", section: "1.13.4.1" }
                 }),
+
                 Field({
                     name: "MS", conformance: "O.a", constraint: "1", description: "MomentarySwitch",
-                    details: "Switch is momentary"
+                    details: "This feature is for a switch that does not maintain its position after being pressed (or turned). " +
+                        "After releasing, it goes back to its idle position.",
+                    xref: { document: "cluster", section: "1.13.4.2" }
                 }),
+
                 Field({
                     name: "MSR", conformance: "[MS]", constraint: "2", description: "MomentarySwitchRelease",
-                    details: "Switch supports release"
+                    details: "This feature is for a momentary switch that can distinguish and report release events. When this " +
+                        "feature flag MSR is present, MS shall be present as well.",
+                    xref: { document: "cluster", section: "1.13.4.3" }
                 }),
+
                 Field({
                     name: "MSL", conformance: "[MS & MSR]", constraint: "3", description: "MomentarySwitchLongPress",
-                    details: "Switch supports long press"
+                    details: "This feature is for a momentary switch that can distinguish and report long presses from short " +
+                        "presses. When this feature flag MSL is present, MS and MSR shall be present as well.",
+                    xref: { document: "cluster", section: "1.13.4.4" }
                 }),
+
                 Field({
                     name: "MSM", conformance: "[MS & MSR]", constraint: "4", description: "MomentarySwitchMultiPress",
-                    details: "Switch supports multi-press"
+                    details: "This feature is for a momentary switch that can distinguish and report double press and potentially " +
+                        "multiple presses with more events, such as triple press, etc. When this feature flag MSM is " +
+                        "present, MS and MSR shall be present as well.",
+                    xref: { document: "cluster", section: "1.13.4.5" }
                 })
             ]
         }),

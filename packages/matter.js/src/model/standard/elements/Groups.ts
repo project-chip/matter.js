@@ -46,7 +46,8 @@ export const Groups = Cluster({
             xref: { document: "cluster", section: "1.3.4" },
             children: [Field({
                 name: "GN", constraint: "0", default: 1, description: "GroupNames",
-                details: "The ability to store a name for a group."
+                details: "The Group Names feature indicates the ability to store a name for a group when a group is added.",
+                xref: { document: "cluster", section: "1.3.4.1" }
             })]
         }),
 

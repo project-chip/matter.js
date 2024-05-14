@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const OccupancySensorDT = DeviceType({
+export const OccupancySensorDt = DeviceType({
     name: "OccupancySensor", id: 0x107, classification: "simple",
     details: "An Occupancy Sensor is a measurement and sensing device that is capable of measuring and reporting " +
         "the occupancy state in a designated area.",
@@ -31,4 +31,4 @@ export const OccupancySensorDT = DeviceType({
     ]
 });
 
-Matter.children.push(OccupancySensorDT);
+Matter.children.push(OccupancySensorDt);

@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const Thermostat = Cluster({
-    name: "Thermostat", id: 0x201, classification: "application",
+    name: "Thermostat", id: 0x201, asOf: "1.3", classification: "application",
     details: "This cluster provides an interface to the functionality of a thermostat.",
     xref: { document: "cluster", section: "4.3" },
 
@@ -52,9 +52,14 @@ export const Thermostat = Cluster({
                     name: "AUTO", conformance: "O", constraint: "5", description: "AutoMode",
                     details: "Supports a System Mode of Auto"
                 }),
+
                 Field({
                     name: "LTNE", conformance: "O", constraint: "6", description: "LocalTemperatureNotExposed",
-                    details: "Thermostat does not expose the LocalTemperature Value in the LocalTemperature attribute"
+                    details: "This feature indicates that the Calculated Local Temperature used internally is unavailable to " +
+                        "report externally, for example due to the temperature control being done by a separate subsystem " +
+                        "which does not offer a view into the currently measured temperature, but allows setpoints to be " +
+                        "provided.",
+                    xref: { document: "cluster", section: "4.3.4.1" }
                 })
             ]
         }),
@@ -89,7 +94,7 @@ export const Thermostat = Cluster({
 
         Attribute({
             name: "Occupancy", id: 0x2, type: "OccupancyBitmap", access: "R V", conformance: "OCC",
-            constraint: "desc", default: "1",
+            constraint: "desc", default: 1,
             details: "This attribute shall indicate whether the heated/cooled space is occupied or not, as measured " +
                 "locally or remotely (over the network).",
             xref: { document: "cluster", section: "4.3.9.5" }
@@ -483,7 +488,7 @@ export const Thermostat = Cluster({
         }),
 
         Attribute({
-            name: "SetpointChangeSourceTimestamp", id: 0x32, type: "utc", access: "R V", conformance: "O",
+            name: "SetpointChangeSourceTimestamp", id: 0x32, type: "epoch-s", access: "R V", conformance: "O",
             default: 0,
             details: "This attribute shall indicate the time in UTC at which the SetpointChangeAmount attribute change " +
                 "was recorded.",
@@ -1365,7 +1370,9 @@ export const Thermostat = Cluster({
                     xref: { document: "cluster", section: "4.3.8.24.3" }
                 })
             ]
-        })
+        }),
+
+        Datatype({ name: "OccupancyBitmap", type: "OccupancySensing.OccupancyBitmap" })
     ]
 });
 

@@ -41,7 +41,7 @@ export const Identify = Cluster({
                 "\n" +
                 "If this attribute is set to a value other than 0 then the device shall enter its identification " +
                 "state, in order to indicate to an observer which of several nodes and/or endpoints it is. It is " +
-                "RECOMMENDED that this state consists of flashing a light with a period of 0.5 seconds. The " +
+                "recommended that this state consists of flashing a light with a period of 0.5 seconds. The " +
                 "IdentifyTime attribute shall be decremented every second while in this state." +
                 "\n" +
                 "If this attribute reaches or is set to the value 0 then the device shall terminate its " +

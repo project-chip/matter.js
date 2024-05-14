@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const Channel = Cluster({
-    name: "Channel", id: 0x504, classification: "application",
+    name: "Channel", id: 0x504, asOf: "1.3", classification: "application",
 
     details: "This cluster provides an interface for controlling the current Channel on a device or endpoint." +
         "\n" +
@@ -446,7 +446,7 @@ export const Channel = Cluster({
                 }),
 
                 Field({
-                    name: "Type", id: 0x6, type: "ChannelTypeEnum", conformance: "O", default: "empty",
+                    name: "Type", id: 0x6, type: "ChannelTypeEnum", conformance: "O",
                     details: "This shall indicate the type or grouping of a specific channel. This field is optional, but SHOULD " +
                         "be provided when known.",
                     xref: { document: "cluster", section: "6.6.5.5.7" }
@@ -763,7 +763,9 @@ export const Channel = Cluster({
                     xref: { document: "cluster", section: "6.6.5.12.2" }
                 })
             ]
-        })
+        }),
+
+        Datatype({ name: "AdditionalInfoStruct", type: "ContentLauncher.AdditionalInfoStruct" })
     ]
 });
 

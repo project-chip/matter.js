@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const PumpControllerDT = DeviceType({
+export const PumpControllerDt = DeviceType({
     name: "PumpController", id: 0x304, classification: "simple",
     details: "A Pump Controller device is capable of configuring and controlling a Pump device.",
     xref: { document: "device", section: "6.5" },
@@ -66,4 +66,4 @@ export const PumpControllerDT = DeviceType({
     ]
 });
 
-Matter.children.push(PumpControllerDT);
+Matter.children.push(PumpControllerDt);

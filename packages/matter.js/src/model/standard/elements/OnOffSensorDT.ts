@@ -9,7 +9,7 @@
 import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-export const OnOffSensorDT = DeviceType({
+export const OnOffSensorDt = DeviceType({
     name: "OnOffSensor", id: 0x850, classification: "simple",
     details: "An On/Off Sensor is a measurement and sensing device that, when bound to a lighting device such as " +
         "a Dimmable Light, is capable of being used to switch the device on or off.",
@@ -51,4 +51,4 @@ export const OnOffSensorDT = DeviceType({
     ]
 });
 
-Matter.children.push(OnOffSensorDT);
+Matter.children.push(OnOffSensorDt);

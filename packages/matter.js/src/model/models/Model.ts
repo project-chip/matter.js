@@ -17,10 +17,13 @@ import { Children } from "./Children.js";
 export abstract class Model {
     abstract readonly tag: ElementTag;
     type?: string;
+    isSeed?: boolean;
     description?: string;
     details?: string;
     xref?: Model.CrossReference;
     errors?: DefinitionError[];
+    asOf?: Specification.Revision;
+    until?: Specification.Revision;
     declare id?: number;
     declare name: string;
 
@@ -81,7 +84,9 @@ export abstract class Model {
      * Determine if this model resides in the global namespace.
      */
     get isGlobal() {
-        return this.tag === "matter" || this.parent?.tag === "matter";
+        return (
+            this.tag === "matter" || (this.parent?.tag === "matter" && this.isType && this.tag !== ElementTag.Cluster)
+        );
     }
 
     /**

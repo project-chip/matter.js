@@ -149,10 +149,7 @@ export const AccessControl = Cluster({
                     details: "The type of change as appropriate.",
                     xref: { document: "core", section: "9.10.7.1.3" }
                 }),
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
 
@@ -195,10 +192,7 @@ export const AccessControl = Cluster({
                     xref: { document: "core", section: "9.10.7.2.2" }
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
 
@@ -306,10 +300,7 @@ export const AccessControl = Cluster({
                     xref: { document: "core", section: "9.10.4.5.1" }
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
 
@@ -334,10 +325,7 @@ export const AccessControl = Cluster({
                     xref: { document: "core", section: "9.10.4.6.1" }
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         })
     ]

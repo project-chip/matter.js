@@ -945,7 +945,7 @@ export const SpecMatter = Matter({
                             xref: { document: "cluster", section: "1.4.7.2.3" }
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -2231,7 +2231,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "CurrentSensitivityLevel", id: 0x0, type: "uint8", access: "RW VO", conformance: "SENSLVL",
-                    quality: "N",
+                    constraint: "max SupportedSensitivityLevels - 1", quality: "N",
                     details: "This attribute shall indicate the currently selected sensitivity level." +
                         "\n" +
                         "If a write interaction to this attribute contains an unsupported sensitivity value, a " +
@@ -2257,7 +2257,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "DefaultSensitivityLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[SENSLVL]",
-                    quality: "F",
+                    constraint: "max SupportedSensitivityLevels - 1", quality: "F",
                     details: "This attribute shall indicate the default sensitivity level selected by the manufacturer.",
                     xref: { document: "cluster", section: "1.8.6.3" }
                 }),
@@ -3898,7 +3898,7 @@ export const SpecMatter = Matter({
                             details: "This field shall indicate the MessageID for newly added message.",
                             xref: { document: "cluster", section: "1.16.8.1.1" }
                         }),
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -3913,7 +3913,7 @@ export const SpecMatter = Matter({
                             details: "This field shall indicate the MessageID for the message being presented.",
                             xref: { document: "cluster", section: "1.16.8.2.1" }
                         }),
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -3950,7 +3950,7 @@ export const SpecMatter = Matter({
                             name: "FutureMessagesPreference", id: 0x3, type: "FutureMessagePreferenceEnum", access: "S",
                             conformance: "M", default: null, quality: "X"
                         }),
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -4222,7 +4222,7 @@ export const SpecMatter = Matter({
                             children: [Field({ name: "entry", type: "MessageResponseOptionStruct" })]
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -4390,7 +4390,8 @@ export const SpecMatter = Matter({
                 }),
 
                 Field({
-                    name: "FixedMax", id: 0x5, type: "uint64", conformance: "O.a+", quality: "F",
+                    name: "FixedMax", id: 0x5, type: "uint64", conformance: "O.a+", constraint: "max 262 - 1",
+                    quality: "F",
                     details: "This field shall indicate the maximum +/- fixed accuracy for the associated measurement, in the " +
                         "unit indicated by MeasurementType.",
                     xref: { document: "cluster", section: "2.1.4.3.6" }
@@ -5948,7 +5949,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "Voltage", id: 0x4, type: "voltage-mV", access: "R V", conformance: "O",
-                    constraint: "-262 to 262", default: "null", quality: "X Q",
+                    constraint: "-262 to 262", default: null, quality: "X Q",
 
                     details: "This shall indicate the most recent Voltage reading in millivolts (mV)." +
                         "\n" +
@@ -6105,7 +6106,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "RmsVoltage", id: 0xb, type: "voltage-mV", access: "R V", conformance: "[ALTC]",
-                    constraint: "-262 to 262", default: "null", quality: "X Q",
+                    constraint: "-262 to 262", default: null, quality: "X Q",
 
                     details: "This shall indicate the most recent RMSVoltage reading in millivolts (mV)." +
                         "\n" +
@@ -9090,8 +9091,8 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "SetpointChangeSourceTimestamp", id: 0x32, type: "utc", access: "R V", conformance: "O",
-                    default: "0",
+                    name: "SetpointChangeSourceTimestamp", id: 0x32, type: "epoch-s", access: "R V", conformance: "O",
+                    default: 0,
                     details: "This attribute shall indicate the time in UTC at which the SetpointChangeAmount attribute change " +
                         "was recorded.",
                     xref: { document: "cluster", section: "4.3.9.37" }
@@ -14071,7 +14072,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "OperationalStatus", id: 0xa, type: "OperationalStatusBitmap", access: "R V",
-                    conformance: "M", default: 0, quality: "P",
+                    conformance: "M", constraint: "0b00xx xxxx", default: 0, quality: "P",
                     details: "This attribute shall indicate the currently ongoing operations and applies to all type of devices.",
                     xref: { document: "cluster", section: "5.3.6.16" }
                 }),
@@ -19003,7 +19004,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "MinTemperature", id: 0x1, type: "temperature", access: "R V", conformance: "TN",
-                    quality: "F",
+                    constraint: "max (MaxTemperature - 1)", quality: "F",
                     details: "This attribute shall represent the minimum temperature to which the TemperatureSetpoint attribute " +
                         "may be set.",
                     xref: { document: "cluster", section: "8.2.5.2" }
@@ -19024,7 +19025,8 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "Step", id: 0x3, type: "temperature", access: "R V", conformance: "STEP", quality: "F",
+                    name: "Step", id: 0x3, type: "temperature", access: "R V", conformance: "STEP",
+                    constraint: "max (MaxTemperature - MinTemperature)", quality: "F",
 
                     details: "This attribute shall represent the discrete value by which the TemperatureSetpoint attribute can be " +
                         "changed via the SetTemperature command." +
@@ -19579,8 +19581,8 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "PowerStep", id: 0x5, type: "uint8", access: "R V", conformance: "PWRLMTS", default: 10,
-                    quality: "F",
+                    name: "PowerStep", id: 0x5, type: "uint8", access: "R V", conformance: "PWRLMTS",
+                    constraint: "1 to (MaxPower - MinPower)", default: 10, quality: "F",
                     details: "This attribute shall indicate the increment of power that can be set on the server." +
                         "\n" +
                         "For example, if MinPower is 1, MaxPower is 10, and PowerSetting can be set to any integer between " +
@@ -22302,7 +22304,7 @@ export const SpecMatter = Matter({
 
         Attribute({
             name: "ClusterRevision", id: 0xfffd, type: "uint16", access: "R V", conformance: "M",
-            constraint: "min 1", quality: "F",
+            constraint: "min 1", isSeed: true, quality: "F",
 
             details: "The ClusterRevision attribute indicates the revision of the server cluster specification supported " +
                 "by the cluster instance. An implementation of a cluster specification before the ClusterRevision " +
@@ -22321,7 +22323,7 @@ export const SpecMatter = Matter({
 
         Attribute({
             name: "FeatureMap", id: 0xfffc, type: "map32", access: "R V", conformance: "M", default: 0,
-            quality: "F",
+            isSeed: true, quality: "F",
 
             details: "Each instance of a cluster shall support this attribute." +
                 "\n" +
@@ -22367,7 +22369,8 @@ export const SpecMatter = Matter({
         }),
 
         Attribute({
-            name: "AttributeList", id: 0xfffb, type: "list", access: "R V", conformance: "M", quality: "F",
+            name: "AttributeList", id: 0xfffb, type: "list", access: "R V", conformance: "M", isSeed: true,
+            quality: "F",
             details: "Each instance of a cluster shall support this attribute. This attribute shall be a list of the " +
                 "attribute IDs of the attributes supported by the cluster instance.",
             xref: { document: "core", section: "7.13.3" },
@@ -22375,7 +22378,8 @@ export const SpecMatter = Matter({
         }),
 
         Attribute({
-            name: "EventList", id: 0xfffa, type: "list", access: "R V", conformance: "P, M", quality: "F",
+            name: "EventList", id: 0xfffa, type: "list", access: "R V", conformance: "P, M", isSeed: true,
+            quality: "F",
             details: "Each instance of a cluster shall support this attribute. This attribute shall be a list of the " +
                 "event IDs of the events supported by the cluster instance.",
             xref: { document: "core", section: "7.13.6" },
@@ -22384,7 +22388,7 @@ export const SpecMatter = Matter({
 
         Attribute({
             name: "AcceptedCommandList", id: 0xfff9, type: "list", access: "R V", conformance: "M",
-            quality: "F",
+            isSeed: true, quality: "F",
 
             details: "This attribute is a list of client generated commands which are supported by this cluster server " +
                 "instance." +
@@ -22403,7 +22407,7 @@ export const SpecMatter = Matter({
 
         Attribute({
             name: "GeneratedCommandList", id: 0xfff8, type: "list", access: "R V", conformance: "M",
-            quality: "F",
+            isSeed: true, quality: "F",
 
             details: "This attribute is a list of server generated commands. A server generated command is a server to " +
                 "client command." +
@@ -22421,7 +22425,7 @@ export const SpecMatter = Matter({
 
         Field({
             name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-            constraint: "1 to 254",
+            constraint: "1 to 254", isSeed: true,
 
             details: "This field shall be present for fabric-scoped data. This field does not have to be defined " +
                 "explicitly in the field table for fabric-scoped data." +
@@ -22435,7 +22439,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "bool", description: "Boolean", metatype: "boolean",
+            name: "bool", description: "Boolean", isSeed: true, metatype: "boolean",
             details: "The Boolean type represents a logical value, either FALSE or TRUE." +
                 "\n" +
                 "  • FALSE shall be equivalent to the value 0 (zero)." +
@@ -22445,92 +22449,100 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "map8", byteSize: 1, description: "8-bit bitmap", metatype: "bitmap",
+            name: "map8", byteSize: 1, description: "8-bit bitmap", isSeed: true, metatype: "bitmap",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "map16", byteSize: 2, description: "16-bit bitmap", metatype: "bitmap",
+            name: "map16", byteSize: 2, description: "16-bit bitmap", isSeed: true, metatype: "bitmap",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "map32", byteSize: 4, description: "32-bit bitmap", metatype: "bitmap",
+            name: "map32", byteSize: 4, description: "32-bit bitmap", isSeed: true, metatype: "bitmap",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "map64", byteSize: 8, description: "64-bit bitmap", metatype: "bitmap",
+            name: "map64", byteSize: 8, description: "64-bit bitmap", isSeed: true, metatype: "bitmap",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "uint8", byteSize: 1, description: "Unsigned 8-bit integer", metatype: "integer",
+            name: "uint8", byteSize: 1, description: "Unsigned 8-bit integer", isSeed: true,
+            metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "uint16", byteSize: 2, description: "Unsigned 16-bit integer", metatype: "integer",
+            name: "uint16", byteSize: 2, description: "Unsigned 16-bit integer", isSeed: true,
+            metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "uint24", byteSize: 3, description: "Unsigned 24-bit integer", metatype: "integer",
+            name: "uint24", byteSize: 3, description: "Unsigned 24-bit integer", isSeed: true,
+            metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "uint32", byteSize: 4, description: "Unsigned 32-bit integer", metatype: "integer",
+            name: "uint32", byteSize: 4, description: "Unsigned 32-bit integer", isSeed: true,
+            metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "uint40", byteSize: 5, description: "Unsigned 40-bit integer", metatype: "integer",
+            name: "uint40", byteSize: 5, description: "Unsigned 40-bit integer", isSeed: true,
+            metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "uint48", byteSize: 6, description: "Unsigned 48-bit integer", metatype: "integer",
+            name: "uint48", byteSize: 6, description: "Unsigned 48-bit integer", isSeed: true,
+            metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "uint56", byteSize: 7, description: "Unsigned 56-bit integer", metatype: "integer",
+            name: "uint56", byteSize: 7, description: "Unsigned 56-bit integer", isSeed: true,
+            metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "uint64", byteSize: 8, description: "Unsigned 64-bit integer", metatype: "integer",
+            name: "uint64", byteSize: 8, description: "Unsigned 64-bit integer", isSeed: true,
+            metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "int8", byteSize: 1, description: "Signed 8-bit integer", metatype: "integer",
+            name: "int8", byteSize: 1, description: "Signed 8-bit integer", isSeed: true, metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "int16", byteSize: 2, description: "Signed 16-bit integer", metatype: "integer",
+            name: "int16", byteSize: 2, description: "Signed 16-bit integer", isSeed: true, metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "int24", byteSize: 3, description: "Signed 24-bit integer", metatype: "integer",
+            name: "int24", byteSize: 3, description: "Signed 24-bit integer", isSeed: true, metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "int32", byteSize: 4, description: "Signed 32-bit integer", metatype: "integer",
+            name: "int32", byteSize: 4, description: "Signed 32-bit integer", isSeed: true, metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "int40", byteSize: 5, description: "Signed 40-bit integer", metatype: "integer",
+            name: "int40", byteSize: 5, description: "Signed 40-bit integer", isSeed: true, metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "int48", byteSize: 6, description: "Signed 48-bit integer", metatype: "integer",
+            name: "int48", byteSize: 6, description: "Signed 48-bit integer", isSeed: true, metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "int56", byteSize: 7, description: "Signed 56-bit integer", metatype: "integer",
+            name: "int56", byteSize: 7, description: "Signed 56-bit integer", isSeed: true, metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "int64", byteSize: 8, description: "Signed 64-bit integer", metatype: "integer",
+            name: "int64", byteSize: 8, description: "Signed 64-bit integer", isSeed: true, metatype: "integer",
             xref: { document: "core", section: "7.18.1" }
         }),
         Datatype({
-            name: "single", byteSize: 4, description: "Single precision", metatype: "float",
+            name: "single", byteSize: 4, description: "Single precision", isSeed: true, metatype: "float",
             xref: { document: "core", section: "7.18.1" }
         }),
 
         Datatype({
-            name: "double", byteSize: 8, description: "Double precision", metatype: "float",
+            name: "double", byteSize: 8, description: "Double precision", isSeed: true, metatype: "float",
 
             details: "The double precision number format is based on the IEEE 754-2019 double precision (64-bit) format " +
                 "for binary floating-point arithmetic." +
@@ -22544,14 +22556,14 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "octstr", description: "Octet string", metatype: "bytes",
+            name: "octstr", description: "Octet string", isSeed: true, metatype: "bytes",
             details: "The octet string data type defines a sequence of octets with a finite octet count from 0 to 65534. " +
                 "It is recommended to define a constraint on the maximum possible count.",
             xref: { document: "core", section: "7.18.1.7" }
         }),
 
         Datatype({
-            name: "list", description: "List", metatype: "array",
+            name: "list", description: "List", isSeed: true, metatype: "array",
 
             details: "A list is defined as a collection of entries of the same data type, with a finite count from 0 to " +
                 "65534. A cluster specification may define further constraints on the maximum possible count. The " +
@@ -22643,7 +22655,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "struct", description: "Struct", metatype: "object",
+            name: "struct", description: "Struct", isSeed: true, metatype: "object",
 
             details: "A struct is a sequence of fields of any data type. Individual fields are identified by a field ID " +
                 "of unsigned integer, starting at 0 (zero), for the first field." +
@@ -22706,16 +22718,16 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "percent", type: "uint8", description: "Percentage units 1%",
+            name: "percent", type: "uint8", description: "Percentage units 1%", isSeed: true,
             xref: { document: "core", section: "7.18.2" }
         }),
         Datatype({
-            name: "percent100ths", type: "uint16", description: "Percentage units 0.01%",
+            name: "percent100ths", type: "uint16", description: "Percentage units 0.01%", isSeed: true,
             xref: { document: "core", section: "7.18.2" }
         }),
 
         Datatype({
-            name: "tod", type: "struct", description: "Time of day",
+            name: "tod", type: "struct", description: "Time of day", isSeed: true,
 
             details: "The Time of Day data type shall be a struct with these fields: Hours, Minutes, Seconds, and " +
                 "Hundredths." +
@@ -22731,7 +22743,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "date", type: "struct", description: "Date",
+            name: "date", type: "struct", description: "Date", isSeed: true,
             details: "This data type shall be a struct as defined below." +
                 "\n" +
                 "Valid combinations using null fields are",
@@ -22769,7 +22781,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "epoch-us", type: "uint64", description: "Epoch Time in microseconds",
+            name: "epoch-us", type: "uint64", description: "Epoch Time in microseconds", isSeed: true,
 
             details: "This type represents an offset, in microseconds, from 0 hours, 0 minutes, 0 seconds, on the 1st of " +
                 "January, 2000 UTC (the Epoch), encoded as an unsigned 64-bit scalar value." +
@@ -22833,7 +22845,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "epoch-s", type: "uint32", description: "Epoch Time in seconds",
+            name: "epoch-s", type: "uint32", description: "Epoch Time in seconds", isSeed: true,
 
             details: "This type has the same semantics as Epoch Time in Microseconds, except that:" +
                 "\n" +
@@ -22848,7 +22860,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "posix-ms", type: "uint64", description: "POSIX Time in milliseconds",
+            name: "posix-ms", type: "uint64", description: "POSIX Time in milliseconds", isSeed: true,
             details: "This type represents an offset, in milliseconds, from the UNIX epoch (1970-01-01 00:00:00 UTC), " +
                 "encoded as an unsigned 64-bit scalar value." +
                 "\n" +
@@ -22857,14 +22869,14 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "systime-us", type: "uint64", description: "System Time in microseconds",
+            name: "systime-us", type: "uint64", description: "System Time in microseconds", isSeed: true,
             details: "System time in microseconds is an unsigned 64-bit value representing the number of microseconds " +
                 "since boot.",
             xref: { document: "core", section: "7.18.2.8" }
         }),
 
         Datatype({
-            name: "systime-ms", type: "uint64", description: "System Time in milliseconds",
+            name: "systime-ms", type: "uint64", description: "System Time in milliseconds", isSeed: true,
             details: "System time in milliseconds is an unsigned 64-bit value representing the number of milliseconds " +
                 "since boot." +
                 "\n" +
@@ -22873,14 +22885,14 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "elapsed-s", type: "uint32", description: "Elapsed Time in seconds",
+            name: "elapsed-s", type: "uint32", description: "Elapsed Time in seconds", isSeed: true,
             details: "Elapsed time in seconds is an unsigned 32-bit value representing the time that has elapsed for an " +
                 "operation or other activity, as determined by the definition of the attribute using this type.",
             xref: { document: "core", section: "7.18.2.10" }
         }),
 
         Datatype({
-            name: "temperature", type: "int16", description: "Temperature",
+            name: "temperature", type: "int16", description: "Temperature", isSeed: true,
 
             details: "This type represents a temperature on the Celsius scale with a resolution of 0.01°C." +
                 "\n" +
@@ -22910,36 +22922,36 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "power-mW", type: "int64", description: "Power",
+            name: "power-mW", type: "int64", description: "Power", isSeed: true,
             details: "This type represents power measured in milliwatts.",
             xref: { document: "core", section: "7.18.2.12" }
         }),
         Datatype({
-            name: "amperage-mA", type: "int64", description: "Amperage",
+            name: "amperage-mA", type: "int64", description: "Amperage", isSeed: true,
             details: "This type represents amperage measured in milliamps.",
             xref: { document: "core", section: "7.18.2.13" }
         }),
         Datatype({
-            name: "voltage-mW", type: "int64", description: "Voltage",
+            name: "voltage-mV", type: "int64", description: "Voltage", isSeed: true,
             details: "This type represents voltage measured in millivolts.",
             xref: { document: "core", section: "7.18.2.14" }
         }),
         Datatype({
-            name: "energy-mWh", type: "int64", description: "Energy",
+            name: "energy-mWh", type: "int64", description: "Energy", isSeed: true,
             details: "This type represents energy measured in milliwatt-hours.",
             xref: { document: "core", section: "7.18.2.15" }
         }),
         Datatype({
-            name: "enum8", type: "uint8", description: "8-bit enumeration", metatype: "enum",
+            name: "enum8", type: "uint8", description: "8-bit enumeration", isSeed: true, metatype: "enum",
             xref: { document: "core", section: "7.18.2" }
         }),
         Datatype({
-            name: "enum16", type: "uint16", description: "16-bit enumeration", metatype: "enum",
+            name: "enum16", type: "uint16", description: "16-bit enumeration", isSeed: true, metatype: "enum",
             xref: { document: "core", section: "7.18.2" }
         }),
 
         Datatype({
-            name: "priority", type: "enum8", description: "Priority",
+            name: "priority", type: "enum8", description: "Priority", isSeed: true,
             details: "This is an enumeration of priority used to tag events and possibly other data. The data type does " +
                 "not define any particular ordering among the values. Specific uses of the data type may assign " +
                 "semantics to the values that imply an ordering relationship.",
@@ -22959,7 +22971,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "status", type: "enum8", description: "Status Code",
+            name: "status", type: "enum8", description: "Status Code", isSeed: true,
 
             details: "An enumeration value that means a success or error status. A status code is indicated as a response " +
                 "to an action in an interaction (see Interaction Model)." +
@@ -23121,20 +23133,20 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "group-id", type: "uint16", description: "Group ID",
+            name: "group-id", type: "uint16", description: "Group ID", isSeed: true,
             details: "A 16-bit ID for a group scoped to a particular fabric as indicated by an accompanying fabric index " +
                 "adjacent instantiation.",
             xref: { document: "core", section: "7.18.2.22" }
         }),
 
         Datatype({
-            name: "endpoint-no", type: "uint16", description: "Endpoint Number",
+            name: "endpoint-no", type: "uint16", description: "Endpoint Number", isSeed: true,
             details: "An unsigned number that indicates an instance of a device type.",
             xref: { document: "core", section: "7.18.2.23" }
         }),
 
         Datatype({
-            name: "vendor-id", type: "uint16", description: "Vendor ID",
+            name: "vendor-id", type: "uint16", description: "Vendor ID", isSeed: true,
             details: "A Vendor ID." +
                 "\n" +
                 "Vendor IDs may be used as a prefix in a Manufacturer Extensible Identifier format.",
@@ -23142,7 +23154,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "devtype-id", type: "uint32", description: "Device Type ID",
+            name: "devtype-id", type: "uint32", description: "Device Type ID", isSeed: true,
             details: "An identifier that indicates conformance to a device type." +
                 "\n" +
                 "Device Type IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation " +
@@ -23151,13 +23163,13 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "fabric-id", type: "uint64", description: "Fabric ID",
+            name: "fabric-id", type: "uint64", description: "Fabric ID", isSeed: true,
             details: "A value to identify a fabric.",
             xref: { document: "core", section: "7.18.2.19" }
         }),
 
         Datatype({
-            name: "fabric-idx", type: "uint8", description: "Fabric Index",
+            name: "fabric-idx", type: "uint8", description: "Fabric Index", isSeed: true,
             details: "This is an index that maps to a particular fabric on the node, see Fabric-Index. It is used for:" +
                 "\n" +
                 "  • the accessing fabric index of an interaction" +
@@ -23167,7 +23179,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "cluster-id", type: "uint32", description: "Cluster ID",
+            name: "cluster-id", type: "uint32", description: "Cluster ID", isSeed: true,
             details: "An identifier that indicates conformance to a cluster specification." +
                 "\n" +
                 "Cluster IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation are " +
@@ -23176,7 +23188,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "attrib-id", type: "uint32", description: "Attribute ID",
+            name: "attrib-id", type: "uint32", description: "Attribute ID", isSeed: true,
             details: "An identifier that indicates an attribute defined in a cluster specification." +
                 "\n" +
                 "Attribute IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation " +
@@ -23185,7 +23197,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "field-id", type: "uint32", description: "Field ID",
+            name: "field-id", type: "uint32", description: "Field ID", isSeed: true,
             details: "An identifier that indicates a field defined in a struct." +
                 "\n" +
                 "Field IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation are " +
@@ -23194,7 +23206,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "event-id", type: "uint32", description: "Event ID",
+            name: "event-id", type: "uint32", description: "Event ID", isSeed: true,
             details: "An identifier that indicates an Event defined in a cluster specification." +
                 "\n" +
                 "Event IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation are " +
@@ -23203,7 +23215,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "command-id", type: "uint32", description: "Command ID",
+            name: "command-id", type: "uint32", description: "Command ID", isSeed: true,
             details: "An identifier that indicates a command defined in a cluster specification." +
                 "\n" +
                 "Command IDs shall be a Manufacturer Extensible Identifier. The specifics of its representation are " +
@@ -23212,43 +23224,43 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "action-id", type: "uint8", description: "Action ID",
+            name: "action-id", type: "uint8", description: "Action ID", isSeed: true,
             details: "An identifier that indicates an action as defined in the Interaction Model specification.",
             xref: { document: "core", section: "7.18.2.31" }
         }),
 
         Datatype({
-            name: "trans-id", type: "uint32", description: "Transaction ID",
+            name: "trans-id", type: "uint32", description: "Transaction ID", isSeed: true,
             details: "An identifier for a transaction as defined in the Interaction Model specification, see Transaction " +
                 "ID.",
             xref: { document: "core", section: "7.18.2.32" }
         }),
 
         Datatype({
-            name: "node-id", type: "uint64", description: "Node ID",
+            name: "node-id", type: "uint64", description: "Node ID", isSeed: true,
             details: "A 64-bit ID for a node scoped and unique to a particular fabric as indicated by an accompanying " +
                 "fabric-index adjacent instantiation.",
             xref: { document: "core", section: "7.18.2.21" }
         }),
 
         Datatype({
-            name: "entry-idx", type: "uint16", description: "Entry Index",
+            name: "entry-idx", type: "uint16", description: "Entry Index", isSeed: true,
             details: "This is an index for a list data type.",
             xref: { document: "core", section: "7.18.2.33" }
         }),
         Datatype({
-            name: "data-ver", type: "uint32", description: "Data Version",
+            name: "data-ver", type: "uint32", description: "Data Version", isSeed: true,
             details: "An unsigned number that indicates a Data Version.",
             xref: { document: "core", section: "7.18.2.34" }
         }),
         Datatype({
-            name: "event-no", type: "uint64", description: "Event Number",
+            name: "event-no", type: "uint64", description: "Event Number", isSeed: true,
             details: "An unsigned number that indicates an Event instance.",
             xref: { document: "core", section: "7.18.2.35" }
         }),
 
         Datatype({
-            name: "string", type: "octstr", description: "Character String", metatype: "string",
+            name: "string", type: "octstr", description: "Character String", isSeed: true, metatype: "string",
 
             details: "The character string data type is derived from an octet string. The octets shall be characters with " +
                 "UTF-8 encoding. An instance of this data type shall NOT contain truncated code points." +
@@ -23273,13 +23285,13 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "ipadr", type: "octstr", description: "IP Address",
+            name: "ipadr", type: "octstr", description: "IP Address", isSeed: true,
             details: "Either an IPv4 or an IPv6 address as defined below.",
             xref: { document: "core", section: "7.18.2.37" }
         }),
 
         Datatype({
-            name: "ipv4adr", type: "octstr", description: "IPv4 Address",
+            name: "ipv4adr", type: "octstr", description: "IPv4 Address", isSeed: true,
 
             details: "The IPv4 address data type is derived from an octet string. The octets shall correspond to the four " +
                 "octets in network byte order that comprise an IPv4 address represented utilizing quad-dotted " +
@@ -23295,7 +23307,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "ipv6adr", type: "octstr", description: "IPv6 Address",
+            name: "ipv6adr", type: "octstr", description: "IPv6 Address", isSeed: true,
 
             details: "The IPv6 address data type is derived from an octet string. The octets shall correspond to the full " +
                 "16 octets that comprise an IPv6 address as defined by RFC 4291. The octets shall be presented in " +
@@ -23311,7 +23323,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "ipv6pre", type: "octstr", description: "IPv6 Prefix",
+            name: "ipv6pre", type: "octstr", description: "IPv6 Prefix", isSeed: true,
 
             details: "The IPv6 prefix data type is derived from an octet string. The octets shall be encoded" +
                 "\n" +
@@ -23336,7 +23348,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "hwadr", type: "octstr", description: "Hardware Address",
+            name: "hwadr", type: "octstr", description: "Hardware Address", isSeed: true,
             details: "The Hardware Address data type shall be either a 48-bit IEEE MAC Address or a 64-bit IEEE MAC " +
                 "Address (e.g. EUI-64). The order of bytes is Big-Endian or display mode, where the first byte in " +
                 "the string is the left most or highest order byte.",
@@ -23344,7 +23356,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "semtag", type: "struct", description: "Semantic Tag",
+            name: "semtag", type: "struct", description: "Semantic Tag", isSeed: true,
             details: "This data type shall be represented by the following structure:",
             xref: { document: "core", section: "7.18.2.42" },
 
@@ -23402,12 +23414,12 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "namespace", type: "enum8", description: "Namespace",
+            name: "namespace", type: "enum8", description: "Namespace", isSeed: true,
             details: "The Namespace type identifies the namespace used for a semantic tag.",
             xref: { document: "core", section: "7.18.2.43" }
         }),
         Datatype({
-            name: "tag", type: "enum8", description: "Tag",
+            name: "tag", type: "enum8", description: "Tag", isSeed: true,
             details: "The Tag type shall identify a semantic tag located within a namespace.",
             xref: { document: "core", section: "7.18.2.44" }
         }),
@@ -23669,7 +23681,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "9.6.5.1.4" }
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 })
             ]
@@ -23904,7 +23916,7 @@ export const SpecMatter = Matter({
                             details: "The type of change as appropriate.",
                             xref: { document: "core", section: "9.10.7.1.3" }
                         }),
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -23947,7 +23959,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "9.10.7.2.2" }
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -24063,7 +24075,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "9.10.4.5.1" }
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -24088,7 +24100,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "9.10.4.6.1" }
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 })
             ]
@@ -25533,7 +25545,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({ name: "Key", id: 0x3, access: "F", conformance: "D" }),
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -26326,7 +26338,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.2.5.3.2" }
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -26450,7 +26462,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.2.5.5.3" }
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 })
             ]
@@ -28180,6 +28192,7 @@ export const SpecMatter = Matter({
 
                         Field({
                             name: "NetworkIndex", id: 0x2, type: "uint8", conformance: "O",
+                            constraint: "0 to (MaxNetworks - 1)",
                             details: "When the NetworkingStatus is Success, this field shall be present. It shall contain the 0-based " +
                                 "index of the entry in the Networks attribute that was last added, updated or removed successfully " +
                                 "by the associated request command.",
@@ -31982,7 +31995,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.17.9.2.1" }
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -32772,7 +32785,7 @@ export const SpecMatter = Matter({
                         Field({
                             name: "IcacValue", id: 0x1, type: "octstr", access: "F", conformance: "O", constraint: "max 400"
                         }),
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -32861,7 +32874,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.18.6.11.1" }
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -33063,7 +33076,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.18.4.4.2" }
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -33117,7 +33130,7 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.18.4.5.5" }
                         }),
 
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 })
             ]
@@ -33673,7 +33686,7 @@ export const SpecMatter = Matter({
                             constraint: "max 512"
                         }),
                         Field({ name: "Endpoint", id: 0x4, type: "endpoint-no", access: "F", conformance: "M" }),
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
 
@@ -33782,7 +33795,7 @@ export const SpecMatter = Matter({
                     children: [
                         Field({ name: "ProviderNodeId", id: 0x1, type: "node-id", access: "F", conformance: "M" }),
                         Field({ name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M" }),
-                        Field({ name: "FabricIndex", id: 0x4d2, type: "FabricIndex" })
+                        Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 })
             ]

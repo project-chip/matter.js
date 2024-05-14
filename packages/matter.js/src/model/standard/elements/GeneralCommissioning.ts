@@ -225,7 +225,7 @@ export const GeneralCommissioning = Cluster({
                 "\n" +
                 "  9. Reset the Breadcrumb attribute to zero." +
                 "\n" +
-                "  10. Optionally: if no factory-reset resulted from the previous steps, it is RECOMMENDED that the" +
+                "  10. Optionally: if no factory-reset resulted from the previous steps, it is recommended that the" +
                 "\n" +
                 "Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.",
 
@@ -465,7 +465,7 @@ export const GeneralCommissioning = Cluster({
                         "which a fail safe timer can be re-armed. See Section 11.10.6.2.1, “Fail Safe Context”." +
                         "\n" +
                         "The value of this field shall be greater than or equal to the FailSafeExpiryLengthSeconds. Absent " +
-                        "additional guidelines, it is RECOMMENDED that the value of this field be aligned with the initial " +
+                        "additional guidelines, it is recommended that the value of this field be aligned with the initial " +
                         "Announcement Duration and default to 900 seconds.",
 
                     xref: { document: "core", section: "11.10.4.3.2" }

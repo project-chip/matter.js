@@ -40,4 +40,9 @@ export namespace Specification {
          */
         section: string;
     };
+
+    /**
+     * Matter specification versions.
+     */
+    export type Revision = `${number}.${number}`;
 }

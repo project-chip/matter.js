@@ -6,6 +6,8 @@
 
 import { LocalMatter } from "../local.js";
 
+// Note that this file is not called "overrides" because the spec simply doesn't define this type.  Though it does
+// reference it...
 LocalMatter.children.push({
     tag: "datatype",
     name: "subject-id",

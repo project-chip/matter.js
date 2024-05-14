@@ -23,7 +23,6 @@ export interface LoadOptions {
     version?: string;
     path?: string;
 }
-
 export class SpecFile {
     #index: IndexDetail;
 

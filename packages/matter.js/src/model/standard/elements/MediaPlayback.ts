@@ -33,16 +33,38 @@ export const MediaPlayback = Cluster({
             xref: { document: "cluster", section: "6.10.4" },
 
             children: [
-                Field({ name: "AS", constraint: "0", description: "AdvancedSeek", details: "Advanced media seeking" }),
+                Field({
+                    name: "AS", constraint: "0", description: "AdvancedSeek",
+                    details: "This feature provides access to the time offset location within current playback media and allows " +
+                        "for jumping to a specific location using time offsets. This enables clients to implement more " +
+                        "advanced media seeking behavior in their user interface, for instance a \"seek bar\".",
+                    xref: { document: "cluster", section: "6.10.4.1" }
+                }),
+
                 Field({
                     name: "VS", constraint: "1", description: "VariableSpeed",
-                    details: "Variable speed playback"
+                    details: "This feature is for a device which supports variable speed playback on media that supports it.",
+                    xref: { document: "cluster", section: "6.10.4.2" }
                 }),
-                Field({ name: "TT", constraint: "2", description: "TextTracks", details: "Text Tracks" }),
-                Field({ name: "AT", constraint: "3", description: "AudioTracks", details: "Audio Tracks" }),
+                Field({
+                    name: "TT", constraint: "2", description: "TextTracks",
+                    details: "This feature is for a device or app that supports Text Tracks.",
+                    xref: { document: "cluster", section: "6.10.4.3" }
+                }),
+                Field({
+                    name: "AT", constraint: "3", description: "AudioTracks",
+                    details: "This feature is for a device or app that supports Audio Tracks.",
+                    xref: { document: "cluster", section: "6.10.4.4" }
+                }),
+
                 Field({
                     name: "AA", constraint: "4", description: "AudioAdvance",
-                    details: "Can play audio during fast and slow playback speeds"
+                    details: "This feature is for a device or app that supports playing audio during fast and slow advance and " +
+                        "rewind (e.g., while playback speed is not 1). A device that supports this feature may only support " +
+                        "playing audio during certain speeds." +
+                        "\n" +
+                        "A cluster implementing AA shall implement AS.",
+                    xref: { document: "cluster", section: "6.10.4.5" }
                 })
             ]
         }),

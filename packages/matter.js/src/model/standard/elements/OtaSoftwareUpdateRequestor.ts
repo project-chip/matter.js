@@ -143,10 +143,7 @@ export const OtaSoftwareUpdateRequestor = Cluster({
                     constraint: "max 512"
                 }),
                 Field({ name: "Endpoint", id: 0x4, type: "endpoint-no", access: "F", conformance: "M" }),
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
 
@@ -250,14 +247,10 @@ export const OtaSoftwareUpdateRequestor = Cluster({
                 "This structure encodes a fabric-scoped location of an OTA provider on a given fabric.",
 
             xref: { document: "core", section: "11.20.7.4.20" },
-
             children: [
                 Field({ name: "ProviderNodeId", id: 0x1, type: "node-id", access: "F", conformance: "M" }),
                 Field({ name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M" }),
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         })
     ]

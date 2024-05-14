@@ -316,10 +316,7 @@ export const GroupKeyManagement = Cluster({
                     xref: { document: "core", section: "11.2.5.3.2" }
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
 
@@ -443,10 +440,7 @@ export const GroupKeyManagement = Cluster({
                     xref: { document: "core", section: "11.2.5.5.3" }
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         })
     ]

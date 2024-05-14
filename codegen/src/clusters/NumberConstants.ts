@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Globals } from "@project-chip/matter.js/model";
+import * as Elements from "@project-chip/matter.js/elements";
 import {
     FLOAT32_MAX,
     FLOAT32_MIN,
@@ -27,25 +27,25 @@ import {
  * Map of matter datatype names to TlvGenerator.tlvImport arguments.
  */
 export const SpecializedNumbers: { [name: string]: [string, string] } = {
-    [Globals.attributeId.name]: ["datatype", "TlvAttributeId"],
-    [Globals.clusterId.name]: ["datatype", "TlvClusterId"],
-    [Globals.commandId.name]: ["datatype", "TlvCommandId"],
-    [Globals.deviceTypeId.name]: ["datatype", "TlvDeviceTypeId"],
-    [Globals.endpointNo.name]: ["datatype", "TlvEndpointNumber"],
-    [Globals.eventId.name]: ["datatype", "TlvEventId"],
-    [Globals.fabricId.name]: ["datatype", "TlvFabricId"],
-    [Globals.fabricIdx.name]: ["datatype", "TlvFabricIndex"],
-    [Globals.groupId.name]: ["datatype", "TlvGroupId"],
-    [Globals.nodeId.name]: ["datatype", "TlvNodeId"],
-    [Globals.subjectId.name]: ["datatype", "TlvSubjectId"],
-    [Globals.vendorId.name]: ["datatype", "TlvVendorId"],
-    [Globals.percent.name]: ["number", "TlvPercent"],
-    [Globals.percent100ths.name]: ["number", "TlvPercent100ths"],
-    [Globals.epochUs.name]: ["number", "TlvEpochUs"],
-    [Globals.epochS.name]: ["number", "TlvEpochS"],
-    [Globals.posixMs.name]: ["number", "TlvPosixMs"],
-    [Globals.systimeUs.name]: ["number", "TlvSysTimeUs"],
-    [Globals.systimeMs.name]: ["number", "TlvSysTimeMS"],
+    [Elements.attribId.name]: ["datatype", "TlvAttributeId"],
+    [Elements.clusterId.name]: ["datatype", "TlvClusterId"],
+    [Elements.commandId.name]: ["datatype", "TlvCommandId"],
+    [Elements.devtypeId.name]: ["datatype", "TlvDeviceTypeId"],
+    [Elements.endpointNo.name]: ["datatype", "TlvEndpointNumber"],
+    [Elements.eventId.name]: ["datatype", "TlvEventId"],
+    [Elements.fabricId.name]: ["datatype", "TlvFabricId"],
+    [Elements.fabricIdx.name]: ["datatype", "TlvFabricIndex"],
+    [Elements.groupId.name]: ["datatype", "TlvGroupId"],
+    [Elements.nodeId.name]: ["datatype", "TlvNodeId"],
+    [Elements.subjectId.name]: ["datatype", "TlvSubjectId"],
+    [Elements.vendorId.name]: ["datatype", "TlvVendorId"],
+    [Elements.percent.name]: ["number", "TlvPercent"],
+    [Elements.percent100ths.name]: ["number", "TlvPercent100ths"],
+    [Elements.epochUs.name]: ["number", "TlvEpochUs"],
+    [Elements.epochS.name]: ["number", "TlvEpochS"],
+    [Elements.posixMs.name]: ["number", "TlvPosixMs"],
+    [Elements.systimeUs.name]: ["number", "TlvSysTimeUs"],
+    [Elements.systimeMs.name]: ["number", "TlvSysTimeMS"],
 };
 
 /**
@@ -56,18 +56,18 @@ export const SpecializedNumbers: { [name: string]: [string, string] } = {
  * leaving in place in case something changes.
  */
 export const WrappedConstantKeys = {
-    [Globals.attributeId.name]: true,
-    [Globals.clusterId.name]: true,
-    [Globals.commandId.name]: true,
-    [Globals.deviceTypeId.name]: true,
-    [Globals.endpointNo.name]: true,
-    [Globals.eventId.name]: true,
-    [Globals.fabricId.name]: true,
-    [Globals.fabricIdx.name]: true,
-    [Globals.groupId.name]: true,
-    [Globals.nodeId.name]: true,
-    [Globals.subjectId.name]: true,
-    [Globals.vendorId.name]: true,
+    [Elements.attribId.name]: true,
+    [Elements.clusterId.name]: true,
+    [Elements.commandId.name]: true,
+    [Elements.devtypeId.name]: true,
+    [Elements.endpointNo.name]: true,
+    [Elements.eventId.name]: true,
+    [Elements.fabricId.name]: true,
+    [Elements.fabricIdx.name]: true,
+    [Elements.groupId.name]: true,
+    [Elements.nodeId.name]: true,
+    [Elements.subjectId.name]: true,
+    [Elements.vendorId.name]: true,
 };
 
 /**
