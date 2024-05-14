@@ -10,12 +10,17 @@
 
 - [BitString](exports_codec.DerType.md#bitstring)
 - [Boolean](exports_codec.DerType.md#boolean)
+- [GeneralizedTime](exports_codec.DerType.md#generalizedtime)
+- [IA5String](exports_codec.DerType.md#ia5string)
+- [Integer](exports_codec.DerType.md#integer)
+- [Null](exports_codec.DerType.md#null)
 - [ObjectIdentifier](exports_codec.DerType.md#objectidentifier)
 - [OctetString](exports_codec.DerType.md#octetstring)
+- [PrintableString](exports_codec.DerType.md#printablestring)
 - [Sequence](exports_codec.DerType.md#sequence)
 - [Set](exports_codec.DerType.md#set)
+- [T16String](exports_codec.DerType.md#t16string)
 - [UTF8String](exports_codec.DerType.md#utf8string)
-- [UnsignedInt](exports_codec.DerType.md#unsignedint)
 - [UtcDate](exports_codec.DerType.md#utcdate)
 
 ## Enumeration Members
@@ -26,7 +31,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:10
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:12
 
 ___
 
@@ -36,7 +41,47 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:8
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:10
+
+___
+
+### GeneralizedTime
+
+• **GeneralizedTime** = ``24``
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:23
+
+___
+
+### IA5String
+
+• **IA5String** = ``22``
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:21
+
+___
+
+### Integer
+
+• **Integer** = ``2``
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:11
+
+___
+
+### Null
+
+• **Null** = ``5``
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:14
 
 ___
 
@@ -46,7 +91,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:12
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:15
 
 ___
 
@@ -56,7 +101,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:11
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:13
+
+___
+
+### PrintableString
+
+• **PrintableString** = ``19``
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:19
 
 ___
 
@@ -66,7 +121,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:14
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:17
 
 ___
 
@@ -76,7 +131,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:15
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:18
+
+___
+
+### T16String
+
+• **T16String** = ``20``
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:20
 
 ___
 
@@ -86,17 +151,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:13
-
-___
-
-### UnsignedInt
-
-• **UnsignedInt** = ``2``
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:9
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:16
 
 ___
 
@@ -106,4 +161,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:16
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:22

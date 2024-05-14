@@ -29,13 +29,20 @@ MatterSpecification.v11.Core § 11.11.8.3
 
 • **current**: [`NetworkFault`](../enums/cluster_export.GeneralDiagnostics.NetworkFault.md)[]
 
+This field shall represent the set of faults currently detected, as per Section 11.11.4.3,
+“NetworkFaultEnum”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.11.8.3.1
+
 #### Inherited from
 
 TypeFromSchema.current
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:422](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L422)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:440](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L440)
 
 ___
 
@@ -43,10 +50,17 @@ ___
 
 • **previous**: [`NetworkFault`](../enums/cluster_export.GeneralDiagnostics.NetworkFault.md)[]
 
+This field shall represent the set of faults detected prior to this change event, as per Section 11.11.4.3,
+“NetworkFaultEnum”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.11.8.3.2
+
 #### Inherited from
 
 TypeFromSchema.previous
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:423](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L423)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:448](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L448)

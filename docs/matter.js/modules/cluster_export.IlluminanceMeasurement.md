@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L86)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:86](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L86)
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L88)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:88](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L88)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L20)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:20](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L20)
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:90](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L90)

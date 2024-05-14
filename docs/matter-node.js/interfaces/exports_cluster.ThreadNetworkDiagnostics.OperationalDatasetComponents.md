@@ -49,7 +49,7 @@ TypeFromSchema.activeTimestampPresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:260
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:264
 
 ___
 
@@ -69,7 +69,7 @@ TypeFromSchema.channelMaskPresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:328
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:332
 
 ___
 
@@ -90,7 +90,7 @@ TypeFromSchema.channelPresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:309
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:313
 
 ___
 
@@ -110,7 +110,7 @@ TypeFromSchema.delayPresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:296
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:300
 
 ___
 
@@ -130,7 +130,7 @@ TypeFromSchema.extendedPanIdPresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:284
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:288
 
 ___
 
@@ -150,7 +150,7 @@ TypeFromSchema.masterKeyPresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:272
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:276
 
 ___
 
@@ -170,7 +170,7 @@ TypeFromSchema.meshLocalPrefixPresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:290
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:294
 
 ___
 
@@ -190,7 +190,7 @@ TypeFromSchema.networkNamePresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:278
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:282
 
 ___
 
@@ -210,7 +210,7 @@ TypeFromSchema.panIdPresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:302
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:306
 
 ___
 
@@ -230,7 +230,7 @@ TypeFromSchema.pendingTimestampPresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:266
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:270
 
 ___
 
@@ -250,7 +250,7 @@ TypeFromSchema.pskcPresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:315
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:319
 
 ___
 
@@ -271,4 +271,4 @@ TypeFromSchema.securityPolicyPresent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:322
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:326

@@ -40,10 +40,10 @@ regardless.  This keeps the touch light for now.
 - [#nextSubscriptionId](node_export._internal_.TransactionalInteractionServer.md##nextsubscriptionid)
 - [#subscriptionConfig](node_export._internal_.TransactionalInteractionServer.md##subscriptionconfig)
 - [#subscriptionMap](node_export._internal_.TransactionalInteractionServer.md##subscriptionmap)
-- [#tracer](node_export._internal_.TransactionalInteractionServer.md##tracer)
 
 ### Accessors
 
+- [#tracer](node_export._internal_.TransactionalInteractionServer.md##tracer)
 - [isClosing](node_export._internal_.TransactionalInteractionServer.md#isclosing)
 
 ### Methods
@@ -85,7 +85,7 @@ regardless.  This keeps the touch light for now.
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L51)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:50](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L50)
 
 ## Properties
 
@@ -95,7 +95,7 @@ regardless.  This keeps the touch light for now.
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L48)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:47](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L47)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L45)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:45](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L45)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L46)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L46)
 
 ___
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L44)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:44](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L44)
 
 ___
 
@@ -157,7 +157,7 @@ InteractionServer.#endpointStructure
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:134](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L134)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:134](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L134)
 
 ___
 
@@ -171,7 +171,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:139](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L139)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:139](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L139)
 
 ___
 
@@ -185,7 +185,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L137)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:137](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L137)
 
 ___
 
@@ -195,7 +195,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:49](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L49)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L48)
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:135](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L135)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:135](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L135)
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:138](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L138)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:138](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L138)
 
 ___
 
@@ -237,19 +237,23 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:136](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L136)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:136](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L136)
 
-___
+## Accessors
 
 ### #tracer
 
-• `Private` `Optional` **#tracer**: [`ActionTracer`](node_export._internal_.ActionTracer-1.md)
+• `get` **#tracer**(): `undefined` \| [`ActionTracer`](node_export._internal_.ActionTracer-1.md)
+
+#### Returns
+
+`undefined` \| [`ActionTracer`](node_export._internal_.ActionTracer-1.md)
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L47)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:166](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L166)
 
-## Accessors
+___
 
 ### isClosing
 
@@ -265,7 +269,7 @@ InteractionServer.isClosing
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:157](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L157)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:157](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L157)
 
 ## Methods
 
@@ -279,7 +283,7 @@ InteractionServer.isClosing
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:171](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L171)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:172](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L172)
 
 ___
 
@@ -293,7 +297,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:85](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L85)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L80)
 
 ___
 
@@ -307,7 +311,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L91)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:86](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L86)
 
 ___
 
@@ -325,7 +329,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1034](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1034)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1034](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1034)
 
 ___
 
@@ -343,7 +347,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:153](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L153)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:153](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L153)
 
 ___
 
@@ -369,7 +373,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:822](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L822)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:822](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L822)
 
 ___
 
@@ -395,7 +399,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:168](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L168)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:168](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L168)
 
 ___
 
@@ -422,7 +426,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:670](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L670)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:670](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L670)
 
 ___
 
@@ -447,7 +451,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1022](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1022)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1022](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1022)
 
 ___
 
@@ -473,7 +477,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:397](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L397)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:397](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L397)
 
 ___
 
@@ -502,7 +506,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:150](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L150)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:145](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L145)
 
 ___
 
@@ -526,7 +530,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L95)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:90](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L90)
 
 ___
 
@@ -553,7 +557,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L112)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:107](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L107)
 
 ___
 
@@ -581,4 +585,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:130](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L130)
+[packages/matter.js/src/node/server/TransactionalInteractionServer.ts:125](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/node/server/TransactionalInteractionServer.ts#L125)

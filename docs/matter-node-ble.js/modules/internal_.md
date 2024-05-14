@@ -28,6 +28,7 @@
 - [DeviceClasses](../enums/internal_.DeviceClasses.md)
 - [EventPriority](../enums/internal_.EventPriority.md)
 - [FabricAction](../enums/internal_.FabricAction.md)
+- [InterfaceType](../enums/internal_.InterfaceType.md)
 - [KeyType](../enums/internal_.KeyType.md)
 - [NodeStateInformation](../enums/internal_.NodeStateInformation.md)
 - [ProtocolStatusCode](../enums/internal_.ProtocolStatusCode.md)
@@ -155,6 +156,7 @@
 - [Message](../interfaces/internal_.Message.md)
 - [NetInterface](../interfaces/internal_.NetInterface.md)
 - [Observable](../interfaces/internal_.Observable.md)
+- [Observer](../interfaces/internal_.Observer.md)
 - [OptionalAttribute](../interfaces/internal_.OptionalAttribute.md)
 - [OptionalCommand](../interfaces/internal_.OptionalCommand.md)
 - [OptionalEvent](../interfaces/internal_.OptionalEvent.md)
@@ -259,10 +261,11 @@
 - [MatterServerRecordWithExpire](internal_.md#matterserverrecordwithexpire)
 - [MaybePromise](internal_.md#maybepromise)
 - [Merge](internal_.md#merge)
+- [NetworkInterface](internal_.md#networkinterface)
+- [NetworkInterfaceDetails](internal_.md#networkinterfacedetails)
 - [NodeCommissioningOptions](internal_.md#nodecommissioningoptions)
 - [NodeId](internal_.md#nodeid)
 - [NonFixedAttributeNames](internal_.md#nonfixedattributenames)
-- [Observer](internal_.md#observer)
 - [ObserverErrorHandler](internal_.md#observererrorhandler)
 - [OperationalDevice](internal_.md#operationaldevice)
 - [OptionalAttributeNames](internal_.md#optionalattributenames)
@@ -1051,7 +1054,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L25)
+[matter-node-ble.js/src/ble/BleScanner.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L25)
 
 ___
 
@@ -1506,7 +1509,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:35
+matter.js/dist/esm/fabric/Fabric.d.ts:38
 
 ___
 
@@ -1581,7 +1584,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:17
+matter.js/dist/esm/fabric/Fabric.d.ts:20
 
 ___
 
@@ -1881,6 +1884,41 @@ matter.js/dist/esm/util/Type.d.ts:10
 
 ___
 
+### NetworkInterface
+
+Ƭ **NetworkInterface**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `name` | `string` |
+| `type?` | [`InterfaceType`](../enums/internal_.InterfaceType.md) |
+
+#### Defined in
+
+matter.js/dist/esm/net/Network.d.ts:36
+
+___
+
+### NetworkInterfaceDetails
+
+Ƭ **NetworkInterfaceDetails**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `ipV4` | `string`[] |
+| `ipV6` | `string`[] |
+| `mac` | `string` |
+
+#### Defined in
+
+matter.js/dist/esm/net/Network.d.ts:40
+
+___
+
 ### NodeCommissioningOptions
 
 Ƭ **NodeCommissioningOptions**: [`CommissioningControllerNodeOptions`](internal_.md#commissioningcontrollernodeoptions) & \{ `commissioning?`: [`CommissioningOptions`](internal_.md#commissioningoptions) ; `discovery`: \{ `identifierData`: [`CommissionableDeviceIdentifiers`](internal_.md#commissionabledeviceidentifiers)  } \| \{ `commissionableDevice`: [`CommissionableDevice`](internal_.md#commissionabledevice)  } & \{ `discoveryCapabilities?`: [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)\<typeof [`DiscoveryCapabilitiesBitmap`](internal_.md#discoverycapabilitiesbitmap)\> ; `knownAddress?`: [`ServerAddress`](internal_.md#serveraddress) ; `timeoutSeconds?`: `number`  } ; `passcode`: `number`  }
@@ -1930,51 +1968,9 @@ matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:116
 
 ___
 
-### Observer
-
-Ƭ **Observer**\<`T`, `R`\>: (...`payload`: `T`) => [`MaybePromise`](internal_.md#maybepromise)\<`R` \| `undefined`\>
-
-A callback function for observables.
-
-The observer return value effects how an [Observable](internal_.md#observable) emits:
-
-  - If an observer returns undefined the [Observable](internal_.md#observable) invokes the next observer immediately.
-
-  - If an observer returns a Promise, the [Observable](internal_.md#observable) awaits the return value then continues as
-    described here.  The emitter must then await the Promise returned by [Observable.emit](../interfaces/internal_.Observable.md#emit).
-
-  - Any other return value is returned by [Observable.emit](../interfaces/internal_.Observable.md#emit) and subsequent observers do not see emission.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `any`[] = `any`[] |
-| `R` | `void` |
-
-#### Type declaration
-
-▸ (`...payload`): [`MaybePromise`](internal_.md#maybepromise)\<`R` \| `undefined`\>
-
-##### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `...payload` | `T` | a list of arguments to be emitted |
-
-##### Returns
-
-[`MaybePromise`](internal_.md#maybepromise)\<`R` \| `undefined`\>
-
-#### Defined in
-
-matter.js/dist/esm/util/Observable.d.ts:21
-
-___
-
 ### ObserverErrorHandler
 
-Ƭ **ObserverErrorHandler**: (`error`: `Error`, `observer`: [`Observer`](internal_.md#observer)\<`any`[], `any`\>) => `void`
+Ƭ **ObserverErrorHandler**: (`error`: `Error`, `observer`: [`Observer`](../interfaces/internal_.Observer.md)\<`any`[], `any`\>) => `void`
 
 #### Type declaration
 
@@ -1985,7 +1981,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `error` | `Error` |
-| `observer` | [`Observer`](internal_.md#observer)\<`any`[], `any`\> |
+| `observer` | [`Observer`](../interfaces/internal_.Observer.md)\<`any`[], `any`\> |
 
 ##### Returns
 
@@ -1993,7 +1989,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/util/Observable.d.ts:69
+matter.js/dist/esm/util/Observable.d.ts:82
 
 ___
 
@@ -2586,7 +2582,7 @@ matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:50
 
 • **AsyncObservable**: \<T, R\>(`errorHandler?`: [`ObserverErrorHandler`](internal_.md#observererrorhandler)) => [`AsyncObservable`](../interfaces/internal_.AsyncObservable.md)\<`T`, `R`\>\<T_1, R_1\>(`errorHandler?`: [`ObserverErrorHandler`](internal_.md#observererrorhandler)) => [`AsyncObservable`](../interfaces/internal_.AsyncObservable.md)\<`T_1`, `R_1`\>
 
-An [Observable](internal_.md#observable) that explicitly supports asynchronous results
+Create an [AsyncObservable](internal_.md#asyncobservable) that explicitly supports asynchronous results
 
 #### Type declaration
 
@@ -2630,9 +2626,9 @@ An [Observable](internal_.md#observable) that explicitly supports asynchronous r
 
 #### Defined in
 
-matter.js/dist/esm/util/Observable.d.ts:66
+matter.js/dist/esm/util/Observable.d.ts:79
 
-matter.js/dist/esm/util/Observable.d.ts:80
+matter.js/dist/esm/util/Observable.d.ts:110
 
 ___
 
@@ -2694,7 +2690,7 @@ ___
 
 • **Observable**: \<T, R\>(`errorHandler?`: [`ObserverErrorHandler`](internal_.md#observererrorhandler)) => [`Observable`](../interfaces/internal_.Observable.md)\<`T`, `R`\>\<T_1, R_1\>(`errorHandler?`: [`ObserverErrorHandler`](internal_.md#observererrorhandler)) => [`Observable`](../interfaces/internal_.Observable.md)\<`T_1`, `R_1`\>
 
-A general implementation of [Observable](internal_.md#observable).
+Create an [Observable](internal_.md#observable).
 
 #### Type declaration
 
@@ -2738,9 +2734,9 @@ A general implementation of [Observable](internal_.md#observable).
 
 #### Defined in
 
-matter.js/dist/esm/util/Observable.d.ts:28
+matter.js/dist/esm/util/Observable.d.ts:32
 
-matter.js/dist/esm/util/Observable.d.ts:73
+matter.js/dist/esm/util/Observable.d.ts:103
 
 ___
 

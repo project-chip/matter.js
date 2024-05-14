@@ -85,7 +85,7 @@ to the value being empty.
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:79
+matter.js/dist/esm/tlv/TlvObject.d.ts:80
 
 ___
 
@@ -113,7 +113,7 @@ Object TLV schema.
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:63
+matter.js/dist/esm/tlv/TlvObject.d.ts:64
 
 ___
 
@@ -142,7 +142,7 @@ Object TLV optional field.
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:81
+matter.js/dist/esm/tlv/TlvObject.d.ts:82
 
 ___
 
@@ -174,7 +174,7 @@ decoding.
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:91
+matter.js/dist/esm/tlv/TlvObject.d.ts:92
 
 ___
 
@@ -205,7 +205,7 @@ decoding.
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:86
+matter.js/dist/esm/tlv/TlvObject.d.ts:87
 
 ___
 
@@ -239,4 +239,4 @@ TODO: We represent Tlv Lists right now as named object properties. This formally
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:73
+matter.js/dist/esm/tlv/TlvObject.d.ts:74

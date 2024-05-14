@@ -96,7 +96,7 @@ These elements and properties are present in all Scenes clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:473](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L473)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:473](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L473)
 
 ___
 
@@ -106,9 +106,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:681](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L681)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:681](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L681)
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:683](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L683)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:683](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L683)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:658](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L658)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:658](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L658)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:684](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L684)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:684](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L684)
 
 ___
 
@@ -155,7 +155,7 @@ MatterSpecification.v11.Cluster § 1.4.9.11.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:352](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L352)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:352](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L352)
 
 ___
 
@@ -177,7 +177,7 @@ MatterSpecification.v11.Cluster § 1.4.7.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L41)
 
 ___
 
@@ -193,7 +193,7 @@ MatterSpecification.v11.Cluster § 1.4.9.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:106](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L106)
 
 ___
 
@@ -207,7 +207,7 @@ MatterSpecification.v11.Cluster § 1.4.9.12
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:124](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L124)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:124](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L124)
 
 ___
 
@@ -223,7 +223,7 @@ MatterSpecification.v11.Cluster § 1.4.6.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L53)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:53](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L53)
 
 ___
 
@@ -239,7 +239,7 @@ MatterSpecification.v11.Cluster § 1.4.9.11
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:359](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L359)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:359](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L359)
 
 ___
 
@@ -255,7 +255,7 @@ MatterSpecification.v11.Cluster § 1.4.9.20
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:421](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L421)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:421](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L421)
 
 ___
 
@@ -273,7 +273,7 @@ MatterSpecification.v11.Cluster § 1.4.6.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L87)
 
 ___
 
@@ -289,7 +289,7 @@ MatterSpecification.v11.Cluster § 1.4.9.8
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:275](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L275)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:275](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L275)
 
 ___
 
@@ -327,7 +327,7 @@ MatterSpecification.v11.Cluster § 1.4.9.17
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:311](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L311)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:311](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L311)
 
 ___
 
@@ -343,7 +343,7 @@ MatterSpecification.v11.Cluster § 1.4.9.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:257](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L257)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:257](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L257)
 
 ___
 
@@ -359,7 +359,7 @@ MatterSpecification.v11.Cluster § 1.4.9.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:202](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L202)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:202](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L202)
 
 ___
 
@@ -373,7 +373,7 @@ MatterSpecification.v11.Cluster § 1.4.9.15
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:214](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L214)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:214](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L214)
 
 ___
 
@@ -389,7 +389,7 @@ MatterSpecification.v11.Cluster § 1.4.9.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:171](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L171)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:171](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L171)
 
 ___
 
@@ -403,7 +403,7 @@ MatterSpecification.v11.Cluster § 1.4.9.14
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:186](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L186)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:186](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L186)
 
 ___
 
@@ -419,7 +419,7 @@ MatterSpecification.v11.Cluster § 1.4.9.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:229](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L229)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:229](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L229)
 
 ___
 
@@ -433,7 +433,7 @@ MatterSpecification.v11.Cluster § 1.4.9.16
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:241](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L241)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:241](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L241)
 
 ___
 
@@ -449,7 +449,7 @@ MatterSpecification.v11.Cluster § 1.4.9.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:140](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L140)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:140](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L140)
 
 ___
 
@@ -463,4 +463,4 @@ MatterSpecification.v11.Cluster § 1.4.9.13
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:152](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:152](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L152)

@@ -38,7 +38,7 @@ MatterSpecification.v11.Core § 9.10.4.2.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:77](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L77)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:77](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L77)
 
 ___
 
@@ -56,7 +56,7 @@ MatterSpecification.v11.Core § 9.10.4.2.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L68)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:68](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L68)
 
 ___
 
@@ -74,7 +74,7 @@ MatterSpecification.v11.Core § 9.10.4.2.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L59)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:59](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L59)
 
 ___
 
@@ -86,7 +86,7 @@ Can read and observe all (as seen by a Proxy)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L50)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:50](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L50)
 
 ___
 
@@ -98,4 +98,4 @@ Can read and observe all (except Access Control Cluster and as seen by a non-Pro
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:45](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L45)

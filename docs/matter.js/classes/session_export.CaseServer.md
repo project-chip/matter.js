@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:246](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseServer.ts#L246)
+[packages/matter.js/src/session/case/CaseServer.ts:253](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/case/CaseServer.ts#L253)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseServer.ts#L58)
+[packages/matter.js/src/session/case/CaseServer.ts:58](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/case/CaseServer.ts#L58)
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseServer.ts#L62)
+[packages/matter.js/src/session/case/CaseServer.ts:62](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/case/CaseServer.ts#L62)
 
 ___
 
@@ -110,4 +110,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseServer.ts#L38)
+[packages/matter.js/src/session/case/CaseServer.ts:38](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/case/CaseServer.ts#L38)

@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.9.0 (2024-05-14)
 * Matter-Core functionality:
   * Feature: cluster default implementations for the following clusters were added/updated:
     * BooleanState: Automatically emit the StateChange event when enabled for the cluster and the stateValue changes

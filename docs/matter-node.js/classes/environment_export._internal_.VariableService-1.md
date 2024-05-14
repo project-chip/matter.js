@@ -34,6 +34,7 @@ Read access to environmental configuration values.
 - [number](environment_export._internal_.VariableService-1.md#number)
 - [set](environment_export._internal_.VariableService-1.md#set)
 - [string](environment_export._internal_.VariableService-1.md#string)
+- [use](environment_export._internal_.VariableService-1.md#use)
 - [[create]](environment_export._internal_.VariableService-1.md#[create])
 
 ## Constructors
@@ -112,7 +113,7 @@ packages/matter.js/dist/esm/environment/VariableService.d.ts:17
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:29
+packages/matter.js/dist/esm/environment/VariableService.d.ts:39
 
 ___
 
@@ -132,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:27
+packages/matter.js/dist/esm/environment/VariableService.d.ts:37
 
 ___
 
@@ -152,7 +153,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:28
+packages/matter.js/dist/esm/environment/VariableService.d.ts:38
 
 ___
 
@@ -172,7 +173,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:23
+packages/matter.js/dist/esm/environment/VariableService.d.ts:33
 
 ___
 
@@ -199,30 +200,52 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:18
+packages/matter.js/dist/esm/environment/VariableService.d.ts:27
 
-▸ **get**\<`T`\>(`name`, `fallback?`): `undefined` \| [`Value`](../modules/environment_export._internal_.VariableService.md#value)
+▸ **get**\<`T`\>(`name`, `fallback`): `T`
 
 #### Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`Value`](../modules/environment_export._internal_.VariableService.md#value) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `name` | `string` |
-| `fallback?` | [`Value`](../modules/environment_export._internal_.VariableService.md#value) |
+| `fallback` | `T` |
 
 #### Returns
 
-`undefined` \| [`Value`](../modules/environment_export._internal_.VariableService.md#value)
+`T`
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:19
+packages/matter.js/dist/esm/environment/VariableService.d.ts:28
+
+▸ **get**\<`T`\>(`name`): `undefined` \| `T`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`Value`](../modules/environment_export._internal_.VariableService.md#value) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `name` | `string` |
+
+#### Returns
+
+`undefined` \| `T`
+
+#### Defined in
+
+packages/matter.js/dist/esm/environment/VariableService.d.ts:29
 
 ___
 
@@ -242,7 +265,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:20
+packages/matter.js/dist/esm/environment/VariableService.d.ts:30
 
 ___
 
@@ -262,7 +285,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:26
+packages/matter.js/dist/esm/environment/VariableService.d.ts:36
 
 ___
 
@@ -283,7 +306,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:25
+packages/matter.js/dist/esm/environment/VariableService.d.ts:35
 
 ___
 
@@ -303,7 +326,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:24
+packages/matter.js/dist/esm/environment/VariableService.d.ts:34
 
 ___
 
@@ -324,7 +347,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:21
+packages/matter.js/dist/esm/environment/VariableService.d.ts:31
 
 ___
 
@@ -344,7 +367,34 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:22
+packages/matter.js/dist/esm/environment/VariableService.d.ts:32
+
+___
+
+### use
+
+▸ **use**(`configurator`): [`Usage`](../interfaces/environment_export._internal_.VariableService.Usage.md)
+
+Configure a component.
+
+Runs the supplied configurator immediately and whenever variables reference by the configurator
+change.
+
+To terminate reconfiguration invoke [VariableService.Usage.close](../interfaces/environment_export._internal_.VariableService.Usage.md#close) on the return value.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `configurator` | () => `void` |
+
+#### Returns
+
+[`Usage`](../interfaces/environment_export._internal_.VariableService.Usage.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/environment/VariableService.d.ts:26
 
 ___
 

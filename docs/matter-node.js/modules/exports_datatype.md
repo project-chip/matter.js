@@ -596,7 +596,7 @@ Tlv schema for a Node Identifier.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/NodeId.d.ts:52
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:56
 
 ___
 

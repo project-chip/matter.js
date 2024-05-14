@@ -56,7 +56,7 @@ Cell chemistry is alkaline
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:599](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L599)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:612](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L612)
 
 ___
 
@@ -68,7 +68,7 @@ Cell chemistry is lead acid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:674](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L674)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:687](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L687)
 
 ___
 
@@ -80,7 +80,7 @@ Cell chemistry is lithium carbon fluoride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:604](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L604)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:617](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L617)
 
 ___
 
@@ -92,7 +92,7 @@ Cell chemistry is lithium chromium oxide
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:609](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L609)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:622](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L622)
 
 ___
 
@@ -104,7 +104,7 @@ Cell chemistry is lithium cobalt oxide
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:679](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L679)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:692](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L692)
 
 ___
 
@@ -116,7 +116,7 @@ Cell chemistry is lithium copper oxide
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:614](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L614)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:627](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L627)
 
 ___
 
@@ -128,7 +128,7 @@ Cell chemistry is lithium ion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:684](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L684)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:697](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L697)
 
 ___
 
@@ -140,7 +140,7 @@ Cell chemistry is lithium ion polymer
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:689](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L689)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:702](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L702)
 
 ___
 
@@ -152,7 +152,7 @@ Cell chemistry is lithium iron disulfide
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:619](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L619)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:632](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L632)
 
 ___
 
@@ -164,7 +164,7 @@ Cell chemistry is lithium iron phosphate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:694](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L694)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:707](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L707)
 
 ___
 
@@ -176,7 +176,7 @@ Cell chemistry is lithium manganese dioxide
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:624](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L624)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:637](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L637)
 
 ___
 
@@ -188,7 +188,7 @@ Cell chemistry is lithium sulfur
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:699](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L699)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:712](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L712)
 
 ___
 
@@ -200,7 +200,7 @@ Cell chemistry is lithium thionyl chloride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:629](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L629)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:642](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L642)
 
 ___
 
@@ -212,7 +212,7 @@ Cell chemistry is lithium titanate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:704](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L704)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:717](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L717)
 
 ___
 
@@ -224,7 +224,7 @@ Cell chemistry is magnesium
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:634](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L634)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:647](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L647)
 
 ___
 
@@ -236,7 +236,7 @@ Cell chemistry is mercury oxide
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:639](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L639)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:652](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L652)
 
 ___
 
@@ -248,7 +248,7 @@ Cell chemistry is nickel cadmium
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:709](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L709)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:722](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L722)
 
 ___
 
@@ -260,7 +260,7 @@ Cell chemistry is nickel hydrogen
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:714](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L714)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:727](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L727)
 
 ___
 
@@ -272,7 +272,7 @@ Cell chemistry is nickel iron
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:719](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L719)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:732](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L732)
 
 ___
 
@@ -284,7 +284,7 @@ Cell chemistry is nickel metal hydride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:724](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L724)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:737](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L737)
 
 ___
 
@@ -296,7 +296,7 @@ Cell chemistry is nickel oxyhydride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:644](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L644)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:657](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L657)
 
 ___
 
@@ -308,7 +308,7 @@ Cell chemistry is nickel zinc
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:729](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L729)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:742](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L742)
 
 ___
 
@@ -320,7 +320,7 @@ Cell chemistry is silver oxide
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:649](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L649)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:662](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L662)
 
 ___
 
@@ -332,7 +332,7 @@ Cell chemistry is silver zinc
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:734](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L734)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:747](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L747)
 
 ___
 
@@ -344,7 +344,7 @@ Cell chemistry is sodium ion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:739](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L739)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:752](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L752)
 
 ___
 
@@ -356,7 +356,7 @@ Cell chemistry is sodium sulfur
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:744](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L744)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:757](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L757)
 
 ___
 
@@ -368,7 +368,7 @@ Cell chemistry is unspecified or unknown
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:594](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L594)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:607](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L607)
 
 ___
 
@@ -380,7 +380,7 @@ Cell chemistry is zinc air
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:654](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L654)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:667](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L667)
 
 ___
 
@@ -392,7 +392,7 @@ Cell chemistry is zinc bromide
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:749](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L749)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:762](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L762)
 
 ___
 
@@ -404,7 +404,7 @@ Cell chemistry is zinc carbon
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:659](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L659)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:672](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L672)
 
 ___
 
@@ -416,7 +416,7 @@ Cell chemistry is zinc cerium
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:754](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L754)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:767](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L767)
 
 ___
 
@@ -428,7 +428,7 @@ Cell chemistry is zinc chloride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:664](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L664)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:677](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L677)
 
 ___
 
@@ -440,4 +440,4 @@ Cell chemistry is zinc manganese dioxide
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:669](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L669)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:682](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L682)

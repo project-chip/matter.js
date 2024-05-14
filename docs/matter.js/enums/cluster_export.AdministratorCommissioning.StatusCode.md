@@ -26,7 +26,7 @@ MatterSpecification.v11.Core § 11.18.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:139](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L139)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:155](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L155)
 
 ___
 
@@ -42,7 +42,7 @@ MatterSpecification.v11.Core § 11.18.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:146](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L146)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:162](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L162)
 
 ___
 
@@ -58,4 +58,4 @@ MatterSpecification.v11.Core § 11.18.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:153](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L153)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:169](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L169)

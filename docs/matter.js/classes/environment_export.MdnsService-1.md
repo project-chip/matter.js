@@ -16,6 +16,7 @@
 - [#construction](environment_export.MdnsService-1.md##construction)
 - [#enableIpv4](environment_export.MdnsService-1.md##enableipv4)
 - [#scanner](environment_export.MdnsService-1.md##scanner)
+- [limitedToNetInterface](environment_export.MdnsService-1.md#limitedtonetinterface)
 
 ### Accessors
 
@@ -50,7 +51,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L30)
+[packages/matter.js/src/environment/MdnsService.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L31)
 
 ## Properties
 
@@ -60,7 +61,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L21)
+[packages/matter.js/src/environment/MdnsService.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L21)
 
 ___
 
@@ -70,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L23)
+[packages/matter.js/src/environment/MdnsService.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L23)
 
 ___
 
@@ -80,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L24)
+[packages/matter.js/src/environment/MdnsService.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L24)
 
 ___
 
@@ -90,7 +91,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L22)
+[packages/matter.js/src/environment/MdnsService.ts:22](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L22)
+
+___
+
+### limitedToNetInterface
+
+• `Optional` `Readonly` **limitedToNetInterface**: `string`
+
+#### Defined in
+
+[packages/matter.js/src/environment/MdnsService.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L25)
 
 ## Accessors
 
@@ -104,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L70)
+[packages/matter.js/src/environment/MdnsService.ts:70](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L70)
 
 ___
 
@@ -118,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L62)
+[packages/matter.js/src/environment/MdnsService.ts:62](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L62)
 
 ___
 
@@ -132,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L74)
+[packages/matter.js/src/environment/MdnsService.ts:74](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L74)
 
 ___
 
@@ -146,7 +157,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L26)
+[packages/matter.js/src/environment/MdnsService.ts:27](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L27)
 
 ___
 
@@ -160,7 +171,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:66](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L66)
+[packages/matter.js/src/environment/MdnsService.ts:66](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L66)
 
 ## Methods
 
@@ -174,7 +185,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:78](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L78)
+[packages/matter.js/src/environment/MdnsService.ts:78](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L78)
 
 ___
 
@@ -194,7 +205,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L58)
+[packages/matter.js/src/environment/MdnsService.ts:58](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L58)
 
 ___
 
@@ -214,4 +225,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/MdnsService.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/MdnsService.ts#L54)
+[packages/matter.js/src/environment/MdnsService.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/environment/MdnsService.ts#L54)

@@ -31,7 +31,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/NodeActivity.ts:102](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L102)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:102](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/context/NodeActivity.ts#L102)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/NodeActivity.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L101)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/context/NodeActivity.ts#L101)
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/NodeActivity.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L100)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:100](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/context/NodeActivity.ts#L100)
 
 ## Methods
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/NodeActivity.ts:104](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L104)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:104](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/context/NodeActivity.ts#L104)
 
 ___
 
@@ -85,4 +85,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/NodeActivity.ts:103](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L103)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:103](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/context/NodeActivity.ts#L103)

@@ -4,11 +4,6 @@
 
 [cluster/export](../modules/cluster_export.md).[GeneralCommissioning](../modules/cluster_export.GeneralCommissioning.md).SetRegulatoryConfigResponse
 
-This field shall contain the result of the operation, based on the behavior specified in the functional
-description of the SetRegulatoryConfig command.
-
-See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.9.6.5
@@ -32,13 +27,19 @@ MatterSpecification.v11.Core § 11.9.6.5
 
 • **debugText**: `string`
 
+See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.9.6.5.2
+
 #### Inherited from
 
 TypeFromSchema.debugText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:184](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L184)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:191](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L191)
 
 ___
 
@@ -46,10 +47,17 @@ ___
 
 • **errorCode**: [`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)
 
+This field shall contain the result of the operation, based on the behavior specified in the functional
+description of the SetRegulatoryConfig command.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.9.6.5.1
+
 #### Inherited from
 
 TypeFromSchema.errorCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:183](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L183)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:184](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L184)

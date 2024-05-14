@@ -36,7 +36,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:569](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L569)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:572](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L572)
 
 ___
 
@@ -50,7 +50,7 @@ TypeFromSchema.icacValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:568](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L568)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:571](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L571)
 
 ___
 
@@ -64,4 +64,4 @@ TypeFromSchema.nocValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:567](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L567)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:570](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L570)

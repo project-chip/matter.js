@@ -26,7 +26,7 @@ MatterSpecification.v11.Cluster § 3.2.7.9
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:839
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:857
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:837
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:855
 
 ___
 
@@ -46,4 +46,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:838
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:856

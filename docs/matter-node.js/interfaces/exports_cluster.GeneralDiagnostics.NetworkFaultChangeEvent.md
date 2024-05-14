@@ -29,13 +29,20 @@ MatterSpecification.v11.Core § 11.11.8.3
 
 • **current**: [`NetworkFault`](../enums/exports_cluster.GeneralDiagnostics.NetworkFault.md)[]
 
+This field shall represent the set of faults currently detected, as per Section 11.11.4.3,
+“NetworkFaultEnum”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.11.8.3.1
+
 #### Inherited from
 
 TypeFromSchema.current
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:356
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:373
 
 ___
 
@@ -43,10 +50,17 @@ ___
 
 • **previous**: [`NetworkFault`](../enums/exports_cluster.GeneralDiagnostics.NetworkFault.md)[]
 
+This field shall represent the set of faults detected prior to this change event, as per Section 11.11.4.3,
+“NetworkFaultEnum”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.11.8.3.2
+
 #### Inherited from
 
 TypeFromSchema.previous
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:357
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:380

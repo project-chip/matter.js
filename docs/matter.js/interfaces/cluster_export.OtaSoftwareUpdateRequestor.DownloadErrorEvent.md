@@ -37,7 +37,7 @@ TypeFromSchema.bytesDownloaded
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:220](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L220)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:218](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L218)
 
 ___
 
@@ -51,7 +51,7 @@ TypeFromSchema.platformCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:222](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L222)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:220](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L220)
 
 ___
 
@@ -65,7 +65,7 @@ TypeFromSchema.progressPercent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:221](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L221)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:219](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L219)
 
 ___
 
@@ -79,4 +79,4 @@ TypeFromSchema.softwareVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:219](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L219)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:217](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L217)

@@ -39,7 +39,7 @@ StateType.basicCommissioningInfo
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:255](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L255)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:259](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L259)
 
 ___
 
@@ -72,7 +72,7 @@ StateType.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:247](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L247)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:251](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L251)
 
 ___
 
@@ -103,7 +103,7 @@ StateType.locationCapability
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:283](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L283)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:287](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L287)
 
 ___
 
@@ -126,7 +126,7 @@ StateType.regulatoryConfig
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:265](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L265)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:269](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L269)
 
 ___
 
@@ -148,4 +148,4 @@ StateType.supportsConcurrentConnection
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:296](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L296)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:300](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L300)

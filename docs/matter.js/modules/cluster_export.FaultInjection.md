@@ -32,9 +32,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L84)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:84](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L84)
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L86)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:86](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L86)
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:60](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L60)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L87)
 
 ___
 
@@ -70,7 +70,7 @@ Input to the FaultInjection failAtFault command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L30)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:30](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L30)
 
 ___
 
@@ -82,4 +82,4 @@ Input to the FaultInjection failRandomlyAtFault command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L46)

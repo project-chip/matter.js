@@ -129,7 +129,7 @@ TypeFromSchema.adminVendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:434](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L434)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:437](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L437)
 
 ___
 
@@ -165,7 +165,7 @@ TypeFromSchema.caseAdminSubject
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:342](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L342)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:345](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L345)
 
 ___
 
@@ -179,7 +179,7 @@ TypeFromSchema.icacValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:303](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L303)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:306](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L306)
 
 ___
 
@@ -208,7 +208,7 @@ TypeFromSchema.ipkValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:319](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L319)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:322](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L322)
 
 ___
 
@@ -222,4 +222,4 @@ TypeFromSchema.nocValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:302](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L302)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:305](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L305)

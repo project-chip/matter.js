@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/Storage.ts#L58)
+[packages/matter.js/src/storage/Storage.ts:58](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/storage/Storage.ts#L58)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/StringifyTools.ts#L60)
+[packages/matter.js/src/storage/StringifyTools.ts:60](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/storage/StringifyTools.ts#L60)
 
 ## Functions
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:98](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/StringifyTools.ts#L98)
+[packages/matter.js/src/storage/StringifyTools.ts:98](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/storage/StringifyTools.ts#L98)
 
 ___
 
@@ -97,4 +97,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/StringifyTools.ts#L68)
+[packages/matter.js/src/storage/StringifyTools.ts:68](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/storage/StringifyTools.ts#L68)

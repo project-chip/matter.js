@@ -29,13 +29,20 @@ MatterSpecification.v11.Core § 11.7.7.2
 
 • **current**: [`BatFault`](../enums/exports_cluster.PowerSource.BatFault.md)[]
 
+This field shall represent the set of faults currently detected, as per Section 11.7.6.19, “ActiveBatFaults
+Attribute”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.7.7.2.1
+
 #### Inherited from
 
 TypeFromSchema.current
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:132
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:138
 
 ___
 
@@ -43,10 +50,17 @@ ___
 
 • **previous**: [`BatFault`](../enums/exports_cluster.PowerSource.BatFault.md)[]
 
+This field shall represent the set of faults detected prior to this change event, as per Section 11.7.6.19,
+“ActiveBatFaults Attribute”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.7.7.2.2
+
 #### Inherited from
 
 TypeFromSchema.previous
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:133
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:145

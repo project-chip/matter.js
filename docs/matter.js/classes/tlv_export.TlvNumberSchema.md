@@ -65,7 +65,7 @@ TlvNumericSchema\&lt;number\&gt;.constructor
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNumber.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvNumber.ts#L90)
+[packages/matter.js/src/tlv/TlvNumber.ts:90](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvNumber.ts#L90)
 
 ## Properties
 
@@ -93,7 +93,7 @@ TlvNumericSchema.lengthProvider
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNumber.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvNumber.ts#L41)
+[packages/matter.js/src/tlv/TlvNumber.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvNumber.ts#L41)
 
 ___
 
@@ -107,7 +107,7 @@ TlvNumericSchema.max
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNumber.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvNumber.ts#L43)
+[packages/matter.js/src/tlv/TlvNumber.ts:43](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvNumber.ts#L43)
 
 ___
 
@@ -121,7 +121,7 @@ TlvNumericSchema.min
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNumber.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvNumber.ts#L42)
+[packages/matter.js/src/tlv/TlvNumber.ts:42](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvNumber.ts#L42)
 
 ___
 
@@ -135,7 +135,7 @@ TlvNumericSchema.type
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNumber.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvNumber.ts#L40)
+[packages/matter.js/src/tlv/TlvNumber.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvNumber.ts#L40)
 
 ## Methods
 
@@ -159,7 +159,7 @@ TlvNumericSchema.bound
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNumber.ts:104](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvNumber.ts#L104)
+[packages/matter.js/src/tlv/TlvNumber.ts:104](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvNumber.ts#L104)
 
 ___
 
@@ -186,7 +186,7 @@ TlvNumericSchema.decode
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
@@ -210,7 +210,7 @@ TlvNumericSchema.decodeInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvSchema.ts#L14)
+[packages/matter.js/src/tlv/TlvSchema.ts:14](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvSchema.ts#L14)
 
 ___
 
@@ -234,7 +234,7 @@ TlvNumericSchema.decodeTlv
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvSchema.ts#L30)
+[packages/matter.js/src/tlv/TlvSchema.ts:30](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvSchema.ts#L30)
 
 ___
 
@@ -263,7 +263,7 @@ TlvNumericSchema.decodeTlvInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvSchema.ts#L34)
+[packages/matter.js/src/tlv/TlvSchema.ts:34](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvSchema.ts#L34)
 
 ___
 
@@ -288,7 +288,7 @@ TlvNumericSchema.decodeTlvInternalValue
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNumber.ts:99](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvNumber.ts#L99)
+[packages/matter.js/src/tlv/TlvNumber.ts:99](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvNumber.ts#L99)
 
 ___
 
@@ -314,7 +314,7 @@ TlvNumericSchema.encode
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
@@ -338,7 +338,7 @@ TlvNumericSchema.encodeInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvSchema.ts#L18)
+[packages/matter.js/src/tlv/TlvSchema.ts:18](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvSchema.ts#L18)
 
 ___
 
@@ -363,7 +363,7 @@ TlvNumericSchema.encodeTlv
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvSchema.ts#L24)
+[packages/matter.js/src/tlv/TlvSchema.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvSchema.ts#L24)
 
 ___
 
@@ -389,7 +389,7 @@ TlvNumericSchema.encodeTlvInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNumber.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvNumber.ts#L48)
+[packages/matter.js/src/tlv/TlvNumber.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvNumber.ts#L48)
 
 ___
 
@@ -416,7 +416,7 @@ TlvNumericSchema.injectField
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvSchema.ts#L43)
+[packages/matter.js/src/tlv/TlvSchema.ts:43](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvSchema.ts#L43)
 
 ___
 
@@ -442,7 +442,7 @@ TlvNumericSchema.removeField
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvSchema.ts#L47)
+[packages/matter.js/src/tlv/TlvSchema.ts:47](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvSchema.ts#L47)
 
 ___
 
@@ -466,7 +466,7 @@ TlvNumericSchema.validate
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNumber.ts:108](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvNumber.ts#L108)
+[packages/matter.js/src/tlv/TlvNumber.ts:108](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvNumber.ts#L108)
 
 ___
 
@@ -490,4 +490,4 @@ TlvNumericSchema.validateBoundaries
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNumber.ts:66](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvNumber.ts#L66)
+[packages/matter.js/src/tlv/TlvNumber.ts:66](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/tlv/TlvNumber.ts#L66)

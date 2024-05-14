@@ -20,7 +20,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:34
+packages/matter.js/dist/esm/environment/VariableService.d.ts:44
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:35
+packages/matter.js/dist/esm/environment/VariableService.d.ts:45
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:33
+packages/matter.js/dist/esm/environment/VariableService.d.ts:43

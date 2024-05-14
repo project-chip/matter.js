@@ -45,7 +45,7 @@ TypeFromSchema.actionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:218](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L218)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:218](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L218)
 
 ___
 
@@ -66,7 +66,7 @@ TypeFromSchema.endpointListId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:244](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L244)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:244](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L244)
 
 ___
 
@@ -88,7 +88,7 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:227](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L227)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:227](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L227)
 
 ___
 
@@ -108,7 +108,7 @@ TypeFromSchema.state
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:261](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L261)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:261](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L261)
 
 ___
 
@@ -131,7 +131,7 @@ TypeFromSchema.supportedCommands
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:254](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L254)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:254](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L254)
 
 ___
 
@@ -153,4 +153,4 @@ TypeFromSchema.type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:236](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L236)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:236](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L236)

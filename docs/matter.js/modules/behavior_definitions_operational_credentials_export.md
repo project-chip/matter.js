@@ -64,7 +64,7 @@ MatterSpecification.v11.Core § 11.17.6.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L106)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:106](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L106)
 
 ___
 
@@ -102,7 +102,7 @@ MatterSpecification.v11.Core § 11.17.6.13
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:295](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L295)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:243](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L243)
 
 ___
 
@@ -122,7 +122,7 @@ MatterSpecification.v11.Core § 11.17.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L22)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:22](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L22)
 
 ___
 
@@ -143,7 +143,7 @@ MatterSpecification.v11.Core § 11.17.6.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L34)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:34](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L34)
 
 ___
 
@@ -160,7 +160,7 @@ MatterSpecification.v11.Core § 11.17.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L42)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:42](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L42)
 
 ___
 
@@ -176,7 +176,7 @@ MatterSpecification.v11.Core § 11.17.6.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:49](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L49)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:49](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L49)
 
 ___
 
@@ -215,7 +215,7 @@ MatterSpecification.v11.Core § 11.17.6.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L79)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:79](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L79)
 
 ___
 
@@ -236,7 +236,7 @@ MatterSpecification.v11.Core § 11.17.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L91)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:91](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L91)
 
 ___
 
@@ -262,7 +262,7 @@ MatterSpecification.v11.Core § 11.17.6.10
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:123](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L123)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:123](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L123)
 
 ___
 
@@ -278,9 +278,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:297](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L297)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:245](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L245)
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:539](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L539)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:434](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L434)
 
 ___
 
@@ -304,48 +304,13 @@ to that Fabric, whether in-band or out-of-band, then this method SHOULD be used 
 Domain’s party of the removal. Otherwise, users may only observe the removal of a Fabric association as persistently
 failing attempts to reach a Node operationally.
 
-This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric which is to be
-removed from the device.
-
-Effect on Receipt
-
-If the FabricIndex field does not match the FabricIndex of any entry within the Fabrics list, then an NOCResponse
-with a StatusCode of InvalidFabricIndex shall be returned for the command and there shall NOT be any permanent
-changes to any device data.
-
-Otherwise, one of the following outcomes shall occur:
-
-  1. If the FabricIndex matches the last remaining entry in the Fabrics list, then the device shall delete all
-     Matter related data on the node which was created since it was commissioned. This includes all Fabric-Scoped
-     data, including Access Control List, bindings, scenes, group keys,
-
-operational certificates, etc. All Trusted Roots shall also be removed. Any Matter related data including logs,
-secure sessions, exchanges and interaction model constructs shall also be removed. Since this operation involves the
-removal of the secure session data that may underpin the current set of exchanges, the Node invoking the command
-SHOULD NOT expect a response before terminating its secure session with the target.
-
-2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the process of
-irrevocably deleting all associated Fabric-Scoped data, including Access Control List, bindings, group keys,
-operational certificates, etc. Any remaining Trusted Roots no longer referenced by any operational certificate shall
-also be removed. All secure sessions, exchanges and interaction model constructs related to the Operational Identity
-under the given Fabric shall also be removed. Following the removal, an NOCResponse with a StatusCode of OK shall be
-returned.
-
-3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of irrevocably
-deleting all associated Fabric-Scoped data, including Access Control Entries, bindings, group keys, operational
-certificates, etc. Any remaining Trusted Roots no longer referenced by any operational certificate shall also be
-removed. All secure sessions, exchanges and interaction model constructs related to the Operational Identity under
-the given Fabric shall also be removed. Since this operation involves the removal of the secure session data that
-may underpin the current set of exchanges, the Node invoking the command SHOULD NOT expect a response before
-terminating its secure session with the target.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.17.6.12
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:266](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L266)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:214](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L214)
 
 ___
 
@@ -359,30 +324,13 @@ by entries in the Fabrics attribute.
 The Label SHOULD be used by Administrators to provide additional per-fabric context when operations such as
 RemoveFabric are used.
 
-This field shall contain the label to set for the fabric associated with the current secure session.
-
-Effect on Receipt
-
-If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that is not the
-accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be returned for the command and there
-shall NOT be any permanent changes to any Fabric data.
-
-Otherwise, the Label field for the accesing fabric shall immediately be updated to reflect the
-
-Label argument provided. Following the update, an NOCResponse with a StatusCode of OK shall be returned.
-
-If the command was invoked within a fail-safe context after a successful UpdateNOC command, then the label update
-shall apply to the pending update state that will be reverted if fail-safe expires prior to a CommissioningComplete
-command. In other words, label updates apply to the state of the Fabrics Attribute as currently visible, even for an
-existing fabric currently in process of being updated.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.17.6.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:210](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L210)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:193](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L193)
 
 ___
 
@@ -450,7 +398,7 @@ MatterSpecification.v11.Core § 11.17.6.9
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:182](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L182)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:182](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L182)
 
 ## Variables
 
@@ -462,8 +410,8 @@ OperationalCredentialsBehavior is the base class for objects that support intera
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts#L17)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts:17](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts#L17)
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts#L22)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts:22](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts#L22)
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts#L24)

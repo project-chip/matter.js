@@ -23,14 +23,12 @@
 
 Ƭ **BitmapSize**: ``1`` \| ``2`` \| ``4`` \| ``8``
 
-Legal bitmap sizes.  The Matter specification defines enums as
-extensions of int8 or in16 so the size information is not used for
-actual enums, just for bitmaps, which are used (somewhat inconsistently)
-as base types.
+Legal bitmap sizes.  The Matter specification defines enums as extensions of int8 or in16 so the size information
+is not used for actual enums, just for bitmaps, which are used (somewhat inconsistently) as base types.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:80
+packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:78
 
 ___
 

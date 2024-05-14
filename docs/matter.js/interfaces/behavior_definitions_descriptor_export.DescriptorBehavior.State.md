@@ -37,7 +37,7 @@ StateType.clientList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L87)
 
 ___
 
@@ -62,7 +62,7 @@ StateType.deviceTypeList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L73)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:73](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L73)
 
 ___
 
@@ -84,7 +84,7 @@ StateType.partsList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L96)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:96](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L96)
 
 ___
 
@@ -104,4 +104,4 @@ StateType.serverList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L80)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L80)

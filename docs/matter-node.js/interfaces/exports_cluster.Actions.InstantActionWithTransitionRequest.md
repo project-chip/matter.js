@@ -36,7 +36,7 @@ TypeFromSchema.actionId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:381
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:382
 
 ___
 
@@ -50,7 +50,7 @@ TypeFromSchema.invokeId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:382
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:383
 
 ___
 
@@ -70,4 +70,4 @@ TypeFromSchema.transitionTime
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:388
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:389

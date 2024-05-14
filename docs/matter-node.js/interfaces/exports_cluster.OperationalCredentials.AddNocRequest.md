@@ -129,7 +129,7 @@ TypeFromSchema.adminVendorId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:395
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:398
 
 ___
 
@@ -165,7 +165,7 @@ TypeFromSchema.caseAdminSubject
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:304
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:307
 
 ___
 
@@ -179,7 +179,7 @@ TypeFromSchema.icacValue
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:267
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:270
 
 ___
 
@@ -208,7 +208,7 @@ TypeFromSchema.ipkValue
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:282
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:285
 
 ___
 
@@ -222,4 +222,4 @@ TypeFromSchema.nocValue
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:266
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:269

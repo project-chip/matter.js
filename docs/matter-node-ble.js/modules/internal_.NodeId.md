@@ -18,6 +18,7 @@
 - [getFromPakeKeyIdentifier](internal_.NodeId.md#getfrompakekeyidentifier)
 - [getFromTemporaryLocalNodeId](internal_.NodeId.md#getfromtemporarylocalnodeid)
 - [getRandomOperationalNodeId](internal_.NodeId.md#getrandomoperationalnodeid)
+- [isOperationalNodeId](internal_.NodeId.md#isoperationalnodeid)
 - [toHexString](internal_.NodeId.md#tohexstring)
 
 ## Variables
@@ -51,7 +52,7 @@ matter.js/dist/esm/datatype/NodeId.d.ts:22
 
 #### Defined in
 
-matter.js/dist/esm/datatype/NodeId.d.ts:43
+matter.js/dist/esm/datatype/NodeId.d.ts:47
 
 ___
 
@@ -74,7 +75,7 @@ single CASE session as specified in Section 6.6.2.1.2, “Subjects identified by
 
 #### Defined in
 
-matter.js/dist/esm/datatype/NodeId.d.ts:42
+matter.js/dist/esm/datatype/NodeId.d.ts:46
 
 ___
 
@@ -96,7 +97,7 @@ A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the l
 
 #### Defined in
 
-matter.js/dist/esm/datatype/NodeId.d.ts:31
+matter.js/dist/esm/datatype/NodeId.d.ts:35
 
 ___
 
@@ -120,7 +121,7 @@ administrative access to any commissioner communicating via a PASE session estab
 
 #### Defined in
 
-matter.js/dist/esm/datatype/NodeId.d.ts:49
+matter.js/dist/esm/datatype/NodeId.d.ts:53
 
 ___
 
@@ -144,7 +145,7 @@ housekeeping internal usage purposes in contexts where an Operational Node ID is
 
 #### Defined in
 
-matter.js/dist/esm/datatype/NodeId.d.ts:37
+matter.js/dist/esm/datatype/NodeId.d.ts:41
 
 ___
 
@@ -163,6 +164,28 @@ as the destination address.
 #### Defined in
 
 matter.js/dist/esm/datatype/NodeId.d.ts:29
+
+___
+
+### isOperationalNodeId
+
+▸ **isOperationalNodeId**(`nodeId`): `boolean`
+
+Returns whether the given Node ID is an Operational Node ID.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](internal_.md#nodeid) |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+matter.js/dist/esm/datatype/NodeId.d.ts:33
 
 ___
 

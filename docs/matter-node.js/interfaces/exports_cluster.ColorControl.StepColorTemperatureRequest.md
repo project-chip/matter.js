@@ -116,7 +116,7 @@ ___
 
 ### stepMode
 
-• **stepMode**: `number`
+• **stepMode**: [`StepMode`](../enums/exports_cluster.ColorControl.StepMode.md)
 
 This field is identical to the StepMode field of the StepHue command of the Color Control cluster (see
 sub-clause StepHue Command).

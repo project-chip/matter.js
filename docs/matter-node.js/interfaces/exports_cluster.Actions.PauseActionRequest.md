@@ -35,7 +35,7 @@ TypeFromSchema.actionId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:457
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:458
 
 ___
 
@@ -49,4 +49,4 @@ TypeFromSchema.invokeId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:458
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:459

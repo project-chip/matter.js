@@ -36,7 +36,7 @@ information such as, but not limited to, thread backtraces or register contents.
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.12.8.1.1
+MatterSpecification.v11.Core § 11.12.8.1.3
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ TypeFromSchema.faultRecording
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:76
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:87
 
 ___
 
@@ -52,13 +52,19 @@ ___
 
 • **id**: `number` \| `bigint`
 
+The ID field shall be set to the ID of the software thread in which the last software fault occurred.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.12.8.1.1
+
 #### Inherited from
 
 TypeFromSchema.id
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:67
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:72
 
 ___
 
@@ -66,10 +72,17 @@ ___
 
 • `Optional` **name**: `string`
 
+The Name field shall be set to a manufacturer-specified name or prefix of the software thread in which the
+last software fault occurred.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.12.8.1.2
+
 #### Inherited from
 
 TypeFromSchema.name
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:68
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:79

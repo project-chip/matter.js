@@ -30,7 +30,7 @@ Server supports an NTP or SNTP client.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:437
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:460
 
 ___
 
@@ -44,7 +44,7 @@ Server supports an NTP server role.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:443
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:466
 
 ___
 
@@ -58,4 +58,4 @@ Server supports time zone.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:431
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:454

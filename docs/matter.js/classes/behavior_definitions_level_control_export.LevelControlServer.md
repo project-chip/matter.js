@@ -4,11 +4,9 @@
 
 [behavior/definitions/level-control/export](../modules/behavior_definitions_level_control_export.md).LevelControlServer
 
-This is the default server implementation of [LevelControlBehavior](../modules/behavior_definitions_level_control_export.md#levelcontrolbehavior).
-
 ## Hierarchy
 
-- [`LevelControlBehavior`](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md)
+- [`ClusterBehavior`](behavior_cluster_export.ClusterBehavior-1.md)\<`this`\> & `Omit`\<[`LevelControlServerLogic`](behavior_definitions_level_control_export.LevelControlServerLogic-1.md), ``"state"`` \| ``"initialize"`` \| typeof `asyncDispose` \| ``"cluster"`` \| ``"events"`` \| keyof Base \| ``"moveToLevelLogic"`` \| ``"moveLogic"`` \| ``"stepLogic"`` \| ``"stopLogic"`` \| ``"setLevel"`` \| ``"setRemainingTime"`` \| ``"handleOnOffChange"``\> & [`Base`](../interfaces/behavior_definitions_level_control_export.LevelControlInterface.Base.md) & `Omit`\<\{ `move`: [`MethodForCommand`](../modules/behavior_cluster_export.ClusterInterface.md#methodforcommand)\<[`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `moveMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MoveMode`](../enums/cluster_export.LevelControl.MoveMode.md)\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `rate`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<... \| ...\>  }\>, `void`, `any`\>\> ; `moveToLevel`: [`MethodForCommand`](../modules/behavior_cluster_export.ClusterInterface.md#methodforcommand)\<[`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `level`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<... \| ...\>  }\>, `void`, `any`\>\> ; `moveToLevelWithOnOff`: [`MethodForCommand`](../modules/behavior_cluster_export.ClusterInterface.md#methodforcommand)\<[`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `level`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<... \| ...\>  }\>, `void`, `any`\>\> ; `moveWithOnOff`: [`MethodForCommand`](../modules/behavior_cluster_export.ClusterInterface.md#methodforcommand)\<[`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `moveMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MoveMode`](../enums/cluster_export.LevelControl.MoveMode.md)\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `rate`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<... \| ...\>  }\>, `void`, `any`\>\> ; `step`: [`MethodForCommand`](../modules/behavior_cluster_export.ClusterInterface.md#methodforcommand)\<[`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `stepMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StepMode`](../enums/cluster_export.LevelControl.StepMode.md)\> ; `stepSize`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<... \| ...\>  }\>, `void`, `any`\>\> ; `stepWithOnOff`: [`MethodForCommand`](../modules/behavior_cluster_export.ClusterInterface.md#methodforcommand)\<[`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `stepMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StepMode`](../enums/cluster_export.LevelControl.StepMode.md)\> ; `stepSize`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<... \| ...\>  }\>, `void`, `any`\>\> ; `stop`: [`MethodForCommand`](../modules/behavior_cluster_export.ClusterInterface.md#methodforcommand)\<[`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\>  }\>, `void`, `any`\>\> ; `stopWithOnOff`: [`MethodForCommand`](../modules/behavior_cluster_export.ClusterInterface.md#methodforcommand)\<[`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<...\>\>  }\>, `void`, `any`\>\>  } & {}, keyof [`Base`](../interfaces/behavior_definitions_level_control_export.LevelControlInterface.Base.md)\> & \{ `handleOnOffChange`: (`onOff`: `boolean`) => `void` ; `moveLogic`: (`moveMode`: [`MoveMode`](../enums/cluster_export.LevelControl.MoveMode.md), `rate`: ``null`` \| `number`, `withOnOff`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> ; `moveToLevelLogic`: (`level`: `number`, `transitionTime`: ``null`` \| `number`, `withOnOff`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> ; `setLevel`: (`level`: `number`, `withOnOff`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> ; `setRemainingTime`: (`remainingTime`: `number`) => `void` ; `stepLogic`: (`stepMode`: [`StepMode`](../enums/cluster_export.LevelControl.StepMode.md), `stepSize`: `number`, `transitionTime`: ``null`` \| `number`, `withOnOff`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> ; `stopLogic`: () => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>  } & \{ `cluster`: [`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff), [`Lighting`](../enums/cluster_export.LevelControl.Feature.md#lighting)]\>, readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff)]\> ; `events`: [`ClusterEvents`](../modules/behavior_cluster_export.md#clusterevents)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff), [`Lighting`](../enums/cluster_export.LevelControl.Feature.md#lighting)]\>, readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff)]\>, typeof [`LevelControlServerLogic`](../modules/behavior_definitions_level_control_export.LevelControlServerLogic.md)\> ; `features`: [`FeaturesAsFlags`](../modules/cluster_export.ClusterComposer.md#featuresasflags)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff)]\> ; `state`: [`ClusterState`](../modules/behavior_cluster_export.md#clusterstate)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff), [`Lighting`](../enums/cluster_export.LevelControl.Feature.md#lighting)]\>, readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff)]\>, typeof [`LevelControlServerLogic`](../modules/behavior_definitions_level_control_export.LevelControlServerLogic.md)\> ; `[asyncDispose]`: () => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>  }
 
   ↳ **`LevelControlServer`**
 
@@ -25,12 +23,16 @@ This is the default server implementation of [LevelControlBehavior](../modules/b
 - [agent](behavior_definitions_level_control_export.LevelControlServer.md#agent)
 - [cluster](behavior_definitions_level_control_export.LevelControlServer.md#cluster)
 - [context](behavior_definitions_level_control_export.LevelControlServer.md#context)
+- [currentLevel](behavior_definitions_level_control_export.LevelControlServer.md#currentlevel)
 - [endpoint](behavior_definitions_level_control_export.LevelControlServer.md#endpoint)
 - [events](behavior_definitions_level_control_export.LevelControlServer.md#events)
 - [features](behavior_definitions_level_control_export.LevelControlServer.md#features)
+- [maxLevel](behavior_definitions_level_control_export.LevelControlServer.md#maxlevel)
+- [minLevel](behavior_definitions_level_control_export.LevelControlServer.md#minlevel)
 - [session](behavior_definitions_level_control_export.LevelControlServer.md#session)
 - [state](behavior_definitions_level_control_export.LevelControlServer.md#state)
 - [Events](behavior_definitions_level_control_export.LevelControlServer.md#events-1)
+- [ExtensionInterface](behavior_definitions_level_control_export.LevelControlServer.md#extensioninterface)
 - [Interface](behavior_definitions_level_control_export.LevelControlServer.md#interface)
 - [Internal](behavior_definitions_level_control_export.LevelControlServer.md#internal)
 - [State](behavior_definitions_level_control_export.LevelControlServer.md#state-1)
@@ -48,16 +50,25 @@ This is the default server implementation of [LevelControlBehavior](../modules/b
 
 - [[asyncDispose]](behavior_definitions_level_control_export.LevelControlServer.md#[asyncdispose])
 - [asAdmin](behavior_definitions_level_control_export.LevelControlServer.md#asadmin)
+- [assertAttributeEnabled](behavior_definitions_level_control_export.LevelControlServer.md#assertattributeenabled)
 - [callback](behavior_definitions_level_control_export.LevelControlServer.md#callback)
+- [handleOnOffChange](behavior_definitions_level_control_export.LevelControlServer.md#handleonoffchange)
 - [initialize](behavior_definitions_level_control_export.LevelControlServer.md#initialize)
 - [move](behavior_definitions_level_control_export.LevelControlServer.md#move)
+- [moveLogic](behavior_definitions_level_control_export.LevelControlServer.md#movelogic)
 - [moveToLevel](behavior_definitions_level_control_export.LevelControlServer.md#movetolevel)
+- [moveToLevelLogic](behavior_definitions_level_control_export.LevelControlServer.md#movetolevellogic)
 - [moveToLevelWithOnOff](behavior_definitions_level_control_export.LevelControlServer.md#movetolevelwithonoff)
 - [moveWithOnOff](behavior_definitions_level_control_export.LevelControlServer.md#movewithonoff)
 - [reactTo](behavior_definitions_level_control_export.LevelControlServer.md#reactto)
+- [requireAttributeEnabled](behavior_definitions_level_control_export.LevelControlServer.md#requireattributeenabled)
+- [setLevel](behavior_definitions_level_control_export.LevelControlServer.md#setlevel)
+- [setRemainingTime](behavior_definitions_level_control_export.LevelControlServer.md#setremainingtime)
 - [step](behavior_definitions_level_control_export.LevelControlServer.md#step)
+- [stepLogic](behavior_definitions_level_control_export.LevelControlServer.md#steplogic)
 - [stepWithOnOff](behavior_definitions_level_control_export.LevelControlServer.md#stepwithonoff)
 - [stop](behavior_definitions_level_control_export.LevelControlServer.md#stop)
+- [stopLogic](behavior_definitions_level_control_export.LevelControlServer.md#stoplogic)
 - [stopWithOnOff](behavior_definitions_level_control_export.LevelControlServer.md#stopwithonoff)
 - [toString](behavior_definitions_level_control_export.LevelControlServer.md#tostring)
 - [alter](behavior_definitions_level_control_export.LevelControlServer.md#alter)
@@ -85,11 +96,11 @@ This is the default server implementation of [LevelControlBehavior](../modules/b
 
 #### Inherited from
 
-LevelControlBehavior.constructor
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:181](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L181)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:201](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L201)
 
 ## Properties
 
@@ -99,11 +110,11 @@ LevelControlBehavior.constructor
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[#agent](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md##agent)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).#agent
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L51)
+[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L51)
 
 ___
 
@@ -113,15 +124,19 @@ ___
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[[reference]](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#[reference])
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).[reference]
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
+
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
+
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
 
 ___
 
@@ -131,15 +146,19 @@ ___
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[agent](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#agent)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).agent
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
+
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
+
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
 
 ___
 
@@ -151,13 +170,13 @@ The implemented cluster.
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[cluster](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#cluster)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).cluster
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L47)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:47](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L47)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:280](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L280)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:306](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L306)
 
 ___
 
@@ -167,15 +186,33 @@ ___
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[context](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#context)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).context
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
+
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
+
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
+
+___
+
+### currentLevel
+
+• **currentLevel**: `number`
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).currentLevel
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:84](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L84)
 
 ___
 
@@ -185,63 +222,97 @@ ___
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[endpoint](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#endpoint)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).endpoint
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
+
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
+
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
 
 ___
 
 ### events
 
-• `Readonly` **events**: [`EventEmitter`](util_export.EventEmitter-1.md) & `Omit`\<[`ClusterEvents`](../modules/behavior_cluster_export.md#clusterevents)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: {} = \{}; `commands`: {} = \{}; `events`: {} = \{}; `id`: ``0`` = 0; `name`: ``"Unknown"`` = "Unknown"; `revision`: ``0`` = 0 }\>, typeof [`ClusterBehavior`](../modules/behavior_cluster_export.ClusterBehavior.md)\>, `never`\> & \{ `currentLevel$Change`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\>\> ; `onLevel$Change`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\>\> ; `options$Change`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `coupleColorTempToLevel`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\>\>  } & \{ `defaultMoveRate$Change`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\>\> ; `maxLevel$Change`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>\> ; `minLevel$Change`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>\> ; `offTransitionTime$Change`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\>\> ; `onOffTransitionTime$Change`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\>\> ; `onTransitionTime$Change`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\>\>  } & {} & {}
+• `Readonly` **events**: [`EventEmitter`](util_export.EventEmitter-1.md) & `Omit`\<[`ClusterEvents`](../modules/behavior_cluster_export.md#clusterevents)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff), [`Lighting`](../enums/cluster_export.LevelControl.Feature.md#lighting)]\>, [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: {} = \{}; `commands`: {} = \{}; `events`: {} = \{}; `id`: ``0`` = 0; `name`: ``"Unknown"`` = "Unknown"; `revision`: ``0`` = 0 }\>, typeof [`ClusterBehavior`](../modules/behavior_cluster_export.ClusterBehavior.md), [`LevelControlInterface`](../modules/behavior_definitions_level_control_export.md#levelcontrolinterface)\>, [`LevelControlInterface`](../modules/behavior_definitions_level_control_export.md#levelcontrolinterface)\>\>, ``"options$Changing"`` \| ``"remainingTime$Changing"`` \| ``"options$Changed"`` \| ``"remainingTime$Changed"`` \| ``"currentLevel$Changing"`` \| ``"onLevel$Changing"`` \| ``"minLevel$Changing"`` \| ``"maxLevel$Changing"`` \| ``"onOffTransitionTime$Changing"`` \| ``"onTransitionTime$Changing"`` \| ``"offTransitionTime$Changing"`` \| ``"defaultMoveRate$Changing"`` \| ``"currentLevel$Changed"`` \| ``"onLevel$Changed"`` \| ``"minLevel$Changed"`` \| ``"maxLevel$Changed"`` \| ``"onOffTransitionTime$Changed"`` \| ``"onTransitionTime$Changed"`` \| ``"offTransitionTime$Changed"`` \| ``"defaultMoveRate$Changed"`` \| ``"startUpCurrentLevel$Changing"`` \| ``"startUpCurrentLevel$Changed"``\> & \{ `currentLevel$Changing`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\>\> ; `onLevel$Changing`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\>\> ; `options$Changing`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `coupleColorTempToLevel`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\>\>  } & \{ `defaultMoveRate$Changing`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\>\> ; `maxLevel$Changing`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>\> ; `minLevel$Changing`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>\> ; `offTransitionTime$Changing`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\>\> ; `onOffTransitionTime$Changing`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\>\> ; `onTransitionTime$Changing`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\>\>  } & \{ `currentLevel$Changed`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\>\> ; `onLevel$Changed`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\>\> ; `options$Changed`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `coupleColorTempToLevel`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\>\>  } & \{ `defaultMoveRate$Changed`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\>\> ; `maxLevel$Changed`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>\> ; `minLevel$Changed`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>\> ; `offTransitionTime$Changed`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\>\> ; `onOffTransitionTime$Changed`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\>\> ; `onTransitionTime$Changed`: `undefined` \| [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\>\>  } & {} & {}
 
 Access the behavior's events.
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[events](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#events)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).events
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L145)
+[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L145)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:290](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L290)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:316](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L316)
 
 ___
 
 ### features
 
-• **features**: `Object`
+• **features**: `never`
 
 Supported features as a flag object.
 
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `onOff` | ``true`` |
-
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[features](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#features)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).features
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:295](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L295)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:295](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L295)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
+
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
+
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
+
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
+
+___
+
+### maxLevel
+
+• **maxLevel**: `number`
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).maxLevel
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:76](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L76)
+
+___
+
+### minLevel
+
+• **minLevel**: `number`
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).minLevel
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:71](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L71)
 
 ___
 
@@ -251,47 +322,77 @@ ___
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[session](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#session)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).session
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
+
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
+
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
 
 ___
 
 ### state
 
-• `Readonly` **state**: `Omit`\<[`Type`](../modules/behavior_cluster_export.ClusterState.md#type)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: {} = \{}; `commands`: {} = \{}; `events`: {} = \{}; `id`: ``0`` = 0; `name`: ``"Unknown"`` = "Unknown"; `revision`: ``0`` = 0 }\>, typeof [`ClusterBehavior`](../modules/behavior_cluster_export.ClusterBehavior.md)\>, `never`\> & \{ `currentLevel`: ``null`` \| `number` ; `onLevel`: ``null`` \| `number` ; `options`: [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `coupleColorTempToLevel`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>  } & \{ `defaultMoveRate?`: ``null`` \| `number` ; `maxLevel?`: `number` ; `minLevel?`: `number` ; `offTransitionTime?`: ``null`` \| `number` ; `onOffTransitionTime?`: `number` ; `onTransitionTime?`: ``null`` \| `number`  } & {} & {}
+• `Readonly` **state**: `Omit`\<[`State`](behavior_definitions_level_control_export.LevelControlServerLogic.State.md), ``"options"`` \| ``"remainingTime"`` \| ``"startUpCurrentLevel"`` \| ``"currentLevel"`` \| ``"minLevel"`` \| ``"maxLevel"`` \| ``"onOffTransitionTime"`` \| ``"onLevel"`` \| ``"onTransitionTime"`` \| ``"offTransitionTime"`` \| ``"defaultMoveRate"``\> & \{ `currentLevel`: ``null`` \| `number` ; `onLevel`: ``null`` \| `number` ; `options`: [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `coupleColorTempToLevel`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>  } & \{ `defaultMoveRate?`: ``null`` \| `number` ; `maxLevel?`: `number` ; `minLevel?`: `number` ; `offTransitionTime?`: ``null`` \| `number` ; `onOffTransitionTime?`: `number` ; `onTransitionTime?`: ``null`` \| `number`  } & {} & {}
 
 Access the behavior's state.
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[state](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#state)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).state
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:140](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L140)
+[packages/matter.js/src/behavior/Behavior.ts:140](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L140)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:285](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L285)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:311](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L311)
 
 ___
 
 ### Events
 
-▪ `Static` `Readonly` **Events**: [`Type`](../modules/behavior_cluster_export.ClusterEvents.md#type)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: {} = \{}; `commands`: {} = \{}; `events`: {} = \{}; `id`: ``0`` = 0; `name`: ``"Unknown"`` = "Unknown"; `revision`: ``0`` = 0 }\>, typeof [`ClusterBehavior`](../modules/behavior_cluster_export.ClusterBehavior.md), [`LevelControlInterface`](../modules/behavior_definitions_level_control_export.md#levelcontrolinterface)\>\>
+▪ `Static` `Readonly` **Events**: [`Type`](../modules/behavior_cluster_export.ClusterEvents.md#type)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff), [`Lighting`](../enums/cluster_export.LevelControl.Feature.md#lighting)]\>, readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff)]\>, typeof [`LevelControlServerLogic`](../modules/behavior_definitions_level_control_export.LevelControlServerLogic.md)\>
 
 #### Inherited from
 
-LevelControlBehavior.Events
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).Events
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:195](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L195)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:215](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L215)
+
+___
+
+### ExtensionInterface
+
+▪ `Static` `Readonly` **ExtensionInterface**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `handleOnOffChange` | (`onOff`: `boolean`) => `void` |
+| `moveLogic` | (`moveMode`: [`MoveMode`](../enums/cluster_export.LevelControl.MoveMode.md), `rate`: ``null`` \| `number`, `withOnOff`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> |
+| `moveToLevelLogic` | (`level`: `number`, `transitionTime`: ``null`` \| `number`, `withOnOff`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> |
+| `setLevel` | (`level`: `number`, `withOnOff`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> |
+| `setRemainingTime` | (`remainingTime`: `number`) => `void` |
+| `stepLogic` | (`stepMode`: [`StepMode`](../enums/cluster_export.LevelControl.StepMode.md), `stepSize`: `number`, `transitionTime`: ``null`` \| `number`, `withOnOff`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> |
+| `stopLogic` | () => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> |
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).ExtensionInterface
+
+#### Defined in
+
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:226](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L226)
 
 ___
 
@@ -301,85 +402,77 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.Interface
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).Interface
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:198](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L198)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:218](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L218)
 
 ___
 
 ### Internal
 
-▪ `Static` `Readonly` **Internal**: () => {}
-
-#### Type declaration
-
-• **new Internal**(): `Object`
-
-##### Returns
-
-`Object`
+▪ `Static` `Readonly` **Internal**: typeof [`Internal`](behavior_definitions_level_control_export.LevelControlServerLogic.Internal.md)
 
 #### Inherited from
 
-LevelControlBehavior.Internal
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).Internal
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:197](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L197)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:217](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L217)
 
 ___
 
 ### State
 
-▪ `Static` `Readonly` **State**: () => [`Type`](../modules/behavior_cluster_export.ClusterState.md#type)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: {} = \{}; `commands`: {} = \{}; `events`: {} = \{}; `id`: ``0`` = 0; `name`: ``"Unknown"`` = "Unknown"; `revision`: ``0`` = 0 }\>, typeof [`ClusterBehavior`](../modules/behavior_cluster_export.ClusterBehavior.md), [`LevelControlInterface`](../modules/behavior_definitions_level_control_export.md#levelcontrolinterface)\>\>
+▪ `Static` `Readonly` **State**: () => [`Type`](../modules/behavior_cluster_export.ClusterState.md#type)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff), [`Lighting`](../enums/cluster_export.LevelControl.Feature.md#lighting)]\>, readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff)]\>, typeof [`LevelControlServerLogic`](../modules/behavior_definitions_level_control_export.LevelControlServerLogic.md)\>
 
 #### Type declaration
 
-• **new State**(): [`Type`](../modules/behavior_cluster_export.ClusterState.md#type)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: {} = \{}; `commands`: {} = \{}; `events`: {} = \{}; `id`: ``0`` = 0; `name`: ``"Unknown"`` = "Unknown"; `revision`: ``0`` = 0 }\>, typeof [`ClusterBehavior`](../modules/behavior_cluster_export.ClusterBehavior.md), [`LevelControlInterface`](../modules/behavior_definitions_level_control_export.md#levelcontrolinterface)\>\>
+• **new State**(): [`Type`](../modules/behavior_cluster_export.ClusterState.md#type)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff), [`Lighting`](../enums/cluster_export.LevelControl.Feature.md#lighting)]\>, readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff)]\>, typeof [`LevelControlServerLogic`](../modules/behavior_definitions_level_control_export.LevelControlServerLogic.md)\>
 
 ##### Returns
 
-[`Type`](../modules/behavior_cluster_export.ClusterState.md#type)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: {} = \{}; `commands`: {} = \{}; `events`: {} = \{}; `id`: ``0`` = 0; `name`: ``"Unknown"`` = "Unknown"; `revision`: ``0`` = 0 }\>, typeof [`ClusterBehavior`](../modules/behavior_cluster_export.ClusterBehavior.md), [`LevelControlInterface`](../modules/behavior_definitions_level_control_export.md#levelcontrolinterface)\>\>
+[`Type`](../modules/behavior_cluster_export.ClusterState.md#type)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff), [`Lighting`](../enums/cluster_export.LevelControl.Feature.md#lighting)]\>, readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff)]\>, typeof [`LevelControlServerLogic`](../modules/behavior_definitions_level_control_export.LevelControlServerLogic.md)\>
 
 #### Inherited from
 
-LevelControlBehavior.State
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).State
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L196)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
 
 ___
 
 ### cluster
 
-▪ `Static` `Readonly` **cluster**: [`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md)
+▪ `Static` `Readonly` **cluster**: [`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff), [`Lighting`](../enums/cluster_export.LevelControl.Feature.md#lighting)]\>, readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff)]\>
 
 Base cluster state include all attribute values but may be extended by subclasses.
 
 #### Inherited from
 
-LevelControlBehavior.cluster
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).cluster
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:193](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L193)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:213](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L213)
 
 ___
 
 ### defaults
 
-▪ `Static` `Readonly` **defaults**: [`Type`](../modules/behavior_cluster_export.ClusterState.md#type)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: {} = \{}; `commands`: {} = \{}; `events`: {} = \{}; `id`: ``0`` = 0; `name`: ``"Unknown"`` = "Unknown"; `revision`: ``0`` = 0 }\>, typeof [`ClusterBehavior`](../modules/behavior_cluster_export.ClusterBehavior.md), [`LevelControlInterface`](../modules/behavior_definitions_level_control_export.md#levelcontrolinterface)\>\>
+▪ `Static` `Readonly` **defaults**: [`Type`](../modules/behavior_cluster_export.ClusterState.md#type)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`WithFeatures`](../modules/cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.LevelControl.Cluster.md), readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff), [`Lighting`](../enums/cluster_export.LevelControl.Feature.md#lighting)]\>, readonly [[`OnOff`](../enums/cluster_export.LevelControl.Feature.md#onoff)]\>, typeof [`LevelControlServerLogic`](../modules/behavior_definitions_level_control_export.LevelControlServerLogic.md)\>
 
 #### Inherited from
 
-LevelControlBehavior.defaults
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).defaults
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:202](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L202)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:222](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L222)
 
 ___
 
@@ -389,11 +482,11 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.dependencies
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).dependencies
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:204](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L204)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:224](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L224)
 
 ___
 
@@ -403,11 +496,11 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.early
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).early
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:201](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L201)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:221](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L221)
 
 ___
 
@@ -419,11 +512,11 @@ The behavior ID for ClusterBehaviors is the name of the cluster.
 
 #### Inherited from
 
-LevelControlBehavior.id
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).id
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:188](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L188)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:208](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L208)
 
 ___
 
@@ -433,11 +526,11 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.name
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).name
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:183](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L183)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:203](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L203)
 
 ___
 
@@ -447,11 +540,11 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.schema
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).schema
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:200](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L200)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:220](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L220)
 
 ___
 
@@ -461,11 +554,11 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.supervisor
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).supervisor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:203](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L203)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:223](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L223)
 
 ___
 
@@ -489,11 +582,11 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.supports
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).supports
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:205](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L205)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:225](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L225)
 
 ## Methods
 
@@ -510,11 +603,11 @@ state.
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[[asyncDispose]](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#[asyncdispose])
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).[asyncDispose]
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:198](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L198)
+[packages/matter.js/src/behavior/Behavior.ts:198](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L198)
 
 ___
 
@@ -543,11 +636,43 @@ You should only elevate privileges for synchronous logic.
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[asAdmin](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#asadmin)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).asAdmin
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L125)
+[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L125)
+
+___
+
+### assertAttributeEnabled
+
+▸ **assertAttributeEnabled**\<`This`, `K`\>(`this`, `attributeName`): `void`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Behavior`](behavior_export.Behavior-1.md) |
+| `K` | extends `string` \| `number` \| `symbol` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | `This` |
+| `attributeName` | `K` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).assertAttributeEnabled
+
+#### Defined in
+
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:183](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L183)
 
 ___
 
@@ -592,11 +717,35 @@ Because of this: The reactor MUST be a real JS function - arrow functions will n
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[callback](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#callback)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).callback
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L226)
+[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L226)
+
+___
+
+### handleOnOffChange
+
+▸ **handleOnOffChange**(`onOff`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `onOff` | `boolean` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).handleOnOffChange
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:602](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L602)
 
 ___
 
@@ -622,11 +771,11 @@ use until initialization completes.
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[initialize](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#initialize)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).initialize
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:192](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L192)
+[packages/matter.js/src/behavior/Behavior.ts:192](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L192)
 
 ___
 
@@ -650,17 +799,43 @@ MatterSpecification.v11.Cluster § 1.6.6.2
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[move](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#move)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).move
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L76)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:76](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L76)
+
+___
+
+### moveLogic
+
+▸ **moveLogic**(`moveMode`, `rate`, `withOnOff`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `moveMode` | [`MoveMode`](../enums/cluster_export.LevelControl.MoveMode.md) |
+| `rate` | ``null`` \| `number` |
+| `withOnOff` | `boolean` |
+
+#### Returns
+
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).moveLogic
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:592](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L592)
 
 ___
 
 ### moveToLevel
 
-▸ **moveToLevel**(`request`): `Promise`\<`void`\>
+▸ **moveToLevel**(`request`): [`MaybePromise`](../modules/util_export.md#maybepromise)
 
 #### Parameters
 
@@ -670,19 +845,45 @@ ___
 
 #### Returns
 
-`Promise`\<`void`\>
+[`MaybePromise`](../modules/util_export.md#maybepromise)
 
 **`See`**
 
 MatterSpecification.v11.Cluster § 1.6.6.1
 
-#### Overrides
+#### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[moveToLevel](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#movetolevel)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).moveToLevel
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L14)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:71](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L71)
+
+___
+
+### moveToLevelLogic
+
+▸ **moveToLevelLogic**(`level`, `transitionTime`, `withOnOff`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `level` | `number` |
+| `transitionTime` | ``null`` \| `number` |
+| `withOnOff` | `boolean` |
+
+#### Returns
+
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).moveToLevelLogic
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:591](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L591)
 
 ___
 
@@ -706,11 +907,11 @@ MatterSpecification.v11.Cluster § 1.6.6
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[moveToLevelWithOnOff](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#movetolevelwithonoff)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).moveToLevelWithOnOff
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L100)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:100](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L100)
 
 ___
 
@@ -734,11 +935,11 @@ MatterSpecification.v11.Cluster § 1.6.6
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[moveWithOnOff](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#movewithonoff)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).moveWithOnOff
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L105)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:105](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L105)
 
 ___
 
@@ -770,11 +971,92 @@ Important: The reactor MUST be a real JS function - arrow functions will not wor
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[reactTo](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#reactto)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).reactTo
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L212)
+[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L212)
+
+___
+
+### requireAttributeEnabled
+
+▸ **requireAttributeEnabled**\<`This`, `K`\>(`this`, `attributeName`): `Exclude`\<`This`[``"state"``][`K`], `undefined`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Behavior`](behavior_export.Behavior-1.md) |
+| `K` | extends `string` \| `number` \| `symbol` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | `This` |
+| `attributeName` | `K` |
+
+#### Returns
+
+`Exclude`\<`This`[``"state"``][`K`], `undefined`\>
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).requireAttributeEnabled
+
+#### Defined in
+
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:171](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L171)
+
+___
+
+### setLevel
+
+▸ **setLevel**(`level`, `withOnOff`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `level` | `number` |
+| `withOnOff` | `boolean` |
+
+#### Returns
+
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).setLevel
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:600](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L600)
+
+___
+
+### setRemainingTime
+
+▸ **setRemainingTime**(`remainingTime`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `remainingTime` | `number` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).setRemainingTime
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:601](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L601)
 
 ___
 
@@ -807,11 +1089,38 @@ MatterSpecification.v11.Cluster § 1.6.6.3
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[step](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#step)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).step
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L90)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:90](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L90)
+
+___
+
+### stepLogic
+
+▸ **stepLogic**(`stepMode`, `stepSize`, `transitionTime`, `withOnOff`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `stepMode` | [`StepMode`](../enums/cluster_export.LevelControl.StepMode.md) |
+| `stepSize` | `number` |
+| `transitionTime` | ``null`` \| `number` |
+| `withOnOff` | `boolean` |
+
+#### Returns
+
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).stepLogic
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:593](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L593)
 
 ___
 
@@ -835,11 +1144,11 @@ MatterSpecification.v11.Cluster § 1.6.6
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[stepWithOnOff](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#stepwithonoff)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).stepWithOnOff
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L110)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:110](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L110)
 
 ___
 
@@ -863,11 +1172,29 @@ MatterSpecification.v11.Cluster § 1.6.6.4
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[stop](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#stop)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).stop
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L95)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:95](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L95)
+
+___
+
+### stopLogic
+
+▸ **stopLogic**(): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Returns
+
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Inherited from
+
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).stopLogic
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:599](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L599)
 
 ___
 
@@ -891,11 +1218,11 @@ MatterSpecification.v11.Cluster § 1.6.6
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[stopWithOnOff](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#stopwithonoff)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).stopWithOnOff
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:115](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L115)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:115](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L115)
 
 ___
 
@@ -911,11 +1238,11 @@ Description used in diagnostic messages.
 
 #### Inherited from
 
-[LevelControlBehavior](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md).[toString](../interfaces/behavior_definitions_level_control_export.LevelControlBehavior-1.md#tostring)
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).toString
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L203)
+[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L203)
 
 ___
 
@@ -943,11 +1270,11 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.alter
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).alter
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:233](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L233)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:254](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L254)
 
 ___
 
@@ -975,11 +1302,11 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.enable
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).enable
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:243](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L243)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:264](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L264)
 
 ___
 
@@ -1008,11 +1335,11 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.for
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).for
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:219](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L219)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:240](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L240)
 
 ___
 
@@ -1039,11 +1366,11 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.set
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).set
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:241](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L241)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:262](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L262)
 
 ___
 
@@ -1071,8 +1398,8 @@ ___
 
 #### Inherited from
 
-LevelControlBehavior.with
+LevelControlServerLogic.with(LevelControl.Feature.OnOff).with
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:225](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L225)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:246](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L246)

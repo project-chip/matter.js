@@ -37,6 +37,7 @@ require update.
 - [session](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#session)
 - [state](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#state)
 - [Events](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#events-1)
+- [ExtensionInterface](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#extensioninterface)
 - [Interface](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#interface)
 - [cluster](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#cluster-1)
 - [defaults](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#defaults)
@@ -48,28 +49,28 @@ require update.
 - [supervisor](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#supervisor)
 - [supports](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#supports)
 
-### Accessors
-
-- [#certification](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md##certification)
-
 ### Methods
 
 - [#handleAddedFabric](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md##handleaddedfabric)
 - [#handleRemovedFabric](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md##handleremovedfabric)
 - [#handleUpdatedFabric](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md##handleupdatedfabric)
+- [#mapNocErrors](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md##mapnocerrors)
 - [#nodeOnline](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md##nodeonline)
 - [#updateFabrics](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md##updatefabrics)
 - [[asyncDispose]](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#[asyncdispose])
 - [addNoc](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#addnoc)
 - [addTrustedRootCertificate](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#addtrustedrootcertificate)
 - [asAdmin](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#asadmin)
+- [assertAttributeEnabled](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#assertattributeenabled)
 - [attestationRequest](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#attestationrequest)
 - [callback](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#callback)
 - [certificateChainRequest](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#certificatechainrequest)
 - [csrRequest](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#csrrequest)
+- [getCertification](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#getcertification)
 - [initialize](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#initialize)
 - [reactTo](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#reactto)
 - [removeFabric](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#removefabric)
+- [requireAttributeEnabled](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#requireattributeenabled)
 - [toString](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#tostring)
 - [updateFabricLabel](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#updatefabriclabel)
 - [updateNoc](behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md#updatenoc)
@@ -102,7 +103,7 @@ OperationalCredentialsBehavior.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:181](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L181)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:201](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L201)
 
 ## Properties
 
@@ -116,7 +117,7 @@ OperationalCredentialsBehavior.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L51)
+[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L51)
 
 ___
 
@@ -130,11 +131,11 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
 
 ___
 
@@ -148,11 +149,11 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
 
 ___
 
@@ -168,9 +169,9 @@ The implemented cluster.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L47)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:47](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L47)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:280](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L280)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:306](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L306)
 
 ___
 
@@ -184,11 +185,11 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
 
 ___
 
@@ -202,17 +203,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
 
 ___
 
 ### events
 
-• `Readonly` **events**: [`EventEmitter`](util_export.EventEmitter-1.md) & `Omit`\<[`ClusterEvents`](../modules/behavior_cluster_export.md#clusterevents)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: {} = \{}; `commands`: {} = \{}; `events`: {} = \{}; `id`: ``0`` = 0; `name`: ``"Unknown"`` = "Unknown"; `revision`: ``0`` = 0 }\>, typeof [`ClusterBehavior`](../modules/behavior_cluster_export.ClusterBehavior.md)\>, `never`\> & \{ `commissionedFabrics$Change`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>\> ; `currentFabricIndex$Change`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex), `any`\>\> ; `fabrics$Change`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`FabricScopedAttribute`](../interfaces/cluster_export.FabricScopedAttribute.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `fabricId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricId`](../modules/datatype_export.md#fabricid)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\> ; `rootPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `vendorId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`VendorId`](../modules/datatype_export.md#vendorid)\>  }\>[], `any`\>\> ; `nocs$Change`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`FabricScopedAttribute`](../interfaces/cluster_export.FabricScopedAttribute.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `icac`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `Uint8Array`\> ; `noc`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>[], `any`\>\> ; `supportedFabrics$Change`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\>\> ; `trustedRootCertificates$Change`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<`Uint8Array`[], `any`\>\>  } & {} & {} & {}
+• `Readonly` **events**: [`EventEmitter`](util_export.EventEmitter-1.md) & `Omit`\<[`ClusterEvents`](../modules/behavior_cluster_export.md#clusterevents)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: {} = \{}; `commands`: {} = \{}; `events`: {} = \{}; `id`: ``0`` = 0; `name`: ``"Unknown"`` = "Unknown"; `revision`: ``0`` = 0 }\>, typeof [`ClusterBehavior`](../modules/behavior_cluster_export.ClusterBehavior.md)\>, `never`\> & \{ `commissionedFabrics$Changing`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>\> ; `currentFabricIndex$Changing`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex), `any`\>\> ; `fabrics$Changing`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`FabricScopedAttribute`](../interfaces/cluster_export.FabricScopedAttribute.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `fabricId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricId`](../modules/datatype_export.md#fabricid)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\> ; `rootPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `vendorId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`VendorId`](../modules/datatype_export.md#vendorid)\>  }\>[], `any`\>\> ; `nocs$Changing`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`FabricScopedAttribute`](../interfaces/cluster_export.FabricScopedAttribute.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `icac`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `Uint8Array`\> ; `noc`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>[], `any`\>\> ; `supportedFabrics$Changing`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\>\> ; `trustedRootCertificates$Changing`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<`Uint8Array`[], `any`\>\>  } & {} & \{ `commissionedFabrics$Changed`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>\> ; `currentFabricIndex$Changed`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex), `any`\>\> ; `fabrics$Changed`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`FabricScopedAttribute`](../interfaces/cluster_export.FabricScopedAttribute.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `fabricId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricId`](../modules/datatype_export.md#fabricid)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\> ; `rootPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `vendorId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`VendorId`](../modules/datatype_export.md#vendorid)\>  }\>[], `any`\>\> ; `nocs$Changed`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`FabricScopedAttribute`](../interfaces/cluster_export.FabricScopedAttribute.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `icac`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `Uint8Array`\> ; `noc`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>[], `any`\>\> ; `supportedFabrics$Changed`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\>\> ; `trustedRootCertificates$Changed`: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<`Uint8Array`[], `any`\>\>  } & {} & {} & {}
 
 Access the behavior's events.
 
@@ -222,9 +223,9 @@ Access the behavior's events.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L145)
+[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L145)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:290](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L290)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:316](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L316)
 
 ___
 
@@ -240,15 +241,15 @@ Supported features as a flag object.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:295](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L295)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:295](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L295)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
 
 ___
 
@@ -258,7 +259,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L46)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L80)
 
 ___
 
@@ -272,11 +273,11 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
 
 ___
 
@@ -292,7 +293,7 @@ Access the behavior's state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L47)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:81](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L81)
 
 ___
 
@@ -306,7 +307,21 @@ OperationalCredentialsBehavior.Events
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:195](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L195)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:215](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L215)
+
+___
+
+### ExtensionInterface
+
+▪ `Static` `Readonly` **ExtensionInterface**: `Object`
+
+#### Inherited from
+
+OperationalCredentialsBehavior.ExtensionInterface
+
+#### Defined in
+
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:226](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L226)
 
 ___
 
@@ -320,7 +335,7 @@ OperationalCredentialsBehavior.Interface
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:198](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L198)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:218](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L218)
 
 ___
 
@@ -336,7 +351,7 @@ OperationalCredentialsBehavior.cluster
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:193](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L193)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:213](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L213)
 
 ___
 
@@ -350,7 +365,7 @@ OperationalCredentialsBehavior.defaults
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:202](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L202)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:222](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L222)
 
 ___
 
@@ -364,7 +379,7 @@ OperationalCredentialsBehavior.dependencies
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:204](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L204)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:224](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L224)
 
 ___
 
@@ -378,7 +393,7 @@ OperationalCredentialsBehavior.early
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:201](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L201)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:221](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L221)
 
 ___
 
@@ -394,7 +409,7 @@ OperationalCredentialsBehavior.id
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:188](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L188)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:208](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L208)
 
 ___
 
@@ -408,7 +423,7 @@ OperationalCredentialsBehavior.name
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:183](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L183)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:203](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L203)
 
 ___
 
@@ -422,7 +437,7 @@ OperationalCredentialsBehavior.schema
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:200](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L200)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:220](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L220)
 
 ___
 
@@ -436,7 +451,7 @@ OperationalCredentialsBehavior.supervisor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:203](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L203)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:223](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L223)
 
 ___
 
@@ -464,21 +479,7 @@ OperationalCredentialsBehavior.supports
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:205](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L205)
-
-## Accessors
-
-### #certification
-
-• `get` **#certification**(): [`DeviceCertification`](export._internal_.DeviceCertification-1.md)
-
-#### Returns
-
-[`DeviceCertification`](export._internal_.DeviceCertification-1.md)
-
-#### Defined in
-
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:361](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L361)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:225](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L225)
 
 ## Methods
 
@@ -498,7 +499,7 @@ OperationalCredentialsBehavior.supports
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:373](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L373)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:448](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L448)
 
 ___
 
@@ -518,7 +519,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:383](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L383)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:458](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L458)
 
 ___
 
@@ -538,7 +539,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:378](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L378)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:453](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L453)
+
+___
+
+### #mapNocErrors
+
+▸ **#mapNocErrors**(`error`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `error` | `unknown` |
+
+#### Returns
+
+[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:157](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L157)
 
 ___
 
@@ -552,7 +573,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:388](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L388)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:463](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L463)
 
 ___
 
@@ -566,7 +587,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:337](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L337)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:410](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L410)
 
 ___
 
@@ -587,13 +608,13 @@ state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:198](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L198)
+[packages/matter.js/src/behavior/Behavior.ts:198](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L198)
 
 ___
 
 ### addNoc
 
-▸ **addNoc**(`«destructured»`): `Promise`\<\{ `debugText`: `string` = "Root certificate not found."; `fabricIndex?`: `undefined` = fabric.fabricIndex; `statusCode`: [`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md) = OperationalCredentials.NodeOperationalCertStatus.InvalidNoc } \| \{ `debugText?`: `undefined` = error.message; `fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex) = fabric.fabricIndex; `statusCode`: [`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md) = OperationalCredentials.NodeOperationalCertStatus.Ok }\>
+▸ **addNoc**(`«destructured»`): `Promise`\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>\>
 
 This command shall add a new NOC chain to the device and commission a new Fabric association upon successful
 validation of all arguments and preconditions.
@@ -613,7 +634,7 @@ A Commissioner or Administrator SHOULD issue this command after performing the A
 
 #### Returns
 
-`Promise`\<\{ `debugText`: `string` = "Root certificate not found."; `fabricIndex?`: `undefined` = fabric.fabricIndex; `statusCode`: [`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md) = OperationalCredentials.NodeOperationalCertStatus.InvalidNoc } \| \{ `debugText?`: `undefined` = error.message; `fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex) = fabric.fabricIndex; `statusCode`: [`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md) = OperationalCredentials.NodeOperationalCertStatus.Ok }\>
+`Promise`\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>\>
 
 **`See`**
 
@@ -625,7 +646,7 @@ MatterSpecification.v11.Core § 11.17.6.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L106)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:186](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L186)
 
 ___
 
@@ -677,7 +698,7 @@ MatterSpecification.v11.Core § 11.17.6.13
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:317](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L317)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:378](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L378)
 
 ___
 
@@ -710,13 +731,45 @@ You should only elevate privileges for synchronous logic.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L125)
+[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L125)
+
+___
+
+### assertAttributeEnabled
+
+▸ **assertAttributeEnabled**\<`This`, `K`\>(`this`, `attributeName`): `void`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Behavior`](behavior_export.Behavior-1.md) |
+| `K` | extends `string` \| `number` \| `symbol` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | `This` |
+| `attributeName` | `K` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[OperationalCredentialsBehavior](../interfaces/behavior_definitions_operational_credentials_export.OperationalCredentialsBehavior-1.md).[assertAttributeEnabled](../interfaces/behavior_definitions_operational_credentials_export.OperationalCredentialsBehavior-1.md#assertattributeenabled)
+
+#### Defined in
+
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:183](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L183)
 
 ___
 
 ### attestationRequest
 
-▸ **attestationRequest**(`«destructured»`): `Object`
+▸ **attestationRequest**(`«destructured»`): `Promise`\<\{ `attestationElements`: `Uint8Array` = elements; `attestationSignature`: `Uint8Array`  }\>
 
 This command shall be generated to request the Attestation Information, in the form of an
 AttestationResponse Command. If the AttestationNonce that is provided in the command is malformed, a
@@ -732,12 +785,7 @@ used in the computation of the Attestation Information.
 
 #### Returns
 
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `attestationElements` | `Uint8Array` |
-| `attestationSignature` | `Uint8Array` |
+`Promise`\<\{ `attestationElements`: `Uint8Array` = elements; `attestationSignature`: `Uint8Array`  }\>
 
 **`See`**
 
@@ -749,7 +797,7 @@ MatterSpecification.v11.Core § 11.17.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L59)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:93](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L93)
 
 ___
 
@@ -798,13 +846,13 @@ Because of this: The reactor MUST be a real JS function - arrow functions will n
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L226)
+[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L226)
 
 ___
 
 ### certificateChainRequest
 
-▸ **certificateChainRequest**(`«destructured»`): `Object`
+▸ **certificateChainRequest**(`«destructured»`): `Promise`\<\{ `certificate`: `Uint8Array` = certification.certificate }\>
 
 If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall fail with a
 Status Code of INVALID_COMMAND.
@@ -817,11 +865,7 @@ Status Code of INVALID_COMMAND.
 
 #### Returns
 
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `certificate` | `Uint8Array` |
+`Promise`\<\{ `certificate`: `Uint8Array` = certification.certificate }\>
 
 **`See`**
 
@@ -833,13 +877,13 @@ MatterSpecification.v11.Core § 11.17.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L95)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:141](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L141)
 
 ___
 
 ### csrRequest
 
-▸ **csrRequest**(`«destructured»`): `Object`
+▸ **csrRequest**(`«destructured»`): `Promise`\<\{ `attestationSignature`: `Uint8Array` ; `nocsrElements`: `Uint8Array`  }\>
 
 This command shall be generated to execute the Node Operational CSR Procedure and subsequently return the
 NOCSR Information, in the form of a CSRResponse Command.
@@ -874,12 +918,7 @@ executed, then this command shall fail with a FAILURE status code sent back to t
 
 #### Returns
 
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `attestationSignature` | `Uint8Array` |
-| `nocsrElements` | `Uint8Array` |
+`Promise`\<\{ `attestationSignature`: `Uint8Array` ; `nocsrElements`: `Uint8Array`  }\>
 
 **`See`**
 
@@ -891,7 +930,21 @@ MatterSpecification.v11.Core § 11.17.6.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L71)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:111](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L111)
+
+___
+
+### getCertification
+
+▸ **getCertification**(): `Promise`\<[`DeviceCertification`](behavior_definitions_operational_credentials_export._internal_.DeviceCertification-1.md)\>
+
+#### Returns
+
+`Promise`\<[`DeviceCertification`](behavior_definitions_operational_credentials_export._internal_.DeviceCertification-1.md)\>
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:434](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L434)
 
 ___
 
@@ -915,7 +968,7 @@ use until initialization completes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:49](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L49)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:83](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L83)
 
 ___
 
@@ -951,7 +1004,7 @@ Important: The reactor MUST be a real JS function - arrow functions will not wor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L212)
+[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L212)
 
 ___
 
@@ -976,42 +1029,6 @@ method SHOULD be used to notify the other Administrative Domain’s party of the
 only observe the removal of a Fabric association as persistently failing attempts to reach a Node
 operationally.
 
-This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric which is
-to be removed from the device.
-
-Effect on Receipt
-
-If the FabricIndex field does not match the FabricIndex of any entry within the Fabrics list, then an
-NOCResponse with a StatusCode of InvalidFabricIndex shall be returned for the command and there shall NOT be
-any permanent changes to any device data.
-
-Otherwise, one of the following outcomes shall occur:
-
-  1. If the FabricIndex matches the last remaining entry in the Fabrics list, then the device shall delete
-     all Matter related data on the node which was created since it was commissioned. This includes all
-     Fabric-Scoped data, including Access Control List, bindings, scenes, group keys,
-
-operational certificates, etc. All Trusted Roots shall also be removed. Any Matter related data including
-logs, secure sessions, exchanges and interaction model constructs shall also be removed. Since this
-operation involves the removal of the secure session data that may underpin the current set of exchanges,
-the Node invoking the command SHOULD NOT expect a response before terminating its secure session with the
-target.
-
-2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the process of
-irrevocably deleting all associated Fabric-Scoped data, including Access Control List, bindings, group keys,
-operational certificates, etc. Any remaining Trusted Roots no longer referenced by any operational
-certificate shall also be removed. All secure sessions, exchanges and interaction model constructs related
-to the Operational Identity under the given Fabric shall also be removed. Following the removal, an
-NOCResponse with a StatusCode of OK shall be returned.
-
-3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of
-irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, bindings, group
-keys, operational certificates, etc. Any remaining Trusted Roots no longer referenced by any operational
-certificate shall also be removed. All secure sessions, exchanges and interaction model constructs related
-to the Operational Identity under the given Fabric shall also be removed. Since this operation involves the
-removal of the secure session data that may underpin the current set of exchanges, the Node invoking the
-command SHOULD NOT expect a response before terminating its secure session with the target.
-
 #### Parameters
 
 | Name | Type |
@@ -1032,7 +1049,39 @@ MatterSpecification.v11.Core § 11.17.6.12
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:296](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L296)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:357](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L357)
+
+___
+
+### requireAttributeEnabled
+
+▸ **requireAttributeEnabled**\<`This`, `K`\>(`this`, `attributeName`): `Exclude`\<`This`[``"state"``][`K`], `undefined`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Behavior`](behavior_export.Behavior-1.md) |
+| `K` | extends `string` \| `number` \| `symbol` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | `This` |
+| `attributeName` | `K` |
+
+#### Returns
+
+`Exclude`\<`This`[``"state"``][`K`], `undefined`\>
+
+#### Inherited from
+
+[OperationalCredentialsBehavior](../interfaces/behavior_definitions_operational_credentials_export.OperationalCredentialsBehavior-1.md).[requireAttributeEnabled](../interfaces/behavior_definitions_operational_credentials_export.OperationalCredentialsBehavior-1.md#requireattributeenabled)
+
+#### Defined in
+
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:171](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L171)
 
 ___
 
@@ -1052,7 +1101,7 @@ Description used in diagnostic messages.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L203)
+[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L203)
 
 ___
 
@@ -1065,23 +1114,6 @@ reflected by entries in the Fabrics attribute.
 
 The Label SHOULD be used by Administrators to provide additional per-fabric context when operations such as
 RemoveFabric are used.
-
-This field shall contain the label to set for the fabric associated with the current secure session.
-
-Effect on Receipt
-
-If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that is not
-the accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be returned for the
-command and there shall NOT be any permanent changes to any Fabric data.
-
-Otherwise, the Label field for the accesing fabric shall immediately be updated to reflect the
-
-Label argument provided. Following the update, an NOCResponse with a StatusCode of OK shall be returned.
-
-If the command was invoked within a fail-safe context after a successful UpdateNOC command, then the label
-update shall apply to the pending update state that will be reverted if fail-safe expires prior to a
-CommissioningComplete command. In other words, label updates apply to the state of the Fabrics Attribute as
-currently visible, even for an existing fabric currently in process of being updated.
 
 #### Parameters
 
@@ -1103,13 +1135,13 @@ MatterSpecification.v11.Core § 11.17.6.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:276](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L276)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:337](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L337)
 
 ___
 
 ### updateNoc
 
-▸ **updateNoc**(`«destructured»`): `Promise`\<\{ `fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex) = updateFabric.fabricIndex; `statusCode`: [`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md) = OperationalCredentials.NodeOperationalCertStatus.Ok }\>
+▸ **updateNoc**(`«destructured»`): `Promise`\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>\>
 
 This command shall replace the NOC and optional associated ICAC (if present) scoped under the accessing
 fabric upon successful validation of all arguments and preconditions. The new value shall immediately be
@@ -1173,7 +1205,7 @@ matching the FabricIndex under which the updated NOC is scoped.
 
 #### Returns
 
-`Promise`\<\{ `fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex) = updateFabric.fabricIndex; `statusCode`: [`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md) = OperationalCredentials.NodeOperationalCertStatus.Ok }\>
+`Promise`\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>\>
 
 **`See`**
 
@@ -1185,7 +1217,7 @@ MatterSpecification.v11.Core § 11.17.6.9
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:225](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L225)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:281](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L281)
 
 ___
 
@@ -1217,7 +1249,7 @@ OperationalCredentialsBehavior.alter
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:233](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L233)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:254](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L254)
 
 ___
 
@@ -1249,7 +1281,7 @@ OperationalCredentialsBehavior.enable
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:243](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L243)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:264](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L264)
 
 ___
 
@@ -1282,7 +1314,7 @@ OperationalCredentialsBehavior.for
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:219](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L219)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:240](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L240)
 
 ___
 
@@ -1313,7 +1345,7 @@ OperationalCredentialsBehavior.set
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:241](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L241)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:262](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L262)
 
 ___
 
@@ -1345,4 +1377,4 @@ OperationalCredentialsBehavior.with
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:225](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L225)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:246](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L246)

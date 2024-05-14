@@ -43,7 +43,7 @@ TypeFromSchema.connected
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:714
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:789
 
 ___
 
@@ -84,4 +84,4 @@ TypeFromSchema.networkId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:706
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:781

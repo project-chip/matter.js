@@ -18,7 +18,8 @@
 
 ### Properties
 
-- [ips](net_export.NetworkFake.md#ips)
+- [ipV4](net_export.NetworkFake.md#ipv4)
+- [ipV6](net_export.NetworkFake.md#ipv6)
 - [mac](net_export.NetworkFake.md#mac)
 - [get](net_export.NetworkFake.md#get)
 
@@ -52,17 +53,27 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:11
+packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:12
 
 ## Properties
 
-### ips
+### ipV4
 
-• `Private` `Readonly` **ips**: `any`
+• `Private` `Readonly` **ipV4**: `any`
 
 #### Defined in
 
 packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:10
+
+___
+
+### ipV6
+
+• `Private` `Readonly` **ipV6**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:11
 
 ___
 
@@ -94,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/Network.d.ts:11
+packages/matter.js/dist/esm/net/Network.d.ts:47
 
 ## Methods
 
@@ -112,7 +123,7 @@ packages/matter.js/dist/esm/net/Network.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/Network.d.ts:18
+packages/matter.js/dist/esm/net/Network.d.ts:51
 
 ___
 
@@ -136,13 +147,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:17
+packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:15
 
 ___
 
 ### getIpMac
 
-▸ **getIpMac**(`_netInterface`): `Object`
+▸ **getIpMac**(`_netInterface`): [`NetworkInterfaceDetails`](../modules/net_export.md#networkinterfacedetails)
 
 #### Parameters
 
@@ -152,12 +163,7 @@ ___
 
 #### Returns
 
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `ips` | `string`[] |
-| `mac` | `string` |
+[`NetworkInterfaceDetails`](../modules/net_export.md#networkinterfacedetails)
 
 #### Overrides
 
@@ -165,17 +171,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:13
+packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:14
 
 ___
 
 ### getNetInterfaces
 
-▸ **getNetInterfaces**(): `string`[]
+▸ **getNetInterfaces**(): [`NetworkInterface`](../modules/net_export.md#networkinterface)[]
 
 #### Returns
 
-`string`[]
+[`NetworkInterface`](../modules/net_export.md#networkinterface)[]
 
 #### Overrides
 
@@ -183,4 +189,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:12
+packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:13

@@ -12,17 +12,20 @@
 
 ### Properties
 
-- [decodeAnsi1](exports_codec.DerCodec.md#decodeansi1)
+- [decodeAsn1](exports_codec.DerCodec.md#decodeasn1)
 - [decodeRec](exports_codec.DerCodec.md#decoderec)
-- [encodeAnsi1](exports_codec.DerCodec.md#encodeansi1)
 - [encodeArray](exports_codec.DerCodec.md#encodearray)
+- [encodeAsn1](exports_codec.DerCodec.md#encodeasn1)
+- [encodeBitString](exports_codec.DerCodec.md#encodebitstring)
 - [encodeBoolean](exports_codec.DerCodec.md#encodeboolean)
 - [encodeDate](exports_codec.DerCodec.md#encodedate)
+- [encodeIA5String](exports_codec.DerCodec.md#encodeia5string)
+- [encodeInteger](exports_codec.DerCodec.md#encodeinteger)
 - [encodeLengthBytes](exports_codec.DerCodec.md#encodelengthbytes)
 - [encodeObject](exports_codec.DerCodec.md#encodeobject)
 - [encodeOctetString](exports_codec.DerCodec.md#encodeoctetstring)
+- [encodePrintableString](exports_codec.DerCodec.md#encodeprintablestring)
 - [encodeString](exports_codec.DerCodec.md#encodestring)
-- [encodeUnsignedInt](exports_codec.DerCodec.md#encodeunsignedint)
 
 ### Methods
 
@@ -41,13 +44,13 @@
 
 ## Properties
 
-### decodeAnsi1
+### decodeAsn1
 
-▪ `Static` `Private` **decodeAnsi1**: `any`
+▪ `Static` `Private` **decodeAsn1**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:55
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:72
 
 ___
 
@@ -57,17 +60,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:54
-
-___
-
-### encodeAnsi1
-
-▪ `Static` `Private` **encodeAnsi1**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:52
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:71
 
 ___
 
@@ -77,7 +70,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:46
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:60
+
+___
+
+### encodeAsn1
+
+▪ `Static` `Private` **encodeAsn1**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:69
+
+___
+
+### encodeBitString
+
+▪ `Static` `Private` **encodeBitString**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:67
 
 ___
 
@@ -87,7 +100,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:45
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:59
 
 ___
 
@@ -97,7 +110,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:44
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:58
+
+___
+
+### encodeIA5String
+
+▪ `Static` `Private` **encodeIA5String**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:65
+
+___
+
+### encodeInteger
+
+▪ `Static` `Private` **encodeInteger**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:66
 
 ___
 
@@ -107,7 +140,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:51
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:68
 
 ___
 
@@ -117,7 +150,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:48
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:62
 
 ___
 
@@ -127,7 +160,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:47
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:61
+
+___
+
+### encodePrintableString
+
+▪ `Static` `Private` **encodePrintableString**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:64
 
 ___
 
@@ -137,17 +180,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:49
-
-___
-
-### encodeUnsignedInt
-
-▪ `Static` `Private` **encodeUnsignedInt**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:50
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:63
 
 ## Methods
 
@@ -167,7 +200,7 @@ packages/matter.js/dist/esm/codec/DerCodec.d.ts:50
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:53
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:70
 
 ___
 
@@ -187,4 +220,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:43
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:57

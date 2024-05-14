@@ -36,7 +36,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:516
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:519
 
 ___
 
@@ -50,7 +50,7 @@ TypeFromSchema.icacValue
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:515
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:518
 
 ___
 
@@ -64,4 +64,4 @@ TypeFromSchema.nocValue
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:514
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:517

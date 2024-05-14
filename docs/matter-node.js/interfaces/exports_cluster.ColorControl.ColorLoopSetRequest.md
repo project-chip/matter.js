@@ -48,7 +48,7 @@ TypeFromSchema.action
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:768
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:786
 
 ___
 
@@ -70,7 +70,7 @@ TypeFromSchema.direction
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:776
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:794
 
 ___
 
@@ -84,7 +84,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:785
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:803
 
 ___
 
@@ -98,7 +98,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:788
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:806
 
 ___
 
@@ -112,7 +112,7 @@ TypeFromSchema.startHue
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:784
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:802
 
 ___
 
@@ -133,7 +133,7 @@ TypeFromSchema.time
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:783
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:801
 
 ___
 
@@ -173,4 +173,4 @@ TypeFromSchema.updateFlags
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:754
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:772

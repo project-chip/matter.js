@@ -19,6 +19,7 @@
 
 ### Classes
 
+- [BasicObservable](../classes/util_export.BasicObservable.md)
 - [BasicSet](../classes/util_export.BasicSet.md)
 - [Cache](../classes/util_export.Cache.md)
 - [DataReader](../classes/util_export.DataReader.md)
@@ -27,6 +28,7 @@
 - [EventEmitter](../classes/util_export.EventEmitter-1.md)
 - [NamedHandler](../classes/util_export.NamedHandler.md)
 - [NoResponseTimeoutError](../classes/util_export.NoResponseTimeoutError.md)
+- [ObservableProxy](../classes/util_export.ObservableProxy.md)
 - [PromiseTimeoutError](../classes/util_export.PromiseTimeoutError.md)
 - [Queue](../classes/util_export.Queue.md)
 
@@ -38,6 +40,7 @@
 - [MutableSet](../interfaces/util_export.MutableSet.md)
 - [Observable](../interfaces/util_export.Observable.md)
 - [ObservableSet](../interfaces/util_export.ObservableSet.md)
+- [Observer](../interfaces/util_export.Observer.md)
 - [Stream](../interfaces/util_export.Stream.md)
 
 ### Type Aliases
@@ -56,7 +59,6 @@
 - [MaybePromiseLike](util_export.md#maybepromiselike)
 - [Merge](util_export.md#merge)
 - [MergeAll](util_export.md#mergeall)
-- [Observer](util_export.md#observer)
 - [ObserverErrorHandler](util_export.md#observererrorhandler)
 - [Pluck](util_export.md#pluck)
 - [Properties](util_export.md#properties)
@@ -83,26 +85,32 @@
 - [UINT32\_MAX](util_export.md#uint32_max)
 - [UINT64\_MAX](util_export.md#uint64_max)
 - [UINT8\_MAX](util_export.md#uint8_max)
+- [observant](util_export.md#observant)
 
 ### Functions
 
 - [Merge](util_export.md#merge-1)
 - [MergeAll](util_export.md#mergeall-1)
 - [Pluck](util_export.md#pluck-1)
+- [addValueWithOverflow](util_export.md#addvaluewithoverflow)
 - [anyPromise](util_export.md#anypromise)
 - [camelize](util_export.md#camelize)
 - [capitalize](util_export.md#capitalize)
 - [commandExecutor](util_export.md#commandexecutor)
 - [commandlineParser](util_export.md#commandlineparser)
 - [createPromise](util_export.md#createpromise)
+- [cropValueRange](util_export.md#cropvaluerange)
 - [decamelize](util_export.md#decamelize)
 - [describeList](util_export.md#describelist)
 - [extendPublicHandlerMethods](util_export.md#extendpublichandlermethods)
 - [getIntParameter](util_export.md#getintparameter)
 - [getParameter](util_export.md#getparameter)
 - [hasParameter](util_export.md#hasparameter)
+- [iPv4ToArray](util_export.md#ipv4toarray)
+- [iPv4ToByteArray](util_export.md#ipv4tobytearray)
 - [iPv4ToNumber](util_export.md#ipv4tonumber)
 - [iPv6ToArray](util_export.md#ipv6toarray)
+- [iPv6ToByteArray](util_export.md#ipv6tobytearray)
 - [isDeepEqual](util_export.md#isdeepequal)
 - [isIPv4](util_export.md#isipv4)
 - [isIPv6](util_export.md#isipv6)
@@ -115,7 +123,7 @@
 - [serialize](util_export.md#serialize)
 - [singleton](util_export.md#singleton)
 - [toBigInt](util_export.md#tobigint)
-- [toHexString](util_export.md#tohexstring)
+- [toHex](util_export.md#tohex)
 - [toNumber](util_export.md#tonumber)
 - [withTimeout](util_export.md#withtimeout)
 
@@ -432,51 +440,9 @@ packages/matter.js/dist/esm/util/Type.d.ts:19
 
 ___
 
-### Observer
-
-Ƭ **Observer**\<`T`, `R`\>: (...`payload`: `T`) => [`MaybePromise`](util_export.md#maybepromise)\<`R` \| `undefined`\>
-
-A callback function for observables.
-
-The observer return value effects how an [Observable](util_export.md#observable) emits:
-
-  - If an observer returns undefined the [Observable](util_export.md#observable) invokes the next observer immediately.
-
-  - If an observer returns a Promise, the [Observable](util_export.md#observable) awaits the return value then continues as
-    described here.  The emitter must then await the Promise returned by [Observable.emit](../interfaces/util_export.Observable.md#emit).
-
-  - Any other return value is returned by [Observable.emit](../interfaces/util_export.Observable.md#emit) and subsequent observers do not see emission.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `any`[] = `any`[] |
-| `R` | `void` |
-
-#### Type declaration
-
-▸ (`...payload`): [`MaybePromise`](util_export.md#maybepromise)\<`R` \| `undefined`\>
-
-##### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `...payload` | `T` | a list of arguments to be emitted |
-
-##### Returns
-
-[`MaybePromise`](util_export.md#maybepromise)\<`R` \| `undefined`\>
-
-#### Defined in
-
-packages/matter.js/dist/esm/util/Observable.d.ts:21
-
-___
-
 ### ObserverErrorHandler
 
-Ƭ **ObserverErrorHandler**: (`error`: `Error`, `observer`: [`Observer`](util_export.md#observer)\<`any`[], `any`\>) => `void`
+Ƭ **ObserverErrorHandler**: (`error`: `Error`, `observer`: [`Observer`](../interfaces/util_export.Observer.md)\<`any`[], `any`\>) => `void`
 
 #### Type declaration
 
@@ -487,7 +453,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `error` | `Error` |
-| `observer` | [`Observer`](util_export.md#observer)\<`any`[], `any`\> |
+| `observer` | [`Observer`](../interfaces/util_export.Observer.md)\<`any`[], `any`\> |
 
 ##### Returns
 
@@ -495,7 +461,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:69
+packages/matter.js/dist/esm/util/Observable.d.ts:82
 
 ___
 
@@ -565,7 +531,7 @@ packages/matter.js/dist/esm/util/Type.d.ts:50
 
 • **AsyncObservable**: \<T, R\>(`errorHandler?`: [`ObserverErrorHandler`](util_export.md#observererrorhandler)) => [`AsyncObservable`](../interfaces/util_export.AsyncObservable.md)\<`T`, `R`\>\<T_1, R_1\>(`errorHandler?`: [`ObserverErrorHandler`](util_export.md#observererrorhandler)) => [`AsyncObservable`](../interfaces/util_export.AsyncObservable.md)\<`T_1`, `R_1`\>
 
-An [Observable](util_export.md#observable) that explicitly supports asynchronous results
+Create an [AsyncObservable](util_export.md#asyncobservable) that explicitly supports asynchronous results
 
 #### Type declaration
 
@@ -609,9 +575,9 @@ An [Observable](util_export.md#observable) that explicitly supports asynchronous
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:66
+packages/matter.js/dist/esm/util/Observable.d.ts:79
 
-packages/matter.js/dist/esm/util/Observable.d.ts:80
+packages/matter.js/dist/esm/util/Observable.d.ts:110
 
 ___
 
@@ -753,7 +719,7 @@ ___
 
 • **Observable**: \<T, R\>(`errorHandler?`: [`ObserverErrorHandler`](util_export.md#observererrorhandler)) => [`Observable`](../interfaces/util_export.Observable.md)\<`T`, `R`\>\<T_1, R_1\>(`errorHandler?`: [`ObserverErrorHandler`](util_export.md#observererrorhandler)) => [`Observable`](../interfaces/util_export.Observable.md)\<`T_1`, `R_1`\>
 
-A general implementation of [Observable](util_export.md#observable).
+Create an [Observable](util_export.md#observable).
 
 #### Type declaration
 
@@ -797,9 +763,9 @@ A general implementation of [Observable](util_export.md#observable).
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:28
+packages/matter.js/dist/esm/util/Observable.d.ts:32
 
-packages/matter.js/dist/esm/util/Observable.d.ts:73
+packages/matter.js/dist/esm/util/Observable.d.ts:103
 
 ___
 
@@ -855,6 +821,19 @@ SPDX-License-Identifier: Apache-2.0
 #### Defined in
 
 packages/matter.js/dist/esm/util/Number.d.ts:6
+
+___
+
+### observant
+
+• `Const` **observant**: unique `symbol`
+
+An observer may designate itself as "not observant" for the purposes of [Observable.isObserved](../interfaces/util_export.Observable.md#isobserved) by returning
+false from this field.
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Observable.d.ts:75
 
 ## Functions
 
@@ -937,6 +916,31 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/util/Type.d.ts:23
+
+___
+
+### addValueWithOverflow
+
+▸ **addValueWithOverflow**(`value`, `add`, `min`, `max`): `number`
+
+Adds a value to another value and wraps around on the min and max values.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `number` |
+| `add` | `number` |
+| `min` | `number` |
+| `max` | `number` |
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Number.d.ts:36
 
 ___
 
@@ -1040,7 +1044,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/util/CommandLine.ts#L33)
+[packages/matter-node.js/src/util/CommandLine.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/util/CommandLine.ts#L33)
 
 ___
 
@@ -1096,6 +1100,30 @@ Obtain a promise with functions to resolve and reject.
 #### Defined in
 
 packages/matter.js/dist/esm/util/Promises.d.ts:12
+
+___
+
+### cropValueRange
+
+▸ **cropValueRange**(`value`, `min`, `max`): `number`
+
+Makes sure a value is within min and max. It sets the value to min or max in case it is below or above the range.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `number` |
+| `min` | `number` |
+| `max` | `number` |
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Number.d.ts:32
 
 ___
 
@@ -1188,7 +1216,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/util/CommandLine.ts#L25)
+[packages/matter-node.js/src/util/CommandLine.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/util/CommandLine.ts#L25)
 
 ___
 
@@ -1208,7 +1236,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/util/CommandLine.ts#L12)
+[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/util/CommandLine.ts#L12)
 
 ___
 
@@ -1228,7 +1256,47 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/util/CommandLine.ts#L19)
+[packages/matter-node.js/src/util/CommandLine.ts:19](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/util/CommandLine.ts#L19)
+
+___
+
+### iPv4ToArray
+
+▸ **iPv4ToArray**(`ip`): `Uint8Array`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ip` | `string` |
+
+#### Returns
+
+`Uint8Array`
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Ip.d.ts:4
+
+___
+
+### iPv4ToByteArray
+
+▸ **iPv4ToByteArray**(`ip`): `Uint8Array`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ip` | `string` |
+
+#### Returns
+
+`Uint8Array`
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Ip.d.ts:5
 
 ___
 
@@ -1248,7 +1316,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Ip.d.ts:8
+packages/matter.js/dist/esm/util/Ip.d.ts:3
 
 ___
 
@@ -1268,7 +1336,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Ip.d.ts:9
+packages/matter.js/dist/esm/util/Ip.d.ts:6
+
+___
+
+### iPv6ToByteArray
+
+▸ **iPv6ToByteArray**(`ip`): `Uint8Array`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ip` | `string` |
+
+#### Returns
+
+`Uint8Array`
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Ip.d.ts:7
 
 ___
 
@@ -1312,14 +1400,9 @@ ___
 
 `boolean`
 
-**`License`**
-
-Copyright 2022-2024 Matter.js Authors
-SPDX-License-Identifier: Apache-2.0
-
 #### Defined in
 
-packages/matter.js/dist/esm/util/Ip.d.ts:6
+packages/matter.js/dist/esm/util/Ip.d.ts:1
 
 ___
 
@@ -1339,7 +1422,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Ip.d.ts:7
+packages/matter.js/dist/esm/util/Ip.d.ts:2
 
 ___
 
@@ -1461,7 +1544,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Ip.d.ts:10
+packages/matter.js/dist/esm/util/Ip.d.ts:8
 
 ___
 
@@ -1481,7 +1564,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/util/Node.ts#L11)
+[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/util/Node.ts#L11)
 
 ___
 
@@ -1564,9 +1647,11 @@ packages/matter.js/dist/esm/util/Number.d.ts:22
 
 ___
 
-### toHexString
+### toHex
 
-▸ **toHexString**(`value`): `string`
+▸ **toHex**(`value`): `string`
+
+Convert a number or bigint to a hex string of a valid "even" hex length
 
 #### Parameters
 
@@ -1580,7 +1665,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Number.d.ts:25
+packages/matter.js/dist/esm/util/Number.d.ts:28
 
 ___
 

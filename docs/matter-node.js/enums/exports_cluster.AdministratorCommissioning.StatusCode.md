@@ -26,7 +26,7 @@ MatterSpecification.v11.Core § 11.18.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:121
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:135
 
 ___
 
@@ -42,7 +42,7 @@ MatterSpecification.v11.Core § 11.18.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:127
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:141
 
 ___
 
@@ -58,4 +58,4 @@ MatterSpecification.v11.Core § 11.18.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:133
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:147

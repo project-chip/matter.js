@@ -38,7 +38,7 @@ IdentifyBehavior.State.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L196)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
 
 ## Properties
 
@@ -67,7 +67,7 @@ IdentifyBehavior.State.identifyTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:255](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L255)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:255](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L255)
 
 ___
 
@@ -90,7 +90,7 @@ IdentifyBehavior.State.identifyType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:265](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L265)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:265](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L265)
 
 ___
 
@@ -100,4 +100,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts#L96)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts:95](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts#L95)

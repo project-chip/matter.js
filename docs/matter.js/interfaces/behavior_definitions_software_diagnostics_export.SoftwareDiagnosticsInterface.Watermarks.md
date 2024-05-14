@@ -42,4 +42,4 @@ MatterSpecification.v11.Core § 11.12.7.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts#L32)
+[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts:32](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts#L32)

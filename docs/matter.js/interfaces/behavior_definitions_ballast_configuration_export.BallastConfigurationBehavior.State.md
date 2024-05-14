@@ -57,7 +57,7 @@ StateType.ballastFactorAdjustment
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L131)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:131](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L131)
 
 ___
 
@@ -80,7 +80,7 @@ StateType.ballastStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:72](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L72)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:72](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L72)
 
 ___
 
@@ -103,7 +103,7 @@ StateType.intrinsicBallastFactor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:110](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L110)
 
 ___
 
@@ -126,7 +126,7 @@ StateType.lampAlarmMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:208](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L208)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:208](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L208)
 
 ___
 
@@ -153,7 +153,7 @@ StateType.lampBurnHours
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:194](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L194)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:194](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L194)
 
 ___
 
@@ -181,7 +181,7 @@ StateType.lampBurnHoursTripPoint
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:227](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L227)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:227](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L227)
 
 ___
 
@@ -201,7 +201,7 @@ StateType.lampManufacturer
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:162](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L162)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:162](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L162)
 
 ___
 
@@ -223,7 +223,7 @@ StateType.lampQuantity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L144)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:144](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L144)
 
 ___
 
@@ -246,7 +246,7 @@ StateType.lampRatedHours
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:176](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L176)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:176](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L176)
 
 ___
 
@@ -266,7 +266,7 @@ StateType.lampType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:151](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L151)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:151](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L151)
 
 ___
 
@@ -293,7 +293,7 @@ StateType.maxLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L100)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:100](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L100)
 
 ___
 
@@ -320,7 +320,7 @@ StateType.minLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L86)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:86](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L86)
 
 ___
 
@@ -341,7 +341,7 @@ StateType.physicalMaxLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:62](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L62)
 
 ___
 
@@ -362,4 +362,4 @@ StateType.physicalMinLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L54)

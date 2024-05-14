@@ -122,7 +122,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L95)
+[packages/matter.js/src/session/SecureSession.ts:95](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L95)
 
 ## Properties
 
@@ -132,7 +132,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L39)
+[packages/matter.js/src/session/SecureSession.ts:39](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L39)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L30)
+[packages/matter.js/src/session/SecureSession.ts:30](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L30)
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L32)
+[packages/matter.js/src/session/SecureSession.ts:32](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L32)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L37)
+[packages/matter.js/src/session/SecureSession.ts:37](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L37)
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L38)
+[packages/matter.js/src/session/SecureSession.ts:38](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L38)
 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L34)
+[packages/matter.js/src/session/SecureSession.ts:34](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L34)
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L33)
+[packages/matter.js/src/session/SecureSession.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L33)
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L35)
+[packages/matter.js/src/session/SecureSession.ts:35](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L35)
 
 ___
 
@@ -212,7 +212,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L36)
+[packages/matter.js/src/session/SecureSession.ts:36](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L36)
 
 ___
 
@@ -222,7 +222,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L31)
+[packages/matter.js/src/session/SecureSession.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L31)
 
 ___
 
@@ -240,7 +240,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L40)
+[packages/matter.js/src/session/SecureSession.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L40)
 
 ___
 
@@ -250,7 +250,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L29)
+[packages/matter.js/src/session/SecureSession.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L29)
 
 ___
 
@@ -264,7 +264,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L44)
+[packages/matter.js/src/session/Session.ts:44](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L44)
 
 ___
 
@@ -278,7 +278,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L45)
+[packages/matter.js/src/session/Session.ts:45](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L45)
 
 ___
 
@@ -292,7 +292,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L42)
+[packages/matter.js/src/session/Session.ts:42](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L42)
 
 ___
 
@@ -314,7 +314,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L46)
+[packages/matter.js/src/session/Session.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L46)
 
 ___
 
@@ -328,7 +328,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L43)
+[packages/matter.js/src/session/Session.ts:43](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L43)
 
 ___
 
@@ -342,7 +342,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L47)
+[packages/matter.js/src/session/Session.ts:47](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L47)
 
 ___
 
@@ -356,7 +356,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L48)
+[packages/matter.js/src/session/Session.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L48)
 
 ___
 
@@ -370,7 +370,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L41)
+[packages/matter.js/src/session/Session.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L41)
 
 ## Accessors
 
@@ -388,7 +388,7 @@ Session.associatedFabric
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:254](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L254)
+[packages/matter.js/src/session/SecureSession.ts:254](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L254)
 
 ___
 
@@ -402,7 +402,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:155](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L155)
+[packages/matter.js/src/session/SecureSession.ts:155](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L155)
 
 ___
 
@@ -420,7 +420,7 @@ Session.closingAfterExchangeFinished
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:159](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L159)
+[packages/matter.js/src/session/SecureSession.ts:159](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L159)
 
 ___
 
@@ -438,7 +438,7 @@ Session.context
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:234](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L234)
+[packages/matter.js/src/session/SecureSession.ts:234](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L234)
 
 ___
 
@@ -452,7 +452,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:215](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L215)
+[packages/matter.js/src/session/SecureSession.ts:215](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L215)
 
 ___
 
@@ -470,7 +470,7 @@ Session.id
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:226](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L226)
+[packages/matter.js/src/session/SecureSession.ts:226](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L226)
 
 ___
 
@@ -488,7 +488,7 @@ Session.isPase
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:171](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L171)
+[packages/matter.js/src/session/SecureSession.ts:171](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L171)
 
 ___
 
@@ -506,7 +506,7 @@ Session.isSecure
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L167)
+[packages/matter.js/src/session/SecureSession.ts:167](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L167)
 
 ___
 
@@ -524,7 +524,7 @@ Session.name
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:230](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L230)
+[packages/matter.js/src/session/SecureSession.ts:230](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L230)
 
 ___
 
@@ -542,7 +542,7 @@ Session.nodeId
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:242](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L242)
+[packages/matter.js/src/session/SecureSession.ts:242](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L242)
 
 ___
 
@@ -556,7 +556,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:250](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L250)
+[packages/matter.js/src/session/SecureSession.ts:250](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L250)
 
 ___
 
@@ -574,7 +574,7 @@ Session.peerNodeId
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:246](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L246)
+[packages/matter.js/src/session/SecureSession.ts:246](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L246)
 
 ___
 
@@ -592,7 +592,7 @@ Session.peerSessionId
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:238](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L238)
+[packages/matter.js/src/session/SecureSession.ts:238](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L238)
 
 ___
 
@@ -606,7 +606,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:163](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L163)
+[packages/matter.js/src/session/SecureSession.ts:163](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L163)
 
 ## Methods
 
@@ -626,7 +626,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:219](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L219)
+[packages/matter.js/src/session/SecureSession.ts:219](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L219)
 
 ___
 
@@ -646,7 +646,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:261](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L261)
+[packages/matter.js/src/session/SecureSession.ts:261](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L261)
 
 ___
 
@@ -666,7 +666,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:276](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L276)
+[packages/matter.js/src/session/SecureSession.ts:276](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L276)
 
 ___
 
@@ -686,7 +686,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:175](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L175)
+[packages/matter.js/src/session/SecureSession.ts:175](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L175)
 
 ___
 
@@ -711,7 +711,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:182](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L182)
+[packages/matter.js/src/session/SecureSession.ts:182](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L182)
 
 ___
 
@@ -738,7 +738,7 @@ Destroys a session. Outstanding subscription data will be discarded.
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:290](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L290)
+[packages/matter.js/src/session/SecureSession.ts:290](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L290)
 
 ___
 
@@ -762,7 +762,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:199](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L199)
+[packages/matter.js/src/session/SecureSession.ts:199](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L199)
 
 ___
 
@@ -789,7 +789,7 @@ Ends a session. Outstanding subscription data will be flushed before the session
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:284](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L284)
+[packages/matter.js/src/session/SecureSession.ts:284](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L284)
 
 ___
 
@@ -811,7 +811,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:305](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L305)
+[packages/matter.js/src/session/SecureSession.ts:305](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L305)
 
 ___
 
@@ -825,7 +825,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:211](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L211)
+[packages/matter.js/src/session/SecureSession.ts:211](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L211)
 
 ___
 
@@ -843,7 +843,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L91)
+[packages/matter.js/src/session/Session.ts:91](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L91)
 
 ___
 
@@ -861,7 +861,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:99](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L99)
+[packages/matter.js/src/session/Session.ts:99](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L99)
 
 ___
 
@@ -879,7 +879,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L87)
+[packages/matter.js/src/session/Session.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L87)
 
 ___
 
@@ -903,7 +903,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L79)
+[packages/matter.js/src/session/Session.ts:79](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L79)
 
 ___
 
@@ -923,7 +923,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:267](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L267)
+[packages/matter.js/src/session/SecureSession.ts:267](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L267)
 
 ___
 
@@ -948,7 +948,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L95)
+[packages/matter.js/src/session/Session.ts:95](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/Session.ts#L95)
 
 ___
 
@@ -986,4 +986,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L42)
+[packages/matter.js/src/session/SecureSession.ts:42](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/SecureSession.ts#L42)

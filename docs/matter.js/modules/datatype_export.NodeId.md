@@ -18,6 +18,7 @@
 - [getFromPakeKeyIdentifier](datatype_export.NodeId.md#getfrompakekeyidentifier)
 - [getFromTemporaryLocalNodeId](datatype_export.NodeId.md#getfromtemporarylocalnodeid)
 - [getRandomOperationalNodeId](datatype_export.NodeId.md#getrandomoperationalnodeid)
+- [isOperationalNodeId](datatype_export.NodeId.md#isoperationalnodeid)
 - [toHexString](datatype_export.NodeId.md#tohexstring)
 
 ## Variables
@@ -31,7 +32,7 @@ usage. It exists to mark or detect the presence of uninitialized, missing, or in
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/datatype/NodeId.ts#L37)
+[packages/matter.js/src/datatype/NodeId.ts:37](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L37)
 
 ## Functions
 
@@ -51,7 +52,7 @@ usage. It exists to mark or detect the presence of uninitialized, missing, or in
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/datatype/NodeId.ts#L90)
+[packages/matter.js/src/datatype/NodeId.ts:97](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L97)
 
 ___
 
@@ -74,7 +75,7 @@ single CASE session as specified in Section 6.6.2.1.2, “Subjects identified by
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:83](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/datatype/NodeId.ts#L83)
+[packages/matter.js/src/datatype/NodeId.ts:90](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L90)
 
 ___
 
@@ -96,7 +97,7 @@ A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the l
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/datatype/NodeId.ts#L60)
+[packages/matter.js/src/datatype/NodeId.ts:67](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L67)
 
 ___
 
@@ -120,7 +121,7 @@ administrative access to any commissioner communicating via a PASE session estab
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:99](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/datatype/NodeId.ts#L99)
+[packages/matter.js/src/datatype/NodeId.ts:106](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L106)
 
 ___
 
@@ -144,7 +145,7 @@ housekeeping internal usage purposes in contexts where an Operational Node ID is
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:72](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/datatype/NodeId.ts#L72)
+[packages/matter.js/src/datatype/NodeId.ts:79](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L79)
 
 ___
 
@@ -162,7 +163,29 @@ as the destination address.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/datatype/NodeId.ts#L50)
+[packages/matter.js/src/datatype/NodeId.ts:50](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L50)
+
+___
+
+### isOperationalNodeId
+
+▸ **isOperationalNodeId**(`nodeId`): `boolean`
+
+Returns whether the given Node ID is an Operational Node ID.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](datatype_export.md#nodeid) |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/matter.js/src/datatype/NodeId.ts:62](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L62)
 
 ___
 
@@ -182,4 +205,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/datatype/NodeId.ts#L39)
+[packages/matter.js/src/datatype/NodeId.ts:39](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L39)

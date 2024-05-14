@@ -57,7 +57,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/log/Format.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Format.ts#L56)
+[packages/matter.js/src/log/Format.ts:57](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/log/Format.ts#L57)
 
 ## Variables
 
@@ -78,7 +78,7 @@ Registry of diagnostic sources.
 
 #### Defined in
 
-[packages/matter.js/src/log/DiagnosticSource.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/DiagnosticSource.ts#L14)
+[packages/matter.js/src/log/DiagnosticSource.ts:14](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/log/DiagnosticSource.ts#L14)
 
 ## Functions
 
@@ -101,7 +101,7 @@ Create a diagnostic giving a value a specific presentation.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L23)
+[packages/matter.js/src/log/Diagnostic.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/log/Diagnostic.ts#L23)
 
 ___
 
@@ -139,7 +139,7 @@ Get a formatter for the specified format.
 
 #### Defined in
 
-[packages/matter.js/src/log/Format.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Format.ts#L16)
+[packages/matter.js/src/log/Format.ts:17](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/log/Format.ts#L17)
 
 ___
 
@@ -162,7 +162,7 @@ Log messages to the console.  This is the default logging mechanism.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L16)
+[packages/matter.js/src/log/Logger.ts:16](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/log/Logger.ts#L16)
 
 ___
 
@@ -187,4 +187,4 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/log/Level.ts:7](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Level.ts#L7)
+[packages/matter.js/src/log/Level.ts:7](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/log/Level.ts#L7)

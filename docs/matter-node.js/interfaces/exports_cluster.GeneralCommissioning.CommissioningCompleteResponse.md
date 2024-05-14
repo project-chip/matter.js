@@ -4,11 +4,6 @@
 
 [exports/cluster](../modules/exports_cluster.md).[GeneralCommissioning](../modules/exports_cluster.GeneralCommissioning.md).CommissioningCompleteResponse
 
-This field shall contain the result of the operation, based on the behavior specified in the functional
-description of the CommissioningComplete command.
-
-See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.9.6.7
@@ -32,13 +27,19 @@ MatterSpecification.v11.Core § 11.9.6.7
 
 • **debugText**: `string`
 
+See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.9.6.7.2
+
 #### Inherited from
 
 TypeFromSchema.debugText
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:183
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:190
 
 ___
 
@@ -46,10 +47,17 @@ ___
 
 • **errorCode**: [`CommissioningError`](../enums/exports_cluster.GeneralCommissioning.CommissioningError.md)
 
+This field shall contain the result of the operation, based on the behavior specified in the functional
+description of the CommissioningComplete command.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.9.6.7.1
+
 #### Inherited from
 
 TypeFromSchema.errorCode
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:182
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:184
