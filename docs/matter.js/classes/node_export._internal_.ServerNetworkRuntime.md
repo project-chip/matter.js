@@ -41,6 +41,8 @@ Handles network functionality for NodeServer.
 - [bleTransport](node_export._internal_.ServerNetworkRuntime.md#bletransport)
 - [interactionServer](node_export._internal_.ServerNetworkRuntime.md#interactionserver)
 - [mdnsBroadcaster](node_export._internal_.ServerNetworkRuntime.md#mdnsbroadcaster)
+- [networkInterfaceConfiguration](node_export._internal_.ServerNetworkRuntime.md#networkinterfaceconfiguration)
+- [networkInterfaces](node_export._internal_.ServerNetworkRuntime.md#networkinterfaces)
 - [operationalPort](node_export._internal_.ServerNetworkRuntime.md#operationalport)
 - [owner](node_export._internal_.ServerNetworkRuntime.md#owner)
 - [rootServer](node_export._internal_.ServerNetworkRuntime.md#rootserver)
@@ -86,7 +88,7 @@ Handles network functionality for NodeServer.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L23)
+[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L23)
 
 ## Properties
 
@@ -96,7 +98,7 @@ Handles network functionality for NodeServer.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L37)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L46)
 
 ___
 
@@ -106,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L38)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:47](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L47)
 
 ___
 
@@ -120,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L20)
+[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:20](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L20)
 
 ___
 
@@ -134,7 +136,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L18)
+[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:18](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L18)
 
 ___
 
@@ -152,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L39)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L48)
 
 ___
 
@@ -162,7 +164,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L33)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:42](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L42)
 
 ___
 
@@ -172,7 +174,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L34)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:43](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L43)
 
 ___
 
@@ -182,7 +184,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L35)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:44](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L44)
 
 ___
 
@@ -196,7 +198,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L17)
+[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:17](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L17)
 
 ___
 
@@ -206,7 +208,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L36)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:45](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L45)
 
 ___
 
@@ -228,7 +230,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L21)
+[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L21)
 
 ___
 
@@ -250,7 +252,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L19)
+[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:19](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L19)
 
 ___
 
@@ -260,7 +262,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L32)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L41)
 
 ## Accessors
 
@@ -274,7 +276,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:217](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L217)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:252](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L252)
 
 ___
 
@@ -290,7 +292,7 @@ A BLE broadcaster.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L106)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:141](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L141)
 
 ___
 
@@ -306,7 +308,7 @@ A BLE transport.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L117)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:152](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L152)
 
 ___
 
@@ -322,7 +324,7 @@ Expose the internal InteractionServer for testing.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:210](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L210)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:245](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L245)
 
 ___
 
@@ -338,7 +340,35 @@ Access the MDNS broadcaster for the node.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L58)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:67](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L67)
+
+___
+
+### networkInterfaceConfiguration
+
+• `get` **networkInterfaceConfiguration**(): [`NetworkInterface`](../modules/net_export.md#networkinterface)[]
+
+#### Returns
+
+[`NetworkInterface`](../modules/net_export.md#networkinterface)[]
+
+#### Defined in
+
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:76](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L76)
+
+___
+
+### networkInterfaces
+
+• `get` **networkInterfaces**(): [`NetworkInterfaceDetailed`](../modules/net_export.md#networkinterfacedetailed)[]
+
+#### Returns
+
+[`NetworkInterfaceDetailed`](../modules/net_export.md#networkinterfacedetailed)[]
+
+#### Defined in
+
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:88](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L88)
 
 ___
 
@@ -356,7 +386,7 @@ NetworkRuntime.operationalPort
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:221](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L221)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:256](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L256)
 
 ___
 
@@ -374,7 +404,7 @@ NetworkRuntime.owner
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L41)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:50](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L50)
 
 ___
 
@@ -390,7 +420,7 @@ Access the [EndpointServer](endpoint_export.EndpointServer.md) for the root endp
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L48)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:57](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L57)
 
 ## Methods
 
@@ -410,7 +440,7 @@ Access the [EndpointServer](endpoint_export.EndpointServer.md) for the root endp
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:197](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L197)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:232](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L232)
 
 ___
 
@@ -430,7 +460,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:202](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L202)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:237](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L237)
 
 ___
 
@@ -448,7 +478,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L73)
+[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:73](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L73)
 
 ___
 
@@ -470,7 +500,7 @@ Add broadcasters to the [MatterDevice](behavior_cluster_export._internal_.Matter
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:151](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L151)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:186](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L186)
 
 ___
 
@@ -492,7 +522,7 @@ Add transports to the [MatterDevice](behavior_cluster_export._internal_.MatterDe
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:127](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L127)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:162](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L162)
 
 ___
 
@@ -506,7 +536,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L75)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:110](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L110)
 
 ___
 
@@ -524,7 +554,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:311](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L311)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:346](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L346)
 
 ___
 
@@ -542,7 +572,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L68)
+[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:68](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L68)
 
 ___
 
@@ -558,7 +588,7 @@ When the first Faric gets added we need to enable MDNS broadcasting.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:173](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L173)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:208](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L208)
 
 ___
 
@@ -572,7 +602,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:225](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L225)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:260](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L260)
 
 ___
 
@@ -590,7 +620,7 @@ On decommission we're destroyed so don't need to handle that case.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:185](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L185)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:220](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L220)
 
 ___
 
@@ -598,7 +628,7 @@ ___
 
 ▸ **getPrimaryNetInterface**(): `Promise`\<[`UdpInterface`](net_export.UdpInterface.md)\>
 
-The IPv6 [UdpInterface](net_export.UdpInterface.md).  We create this interface independently of the server so the OS can select a port
+The IPv6 [UdpInterface](net_export.UdpInterface.md). We create this interface independently of the server so the OS can select a port
 before we are fully online.
 
 #### Returns
@@ -607,7 +637,7 @@ before we are fully online.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L88)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:123](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L123)
 
 ___
 
@@ -621,7 +651,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L67)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:102](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L102)
 
 ___
 
@@ -639,7 +669,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L41)
+[packages/matter.js/src/behavior/system/network/NetworkRuntime.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/NetworkRuntime.ts#L41)
 
 ___
 
@@ -657,7 +687,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:231](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L231)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:266](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L266)
 
 ___
 
@@ -675,4 +705,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:280](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L280)
+[packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts:315](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/network/ServerNetworkRuntime.ts#L315)

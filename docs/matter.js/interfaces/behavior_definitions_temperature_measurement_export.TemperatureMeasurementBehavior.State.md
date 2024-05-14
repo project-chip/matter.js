@@ -40,7 +40,7 @@ StateType.maxMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L56)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:56](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L56)
 
 ___
 
@@ -65,7 +65,7 @@ StateType.measuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:36](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L36)
 
 ___
 
@@ -88,7 +88,7 @@ StateType.minMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L46)
 
 ___
 
@@ -108,4 +108,4 @@ StateType.tolerance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L63)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:63](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L63)

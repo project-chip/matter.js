@@ -37,7 +37,7 @@ StateType.currentPosition
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:360](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L360)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:360](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L360)
 
 ___
 
@@ -59,4 +59,4 @@ StateType.numberOfPositions
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:351](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L351)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:351](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L351)

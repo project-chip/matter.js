@@ -13,18 +13,21 @@
 ### Methods
 
 - [decode](codec_export.DerCodec.md#decode)
-- [decodeAnsi1](codec_export.DerCodec.md#decodeansi1)
+- [decodeAsn1](codec_export.DerCodec.md#decodeasn1)
 - [decodeRec](codec_export.DerCodec.md#decoderec)
 - [encode](codec_export.DerCodec.md#encode)
-- [encodeAnsi1](codec_export.DerCodec.md#encodeansi1)
 - [encodeArray](codec_export.DerCodec.md#encodearray)
+- [encodeAsn1](codec_export.DerCodec.md#encodeasn1)
+- [encodeBitString](codec_export.DerCodec.md#encodebitstring)
 - [encodeBoolean](codec_export.DerCodec.md#encodeboolean)
 - [encodeDate](codec_export.DerCodec.md#encodedate)
+- [encodeIA5String](codec_export.DerCodec.md#encodeia5string)
+- [encodeInteger](codec_export.DerCodec.md#encodeinteger)
 - [encodeLengthBytes](codec_export.DerCodec.md#encodelengthbytes)
 - [encodeObject](codec_export.DerCodec.md#encodeobject)
 - [encodeOctetString](codec_export.DerCodec.md#encodeoctetstring)
+- [encodePrintableString](codec_export.DerCodec.md#encodeprintablestring)
 - [encodeString](codec_export.DerCodec.md#encodestring)
-- [encodeUnsignedInt](codec_export.DerCodec.md#encodeunsignedint)
 
 ## Constructors
 
@@ -54,13 +57,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:178](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L178)
+[packages/matter.js/src/codec/DerCodec.ts:259](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L259)
 
 ___
 
-### decodeAnsi1
+### decodeAsn1
 
-▸ **decodeAnsi1**(`reader`): `Object`
+▸ **decodeAsn1**(`reader`): `Object`
 
 #### Parameters
 
@@ -79,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:195](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L195)
+[packages/matter.js/src/codec/DerCodec.ts:276](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L276)
 
 ___
 
@@ -99,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:182](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L182)
+[packages/matter.js/src/codec/DerCodec.ts:263](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L263)
 
 ___
 
@@ -119,28 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L64)
-
-___
-
-### encodeAnsi1
-
-▸ **encodeAnsi1**(`tag`, `data`): `Uint8Array`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `tag` | `number` |
-| `data` | `Uint8Array` |
-
-#### Returns
-
-`Uint8Array`
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:174](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L174)
+[packages/matter.js/src/codec/DerCodec.ts:79](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L79)
 
 ___
 
@@ -160,7 +142,48 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:119](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L119)
+[packages/matter.js/src/codec/DerCodec.ts:172](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L172)
+
+___
+
+### encodeAsn1
+
+▸ **encodeAsn1**(`tag`, `data`): `Uint8Array`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `tag` | `number` |
+| `data` | `Uint8Array` |
+
+#### Returns
+
+`Uint8Array`
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:255](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L255)
+
+___
+
+### encodeBitString
+
+▸ **encodeBitString**(`value`): `Uint8Array`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `number` |
+
+#### Returns
+
+`Uint8Array`
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:230](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L230)
 
 ___
 
@@ -180,7 +203,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:115](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L115)
+[packages/matter.js/src/codec/DerCodec.ts:168](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L168)
 
 ___
 
@@ -200,7 +223,47 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:103](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L103)
+[packages/matter.js/src/codec/DerCodec.ts:144](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L144)
+
+___
+
+### encodeIA5String
+
+▸ **encodeIA5String**(`value`): `Uint8Array`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `string` |
+
+#### Returns
+
+`Uint8Array`
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:202](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L202)
+
+___
+
+### encodeInteger
+
+▸ **encodeInteger**(`value`): `Uint8Array`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `number` \| `bigint` \| `Uint8Array` |
+
+#### Returns
+
+`Uint8Array`
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:210](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L210)
 
 ___
 
@@ -220,7 +283,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:156](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L156)
+[packages/matter.js/src/codec/DerCodec.ts:237](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L237)
 
 ___
 
@@ -240,7 +303,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:130](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L130)
+[packages/matter.js/src/codec/DerCodec.ts:183](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L183)
 
 ___
 
@@ -260,7 +323,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:126](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L126)
+[packages/matter.js/src/codec/DerCodec.ts:179](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L179)
+
+___
+
+### encodePrintableString
+
+▸ **encodePrintableString**(`value`): `Uint8Array`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `string` |
+
+#### Returns
+
+`Uint8Array`
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:195](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L195)
 
 ___
 
@@ -280,24 +363,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:138](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L138)
-
-___
-
-### encodeUnsignedInt
-
-▸ **encodeUnsignedInt**(`value`): `Uint8Array`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `number` |
-
-#### Returns
-
-`Uint8Array`
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:142](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L142)
+[packages/matter.js/src/codec/DerCodec.ts:191](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/DerCodec.ts#L191)

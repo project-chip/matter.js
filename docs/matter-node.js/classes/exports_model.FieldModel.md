@@ -51,7 +51,6 @@ A field element defines a field in a list, struct, enum or bitmap.
 - [conformance](exports_model.FieldModel.md#conformance)
 - [constraint](exports_model.FieldModel.md#constraint)
 - [definingModel](exports_model.FieldModel.md#definingmodel)
-- [deprecated](exports_model.FieldModel.md#deprecated)
 - [directMetatype](exports_model.FieldModel.md#directmetatype)
 - [disallowed](exports_model.FieldModel.md#disallowed)
 - [discriminator](exports_model.FieldModel.md#discriminator)
@@ -66,6 +65,7 @@ A field element defines a field in a list, struct, enum or bitmap.
 - [effectiveXref](exports_model.FieldModel.md#effectivexref)
 - [elements](exports_model.FieldModel.md#elements)
 - [globalBase](exports_model.FieldModel.md#globalbase)
+- [isDeprecated](exports_model.FieldModel.md#isdeprecated)
 - [key](exports_model.FieldModel.md#key)
 - [listEntry](exports_model.FieldModel.md#listentry)
 - [mandatory](exports_model.FieldModel.md#mandatory)
@@ -694,26 +694,6 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:67
 
 ___
 
-### deprecated
-
-• `get` **deprecated**(): `boolean`
-
-Is this model deprecated?
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-PropertyModel.deprecated
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
-
-___
-
 ### directMetatype
 
 • `get` **directMetatype**(): `undefined` \| [`Metatype`](../enums/exports_model.Metatype-1.md)
@@ -986,6 +966,26 @@ PropertyModel.globalBase
 #### Defined in
 
 packages/matter.js/dist/esm/model/models/Model.d.ts:98
+
+___
+
+### isDeprecated
+
+• `get` **isDeprecated**(): `boolean`
+
+Is this model deprecated?
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+PropertyModel.isDeprecated
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
 
 ___
 

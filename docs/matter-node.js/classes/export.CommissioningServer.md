@@ -21,7 +21,6 @@ host
 
 ### Properties
 
-- [certification](export.CommissioningServer.md#certification)
 - [commandHandler](export.CommissioningServer.md#commandhandler)
 - [delayedAnnouncement](export.CommissioningServer.md#delayedannouncement)
 - [deviceInstance](export.CommissioningServer.md#deviceinstance)
@@ -100,19 +99,9 @@ Creates a new CommissioningServer node and add all needed Root clusters
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:164
+packages/matter.js/dist/esm/CommissioningServer.d.ts:159
 
 ## Properties
-
-### certification
-
-• `Private` `Readonly` **certification**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/CommissioningServer.d.ts:145
-
-___
 
 ### commandHandler
 
@@ -120,7 +109,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:158
+packages/matter.js/dist/esm/CommissioningServer.d.ts:153
 
 ___
 
@@ -130,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:157
+packages/matter.js/dist/esm/CommissioningServer.d.ts:152
 
 ___
 
@@ -140,7 +129,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:151
+packages/matter.js/dist/esm/CommissioningServer.d.ts:146
 
 ___
 
@@ -150,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:142
+packages/matter.js/dist/esm/CommissioningServer.d.ts:138
 
 ___
 
@@ -160,7 +149,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:153
+packages/matter.js/dist/esm/CommissioningServer.d.ts:148
 
 ___
 
@@ -170,7 +159,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:147
+packages/matter.js/dist/esm/CommissioningServer.d.ts:142
 
 ___
 
@@ -180,7 +169,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:152
+packages/matter.js/dist/esm/CommissioningServer.d.ts:147
 
 ___
 
@@ -190,7 +179,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:220
+packages/matter.js/dist/esm/CommissioningServer.d.ts:215
 
 ___
 
@@ -200,7 +189,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:143
+packages/matter.js/dist/esm/CommissioningServer.d.ts:139
 
 ___
 
@@ -210,7 +199,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:219
+packages/matter.js/dist/esm/CommissioningServer.d.ts:214
 
 ___
 
@@ -220,7 +209,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:154
+packages/matter.js/dist/esm/CommissioningServer.d.ts:149
 
 ___
 
@@ -230,7 +219,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:139
+packages/matter.js/dist/esm/CommissioningServer.d.ts:135
 
 ___
 
@@ -240,7 +229,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:149
+packages/matter.js/dist/esm/CommissioningServer.d.ts:144
 
 ___
 
@@ -250,7 +239,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:150
+packages/matter.js/dist/esm/CommissioningServer.d.ts:145
 
 ___
 
@@ -260,7 +249,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:148
+packages/matter.js/dist/esm/CommissioningServer.d.ts:143
 
 ___
 
@@ -270,7 +259,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:156
+packages/matter.js/dist/esm/CommissioningServer.d.ts:151
 
 ___
 
@@ -280,7 +269,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:138
+packages/matter.js/dist/esm/CommissioningServer.d.ts:134
 
 ___
 
@@ -290,7 +279,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:141
+packages/matter.js/dist/esm/CommissioningServer.d.ts:137
 
 ___
 
@@ -300,7 +289,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:140
+packages/matter.js/dist/esm/CommissioningServer.d.ts:136
 
 ___
 
@@ -310,7 +299,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:144
+packages/matter.js/dist/esm/CommissioningServer.d.ts:140
 
 ___
 
@@ -320,7 +309,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:155
+packages/matter.js/dist/esm/CommissioningServer.d.ts:150
 
 ___
 
@@ -330,7 +319,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:146
+packages/matter.js/dist/esm/CommissioningServer.d.ts:141
 
 ## Methods
 
@@ -351,7 +340,7 @@ Add a new command handler for the given command
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `command` | `K` | Command to add the handler for |
-| `handler` | [`CommissioningServerCommands`](../modules/export._internal_.md#commissioningservercommands)[`K`] | Handler function to add |
+| `handler` | [`CommissioningServerCommands`](../modules/export.md#commissioningservercommands)[`K`] | Handler function to add |
 
 #### Returns
 
@@ -359,7 +348,7 @@ Add a new command handler for the given command
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:269
+packages/matter.js/dist/esm/CommissioningServer.d.ts:264
 
 ___
 
@@ -381,7 +370,7 @@ Add a new device to the node
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:251
+packages/matter.js/dist/esm/CommissioningServer.d.ts:246
 
 ___
 
@@ -403,7 +392,7 @@ Add a child endpoint to the root endpoint. This is mainly used internally and no
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:193
+packages/matter.js/dist/esm/CommissioningServer.d.ts:188
 
 ___
 
@@ -434,7 +423,7 @@ Add a cluster client to the root endpoint. This is mainly used internally and no
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:176
+packages/matter.js/dist/esm/CommissioningServer.d.ts:171
 
 ___
 
@@ -465,7 +454,7 @@ added in the constructor
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:208
+packages/matter.js/dist/esm/CommissioningServer.d.ts:203
 
 ___
 
@@ -487,7 +476,7 @@ Advertise the node via all available interfaces (Ethernet/MDNS, BLE, ...) and st
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:215
+packages/matter.js/dist/esm/CommissioningServer.d.ts:210
 
 ___
 
@@ -501,7 +490,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:218
+packages/matter.js/dist/esm/CommissioningServer.d.ts:213
 
 ___
 
@@ -521,7 +510,7 @@ Close network connections of the device and stop responding to requests
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:261
+packages/matter.js/dist/esm/CommissioningServer.d.ts:256
 
 ___
 
@@ -535,7 +524,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:262
+packages/matter.js/dist/esm/CommissioningServer.d.ts:257
 
 ___
 
@@ -557,7 +546,7 @@ Get some basic details of all currently active sessions.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:299
+packages/matter.js/dist/esm/CommissioningServer.d.ts:294
 
 ___
 
@@ -579,7 +568,7 @@ Get a child endpoint from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:200
+packages/matter.js/dist/esm/CommissioningServer.d.ts:195
 
 ___
 
@@ -601,7 +590,7 @@ Get some basic details of all Fabrics the server is commissioned to.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:293
+packages/matter.js/dist/esm/CommissioningServer.d.ts:288
 
 ___
 
@@ -621,7 +610,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:217
+packages/matter.js/dist/esm/CommissioningServer.d.ts:212
 
 ___
 
@@ -643,7 +632,7 @@ Return the pairing information for the device
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:228
+packages/matter.js/dist/esm/CommissioningServer.d.ts:223
 
 ___
 
@@ -663,7 +652,7 @@ Return the port the device is listening on
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:255
+packages/matter.js/dist/esm/CommissioningServer.d.ts:250
 
 ___
 
@@ -695,7 +684,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:182
+packages/matter.js/dist/esm/CommissioningServer.d.ts:177
 
 ___
 
@@ -727,7 +716,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:170
+packages/matter.js/dist/esm/CommissioningServer.d.ts:165
 
 ___
 
@@ -743,7 +732,7 @@ Get the root endpoint of the node.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:186
+packages/matter.js/dist/esm/CommissioningServer.d.ts:181
 
 ___
 
@@ -769,7 +758,7 @@ used internally by MatterServer to initialize the state of the device.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:285
+packages/matter.js/dist/esm/CommissioningServer.d.ts:280
 
 ___
 
@@ -785,7 +774,7 @@ Return info if the device is paired with at least one controller
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:224
+packages/matter.js/dist/esm/CommissioningServer.d.ts:219
 
 ___
 
@@ -806,7 +795,7 @@ Remove a command handler for the given command
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `command` | `K` | Command to remove the handler for |
-| `handler` | [`CommissioningServerCommands`](../modules/export._internal_.md#commissioningservercommands)[`K`] | Handler function to remove |
+| `handler` | [`CommissioningServerCommands`](../modules/export.md#commissioningservercommands)[`K`] | Handler function to remove |
 
 #### Returns
 
@@ -814,7 +803,7 @@ Remove a command handler for the given command
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:276
+packages/matter.js/dist/esm/CommissioningServer.d.ts:271
 
 ___
 
@@ -840,7 +829,7 @@ Set the MDNS Broadcaster instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:240
+packages/matter.js/dist/esm/CommissioningServer.d.ts:235
 
 ___
 
@@ -866,7 +855,7 @@ Set the MDNS Scanner instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:234
+packages/matter.js/dist/esm/CommissioningServer.d.ts:229
 
 ___
 
@@ -888,7 +877,7 @@ Set the port the device is listening on. Can only be called before the device is
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:257
+packages/matter.js/dist/esm/CommissioningServer.d.ts:252
 
 ___
 
@@ -911,7 +900,7 @@ the reachability flag was set in the BasicInformationCluster or in the BasicInfo
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:283
+packages/matter.js/dist/esm/CommissioningServer.d.ts:278
 
 ___
 
@@ -933,7 +922,7 @@ Set the StorageManager instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:245
+packages/matter.js/dist/esm/CommissioningServer.d.ts:240
 
 ___
 
@@ -953,7 +942,7 @@ Starts the Matter device and advertises it.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:287
+packages/matter.js/dist/esm/CommissioningServer.d.ts:282
 
 ___
 
@@ -967,4 +956,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:216
+packages/matter.js/dist/esm/CommissioningServer.d.ts:211

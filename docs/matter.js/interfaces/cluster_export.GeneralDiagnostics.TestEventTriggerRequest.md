@@ -54,7 +54,7 @@ TypeFromSchema.enableKey
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:332](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L332)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:332](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L332)
 
 ___
 
@@ -93,4 +93,4 @@ TypeFromSchema.eventTrigger
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:358](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L358)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:358](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L358)

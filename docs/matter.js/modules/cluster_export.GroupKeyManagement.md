@@ -70,7 +70,7 @@ These elements and properties are present in all GroupKeyManagement clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:333](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L333)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:334](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L334)
 
 ___
 
@@ -80,9 +80,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:536](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L536)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:537](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L537)
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:538](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L538)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:539](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L539)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:524](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L524)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:525](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L525)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:539](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L539)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:540](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L540)
 
 ___
 
@@ -114,15 +114,13 @@ ___
 
 • `Const` **TlvGroupInfoMapStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `endpoints`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)[]\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>
 
-This field uniquely identifies the group within the scope of the given Fabric.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.2.6.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L68)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:66](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L66)
 
 ___
 
@@ -136,7 +134,7 @@ MatterSpecification.v11.Core § 11.2.6.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:36](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L36)
 
 ___
 
@@ -144,16 +142,13 @@ ___
 
 • `Const` **TlvGroupKeySetStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `epochKey0`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochKey1`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochKey2`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochStartTime0`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `epochStartTime1`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `epochStartTime2`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `groupKeyMulticastPolicy`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupKeyMulticastPolicy`](../enums/cluster_export.GroupKeyManagement.GroupKeyMulticastPolicy.md)\> ; `groupKeySecurityPolicy`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupKeySecurityPolicy`](../enums/cluster_export.GroupKeyManagement.GroupKeySecurityPolicy.md)\> ; `groupKeySetId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
-This field shall provide the fabric-unique index for the associated group key set, as specified in Section
-4.15.3.5.1, “Group Key Set ID”.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.2.6.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:140](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L140)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:138](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L138)
 
 ___
 
@@ -177,7 +172,7 @@ MatterSpecification.v11.Core § 11.2.8.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:299](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L299)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:300](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L300)
 
 ___
 
@@ -193,7 +188,7 @@ MatterSpecification.v11.Core § 11.2.8.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:245](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L245)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:246](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L246)
 
 ___
 
@@ -211,7 +206,7 @@ MatterSpecification.v11.Core § 11.2.8.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:261](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L261)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:262](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L262)
 
 ___
 
@@ -227,7 +222,7 @@ MatterSpecification.v11.Core § 11.2.8.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:277](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L277)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:278](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L278)
 
 ___
 
@@ -243,4 +238,4 @@ MatterSpecification.v11.Core § 11.2.8.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:231](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L231)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:232](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L232)

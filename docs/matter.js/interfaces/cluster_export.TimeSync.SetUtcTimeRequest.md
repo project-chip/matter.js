@@ -42,7 +42,7 @@ TypeFromSchema.granularity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:264](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L264)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:275](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L275)
 
 ___
 
@@ -62,7 +62,7 @@ TypeFromSchema.timeSource
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:271](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L271)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:282](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L282)
 
 ___
 
@@ -82,4 +82,4 @@ TypeFromSchema.utcTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:257](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L257)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:268](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L268)

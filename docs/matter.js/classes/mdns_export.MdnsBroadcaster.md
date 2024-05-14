@@ -56,7 +56,7 @@ This class is handing MDNS Announcements for multiple instances/devices
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:77](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L77)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:77](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L77)
 
 ## Properties
 
@@ -66,7 +66,7 @@ This class is handing MDNS Announcements for multiple instances/devices
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L61)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:61](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L61)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L62)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:62](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L62)
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:65](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L65)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:65](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L65)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:66](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L66)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:66](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L66)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L64)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:64](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L64)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L63)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:63](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L63)
 
 ## Methods
 
@@ -136,7 +136,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:344](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L344)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:344](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L344)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:373](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L373)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:373](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L373)
 
 ___
 
@@ -170,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:83](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L83)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:83](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L83)
 
 ___
 
@@ -190,7 +190,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:362](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L362)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:362](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L362)
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:355](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L355)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:355](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L355)
 
 ___
 
@@ -230,7 +230,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:348](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L348)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:348](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L348)
 
 ___
 
@@ -251,7 +251,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:116](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L116)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:116](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L116)
 
 ___
 
@@ -275,7 +275,7 @@ Set the Broadcaster data to announce a device ready for commissioning in a speci
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:133](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L133)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:133](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L133)
 
 ___
 
@@ -298,7 +298,7 @@ Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery)
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:286](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L286)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:286](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L286)
 
 ___
 
@@ -322,7 +322,7 @@ Set the Broadcaster Data to announce a device for operative discovery (aka "alre
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:219](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L219)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:219](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L219)
 
 ___
 
@@ -343,7 +343,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:92](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L92)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:92](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L92)
 
 ___
 
@@ -366,4 +366,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L68)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:68](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L68)

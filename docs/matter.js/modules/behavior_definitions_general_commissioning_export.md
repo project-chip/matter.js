@@ -158,7 +158,7 @@ MatterSpecification.v11.Core § 11.9.6.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:127](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L127)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:127](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L127)
 
 ___
 
@@ -172,7 +172,7 @@ MatterSpecification.v11.Core § 11.9.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L132)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:132](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L132)
 
 ___
 
@@ -180,18 +180,13 @@ ___
 
 Ƭ **CommissioningCompleteResponse**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvCommissioningCompleteResponse`](cluster_export.GeneralCommissioning.md#tlvcommissioningcompleteresponse)\>
 
-This field shall contain the result of the operation, based on the behavior specified in the functional description
-of the CommissioningComplete command.
-
-See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.9.6.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:186](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L186)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:176](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L176)
 
 ___
 
@@ -207,9 +202,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:188](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L188)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:178](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L178)
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:404](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L404)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:394](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L394)
 
 ___
 
@@ -252,7 +247,7 @@ MatterSpecification.v11.Core § 11.9.6.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:166](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L166)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:166](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L166)
 
 ___
 
@@ -260,18 +255,13 @@ ___
 
 Ƭ **SetRegulatoryConfigResponse**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvSetRegulatoryConfigResponse`](cluster_export.GeneralCommissioning.md#tlvsetregulatoryconfigresponse)\>
 
-This field shall contain the result of the operation, based on the behavior specified in the functional description
-of the SetRegulatoryConfig command.
-
-See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.9.6.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:176](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L176)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:171](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L171)
 
 ## Variables
 
@@ -283,8 +273,8 @@ GeneralCommissioningBehavior is the base class for objects that support interact
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts#L17)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts:17](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts#L17)
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts#L22)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts:22](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts#L22)
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningBehavior.ts#L24)

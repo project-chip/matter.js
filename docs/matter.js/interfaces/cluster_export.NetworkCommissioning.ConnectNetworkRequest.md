@@ -29,13 +29,19 @@ MatterSpecification.v11.Core § 11.8.7.9
 
 • `Optional` **breadcrumb**: `number` \| `bigint`
 
+See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.9.2
+
 #### Inherited from
 
 TypeFromSchema.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:442](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L442)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:457](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L457)
 
 ___
 
@@ -43,10 +49,17 @@ ___
 
 • **networkId**: `Uint8Array`
 
+This field shall contain the NetworkID for the entry used to configure the connection: the SSID for Wi-Fi
+and XPAN ID for Thread.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.9.1
+
 #### Inherited from
 
 TypeFromSchema.networkId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:441](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L441)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:450](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L450)

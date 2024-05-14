@@ -12,10 +12,11 @@
 
 - [GeneralDiagnosticsBehavior](behavior_definitions_general_diagnostics_export.GeneralDiagnosticsBehavior.md)
 - [GeneralDiagnosticsInterface](behavior_definitions_general_diagnostics_export.GeneralDiagnosticsInterface.md)
+- [GeneralDiagnosticsServer](behavior_definitions_general_diagnostics_export.GeneralDiagnosticsServer.md)
 
 ### Classes
 
-- [GeneralDiagnosticsServer](../classes/behavior_definitions_general_diagnostics_export.GeneralDiagnosticsServer.md)
+- [GeneralDiagnosticsServer](../classes/behavior_definitions_general_diagnostics_export.GeneralDiagnosticsServer-1.md)
 
 ### Interfaces
 
@@ -44,9 +45,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts#L24)
+[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts#L24)
 
-[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts#L40)
+[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts#L40)
 
 ___
 
@@ -66,7 +67,7 @@ MatterSpecification.v11.Core § 11.11.7.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts#L22)
+[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts:22](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsInterface.ts#L22)
 
 ## Variables
 
@@ -78,8 +79,8 @@ GeneralDiagnosticsBehavior is the base class for objects that support interactio
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts#L17)
+[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts:17](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts#L17)
 
-[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts#L22)
+[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts:22](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts#L22)
 
-[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsBehavior.ts#L24)

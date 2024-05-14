@@ -42,7 +42,7 @@ TypeFromSchema.granularity
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:212
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:222
 
 ___
 
@@ -62,7 +62,7 @@ TypeFromSchema.timeSource
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:218
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:228
 
 ___
 
@@ -82,4 +82,4 @@ TypeFromSchema.utcTime
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:206
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:216

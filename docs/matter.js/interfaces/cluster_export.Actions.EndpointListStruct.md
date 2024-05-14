@@ -7,14 +7,6 @@
 This data type holds the details of a single endpoint list, which relates to a set of endpoints that have some
 logical relation, and contains the data fields below.
 
-This field shall provide an unique identifier used to identify the endpoint list.
-
-This field shall indicate the name (as assigned by the user or automatically by the server) associated with the
-set of endpoints in this list. This can be used for identifying the action to the user by the client. Example:
-"living room".
-
-This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
-
 **`See`**
 
 MatterSpecification.v11.Core § 9.14.4.7
@@ -40,13 +32,19 @@ MatterSpecification.v11.Core § 9.14.4.7
 
 • **endpointListId**: `number`
 
+This field shall provide an unique identifier used to identify the endpoint list.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.4.7.1
+
 #### Inherited from
 
 TypeFromSchema.endpointListId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:332](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L332)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:329](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L329)
 
 ___
 
@@ -58,7 +56,7 @@ This field shall provide a list of endpoint numbers.
 
 **`See`**
 
-MatterSpecification.v11.Core § 9.14.4.7.1
+MatterSpecification.v11.Core § 9.14.4.7.4
 
 #### Inherited from
 
@@ -66,7 +64,7 @@ TypeFromSchema.endpoints
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:341](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L341)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:352](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L352)
 
 ___
 
@@ -74,13 +72,21 @@ ___
 
 • **name**: `string`
 
+This field shall indicate the name (as assigned by the user or automatically by the server) associated with
+the set of endpoints in this list. This can be used for identifying the action to the user by the client.
+Example: "living room".
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.4.7.2
+
 #### Inherited from
 
 TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:333](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L333)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:338](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L338)
 
 ___
 
@@ -88,10 +94,16 @@ ___
 
 • **type**: [`EndpointListType`](../enums/cluster_export.Actions.EndpointListType.md)
 
+This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.4.7.3
+
 #### Inherited from
 
 TypeFromSchema.type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:334](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L334)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:345](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L345)

@@ -33,6 +33,7 @@ so we keep it in the same section.
 - [desc](model.Constraint-1.md#desc)
 - [entry](model.Constraint-1.md#entry)
 - [errors](model.Constraint-1.md#errors)
+- [in](model.Constraint-1.md#in)
 - [max](model.Constraint-1.md#max)
 - [min](model.Constraint-1.md#min)
 - [parts](model.Constraint-1.md#parts)
@@ -76,7 +77,7 @@ Initialize from a Constraint.Definition or the constraint DSL defined by the Mat
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L31)
+[packages/matter.js/src/model/aspects/Constraint.ts:32](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L32)
 
 ## Properties
 
@@ -90,7 +91,7 @@ Initialize from a Constraint.Definition or the constraint DSL defined by the Mat
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Aspect.ts#L17)
+[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Aspect.ts#L17)
 
 ___
 
@@ -104,7 +105,7 @@ Constraint.Ast.desc
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L21)
+[packages/matter.js/src/model/aspects/Constraint.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L21)
 
 ___
 
@@ -118,7 +119,7 @@ Constraint.Ast.entry
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L25)
+[packages/matter.js/src/model/aspects/Constraint.ts:26](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L26)
 
 ___
 
@@ -132,7 +133,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Aspect.ts#L18)
+[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Aspect.ts#L18)
+
+___
+
+### in
+
+• `Optional` **in**: [`FieldValue`](../modules/model.md#fieldvalue)
+
+#### Implementation of
+
+Constraint.Ast.in
+
+#### Defined in
+
+[packages/matter.js/src/model/aspects/Constraint.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L25)
 
 ___
 
@@ -146,7 +161,7 @@ Constraint.Ast.max
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L24)
+[packages/matter.js/src/model/aspects/Constraint.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L24)
 
 ___
 
@@ -160,7 +175,7 @@ Constraint.Ast.min
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L23)
+[packages/matter.js/src/model/aspects/Constraint.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L23)
 
 ___
 
@@ -174,7 +189,7 @@ Constraint.Ast.parts
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L26)
+[packages/matter.js/src/model/aspects/Constraint.ts:27](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L27)
 
 ___
 
@@ -188,7 +203,7 @@ Constraint.Ast.value
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L22)
+[packages/matter.js/src/model/aspects/Constraint.ts:22](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L22)
 
 ## Accessors
 
@@ -206,7 +221,7 @@ Aspect.empty
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Aspect.ts#L28)
+[packages/matter.js/src/model/aspects/Aspect.ts:28](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Aspect.ts#L28)
 
 ___
 
@@ -224,7 +239,7 @@ Aspect.valid
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Aspect.ts#L20)
+[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Aspect.ts#L20)
 
 ## Methods
 
@@ -250,7 +265,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Aspect.ts#L40)
+[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Aspect.ts#L40)
 
 ___
 
@@ -275,7 +290,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Aspect.ts#L54)
+[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Aspect.ts#L54)
 
 ___
 
@@ -306,7 +321,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Aspect.ts#L65)
+[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Aspect.ts#L65)
 
 ___
 
@@ -329,7 +344,7 @@ Test a value against a constraint.  Does not recurse into arrays.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L79)
+[packages/matter.js/src/model/aspects/Constraint.ts:83](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L83)
 
 ___
 
@@ -347,7 +362,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:125](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L125)
+[packages/matter.js/src/model/aspects/Constraint.ts:141](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L141)
 
 ___
 
@@ -365,4 +380,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Aspect.ts#L47)
+[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Aspect.ts#L47)

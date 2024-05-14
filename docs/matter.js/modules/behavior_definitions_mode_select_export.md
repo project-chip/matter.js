@@ -16,6 +16,7 @@
 ### Classes
 
 - [ModeSelectServer](../classes/behavior_definitions_mode_select_export.ModeSelectServer.md)
+- [ModeSelectServerLogic](../classes/behavior_definitions_mode_select_export.ModeSelectServerLogic.md)
 
 ### Interfaces
 
@@ -47,7 +48,7 @@ MatterSpecification.v11.Cluster § 1.8.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts#L21)
+[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts#L21)
 
 ___
 
@@ -63,9 +64,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts#L23)
+[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts#L23)
 
-[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts#L37)
+[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts:37](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts#L37)
 
 ## Variables
 
@@ -80,8 +81,8 @@ ModeSelectBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts:19](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts#L24)
 
-[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts#L26)
+[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts:26](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectBehavior.ts#L26)

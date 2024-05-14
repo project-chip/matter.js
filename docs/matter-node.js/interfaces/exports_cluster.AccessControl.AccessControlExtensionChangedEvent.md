@@ -32,13 +32,22 @@ MatterSpecification.v11.Core § 9.10.7.2
 
 • **adminNodeId**: ``null`` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
 
+The Node ID of the Administrator that made the change, if the change occurred via a CASE session.
+
+Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change occurred via a
+CASE or PASE session; the other shall be null.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.10.7.2.1
+
 #### Inherited from
 
 TypeFromSchema.adminNodeId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:383
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:391
 
 ___
 
@@ -46,13 +55,23 @@ ___
 
 • **adminPasscodeId**: ``null`` \| `number`
 
+The Passcode ID of the Administrator that made the change, if the change occurred via a PASE session.
+Non-zero values are reserved for future use (see PasscodeId generation in PBKDFParamRequest).
+
+Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change occurred via a
+CASE or PASE session; the other shall be null.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.10.7.2.2
+
 #### Inherited from
 
 TypeFromSchema.adminPasscodeId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:384
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:401
 
 ___
 
@@ -60,13 +79,19 @@ ___
 
 • **changeType**: [`ChangeType`](../enums/exports_cluster.AccessControl.ChangeType.md)
 
+The type of change as appropriate.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.10.7.2.3
+
 #### Inherited from
 
 TypeFromSchema.changeType
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:385
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:407
 
 ___
 
@@ -80,7 +105,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:403
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:433
 
 ___
 
@@ -88,10 +113,19 @@ ___
 
 • **latestValue**: ``null`` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `data`: [`FieldType`](exports_tlv.FieldType.md)\<`Uint8Array`\> ; `fabricIndex`: [`FieldType`](exports_tlv.FieldType.md)\<[`FabricIndex`](../modules/exports_datatype.md#fabricindex)\>  }\>
 
+The latest value of the changed extension.
+
+This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if resources
+are scarce.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.10.7.2.4
+
 #### Inherited from
 
 TypeFromSchema.latestValue
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:386
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:416

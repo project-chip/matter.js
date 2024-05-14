@@ -43,7 +43,7 @@ StateType.currentLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:291](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L291)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:291](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L291)
 
 ___
 
@@ -64,7 +64,7 @@ StateType.defaultMoveRate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:372](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L372)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:372](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L372)
 
 ___
 
@@ -84,7 +84,7 @@ StateType.maxLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:305](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L305)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:305](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L305)
 
 ___
 
@@ -104,7 +104,7 @@ StateType.minLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:298](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L298)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:298](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L298)
 
 ___
 
@@ -127,7 +127,7 @@ StateType.offTransitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:364](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L364)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:364](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L364)
 
 ___
 
@@ -150,7 +150,7 @@ StateType.onLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:344](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L344)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:344](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L344)
 
 ___
 
@@ -176,7 +176,7 @@ StateType.onOffTransitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:334](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L334)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:334](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L334)
 
 ___
 
@@ -199,7 +199,7 @@ StateType.onTransitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:354](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L354)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:354](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L354)
 
 ___
 
@@ -228,4 +228,4 @@ StateType.options
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:321](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L321)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L321)

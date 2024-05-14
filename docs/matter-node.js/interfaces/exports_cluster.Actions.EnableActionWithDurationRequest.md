@@ -36,7 +36,7 @@ TypeFromSchema.actionId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:522
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:528
 
 ___
 
@@ -44,13 +44,19 @@ ___
 
 • **duration**: `number`
 
+This field shall indicate the requested duration in seconds.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.6.10.1
+
 #### Inherited from
 
 TypeFromSchema.duration
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:524
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:535
 
 ___
 
@@ -64,4 +70,4 @@ TypeFromSchema.invokeId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:523
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:529

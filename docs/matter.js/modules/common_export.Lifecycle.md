@@ -34,7 +34,7 @@ Lifecycle status for multiple items.
 
 #### Defined in
 
-[packages/matter.js/src/common/Lifecycle.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/Lifecycle.ts#L28)
+[packages/matter.js/src/common/Lifecycle.ts:28](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/common/Lifecycle.ts#L28)
 
 ## Functions
 
@@ -57,4 +57,4 @@ Assert subject is active.
 
 #### Defined in
 
-[packages/matter.js/src/common/Lifecycle.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/Lifecycle.ts#L33)
+[packages/matter.js/src/common/Lifecycle.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/common/Lifecycle.ts#L33)

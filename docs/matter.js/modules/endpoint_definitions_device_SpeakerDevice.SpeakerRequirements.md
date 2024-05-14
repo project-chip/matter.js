@@ -24,7 +24,7 @@ We provide this alias to the default implementation [LevelControlServer](endpoin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L48)
+[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L48)
 
 ___
 
@@ -38,7 +38,7 @@ We provide this alias to the default implementation [OnOffServer](endpoint_defin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L41)
+[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L41)
 
 ___
 
@@ -58,4 +58,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L53)
+[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:53](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L53)

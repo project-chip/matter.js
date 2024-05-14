@@ -59,7 +59,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
 
 ## Properties
 
@@ -73,7 +73,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
 
 ## Methods
 
@@ -91,7 +91,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L75)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:75](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L75)
 
 ___
 
@@ -109,18 +109,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L71)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:71](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L71)
 
 ___
 
 ### nextMessage
 
-▸ **nextMessage**(`expectedMessageType?`): `Promise`\<[`Message`](../interfaces/codec_export.Message.md)\>
+▸ **nextMessage**(`expectedMessageInfo`, `expectedMessageType?`): `Promise`\<[`Message`](../interfaces/codec_export.Message.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `expectedMessageInfo` | `string` |
 | `expectedMessageType?` | `number` |
 
 #### Returns
@@ -133,13 +134,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L33)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L33)
 
 ___
 
 ### nextMessageDecoded
 
-▸ **nextMessageDecoded**\<`T`\>(`expectedMessageType`, `schema`): `Promise`\<`T`\>
+▸ **nextMessageDecoded**\<`T`\>(`expectedMessageType`, `schema`, `expectedMessageInfo`): `Promise`\<`T`\>
 
 #### Type parameters
 
@@ -153,6 +154,7 @@ ___
 | :------ | :------ |
 | `expectedMessageType` | `number` |
 | `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`T`\> |
+| `expectedMessageInfo` | `string` |
 
 #### Returns
 
@@ -164,7 +166,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L44)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:44](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L44)
 
 ___
 
@@ -178,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessenger.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessenger.ts#L16)
+[packages/matter.js/src/session/case/CaseMessenger.ts:16](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/case/CaseMessenger.ts#L16)
 
 ___
 
@@ -192,7 +194,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessenger.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessenger.ts#L29)
+[packages/matter.js/src/session/case/CaseMessenger.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/case/CaseMessenger.ts#L29)
 
 ___
 
@@ -224,7 +226,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L53)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:53](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L53)
 
 ___
 
@@ -242,7 +244,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L67)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:67](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L67)
 
 ___
 
@@ -266,7 +268,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L59)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:59](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L59)
 
 ___
 
@@ -286,7 +288,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessenger.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessenger.ts#L21)
+[packages/matter.js/src/session/case/CaseMessenger.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/case/CaseMessenger.ts#L21)
 
 ___
 
@@ -306,7 +308,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessenger.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessenger.ts#L25)
+[packages/matter.js/src/session/case/CaseMessenger.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/session/case/CaseMessenger.ts#L25)
 
 ___
 
@@ -324,19 +326,20 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L63)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:63](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L63)
 
 ___
 
 ### throwIfErrorStatusReport
 
-▸ **throwIfErrorStatusReport**(`message`): `void`
+▸ **throwIfErrorStatusReport**(`message`, `logHint?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) |
+| `logHint?` | `string` |
 
 #### Returns
 
@@ -348,13 +351,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L95)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:95](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L95)
 
 ___
 
 ### waitForSuccess
 
-▸ **waitForSuccess**(): `Promise`\<`void`\>
+▸ **waitForSuccess**(`expectedMessageInfo`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `expectedMessageInfo` | `string` |
 
 #### Returns
 
@@ -366,4 +375,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L48)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L48)

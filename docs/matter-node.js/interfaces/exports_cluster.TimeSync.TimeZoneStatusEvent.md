@@ -29,13 +29,20 @@ MatterSpecification.v11.Core § 11.16.10.3
 
 • `Optional` **name**: `string`
 
+Current time zone name. This name SHOULD use the country/city format specified by the IANA time zone
+database [https://www.iana.org/time-zones].
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.16.10.3.2
+
 #### Inherited from
 
 TypeFromSchema.name
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:81
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:91
 
 ___
 
@@ -43,10 +50,16 @@ ___
 
 • **offset**: `number`
 
+Current time zone offset from UTC in seconds.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.16.10.3.1
+
 #### Inherited from
 
 TypeFromSchema.offset
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:80
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:84

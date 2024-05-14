@@ -24,7 +24,7 @@ We provide this alias to the default implementation [IdentifyServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L37)
+[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:37](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L37)
 
 ___
 
@@ -38,7 +38,7 @@ We provide this alias to the default implementation [TemperatureMeasurementServe
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L30)
+[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:30](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L30)
 
 ___
 
@@ -58,4 +58,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L42)
+[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:42](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L42)

@@ -31,6 +31,7 @@ Parsed list structure.
 | :------ | :------ | :------ |
 | `desc?` | `boolean` | Indicates constraint is defined in prose and cannot be enforced automatically. |
 | `entry?` | [`Ast`](exports_model.Constraint.md#ast) | Constraint on list child element. |
+| `in?` | [`FieldValue`](exports_model.md#fieldvalue) | Require set membership for the value. |
 | `max?` | [`FieldValue`](exports_model.md#fieldvalue) | Upper bound on value or sequence length. |
 | `min?` | [`FieldValue`](exports_model.md#fieldvalue) | Lower bound on value or sequence length. |
 | `parts?` | [`Ast`](exports_model.Constraint.md#ast)[] | List of sub-constraints in a sequence. |
@@ -38,7 +39,7 @@ Parsed list structure.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:38
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:39
 
 ___
 
@@ -50,7 +51,7 @@ These are all ways to describe a constraint.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:67
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:72
 
 ___
 
@@ -60,7 +61,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:34
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:35
 
 ## Functions
 
@@ -83,7 +84,7 @@ Parse constraint DSL.  Extremely lenient.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:73
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:78
 
 ___
 
@@ -103,4 +104,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:74
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:79

@@ -8,7 +8,7 @@ Input to the OtaSoftwareUpdateProvider applyUpdateRequest command
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.19.6.5.18
+MatterSpecification.v11.Core § 11.19.6.5.19
 
 ## Hierarchy
 

@@ -18,11 +18,9 @@
 - ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvVoid"](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvVoid_.md)
 - ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md)
 - [AsyncConstruction](exports_cluster._internal_.AsyncConstruction.md)
-- [DeviceCertification](exports_cluster._internal_.DeviceCertification.md)
 
 ### Classes
 
-- [DeviceCertification](../classes/exports_cluster._internal_.DeviceCertification-1.md)
 - [MatterDevice](../classes/exports_cluster._internal_.MatterDevice.md)
 
 ### Interfaces

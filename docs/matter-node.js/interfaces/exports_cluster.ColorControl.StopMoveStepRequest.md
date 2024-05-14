@@ -35,7 +35,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:805
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:823
 
 ___
 
@@ -49,4 +49,4 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:808
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:826

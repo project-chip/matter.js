@@ -10,6 +10,7 @@
 
 - [Map](../interfaces/environment_export._internal_.VariableService.Map.md)
 - [Options](../interfaces/environment_export._internal_.VariableService.Options.md)
+- [Usage](../interfaces/environment_export._internal_.VariableService.Usage.md)
 
 ### Type Aliases
 
@@ -25,7 +26,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:39
+packages/matter.js/dist/esm/environment/VariableService.d.ts:49
 
 ___
 
@@ -35,7 +36,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:40
+packages/matter.js/dist/esm/environment/VariableService.d.ts:50
 
 ___
 
@@ -45,4 +46,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/VariableService.d.ts:41
+packages/matter.js/dist/esm/environment/VariableService.d.ts:51

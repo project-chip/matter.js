@@ -4,6 +4,12 @@
 
 [certificate/export](../modules/certificate_export.md).ProductAttestationIntermediateCertificate
 
+## Hierarchy
+
+- [`AttestationCertificateBase`](certificate_export._internal_.AttestationCertificateBase.md)
+
+  ↳ **`ProductAttestationIntermediateCertificate`**
+
 ## Table of contents
 
 ### Properties
@@ -26,9 +32,13 @@
 
 • **ellipticCurveIdentifier**: `number`
 
+#### Inherited from
+
+[AttestationCertificateBase](certificate_export._internal_.AttestationCertificateBase.md).[ellipticCurveIdentifier](certificate_export._internal_.AttestationCertificateBase.md#ellipticcurveidentifier)
+
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:279](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/CertificateManager.ts#L279)
+[packages/matter.js/src/certificate/CertificateManager.ts:290](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/CertificateManager.ts#L290)
 
 ___
 
@@ -36,9 +46,13 @@ ___
 
 • **ellipticCurvePublicKey**: `Uint8Array`
 
+#### Inherited from
+
+[AttestationCertificateBase](certificate_export._internal_.AttestationCertificateBase.md).[ellipticCurvePublicKey](certificate_export._internal_.AttestationCertificateBase.md#ellipticcurvepublickey)
+
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:280](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/CertificateManager.ts#L280)
+[packages/matter.js/src/certificate/CertificateManager.ts:291](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/CertificateManager.ts#L291)
 
 ___
 
@@ -55,13 +69,17 @@ ___
 | `basicConstraints.isCa` | `boolean` |
 | `basicConstraints.pathLen?` | `number` |
 | `extendedKeyUsage?` | `number`[] |
-| `futureExtension?` | `Uint8Array` |
-| `keyUsage` | `number` |
+| `futureExtension?` | `Uint8Array`[] |
+| `keyUsage` | [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `cRLSign`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `dataEncipherment`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `decipherOnly`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `digitalSignature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `encipherOnly`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `keyAgreement`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `keyCertSign`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `keyEncipherment`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `nonRepudiation`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\> |
 | `subjectKeyIdentifier` | `Uint8Array` |
+
+#### Inherited from
+
+[AttestationCertificateBase](certificate_export._internal_.AttestationCertificateBase.md).[extensions](certificate_export._internal_.AttestationCertificateBase.md#extensions)
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:281](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/CertificateManager.ts#L281)
+[packages/matter.js/src/certificate/CertificateManager.ts:292](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/CertificateManager.ts#L292)
 
 ___
 
@@ -76,9 +94,13 @@ ___
 | `commonName` | `string` |
 | `vendorId?` | [`VendorId`](../modules/datatype_export.md#vendorid) |
 
+#### Overrides
+
+[AttestationCertificateBase](certificate_export._internal_.AttestationCertificateBase.md).[issuer](certificate_export._internal_.AttestationCertificateBase.md#issuer)
+
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:267](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/CertificateManager.ts#L267)
+[packages/matter.js/src/certificate/CertificateManager.ts:320](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/CertificateManager.ts#L320)
 
 ___
 
@@ -86,9 +108,13 @@ ___
 
 • **notAfter**: `number`
 
+#### Inherited from
+
+[AttestationCertificateBase](certificate_export._internal_.AttestationCertificateBase.md).[notAfter](certificate_export._internal_.AttestationCertificateBase.md#notafter)
+
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:272](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/CertificateManager.ts#L272)
+[packages/matter.js/src/certificate/CertificateManager.ts:287](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/CertificateManager.ts#L287)
 
 ___
 
@@ -96,9 +122,13 @@ ___
 
 • **notBefore**: `number`
 
+#### Inherited from
+
+[AttestationCertificateBase](certificate_export._internal_.AttestationCertificateBase.md).[notBefore](certificate_export._internal_.AttestationCertificateBase.md#notbefore)
+
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:271](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/CertificateManager.ts#L271)
+[packages/matter.js/src/certificate/CertificateManager.ts:286](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/CertificateManager.ts#L286)
 
 ___
 
@@ -106,9 +136,13 @@ ___
 
 • **publicKeyAlgorithm**: `number`
 
+#### Inherited from
+
+[AttestationCertificateBase](certificate_export._internal_.AttestationCertificateBase.md).[publicKeyAlgorithm](certificate_export._internal_.AttestationCertificateBase.md#publickeyalgorithm)
+
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:278](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/CertificateManager.ts#L278)
+[packages/matter.js/src/certificate/CertificateManager.ts:289](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/CertificateManager.ts#L289)
 
 ___
 
@@ -116,9 +150,13 @@ ___
 
 • **serialNumber**: `Uint8Array`
 
+#### Inherited from
+
+[AttestationCertificateBase](certificate_export._internal_.AttestationCertificateBase.md).[serialNumber](certificate_export._internal_.AttestationCertificateBase.md#serialnumber)
+
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:265](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/CertificateManager.ts#L265)
+[packages/matter.js/src/certificate/CertificateManager.ts:283](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/CertificateManager.ts#L283)
 
 ___
 
@@ -126,9 +164,13 @@ ___
 
 • **signature**: `Uint8Array`
 
+#### Inherited from
+
+[AttestationCertificateBase](certificate_export._internal_.AttestationCertificateBase.md).[signature](certificate_export._internal_.AttestationCertificateBase.md#signature)
+
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:292](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/CertificateManager.ts#L292)
+[packages/matter.js/src/certificate/CertificateManager.ts:303](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/CertificateManager.ts#L303)
 
 ___
 
@@ -136,9 +178,13 @@ ___
 
 • **signatureAlgorithm**: `number`
 
+#### Inherited from
+
+[AttestationCertificateBase](certificate_export._internal_.AttestationCertificateBase.md).[signatureAlgorithm](certificate_export._internal_.AttestationCertificateBase.md#signaturealgorithm)
+
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:266](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/CertificateManager.ts#L266)
+[packages/matter.js/src/certificate/CertificateManager.ts:284](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/CertificateManager.ts#L284)
 
 ___
 
@@ -154,6 +200,10 @@ ___
 | `productId?` | `number` |
 | `vendorId` | [`VendorId`](../modules/datatype_export.md#vendorid) |
 
+#### Overrides
+
+[AttestationCertificateBase](certificate_export._internal_.AttestationCertificateBase.md).[subject](certificate_export._internal_.AttestationCertificateBase.md#subject)
+
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:273](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/CertificateManager.ts#L273)
+[packages/matter.js/src/certificate/CertificateManager.ts:324](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/CertificateManager.ts#L324)

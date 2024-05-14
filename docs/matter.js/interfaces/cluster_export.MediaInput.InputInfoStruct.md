@@ -44,7 +44,7 @@ TypeFromSchema.description
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L94)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L94)
 
 ___
 
@@ -64,7 +64,7 @@ TypeFromSchema.index
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L71)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:71](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L71)
 
 ___
 
@@ -84,7 +84,7 @@ TypeFromSchema.inputType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:78](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L78)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:78](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L78)
 
 ___
 
@@ -105,4 +105,4 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L86)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:86](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L86)

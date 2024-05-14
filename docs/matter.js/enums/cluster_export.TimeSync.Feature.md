@@ -30,7 +30,7 @@ Server supports an NTP or SNTP client.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:476](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L476)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:482](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L482)
 
 ___
 
@@ -44,7 +44,7 @@ Server supports an NTP server role.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:483](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L483)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:489](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L489)
 
 ___
 
@@ -58,4 +58,4 @@ Server supports time zone.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:469](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L469)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:475](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L475)

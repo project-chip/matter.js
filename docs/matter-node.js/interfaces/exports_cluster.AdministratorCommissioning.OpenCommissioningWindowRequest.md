@@ -48,7 +48,7 @@ TypeFromSchema.commissioningTimeout
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:60
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:74
 
 ___
 
@@ -70,7 +70,7 @@ TypeFromSchema.discriminator
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:79
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:93
 
 ___
 
@@ -94,7 +94,7 @@ TypeFromSchema.iterations
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:89
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:103
 
 ___
 
@@ -119,7 +119,7 @@ TypeFromSchema.pakePasscodeVerifier
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:71
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:85
 
 ___
 
@@ -150,4 +150,4 @@ TypeFromSchema.salt
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:106
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:120

@@ -31,13 +31,19 @@ MatterSpecification.v11.Core § 9.14.7.2
 
 • **actionId**: `number`
 
+This field shall be set to the ActionID of the action which encountered an error.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.7.2.1
+
 #### Inherited from
 
 TypeFromSchema.actionId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:613
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:639
 
 ___
 
@@ -49,7 +55,7 @@ This field shall be set to indicate the reason for non-successful progress of th
 
 **`See`**
 
-MatterSpecification.v11.Core § 9.14.7.2.1
+MatterSpecification.v11.Core § 9.14.7.2.4
 
 #### Inherited from
 
@@ -57,7 +63,7 @@ TypeFromSchema.error
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:621
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:658
 
 ___
 
@@ -65,13 +71,20 @@ ___
 
 • **invokeId**: `number`
 
+This field shall be set to the InvokeID which was provided to the most recent command referencing this
+ActionID.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.7.2.2
+
 #### Inherited from
 
 TypeFromSchema.invokeId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:614
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:646
 
 ___
 
@@ -79,10 +92,16 @@ ___
 
 • **newState**: [`ActionState`](../enums/exports_cluster.Actions.ActionState.md)
 
+This field shall be set to state that the action is in at the time of generating the event.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.7.2.3
+
 #### Inherited from
 
 TypeFromSchema.newState
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:615
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:652

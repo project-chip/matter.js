@@ -31,6 +31,7 @@ Parsed list structure.
 | :------ | :------ | :------ |
 | `desc?` | `boolean` | Indicates constraint is defined in prose and cannot be enforced automatically. |
 | `entry?` | [`Ast`](model.Constraint.md#ast) | Constraint on list child element. |
+| `in?` | [`FieldValue`](model.md#fieldvalue) | Require set membership for the value. |
 | `max?` | [`FieldValue`](model.md#fieldvalue) | Upper bound on value or sequence length. |
 | `min?` | [`FieldValue`](model.md#fieldvalue) | Lower bound on value or sequence length. |
 | `parts?` | [`Ast`](model.Constraint.md#ast)[] | List of sub-constraints in a sequence. |
@@ -38,7 +39,7 @@ Parsed list structure.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:136](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L136)
+[packages/matter.js/src/model/aspects/Constraint.ts:152](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L152)
 
 ___
 
@@ -50,7 +51,7 @@ These are all ways to describe a constraint.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:171](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L171)
+[packages/matter.js/src/model/aspects/Constraint.ts:192](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L192)
 
 ___
 
@@ -60,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L131)
+[packages/matter.js/src/model/aspects/Constraint.ts:147](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L147)
 
 ## Functions
 
@@ -83,7 +84,7 @@ Parse constraint DSL.  Extremely lenient.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:270](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L270)
+[packages/matter.js/src/model/aspects/Constraint.ts:295](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L295)
 
 ___
 
@@ -103,4 +104,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:395](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Constraint.ts#L395)
+[packages/matter.js/src/model/aspects/Constraint.ts:428](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Constraint.ts#L428)

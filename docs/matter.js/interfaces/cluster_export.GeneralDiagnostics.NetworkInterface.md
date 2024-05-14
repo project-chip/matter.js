@@ -50,7 +50,7 @@ TypeFromSchema.hardwareAddress
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:109](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:109](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L109)
 
 ___
 
@@ -70,7 +70,7 @@ TypeFromSchema.iPv4Addresses
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:116](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L116)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:116](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L116)
 
 ___
 
@@ -92,7 +92,7 @@ TypeFromSchema.iPv6Addresses
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:125](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L125)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:125](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L125)
 
 ___
 
@@ -113,7 +113,7 @@ TypeFromSchema.isOperational
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L82)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:82](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L82)
 
 ___
 
@@ -134,7 +134,7 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L74)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:74](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L74)
 
 ___
 
@@ -156,7 +156,7 @@ TypeFromSchema.offPremiseServicesReachableIPv4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L91)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:91](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L91)
 
 ___
 
@@ -178,7 +178,7 @@ TypeFromSchema.offPremiseServicesReachableIPv6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L100)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:100](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L100)
 
 ___
 
@@ -198,4 +198,4 @@ TypeFromSchema.type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L132)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:132](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L132)

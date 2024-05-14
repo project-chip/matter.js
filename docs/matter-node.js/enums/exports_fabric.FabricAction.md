@@ -20,7 +20,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:19
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:20
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:20
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:21
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:21
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:22

@@ -8,6 +8,13 @@
 
 - [\<internal\>](exports_certificate._internal_.md)
 
+### Namespaces
+
+- [Pkcs7](exports_certificate.Pkcs7.md)
+- [X509](exports_certificate.X509.md)
+- [X520](exports_certificate.X520.md)
+- [X962](exports_certificate.X962.md)
+
 ### Classes
 
 - [AttestationCertificateManager](../classes/exports_certificate.AttestationCertificateManager.md)
@@ -24,12 +31,15 @@
 
 ### Type Aliases
 
+- [BaseCertificate](exports_certificate.md#basecertificate)
 - [IntermediateCertificate](exports_certificate.md#intermediatecertificate)
 - [OperationalCertificate](exports_certificate.md#operationalcertificate)
 - [RootCertificate](exports_certificate.md#rootcertificate)
+- [Unsigned](exports_certificate.md#unsigned)
 
 ### Variables
 
+- [SHA256\_CMS](exports_certificate.md#sha256_cms)
 - [TestCert\_PAA\_FFF1\_Cert](exports_certificate.md#testcert_paa_fff1_cert)
 - [TestCert\_PAA\_FFF1\_PrivateKey](exports_certificate.md#testcert_paa_fff1_privatekey)
 - [TestCert\_PAA\_FFF1\_PublicKey](exports_certificate.md#testcert_paa_fff1_publickey)
@@ -45,7 +55,6 @@
 
 ### Functions
 
-- [CommonName\_X520](exports_certificate.md#commonname_x520)
 - [FabricId\_Matter](exports_certificate.md#fabricid_matter)
 - [FirmwareSigningId\_Matter](exports_certificate.md#firmwaresigningid_matter)
 - [IcacId\_Matter](exports_certificate.md#icacid_matter)
@@ -59,13 +68,23 @@
 
 ## Type Aliases
 
+### BaseCertificate
+
+Ƭ **BaseCertificate**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvBaseCertificate`](exports_certificate._internal_.md#tlvbasecertificate)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:543
+
+___
+
 ### IntermediateCertificate
 
 Ƭ **IntermediateCertificate**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvIntermediateCertificate`](exports_certificate.md#tlvintermediatecertificate)\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:222
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:545
 
 ___
 
@@ -75,7 +94,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:223
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:546
 
 ___
 
@@ -85,9 +104,35 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:221
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:544
+
+___
+
+### Unsigned
+
+Ƭ **Unsigned**\<`Type`\>: \{ [Property in keyof Type as Exclude\<Property, "signature"\>]: Type[Property] }
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `Type` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:547
 
 ## Variables
+
+### SHA256\_CMS
+
+• `Const` **SHA256\_CMS**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/certificate/CertificateDerTypes.d.ts:27
+
+___
 
 ### TestCert\_PAA\_FFF1\_Cert
 
@@ -171,69 +216,47 @@ ___
 
 ### TlvCertificationDeclaration
 
-• `Const` **TlvCertificationDeclaration**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+• `Const` **TlvCertificationDeclaration**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:207
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:529
 
 ___
 
 ### TlvIntermediateCertificate
 
-• `Const` **TlvIntermediateCertificate**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+• `Const` **TlvIntermediateCertificate**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:92
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:265
 
 ___
 
 ### TlvOperationalCertificate
 
-• `Const` **TlvOperationalCertificate**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+• `Const` **TlvOperationalCertificate**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:63
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:155
 
 ___
 
 ### TlvRootCertificate
 
-• `Const` **TlvRootCertificate**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+• `Const` **TlvRootCertificate**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:36
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:46
 
 ## Functions
 
-### CommonName\_X520
-
-▸ **CommonName_X520**(`name`): `any`[]
-
-commonName = ASN.1 OID 2.5.4.3
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-
-#### Returns
-
-`any`[]
-
-#### Defined in
-
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:19
-
-___
-
 ### FabricId\_Matter
 
-▸ **FabricId_Matter**(`id`): `any`[]
+▸ **FabricId_Matter**(`value`): `any`[]
 
 matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5
 
@@ -241,7 +264,7 @@ matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5
 
 | Name | Type |
 | :------ | :------ |
-| `id` | [`FabricId`](exports_datatype.md#fabricid) |
+| `value` | [`FabricId`](exports_datatype.md#fabricid) |
 
 #### Returns
 
@@ -249,13 +272,13 @@ matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:29
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:28
 
 ___
 
 ### FirmwareSigningId\_Matter
 
-▸ **FirmwareSigningId_Matter**(`signingId`): `any`[]
+▸ **FirmwareSigningId_Matter**(`value`): `any`[]
 
 matter-firmware-signing-id = ASN.1 OID 1.3.6.1.4.1.37244.1.2
 
@@ -263,7 +286,7 @@ matter-firmware-signing-id = ASN.1 OID 1.3.6.1.4.1.37244.1.2
 
 | Name | Type |
 | :------ | :------ |
-| `signingId` | `number` |
+| `value` | `number` |
 
 #### Returns
 
@@ -271,13 +294,13 @@ matter-firmware-signing-id = ASN.1 OID 1.3.6.1.4.1.37244.1.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:23
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:22
 
 ___
 
 ### IcacId\_Matter
 
-▸ **IcacId_Matter**(`id`): `any`[]
+▸ **IcacId_Matter**(`value`): `any`[]
 
 matter-icac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.3
 
@@ -285,7 +308,7 @@ matter-icac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.3
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` \| `bigint` |
+| `value` | `number` \| `bigint` |
 
 #### Returns
 
@@ -293,13 +316,13 @@ matter-icac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:25
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:24
 
 ___
 
 ### NocCat\_Matter
 
-▸ **NocCat_Matter**(`cat`): `any`[]
+▸ **NocCat_Matter**(`value`): `any`[]
 
 matter-noc-cat = ASN.1 OID 1.3.6.1.4.1.37244.1.6
 
@@ -307,7 +330,7 @@ matter-noc-cat = ASN.1 OID 1.3.6.1.4.1.37244.1.6
 
 | Name | Type |
 | :------ | :------ |
-| `cat` | `number` |
+| `value` | `number` |
 
 #### Returns
 
@@ -315,13 +338,13 @@ matter-noc-cat = ASN.1 OID 1.3.6.1.4.1.37244.1.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:31
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:30
 
 ___
 
 ### NodeId\_Matter
 
-▸ **NodeId_Matter**(`nodeId`): `any`[]
+▸ **NodeId_Matter**(`value`): `any`[]
 
 matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1
 
@@ -329,7 +352,7 @@ matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1
 
 | Name | Type |
 | :------ | :------ |
-| `nodeId` | [`NodeId`](exports_datatype.md#nodeid) |
+| `value` | [`NodeId`](exports_datatype.md#nodeid) |
 
 #### Returns
 
@@ -337,13 +360,13 @@ matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:21
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:20
 
 ___
 
 ### ProductId\_Matter
 
-▸ **ProductId_Matter**(`id`): `any`[]
+▸ **ProductId_Matter**(`value`): `any`[]
 
 matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.37244.2.2
 
@@ -351,7 +374,7 @@ matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.37244.2.2
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` |
+| `value` | `number` |
 
 #### Returns
 
@@ -359,13 +382,13 @@ matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.37244.2.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:35
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:34
 
 ___
 
 ### RcacId\_Matter
 
-▸ **RcacId_Matter**(`id`): `any`[]
+▸ **RcacId_Matter**(`value`): `any`[]
 
 matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4
 
@@ -373,7 +396,7 @@ matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` \| `bigint` |
+| `value` | `number` \| `bigint` |
 
 #### Returns
 
@@ -381,13 +404,13 @@ matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:27
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:26
 
 ___
 
 ### VendorId\_Matter
 
-▸ **VendorId_Matter**(`vendorId`): `any`[]
+▸ **VendorId_Matter**(`value`): `any`[]
 
 matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1
 
@@ -395,7 +418,7 @@ matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1
 
 | Name | Type |
 | :------ | :------ |
-| `vendorId` | [`VendorId`](exports_datatype.md#vendorid) |
+| `value` | [`VendorId`](exports_datatype.md#vendorid) |
 
 #### Returns
 
@@ -403,7 +426,7 @@ matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:33
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:32
 
 ___
 
@@ -424,7 +447,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:17
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:18
 
 ___
 
@@ -444,4 +467,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:16
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:17

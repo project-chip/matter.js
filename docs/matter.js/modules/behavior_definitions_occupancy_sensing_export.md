@@ -34,8 +34,8 @@ OccupancySensingBehavior is the base class for objects that support interaction 
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts:16](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts:19](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/occupancy-sensing/OccupancySensingBehavior.ts#L21)

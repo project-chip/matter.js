@@ -29,13 +29,19 @@ MatterSpecification.v11.Core § 11.8.7.9
 
 • `Optional` **breadcrumb**: `number` \| `bigint`
 
+See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.9.2
+
 #### Inherited from
 
 TypeFromSchema.breadcrumb
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:468
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:480
 
 ___
 
@@ -43,10 +49,17 @@ ___
 
 • **networkId**: `Uint8Array`
 
+This field shall contain the NetworkID for the entry used to configure the connection: the SSID for Wi-Fi
+and XPAN ID for Thread.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.9.1
+
 #### Inherited from
 
 TypeFromSchema.networkId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:467
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:474

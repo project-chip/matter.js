@@ -31,13 +31,19 @@ MatterSpecification.v11.Core § 9.14.7.2
 
 • **actionId**: `number`
 
+This field shall be set to the ActionID of the action which encountered an error.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.7.2.1
+
 #### Inherited from
 
 TypeFromSchema.actionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:633](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L633)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:664](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L664)
 
 ___
 
@@ -49,7 +55,7 @@ This field shall be set to indicate the reason for non-successful progress of th
 
 **`See`**
 
-MatterSpecification.v11.Core § 9.14.7.2.1
+MatterSpecification.v11.Core § 9.14.7.2.4
 
 #### Inherited from
 
@@ -57,7 +63,7 @@ TypeFromSchema.error
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:642](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L642)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:686](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L686)
 
 ___
 
@@ -65,13 +71,20 @@ ___
 
 • **invokeId**: `number`
 
+This field shall be set to the InvokeID which was provided to the most recent command referencing this
+ActionID.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.7.2.2
+
 #### Inherited from
 
 TypeFromSchema.invokeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:634](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L634)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:672](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L672)
 
 ___
 
@@ -79,10 +92,16 @@ ___
 
 • **newState**: [`ActionState`](../enums/cluster_export.Actions.ActionState.md)
 
+This field shall be set to state that the action is in at the time of generating the event.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.7.2.3
+
 #### Inherited from
 
 TypeFromSchema.newState
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:635](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L635)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:679](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L679)

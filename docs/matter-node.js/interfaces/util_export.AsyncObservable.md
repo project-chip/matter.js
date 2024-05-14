@@ -10,8 +10,8 @@ An [Observable](../modules/util_export.md#observable) that explicitly supports a
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends `any`[] |
-| `R` | `R` |
+| `T` | extends `any`[] = `any`[] |
+| `R` | `void` |
 
 ## Hierarchy
 
@@ -24,6 +24,7 @@ An [Observable](../modules/util_export.md#observable) that explicitly supports a
 ### Properties
 
 - [isAsync](util_export.AsyncObservable.md#isasync)
+- [isObserved](util_export.AsyncObservable.md#isobserved)
 
 ### Methods
 
@@ -50,7 +51,23 @@ be asynchronous but this information is not available at runtime unless you spec
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:67
+packages/matter.js/dist/esm/util/Observable.d.ts:80
+
+___
+
+### isObserved
+
+• **isObserved**: `boolean`
+
+True if there is at least one observer registered.
+
+#### Inherited from
+
+[Observable](util_export.Observable.md).[isObserved](util_export.Observable.md#isobserved)
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Observable.d.ts:52
 
 ## Methods
 
@@ -73,7 +90,7 @@ cannot return a value.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:57
+packages/matter.js/dist/esm/util/Observable.d.ts:65
 
 ___
 
@@ -93,7 +110,7 @@ Release resources associated with the observable.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:61
+packages/matter.js/dist/esm/util/Observable.d.ts:69
 
 ___
 
@@ -119,7 +136,7 @@ Notify observers.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:32
+packages/matter.js/dist/esm/util/Observable.d.ts:36
 
 ___
 
@@ -133,7 +150,7 @@ Remove an observer.
 
 | Name | Type |
 | :------ | :------ |
-| `observer` | [`Observer`](../modules/util_export.md#observer)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
+| `observer` | [`Observer`](util_export.Observer.md)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
 
 #### Returns
 
@@ -145,7 +162,7 @@ Remove an observer.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:40
+packages/matter.js/dist/esm/util/Observable.d.ts:44
 
 ___
 
@@ -159,7 +176,7 @@ Add an observer.
 
 | Name | Type |
 | :------ | :------ |
-| `observer` | [`Observer`](../modules/util_export.md#observer)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
+| `observer` | [`Observer`](util_export.Observer.md)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
 
 #### Returns
 
@@ -171,7 +188,7 @@ Add an observer.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:36
+packages/matter.js/dist/esm/util/Observable.d.ts:40
 
 ___
 
@@ -185,7 +202,7 @@ Add an observer that emits once then is unregistered.
 
 | Name | Type |
 | :------ | :------ |
-| `observer` | [`Observer`](../modules/util_export.md#observer)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
+| `observer` | [`Observer`](util_export.Observer.md)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
 
 #### Returns
 
@@ -197,4 +214,4 @@ Add an observer that emits once then is unregistered.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:44
+packages/matter.js/dist/esm/util/Observable.d.ts:48

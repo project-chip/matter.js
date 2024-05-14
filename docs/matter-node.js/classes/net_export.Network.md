@@ -55,7 +55,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/Network.d.ts:11
+packages/matter.js/dist/esm/net/Network.d.ts:47
 
 ## Methods
 
@@ -69,7 +69,7 @@ packages/matter.js/dist/esm/net/Network.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/Network.d.ts:18
+packages/matter.js/dist/esm/net/Network.d.ts:51
 
 ___
 
@@ -89,13 +89,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/Network.d.ts:17
+packages/matter.js/dist/esm/net/Network.d.ts:50
 
 ___
 
 ### getIpMac
 
-▸ **getIpMac**(`netInterface`): `undefined` \| \{ `ips`: `string`[] ; `mac`: `string`  }
+▸ **getIpMac**(`netInterface`): `undefined` \| [`NetworkInterfaceDetails`](../modules/net_export.md#networkinterfacedetails)
 
 #### Parameters
 
@@ -105,22 +105,28 @@ ___
 
 #### Returns
 
-`undefined` \| \{ `ips`: `string`[] ; `mac`: `string`  }
+`undefined` \| [`NetworkInterfaceDetails`](../modules/net_export.md#networkinterfacedetails)
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/Network.d.ts:13
+packages/matter.js/dist/esm/net/Network.d.ts:49
 
 ___
 
 ### getNetInterfaces
 
-▸ **getNetInterfaces**(): `string`[]
+▸ **getNetInterfaces**(`configuration?`): [`NetworkInterface`](../modules/net_export.md#networkinterface)[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `configuration?` | [`NetworkInterface`](../modules/net_export.md#networkinterface)[] |
 
 #### Returns
 
-`string`[]
+[`NetworkInterface`](../modules/net_export.md#networkinterface)[]
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/Network.d.ts:12
+packages/matter.js/dist/esm/net/Network.d.ts:48

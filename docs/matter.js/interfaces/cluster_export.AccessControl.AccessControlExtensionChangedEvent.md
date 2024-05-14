@@ -32,13 +32,22 @@ MatterSpecification.v11.Core § 9.10.7.2
 
 • **adminNodeId**: ``null`` \| [`NodeId`](../modules/datatype_export.md#nodeid)
 
+The Node ID of the Administrator that made the change, if the change occurred via a CASE session.
+
+Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change occurred via a
+CASE or PASE session; the other shall be null.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.10.7.2.1
+
 #### Inherited from
 
 TypeFromSchema.adminNodeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:328](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L328)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:336](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L336)
 
 ___
 
@@ -46,13 +55,23 @@ ___
 
 • **adminPasscodeId**: ``null`` \| `number`
 
+The Passcode ID of the Administrator that made the change, if the change occurred via a PASE session.
+Non-zero values are reserved for future use (see PasscodeId generation in PBKDFParamRequest).
+
+Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change occurred via a
+CASE or PASE session; the other shall be null.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.10.7.2.2
+
 #### Inherited from
 
 TypeFromSchema.adminPasscodeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:329](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L329)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:347](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L347)
 
 ___
 
@@ -60,13 +79,19 @@ ___
 
 • **changeType**: [`ChangeType`](../enums/cluster_export.AccessControl.ChangeType.md)
 
+The type of change as appropriate.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.10.7.2.3
+
 #### Inherited from
 
 TypeFromSchema.changeType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:330](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L330)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:354](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L354)
 
 ___
 
@@ -80,7 +105,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:332](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L332)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:366](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L366)
 
 ___
 
@@ -88,10 +113,19 @@ ___
 
 • **latestValue**: ``null`` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `data`: [`FieldType`](tlv_export.FieldType.md)\<`Uint8Array`\> ; `fabricIndex`: [`FieldType`](tlv_export.FieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\>  }\>
 
+The latest value of the changed extension.
+
+This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if resources
+are scarce.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.10.7.2.4
+
 #### Inherited from
 
 TypeFromSchema.latestValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:331](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L331)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:364](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L364)

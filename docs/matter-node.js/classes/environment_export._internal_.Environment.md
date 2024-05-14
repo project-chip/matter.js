@@ -12,6 +12,7 @@ The following variables are defined by this class:
 * `log.stack.limit` - Stack trace limit, see https://nodejs.org/api/errors.html#errorstacktracelimit
 * `mdns.networkInterface` - Network interface to use for MDNS broadcasts and scanning, default are all available interfaces
 * `mdns.ipv4` - Also announce/scan on IPv4 interfaces
+* `network.interface` - Map of interface names to types, expected to be defined as object with name as key and of `{type: string|number}` objects with types: 1=Wifi, 2=Ethernet, 3=Cellular, 4=Thread (strings or numbers can be used). Can also be provided via env or cli like `MATTER_NETWORK_INTERFACE_ETH0_TYPE=Ethernet`
 
 TODO - could remove global singletons by moving here
 
@@ -64,7 +65,7 @@ TODO - could remove global singletons by moving here
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:25
+packages/matter.js/dist/esm/environment/Environment.d.ts:26
 
 ## Properties
 
@@ -74,7 +75,7 @@ packages/matter.js/dist/esm/environment/Environment.d.ts:25
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:24
+packages/matter.js/dist/esm/environment/Environment.d.ts:25
 
 ## Accessors
 
@@ -92,7 +93,7 @@ Currently only emits for services owned directly by this environment.
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:58
+packages/matter.js/dist/esm/environment/Environment.d.ts:59
 
 ___
 
@@ -110,7 +111,7 @@ Currently only emits for services owned directly by this environment.
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:64
+packages/matter.js/dist/esm/environment/Environment.d.ts:65
 
 ___
 
@@ -126,7 +127,7 @@ Name of the environment.
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:52
+packages/matter.js/dist/esm/environment/Environment.d.ts:53
 
 ___
 
@@ -142,7 +143,7 @@ Shortcut for accessing [RuntimeService](environment_export._internal_.RuntimeSer
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:88
+packages/matter.js/dist/esm/environment/Environment.d.ts:89
 
 ___
 
@@ -158,7 +159,7 @@ Shortcut for accessing [VariableService.vars](environment_export._internal_.Vari
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:84
+packages/matter.js/dist/esm/environment/Environment.d.ts:85
 
 ___
 
@@ -176,7 +177,7 @@ Currently only emits for services owned directly by this environment.
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:76
+packages/matter.js/dist/esm/environment/Environment.d.ts:77
 
 • `set` **default**(`env`): `void`
 
@@ -194,7 +195,7 @@ Set the default environment.
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:80
+packages/matter.js/dist/esm/environment/Environment.d.ts:81
 
 ## Methods
 
@@ -217,7 +218,7 @@ Remove an environmental service.
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:40
+packages/matter.js/dist/esm/environment/Environment.d.ts:41
 
 ___
 
@@ -233,7 +234,7 @@ Display tasks that supply diagnostics.
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:92
+packages/matter.js/dist/esm/environment/Environment.d.ts:93
 
 ___
 
@@ -263,7 +264,7 @@ This is a more convenient way to observe a specific service than [added](environ
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:70
+packages/matter.js/dist/esm/environment/Environment.d.ts:71
 
 ___
 
@@ -291,7 +292,7 @@ Access an environmental service.
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:33
+packages/matter.js/dist/esm/environment/Environment.d.ts:34
 
 ___
 
@@ -313,7 +314,7 @@ Determine if an environmental service is available.
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:29
+packages/matter.js/dist/esm/environment/Environment.d.ts:30
 
 ___
 
@@ -341,7 +342,7 @@ Access an environmental service, waiting for any async initialization to complet
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:44
+packages/matter.js/dist/esm/environment/Environment.d.ts:45
 
 ___
 
@@ -355,7 +356,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:93
+packages/matter.js/dist/esm/environment/Environment.d.ts:94
 
 ___
 
@@ -384,4 +385,4 @@ Install a preinitialized version of an environmental service.
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/Environment.d.ts:48
+packages/matter.js/dist/esm/environment/Environment.d.ts:49

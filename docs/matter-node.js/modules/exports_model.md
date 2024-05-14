@@ -552,7 +552,6 @@ these types or derive new types.
 | `FabricIndex` | [`FieldElement`](../interfaces/exports_model.FieldElement-1.md) | - |
 | `FeatureMap` | [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) | - |
 | `GeneratedCommandList` | [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) | - |
-| `SubjectId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `actionId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `any` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `attributeId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
@@ -563,6 +562,7 @@ these types or derive new types.
 | `date` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `deviceTypeId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `double` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `elapsedS` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `endpointNo` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `entryIdx` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `enum16` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
@@ -604,8 +604,10 @@ these types or derive new types.
 | `status` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `string` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `struct` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `subjectId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `systimeMs` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `systimeUs` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `temperature` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `tod` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `transactionId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `uint16` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |

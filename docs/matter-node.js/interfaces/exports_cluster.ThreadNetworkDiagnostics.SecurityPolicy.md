@@ -40,7 +40,7 @@ TypeFromSchema.flags
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:244
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:248
 
 ___
 
@@ -61,4 +61,4 @@ TypeFromSchema.rotationTime
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:237
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:241

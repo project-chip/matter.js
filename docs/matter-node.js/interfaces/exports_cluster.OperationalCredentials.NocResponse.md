@@ -54,7 +54,7 @@ TypeFromSchema.debugText
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:489
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:492
 
 ___
 
@@ -75,7 +75,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:481
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:484
 
 ___
 
@@ -95,4 +95,4 @@ TypeFromSchema.statusCode
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:474
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:477

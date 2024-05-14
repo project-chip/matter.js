@@ -40,4 +40,4 @@ TypeFromSchema.bootReason
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:377
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:400

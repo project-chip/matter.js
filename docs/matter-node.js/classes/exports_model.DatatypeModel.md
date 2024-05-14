@@ -50,7 +50,6 @@ A datatype represents a named, standalone type definition.
 - [conformance](exports_model.DatatypeModel.md#conformance)
 - [constraint](exports_model.DatatypeModel.md#constraint)
 - [definingModel](exports_model.DatatypeModel.md#definingmodel)
-- [deprecated](exports_model.DatatypeModel.md#deprecated)
 - [directMetatype](exports_model.DatatypeModel.md#directmetatype)
 - [disallowed](exports_model.DatatypeModel.md#disallowed)
 - [discriminator](exports_model.DatatypeModel.md#discriminator)
@@ -65,6 +64,7 @@ A datatype represents a named, standalone type definition.
 - [effectiveXref](exports_model.DatatypeModel.md#effectivexref)
 - [elements](exports_model.DatatypeModel.md#elements)
 - [globalBase](exports_model.DatatypeModel.md#globalbase)
+- [isDeprecated](exports_model.DatatypeModel.md#isdeprecated)
 - [key](exports_model.DatatypeModel.md#key)
 - [listEntry](exports_model.DatatypeModel.md#listentry)
 - [mandatory](exports_model.DatatypeModel.md#mandatory)
@@ -687,26 +687,6 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:67
 
 ___
 
-### deprecated
-
-• `get` **deprecated**(): `boolean`
-
-Is this model deprecated?
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-ValueModel.deprecated
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
-
-___
-
 ### directMetatype
 
 • `get` **directMetatype**(): `undefined` \| [`Metatype`](../enums/exports_model.Metatype-1.md)
@@ -979,6 +959,26 @@ ValueModel.globalBase
 #### Defined in
 
 packages/matter.js/dist/esm/model/models/Model.d.ts:98
+
+___
+
+### isDeprecated
+
+• `get` **isDeprecated**(): `boolean`
+
+Is this model deprecated?
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+ValueModel.isDeprecated
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
 
 ___
 

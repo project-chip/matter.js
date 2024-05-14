@@ -56,7 +56,7 @@ MatterSpecification.v11.Cluster § 1.3.7.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:103](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L103)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:103](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L103)
 
 ___
 
@@ -72,7 +72,7 @@ MatterSpecification.v11.Cluster § 1.3.7.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L18)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:18](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L18)
 
 ___
 
@@ -88,7 +88,7 @@ MatterSpecification.v11.Cluster § 1.3.7.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L25)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L25)
 
 ___
 
@@ -105,7 +105,7 @@ MatterSpecification.v11.Cluster § 1.3.7.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L48)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L48)
 
 ___
 
@@ -143,7 +143,7 @@ MatterSpecification.v11.Cluster § 1.3.7.9
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:77](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L77)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:77](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L77)
 
 ___
 
@@ -159,9 +159,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L105)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:105](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L105)
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:161](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L161)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:161](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L161)
 
 ___
 
@@ -178,7 +178,7 @@ MatterSpecification.v11.Cluster § 1.3.7.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:85](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L85)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:85](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L85)
 
 ___
 
@@ -194,7 +194,7 @@ MatterSpecification.v11.Cluster § 1.3.7.10
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:92](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L92)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:92](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L92)
 
 ___
 
@@ -211,7 +211,7 @@ MatterSpecification.v11.Cluster § 1.3.7.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L33)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L33)
 
 ___
 
@@ -227,7 +227,7 @@ MatterSpecification.v11.Cluster § 1.3.7.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L40)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L40)
 
 ## Variables
 
@@ -239,8 +239,8 @@ GroupsBehavior is the base class for objects that support interaction with [Grou
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts:16](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/groups/GroupsBehavior.ts#L23)

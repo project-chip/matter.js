@@ -60,7 +60,7 @@ StateType.activeNetworkFaults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1156](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1156)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1161](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1161)
 
 ___
 
@@ -80,7 +80,7 @@ StateType.activeTimestamp
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1101)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1106](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1106)
 
 ___
 
@@ -102,7 +102,7 @@ StateType.channel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:991](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L991)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:996](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L996)
 
 ___
 
@@ -126,7 +126,7 @@ StateType.channelPage0Mask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1134](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1134)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1139](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1139)
 
 ___
 
@@ -147,7 +147,7 @@ StateType.dataVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1076](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1076)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1081](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1081)
 
 ___
 
@@ -167,7 +167,7 @@ StateType.delay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1115](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1115)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1120](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1120)
 
 ___
 
@@ -189,7 +189,7 @@ StateType.extendedPanId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1027](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1027)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1032](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1032)
 
 ___
 
@@ -211,7 +211,7 @@ StateType.leaderRouterId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1094](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1094)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1099](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1099)
 
 ___
 
@@ -233,7 +233,7 @@ StateType.meshLocalPrefix
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1036](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1036)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1041](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1041)
 
 ___
 
@@ -254,7 +254,7 @@ StateType.neighborTable
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1044](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1044)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1049](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1049)
 
 ___
 
@@ -276,7 +276,7 @@ StateType.networkName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1010](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1010)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1015](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1015)
 
 ___
 
@@ -297,7 +297,7 @@ StateType.operationalDatasetComponents
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1142](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1142)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1147](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1147)
 
 ___
 
@@ -318,7 +318,7 @@ StateType.panId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1018](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1018)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1023](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1023)
 
 ___
 
@@ -339,7 +339,7 @@ StateType.partitionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1060](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1060)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1065](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1065)
 
 ___
 
@@ -359,7 +359,7 @@ StateType.pendingTimestamp
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1108](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1108)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1113](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1113)
 
 ___
 
@@ -380,7 +380,7 @@ StateType.routeTable
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1052](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1052)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1057](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1057)
 
 ___
 
@@ -403,7 +403,7 @@ StateType.routingRole
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1001](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1001)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1006](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1006)
 
 ___
 
@@ -424,7 +424,7 @@ StateType.securityPolicy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1123](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1123)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1128](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1128)
 
 ___
 
@@ -446,7 +446,7 @@ StateType.stableDataVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1085](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1085)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1090](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1090)
 
 ___
 
@@ -467,4 +467,4 @@ StateType.weighting
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1068](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1068)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1073](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1073)

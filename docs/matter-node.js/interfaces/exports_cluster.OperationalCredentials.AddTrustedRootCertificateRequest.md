@@ -34,4 +34,4 @@ TypeFromSchema.rootCaCertificate
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:562
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:624

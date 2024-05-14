@@ -54,7 +54,7 @@ A ApplicationLauncherCluster supports these elements if it supports feature Appl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:200](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L200)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:200](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L200)
 
 ___
 
@@ -83,7 +83,7 @@ These elements and properties are present in all ApplicationLauncher clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:233](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L233)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:233](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L233)
 
 ___
 
@@ -93,9 +93,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:343](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L343)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:343](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L343)
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:345](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L345)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:345](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L345)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:331](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L331)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:331](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L331)
 
 ___
 
@@ -119,9 +119,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:374](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L374)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:374](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L374)
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:376](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L376)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:376](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L376)
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:351](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L351)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:351](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L351)
 
 ___
 
@@ -151,7 +151,7 @@ MatterSpecification.v11.Cluster § 6.4.5.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:62](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L62)
 
 ___
 
@@ -167,7 +167,7 @@ MatterSpecification.v11.Cluster § 6.4.5.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L28)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:28](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L28)
 
 ___
 
@@ -183,7 +183,7 @@ MatterSpecification.v11.Cluster § 6.4.4.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:181](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L181)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:181](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L181)
 
 ___
 
@@ -199,7 +199,7 @@ MatterSpecification.v11.Cluster § 6.4.4.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L79)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:79](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L79)
 
 ___
 
@@ -215,7 +215,7 @@ MatterSpecification.v11.Cluster § 6.4.4.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L132)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:132](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L132)
 
 ___
 
@@ -231,4 +231,4 @@ MatterSpecification.v11.Cluster § 6.4.4.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:160](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L160)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:160](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L160)

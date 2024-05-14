@@ -65,7 +65,7 @@ ValueElement.access
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/ValueElement.ts#L38)
+[packages/matter.js/src/model/elements/ValueElement.ts:38](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/ValueElement.ts#L38)
 
 ___
 
@@ -81,7 +81,7 @@ ValueElement.byteSize
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/ValueElement.ts#L48)
+[packages/matter.js/src/model/elements/ValueElement.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/ValueElement.ts#L48)
 
 ___
 
@@ -95,7 +95,7 @@ ValueElement.children
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/DatatypeElement.ts#L31)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/DatatypeElement.ts#L31)
 
 ___
 
@@ -111,7 +111,7 @@ ValueElement.conformance
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/ValueElement.ts#L33)
+[packages/matter.js/src/model/elements/ValueElement.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/ValueElement.ts#L33)
 
 ___
 
@@ -127,7 +127,7 @@ ValueElement.constraint
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/ValueElement.ts#L28)
+[packages/matter.js/src/model/elements/ValueElement.ts:28](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/ValueElement.ts#L28)
 
 ___
 
@@ -143,7 +143,7 @@ ValueElement.default
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/ValueElement.ts#L53)
+[packages/matter.js/src/model/elements/ValueElement.ts:53](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/ValueElement.ts#L53)
 
 ___
 
@@ -159,7 +159,7 @@ ValueElement.description
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/BaseElement.ts#L40)
+[packages/matter.js/src/model/elements/BaseElement.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/BaseElement.ts#L40)
 
 ___
 
@@ -175,7 +175,7 @@ ValueElement.details
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/BaseElement.ts#L45)
+[packages/matter.js/src/model/elements/BaseElement.ts:45](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/BaseElement.ts#L45)
 
 ___
 
@@ -192,7 +192,7 @@ ValueElement.global
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/BaseElement.ts#L61)
+[packages/matter.js/src/model/elements/BaseElement.ts:61](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/BaseElement.ts#L61)
 
 ___
 
@@ -208,7 +208,7 @@ ValueElement.id
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/DatatypeElement.ts#L29)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/DatatypeElement.ts#L29)
 
 ___
 
@@ -223,7 +223,7 @@ type.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/DatatypeElement.ts#L24)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/DatatypeElement.ts#L24)
 
 ___
 
@@ -240,7 +240,7 @@ ValueElement.name
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/BaseElement.ts#L29)
+[packages/matter.js/src/model/elements/BaseElement.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/BaseElement.ts#L29)
 
 ___
 
@@ -256,7 +256,7 @@ ValueElement.quality
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/ValueElement.ts#L43)
+[packages/matter.js/src/model/elements/ValueElement.ts:43](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/ValueElement.ts#L43)
 
 ___
 
@@ -266,7 +266,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/DatatypeElement.ts#L16)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:16](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/DatatypeElement.ts#L16)
 
 ___
 
@@ -283,9 +283,9 @@ ValueElement.type
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/BaseElement.ts#L35)
+[packages/matter.js/src/model/elements/BaseElement.ts:35](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/BaseElement.ts#L35)
 
-[packages/matter.js/src/model/elements/ValueElement.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/ValueElement.ts#L23)
+[packages/matter.js/src/model/elements/ValueElement.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/ValueElement.ts#L23)
 
 ___
 
@@ -301,4 +301,4 @@ ValueElement.xref
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/BaseElement.ts#L50)
+[packages/matter.js/src/model/elements/BaseElement.ts:50](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/BaseElement.ts#L50)

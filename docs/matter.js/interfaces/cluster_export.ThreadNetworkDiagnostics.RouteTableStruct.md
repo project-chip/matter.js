@@ -4,11 +4,6 @@
 
 [cluster/export](../modules/cluster_export.md).[ThreadNetworkDiagnostics](../modules/cluster_export.ThreadNetworkDiagnostics.md).RouteTableStruct
 
-This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table entry
-corresponds.
-
-This field shall specify the RLOC16 for the Node for which this route table entry corresponds.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.13.5.5
@@ -40,13 +35,20 @@ MatterSpecification.v11.Core § 11.13.5.5
 
 • **age**: `number`
 
+This field shall specify the duration of time, in seconds, since a frame has been received from the Node for
+which this route table entry corresponds.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.13.5.5.8
+
 #### Inherited from
 
 TypeFromSchema.age
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:248](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L248)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:258](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L258)
 
 ___
 
@@ -58,7 +60,7 @@ This field shall specify if the router ID as defined within the RouterId field h
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.6
+MatterSpecification.v11.Core § 11.13.5.5.9
 
 #### Inherited from
 
@@ -66,7 +68,7 @@ TypeFromSchema.allocated
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:255](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L255)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:265](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L265)
 
 ___
 
@@ -74,13 +76,20 @@ ___
 
 • **extAddress**: `number` \| `bigint`
 
+This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table entry
+corresponds.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.13.5.5.1
+
 #### Inherited from
 
 TypeFromSchema.extAddress
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:204](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L204)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:205](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L205)
 
 ___
 
@@ -93,7 +102,7 @@ corresponds.
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.7
+MatterSpecification.v11.Core § 11.13.5.5.10
 
 #### Inherited from
 
@@ -101,7 +110,7 @@ TypeFromSchema.linkEstablished
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:263](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L263)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:273](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L273)
 
 ___
 
@@ -114,7 +123,7 @@ scaled from 0 to 255, from the perspective of the Node reporting the neighbor ta
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.4
+MatterSpecification.v11.Core § 11.13.5.5.6
 
 #### Inherited from
 
@@ -122,7 +131,7 @@ TypeFromSchema.lqiIn
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:235](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L235)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:242](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L242)
 
 ___
 
@@ -133,12 +142,9 @@ ___
 This field shall specify the implementation specific mix of IEEE 802.15.4 PDU receive quality indicators,
 scaled from 0 to 255, from the perspective of the Node specified within the NextHop field.
 
-This field shall specify the duration of time, in seconds, since a frame has been received from the Node for
-which this route table entry corresponds.
-
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.5
+MatterSpecification.v11.Core § 11.13.5.5.7
 
 #### Inherited from
 
@@ -146,7 +152,7 @@ TypeFromSchema.lqiOut
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:246](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L246)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:250](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L250)
 
 ___
 
@@ -159,7 +165,7 @@ entry corresponds.
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.2
+MatterSpecification.v11.Core § 11.13.5.5.4
 
 #### Inherited from
 
@@ -167,7 +173,7 @@ TypeFromSchema.nextHop
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:220](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L220)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:227](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L227)
 
 ___
 
@@ -179,7 +185,7 @@ This Field shall specify the cost of the route to the Node for which this route 
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.3
+MatterSpecification.v11.Core § 11.13.5.5.5
 
 #### Inherited from
 
@@ -187,7 +193,7 @@ TypeFromSchema.pathCost
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:227](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L227)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:234](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L234)
 
 ___
 
@@ -195,13 +201,19 @@ ___
 
 • **rloc16**: `number`
 
+This field shall specify the RLOC16 for the Node for which this route table entry corresponds.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.13.5.5.2
+
 #### Inherited from
 
 TypeFromSchema.rloc16
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:205](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L205)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:212](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L212)
 
 ___
 
@@ -213,7 +225,7 @@ This field shall specify the Router ID for the Node for which this route table e
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.1
+MatterSpecification.v11.Core § 11.13.5.5.3
 
 #### Inherited from
 
@@ -221,4 +233,4 @@ TypeFromSchema.routerId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:212](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L212)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:219](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L219)

@@ -29,13 +29,19 @@ MatterSpecification.v11.Core § 11.8.7.7
 
 • `Optional` **breadcrumb**: `number` \| `bigint`
 
+See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.7.2
+
 #### Inherited from
 
 TypeFromSchema.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:349](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L349)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:362](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L362)
 
 ___
 
@@ -43,10 +49,18 @@ ___
 
 • **networkId**: `Uint8Array`
 
+This field shall contain the NetworkID for the entry to remove: the SSID for Wi-Fi and XPAN ID
+
+for Thread.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.7.1
+
 #### Inherited from
 
 TypeFromSchema.networkId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:348](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L348)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:355](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L355)

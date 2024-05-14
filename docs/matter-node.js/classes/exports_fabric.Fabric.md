@@ -12,29 +12,27 @@
 
 ### Properties
 
+- [#private](exports_fabric.Fabric.md##private)
 - [caseAuthenticatedTags](exports_fabric.Fabric.md#caseauthenticatedtags)
 - [fabricId](exports_fabric.Fabric.md#fabricid)
 - [fabricIndex](exports_fabric.Fabric.md#fabricindex)
 - [identityProtectionKey](exports_fabric.Fabric.md#identityprotectionkey)
 - [intermediateCACert](exports_fabric.Fabric.md#intermediatecacert)
-- [keyPair](exports_fabric.Fabric.md#keypair)
 - [label](exports_fabric.Fabric.md#label)
 - [nodeId](exports_fabric.Fabric.md#nodeid)
 - [operationalCert](exports_fabric.Fabric.md#operationalcert)
 - [operationalId](exports_fabric.Fabric.md#operationalid)
 - [operationalIdentityProtectionKey](exports_fabric.Fabric.md#operationalidentityprotectionkey)
-- [persistCallback](exports_fabric.Fabric.md#persistcallback)
-- [removeCallbacks](exports_fabric.Fabric.md#removecallbacks)
 - [rootCert](exports_fabric.Fabric.md#rootcert)
 - [rootNodeId](exports_fabric.Fabric.md#rootnodeid)
 - [rootPublicKey](exports_fabric.Fabric.md#rootpublickey)
 - [rootVendorId](exports_fabric.Fabric.md#rootvendorid)
-- [scopedClusterData](exports_fabric.Fabric.md#scopedclusterdata)
-- [sessions](exports_fabric.Fabric.md#sessions)
 
 ### Accessors
 
 - [externalInformation](exports_fabric.Fabric.md#externalinformation)
+- [persistCallback](exports_fabric.Fabric.md#persistcallback)
+- [publicKey](exports_fabric.Fabric.md#publickey)
 
 ### Methods
 
@@ -44,16 +42,15 @@
 - [deleteScopedClusterData](exports_fabric.Fabric.md#deletescopedclusterdata)
 - [deleteScopedClusterDataValue](exports_fabric.Fabric.md#deletescopedclusterdatavalue)
 - [getDestinationId](exports_fabric.Fabric.md#getdestinationid)
-- [getPublicKey](exports_fabric.Fabric.md#getpublickey)
 - [getScopedClusterDataKeys](exports_fabric.Fabric.md#getscopedclusterdatakeys)
 - [getScopedClusterDataValue](exports_fabric.Fabric.md#getscopedclusterdatavalue)
 - [hasScopedClusterDataValue](exports_fabric.Fabric.md#hasscopedclusterdatavalue)
 - [matchesFabricIdAndRootPublicKey](exports_fabric.Fabric.md#matchesfabricidandrootpublickey)
+- [matchesKeyPair](exports_fabric.Fabric.md#matcheskeypair)
 - [persist](exports_fabric.Fabric.md#persist)
 - [remove](exports_fabric.Fabric.md#remove)
 - [removeSession](exports_fabric.Fabric.md#removesession)
 - [setLabel](exports_fabric.Fabric.md#setlabel)
-- [setPersistCallback](exports_fabric.Fabric.md#setpersistcallback)
 - [setScopedClusterDataValue](exports_fabric.Fabric.md#setscopedclusterdatavalue)
 - [sign](exports_fabric.Fabric.md#sign)
 - [toStorageObject](exports_fabric.Fabric.md#tostorageobject)
@@ -93,9 +90,19 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:63
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:62
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:47
+
+___
 
 ### caseAuthenticatedTags
 
@@ -103,7 +110,7 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:63
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:58
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:61
 
 ___
 
@@ -113,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:45
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:49
 
 ___
 
@@ -123,7 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:44
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:48
 
 ___
 
@@ -133,7 +140,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:53
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:56
 
 ___
 
@@ -143,17 +150,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:55
-
-___
-
-### keyPair
-
-• `Private` `Readonly` **keyPair**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:50
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:58
 
 ___
 
@@ -163,7 +160,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:57
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:60
 
 ___
 
@@ -173,7 +170,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:46
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:50
 
 ___
 
@@ -183,7 +180,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:56
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:59
 
 ___
 
@@ -193,7 +190,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:48
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:52
 
 ___
 
@@ -203,27 +200,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:54
-
-___
-
-### persistCallback
-
-• `Private` **persistCallback**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:62
-
-___
-
-### removeCallbacks
-
-• `Private` **removeCallbacks**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:61
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:57
 
 ___
 
@@ -233,7 +210,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:52
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:55
 
 ___
 
@@ -243,7 +220,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:47
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:51
 
 ___
 
@@ -253,7 +230,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:49
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:53
 
 ___
 
@@ -263,27 +240,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:51
-
-___
-
-### scopedClusterData
-
-• `Private` `Readonly` **scopedClusterData**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:60
-
-___
-
-### sessions
-
-• `Private` `Readonly` **sessions**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:59
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:54
 
 ## Accessors
 
@@ -298,6 +255,40 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:59
 #### Defined in
 
 packages/matter.js/dist/esm/fabric/Fabric.d.ts:85
+
+___
+
+### persistCallback
+
+• `set` **persistCallback**(`callback`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `callback` | (`isUpdate?`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:76
+
+___
+
+### publicKey
+
+• `get` **publicKey**(): `Uint8Array`
+
+#### Returns
+
+`Uint8Array`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:66
 
 ## Methods
 
@@ -423,20 +414,6 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:71
 
 ___
 
-### getPublicKey
-
-▸ **getPublicKey**(): `Uint8Array`
-
-#### Returns
-
-`Uint8Array`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:67
-
-___
-
 ### getScopedClusterDataKeys
 
 ▸ **getScopedClusterDataKeys**(`cluster`): `string`[]
@@ -515,6 +492,26 @@ ___
 | :------ | :------ |
 | `fabricId` | [`FabricId`](../modules/exports_datatype.md#fabricid) |
 | `rootPublicKey` | `Uint8Array` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:69
+
+___
+
+### matchesKeyPair
+
+▸ **matchesKeyPair**(`keyPair`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `keyPair` | [`Key`](../interfaces/crypto_export.Key.md) |
 
 #### Returns
 
@@ -602,27 +599,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:66
-
-___
-
-### setPersistCallback
-
-▸ **setPersistCallback**(`callback`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `callback` | (`isUpdate?`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:76
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:65
 
 ___
 
@@ -670,7 +647,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:68
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:67
 
 ___
 
@@ -684,20 +661,20 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:64
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:63
 
 ___
 
 ### verifyCredentials
 
-▸ **verifyCredentials**(`_operationalCert`, `_intermediateCACert`): `void`
+▸ **verifyCredentials**(`operationalCert`, `intermediateCACert?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `_operationalCert` | `Uint8Array` |
-| `_intermediateCACert` | `undefined` \| `Uint8Array` |
+| `operationalCert` | `Uint8Array` |
+| `intermediateCACert?` | `Uint8Array` |
 
 #### Returns
 
@@ -705,7 +682,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:69
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:68
 
 ___
 
@@ -725,4 +702,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:65
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:64

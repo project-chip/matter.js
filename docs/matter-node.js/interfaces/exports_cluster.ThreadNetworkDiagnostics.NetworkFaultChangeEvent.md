@@ -42,7 +42,7 @@ TypeFromSchema.current
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:396
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:400
 
 ___
 
@@ -63,4 +63,4 @@ TypeFromSchema.previous
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:403
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:407

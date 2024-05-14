@@ -38,7 +38,7 @@ ___
 
 ### ClusterInstance
 
-• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `allowedVendorList`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`VendorId`](exports_datatype.md#vendorid)[], `any`\> ; `application`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `applicationName`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`, `any`\> ; `applicationVersion`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`, `any`\> ; `productId`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> ; `status`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`ApplicationStatus`](../enums/exports_cluster.ApplicationBasic.ApplicationStatus.md), `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<[`VendorId`](exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\>  } ; `id`: ``1293`` ; `name`: ``"ApplicationBasic"`` ; `revision`: ``1``  }\>
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `allowedVendorList`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`VendorId`](exports_datatype.md#vendorid)[], `any`\> ; `application`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `applicationName`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`, `any`\> ; `applicationVersion`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`, `any`\> ; `productId`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> ; `status`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`ApplicationStatus`](../enums/exports_cluster.ApplicationBasic.ApplicationStatus.md), `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<[`VendorId`](exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\>  } ; `id`: ``1293`` ; `name`: ``"ApplicationBasic"`` ; `revision`: ``1``  }\>
 
 **`See`**
 
@@ -62,7 +62,7 @@ ___
 
 ### TlvApplicationStruct
 
-• `Const` **TlvApplicationStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+• `Const` **TlvApplicationStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This indicates a global identifier for an Application given a catalog.
 

@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L25)
+[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L25)
 
-[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:65](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L65)
+[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:65](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L65)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L56)
+[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:56](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L56)

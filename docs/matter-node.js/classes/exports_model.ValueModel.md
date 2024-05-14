@@ -59,7 +59,6 @@ this class.
 - [conformance](exports_model.ValueModel.md#conformance)
 - [constraint](exports_model.ValueModel.md#constraint)
 - [definingModel](exports_model.ValueModel.md#definingmodel)
-- [deprecated](exports_model.ValueModel.md#deprecated)
 - [directMetatype](exports_model.ValueModel.md#directmetatype)
 - [disallowed](exports_model.ValueModel.md#disallowed)
 - [discriminator](exports_model.ValueModel.md#discriminator)
@@ -74,6 +73,7 @@ this class.
 - [effectiveXref](exports_model.ValueModel.md#effectivexref)
 - [elements](exports_model.ValueModel.md#elements)
 - [globalBase](exports_model.ValueModel.md#globalbase)
+- [isDeprecated](exports_model.ValueModel.md#isdeprecated)
 - [key](exports_model.ValueModel.md#key)
 - [listEntry](exports_model.ValueModel.md#listentry)
 - [mandatory](exports_model.ValueModel.md#mandatory)
@@ -613,22 +613,6 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:67
 
 ___
 
-### deprecated
-
-• `get` **deprecated**(): `boolean`
-
-Is this model deprecated?
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
-
-___
-
 ### directMetatype
 
 • `get` **directMetatype**(): `undefined` \| [`Metatype`](../enums/exports_model.Metatype-1.md)
@@ -869,6 +853,22 @@ Model.globalBase
 #### Defined in
 
 packages/matter.js/dist/esm/model/models/Model.d.ts:98
+
+___
+
+### isDeprecated
+
+• `get` **isDeprecated**(): `boolean`
+
+Is this model deprecated?
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
 
 ___
 
