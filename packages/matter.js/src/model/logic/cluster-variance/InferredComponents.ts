@@ -53,11 +53,13 @@ function pattern(...parts: string[]) {
     return new RegExp(`^${parts.join("")}$`);
 }
 
-const FEATURE_NAME = "[A-Z_][A-Z_]+";
+const FEATURE_NAME = "[A-Z_][A-Z_0-9]+";
 const FEATURE = `(${FEATURE_NAME})`;
 const CONJUNCT_FEATURES = `(${FEATURE_NAME}(?: & ${FEATURE_NAME})*)`;
 const DISJUNCT_FEATURES = CONJUNCT_FEATURES.replace(/&/g, "[|,]");
 const FIELD = "[A-Z][A-Za-z_$]*[a-z][A-Za-z_$]*";
+const CONJUNCT_FIELDS = `(${FIELD}(?: & ${FIELD})*)`;
+const DISJUNCT_FIELDS = CONJUNCT_FIELDS.replace(/&/g, "[|,]");
 const AND = " & ";
 const NOT = "!";
 
@@ -70,23 +72,20 @@ function splitDisjunction(disjunction: string) {
 }
 
 /**
- * We use a rules-based approach to infer cluster variance.  The goal is to
- * classify into as few sets as possible.  This leads to fewer duplicated
- * elements and reduced complexity of generated clusters.
+ * We use a rules-based approach to infer cluster variance.  The goal is to classify into as few sets as possible.  This
+ * leads to fewer duplicated elements and reduced complexity of generated clusters.
  *
- * Matches string form rather than the AST because that is also simpler for
- * the moment.  Note this is less fragile than it may appear because string is
- * normalized product of parser -> AST -> serializer.
+ * Matches string form rather than the AST because that is also simpler for the moment.  This is less fragile than it
+ * may appear because string is normalized product of parser -> AST -> serializer.
  *
- * Note also that this only applies to conformance of cluster-level elements.
- * There is considerably more variance in field-level conformance but we handle
- * that with the record validator which supports the entire dialect.
+ * Note also that this only applies to conformance of cluster-level elements. There is considerably more variance in
+ * field-level conformance but we handle that with the record validator which supports the entire dialect.
  */
 const VarianceMatchers: VarianceMatcher[] = [
     // Mandatory, unconditional
     {
         pattern: pattern("(?:|M)"),
-        processor: add => {
+        processor(add) {
             add();
         },
     },
@@ -94,16 +93,31 @@ const VarianceMatchers: VarianceMatcher[] = [
     // Optional, unconditional
     {
         pattern: pattern("(?:O|desc)"),
-        processor: add => {
+        processor(add) {
             add(true);
         },
     },
 
-    // Optional, unconditional.  Ignores field expression which can only be
-    // enforced at runtime
+    // fieldName (optional, unconditional).  Ignores field reference which can only be enforced at runtime
+    {
+        pattern: pattern(FIELD),
+        processor(add) {
+            add(true);
+        },
+    },
+
+    // fieldName > num (optional, unconditional).  Ignores field expression
     {
         pattern: pattern(FIELD, " > ", "\\d+"),
-        processor: add => {
+        processor(add) {
+            add(true);
+        },
+    },
+
+    // fieldName, O (optional, unconditional).  Ignores field reference
+    {
+        pattern: pattern(FIELD, ", ", "O"),
+        processor(add) {
             add(true);
         },
     },
@@ -111,7 +125,7 @@ const VarianceMatchers: VarianceMatcher[] = [
     // FOO & fieldName (field ignored as must be runtime enforced)
     {
         pattern: pattern(FEATURE, AND, FIELD),
-        processor: (add, match) => {
+        processor(add, match) {
             add(true, { allOf: match });
         },
     },
@@ -119,7 +133,7 @@ const VarianceMatchers: VarianceMatcher[] = [
     // FOO<& BAR>*
     {
         pattern: pattern(CONJUNCT_FEATURES),
-        processor: (add, match) => {
+        processor(add, match) {
             add(false, { allOf: splitConjunction(match[0]) });
         },
     },
@@ -127,23 +141,39 @@ const VarianceMatchers: VarianceMatcher[] = [
     // [FOO<& BAR>*]
     {
         pattern: pattern("[", CONJUNCT_FEATURES, "]"),
-        processor: (add, match) => {
+        processor(add, match) {
             add(true, { allOf: splitConjunction(match[0]) });
         },
     },
 
-    // FOO<| BAR*> or FOO<, BAR>*
+    // [FOO<| BAR>+]
+    {
+        pattern: pattern("[", DISJUNCT_FEATURES, "]"),
+        processor(add, match) {
+            add(true, { anyOf: splitDisjunction(match[0]) });
+        },
+    },
+
+    // FOO<| BAR>* or FOO<, BAR>*
     {
         pattern: pattern(DISJUNCT_FEATURES),
-        processor: (add, match) => {
+        processor(add, match) {
             add(false, { anyOf: splitDisjunction(match[0]) });
+        },
+    },
+
+    // Field<| Field>* or Field<, Field>* (optional, unconditional).  Ignores field references
+    {
+        pattern: pattern(DISJUNCT_FIELDS),
+        processor(add) {
+            add(true);
         },
     },
 
     // FOO, [BAR]
     {
         pattern: pattern(FEATURE, ", ", "[", FEATURE, "]"),
-        processor: (add, match) => {
+        processor(add, match) {
             // Must add to two sets because optionality differs
             add(false, { allOf: [match[0]] });
             add(true, { allOf: [match[1]] });
@@ -153,7 +183,7 @@ const VarianceMatchers: VarianceMatcher[] = [
     // !FOO & BAR
     {
         pattern: pattern(NOT, FEATURE, AND, FEATURE),
-        processor: (add, match) => {
+        processor(add, match) {
             add(false, { allOf: [match[1]], not: match[0] });
         },
     },
@@ -161,7 +191,7 @@ const VarianceMatchers: VarianceMatcher[] = [
     // !FOO & [BAR]
     {
         pattern: pattern(NOT, FEATURE, AND, "[", FEATURE, "]"),
-        processor: (add, match) => {
+        processor(add, match) {
             add(true, { allOf: [match[1]], not: match[0] });
         },
     },
@@ -169,7 +199,7 @@ const VarianceMatchers: VarianceMatcher[] = [
     // !FOO & (BAR<| BIZ>*)
     {
         pattern: pattern(NOT, FEATURE, AND, "(", DISJUNCT_FEATURES, ")"),
-        processor: (add, match) => {
+        processor(add, match) {
             add(true, { allOf: splitDisjunction(match[1]), not: match[0] });
         },
     },
@@ -177,7 +207,7 @@ const VarianceMatchers: VarianceMatcher[] = [
     // !FOO
     {
         pattern: pattern(NOT, FEATURE),
-        processor: (add, match) => {
+        processor(add, match) {
             add(false, { not: match[0] });
         },
     },
@@ -185,17 +215,34 @@ const VarianceMatchers: VarianceMatcher[] = [
     // [!FOO]
     {
         pattern: pattern("[", NOT, FEATURE, "]"),
-        processor: (add, match) => {
+        processor(add, match) {
             add(true, { not: match[0] });
+        },
+    },
+
+    // [!FOO & BAR]
+    {
+        pattern: pattern("[", NOT, FEATURE, AND, FEATURE, "]"),
+        processor(add, match) {
+            add(true, { not: match[0], allOf: [match[1]] });
         },
     },
 
     // FOO & BAR, [BIZ]
     {
         pattern: pattern(FEATURE, AND, FEATURE, ", ", "[", FEATURE, "]"),
-        processor: (add, match) => {
+        processor(add, match) {
             add(false, { allOf: match.slice(0, 2) });
             add(true, { allOf: [match[2]] });
+        },
+    },
+
+    // FOO, O
+    {
+        pattern: pattern(FEATURE, ", ", "O"),
+        processor(add, match) {
+            add(false, { allOf: [match[0]] });
+            add(true);
         },
     },
 ];

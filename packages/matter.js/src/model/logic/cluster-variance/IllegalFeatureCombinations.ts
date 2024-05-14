@@ -78,15 +78,51 @@ function addFeatureNode(
         throw new InternalError(`New rule required to support ${feature.path} conformance "${feature.conformance}"`);
     }
 
-    function addDisjunctRequirement(flags: FeatureBitmap, node: Conformance.Ast) {
+    /**
+     * Extract a flag for a single feature.  Fails unless the AST is for NAME or !NAME.
+     */
+    function extractFeature(node: Conformance.Ast) {
         switch (node.type) {
             case Conformance.Special.Name:
-                flags[node.param] = false;
+                return { [node.param]: true };
+
+            case Conformance.Operator.NOT:
+                if (node.param.type === Conformance.Special.Name) {
+                    return { [node.param.param]: false };
+                } else {
+                    unsupported();
+                }
+        }
+    }
+
+    /**
+     * Extends a flag set with flag values that are disallowed given the base feature set.
+     */
+    function addExclusivityRequirement(flags: FeatureBitmap, node: Conformance.Ast) {
+        switch (node.type) {
+            case Conformance.OR:
+                addExclusivityRequirement(flags, node.param.lhs);
+                addExclusivityRequirement(flags, node.param.rhs);
                 break;
 
-            case Conformance.OR:
-                addDisjunctRequirement(flags, node.param.lhs);
-                addDisjunctRequirement(flags, node.param.rhs);
+            default:
+                Object.assign(flags, extractFeature(node));
+                break;
+        }
+    }
+
+    /**
+     * Add illegal feature sets for features that must be enabled based on the state of other features.
+     */
+    function addDependencyRequirement(feature: string, node: Conformance.Ast) {
+        switch (node.type) {
+            case Conformance.Special.Name:
+                illegal.push({ [feature]: true, [node.param]: false });
+                break;
+
+            case Conformance.AND:
+                addDependencyRequirement(feature, node.param.lhs);
+                addDependencyRequirement(feature, node.param.rhs);
                 break;
 
             default:
@@ -94,23 +130,47 @@ function addFeatureNode(
         }
     }
 
-    function addConjunctRequirement(feature: string, node: Conformance.Ast) {
-        switch (node.type) {
-            case Conformance.Special.Name:
-                illegal.push({ [feature]: true, [node.param]: false });
-                break;
+    /**
+     * Extract a feature flag disjunction.  Supports | and !.
+     */
+    function extractDisjunctFeatures(node: Conformance.Ast) {
+        const result = {} as FeatureBitmap;
 
-            case Conformance.AND:
-                addConjunctRequirement(feature, node.param.lhs);
-                addConjunctRequirement(feature, node.param.rhs);
-                break;
+        function extract(node: Conformance.Ast, invert = false) {
+            switch (node.type) {
+                case Conformance.Special.Name:
+                    result[node.param] = !invert;
+                    break;
+
+                case Conformance.Operator.OR:
+                    extract(node.param.lhs, invert);
+                    extract(node.param.rhs, invert);
+                    break;
+
+                case Conformance.Operator.NOT:
+                    extract(node.param, !invert);
+                    break;
+
+                default:
+                    unsupported();
+            }
         }
+
+        extract(node);
+
+        return result;
     }
 
     switch (node.type) {
+        case Conformance.Special.Desc:
         case Conformance.Special.Empty:
         case Conformance.Flag.Optional:
         case Conformance.Flag.Provisional:
+            break;
+
+        case Conformance.Flag.Deprecated:
+        case Conformance.Flag.Disallowed:
+            illegal.push({ [feature.name]: true });
             break;
 
         case Conformance.Special.Group:
@@ -137,14 +197,29 @@ function addFeatureNode(
             break;
 
         case Conformance.Special.OptionalIf:
-            if (node.param.type == Conformance.AND) {
-                addConjunctRequirement(feature.name, node.param);
+            if (node.param.type === Conformance.AND) {
+                addDependencyRequirement(feature.name, node.param);
             } else {
                 const flags = FeatureBitmap({ [feature.name]: true });
-                addDisjunctRequirement(flags, node.param);
+                addExclusivityRequirement(flags, node.param);
                 illegal.push(flags);
             }
             break;
+
+        case Conformance.Operator.AND: {
+            // Handles simple conjunctions like "FOO & BAR" and "(STA|PAU|FA|CON) & !SFR"
+            const lhsFeatures = extractDisjunctFeatures(node.param.lhs);
+            const rhsFeature = extractFeature(node.param.rhs);
+
+            for (const lhsFeature in lhsFeatures) {
+                illegal.push({
+                    feature: false,
+                    [lhsFeature]: lhsFeatures[lhsFeature],
+                    ...rhsFeature,
+                });
+            }
+            break;
+        }
 
         default:
             unsupported();

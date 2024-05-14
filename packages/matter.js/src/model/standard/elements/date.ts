@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DatatypeElement as Datatype, FieldElement as Field } from "../../elements/index.js";
 
 export const date = Datatype({
-    name: "date", type: "struct", description: "Date", isSeed: true,
+    name: "date", type: "struct", description: "Date", isSeed: true, metatype: "date",
     details: "This data type shall be a struct as defined below." +
         "\n" +
         "Valid combinations using null fields are",

@@ -228,6 +228,11 @@ function installPreciseDetails(
         const name = r.name.toLowerCase();
         let detail = lookup[`${name} ${titleSuffix}`] || lookup[`${name}`];
 
+        // Grr WC (at least) doing their own thing per usual and uses "bits" suffix instead of "bit"
+        if (detail === undefined && titleSuffix === "bit") {
+            detail = lookup[`${name} bits`];
+        }
+
         if (detail === undefined) {
             const description = (r as { description?: string }).description?.toLowerCase();
             if (description !== undefined) {

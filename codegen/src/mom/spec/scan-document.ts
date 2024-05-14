@@ -11,17 +11,35 @@ import { Str } from "./html-translators.js";
 import { HtmlReference, Table } from "./spec-types.js";
 
 // Convert HTMLTableELement -> Table
-function convertTable(el: HTMLTableElement) {
-    const table = {
-        fields: [],
-        rows: [],
-        notes: [],
-    } as Table;
+function convertTable(el: HTMLTableElement, previous: Table | undefined) {
+    let table: Table | undefined;
 
     const rowspans = Array<{ remaining: number; el: HTMLElement }>();
 
     for (const tr of el.querySelectorAll("tr")) {
         const cells = tr.querySelectorAll("td, th");
+
+        if (table === undefined) {
+            // Use the first row to identify whether this is a table split across page boundaries.  For the spec the
+            // first row is always replicated on subsequent pages
+            const firstRowIdentity = Array.from(cells)
+                .map(cell => cell.textContent?.trim())
+                .join("␜");
+
+            if (previous?.firstRowIdentity === firstRowIdentity) {
+                table = previous;
+
+                // Skip the first row as it tells us nothing new
+                continue;
+            } else {
+                table = {
+                    firstRowIdentity,
+                    fields: [],
+                    rows: [],
+                    notes: [],
+                };
+            }
+        }
 
         if (cells.length === 1) {
             table.notes.push(cells[0] as HTMLElement);
@@ -37,7 +55,7 @@ function convertTable(el: HTMLTableElement) {
             cells.forEach(cell => {
                 let key = cell.textContent || "";
                 key = key.replace(/[\W]/g, "").toLowerCase();
-                table.fields.push(key);
+                table?.fields.push(key);
             });
             continue;
         }
@@ -74,14 +92,13 @@ function convertTable(el: HTMLTableElement) {
     // decide it is a multi-row table without line separators.
     //
     // Detect this case and correct by concatenating the contents of rows onto the first row
-    const col1 = table.fields[0];
-    if (col1 !== undefined) {
+    if (table?.fields[0] !== undefined) {
         // Scan the table.  We treat as broken if there are multiple rows but the first column is empty except on the
         // first row
         const looksBorked =
             table.rows.length > 1 &&
             table.rows.every((row, i) => {
-                let text = row[col1]?.textContent?.trim();
+                let text = row[table?.fields[0]]?.textContent?.trim();
                 if (text === "") {
                     text = undefined;
                 }
@@ -229,7 +246,11 @@ export function* scanDocument(docRef: HtmlReference) {
                     }
 
                     // Sometimes there isn't even a section marker.  In this case we generate the missing section number
-                    if (text?.match(/^[a-z0-9]+(?: Field| Value)$/) && fakeSection.faking && !fakeSection.fakingField) {
+                    if (
+                        text?.match(/^[a-z0-9]+(?: Field| Value)$/i) &&
+                        fakeSection.faking &&
+                        !fakeSection.fakingField
+                    ) {
                         // Already faking; treat these like a sub-headings to our fake heading
                         yield* emit();
                         fakeSection.subsection++;
@@ -243,9 +264,7 @@ export function* scanDocument(docRef: HtmlReference) {
                         };
                         break;
                     } else if (
-                        text?.match(
-                            /^[a-z0-9]+(?:Enum(?: Type)?|Struct(?: Type)?| Attribute| Command| Event| Field| Value)$/i,
-                        )
+                        text?.match(/^[a-z0-9]+(?:Enum|Struct| Attribute| Command| Event| Type| Field| Value| Bits?)$/i)
                     ) {
                         // Looks like a section
                         const realSection = currentRef ? currentRef.xref.section : ref.xref.section;
@@ -266,8 +285,8 @@ export function* scanDocument(docRef: HtmlReference) {
                         };
 
                         // Note if we're faking a field or a value so we know not to treat them like subsections when we
-                        // see them next
-                        fakeSection.fakingField = !!text.match(/(?: Field| Value)$/);
+                        // see the next one
+                        fakeSection.fakingField = !!text.match(/(?: Field| Value)$/i);
                         break;
                     }
 
@@ -285,32 +304,14 @@ export function* scanDocument(docRef: HtmlReference) {
                         break;
                     }
 
-                    const table = convertTable(element as HTMLTableElement);
-                    if (!table.rows.length) {
-                        continue;
-                    }
-
-                    // If tables split across pages (in the original PDF) then each section is a separate table (in the
-                    // HTML page).  Headings are the same, though; use this to merge tables
-                    const other = currentRef.table;
-                    if (other) {
-                        if (table.rows.length) {
-                            if (
-                                !other.rows.length ||
-                                Object.keys(other.rows[0]).join("/") === Object.keys(table.rows[0]).join("/")
-                            ) {
-                                // Merge tables
-                                other.notes.push(...table.notes);
-                                other.rows.push(...table.rows);
-                            }
-                        }
-
-                        // We either merged this table or we ignore it
+                    const table = convertTable(element as HTMLTableElement, currentRef.table);
+                    if (!table) {
                         break;
                     }
 
-                    // New (presumably defining) table
-                    currentRef.table = table;
+                    if (!currentRef.table) {
+                        currentRef.table = table;
+                    }
                     break;
             }
         }

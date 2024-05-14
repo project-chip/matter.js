@@ -6,7 +6,7 @@
 
 import { InternalError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
-import { ElementTag } from "../definitions/index.js";
+import { ElementTag, Specification } from "../definitions/index.js";
 import { AnyElement } from "../elements/index.js";
 import { Model, ValueModel } from "../models/index.js";
 import { ModelTraversal } from "./ModelTraversal.js";
@@ -61,7 +61,10 @@ export abstract class ModelVariantTraversal<S = void> {
      * Create a new visitor.  Must list the valid names of sources.  The order of this list implies the priority used
      * for choosing a name when multiple model variants have different names.
      */
-    constructor(private sourceNames: string[]) {}
+    constructor(
+        private revision: Specification.Revision,
+        private sourceNames: string[],
+    ) {}
 
     /**
      * Initiate traversal.  The class is stateful so this call should not be invoked while traversal is ongoing.
@@ -123,7 +126,7 @@ export abstract class ModelVariantTraversal<S = void> {
     protected enterCluster(variants: VariantDetail) {
         if (variants.tag === ElementTag.Cluster) {
             this.clusterState = {
-                canonicalNames: computeCanonicalNames(this.sourceNames, variants),
+                canonicalNames: computeCanonicalNames(this.revision, this.sourceNames, variants),
             };
             return true;
         }
@@ -204,9 +207,13 @@ export abstract class ModelVariantTraversal<S = void> {
 
         // Iterate over each model variant
         for (const [sourceName, variant] of Object.entries(variants.map)) {
-            // For each child of this variant, associated it with a slot
+            // For each applicable child of this variant, associated it with a slot
             for (let i = 0; i < variant.children.length; i++) {
                 const child = variant.children[i];
+
+                if (!child.appliesTo(this.revision)) {
+                    continue;
+                }
 
                 const mapping =
                     mappings[child.tag] || (mappings[child.tag] = { slots: [], idToSlot: {}, nameToSlot: {} });
@@ -319,7 +326,7 @@ type ClusterState = {
  * ModelVariantTraversal calls this function each time it enters a cluster. Thus we are only dealing with names scoped
  * to a single cluster
  */
-function computeCanonicalNames(sourceNames: string[], variants: VariantDetail) {
+function computeCanonicalNames(revision: Specification.Revision, sourceNames: string[], variants: VariantDetail) {
     // First, infer name equivalence of datatypes based on usage.  There is no ID on datatypes.  This is a reliable
     // alternative.  We perform this iteratively as new mappings could appear from subfields of previously- unknown
     // equivalent datatypes
@@ -328,11 +335,11 @@ function computeCanonicalNames(sourceNames: string[], variants: VariantDetail) {
 
     do {
         numberOfMappings = datatypeNameMap.size;
-        inferEquivalentDatatypes(sourceNames, variants, datatypeNameMap);
+        inferEquivalentDatatypes(revision, sourceNames, variants, datatypeNameMap);
     } while (numberOfMappings != datatypeNameMap.size);
 
     // Now that we generally what what equals what, go through the names and choose the name for the final model
-    const canonicalNames = chooseCanonicalNames(sourceNames, variants, datatypeNameMap);
+    const canonicalNames = chooseCanonicalNames(revision, sourceNames, variants, datatypeNameMap);
 
     return canonicalNames;
 }
@@ -346,7 +353,12 @@ function computeCanonicalNames(sourceNames: string[], variants: VariantDetail) {
  *
  *  - Add a mapping from the referenced name to the name we found
  */
-function inferEquivalentDatatypes(sourceNames: string[], variants: VariantDetail, datatypeNameMap: NameMapping) {
+function inferEquivalentDatatypes(
+    revision: Specification.Revision,
+    sourceNames: string[],
+    variants: VariantDetail,
+    datatypeNameMap: NameMapping,
+) {
     type ModelNameMapping = {
         mapTo: string | undefined;
         priority: number;
@@ -409,7 +421,7 @@ function inferEquivalentDatatypes(sourceNames: string[], variants: VariantDetail
             }
             return false;
         }
-    })(sourceNames);
+    })(revision, sourceNames);
     traversal.traverse(variants.map);
 
     // Convert the internal structure to NameMappings
@@ -424,6 +436,7 @@ function inferEquivalentDatatypes(sourceNames: string[], variants: VariantDetail
  * Heuristically select the best name for each element.  Priority does affect this selection but it's not absolute
  */
 function chooseCanonicalNames(
+    revision: Specification.Revision,
     sourceNames: string[],
     variants: VariantDetail,
     datatypeNameMap: NameMapping,
@@ -496,7 +509,7 @@ function chooseCanonicalNames(
             }
             return false;
         }
-    })(sourceNames);
+    })(revision, sourceNames);
 
     traversal.traverse(variants.map);
 

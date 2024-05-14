@@ -250,6 +250,17 @@ export abstract class Model {
     }
 
     /**
+     * Determine whether this element applies to a specific revision.
+     */
+    appliesTo(revision: Specification.Revision) {
+        // Stick to simple string comparison for now as it is efficient; update if versioning ever gets more complex
+        // (or Matter reaches version 10)
+        return (
+            (this.asOf === undefined || revision >= this.asOf) && (this.until === undefined || revision < this.until)
+        );
+    }
+
+    /**
      * Add a child.  children.push works too but only accepts models.
      */
     add(...children: (Model | AnyElement)[]) {

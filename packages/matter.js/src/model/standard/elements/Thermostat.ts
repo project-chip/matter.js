@@ -41,7 +41,7 @@ export const Thermostat = Cluster({
                     details: "Supports Occupied and Unoccupied setpoints"
                 }),
                 Field({
-                    name: "SCH", conformance: "[Zigbee], D", constraint: "3", description: "ScheduleConfiguration",
+                    name: "SCH", conformance: "D", constraint: "3", description: "ScheduleConfiguration",
                     details: "Supports remote configuration of a weekly schedule of setpoint transitions"
                 }),
                 Field({
@@ -326,7 +326,7 @@ export const Thermostat = Cluster({
 
         Attribute({
             name: "RemoteSensing", id: 0x1a, type: "RemoteSensingBitmap", access: "RW VM", conformance: "O",
-            constraint: "0", default: 0, quality: "N",
+            default: 0, quality: "N",
 
             details: "This attribute shall indicate when the local temperature, outdoor temperature and occupancy are " +
                 "being sensed by remote networked sensors, rather than internal sensors." +
@@ -357,7 +357,7 @@ export const Thermostat = Cluster({
         }),
 
         Attribute({
-            name: "AlarmMask", id: 0x1d, type: "AlarmCodeBitmap", access: "R V", conformance: "[Zigbee]",
+            name: "AlarmMask", id: 0x1d, type: "AlarmCodeBitmap", access: "R V", conformance: "D",
             constraint: "desc", default: 0,
             details: "This attribute shall indicate whether each of the alarms in AlarmCodeBitmap is enabled." +
                 "\n" +
@@ -857,7 +857,7 @@ export const Thermostat = Cluster({
         }),
 
         Command({
-            name: "GetRelayStatusLog", id: 0x4, access: "O", conformance: "[Zigbee]", direction: "request",
+            name: "GetRelayStatusLog", id: 0x4, access: "O", conformance: "D", direction: "request",
             response: "GetRelayStatusLogResponse",
 
             details: "This command is used to query the thermostat internal relay status log. This command has no payload." +
@@ -1029,11 +1029,36 @@ export const Thermostat = Cluster({
             children: [
                 Field({
                     name: "CoolingStage", constraint: "0 to 2",
-                    description: "Stage of cooling the HVAC system is using."
+                    description: "Stage of cooling the HVAC system is using.",
+
+                    details: "These bits shall indicate what stage of cooling the HVAC system is using." +
+                        "\n" +
+                        "  • 00 = Cool Stage 1" +
+                        "\n" +
+                        "  • 01 = Cool Stage 2" +
+                        "\n" +
+                        "  • 10 = Cool Stage 3" +
+                        "\n" +
+                        "  • 11 = Reserved",
+
+                    xref: { document: "cluster", section: "4.3.8.6.1" }
                 }),
+
                 Field({
                     name: "HeatingStage", constraint: "2 to 4",
-                    description: "Stage of heating the HVAC system is using."
+                    description: "Stage of heating the HVAC system is using.",
+
+                    details: "These bits shall indicate what stage of heating the HVAC system is using." +
+                        "\n" +
+                        "  • 00 = Heat Stage 1" +
+                        "\n" +
+                        "  • 01 = Heat Stage 2" +
+                        "\n" +
+                        "  • 10 = Heat Stage 3" +
+                        "\n" +
+                        "  • 11 = Reserved",
+
+                    xref: { document: "cluster", section: "4.3.8.6.2" }
                 }),
 
                 Field({

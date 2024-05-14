@@ -32,13 +32,13 @@ export type Documentation = {
 function mapSpec(xref?: Specification.CrossReference) {
     switch (xref?.document) {
         case "core":
-            return "MatterSpecification.v11.Core";
+            return "MatterSpecification.v13.Core";
 
         case "cluster":
-            return "MatterSpecification.v11.Cluster";
+            return "MatterSpecification.v13.Cluster";
 
         case "device":
-            return "MatterSpecification.v11.Device";
+            return "MatterSpecification.v13.Device";
     }
 }
 

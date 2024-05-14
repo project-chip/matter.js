@@ -476,7 +476,7 @@ export const SpecMatter = Matter({
                     name: "LastConfiguredBy", id: 0x0, type: "node-id", access: "R V", conformance: "O", default: null,
                     quality: "X",
 
-                    details: "This attribute shall indicate the Node ID of the node that last configured the Scene Table." +
+                    details: "Indicates the Node ID of the node that last configured the Scene Table." +
                         "\n" +
                         "The null value indicates that the server has not been configured, or that the identifier of the " +
                         "node that last configured the Scenes Management cluster is not known." +
@@ -489,18 +489,18 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SceneTableSize", id: 0x1, type: "uint16", access: "R V", conformance: "M",
                     constraint: "desc", default: 16, quality: "F",
-                    details: "This attribute shall indicate the number of entries in the Scene Table on this endpoint. This is " +
-                        "the total across all fabrics; note that a single fabric cannot use all those entries (see Handling " +
-                        "of fabric- scoping). The minimum size of this table, (i.e., the minimum number of scenes to support " +
-                        "across all fabrics per endpoint) shall be 16, unless a device type in which this cluster is used, " +
-                        "defines a larger value in the device type definition.",
+                    details: "Indicates the number of entries in the Scene Table on this endpoint. This is the total across all " +
+                        "fabrics; note that a single fabric cannot use all those entries (see Handling of fabric- scoping). " +
+                        "The minimum size of this table, (i.e., the minimum number of scenes to support across all fabrics " +
+                        "per endpoint) shall be 16, unless a device type in which this cluster is used, defines a larger " +
+                        "value in the device type definition.",
                     xref: { document: "cluster", section: "1.4.8.2" }
                 }),
 
                 Attribute({
                     name: "FabricSceneInfo", id: 0x2, type: "list", access: "R F V", conformance: "M",
                     constraint: "desc",
-                    details: "This attribute shall indicate a list of fabric scoped information about scenes on this endpoint." +
+                    details: "Indicates a list of fabric scoped information about scenes on this endpoint." +
                         "\n" +
                         "The number of list entries for this attribute shall NOT exceed the number of supported fabrics by " +
                         "the device.",
@@ -943,6 +943,36 @@ export const SpecMatter = Matter({
                             details: "This field shall indicate the group identifier of the scene last invoked on the associated fabric, " +
                                 "or 0 if the scene last invoked is not associated with a group.",
                             xref: { document: "cluster", section: "1.4.7.2.3" }
+                        }),
+
+                        Field({
+                            name: "SceneValid", id: 0x3, type: "bool", access: "S", conformance: "M", default: true,
+
+                            details: "This field shall indicate whether the state of the server corresponds to that associated with the " +
+                                "CurrentScene and CurrentGroup fields of the SceneInfoStruct they belong to. TRUE indicates that " +
+                                "these fields are valid, FALSE indicates that they are not valid." +
+                                "\n" +
+                                "This field shall be set to False for all other fabrics when an attribute with the Scenes (\"S\") " +
+                                "designation in the Quality column of another cluster present on the same endpoint is modified or " +
+                                "when the current scene is modified by a fabric through the RecallScene or StoreScene commands, " +
+                                "regardless of the fabric-scoped access quality of the command." +
+                                "\n" +
+                                "In the event where the SceneValid field is set to False for a fabric, the CurrentScene and " +
+                                "CurrentGroup fields shall be the last invoked scene and group for that fabric. In the event where " +
+                                "no scene was previously invoked for that fabric, the CurrentScene and CurrentGroup fields shall be " +
+                                "their default values.",
+
+                            xref: { document: "cluster", section: "1.4.7.2.4" }
+                        }),
+
+                        Field({
+                            name: "RemainingCapacity", id: 0x4, type: "uint8", access: "F", conformance: "M",
+                            constraint: "max 253",
+                            details: "This field shall indicate the remaining capacity of the Scene Table on this endpoint for the " +
+                                "accessing fabric. Note that this value may change between reads, even if no entries are added or " +
+                                "deleted on the accessing fabric, due to other clients associated with other fabrics adding or " +
+                                "deleting entries that impact the resource usage on the device.",
+                            xref: { document: "cluster", section: "1.4.7.2.5" }
                         }),
 
                         Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
@@ -1444,62 +1474,58 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "CurrentLevel", id: 0x0, type: "uint8", access: "R V", conformance: "M",
                     constraint: "minLevel to maxLevel", default: null, quality: "X N S",
-                    details: "This attribute shall indicate the current level of this device. The meaning of 'level' is device " +
-                        "dependent.",
+                    details: "Indicates the current level of this device. The meaning of 'level' is device dependent.",
                     xref: { document: "cluster", section: "1.6.6.2" }
                 }),
 
                 Attribute({
                     name: "RemainingTime", id: 0x1, type: "uint16", access: "R V", conformance: "LT", default: 0,
-                    details: "This attribute shall indicate the time remaining until the current command is complete - it is " +
-                        "specified in 1/10ths of a second.",
+                    details: "Indicates the time remaining until the current command is complete - it is specified in 1/10ths of " +
+                        "a second.",
                     xref: { document: "cluster", section: "1.6.6.3" }
                 }),
 
                 Attribute({
                     name: "MinLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[LT]",
                     constraint: "1 to maxLevel", default: 1,
-                    details: "This attribute shall indicate the minimum value of CurrentLevel that is capable of being assigned.",
+                    details: "Indicates the minimum value of CurrentLevel that is capable of being assigned.",
                     xref: { document: "cluster", section: "1.6.6.4" }
                 }),
 
                 Attribute({
                     name: "MinLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[!LT]",
                     constraint: "0 to maxLevel", default: 0,
-                    details: "This attribute shall indicate the minimum value of CurrentLevel that is capable of being assigned.",
+                    details: "Indicates the minimum value of CurrentLevel that is capable of being assigned.",
                     xref: { document: "cluster", section: "1.6.6.4" }
                 }),
 
                 Attribute({
                     name: "MaxLevel", id: 0x3, type: "uint8", access: "R V", conformance: "O",
                     constraint: "minLevel to 254", default: 254,
-                    details: "This attribute shall indicate the maximum value of CurrentLevel that is capable of being assigned.",
+                    details: "Indicates the maximum value of CurrentLevel that is capable of being assigned.",
                     xref: { document: "cluster", section: "1.6.6.5" }
                 }),
 
                 Attribute({
                     name: "CurrentFrequency", id: 0x4, type: "uint16", access: "R V", conformance: "FQ",
                     constraint: "minFrequency to maxFrequency", default: 0, quality: "S P",
-                    details: "This attribute shall indicate the frequency at which the device is at CurrentLevel. A " +
-                        "CurrentFrequency of 0 is unknown.",
+                    details: "Indicates the frequency at which the device is at CurrentLevel. A CurrentFrequency of 0 is unknown.",
                     xref: { document: "cluster", section: "1.6.6.6" }
                 }),
 
                 Attribute({
                     name: "MinFrequency", id: 0x5, type: "uint16", access: "R V", conformance: "FQ",
                     constraint: "0 to maxFrequency", default: 0,
-                    details: "This attribute shall indicate the minimum value of CurrentFrequency that is capable of being " +
-                        "assigned. MinFrequency shall be less than or equal to MaxFrequency. A value of 0 indicates " +
-                        "undefined.",
+                    details: "Indicates the minimum value of CurrentFrequency that is capable of being assigned. MinFrequency " +
+                        "shall be less than or equal to MaxFrequency. A value of 0 indicates undefined.",
                     xref: { document: "cluster", section: "1.6.6.7" }
                 }),
 
                 Attribute({
                     name: "MaxFrequency", id: 0x6, type: "uint16", access: "R V", conformance: "FQ",
                     constraint: "min minFrequency", default: 0,
-                    details: "This attribute shall indicate the maximum value of CurrentFrequency that is capable of being " +
-                        "assigned. MaxFrequency shall be greater than or equal to MinFrequency. A value of 0 indicates " +
-                        "undefined.",
+                    details: "Indicates the maximum value of CurrentFrequency that is capable of being assigned. MaxFrequency " +
+                        "shall be greater than or equal to MinFrequency. A value of 0 indicates undefined.",
                     xref: { document: "cluster", section: "1.6.6.8" }
                 }),
 
@@ -1507,9 +1533,8 @@ export const SpecMatter = Matter({
                     name: "OnOffTransitionTime", id: 0x10, type: "uint16", access: "RW VO", conformance: "O",
                     default: 0,
 
-                    details: "This attribute shall indicate the time taken to move to or from the target level when On or Off " +
-                        "commands are received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a " +
-                        "second." +
+                    details: "Indicates the time taken to move to or from the target level when On or Off commands are received " +
+                        "by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a second." +
                         "\n" +
                         "The actual time taken SHOULD be as close to OnOffTransitionTime as the device is able. Please note " +
                         "that if the device is not able to move at a variable rate, the OnOffTransitionTime attribute SHOULD " +
@@ -1522,10 +1547,10 @@ export const SpecMatter = Matter({
                     name: "OnLevel", id: 0x11, type: "uint8", access: "RW VO", conformance: "M",
                     constraint: "minLevel to maxLevel", default: null, quality: "X",
 
-                    details: "This attribute shall indicate the value that the CurrentLevel attribute is set to when the OnOff " +
-                        "attribute of an On/Off cluster on the same endpoint is set to TRUE, as a result of processing an " +
-                        "On/Off cluster command. If the OnLevel attribute is not implemented, or is set to the null value, " +
-                        "it has no effect. For more details see Effect of On/Off Commands on the CurrentLevel Attribute." +
+                    details: "Indicates the value that the CurrentLevel attribute is set to when the OnOff attribute of an On/Off " +
+                        "cluster on the same endpoint is set to TRUE, as a result of processing an On/Off cluster command. " +
+                        "If the OnLevel attribute is not implemented, or is set to the null value, it has no effect. For " +
+                        "more details see Effect of On/Off Commands on the CurrentLevel Attribute." +
                         "\n" +
                         "OnLevel represents a mandatory field that was previously not present or optional. Implementers " +
                         "should be aware that older devices may not implement it.",
@@ -1536,27 +1561,27 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "OnTransitionTime", id: 0x12, type: "uint16", access: "RW VO", conformance: "O",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the time taken to move the current level from the minimum level to " +
-                        "the maximum level when an On command is received by an On/Off cluster on the same endpoint. It is " +
-                        "specified in 1/10ths of a second. If this attribute is not implemented, or contains a null value, " +
-                        "the OnOffTransitionTime shall be used instead.",
+                    details: "Indicates the time taken to move the current level from the minimum level to the maximum level when " +
+                        "an On command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of " +
+                        "a second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
+                        "shall be used instead.",
                     xref: { document: "cluster", section: "1.6.6.12" }
                 }),
 
                 Attribute({
                     name: "OffTransitionTime", id: 0x13, type: "uint16", access: "RW VO", conformance: "O",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the time taken to move the current level from the maximum level to " +
-                        "the minimum level when an Off command is received by an On/Off cluster on the same endpoint. It is " +
-                        "specified in 1/10ths of a second. If this attribute is not implemented, or contains a null value, " +
-                        "the OnOffTransitionTime shall be used instead.",
+                    details: "Indicates the time taken to move the current level from the maximum level to the minimum level when " +
+                        "an Off command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of " +
+                        "a second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
+                        "shall be used instead.",
                     xref: { document: "cluster", section: "1.6.6.13" }
                 }),
 
                 Attribute({
                     name: "DefaultMoveRate", id: 0x14, type: "uint8", access: "RW VO", conformance: "O", quality: "X",
-                    details: "This attribute shall indicate the movement rate, in units per second, when a Move command is " +
-                        "received with a null value Rate parameter.",
+                    details: "Indicates the movement rate, in units per second, when a Move command is received with a null value " +
+                        "Rate parameter.",
                     xref: { document: "cluster", section: "1.6.6.14" }
                 }),
 
@@ -1564,7 +1589,7 @@ export const SpecMatter = Matter({
                     name: "Options", id: 0xf, type: "OptionsBitmap", access: "RW VO", conformance: "M",
                     constraint: "desc", default: 0,
 
-                    details: "This attribute shall indicate the selected options of the device." +
+                    details: "Indicates the selected options of the device." +
                         "\n" +
                         "The Options attribute is a bitmap that determines the default behavior of some cluster commands. " +
                         "Each command that is dependent on the Options attribute shall first construct a temporary Options " +
@@ -1592,9 +1617,9 @@ export const SpecMatter = Matter({
                     name: "StartUpCurrentLevel", id: 0x4000, type: "uint8", access: "RW VM", conformance: "LT",
                     constraint: "desc", quality: "X N",
 
-                    details: "This attribute shall indicate the desired startup level for a device when it is supplied with power " +
-                        "and this level shall be reflected in the CurrentLevel attribute. The values of the " +
-                        "StartUpCurrentLevel attribute are listed below:" +
+                    details: "Indicates the desired startup level for a device when it is supplied with power and this level " +
+                        "shall be reflected in the CurrentLevel attribute. The values of the StartUpCurrentLevel attribute " +
+                        "are listed below:" +
                         "\n" +
                         "This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentLevel " +
                         "attribute shall return to its value prior to the restart.",
@@ -1818,62 +1843,58 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "CurrentLevel", id: 0x0, type: "uint8", access: "R V", conformance: "M",
                     constraint: "minLevel to maxLevel", default: null, quality: "X N S",
-                    details: "This attribute shall indicate the current level of this device. The meaning of 'level' is device " +
-                        "dependent.",
+                    details: "Indicates the current level of this device. The meaning of 'level' is device dependent.",
                     xref: { document: "cluster", section: "1.6.6.2" }
                 }),
 
                 Attribute({
                     name: "RemainingTime", id: 0x1, type: "uint16", access: "R V", conformance: "LT", default: 0,
-                    details: "This attribute shall indicate the time remaining until the current command is complete - it is " +
-                        "specified in 1/10ths of a second.",
+                    details: "Indicates the time remaining until the current command is complete - it is specified in 1/10ths of " +
+                        "a second.",
                     xref: { document: "cluster", section: "1.6.6.3" }
                 }),
 
                 Attribute({
                     name: "MinLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[LT]",
                     constraint: "1 to maxLevel", default: 1,
-                    details: "This attribute shall indicate the minimum value of CurrentLevel that is capable of being assigned.",
+                    details: "Indicates the minimum value of CurrentLevel that is capable of being assigned.",
                     xref: { document: "cluster", section: "1.6.6.4" }
                 }),
 
                 Attribute({
                     name: "MinLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[!LT]",
                     constraint: "0 to maxLevel", default: 0,
-                    details: "This attribute shall indicate the minimum value of CurrentLevel that is capable of being assigned.",
+                    details: "Indicates the minimum value of CurrentLevel that is capable of being assigned.",
                     xref: { document: "cluster", section: "1.6.6.4" }
                 }),
 
                 Attribute({
                     name: "MaxLevel", id: 0x3, type: "uint8", access: "R V", conformance: "O",
                     constraint: "minLevel to 254", default: 254,
-                    details: "This attribute shall indicate the maximum value of CurrentLevel that is capable of being assigned.",
+                    details: "Indicates the maximum value of CurrentLevel that is capable of being assigned.",
                     xref: { document: "cluster", section: "1.6.6.5" }
                 }),
 
                 Attribute({
                     name: "CurrentFrequency", id: 0x4, type: "uint16", access: "R V", conformance: "FQ",
                     constraint: "minFrequency to maxFrequency", default: 0, quality: "S P",
-                    details: "This attribute shall indicate the frequency at which the device is at CurrentLevel. A " +
-                        "CurrentFrequency of 0 is unknown.",
+                    details: "Indicates the frequency at which the device is at CurrentLevel. A CurrentFrequency of 0 is unknown.",
                     xref: { document: "cluster", section: "1.6.6.6" }
                 }),
 
                 Attribute({
                     name: "MinFrequency", id: 0x5, type: "uint16", access: "R V", conformance: "FQ",
                     constraint: "0 to maxFrequency", default: 0,
-                    details: "This attribute shall indicate the minimum value of CurrentFrequency that is capable of being " +
-                        "assigned. MinFrequency shall be less than or equal to MaxFrequency. A value of 0 indicates " +
-                        "undefined.",
+                    details: "Indicates the minimum value of CurrentFrequency that is capable of being assigned. MinFrequency " +
+                        "shall be less than or equal to MaxFrequency. A value of 0 indicates undefined.",
                     xref: { document: "cluster", section: "1.6.6.7" }
                 }),
 
                 Attribute({
                     name: "MaxFrequency", id: 0x6, type: "uint16", access: "R V", conformance: "FQ",
                     constraint: "min minFrequency", default: 0,
-                    details: "This attribute shall indicate the maximum value of CurrentFrequency that is capable of being " +
-                        "assigned. MaxFrequency shall be greater than or equal to MinFrequency. A value of 0 indicates " +
-                        "undefined.",
+                    details: "Indicates the maximum value of CurrentFrequency that is capable of being assigned. MaxFrequency " +
+                        "shall be greater than or equal to MinFrequency. A value of 0 indicates undefined.",
                     xref: { document: "cluster", section: "1.6.6.8" }
                 }),
 
@@ -1881,9 +1902,8 @@ export const SpecMatter = Matter({
                     name: "OnOffTransitionTime", id: 0x10, type: "uint16", access: "RW VO", conformance: "O",
                     default: 0,
 
-                    details: "This attribute shall indicate the time taken to move to or from the target level when On or Off " +
-                        "commands are received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a " +
-                        "second." +
+                    details: "Indicates the time taken to move to or from the target level when On or Off commands are received " +
+                        "by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a second." +
                         "\n" +
                         "The actual time taken SHOULD be as close to OnOffTransitionTime as the device is able. Please note " +
                         "that if the device is not able to move at a variable rate, the OnOffTransitionTime attribute SHOULD " +
@@ -1896,10 +1916,10 @@ export const SpecMatter = Matter({
                     name: "OnLevel", id: 0x11, type: "uint8", access: "RW VO", conformance: "M",
                     constraint: "minLevel to maxLevel", default: null, quality: "X",
 
-                    details: "This attribute shall indicate the value that the CurrentLevel attribute is set to when the OnOff " +
-                        "attribute of an On/Off cluster on the same endpoint is set to TRUE, as a result of processing an " +
-                        "On/Off cluster command. If the OnLevel attribute is not implemented, or is set to the null value, " +
-                        "it has no effect. For more details see Effect of On/Off Commands on the CurrentLevel Attribute." +
+                    details: "Indicates the value that the CurrentLevel attribute is set to when the OnOff attribute of an On/Off " +
+                        "cluster on the same endpoint is set to TRUE, as a result of processing an On/Off cluster command. " +
+                        "If the OnLevel attribute is not implemented, or is set to the null value, it has no effect. For " +
+                        "more details see Effect of On/Off Commands on the CurrentLevel Attribute." +
                         "\n" +
                         "OnLevel represents a mandatory field that was previously not present or optional. Implementers " +
                         "should be aware that older devices may not implement it.",
@@ -1910,27 +1930,27 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "OnTransitionTime", id: 0x12, type: "uint16", access: "RW VO", conformance: "O",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the time taken to move the current level from the minimum level to " +
-                        "the maximum level when an On command is received by an On/Off cluster on the same endpoint. It is " +
-                        "specified in 1/10ths of a second. If this attribute is not implemented, or contains a null value, " +
-                        "the OnOffTransitionTime shall be used instead.",
+                    details: "Indicates the time taken to move the current level from the minimum level to the maximum level when " +
+                        "an On command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of " +
+                        "a second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
+                        "shall be used instead.",
                     xref: { document: "cluster", section: "1.6.6.12" }
                 }),
 
                 Attribute({
                     name: "OffTransitionTime", id: 0x13, type: "uint16", access: "RW VO", conformance: "O",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the time taken to move the current level from the maximum level to " +
-                        "the minimum level when an Off command is received by an On/Off cluster on the same endpoint. It is " +
-                        "specified in 1/10ths of a second. If this attribute is not implemented, or contains a null value, " +
-                        "the OnOffTransitionTime shall be used instead.",
+                    details: "Indicates the time taken to move the current level from the maximum level to the minimum level when " +
+                        "an Off command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of " +
+                        "a second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
+                        "shall be used instead.",
                     xref: { document: "cluster", section: "1.6.6.13" }
                 }),
 
                 Attribute({
                     name: "DefaultMoveRate", id: 0x14, type: "uint8", access: "RW VO", conformance: "O", quality: "X",
-                    details: "This attribute shall indicate the movement rate, in units per second, when a Move command is " +
-                        "received with a null value Rate parameter.",
+                    details: "Indicates the movement rate, in units per second, when a Move command is received with a null value " +
+                        "Rate parameter.",
                     xref: { document: "cluster", section: "1.6.6.14" }
                 }),
 
@@ -1938,7 +1958,7 @@ export const SpecMatter = Matter({
                     name: "Options", id: 0xf, type: "OptionsBitmap", access: "RW VO", conformance: "M",
                     constraint: "desc", default: 0,
 
-                    details: "This attribute shall indicate the selected options of the device." +
+                    details: "Indicates the selected options of the device." +
                         "\n" +
                         "The Options attribute is a bitmap that determines the default behavior of some cluster commands. " +
                         "Each command that is dependent on the Options attribute shall first construct a temporary Options " +
@@ -1966,9 +1986,9 @@ export const SpecMatter = Matter({
                     name: "StartUpCurrentLevel", id: 0x4000, type: "uint8", access: "RW VM", conformance: "LT",
                     constraint: "desc", quality: "X N",
 
-                    details: "This attribute shall indicate the desired startup level for a device when it is supplied with power " +
-                        "and this level shall be reflected in the CurrentLevel attribute. The values of the " +
-                        "StartUpCurrentLevel attribute are listed below:" +
+                    details: "Indicates the desired startup level for a device when it is supplied with power and this level " +
+                        "shall be reflected in the CurrentLevel attribute. The values of the StartUpCurrentLevel attribute " +
+                        "are listed below:" +
                         "\n" +
                         "This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentLevel " +
                         "attribute shall return to its value prior to the restart.",
@@ -2232,7 +2252,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "CurrentSensitivityLevel", id: 0x0, type: "uint8", access: "RW VO", conformance: "SENSLVL",
                     constraint: "max SupportedSensitivityLevels - 1", quality: "N",
-                    details: "This attribute shall indicate the currently selected sensitivity level." +
+                    details: "Indicates the currently selected sensitivity level." +
                         "\n" +
                         "If a write interaction to this attribute contains an unsupported sensitivity value, a " +
                         "CONSTRAINT_ERROR status shall be returned.",
@@ -2243,7 +2263,7 @@ export const SpecMatter = Matter({
                     name: "SupportedSensitivityLevels", id: 0x1, type: "uint8", access: "R V", conformance: "SENSLVL",
                     constraint: "2 to 10", quality: "F",
 
-                    details: "This attribute shall indicate the number of supported sensitivity levels by the device." +
+                    details: "Indicates the number of supported sensitivity levels by the device." +
                         "\n" +
                         "These supported sensitivity levels shall be ordered by sensitivity, where a value of 0 shall be " +
                         "considered the lowest sensitivity level (least sensitive) and the highest supported value shall be " +
@@ -2258,7 +2278,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "DefaultSensitivityLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[SENSLVL]",
                     constraint: "max SupportedSensitivityLevels - 1", quality: "F",
-                    details: "This attribute shall indicate the default sensitivity level selected by the manufacturer.",
+                    details: "Indicates the default sensitivity level selected by the manufacturer.",
                     xref: { document: "cluster", section: "1.8.6.3" }
                 }),
 
@@ -2266,9 +2286,9 @@ export const SpecMatter = Matter({
                     name: "AlarmsActive", id: 0x3, type: "AlarmModeBitmap", access: "R V", conformance: "VIS | AUD",
                     default: 0,
 
-                    details: "This attribute shall indicate which specific alarm modes on the server are currently active. When " +
-                        "the sensor is no longer triggered, this attribute shall be set to the inactive state, by setting " +
-                        "the bit to 0, for all supported alarm modes." +
+                    details: "Indicates which specific alarm modes on the server are currently active. When the sensor is no " +
+                        "longer triggered, this attribute shall be set to the inactive state, by setting the bit to 0, for " +
+                        "all supported alarm modes." +
                         "\n" +
                         "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit " +
                         "shall indicate whether the alarm mode inactive or not:" +
@@ -2284,9 +2304,9 @@ export const SpecMatter = Matter({
                     name: "AlarmsSuppressed", id: 0x4, type: "AlarmModeBitmap", access: "R V", conformance: "SPRS",
                     default: 0,
 
-                    details: "This attribute shall indicate which specific alarm modes on the server are currently suppressed. " +
-                        "When the sensor is no longer triggered, this attribute shall be set to the unsuppressed state, by " +
-                        "setting the bit to 0, for all supported alarm modes." +
+                    details: "Indicates which specific alarm modes on the server are currently suppressed. When the sensor is no " +
+                        "longer triggered, this attribute shall be set to the unsuppressed state, by setting the bit to 0, " +
+                        "for all supported alarm modes." +
                         "\n" +
                         "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit " +
                         "shall indicate whether the alarm mode is suppressed or not:" +
@@ -2302,8 +2322,8 @@ export const SpecMatter = Matter({
                     name: "AlarmsEnabled", id: 0x5, type: "AlarmModeBitmap", access: "R V", conformance: "[VIS | AUD]",
                     quality: "N",
 
-                    details: "This attribute shall indicate the alarm modes that will be emitted if the sensor is triggered. If " +
-                        "an alarm mode is not supported, the bit indicating this alarm mode shall always be 0." +
+                    details: "Indicates the alarm modes that will be emitted if the sensor is triggered. If an alarm mode is not " +
+                        "supported, the bit indicating this alarm mode shall always be 0." +
                         "\n" +
                         "A bit shall indicate whether the alarm mode is enabled or disabled:" +
                         "\n" +
@@ -2318,8 +2338,8 @@ export const SpecMatter = Matter({
                     name: "AlarmsSupported", id: 0x6, type: "AlarmModeBitmap", access: "R V", conformance: "VIS | AUD",
                     default: 0, quality: "F",
 
-                    details: "This attribute shall indicate the alarms supported by the sensor. A bit shall indicate whether the " +
-                        "alarm mode is supported:" +
+                    details: "Indicates the alarms supported by the sensor. A bit shall indicate whether the alarm mode is " +
+                        "supported:" +
                         "\n" +
                         "  • 0 = Not supported" +
                         "\n" +
@@ -2331,7 +2351,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SensorFault", id: 0x7, type: "SensorFaultBitmap", access: "R V", conformance: "O",
                     default: 0,
-                    details: "This attribute shall indicate any faults registered by the device.",
+                    details: "Indicates any faults registered by the device.",
                     xref: { document: "cluster", section: "1.8.6.8" }
                 }),
 
@@ -2537,10 +2557,9 @@ export const SpecMatter = Matter({
                     name: "OnMode", id: 0x5, type: "uint8", access: "RW VO", conformance: "DEPONOFF",
                     constraint: "desc", default: null, quality: "X N",
 
-                    details: "This attribute shall indicate the value of CurrentMode that depends on the state of the On/Off " +
-                        "cluster on the same endpoint. If this attribute is not present or is set to null, it shall NOT have " +
-                        "an effect, otherwise the CurrentMode attribute shall depend on the OnOff attribute of the On/Off " +
-                        "cluster" +
+                    details: "Indicates the value of CurrentMode that depends on the state of the On/Off cluster on the same " +
+                        "endpoint. If this attribute is not present or is set to null, it shall NOT have an effect, " +
+                        "otherwise the CurrentMode attribute shall depend on the OnOff attribute of the On/Off cluster" +
                         "\n" +
                         "The value of this field shall match the Mode field of one of the entries in the SupportedModes " +
                         "attribute.",
@@ -2691,7 +2710,7 @@ export const SpecMatter = Matter({
                     name: "CurrentMode", id: 0x1, type: "uint8", access: "R V", conformance: "M", constraint: "desc",
                     quality: "N S",
 
-                    details: "This attribute shall indicate the current mode of the server." +
+                    details: "Indicates the current mode of the server." +
                         "\n" +
                         "The value of this field shall match the Mode field of one of the entries in the SupportedModes " +
                         "attribute." +
@@ -2708,8 +2727,7 @@ export const SpecMatter = Matter({
                     name: "StartUpMode", id: 0x2, type: "uint8", access: "RW VO", conformance: "O", constraint: "desc",
                     quality: "X N",
 
-                    details: "This attribute shall indicate the desired startup mode for the server when it is supplied with " +
-                        "power." +
+                    details: "Indicates the desired startup mode for the server when it is supplied with power." +
                         "\n" +
                         "If this attribute is not null, the CurrentMode attribute shall be set to the StartUpMode value, " +
                         "when the server is powered up, except in the case when the OnMode attribute overrides the " +
@@ -2730,10 +2748,9 @@ export const SpecMatter = Matter({
                     name: "OnMode", id: 0x3, type: "uint8", access: "RW VO", conformance: "DEPONOFF",
                     constraint: "desc", default: null, quality: "X N",
 
-                    details: "This attribute shall indicate whether the value of CurrentMode depends on the state of the On/Off " +
-                        "cluster on the same endpoint. If this attribute is not present or is set to null, there is no " +
-                        "dependency, otherwise the CurrentMode attribute shall depend on the OnOff attribute in the On/Off " +
-                        "cluster" +
+                    details: "Indicates whether the value of CurrentMode depends on the state of the On/Off cluster on the same " +
+                        "endpoint. If this attribute is not present or is set to null, there is no dependency, otherwise the " +
+                        "CurrentMode attribute shall depend on the OnOff attribute in the On/Off cluster" +
                         "\n" +
                         "The value of this field shall match the Mode field of one of the entries in the SupportedModes " +
                         "attribute.",
@@ -2964,8 +2981,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "MacAddress", id: 0x0, type: "string", access: "R V", conformance: "O", constraint: "max 12",
                     quality: "F",
-                    details: "This attribute shall indicate the current MAC address of the device. Only 48-bit MAC Addresses " +
-                        "shall be used for this attribute as required by the Wake on LAN protocol." +
+                    details: "Indicates the current MAC address of the device. Only 48-bit MAC Addresses shall be used for this " +
+                        "attribute as required by the Wake on LAN protocol." +
                         "\n" +
                         "Format of this attribute shall be an upper-case hex-encoded string representing the hex address, " +
                         "like 12345678ABCD.",
@@ -2976,8 +2993,8 @@ export const SpecMatter = Matter({
                     name: "LinkLocalAddress", id: 0x1, type: "ipv6adr", access: "R V", conformance: "O",
                     constraint: "desc", quality: "F",
 
-                    details: "This attribute shall indicate the current link-local address of the device. Only 128-bit IPv6 link- " +
-                        "local addresses shall be used for this attribute." +
+                    details: "Indicates the current link-local address of the device. Only 128-bit IPv6 link- local addresses " +
+                        "shall be used for this attribute." +
                         "\n" +
                         "NOTE" +
                         "\n" +
@@ -3056,27 +3073,26 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "NumberOfPositions", id: 0x0, type: "uint8", access: "R V", conformance: "M",
                     constraint: "min 2", default: 2, quality: "F",
-                    details: "This attribute shall indicate the maximum number of positions the switch has. Any kind of switch " +
-                        "has a minimum of 2 positions. Also see Multi Position Details for the case NumberOfPositions>2.",
+                    details: "Indicates the maximum number of positions the switch has. Any kind of switch has a minimum of 2 " +
+                        "positions. Also see Multi Position Details for the case NumberOfPositions>2.",
                     xref: { document: "cluster", section: "1.13.5.1" }
                 }),
 
                 Attribute({
                     name: "CurrentPosition", id: 0x1, type: "uint8", access: "R V", conformance: "M",
                     constraint: "max numberOfPositions1", default: 0, quality: "N",
-                    details: "This attribute shall indicate the position of the switch. The valid range is zero to " +
-                        "NumberOfPositions-1. CurrentPosition value 0 shall be assigned to the default position of the " +
-                        "switch: for example the \"open\" state of a rocker switch, or the \"idle\" state of a push button " +
-                        "switch.",
+                    details: "Indicates the position of the switch. The valid range is zero to NumberOfPositions-1. " +
+                        "CurrentPosition value 0 shall be assigned to the default position of the switch: for example the " +
+                        "\"open\" state of a rocker switch, or the \"idle\" state of a push button switch.",
                     xref: { document: "cluster", section: "1.13.5.2" }
                 }),
 
                 Attribute({
                     name: "MultiPressMax", id: 0x2, type: "uint8", access: "R V", conformance: "MSM",
                     constraint: "min 2", default: 2, quality: "F",
-                    details: "This attribute shall indicate how many consecutive presses can be detected and reported by a " +
-                        "momentary switch which supports multi-press (e.g. it will report the value 3 if it can detect " +
-                        "single press, double press and triple press, but not quad press and beyond).",
+                    details: "Indicates how many consecutive presses can be detected and reported by a momentary switch which " +
+                        "supports multi-press (e.g. it will report the value 3 if it can detect single press, double press " +
+                        "and triple press, but not quad press and beyond).",
                     xref: { document: "cluster", section: "1.13.5.3" }
                 }),
 
@@ -3267,10 +3283,10 @@ export const SpecMatter = Matter({
                     name: "PhaseList", id: 0x0, type: "list", access: "R V", conformance: "M",
                     constraint: "max 32[max 64]", quality: "X",
 
-                    details: "This attribute shall indicate a list of names of different phases that the device can go through " +
-                        "for the selected function or mode. The list may not be in sequence order. For example in a washing " +
-                        "machine this could include items such as \"pre-soak\", \"rinse\", and \"spin\". These phases are " +
-                        "manufacturer specific and may change when a different function or mode is selected." +
+                    details: "Indicates a list of names of different phases that the device can go through for the selected " +
+                        "function or mode. The list may not be in sequence order. For example in a washing machine this " +
+                        "could include items such as \"pre-soak\", \"rinse\", and \"spin\". These phases are manufacturer specific " +
+                        "and may change when a different function or mode is selected." +
                         "\n" +
                         "A null value indicates that the device does not present phases during its operation. When this " +
                         "attribute’s value is null, the CurrentPhase attribute shall also be set to null.",
@@ -3288,8 +3304,7 @@ export const SpecMatter = Matter({
                         "where the first item in that list is an index of 0. Thus, this attribute shall have a maximum value " +
                         "that is \"length(PhaseList) - 1\"." +
                         "\n" +
-                        "This attribute shall be null if the PhaseList attribute is null or if the PhaseList attribute is an " +
-                        "empty list.",
+                        "Null if the PhaseList attribute is null or if the PhaseList attribute is an empty list.",
 
                     xref: { document: "cluster", section: "1.14.5.2" }
                 }),
@@ -3298,10 +3313,10 @@ export const SpecMatter = Matter({
                     name: "CountdownTime", id: 0x2, type: "elapsed-s", access: "R V", conformance: "O",
                     constraint: "max 259200", default: null, quality: "X C",
 
-                    details: "This attribute shall represent the estimated time left before the operation is completed, in " +
-                        "seconds. Changes to this value shall NOT be reported in a subscription (note the C Quality). A " +
-                        "Client implementation may periodically poll this value to ensure alignment of any local rendering " +
-                        "of the CountdownTime with the device provided value." +
+                    details: "Indicates the estimated time left before the operation is completed, in seconds. Changes to this " +
+                        "value shall NOT be reported in a subscription (note the C Quality). A Client implementation may " +
+                        "periodically poll this value to ensure alignment of any local rendering of the CountdownTime with " +
+                        "the device provided value." +
                         "\n" +
                         "A value of 0 means that the operation has completed." +
                         "\n" +
@@ -3694,33 +3709,32 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "Mask", id: 0x0, type: "AlarmBitmap", access: "R V", conformance: "M", default: 0,
-                    details: "This attribute shall indicate a bitmap where each bit set in the Mask attribute corresponds to an " +
-                        "alarm that shall be enabled.",
+                    details: "Indicates a bitmap where each bit set in the Mask attribute corresponds to an alarm that shall be " +
+                        "enabled.",
                     xref: { document: "cluster", section: "1.15.6.1" }
                 }),
 
                 Attribute({
                     name: "Latch", id: 0x1, type: "AlarmBitmap", access: "R V", conformance: "RESET", default: 0,
                     quality: "F",
-                    details: "This attribute shall indicate a bitmap where each bit set in the Latch attribute shall indicate " +
-                        "that the corresponding alarm will be latched when set, and will not reset to inactive when the " +
-                        "underlying condition which caused the alarm is no longer present, and so requires an explicit reset " +
-                        "using the Reset command.",
+                    details: "Indicates a bitmap where each bit set in the Latch attribute shall indicate that the corresponding " +
+                        "alarm will be latched when set, and will not reset to inactive when the underlying condition which " +
+                        "caused the alarm is no longer present, and so requires an explicit reset using the Reset command.",
                     xref: { document: "cluster", section: "1.15.6.2" }
                 }),
 
                 Attribute({
                     name: "State", id: 0x2, type: "AlarmBitmap", access: "R V", conformance: "M", default: 0,
-                    details: "This attribute shall indicate a bitmap where each bit shall represent the state of an alarm. The " +
-                        "value of true means the alarm is active, otherwise the alarm is inactive.",
+                    details: "Indicates a bitmap where each bit shall represent the state of an alarm. The value of true means " +
+                        "the alarm is active, otherwise the alarm is inactive.",
                     xref: { document: "cluster", section: "1.15.6.3" }
                 }),
 
                 Attribute({
                     name: "Supported", id: 0x3, type: "AlarmBitmap", access: "R V", conformance: "M", default: 0,
                     quality: "F",
-                    details: "This attribute shall indicate a bitmap where each bit shall represent whether or not an alarm is " +
-                        "supported. The value of true means the alarm is supported, otherwise the alarm is not supported." +
+                    details: "Indicates a bitmap where each bit shall represent whether or not an alarm is supported. The value " +
+                        "of true means the alarm is supported, otherwise the alarm is not supported." +
                         "\n" +
                         "If an alarm is not supported, the corresponding bit in Mask, Latch, and State shall be false.",
                     xref: { document: "cluster", section: "1.15.6.4" }
@@ -3866,7 +3880,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "Messages", id: 0x0, type: "list", access: "R F V", conformance: "M", constraint: "max 8",
                     default: [],
-                    details: "This attribute shall indicate a list of queued messages." +
+                    details: "Indicates a list of queued messages." +
                         "\n" +
                         "In addition to filtering based upon fabric, to preserve user privacy, the server may further limit " +
                         "the set of messages returned in a read request. At minimum, the server shall return to a client " +
@@ -3878,8 +3892,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ActiveMessageIDs", id: 0x1, type: "list", access: "R V", conformance: "M",
                     constraint: "max 8", default: [],
-                    details: "This attribute shall indicate a list of the MessageIDs of the Messages currently being presented. " +
-                        "If this list is empty, no messages are currently being presented." +
+                    details: "Indicates a list of the MessageIDs of the Messages currently being presented. If this list is " +
+                        "empty, no messages are currently being presented." +
                         "\n" +
                         "This list shall NOT be fabric-scoped; it shall contain MessageIDs for all Messages being presented, " +
                         "no matter what fabric the client that queued them is on.",
@@ -4556,16 +4570,15 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "MeasuredValue", id: 0x0, type: "temperature", access: "R V", conformance: "M",
                     constraint: "minMeasuredValue to maxMeasuredValue", quality: "X P",
-                    details: "This attribute shall indicate the measured temperature. The null value indicates that the " +
-                        "temperature is unknown.",
+                    details: "Indicates the measured temperature. The null value indicates that the temperature is unknown.",
                     xref: { document: "cluster", section: "2.3.4.1" }
                 }),
 
                 Attribute({
                     name: "MinMeasuredValue", id: 0x1, type: "temperature", access: "R V", conformance: "M",
                     constraint: "-27315 to maxMeasuredValue1", quality: "X",
-                    details: "This attribute shall indicate the minimum value of MeasuredValue that is capable of being measured. " +
-                        "See Measured Value for more details." +
+                    details: "Indicates the minimum value of MeasuredValue that is capable of being measured. See Measured Value " +
+                        "for more details." +
                         "\n" +
                         "The null value indicates that the value is not available.",
                     xref: { document: "cluster", section: "2.3.4.2" }
@@ -4611,7 +4624,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "MeasuredValue", id: 0x0, type: "int16", access: "R V", conformance: "M",
                     constraint: "minMeasuredValue to maxMeasuredValue", quality: "X P",
-                    details: "This attribute shall represent the pressure in kPa as follows:" +
+                    details: "Indicates the pressure in kPa as follows:" +
                         "\n" +
                         "MeasuredValue = 10 x Pressure [kPa]" +
                         "\n" +
@@ -4622,8 +4635,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "MinMeasuredValue", id: 0x1, type: "int16", access: "R V", conformance: "M",
                     constraint: "-32767 to maxMeasuredValue1", quality: "X",
-                    details: "This attribute shall indicate the minimum value of MeasuredValue that can be measured. See Measured " +
-                        "Value for more details." +
+                    details: "Indicates the minimum value of MeasuredValue that can be measured. See Measured Value for more " +
+                        "details." +
                         "\n" +
                         "The null value indicates that the value is not available.",
                     xref: { document: "cluster", section: "2.4.5.2" }
@@ -4632,8 +4645,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "MaxMeasuredValue", id: 0x2, type: "int16", access: "R V", conformance: "M",
                     constraint: "minMeasuredValue1 to 32767", quality: "X",
-                    details: "This attribute shall indicate the maximum value of MeasuredValue that can be measured. See Measured " +
-                        "Value for more details." +
+                    details: "Indicates the maximum value of MeasuredValue that can be measured. See Measured Value for more " +
+                        "details." +
                         "\n" +
                         "The null value indicates that the value is not available.",
                     xref: { document: "cluster", section: "2.4.5.3" }
@@ -4649,7 +4662,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ScaledValue", id: 0x10, type: "int16", access: "R V", conformance: "EXT",
                     constraint: "minScaledValue to maxScaledValue", default: 0, quality: "X",
-                    details: "This attribute shall represent the pressure in Pascals as follows:" +
+                    details: "Indicates the pressure in Pascals as follows:" +
                         "\n" +
                         "ScaledValue = 10Scale x Pressure [Pa]" +
                         "\n" +
@@ -4660,23 +4673,23 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "MinScaledValue", id: 0x11, type: "int16", access: "R V", conformance: "EXT",
                     constraint: "-32767 to maxScaledValue1", default: 0, quality: "X",
-                    details: "This attribute shall indicate the minimum value of ScaledValue that can be measured. The null value " +
-                        "indicates that the value is not available.",
+                    details: "Indicates the minimum value of ScaledValue that can be measured. The null value indicates that the " +
+                        "value is not available.",
                     xref: { document: "cluster", section: "2.4.5.6" }
                 }),
 
                 Attribute({
                     name: "MaxScaledValue", id: 0x12, type: "int16", access: "R V", conformance: "EXT",
                     constraint: "minScaledValue1 to 32767", default: 0, quality: "X",
-                    details: "This attribute shall indicate the maximum value of ScaledValue that can be measured. The null value " +
-                        "indicates that the value is not available.",
+                    details: "Indicates the maximum value of ScaledValue that can be measured. The null value indicates that the " +
+                        "value is not available.",
                     xref: { document: "cluster", section: "2.4.5.7" }
                 }),
 
                 Attribute({
                     name: "ScaledTolerance", id: 0x13, type: "uint16", access: "R V", conformance: "[EXT]",
                     constraint: "0 to 2048", default: 0,
-                    details: "This attribute shall indicate the magnitude of the possible error that is associated with Scaled" +
+                    details: "Indicates the magnitude of the possible error that is associated with Scaled" +
                         "\n" +
                         "Value. The true value is located in the range" +
                         "\n" +
@@ -4687,7 +4700,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "Scale", id: 0x14, type: "int8", access: "R V", conformance: "EXT", constraint: "-127 to 127",
                     default: 0,
-                    details: "This attribute shall indicate the base 10 exponent used to obtain ScaledValue (see ScaledValue).",
+                    details: "Indicates the base 10 exponent used to obtain ScaledValue (see ScaledValue).",
                     xref: { document: "cluster", section: "2.4.5.9" }
                 })
             ]
@@ -4993,8 +5006,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "AirQuality", id: 0x0, type: "AirQualityEnum", access: "R V", conformance: "M",
                     constraint: "desc", default: 0,
-                    details: "This attribute shall indicate a value from AirQualityEnum that is indicative of the currently " +
-                        "measured air quality.",
+                    details: "Indicates a value from AirQualityEnum that is indicative of the currently measured air quality.",
                     xref: { document: "cluster", section: "2.9.6.1" }
                 }),
 
@@ -5053,12 +5065,12 @@ export const SpecMatter = Matter({
                     name: "ExpressedState", id: 0x0, type: "ExpressedStateEnum", access: "R V", conformance: "M",
                     quality: "N",
 
-                    details: "This attribute shall indicate the visibly- and audibly-expressed state of the alarm. When multiple " +
-                        "alarm conditions are being reflected in the server, this attribute shall indicate the condition " +
-                        "with the highest priority. Priority order of conditions is determined by the manufacturer and shall " +
-                        "be supplied as a part of certification procedure. If the value of ExpressedState is not Normal, the " +
-                        "attribute corresponding to the value shall NOT be Normal. For example, if the ExpressedState is set " +
-                        "to SmokeAlarm, the value of the SmokeState will indicate the severity of the alarm (Warning or " +
+                    details: "Indicates the visibly- and audibly-expressed state of the alarm. When multiple alarm conditions are " +
+                        "being reflected in the server, this attribute shall indicate the condition with the highest " +
+                        "priority. Priority order of conditions is determined by the manufacturer and shall be supplied as a " +
+                        "part of certification procedure. If the value of ExpressedState is not Normal, the attribute " +
+                        "corresponding to the value shall NOT be Normal. For example, if the ExpressedState is set to " +
+                        "SmokeAlarm, the value of the SmokeState will indicate the severity of the alarm (Warning or " +
                         "Critical). Clients SHOULD also read the other attributes to be aware of further alarm conditions " +
                         "beyond the one indicated in ExpressedState." +
                         "\n" +
@@ -5072,95 +5084,93 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SmokeState", id: 0x1, type: "AlarmStateEnum", access: "R V", conformance: "SMOKE",
                     quality: "N",
-                    details: "This attribute shall indicate whether the device’s smoke sensor is currently triggering a smoke " +
-                        "alarm.",
+                    details: "Indicates whether the device’s smoke sensor is currently triggering a smoke alarm.",
                     xref: { document: "cluster", section: "2.11.6.2" }
                 }),
 
                 Attribute({
                     name: "CoState", id: 0x2, type: "AlarmStateEnum", access: "R V", conformance: "CO", quality: "N",
-                    details: "This attribute shall indicate whether the device’s CO sensor is currently triggering a CO alarm.",
+                    details: "Indicates whether the device’s CO sensor is currently triggering a CO alarm.",
                     xref: { document: "cluster", section: "2.11.6.3" }
                 }),
 
                 Attribute({
                     name: "BatteryAlert", id: 0x3, type: "AlarmStateEnum", access: "R V", conformance: "M",
                     quality: "N",
-                    details: "This attribute shall indicate whether the power resource fault detection mechanism is currently " +
-                        "triggered at the device. If the detection mechanism is triggered, this attribute shall be set to " +
-                        "Warning or Critical, otherwise it shall be set to Normal. The battery state shall also be reflected " +
-                        "in the Power Source cluster representing the device’s battery using the appropriate supported " +
-                        "attributes and events.",
+                    details: "Indicates whether the power resource fault detection mechanism is currently triggered at the " +
+                        "device. If the detection mechanism is triggered, this attribute shall be set to Warning or " +
+                        "Critical, otherwise it shall be set to Normal. The battery state shall also be reflected in the " +
+                        "Power Source cluster representing the device’s battery using the appropriate supported attributes " +
+                        "and events.",
                     xref: { document: "cluster", section: "2.11.6.4" }
                 }),
 
                 Attribute({
                     name: "DeviceMuted", id: 0x4, type: "MuteStateEnum", access: "R V", conformance: "O", quality: "N",
-                    details: "This attribute shall indicate the whether the audible expression of the device is currently muted. " +
-                        "Audible expression is typically a horn or speaker pattern.",
+                    details: "Indicates the whether the audible expression of the device is currently muted. Audible expression " +
+                        "is typically a horn or speaker pattern.",
                     xref: { document: "cluster", section: "2.11.6.5" }
                 }),
 
                 Attribute({
                     name: "TestInProgress", id: 0x5, type: "bool", access: "R V", conformance: "M",
-                    details: "This attribute shall indicate whether the device self-test is currently activated. If the device " +
-                        "self- test is activated, this attribute shall be set to True, otherwise it shall be set to False.",
+                    details: "Indicates whether the device self-test is currently activated. If the device self- test is " +
+                        "activated, this attribute shall be set to True, otherwise it shall be set to False.",
                     xref: { document: "cluster", section: "2.11.6.6" }
                 }),
 
                 Attribute({
                     name: "HardwareFaultAlert", id: 0x6, type: "bool", access: "R V", conformance: "M", quality: "N",
-                    details: "This attribute shall indicate whether the hardware fault detection mechanism is currently " +
-                        "triggered. If the detection mechanism is triggered, this attribute shall be set to True, otherwise " +
-                        "it shall be set to False.",
+                    details: "Indicates whether the hardware fault detection mechanism is currently triggered. If the detection " +
+                        "mechanism is triggered, this attribute shall be set to True, otherwise it shall be set to False.",
                     xref: { document: "cluster", section: "2.11.6.7" }
                 }),
 
                 Attribute({
                     name: "EndOfServiceAlert", id: 0x7, type: "EndOfServiceEnum", access: "R V", conformance: "M",
                     quality: "N",
-                    details: "This attribute shall indicate whether the end-of-service has been triggered at the device. This " +
-                        "attribute shall be set to Expired when the device reaches the end-of-service.",
+                    details: "Indicates whether the end-of-service has been triggered at the device. This attribute shall be set " +
+                        "to Expired when the device reaches the end-of-service.",
                     xref: { document: "cluster", section: "2.11.6.8" }
                 }),
 
                 Attribute({
                     name: "InterconnectSmokeAlarm", id: 0x8, type: "AlarmStateEnum", access: "R V", conformance: "O",
-                    details: "This attribute shall indicate whether the interconnected smoke alarm is currently triggering by " +
-                        "branching devices. When the interconnected smoke alarm is being triggered, this attribute shall be " +
-                        "set to Warning or Critical, otherwise it shall be set to Normal.",
+                    details: "Indicates whether the interconnected smoke alarm is currently triggering by branching devices. When " +
+                        "the interconnected smoke alarm is being triggered, this attribute shall be set to Warning or " +
+                        "Critical, otherwise it shall be set to Normal.",
                     xref: { document: "cluster", section: "2.11.6.9" }
                 }),
 
                 Attribute({
                     name: "InterconnectCoAlarm", id: 0x9, type: "AlarmStateEnum", access: "R V", conformance: "O",
-                    details: "This attribute shall indicate whether the interconnected CO alarm is currently triggering by " +
-                        "branching devices. When the interconnected CO alarm is being triggered, this attribute shall be set " +
-                        "to Warning or Critical, otherwise it shall be set to Normal.",
+                    details: "Indicates whether the interconnected CO alarm is currently triggering by branching devices. When " +
+                        "the interconnected CO alarm is being triggered, this attribute shall be set to Warning or Critical, " +
+                        "otherwise it shall be set to Normal.",
                     xref: { document: "cluster", section: "2.11.6.10" }
                 }),
 
                 Attribute({
                     name: "ContaminationState", id: 0xa, type: "ContaminationStateEnum", access: "R V",
                     conformance: "[SMOKE]",
-                    details: "This attribute shall indicate the contamination level of the smoke sensor.",
+                    details: "Indicates the contamination level of the smoke sensor.",
                     xref: { document: "cluster", section: "2.11.6.11" }
                 }),
 
                 Attribute({
                     name: "SmokeSensitivityLevel", id: 0xb, type: "SensitivityEnum", access: "RW VM",
                     conformance: "[SMOKE]",
-                    details: "This attribute shall indicate the sensitivity level of the smoke sensor configured on the device.",
+                    details: "Indicates the sensitivity level of the smoke sensor configured on the device.",
                     xref: { document: "cluster", section: "2.11.6.12" }
                 }),
 
                 Attribute({
                     name: "ExpiryDate", id: 0xc, type: "epoch-s", access: "R V", conformance: "O", quality: "F",
-                    details: "This attribute shall indicate the date when the device reaches its stated expiry date. After the " +
-                        "ExpiryDate has been reached, the EndOfServiceAlert shall start to be triggered. To account for " +
-                        "better customer experience across time zones, the EndOfServiceAlert may be delayed by up to 24 " +
-                        "hours after the ExpiryDate. Similarly, clients may delay any actions based on the ExpiryDate by up " +
-                        "to 24 hours to best align with the local time zone.",
+                    details: "Indicates the date when the device reaches its stated expiry date. After the ExpiryDate has been " +
+                        "reached, the EndOfServiceAlert shall start to be triggered. To account for better customer " +
+                        "experience across time zones, the EndOfServiceAlert may be delayed by up to 24 hours after the " +
+                        "ExpiryDate. Similarly, clients may delay any actions based on the ExpiryDate by up to 24 hours to " +
+                        "best align with the local time zone.",
                     xref: { document: "cluster", section: "2.11.6.13" }
                 }),
 
@@ -5519,8 +5529,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "Accuracy", id: 0x0, type: "MeasurementAccuracyStruct", access: "R V", conformance: "M",
                     quality: "F",
-                    details: "This attribute shall indicate the accuracy of energy measurement by this server. The value of the " +
-                        "MeasurementType field on this MeasurementAccuracyStruct shall be ElectricalEnergy.",
+                    details: "Indicates the accuracy of energy measurement by this server. The value of the MeasurementType field " +
+                        "on this MeasurementAccuracyStruct shall be ElectricalEnergy.",
                     xref: { document: "cluster", section: "2.12.6.1" }
                 }),
 
@@ -5528,8 +5538,8 @@ export const SpecMatter = Matter({
                     name: "CumulativeEnergyImported", id: 0x1, type: "EnergyMeasurementStruct", access: "R V",
                     conformance: "IMPE & CUME", default: null, quality: "X Q",
 
-                    details: "This attribute shall indicate the most recent measurement of cumulative energy imported by the " +
-                        "server over the lifetime of the device, and the timestamp of when the measurement was recorded." +
+                    details: "Indicates the most recent measurement of cumulative energy imported by the server over the lifetime " +
+                        "of the device, and the timestamp of when the measurement was recorded." +
                         "\n" +
                         "The reporting interval of this attribute shall be manufacturer dependent. The server may choose to " +
                         "omit publication of deltas considered not meaningful." +
@@ -5549,8 +5559,8 @@ export const SpecMatter = Matter({
                     name: "CumulativeEnergyExported", id: 0x2, type: "EnergyMeasurementStruct", access: "R V",
                     conformance: "EXPE & CUME", default: null, quality: "X Q",
 
-                    details: "This attribute shall indicate the most recent measurement of cumulative energy exported by the " +
-                        "server over the lifetime of the device, and the timestamp of when the measurement was recorded." +
+                    details: "Indicates the most recent measurement of cumulative energy exported by the server over the lifetime " +
+                        "of the device, and the timestamp of when the measurement was recorded." +
                         "\n" +
                         "The reporting interval of this attribute shall be manufacturer dependent. The server may choose to " +
                         "omit publication of deltas considered not meaningful." +
@@ -5570,8 +5580,8 @@ export const SpecMatter = Matter({
                     name: "PeriodicEnergyImported", id: 0x3, type: "EnergyMeasurementStruct", access: "R V",
                     conformance: "IMPE & PERE", default: null, quality: "X Q",
 
-                    details: "This attribute shall indicate the most recent measurement of energy imported by the server and the " +
-                        "period during which it was measured." +
+                    details: "Indicates the most recent measurement of energy imported by the server and the period during which " +
+                        "it was measured." +
                         "\n" +
                         "The reporting interval of this attribute shall be manufacturer dependent. The server may choose to " +
                         "omit publication of deltas considered not meaningful." +
@@ -5591,8 +5601,8 @@ export const SpecMatter = Matter({
                     name: "PeriodicEnergyExported", id: 0x4, type: "EnergyMeasurementStruct", access: "R V",
                     conformance: "EXPE & PERE", default: null, quality: "X Q",
 
-                    details: "This attribute shall indicate the most recent measurement of energy exported by the server and the " +
-                        "period during which it was measured." +
+                    details: "Indicates the most recent measurement of energy exported by the server and the period during which " +
+                        "it was measured." +
                         "\n" +
                         "The reporting interval of this attribute shall be manufacturer dependent. The server may choose to " +
                         "omit publication of deltas considered not meaningful." +
@@ -5611,7 +5621,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "CumulativeEnergyReset", id: 0x5, type: "CumulativeEnergyResetStruct", access: "R V",
                     conformance: "[CUME]", default: null, quality: "X",
-                    details: "This attribute shall indicate when cumulative measurements were most recently zero.",
+                    details: "Indicates when cumulative measurements were most recently zero.",
                     xref: { document: "cluster", section: "2.12.6.6" }
                 }),
 
@@ -8053,8 +8063,7 @@ export const SpecMatter = Matter({
                     details: "This attribute specifies the maximum pressure the pump can achieve. It is a physical limit, and " +
                         "does not apply to any specific control mode or operation mode." +
                         "\n" +
-                        "Valid range is -3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                        "value is invalid.",
+                        "Valid range is -3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.1" }
                 }),
 
@@ -8064,8 +8073,7 @@ export const SpecMatter = Matter({
                     details: "This attribute specifies the maximum speed the pump can achieve. It is a physical limit, and does " +
                         "not apply to any specific control mode or operation mode." +
                         "\n" +
-                        "Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is " +
-                        "invalid.",
+                        "Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.2" }
                 }),
 
@@ -8075,8 +8083,7 @@ export const SpecMatter = Matter({
                     details: "This attribute specifies the maximum flow the pump can achieve. It is a physical limit, and does " +
                         "not apply to any specific control mode or operation mode." +
                         "\n" +
-                        "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value " +
-                        "is invalid.",
+                        "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.3" }
                 }),
 
@@ -8086,8 +8093,7 @@ export const SpecMatter = Matter({
                     details: "This attribute specifies the minimum pressure the pump can achieve when it is working with the " +
                         "ControlMode attribute set to ConstantPressure." +
                         "\n" +
-                        "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                        "value is invalid.",
+                        "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.4" }
                 }),
 
@@ -8097,8 +8103,7 @@ export const SpecMatter = Matter({
                     details: "This attribute specifies the maximum pressure the pump can achieve when it is working with the " +
                         "ControlMode attribute set to ConstantPressure." +
                         "\n" +
-                        "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                        "value is invalid.",
+                        "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.5" }
                 }),
 
@@ -8108,8 +8113,7 @@ export const SpecMatter = Matter({
                     details: "This attribute specifies the minimum compensated pressure the pump can achieve when it is working " +
                         "with the ControlMode attribute set to ProportionalPressure." +
                         "\n" +
-                        "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                        "value is invalid.",
+                        "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.6" }
                 }),
 
@@ -8119,8 +8123,7 @@ export const SpecMatter = Matter({
                     details: "This attribute specifies the maximum compensated pressure the pump can achieve when it is working " +
                         "with the ControlMode attribute set to ProportionalPressure." +
                         "\n" +
-                        "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                        "value is invalid.",
+                        "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.7" }
                 }),
 
@@ -8130,8 +8133,7 @@ export const SpecMatter = Matter({
                     details: "This attribute specifies the minimum speed the pump can achieve when it is working with the " +
                         "ControlMode attribute set to ConstantSpeed." +
                         "\n" +
-                        "Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is " +
-                        "invalid.",
+                        "Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.8" }
                 }),
 
@@ -8141,22 +8143,18 @@ export const SpecMatter = Matter({
                     details: "This attribute specifies the maximum speed the pump can achieve when it is working with the " +
                         "ControlMode attribute set to ConstantSpeed." +
                         "\n" +
-                        "Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is " +
-                        "invalid.",
+                        "Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.9" }
                 }),
 
                 Attribute({
                     name: "MinConstFlow", id: 0x9, type: "uint16", access: "R V", conformance: "FLW, [AUTO]",
                     default: null, quality: "X F",
-
                     details: "This attribute specifies the minimum flow the pump can achieve when it is working with the Con" +
                         "\n" +
                         "trolMode attribute set to ConstantFlow." +
                         "\n" +
-                        "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value " +
-                        "is invalid.",
-
+                        "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.10" }
                 }),
 
@@ -8166,8 +8164,7 @@ export const SpecMatter = Matter({
                     details: "This attribute specifies the maximum flow the pump can achieve when it is working with the " +
                         "ControlMode attribute set to ConstantFlow." +
                         "\n" +
-                        "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value " +
-                        "is invalid.",
+                        "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.11" }
                 }),
 
@@ -8177,8 +8174,7 @@ export const SpecMatter = Matter({
                     details: "This attribute specifies the minimum temperature the pump can maintain in the system when it is " +
                         "working with the ControlMode attribute set to ConstantTemperature." +
                         "\n" +
-                        "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the " +
-                        "value is invalid.",
+                        "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). Null if the value is invalid.",
                     xref: { document: "cluster", section: "4.2.7.12" }
                 }),
 
@@ -8191,8 +8187,7 @@ export const SpecMatter = Matter({
                         "\n" +
                         "MaxConstTemp shall be greater than or equal to MinConstTemp" +
                         "\n" +
-                        "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the " +
-                        "value is invalid.",
+                        "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). Null if the value is invalid.",
 
                     xref: { document: "cluster", section: "4.2.7.13" }
                 }),
@@ -8330,7 +8325,7 @@ export const SpecMatter = Matter({
                         "\n" +
                         "Valid range is 0 kWh to 4,294,967,294 kWh." +
                         "\n" +
-                        "This attribute shall be null if the value is unknown.",
+                        "Null if the value is unknown.",
 
                     xref: { document: "cluster", section: "4.2.7.21" }
                 }),
@@ -8644,7 +8639,7 @@ export const SpecMatter = Matter({
                             details: "Supports Occupied and Unoccupied setpoints"
                         }),
                         Field({
-                            name: "SCH", conformance: "[Zigbee], D", constraint: "3", description: "ScheduleConfiguration",
+                            name: "SCH", conformance: "D", constraint: "3", description: "ScheduleConfiguration",
                             details: "Supports remote configuration of a weekly schedule of setpoint transitions"
                         }),
                         Field({
@@ -8671,7 +8666,7 @@ export const SpecMatter = Matter({
                     name: "LocalTemperature", id: 0x0, type: "temperature", access: "R V", conformance: "M",
                     default: null, quality: "X P",
 
-                    details: "This attribute shall indicate the current Calculated Local Temperature, when available." +
+                    details: "Indicates the current Calculated Local Temperature, when available." +
                         "\n" +
                         "  • If the LTNE feature is not supported:" +
                         "\n" +
@@ -8690,16 +8685,15 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "OutdoorTemperature", id: 0x1, type: "temperature", access: "R V", conformance: "O",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the outdoor temperature, as measured locally or remotely (over the " +
-                        "network).",
+                    details: "Indicates the outdoor temperature, as measured locally or remotely (over the network).",
                     xref: { document: "cluster", section: "4.3.9.4" }
                 }),
 
                 Attribute({
                     name: "Occupancy", id: 0x2, type: "OccupancyBitmap", access: "R V", conformance: "OCC",
                     constraint: "desc", default: "1",
-                    details: "This attribute shall indicate whether the heated/cooled space is occupied or not, as measured " +
-                        "locally or remotely (over the network).",
+                    details: "Indicates whether the heated/cooled space is occupied or not, as measured locally or remotely (over " +
+                        "the network).",
                     xref: { document: "cluster", section: "4.3.9.5" }
                 }),
 
@@ -8717,8 +8711,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "AbsMinCoolSetpointLimit", id: 0x5, type: "temperature", access: "R V", conformance: "[COOL]",
                     constraint: "desc", default: { type: "celsius", value: 16 }, quality: "F",
-                    details: "This attribute shall indicate the absolute minimum level that the cooling setpoint may be set to. " +
-                        "This is a limitation imposed by the manufacturer." +
+                    details: "Indicates the absolute minimum level that the cooling setpoint may be set to. This is a limitation " +
+                        "imposed by the manufacturer." +
                         "\n" +
                         "Refer to Setpoint Limits for constraints",
                     xref: { document: "cluster", section: "4.3.9.8" }
@@ -8727,8 +8721,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "AbsMaxCoolSetpointLimit", id: 0x6, type: "temperature", access: "R V", conformance: "[COOL]",
                     constraint: "desc", default: { type: "celsius", value: 32 }, quality: "F",
-                    details: "This attribute shall indicate the absolute maximum level that the cooling setpoint may be set to. " +
-                        "This is a limitation imposed by the manufacturer." +
+                    details: "Indicates the absolute maximum level that the cooling setpoint may be set to. This is a limitation " +
+                        "imposed by the manufacturer." +
                         "\n" +
                         "Refer to Setpoint Limits for constraints",
                     xref: { document: "cluster", section: "4.3.9.9" }
@@ -8737,9 +8731,9 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "PiCoolingDemand", id: 0x7, type: "uint8", access: "R V", conformance: "[COOL]",
                     constraint: "0%'; to 100%';", quality: "P",
-                    details: "This attribute shall indicate the level of cooling demanded by the PI (proportional integral) " +
-                        "control loop in use by the thermostat (if any), in percent. This value is 0 when the thermostat is " +
-                        "in “off” or “heating” mode." +
+                    details: "Indicates the level of cooling demanded by the PI (proportional integral) control loop in use by " +
+                        "the thermostat (if any), in percent. This value is 0 when the thermostat is in “off” or “heating” " +
+                        "mode." +
                         "\n" +
                         "This attribute is reported regularly and may be used to control a cooling device.",
                     xref: { document: "cluster", section: "4.3.9.10" }
@@ -8748,8 +8742,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "PiHeatingDemand", id: 0x8, type: "uint8", access: "R V", conformance: "[HEAT]",
                     constraint: "0%'; to 100%';", quality: "P",
-                    details: "This attribute shall indicate the level of heating demanded by the PI loop in percent. This value " +
-                        "is 0 when the thermostat is in “off” or “cooling” mode." +
+                    details: "Indicates the level of heating demanded by the PI loop in percent. This value is 0 when the " +
+                        "thermostat is in “off” or “cooling” mode." +
                         "\n" +
                         "This attribute is reported regularly and may be used to control a heating device.",
                     xref: { document: "cluster", section: "4.3.9.11" }
@@ -8758,10 +8752,10 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "HvacSystemTypeConfiguration", id: 0x9, type: "HVACSystemTypeBitmap", access: "R[W] VM",
                     conformance: "D", constraint: "desc", default: 0, quality: "N",
-                    details: "This attribute shall indicate the HVAC system type controlled by the thermostat. If the thermostat " +
-                        "uses physical DIP switches to set these parameters, this information shall be available read-only " +
-                        "from the DIP switches. If these parameters are set via software, there shall be read/write access " +
-                        "in order to provide remote programming capability.",
+                    details: "Indicates the HVAC system type controlled by the thermostat. If the thermostat uses physical DIP " +
+                        "switches to set these parameters, this information shall be available read-only from the DIP " +
+                        "switches. If these parameters are set via software, there shall be read/write access in order to " +
+                        "provide remote programming capability.",
                     xref: { document: "cluster", section: "4.3.9.12" }
                 }),
 
@@ -8770,9 +8764,8 @@ export const SpecMatter = Matter({
                     conformance: "[!LTNE]", constraint: "-2.5°C to 2.5°C", default: { type: "celsius", value: 0 },
                     quality: "N",
 
-                    details: "This attribute shall indicate the offset the Thermostat server shall make to the measured " +
-                        "temperature (locally or remotely) to adjust the Calculated Local Temperature prior to using, " +
-                        "displaying or reporting it." +
+                    details: "Indicates the offset the Thermostat server shall make to the measured temperature (locally or " +
+                        "remotely) to adjust the Calculated Local Temperature prior to using, displaying or reporting it." +
                         "\n" +
                         "The purpose of this attribute is to adjust the calibration of the Thermostat server per the user’s " +
                         "preferences (e.g., to match if there are multiple servers displaying different values for the same " +
@@ -8790,7 +8783,7 @@ export const SpecMatter = Matter({
                     name: "OccupiedCoolingSetpoint", id: 0x11, type: "temperature", access: "RW VO",
                     conformance: "COOL", constraint: "desc", default: { type: "celsius", value: 26 }, quality: "N S",
 
-                    details: "This attribute shall indicate the cooling mode setpoint when the room is occupied." +
+                    details: "Indicates the cooling mode setpoint when the room is occupied." +
                         "\n" +
                         "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that " +
                         "these constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned." +
@@ -8805,7 +8798,7 @@ export const SpecMatter = Matter({
                     name: "OccupiedHeatingSetpoint", id: 0x12, type: "temperature", access: "RW VO",
                     conformance: "HEAT", constraint: "desc", default: { type: "celsius", value: 20 }, quality: "N S",
 
-                    details: "This attribute shall indicate the heating mode setpoint when the room is occupied." +
+                    details: "Indicates the heating mode setpoint when the room is occupied." +
                         "\n" +
                         "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that " +
                         "these constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned." +
@@ -8821,7 +8814,7 @@ export const SpecMatter = Matter({
                     conformance: "COOL & OCC", constraint: "desc", default: { type: "celsius", value: 26 },
                     quality: "N",
 
-                    details: "This attribute shall indicate the cooling mode setpoint when the room is unoccupied." +
+                    details: "Indicates the cooling mode setpoint when the room is unoccupied." +
                         "\n" +
                         "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that " +
                         "these constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned." +
@@ -8836,7 +8829,7 @@ export const SpecMatter = Matter({
                     conformance: "HEAT & OCC", constraint: "desc", default: { type: "celsius", value: 20 },
                     quality: "N",
 
-                    details: "This attribute shall indicate the heating mode setpoint when the room is unoccupied." +
+                    details: "Indicates the heating mode setpoint when the room is unoccupied." +
                         "\n" +
                         "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that " +
                         "these constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned." +
@@ -8850,7 +8843,7 @@ export const SpecMatter = Matter({
                     name: "MinHeatSetpointLimit", id: 0x15, type: "temperature", access: "RW VM", conformance: "[HEAT]",
                     constraint: "desc", default: { type: "reference", name: "AbsMinHeatSetpointLimit" }, quality: "N",
 
-                    details: "This attribute shall indicate the minimum level that the heating setpoint may be set to." +
+                    details: "Indicates the minimum level that the heating setpoint may be set to." +
                         "\n" +
                         "This attribute, and the following three attributes, allow the user to define setpoint limits more " +
                         "constrictive than the manufacturer imposed ones. Limiting users (e.g., in a commercial building) to " +
@@ -8869,7 +8862,7 @@ export const SpecMatter = Matter({
                     name: "MaxHeatSetpointLimit", id: 0x16, type: "temperature", access: "RW VM", conformance: "[HEAT]",
                     constraint: "desc", default: { type: "reference", name: "AbsMaxHeatSetpointLimit" }, quality: "N",
 
-                    details: "This attribute shall indicate the maximum level that the heating setpoint may be set to." +
+                    details: "Indicates the maximum level that the heating setpoint may be set to." +
                         "\n" +
                         "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute to a value " +
                         "which conflicts with setpoint values then those setpoints shall be adjusted by the minimum amount " +
@@ -8884,7 +8877,7 @@ export const SpecMatter = Matter({
                     name: "MinCoolSetpointLimit", id: 0x17, type: "temperature", access: "RW VM", conformance: "[COOL]",
                     constraint: "desc", default: { type: "reference", name: "AbsMinCoolSetpointLimit" }, quality: "N",
 
-                    details: "This attribute shall indicate the minimum level that the cooling setpoint may be set to." +
+                    details: "Indicates the minimum level that the cooling setpoint may be set to." +
                         "\n" +
                         "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute to a value " +
                         "which conflicts with setpoint values then those setpoints shall be adjusted by the minimum amount " +
@@ -8899,7 +8892,7 @@ export const SpecMatter = Matter({
                     name: "MaxCoolSetpointLimit", id: 0x18, type: "temperature", access: "RW VM", conformance: "[COOL]",
                     constraint: "desc", default: { type: "reference", name: "AbsMaxCoolSetpointLimit" }, quality: "N",
 
-                    details: "This attribute shall indicate the maximum level that the cooling setpoint may be set to." +
+                    details: "Indicates the maximum level that the cooling setpoint may be set to." +
                         "\n" +
                         "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute to a value " +
                         "which conflicts with setpoint values then those setpoints shall be adjusted by the minimum amount " +
@@ -8929,10 +8922,10 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "RemoteSensing", id: 0x1a, type: "RemoteSensingBitmap", access: "RW VM", conformance: "O",
-                    constraint: "0", default: 0, quality: "N",
+                    default: 0, quality: "N",
 
-                    details: "This attribute shall indicate when the local temperature, outdoor temperature and occupancy are " +
-                        "being sensed by remote networked sensors, rather than internal sensors." +
+                    details: "Indicates when the local temperature, outdoor temperature and occupancy are being sensed by remote " +
+                        "networked sensors, rather than internal sensors." +
                         "\n" +
                         "If the LTNE feature is present in the server, the LocalTemperature RemoteSensing bit value shall " +
                         "always report a value of 0." +
@@ -8946,23 +8939,23 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ControlSequenceOfOperation", id: 0x1b, type: "ControlSequenceOfOperationEnum",
                     access: "RW VM", conformance: "M", constraint: "desc", default: 4, quality: "N",
-                    details: "This attribute shall indicate the overall operating environment of the thermostat, and thus the " +
-                        "possible system modes that the thermostat can operate in.",
+                    details: "Indicates the overall operating environment of the thermostat, and thus the possible system modes " +
+                        "that the thermostat can operate in.",
                     xref: { document: "cluster", section: "4.3.9.24" }
                 }),
 
                 Attribute({
                     name: "SystemMode", id: 0x1c, type: "SystemModeEnum", access: "RW VM", conformance: "M",
                     constraint: "desc", default: 1, quality: "N S",
-                    details: "This attribute shall indicate the current operating mode of the thermostat. Its value shall be " +
-                        "limited by the ControlSequenceOfOperation attribute.",
+                    details: "Indicates the current operating mode of the thermostat. Its value shall be limited by the " +
+                        "ControlSequenceOfOperation attribute.",
                     xref: { document: "cluster", section: "4.3.9.25" }
                 }),
 
                 Attribute({
-                    name: "AlarmMask", id: 0x1d, type: "AlarmCodeBitmap", access: "R V", conformance: "[Zigbee]",
+                    name: "AlarmMask", id: 0x1d, type: "AlarmCodeBitmap", access: "R V", conformance: "D",
                     constraint: "desc", default: 0,
-                    details: "This attribute shall indicate whether each of the alarms in AlarmCodeBitmap is enabled." +
+                    details: "Indicates whether each of the alarms in AlarmCodeBitmap is enabled." +
                         "\n" +
                         "When the Alarms cluster is implemented on a device, and one of the alarm conditions included in " +
                         "AlarmCodeBitmap occurs, an alarm notification is generated, with the alarm code field set as listed " +
@@ -8973,9 +8966,9 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ThermostatRunningMode", id: 0x1e, type: "ThermostatRunningModeEnum", access: "R V",
                     conformance: "[AUTO]", constraint: "desc", default: 0,
-                    details: "This attribute shall indicate the running mode of the thermostat. This attribute uses the same " +
-                        "values as SystemModeEnum but can only be Off, Cool or Heat. This attribute is intended to provide " +
-                        "additional information when the thermostat’s system mode is in auto mode.",
+                    details: "Indicates the running mode of the thermostat. This attribute uses the same values as SystemModeEnum " +
+                        "but can only be Off, Cool or Heat. This attribute is intended to provide additional information " +
+                        "when the thermostat’s system mode is in auto mode.",
                     xref: { document: "cluster", section: "4.3.9.27" }
                 }),
 
@@ -8983,8 +8976,8 @@ export const SpecMatter = Matter({
                     name: "StartOfWeek", id: 0x20, type: "StartOfWeekEnum", access: "R V", conformance: "SCH",
                     constraint: "desc", quality: "F",
 
-                    details: "This attribute shall indicate the day of the week that this thermostat considers to be the start of " +
-                        "week for weekly setpoint scheduling." +
+                    details: "Indicates the day of the week that this thermostat considers to be the start of week for weekly " +
+                        "setpoint scheduling." +
                         "\n" +
                         "This attribute may be able to be used as the base to determine if the device supports weekly " +
                         "scheduling by reading the attribute. Successful response means that the weekly scheduling is " +
@@ -8996,36 +8989,34 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "NumberOfWeeklyTransitions", id: 0x21, type: "uint8", access: "R V", conformance: "SCH",
                     default: 0, quality: "F",
-                    details: "This attribute shall indicate how many weekly schedule transitions the thermostat is capable of " +
-                        "handling.",
+                    details: "Indicates how many weekly schedule transitions the thermostat is capable of handling.",
                     xref: { document: "cluster", section: "4.3.9.29" }
                 }),
 
                 Attribute({
                     name: "NumberOfDailyTransitions", id: 0x22, type: "uint8", access: "R V", conformance: "SCH",
                     default: 0, quality: "F",
-                    details: "This attribute shall indicate how many daily schedule transitions the thermostat is capable of " +
-                        "handling.",
+                    details: "Indicates how many daily schedule transitions the thermostat is capable of handling.",
                     xref: { document: "cluster", section: "4.3.9.30" }
                 }),
 
                 Attribute({
                     name: "TemperatureSetpointHold", id: 0x23, type: "TemperatureSetpointHoldEnum", access: "RW VM",
                     conformance: "O", constraint: "desc", default: 0, quality: "N",
-                    details: "This attribute shall indicate the temperature hold status on the thermostat. If hold status is on, " +
-                        "the thermostat SHOULD maintain the temperature setpoint for the current mode until a system mode " +
-                        "change. If hold status is off, the thermostat SHOULD follow the setpoint transitions specified by " +
-                        "its internal scheduling program. If the thermostat supports setpoint hold for a specific duration, " +
-                        "it SHOULD also implement the TemperatureSetpointHoldDuration attribute.",
+                    details: "Indicates the temperature hold status on the thermostat. If hold status is on, the thermostat " +
+                        "SHOULD maintain the temperature setpoint for the current mode until a system mode change. If hold " +
+                        "status is off, the thermostat SHOULD follow the setpoint transitions specified by its internal " +
+                        "scheduling program. If the thermostat supports setpoint hold for a specific duration, it SHOULD " +
+                        "also implement the TemperatureSetpointHoldDuration attribute.",
                     xref: { document: "cluster", section: "4.3.9.31" }
                 }),
 
                 Attribute({
                     name: "TemperatureSetpointHoldDuration", id: 0x24, type: "uint16", access: "RW VM",
                     conformance: "O", constraint: "max 1440", default: null, quality: "X N",
-                    details: "This attribute shall indicate the period in minutes for which a setpoint hold is active. " +
-                        "Thermostats that support hold for a specified duration SHOULD implement this attribute. The null " +
-                        "value indicates the field is unused. All other values are reserved.",
+                    details: "Indicates the period in minutes for which a setpoint hold is active. Thermostats that support hold " +
+                        "for a specified duration SHOULD implement this attribute. The null value indicates the field is " +
+                        "unused. All other values are reserved.",
                     xref: { document: "cluster", section: "4.3.9.32" }
                 }),
 
@@ -9033,11 +9024,11 @@ export const SpecMatter = Matter({
                     name: "ThermostatProgrammingOperationMode", id: 0x25, type: "ProgrammingOperationModeBitmap",
                     access: "RW VM", conformance: "O", constraint: "desc", default: 0, quality: "P",
 
-                    details: "This attribute shall indicate the operational state of the thermostat’s programming. The thermostat " +
-                        "shall modify its programming operation when this attribute is modified by a client and update this " +
-                        "attribute when its programming operation is modified locally by a user. The thermostat may support " +
-                        "more than one active ProgrammingOperationModeBitmap. For example, the thermostat may operate " +
-                        "simultaneously in Schedule Programming Mode and Recovery Mode." +
+                    details: "Indicates the operational state of the thermostat’s programming. The thermostat shall modify its " +
+                        "programming operation when this attribute is modified by a client and update this attribute when " +
+                        "its programming operation is modified locally by a user. The thermostat may support more than one " +
+                        "active ProgrammingOperationModeBitmap. For example, the thermostat may operate simultaneously in " +
+                        "Schedule Programming Mode and Recovery Mode." +
                         "\n" +
                         "Thermostats which contain a schedule may use this attribute to control how that schedule is used, " +
                         "even if they do not support the ScheduleConfiguration feature." +
@@ -9056,8 +9047,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ThermostatRunningState", id: 0x29, type: "RelayStateBitmap", access: "R V", conformance: "O",
                     constraint: "desc",
-                    details: "This attribute shall indicate the current relay state of the heat, cool, and fan relays. " +
-                        "Unimplemented outputs shall be treated as if they were Off.",
+                    details: "Indicates the current relay state of the heat, cool, and fan relays. Unimplemented outputs shall be " +
+                        "treated as if they were Off.",
                     xref: { document: "cluster", section: "4.3.9.34" }
                 }),
 
@@ -9065,8 +9056,8 @@ export const SpecMatter = Matter({
                     name: "SetpointChangeSource", id: 0x30, type: "SetpointChangeSourceEnum", access: "R V",
                     conformance: "O", constraint: "desc", default: 0,
 
-                    details: "This attribute shall indicate the source of the current active OccupiedCoolingSetpoint or " +
-                        "OccupiedHeatingSetpoint (i.e., who or what determined the current setpoint)." +
+                    details: "Indicates the source of the current active OccupiedCoolingSetpoint or OccupiedHeatingSetpoint " +
+                        "(i.e., who or what determined the current setpoint)." +
                         "\n" +
                         "This attribute enables service providers to determine whether changes to setpoints were initiated " +
                         "due to occupant comfort, scheduled programming or some other source (e.g., electric utility or " +
@@ -9079,22 +9070,18 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SetpointChangeAmount", id: 0x31, type: "TemperatureDifference", access: "R V",
                     conformance: "O", default: null, quality: "X",
-
-                    details: "This attribute shall indicate the delta between the current active OccupiedCoolingSetpoint or " +
-                        "OccupiedHeatingSetpoint and the previous active setpoint. This attribute is meant to accompany the " +
-                        "SetpointChangeSource attribute; devices implementing SetpointChangeAmount SHOULD also implement " +
-                        "SetpointChangeSource." +
+                    details: "Indicates the delta between the current active OccupiedCoolingSetpoint or OccupiedHeatingSetpoint " +
+                        "and the previous active setpoint. This attribute is meant to accompany the SetpointChangeSource " +
+                        "attribute; devices implementing SetpointChangeAmount SHOULD also implement SetpointChangeSource." +
                         "\n" +
                         "The null value indicates that the previous setpoint was unknown.",
-
                     xref: { document: "cluster", section: "4.3.9.36" }
                 }),
 
                 Attribute({
                     name: "SetpointChangeSourceTimestamp", id: 0x32, type: "epoch-s", access: "R V", conformance: "O",
                     default: 0,
-                    details: "This attribute shall indicate the time in UTC at which the SetpointChangeAmount attribute change " +
-                        "was recorded.",
+                    details: "Indicates the time in UTC at which the SetpointChangeAmount attribute change was recorded.",
                     xref: { document: "cluster", section: "4.3.9.37" }
                 }),
 
@@ -9102,11 +9089,11 @@ export const SpecMatter = Matter({
                     name: "OccupiedSetback", id: 0x34, type: "UnsignedTemperature", access: "RW VM", conformance: "SB",
                     constraint: "occupiedSetbackMin to occupiedSetbackMax", default: null, quality: "X N",
 
-                    details: "This attribute shall indicate the amount that the Thermostat server will allow the Calculated Local " +
-                        "Temperature to float above the OccupiedCoolingSetpoint (i.e., OccupiedCoolingSetpoint + " +
-                        "OccupiedSetback) or below the OccupiedHeatingSetpoint setpoint (i.e., OccupiedHeatingSetpoint – " +
-                        "OccupiedSetback) before initiating a state change to bring the temperature back to the user’s " +
-                        "desired setpoint. This attribute is sometimes also referred to as the “span.”" +
+                    details: "Indicates the amount that the Thermostat server will allow the Calculated Local Temperature to " +
+                        "float above the OccupiedCoolingSetpoint (i.e., OccupiedCoolingSetpoint + OccupiedSetback) or below " +
+                        "the OccupiedHeatingSetpoint setpoint (i.e., OccupiedHeatingSetpoint – OccupiedSetback) before " +
+                        "initiating a state change to bring the temperature back to the user’s desired setpoint. This " +
+                        "attribute is sometimes also referred to as the “span.”" +
                         "\n" +
                         "The purpose of this attribute is to allow remote configuration of the span between the desired " +
                         "setpoint and the measured temperature to help prevent over-cycling and reduce energy bills, though " +
@@ -9129,8 +9116,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "OccupiedSetbackMin", id: 0x35, type: "UnsignedTemperature", access: "R V", conformance: "SB",
                     constraint: "max occupiedSetbackMax", default: null, quality: "X F",
-                    details: "This attribute shall indicate the minimum value that the Thermostat server will allow the " +
-                        "OccupiedSetback attribute to be configured by a user." +
+                    details: "Indicates the minimum value that the Thermostat server will allow the OccupiedSetback attribute to " +
+                        "be configured by a user." +
                         "\n" +
                         "The null value indicates the attribute is unused.",
                     xref: { document: "cluster", section: "4.3.9.39" }
@@ -9139,8 +9126,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "OccupiedSetbackMax", id: 0x36, type: "UnsignedTemperature", access: "R V", conformance: "SB",
                     constraint: "occupiedSetbackMin to 25.4°C", default: null, quality: "X F",
-                    details: "This attribute shall indicate the maximum value that the Thermostat server will allow the " +
-                        "OccupiedSetback attribute to be configured by a user." +
+                    details: "Indicates the maximum value that the Thermostat server will allow the OccupiedSetback attribute to " +
+                        "be configured by a user." +
                         "\n" +
                         "The null value indicates the attribute is unused.",
                     xref: { document: "cluster", section: "4.3.9.40" }
@@ -9151,11 +9138,11 @@ export const SpecMatter = Matter({
                     conformance: "SB & OCC", constraint: "unoccupiedSetbackMin to unoccupiedSetbackMax", default: null,
                     quality: "X N",
 
-                    details: "This attribute shall indicate the amount that the Thermostat server will allow the Calculated Local " +
-                        "Temperature to float above the UnoccupiedCoolingSetpoint (i.e., UnoccupiedCoolingSetpoint + " +
-                        "UnoccupiedSetback) or below the UnoccupiedHeatingSetpoint setpoint (i.e., UnoccupiedHeatingSetpoint " +
-                        "- UnoccupiedSetback) before initiating a state change to bring the temperature back to the user’s " +
-                        "desired setpoint. This attribute is sometimes also referred to as the “span.”" +
+                    details: "Indicates the amount that the Thermostat server will allow the Calculated Local Temperature to " +
+                        "float above the UnoccupiedCoolingSetpoint (i.e., UnoccupiedCoolingSetpoint + UnoccupiedSetback) or " +
+                        "below the UnoccupiedHeatingSetpoint setpoint (i.e., UnoccupiedHeatingSetpoint - UnoccupiedSetback) " +
+                        "before initiating a state change to bring the temperature back to the user’s desired setpoint. This " +
+                        "attribute is sometimes also referred to as the “span.”" +
                         "\n" +
                         "The purpose of this attribute is to allow remote configuration of the span between the desired " +
                         "setpoint and the measured temperature to help prevent over-cycling and reduce energy bills, though " +
@@ -9179,8 +9166,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "UnoccupiedSetbackMin", id: 0x38, type: "UnsignedTemperature", access: "R V",
                     conformance: "SB & OCC", constraint: "max unoccupiedSetbackMax", default: null, quality: "X F",
-                    details: "This attribute shall indicate the minimum value that the Thermostat server will allow the " +
-                        "UnoccupiedSetback attribute to be configured by a user." +
+                    details: "Indicates the minimum value that the Thermostat server will allow the UnoccupiedSetback attribute " +
+                        "to be configured by a user." +
                         "\n" +
                         "The null value indicates the attribute is unused.",
                     xref: { document: "cluster", section: "4.3.9.42" }
@@ -9190,8 +9177,8 @@ export const SpecMatter = Matter({
                     name: "UnoccupiedSetbackMax", id: 0x39, type: "UnsignedTemperature", access: "R V",
                     conformance: "SB & OCC", constraint: "unoccupiedSetbackMin to 25.4°C", default: null,
                     quality: "X F",
-                    details: "This attribute shall indicate the maximum value that the Thermostat server will allow the " +
-                        "UnoccupiedSetback attribute to be configured by a user." +
+                    details: "Indicates the maximum value that the Thermostat server will allow the UnoccupiedSetback attribute " +
+                        "to be configured by a user." +
                         "\n" +
                         "The null value indicates the attribute is unused.",
                     xref: { document: "cluster", section: "4.3.9.43" }
@@ -9201,9 +9188,9 @@ export const SpecMatter = Matter({
                     name: "EmergencyHeatDelta", id: 0x3a, type: "UnsignedTemperature", access: "RW VM",
                     conformance: "O", default: { type: "celsius", value: 25 }, quality: "N",
 
-                    details: "This attribute shall indicate the delta between the Calculated Local Temperature and the " +
-                        "OccupiedHeatingSetpoint or UnoccupiedHeatingSetpoint attributes at which the Thermostat server will " +
-                        "operate in emergency heat mode." +
+                    details: "Indicates the delta between the Calculated Local Temperature and the OccupiedHeatingSetpoint or " +
+                        "UnoccupiedHeatingSetpoint attributes at which the Thermostat server will operate in emergency heat " +
+                        "mode." +
                         "\n" +
                         "If the difference between the Calculated Local Temperature and OccupiedCoolingSetpoint or " +
                         "UnoccupiedCoolingSetpoint is greater than or equal to the EmergencyHeatDelta and the Thermostat " +
@@ -9234,59 +9221,57 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "AcType", id: 0x40, type: "ACTypeEnum", access: "RW VM", conformance: "O", constraint: "desc",
                     default: 0, quality: "N",
-                    details: "This attribute shall indicate the type of Mini Split ACTypeEnum of Mini Split AC is defined " +
-                        "depending on how Cooling and Heating condition is achieved by Mini Split AC.",
+                    details: "Indicates the type of Mini Split ACTypeEnum of Mini Split AC is defined depending on how Cooling " +
+                        "and Heating condition is achieved by Mini Split AC.",
                     xref: { document: "cluster", section: "4.3.9.45" }
                 }),
 
                 Attribute({
                     name: "AcCapacity", id: 0x41, type: "uint16", access: "RW VM", conformance: "O", default: 0,
                     quality: "N",
-                    details: "This attribute shall indicate capacity of Mini Split AC in terms of the format defined by the " +
-                        "ACCapacityFormat attribute",
+                    details: "Indicates capacity of Mini Split AC in terms of the format defined by the ACCapacityFormat attribute",
                     xref: { document: "cluster", section: "4.3.9.46" }
                 }),
 
                 Attribute({
                     name: "AcRefrigerantType", id: 0x42, type: "ACRefrigerantTypeEnum", access: "RW VM",
                     conformance: "O", constraint: "desc", default: 0, quality: "N",
-                    details: "This attribute shall indicate type of refrigerant used within the Mini Split AC.",
+                    details: "Indicates type of refrigerant used within the Mini Split AC.",
                     xref: { document: "cluster", section: "4.3.9.47" }
                 }),
 
                 Attribute({
                     name: "AcCompressorType", id: 0x43, type: "ACCompressorTypeEnum", access: "RW VM", conformance: "O",
                     constraint: "desc", default: 0, quality: "N",
-                    details: "This attribute shall indicate the type of compressor used within the Mini Split AC.",
+                    details: "Indicates the type of compressor used within the Mini Split AC.",
                     xref: { document: "cluster", section: "4.3.9.48" }
                 }),
 
                 Attribute({
                     name: "AcErrorCode", id: 0x44, type: "ACErrorCodeBitmap", access: "RW VM", conformance: "O",
                     default: 0,
-                    details: "This attribute shall indicate the type of errors encountered within the Mini Split AC.",
+                    details: "Indicates the type of errors encountered within the Mini Split AC.",
                     xref: { document: "cluster", section: "4.3.9.49" }
                 }),
 
                 Attribute({
                     name: "AcLouverPosition", id: 0x45, type: "ACLouverPositionEnum", access: "RW VM", conformance: "O",
                     constraint: "desc", default: 0, quality: "N",
-                    details: "This attribute shall indicate the position of Louver on the AC.",
+                    details: "Indicates the position of Louver on the AC.",
                     xref: { document: "cluster", section: "4.3.9.50" }
                 }),
 
                 Attribute({
                     name: "AcCoilTemperature", id: 0x46, type: "temperature", access: "R V", conformance: "O",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the temperature of the AC coil, as measured locally or remotely (over " +
-                        "the network).",
+                    details: "Indicates the temperature of the AC coil, as measured locally or remotely (over the network).",
                     xref: { document: "cluster", section: "4.3.9.51" }
                 }),
 
                 Attribute({
                     name: "AcCapacityFormat", id: 0x47, type: "ACCapacityFormatEnum", access: "RW VM", conformance: "O",
                     constraint: "desc", default: 0, quality: "N",
-                    details: "This attribute shall indicate the format for the ACCapacity attribute.",
+                    details: "Indicates the format for the ACCapacity attribute.",
                     xref: { document: "cluster", section: "4.3.9.52" }
                 }),
 
@@ -9463,7 +9448,7 @@ export const SpecMatter = Matter({
                 }),
 
                 Command({
-                    name: "GetRelayStatusLog", id: 0x4, access: "O", conformance: "[Zigbee]", direction: "request",
+                    name: "GetRelayStatusLog", id: 0x4, access: "O", conformance: "D", direction: "request",
                     response: "GetRelayStatusLogResponse",
 
                     details: "This command is used to query the thermostat internal relay status log. This command has no payload." +
@@ -9639,11 +9624,36 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "CoolingStage", constraint: "0 to 2",
-                            description: "Stage of cooling the HVAC system is using."
+                            description: "Stage of cooling the HVAC system is using.",
+
+                            details: "These bits shall indicate what stage of cooling the HVAC system is using." +
+                                "\n" +
+                                "  • 00 = Cool Stage 1" +
+                                "\n" +
+                                "  • 01 = Cool Stage 2" +
+                                "\n" +
+                                "  • 10 = Cool Stage 3" +
+                                "\n" +
+                                "  • 11 = Reserved",
+
+                            xref: { document: "cluster", section: "4.3.8.6.1" }
                         }),
+
                         Field({
                             name: "HeatingStage", constraint: "2 to 4",
-                            description: "Stage of heating the HVAC system is using."
+                            description: "Stage of heating the HVAC system is using.",
+
+                            details: "These bits shall indicate what stage of heating the HVAC system is using." +
+                                "\n" +
+                                "  • 00 = Heat Stage 1" +
+                                "\n" +
+                                "  • 01 = Heat Stage 2" +
+                                "\n" +
+                                "  • 10 = Heat Stage 3" +
+                                "\n" +
+                                "  • 11 = Reserved",
+
+                            xref: { document: "cluster", section: "4.3.8.6.2" }
                         }),
 
                         Field({
@@ -10050,13 +10060,12 @@ export const SpecMatter = Matter({
                     name: "FanMode", id: 0x0, type: "FanModeEnum", access: "RW VO", conformance: "M",
                     constraint: "0 to 6", default: 0, quality: "N",
 
-                    details: "This attribute shall indicate the current speed mode of the fan. This attribute may be written by " +
-                        "the client to request a different fan mode. A server shall return INVALID_IN_STATE to indicate that " +
-                        "the fan is not in a state where the FanMode can be changed to the requested value. A server may " +
-                        "have FanMode values that it can never be set to. For example, where this cluster appears on the " +
-                        "same or another endpoint as other clusters with a system dependency, for example the Thermostat " +
-                        "cluster, attempting to set the FanMode attribute of this cluster to Off may not be allowed by the " +
-                        "system." +
+                    details: "Indicates the current speed mode of the fan. This attribute may be written by the client to request " +
+                        "a different fan mode. A server shall return INVALID_IN_STATE to indicate that the fan is not in a " +
+                        "state where the FanMode can be changed to the requested value. A server may have FanMode values " +
+                        "that it can never be set to. For example, where this cluster appears on the same or another " +
+                        "endpoint as other clusters with a system dependency, for example the Thermostat cluster, attempting " +
+                        "to set the FanMode attribute of this cluster to Off may not be allowed by the system." +
                         "\n" +
                         "This attribute shall be set to one of the values in FanModeEnum." +
                         "\n" +
@@ -10071,6 +10080,13 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
+                    name: "FanModeSequence", id: 0x1, type: "FanModeSequenceEnum", access: "R[W] VO", conformance: "D",
+                    constraint: "0 to 5", quality: "N",
+                    details: "This attribute indicates the fan speed ranges that shall be supported.",
+                    xref: { document: "cluster", section: "4.4.6.2" }
+                }),
+
+                Attribute({
                     name: "FanModeSequence", id: 0x1, type: "FanModeSequenceEnum", access: "R V", conformance: "M",
                     constraint: "0 to 5", quality: "F",
                     details: "This attribute indicates the fan speed ranges that shall be supported.",
@@ -10081,10 +10097,10 @@ export const SpecMatter = Matter({
                     name: "PercentSetting", id: 0x2, type: "percent", access: "RW VO", conformance: "M",
                     constraint: "0 to 100", default: 0, quality: "X",
 
-                    details: "This attribute shall indicate the speed setting for the fan. This attribute may be written by the " +
-                        "client to indicate a new fan speed. If the client writes null to this attribute, the attribute " +
-                        "value shall NOT change. A server shall return INVALID_IN_STATE to indicate that the fan is not in a " +
-                        "state where the PercentSetting can be changed to the requested value." +
+                    details: "Indicates the speed setting for the fan. This attribute may be written by the client to indicate a " +
+                        "new fan speed. If the client writes null to this attribute, the attribute value shall NOT change. A " +
+                        "server shall return INVALID_IN_STATE to indicate that the fan is not in a state where the " +
+                        "PercentSetting can be changed to the requested value." +
                         "\n" +
                         "If this is successfully written to 0, the server shall set the FanMode attribute value to Off.",
 
@@ -10094,18 +10110,18 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "PercentCurrent", id: 0x3, type: "percent", access: "R V", conformance: "M",
                     constraint: "0 to 100",
-                    details: "This attribute shall indicate the actual currently operating fan speed, or zero to indicate that " +
-                        "the fan is off. There may be a temporary mismatch between the value of this attribute and the value " +
-                        "of the PercentSetting attribute due to other system requirements that would not allow the fan to " +
-                        "operate at the requested setting. See Percent Rules for more details.",
+                    details: "Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There " +
+                        "may be a temporary mismatch between the value of this attribute and the value of the PercentSetting " +
+                        "attribute due to other system requirements that would not allow the fan to operate at the requested " +
+                        "setting. See Percent Rules for more details.",
                     xref: { document: "cluster", section: "4.4.6.4" }
                 }),
 
                 Attribute({
                     name: "SpeedMax", id: 0x4, type: "uint8", access: "R V", conformance: "SPD", constraint: "1 to 100",
                     quality: "F",
-                    details: "This attribute shall indicate that the fan has one speed (value of 1) or the maximum speed, if the " +
-                        "fan is capable of multiple speeds.",
+                    details: "Indicates that the fan has one speed (value of 1) or the maximum speed, if the fan is capable of " +
+                        "multiple speeds.",
                     xref: { document: "cluster", section: "4.4.6.5" }
                 }),
 
@@ -10113,10 +10129,10 @@ export const SpecMatter = Matter({
                     name: "SpeedSetting", id: 0x5, type: "uint8", access: "RW VO", conformance: "SPD",
                     constraint: "0 to speedMax", default: 0, quality: "X",
 
-                    details: "This attribute shall indicate the speed setting for the fan. This attribute may be written by the " +
-                        "client to indicate a new fan speed. If the client writes null to this attribute, the attribute " +
-                        "value shall NOT change. A server shall return INVALID_IN_STATE to indicate that the fan is not in a " +
-                        "state where the SpeedSetting can be changed to the requested value." +
+                    details: "Indicates the speed setting for the fan. This attribute may be written by the client to indicate a " +
+                        "new fan speed. If the client writes null to this attribute, the attribute value shall NOT change. A " +
+                        "server shall return INVALID_IN_STATE to indicate that the fan is not in a state where the " +
+                        "SpeedSetting can be changed to the requested value." +
                         "\n" +
                         "If this is successfully written to 0, the server shall set the FanMode attribute value to Off. " +
                         "Please see the Speed Rules for details on other values.",
@@ -10127,10 +10143,10 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SpeedCurrent", id: 0x6, type: "uint8", access: "R V", conformance: "SPD",
                     constraint: "0 to speedMax", quality: "P",
-                    details: "This attribute shall indicate the actual currently operating fan speed, or zero to indicate that " +
-                        "the fan is off. There may be a temporary mismatch between the value of this attribute and the value " +
-                        "of the SpeedSetting attribute due to other system requirements that would not allow the fan to " +
-                        "operate at the requested setting.",
+                    details: "Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There " +
+                        "may be a temporary mismatch between the value of this attribute and the value of the SpeedSetting " +
+                        "attribute due to other system requirements that would not allow the fan to operate at the requested " +
+                        "setting.",
                     xref: { document: "cluster", section: "4.4.6.7" }
                 }),
 
@@ -10188,9 +10204,9 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "AirflowDirection", id: 0xb, type: "AirflowDirectionEnum", access: "RW VO",
                     conformance: "DIR", constraint: "desc", default: 0, quality: "P",
-                    details: "This attribute shall indicate the current airflow direction of the fan. This attribute may be " +
-                        "written by the client to indicate a new airflow direction for the fan. This attribute shall be set " +
-                        "to one of the values in the AirflowDirectionEnum table.",
+                    details: "Indicates the current airflow direction of the fan. This attribute may be written by the client to " +
+                        "indicate a new airflow direction for the fan. This attribute shall be set to one of the values in " +
+                        "the AirflowDirectionEnum table.",
                     xref: { document: "cluster", section: "4.4.6.12" }
                 }),
 
@@ -10348,15 +10364,14 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "TemperatureDisplayMode", id: 0x0, type: "TemperatureDisplayModeEnum", access: "RW VO",
                     conformance: "M", constraint: "desc", default: 0,
-                    details: "This attribute shall indicate the units of the temperature displayed on the thermostat screen.",
+                    details: "Indicates the units of the temperature displayed on the thermostat screen.",
                     xref: { document: "cluster", section: "4.5.6.1" }
                 }),
 
                 Attribute({
                     name: "KeypadLockout", id: 0x1, type: "KeypadLockoutEnum", access: "RW VM", conformance: "M",
                     constraint: "desc", default: 0,
-                    details: "This attribute shall indicate the level of functionality that is available to the user via the " +
-                        "keypad.",
+                    details: "Indicates the level of functionality that is available to the user via the keypad.",
                     xref: { document: "cluster", section: "4.5.6.2" }
                 }),
 
@@ -10469,8 +10484,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "OpenDuration", id: 0x0, type: "elapsed-s", access: "R V", conformance: "M",
                     constraint: "min 1", default: null, quality: "X",
-                    details: "This attribute shall indicate the total duration, in seconds, for which the valve will remain open " +
-                        "for this current opening." +
+                    details: "Indicates the total duration, in seconds, for which the valve will remain open for this current " +
+                        "opening." +
                         "\n" +
                         "A value of null shall indicate the duration is not set, meaning that the valve will remain open " +
                         "until closed by the user or some other automation.",
@@ -10480,8 +10495,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "DefaultOpenDuration", id: 0x1, type: "elapsed-s", access: "RW VO", conformance: "M",
                     constraint: "min 1", default: null, quality: "X N",
-                    details: "This attribute shall indicate the default duration, in seconds, for which the valve will remain " +
-                        "open, if the OpenDuration field is not present in the Open command." +
+                    details: "Indicates the default duration, in seconds, for which the valve will remain open, if the " +
+                        "OpenDuration field is not present in the Open command." +
                         "\n" +
                         "A value of null shall indicate the duration is not set, meaning that the valve will remain open " +
                         "until closed by the user or some other automation.",
@@ -10492,10 +10507,9 @@ export const SpecMatter = Matter({
                     name: "AutoCloseTime", id: 0x2, type: "epoch-us", access: "R V", conformance: "TS", default: null,
                     quality: "X",
 
-                    details: "This attribute shall indicate the UTC time when the valve will close, depending on value of the " +
-                        "OpenDuration attribute." +
+                    details: "Indicates the UTC time when the valve will close, depending on value of the OpenDuration attribute." +
                         "\n" +
-                        "This attribute shall be null:" +
+                        "Null:" +
                         "\n" +
                         "  • When OpenDuration is null, or" +
                         "\n" +
@@ -10518,8 +10532,7 @@ export const SpecMatter = Matter({
                     name: "RemainingDuration", id: 0x3, type: "elapsed-s", access: "R V", conformance: "M",
                     default: null, quality: "X Q",
 
-                    details: "This attribute shall indicate the remaining duration, in seconds, until the valve closes. This " +
-                        "attribute shall be null:" +
+                    details: "Indicates the remaining duration, in seconds, until the valve closes. Null:" +
                         "\n" +
                         "  • When OpenDuration is null, or" +
                         "\n" +
@@ -10551,7 +10564,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "CurrentState", id: 0x4, type: "ValveStateEnum", access: "R V", conformance: "M",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the current state of the valve." +
+                    details: "Indicates the current state of the valve." +
                         "\n" +
                         "A value of null shall indicate that the current state is not known.",
                     xref: { document: "cluster", section: "4.6.7.5" }
@@ -10560,7 +10573,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "TargetState", id: 0x5, type: "ValveStateEnum", access: "R V", conformance: "M",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the target state, while changing the state, of the valve." +
+                    details: "Indicates the target state, while changing the state, of the valve." +
                         "\n" +
                         "A value of null shall indicate that no target position is set, since the change in state is either " +
                         "done or failed.",
@@ -10571,10 +10584,10 @@ export const SpecMatter = Matter({
                     name: "CurrentLevel", id: 0x6, type: "percent", access: "R V", conformance: "LVL", default: null,
                     quality: "X",
 
-                    details: "This attribute shall indicate the current level of the valve as a percentage value, between fully " +
-                        "closed and fully open. During a transition from one level to another level, the valve SHOULD keep " +
-                        "this attribute updated to the best of its ability, in order to represent the actual level of the " +
-                        "valve during the movement." +
+                    details: "Indicates the current level of the valve as a percentage value, between fully closed and fully " +
+                        "open. During a transition from one level to another level, the valve SHOULD keep this attribute " +
+                        "updated to the best of its ability, in order to represent the actual level of the valve during the " +
+                        "movement." +
                         "\n" +
                         "A value of 100 percent shall indicate the fully open position. A value of 0 percent shall indicate " +
                         "the fully closed position." +
@@ -10588,8 +10601,7 @@ export const SpecMatter = Matter({
                     name: "TargetLevel", id: 0x7, type: "percent", access: "R V", conformance: "LVL", default: null,
                     quality: "X",
 
-                    details: "This attribute shall indicate the target level of the valve as a percentage value, between fully " +
-                        "closed and fully open." +
+                    details: "Indicates the target level of the valve as a percentage value, between fully closed and fully open." +
                         "\n" +
                         "The interpretation of the percentage value is the same as for the CurrentLevel attribute." +
                         "\n" +
@@ -10603,9 +10615,9 @@ export const SpecMatter = Matter({
                     name: "DefaultOpenLevel", id: 0x8, type: "percent", access: "RW VO", conformance: "[LVL]",
                     constraint: "1 to 100", default: 100, quality: "N",
 
-                    details: "This attribute shall indicate the default value used for the TargetLevel attribute, when a valve " +
-                        "transitions from the closed to the open state, caused by an Open command, if a TargetLevel field is " +
-                        "not present in the Open command." +
+                    details: "Indicates the default value used for the TargetLevel attribute, when a valve transitions from the " +
+                        "closed to the open state, caused by an Open command, if a TargetLevel field is not present in the " +
+                        "Open command." +
                         "\n" +
                         "If the LevelStep attribute is present and the value of a write interaction to this attribute field " +
                         "is not 100, the value shall be a supported value as defined by the LevelStep attribute, such that " +
@@ -10618,7 +10630,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "ValveFault", id: 0x9, type: "ValveFaultBitmap", access: "R V", conformance: "O", default: 0,
-                    details: "This attribute shall indicate any faults registered by the valve.",
+                    details: "Indicates any faults registered by the valve.",
                     xref: { document: "cluster", section: "4.6.7.10" }
                 }),
 
@@ -10626,7 +10638,7 @@ export const SpecMatter = Matter({
                     name: "LevelStep", id: 0xa, type: "uint8", access: "R V", conformance: "[LVL]",
                     constraint: "1 to 50", default: 1, quality: "F",
 
-                    details: "This attribute shall indicate the step size the valve can support." +
+                    details: "Indicates the step size the valve can support." +
                         "\n" +
                         "The step size defined by this attribute is counted from 0 and the final step towards 100 may be " +
                         "different than what is defined in this attribute. For example, if the value of this attribute is " +
@@ -10907,24 +10919,23 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "LockType", id: 0x1, type: "LockTypeEnum", access: "R V", conformance: "M",
                     constraint: "desc",
-                    details: "This attribute shall indicate the type of door lock as defined in LockTypeEnum.",
+                    details: "Indicates the type of door lock as defined in LockTypeEnum.",
                     xref: { document: "cluster", section: "5.2.9.3" }
                 }),
 
                 Attribute({
                     name: "ActuatorEnabled", id: 0x2, type: "bool", access: "R V", conformance: "M",
-                    details: "This attribute shall indicate if the lock is currently able to (Enabled) or not able to (Disabled) " +
-                        "process remote Lock, Unlock, or Unlock with Timeout commands.",
+                    details: "Indicates if the lock is currently able to (Enabled) or not able to (Disabled) process remote Lock, " +
+                        "Unlock, or Unlock with Timeout commands.",
                     xref: { document: "cluster", section: "5.2.9.4" }
                 }),
 
                 Attribute({
                     name: "DoorState", id: 0x3, type: "DoorStateEnum", access: "R V", conformance: "DPS",
                     constraint: "desc", quality: "X P",
-                    details: "This attribute shall indicate the current door state as defined in DoorStateEnum." +
+                    details: "Indicates the current door state as defined in DoorStateEnum." +
                         "\n" +
-                        "This attribute shall be null only if an internal error prevents the retrieval of the current door " +
-                        "state.",
+                        "Null only if an internal error prevents the retrieval of the current door state.",
                     xref: { document: "cluster", section: "5.2.9.5" }
                 }),
 
@@ -10952,77 +10963,76 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "NumberOfLogRecordsSupported", id: 0x10, type: "uint16", access: "R V", conformance: "LOG",
                     default: 0, quality: "F",
-                    details: "This attribute shall indicate the number of available log records.",
+                    details: "Indicates the number of available log records.",
                     xref: { document: "cluster", section: "5.2.9.9" }
                 }),
 
                 Attribute({
                     name: "NumberOfTotalUsersSupported", id: 0x11, type: "uint16", access: "R V", conformance: "USR",
                     default: 0, quality: "F",
-                    details: "This attribute shall indicate the number of total users supported by the lock.",
+                    details: "Indicates the number of total users supported by the lock.",
                     xref: { document: "cluster", section: "5.2.9.10" }
                 }),
 
                 Attribute({
                     name: "NumberOfPinUsersSupported", id: 0x12, type: "uint16", access: "R V", conformance: "PIN",
                     default: 0, quality: "F",
-                    details: "This attribute shall indicate the number of PIN users supported.",
+                    details: "Indicates the number of PIN users supported.",
                     xref: { document: "cluster", section: "5.2.9.11" }
                 }),
 
                 Attribute({
                     name: "NumberOfRfidUsersSupported", id: 0x13, type: "uint16", access: "R V", conformance: "RID",
                     default: 0, quality: "F",
-                    details: "This attribute shall indicate the number of RFID users supported.",
+                    details: "Indicates the number of RFID users supported.",
                     xref: { document: "cluster", section: "5.2.9.12" }
                 }),
 
                 Attribute({
                     name: "NumberOfWeekDaySchedulesSupportedPerUser", id: 0x14, type: "uint8", access: "R V",
                     conformance: "WDSCH", default: 0, quality: "F",
-                    details: "This attribute shall indicate the number of configurable week day schedule supported per user.",
+                    details: "Indicates the number of configurable week day schedule supported per user.",
                     xref: { document: "cluster", section: "5.2.9.13" }
                 }),
 
                 Attribute({
                     name: "NumberOfYearDaySchedulesSupportedPerUser", id: 0x15, type: "uint8", access: "R V",
                     conformance: "YDSCH", default: 0, quality: "F",
-                    details: "This attribute shall indicate the number of configurable year day schedule supported per user.",
+                    details: "Indicates the number of configurable year day schedule supported per user.",
                     xref: { document: "cluster", section: "5.2.9.14" }
                 }),
 
                 Attribute({
                     name: "NumberOfHolidaySchedulesSupported", id: 0x16, type: "uint8", access: "R V",
                     conformance: "HDSCH", default: 0, quality: "F",
-                    details: "This attribute shall indicate the number of holiday schedules supported for the entire door lock " +
-                        "device.",
+                    details: "Indicates the number of holiday schedules supported for the entire door lock device.",
                     xref: { document: "cluster", section: "5.2.9.15" }
                 }),
 
                 Attribute({
                     name: "MaxPinCodeLength", id: 0x17, type: "uint8", access: "R V", conformance: "PIN", quality: "F",
-                    details: "This attribute shall indicate the maximum length in bytes of a PIN Code on this device.",
+                    details: "Indicates the maximum length in bytes of a PIN Code on this device.",
                     xref: { document: "cluster", section: "5.2.9.16" }
                 }),
                 Attribute({
                     name: "MinPinCodeLength", id: 0x18, type: "uint8", access: "R V", conformance: "PIN", quality: "F",
-                    details: "This attribute shall indicate the minimum length in bytes of a PIN Code on this device.",
+                    details: "Indicates the minimum length in bytes of a PIN Code on this device.",
                     xref: { document: "cluster", section: "5.2.9.17" }
                 }),
 
                 Attribute({
                     name: "MaxRfidCodeLength", id: 0x19, type: "uint8", access: "R V", conformance: "RID", quality: "F",
-                    details: "This attribute shall indicate the maximum length in bytes of a RFID Code on this device. The value " +
-                        "depends on the RFID code range specified by the manufacturer, if media anti-collision identifiers " +
-                        "(UID) are used as RFID code, a value of 20 (equals 10 Byte ISO 14443A UID) is recommended.",
+                    details: "Indicates the maximum length in bytes of a RFID Code on this device. The value depends on the RFID " +
+                        "code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as " +
+                        "RFID code, a value of 20 (equals 10 Byte ISO 14443A UID) is recommended.",
                     xref: { document: "cluster", section: "5.2.9.18" }
                 }),
 
                 Attribute({
                     name: "MinRfidCodeLength", id: 0x1a, type: "uint8", access: "R V", conformance: "RID", quality: "F",
-                    details: "This attribute shall indicate the minimum length in bytes of a RFID Code on this device. The value " +
-                        "depends on the RFID code range specified by the manufacturer, if media anti-collision identifiers " +
-                        "(UID) are used as RFID code, a value of 8 (equals 4 Byte ISO 14443A UID) is recommended.",
+                    details: "Indicates the minimum length in bytes of a RFID Code on this device. The value depends on the RFID " +
+                        "code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as " +
+                        "RFID code, a value of 8 (equals 4 Byte ISO 14443A UID) is recommended.",
                     xref: { document: "cluster", section: "5.2.9.19" }
                 }),
 
@@ -11038,7 +11048,7 @@ export const SpecMatter = Matter({
                     name: "NumberOfCredentialsSupportedPerUser", id: 0x1c, type: "uint8", access: "R V",
                     conformance: "USR", default: 0, quality: "F",
 
-                    details: "This attribute shall indicate the number of credentials that could be assigned for each user." +
+                    details: "Indicates the number of credentials that could be assigned for each user." +
                         "\n" +
                         "Depending on the value of NumberOfRFIDUsersSupported and NumberOfPINUsersSupported it may not be " +
                         "possible to assign that number of credentials for a user." +
@@ -11068,38 +11078,37 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "Language", id: 0x21, type: "string", access: "R[W] VM", conformance: "O",
                     constraint: "max 3", quality: "P",
-                    details: "This attribute shall indicate the language for the on-screen or audible user interface using a 2- " +
-                        "byte language code from ISO-639-1.",
+                    details: "Indicates the language for the on-screen or audible user interface using a 2- byte language code " +
+                        "from ISO-639-1.",
                     xref: { document: "cluster", section: "5.2.9.23" }
                 }),
 
                 Attribute({
                     name: "LedSettings", id: 0x22, type: "LEDSettingEnum", access: "R[W] VM", conformance: "O",
                     default: 0, quality: "P",
-                    details: "This attribute shall indicate the settings for the LED support, as defined by LEDSettingEnum.",
+                    details: "Indicates the settings for the LED support, as defined by LEDSettingEnum.",
                     xref: { document: "cluster", section: "5.2.9.24" }
                 }),
 
                 Attribute({
                     name: "AutoRelockTime", id: 0x23, type: "uint32", access: "R[W] VM", conformance: "O", quality: "P",
-                    details: "This attribute shall indicate the number of seconds to wait after unlocking a lock before it " +
-                        "automatically locks again. 0=disabled. If set, unlock operations from any source will be timed. For " +
-                        "one time unlock with timeout use the specific command.",
+                    details: "Indicates the number of seconds to wait after unlocking a lock before it automatically locks again. " +
+                        "0=disabled. If set, unlock operations from any source will be timed. For one time unlock with " +
+                        "timeout use the specific command.",
                     xref: { document: "cluster", section: "5.2.9.25" }
                 }),
 
                 Attribute({
                     name: "SoundVolume", id: 0x24, type: "SoundVolumeEnum", access: "R[W] VM", conformance: "O",
                     default: 0, quality: "P",
-                    details: "This attribute shall indicate the sound volume on a door lock as defined by SoundVolumeEnum.",
+                    details: "Indicates the sound volume on a door lock as defined by SoundVolumeEnum.",
                     xref: { document: "cluster", section: "5.2.9.26" }
                 }),
 
                 Attribute({
                     name: "OperatingMode", id: 0x25, type: "OperatingModeEnum", access: "R[W] VM", conformance: "M",
                     constraint: "desc", default: 0, quality: "P",
-                    details: "This attribute shall indicate the current operating mode of the lock as defined in " +
-                        "OperatingModeEnum.",
+                    details: "Indicates the current operating mode of the lock as defined in OperatingModeEnum.",
                     xref: { document: "cluster", section: "5.2.9.27" }
                 }),
 
@@ -11116,10 +11125,9 @@ export const SpecMatter = Matter({
                     name: "DefaultConfigurationRegister", id: 0x27, type: "ConfigurationRegisterBitmap", access: "R V",
                     conformance: "O", default: 0, quality: "P",
 
-                    details: "This attribute shall represent the default configurations as they are physically set on the device " +
-                        "(example: hardware dip switch setting, etc…) and represents the default setting for some of the " +
-                        "attributes within this cluster (for example: LED, Auto Lock, Sound Volume, and Operating Mode " +
-                        "attributes)." +
+                    details: "Indicates the default configurations as they are physically set on the device (example: hardware " +
+                        "dip switch setting, etc…) and represents the default setting for some of the attributes within this " +
+                        "cluster (for example: LED, Auto Lock, Sound Volume, and Operating Mode attributes)." +
                         "\n" +
                         "This is a read-only attribute and is intended to allow clients to determine what changes may need " +
                         "to be made without having to query all the included attributes. It may be beneficial for the " +
@@ -11175,11 +11183,11 @@ export const SpecMatter = Matter({
                     name: "LocalProgrammingFeatures", id: 0x2c, type: "LocalProgrammingFeaturesBitmap",
                     access: "R[W] VA", conformance: "O", default: 0, quality: "P",
 
-                    details: "This attribute shall indicate the local programming features that will be disabled when " +
-                        "EnableLocalProgramming attribute is set to False. If a door lock doesn’t support disabling one " +
-                        "aspect of local programming it shall return CONSTRAINT_ERROR during a write operation of this " +
-                        "attribute. If the EnableLocalProgramming attribute is set to True then all local programming " +
-                        "features shall be enabled regardless of the bits set to 0 in this attribute." +
+                    details: "Indicates the local programming features that will be disabled when EnableLocalProgramming " +
+                        "attribute is set to False. If a door lock doesn’t support disabling one aspect of local programming " +
+                        "it shall return CONSTRAINT_ERROR during a write operation of this attribute. If the " +
+                        "EnableLocalProgramming attribute is set to True then all local programming features shall be " +
+                        "enabled regardless of the bits set to 0 in this attribute." +
                         "\n" +
                         "The features that can be disabled from local programming are defined in " +
                         "LocalProgrammingFeaturesBitmap.",
@@ -11191,13 +11199,12 @@ export const SpecMatter = Matter({
                     name: "WrongCodeEntryLimit", id: 0x30, type: "uint8", access: "R[W] VA", conformance: "PIN | RID",
                     constraint: "1 to 255", quality: "P",
 
-                    details: "This attribute shall indicate the number of incorrect Pin codes or RFID presentment attempts a user " +
-                        "is allowed to enter before the lock will enter a lockout state. The value of this attribute is " +
-                        "compared to all failing forms of credential presentation, including Pin codes used in an Unlock " +
-                        "Command when RequirePINforRemoteOperation is set to true. Valid range is 1-255 incorrect attempts. " +
-                        "The lockout state will be for the duration of UserCodeTemporaryDisableTime. If the attribute " +
-                        "accepts writes and an attempt to write the value 0 is made, the device shall respond with " +
-                        "CONSTRAINT_ERROR." +
+                    details: "Indicates the number of incorrect Pin codes or RFID presentment attempts a user is allowed to enter " +
+                        "before the lock will enter a lockout state. The value of this attribute is compared to all failing " +
+                        "forms of credential presentation, including Pin codes used in an Unlock Command when " +
+                        "RequirePINforRemoteOperation is set to true. Valid range is 1-255 incorrect attempts. The lockout " +
+                        "state will be for the duration of UserCodeTemporaryDisableTime. If the attribute accepts writes and " +
+                        "an attempt to write the value 0 is made, the device shall respond with CONSTRAINT_ERROR." +
                         "\n" +
                         "The lock may reset the counter used to track incorrect credential presentations as required by " +
                         "internal logic, environmental events, or other reasons. The lock shall reset the counter if a valid " +
@@ -11209,10 +11216,10 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "UserCodeTemporaryDisableTime", id: 0x31, type: "uint8", access: "R[W] VA",
                     conformance: "PIN | RID", constraint: "1 to 255", quality: "P",
-                    details: "This attribute shall indicate the number of seconds that the lock shuts down following wrong code " +
-                        "entry. Valid range is 1-255 seconds. Device can shut down to lock user out for specified amount of " +
-                        "time. (Makes it difficult to try and guess a PIN for the device.) If the attribute accepts writes " +
-                        "and an attempt to write the attribute to 0 is made, the device shall respond with CONSTRAINT_ERROR.",
+                    details: "Indicates the number of seconds that the lock shuts down following wrong code entry. Valid range is " +
+                        "1-255 seconds. Device can shut down to lock user out for specified amount of time. (Makes it " +
+                        "difficult to try and guess a PIN for the device.) If the attribute accepts writes and an attempt to " +
+                        "write the attribute to 0 is made, the device shall respond with CONSTRAINT_ERROR.",
                     xref: { document: "cluster", section: "5.2.9.36" }
                 }),
 
@@ -11220,10 +11227,10 @@ export const SpecMatter = Matter({
                     name: "SendPinOverTheAir", id: 0x32, type: "bool", access: "R[W] VA", conformance: "[!USR & PIN]",
                     default: true, quality: "P",
 
-                    details: "This attribute shall indicate the door locks ability to send PINs over the air. If the attribute is " +
-                        "True it is ok for the door lock server to send PINs over the air. This attribute determines the " +
-                        "behavior of the server’s TX operation. If it is false, then it is not ok for the device to send PIN " +
-                        "in any messages over the air." +
+                    details: "Indicates the door locks ability to send PINs over the air. If the attribute is True it is ok for " +
+                        "the door lock server to send PINs over the air. This attribute determines the behavior of the " +
+                        "server’s TX operation. If it is false, then it is not ok for the device to send PIN in any messages " +
+                        "over the air." +
                         "\n" +
                         "The PIN field within any door lock cluster message shall keep the first octet unchanged and masks " +
                         "the actual code by replacing with 0xFF. For example (PIN \"1234\" ): If the attribute value is True, " +
@@ -11236,9 +11243,9 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "RequirePiNforRemoteOperation", id: 0x33, type: "bool", access: "R[W] VA",
                     conformance: "COTA & PIN", default: true, quality: "P",
-                    details: "This attribute shall indicate if the door lock requires an optional PIN. If this attribute is set " +
-                        "to True, the door lock server requires that an optional PINs be included in the payload of remote " +
-                        "lock operation events like Lock, Unlock, Unlock with Timeout and Toggle in order to function.",
+                    details: "Indicates if the door lock requires an optional PIN. If this attribute is set to True, the door " +
+                        "lock server requires that an optional PINs be included in the payload of remote lock operation " +
+                        "events like Lock, Unlock, Unlock with Timeout and Toggle in order to function.",
                     xref: { document: "cluster", section: "5.2.9.38" }
                 }),
 
@@ -11250,9 +11257,9 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ExpiringUserTimeout", id: 0x35, type: "uint16", access: "R[W] VA", conformance: "[USR]",
                     constraint: "1 to 2880", quality: "P",
-                    details: "This attribute shall indicate the number of minutes a PIN, RFID, Fingerprint, or other credential " +
-                        "associated with a user of type ExpiringUser shall remain valid after its first use before expiring. " +
-                        "When the credential expires the UserStatus for the corresponding user record shall be set to " +
+                    details: "Indicates the number of minutes a PIN, RFID, Fingerprint, or other credential associated with a " +
+                        "user of type ExpiringUser shall remain valid after its first use before expiring. When the " +
+                        "credential expires the UserStatus for the corresponding user record shall be set to " +
                         "OccupiedDisabled.",
                     xref: { document: "cluster", section: "5.2.9.39" }
                 }),
@@ -13997,16 +14004,16 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "PhysicalClosedLimitLift", id: 0x1, type: "uint16", access: "R V",
                     conformance: "[LF & PA_LF & ABS]", default: 0, quality: "F",
-                    details: "This attribute shall indicate the maximum possible encoder position possible (Unit cm, centimeters) " +
-                        "to position the height of the window covering lift.",
+                    details: "Indicates the maximum possible encoder position possible (Unit cm, centimeters) to position the " +
+                        "height of the window covering lift.",
                     xref: { document: "cluster", section: "5.3.6.3" }
                 }),
 
                 Attribute({
                     name: "PhysicalClosedLimitTilt", id: 0x2, type: "uint16", access: "R V",
                     conformance: "[TL & PA_TL & ABS]", default: 0, quality: "F",
-                    details: "This attribute shall indicate the maximum possible encoder position possible (Unit 0.1°, tenths of " +
-                        "a degree) to position the angle of the window covering tilt.",
+                    details: "Indicates the maximum possible encoder position possible (Unit 0.1°, tenths of a degree) to " +
+                        "position the angle of the window covering tilt.",
                     xref: { document: "cluster", section: "5.3.6.4" }
                 }),
 
@@ -14014,8 +14021,8 @@ export const SpecMatter = Matter({
                     name: "CurrentPositionLift", id: 0x3, type: "uint16", access: "R V",
                     conformance: "[LF & PA_LF & ABS]", constraint: "installedOpenLimitLift to installedClosedLimitLift",
                     default: null, quality: "X N",
-                    details: "This attribute shall indicate the actual lift position (Unit cm, centimeters) of the window " +
-                        "covering from the fully-open position.",
+                    details: "Indicates the actual lift position (Unit cm, centimeters) of the window covering from the " +
+                        "fully-open position.",
                     xref: { document: "cluster", section: "5.3.6.5" }
                 }),
 
@@ -14023,24 +14030,24 @@ export const SpecMatter = Matter({
                     name: "CurrentPositionTilt", id: 0x4, type: "uint16", access: "R V",
                     conformance: "[TL & PA_TL & ABS]", constraint: "installedOpenLimitTilt to installedClosedLimitTilt",
                     default: null, quality: "X N",
-                    details: "This attribute shall indicate the actual tilt position (Unit 0.1°, tenths of a degree) of the " +
-                        "window covering from the fully-open position.",
+                    details: "Indicates the actual tilt position (Unit 0.1°, tenths of a degree) of the window covering from the " +
+                        "fully-open position.",
                     xref: { document: "cluster", section: "5.3.6.6" }
                 }),
 
                 Attribute({
                     name: "NumberOfActuationsLift", id: 0x5, type: "uint16", access: "R V", conformance: "[LF]",
                     default: 0, quality: "N",
-                    details: "This attribute shall indicate the total number of lift/slide actuations applied to the window " +
-                        "covering since the device was installed.",
+                    details: "Indicates the total number of lift/slide actuations applied to the window covering since the device " +
+                        "was installed.",
                     xref: { document: "cluster", section: "5.3.6.7" }
                 }),
 
                 Attribute({
                     name: "NumberOfActuationsTilt", id: 0x6, type: "uint16", access: "R V", conformance: "[TL]",
                     default: 0, quality: "N",
-                    details: "This attribute shall indicate the total number of tilt actuations applied to the window covering " +
-                        "since the device was installed.",
+                    details: "Indicates the total number of tilt actuations applied to the window covering since the device was " +
+                        "installed.",
                     xref: { document: "cluster", section: "5.3.6.8" }
                 }),
 
@@ -14057,23 +14064,23 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "CurrentPositionLiftPercentage", id: 0x8, type: "percent", access: "R V",
                     conformance: "[LF & PA_LF]", default: null, quality: "X N S P",
-                    details: "This attribute shall indicate the actual position as a percentage from 0% to 100% with 1% default " +
-                        "step. This attribute is equal to CurrentPositionLiftPercent100ths attribute divided by 100.",
+                    details: "Indicates the actual position as a percentage from 0% to 100% with 1% default step. This attribute " +
+                        "is equal to CurrentPositionLiftPercent100ths attribute divided by 100.",
                     xref: { document: "cluster", section: "5.3.6.12" }
                 }),
 
                 Attribute({
                     name: "CurrentPositionTiltPercentage", id: 0x9, type: "percent", access: "R V",
                     conformance: "[TL & PA_TL]", constraint: "0 to 100", default: null, quality: "X N S P",
-                    details: "This attribute shall indicate the actual position as a percentage from 0% to 100% with 1% default " +
-                        "step. This attribute is equal to CurrentPositionTiltPercent100ths attribute divided by 100.",
+                    details: "Indicates the actual position as a percentage from 0% to 100% with 1% default step. This attribute " +
+                        "is equal to CurrentPositionTiltPercent100ths attribute divided by 100.",
                     xref: { document: "cluster", section: "5.3.6.13" }
                 }),
 
                 Attribute({
                     name: "OperationalStatus", id: 0xa, type: "OperationalStatusBitmap", access: "R V",
-                    conformance: "M", constraint: "0b00xx xxxx", default: 0, quality: "P",
-                    details: "This attribute shall indicate the currently ongoing operations and applies to all type of devices.",
+                    conformance: "M", default: 0, quality: "P",
+                    details: "Indicates the currently ongoing operations and applies to all type of devices.",
                     xref: { document: "cluster", section: "5.3.6.16" }
                 }),
 
@@ -14112,32 +14119,32 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "InstalledOpenLimitLift", id: 0x10, type: "uint16", access: "R V",
                     conformance: "LF & PA_LF & ABS", constraint: "0 to 65534", default: 0, quality: "N",
-                    details: "This attribute shall indicate the open limit for lifting the window covering whether position (in " +
-                        "centimeters) is encoded or timed.",
+                    details: "Indicates the open limit for lifting the window covering whether position (in centimeters) is " +
+                        "encoded or timed.",
                     xref: { document: "cluster", section: "5.3.6.18" }
                 }),
 
                 Attribute({
                     name: "InstalledClosedLimitLift", id: 0x11, type: "uint16", access: "R V",
                     conformance: "LF & PA_LF & ABS", constraint: "0 to 65534", default: 65534, quality: "N",
-                    details: "This attribute shall indicate the closed limit for lifting the window covering whether position (in " +
-                        "centimeters) is encoded or timed.",
+                    details: "Indicates the closed limit for lifting the window covering whether position (in centimeters) is " +
+                        "encoded or timed.",
                     xref: { document: "cluster", section: "5.3.6.19" }
                 }),
 
                 Attribute({
                     name: "InstalledOpenLimitTilt", id: 0x12, type: "uint16", access: "R V",
                     conformance: "TL & PA_TL & ABS", constraint: "0 to 65534", default: 0, quality: "N",
-                    details: "This attribute shall indicate the open limit for tilting the window covering whether position (in " +
-                        "tenth of a degree) is encoded or timed.",
+                    details: "Indicates the open limit for tilting the window covering whether position (in tenth of a degree) is " +
+                        "encoded or timed.",
                     xref: { document: "cluster", section: "5.3.6.20" }
                 }),
 
                 Attribute({
                     name: "InstalledClosedLimitTilt", id: 0x13, type: "uint16", access: "R V",
                     conformance: "TL & PA_TL & ABS", constraint: "0 to 65534", default: 65534, quality: "N",
-                    details: "This attribute shall indicate the closed limit for tilting the window covering whether position (in " +
-                        "tenth of a degree) is encoded or timed.",
+                    details: "Indicates the closed limit for tilting the window covering whether position (in tenth of a degree) " +
+                        "is encoded or timed.",
                     xref: { document: "cluster", section: "5.3.6.21" }
                 }),
 
@@ -14155,8 +14162,8 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "Mode", id: 0x17, type: "ModeBitmap", access: "RW VM", conformance: "M", constraint: "0",
-                    default: 0, quality: "N",
+                    name: "Mode", id: 0x17, type: "ModeBitmap", access: "RW VM", conformance: "M", default: 0,
+                    quality: "N",
 
                     details: "The Mode attribute allows configuration of the window covering, such as: reversing the motor " +
                         "direction, placing the window covering into calibration mode, placing the motor into maintenance " +
@@ -14500,10 +14507,28 @@ export const SpecMatter = Matter({
                         "  • 11b = Reserved",
 
                     xref: { document: "cluster", section: "5.3.5.3" },
+
                     children: [
-                        Field({ name: "Global", constraint: "0 to 2", description: "Global operational state." }),
-                        Field({ name: "Lift", constraint: "2 to 4", description: "Lift operational state." }),
-                        Field({ name: "Tilt", constraint: "4 to 6", description: "Tilt operational state." })
+                        Field({
+                            name: "Global", constraint: "0 to 2", description: "Global operational state.",
+                            details: "These bits shall indicate in which direction the covering is currently moving or if it has stopped. " +
+                                "Global operational state shall always reflect the overall motion of the device.",
+                            xref: { document: "cluster", section: "5.3.5.3.1" }
+                        }),
+
+                        Field({
+                            name: "Lift", constraint: "2 to 4", description: "Lift operational state.",
+                            details: "These bits shall indicate in which direction the covering’s lift is currently moving or if it has " +
+                                "stopped.",
+                            xref: { document: "cluster", section: "5.3.5.3.2" }
+                        }),
+
+                        Field({
+                            name: "Tilt", constraint: "4 to 6", description: "Tilt operational state.",
+                            details: "These bits shall indicate in which direction the covering’s tilt is currently moving or if it has " +
+                                "stopped.",
+                            xref: { document: "cluster", section: "5.3.5.3.3" }
+                        })
                     ]
                 }),
 
@@ -17088,7 +17113,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "CurrentState", id: 0x0, type: "PlaybackStateEnum", access: "R V", conformance: "M",
                     constraint: "desc",
-                    details: "This attribute shall indicate the current playback state of media." +
+                    details: "Indicates the current playback state of media." +
                         "\n" +
                         "During fast-forward, rewind, and other seek operations; this attribute shall be set to PLAYING.",
                     xref: { document: "cluster", section: "6.10.6.1" }
@@ -17097,17 +17122,17 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "StartTime", id: 0x1, type: "epoch-us", access: "R V", conformance: "AS", constraint: "desc",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the start time of the media, in case the media has a fixed start time " +
-                        "(for example, live stream or television broadcast), or null when start time does not apply to the " +
-                        "current media (for example, video-on-demand). This time is a UTC time. The client needs to handle " +
-                        "conversion to local time, as required, taking in account time zone and possible local DST offset.",
+                    details: "Indicates the start time of the media, in case the media has a fixed start time (for example, live " +
+                        "stream or television broadcast), or null when start time does not apply to the current media (for " +
+                        "example, video-on-demand). This time is a UTC time. The client needs to handle conversion to local " +
+                        "time, as required, taking in account time zone and possible local DST offset.",
                     xref: { document: "cluster", section: "6.10.6.2" }
                 }),
 
                 Attribute({
                     name: "Duration", id: 0x2, type: "uint64", access: "R V", conformance: "AS", constraint: "desc",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the duration, in milliseconds, of the current media being played back" +
+                    details: "Indicates the duration, in milliseconds, of the current media being played back" +
                         "\n" +
                         "or null when duration is not applicable (for example, in live streaming content with no known " +
                         "duration). This attribute shall never be 0.",
@@ -17118,13 +17143,12 @@ export const SpecMatter = Matter({
                     name: "SampledPosition", id: 0x3, type: "PlaybackPositionStruct", access: "R V", conformance: "AS",
                     constraint: "desc", default: null, quality: "X",
 
-                    details: "This attribute shall indicate the position of playback (Position field) at the time (UpdateAt " +
-                        "field) specified in the attribute. The client may use the SampledPosition attribute to compute the " +
-                        "current position within the media stream based on the PlaybackSpeed, " +
-                        "PlaybackPositionStruct.UpdatedAt and PlaybackPositionStruct.Position fields. To enable this, the " +
-                        "SampledPosition attribute shall be updated whenever a change in either the playback speed or the " +
-                        "playback position is triggered outside the normal playback of the media. The events which may cause " +
-                        "this to happen include:" +
+                    details: "Indicates the position of playback (Position field) at the time (UpdateAt field) specified in the " +
+                        "attribute. The client may use the SampledPosition attribute to compute the current position within " +
+                        "the media stream based on the PlaybackSpeed, PlaybackPositionStruct.UpdatedAt and " +
+                        "PlaybackPositionStruct.Position fields. To enable this, the SampledPosition attribute shall be " +
+                        "updated whenever a change in either the playback speed or the playback position is triggered " +
+                        "outside the normal playback of the media. The events which may cause this to happen include:" +
                         "\n" +
                         "  • Starting or resumption of playback" +
                         "\n" +
@@ -17143,8 +17167,8 @@ export const SpecMatter = Matter({
                     name: "PlaybackSpeed", id: 0x4, type: "single", access: "R V", conformance: "AS",
                     constraint: "desc", default: 0,
 
-                    details: "This attribute shall indicate the speed at which the current media is being played. The new " +
-                        "PlaybackSpeed shall be reflected in this attribute whenever any of the following occurs:" +
+                    details: "Indicates the speed at which the current media is being played. The new PlaybackSpeed shall be " +
+                        "reflected in this attribute whenever any of the following occurs:" +
                         "\n" +
                         "  • Starting of playback" +
                         "\n" +
@@ -17180,12 +17204,12 @@ export const SpecMatter = Matter({
                     name: "SeekRangeEnd", id: 0x5, type: "uint64", access: "R V", conformance: "AS", constraint: "desc",
                     default: null, quality: "X",
 
-                    details: "This attribute shall indicate the furthest forward valid position to which a client may seek " +
-                        "forward, in milliseconds from the start of the media. When the media has an associated StartTime, a " +
-                        "value of null shall indicate that a seek forward is valid only until the current time within the " +
-                        "media, using a position computed from the difference between the current time offset and StartTime, " +
-                        "in milliseconds from start of the media, truncating fractional milliseconds towards 0. A value of " +
-                        "Nas when StartTime is not specified shall indicate that seeking forward is not allowed.",
+                    details: "Indicates the furthest forward valid position to which a client may seek forward, in milliseconds " +
+                        "from the start of the media. When the media has an associated StartTime, a value of null shall " +
+                        "indicate that a seek forward is valid only until the current time within the media, using a " +
+                        "position computed from the difference between the current time offset and StartTime, in " +
+                        "milliseconds from start of the media, truncating fractional milliseconds towards 0. A value of Nas " +
+                        "when StartTime is not specified shall indicate that seeking forward is not allowed.",
 
                     xref: { document: "cluster", section: "6.10.6.7" }
                 }),
@@ -17193,9 +17217,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SeekRangeStart", id: 0x6, type: "uint64", access: "R V", conformance: "AS",
                     constraint: "desc", default: null, quality: "X",
-                    details: "This attribute shall indicate the earliest valid position to which a client may seek back, in " +
-                        "milliseconds from start of the media. A value of Nas shall indicate that seeking backwards is not " +
-                        "allowed.",
+                    details: "Indicates the earliest valid position to which a client may seek back, in milliseconds from start " +
+                        "of the media. A value of Nas shall indicate that seeking backwards is not allowed.",
                     xref: { document: "cluster", section: "6.10.6.6" }
                 }),
 
@@ -17787,9 +17810,9 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "TargetList", id: 0x0, type: "list", access: "R V", conformance: "M",
-                    details: "This attribute shall represent a list of targets that can be navigated to within the experience " +
-                        "presented to the user by the Endpoint (Video Player or Content App). The list shall not contain any " +
-                        "entries with the same Identifier in the TargetInfoStruct object.",
+                    details: "Indicates a list of targets that can be navigated to within the experience presented to the user by " +
+                        "the Endpoint (Video Player or Content App). The list shall not contain any entries with the same " +
+                        "Identifier in the TargetInfoStruct object.",
                     xref: { document: "cluster", section: "6.11.5.1" },
                     children: [Field({ name: "entry", type: "TargetInfoStruct" })]
                 }),
@@ -17797,14 +17820,11 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "CurrentTarget", id: 0x1, type: "uint8", access: "R V", conformance: "O", constraint: "desc",
                     default: 0,
-
-                    details: "This attribute shall represent the Identifier for the target which is currently in foreground on " +
-                        "the corresponding Endpoint (Video Player or Content App), or 0xFF to indicate that no target is in " +
-                        "the foreground." +
+                    details: "Indicates the Identifier for the target which is currently in foreground on the corresponding " +
+                        "Endpoint (Video Player or Content App), or 0xFF to indicate that no target is in the foreground." +
                         "\n" +
                         "When not 0xFF, the CurrentTarget shall be an Identifier value contained within one of the " +
                         "TargetInfoStruct objects in the TargetList attribute.",
-
                     xref: { document: "cluster", section: "6.11.5.2" }
                 }),
 
@@ -18078,8 +18098,8 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "Enabled", id: 0x0, type: "bool", access: "R V", conformance: "M",
-                    details: "This attribute shall indicate whether the Content Control feature implemented on a media device is " +
-                        "turned off (FALSE) or turned on (TRUE).",
+                    details: "Indicates whether the Content Control feature implemented on a media device is turned off (FALSE) " +
+                        "or turned on (TRUE).",
                     xref: { document: "cluster", section: "6.13.7.1" }
                 }),
 
@@ -18106,11 +18126,11 @@ export const SpecMatter = Matter({
                     name: "OnDemandRatingThreshold", id: 0x2, type: "string", access: "R V", conformance: "OCR",
                     constraint: "max 8",
 
-                    details: "This attribute shall indicate a threshold rating as a content filter which is compared with the " +
-                        "rating for on-demand content. For example, if the on-demand content rating is greater than or equal " +
-                        "to OnDemandRatingThreshold, for a rating system that is ordered from lower viewer age to higher " +
-                        "viewer age, then on-demand content is not appropriate for the User and the Node shall prevent the " +
-                        "playback of content." +
+                    details: "Indicates a threshold rating as a content filter which is compared with the rating for on-demand " +
+                        "content. For example, if the on-demand content rating is greater than or equal to " +
+                        "OnDemandRatingThreshold, for a rating system that is ordered from lower viewer age to higher viewer " +
+                        "age, then on-demand content is not appropriate for the User and the Node shall prevent the playback " +
+                        "of content." +
                         "\n" +
                         "This attribute shall be set to one of the values present in the OnDemandRatings attribute." +
                         "\n" +
@@ -18124,9 +18144,9 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ScheduledContentRatings", id: 0x3, type: "list", access: "R V", conformance: "SCR",
 
-                    details: "This attribute shall indicate a collection of ratings which ScheduledContentRatingThreshold can be " +
-                        "set to. The items should honor metadata of the scheduled content rating system for the country or " +
-                        "region where the media device has been provisioned." +
+                    details: "Indicates a collection of ratings which ScheduledContentRatingThreshold can be set to. The items " +
+                        "should honor metadata of the scheduled content rating system for the country or region where the " +
+                        "media device has been provisioned." +
                         "\n" +
                         "The media device shall have a way to determine which scheduled content rating system applies and " +
                         "then populate this attribute. For example, this can be done by examining the Location attribute in " +
@@ -18143,11 +18163,10 @@ export const SpecMatter = Matter({
                     name: "ScheduledContentRatingThreshold", id: 0x4, type: "string", access: "R V", conformance: "SCR",
                     constraint: "max 8",
 
-                    details: "This attribute shall indicate a threshold rating as a content filter which is used to compare with " +
-                        "the rating for scheduled content. For example, if the scheduled content rating is greater than or " +
-                        "equal to ScheduledContentRatingThreshold for a rating system that is ordered from lower viewer age " +
-                        "to higher viewer age, then the scheduled content is not appropriate for the User and shall be " +
-                        "blocked." +
+                    details: "Indicates a threshold rating as a content filter which is used to compare with the rating for " +
+                        "scheduled content. For example, if the scheduled content rating is greater than or equal to " +
+                        "ScheduledContentRatingThreshold for a rating system that is ordered from lower viewer age to higher " +
+                        "viewer age, then the scheduled content is not appropriate for the User and shall be blocked." +
                         "\n" +
                         "This attribute shall be set to one of the values present in the ScheduledContentRatings attribute." +
                         "\n" +
@@ -18161,8 +18180,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ScreenDailyTime", id: 0x5, type: "elapsed-s", access: "R V", conformance: "ST",
                     constraint: "max 86400",
-                    details: "This attribute shall indicate the amount of time (in seconds) which the User is allowed to spend " +
-                        "watching TV within one day when the Content Control feature is activated.",
+                    details: "Indicates the amount of time (in seconds) which the User is allowed to spend watching TV within one " +
+                        "day when the Content Control feature is activated.",
                     xref: { document: "cluster", section: "6.13.7.6" }
                 }),
 
@@ -18170,9 +18189,9 @@ export const SpecMatter = Matter({
                     name: "RemainingScreenTime", id: 0x6, type: "elapsed-s", access: "R V", conformance: "ST",
                     constraint: "max 86400",
 
-                    details: "This attribute shall indicate the remaining screen time (in seconds) which the User is allowed to " +
-                        "spend watching TV for the current day when the Content Control feature is activated. When this " +
-                        "value equals 0, the media device shall terminate the playback of content." +
+                    details: "Indicates the remaining screen time (in seconds) which the User is allowed to spend watching TV for " +
+                        "the current day when the Content Control feature is activated. When this value equals 0, the media " +
+                        "device shall terminate the playback of content." +
                         "\n" +
                         "This attribute shall be updated when the AddBonusTime command is received and processed " +
                         "successfully (with the correct PIN).",
@@ -18183,8 +18202,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "BlockUnrated", id: 0x7, type: "bool", access: "R V", conformance: "BU",
 
-                    details: "This attribute shall indicate whether the playback of unrated content is allowed when the Content " +
-                        "Control feature is activated. If this attribute equals FALSE, then playback of unrated content" +
+                    details: "Indicates whether the playback of unrated content is allowed when the Content Control feature is " +
+                        "activated. If this attribute equals FALSE, then playback of unrated content" +
                         "\n" +
                         "shall be permitted. Otherwise, the media device shall prevent the playback of unrated content." +
                         "\n" +
@@ -18197,16 +18216,14 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "BlockChannelList", id: 0x8, type: "list", access: "R V", conformance: "BC",
-                    details: "This attribute shall indicate a set of channels that shall be blocked when the Content Control " +
-                        "feature is activated.",
+                    details: "Indicates a set of channels that shall be blocked when the Content Control feature is activated.",
                     xref: { document: "cluster", section: "6.13.7.9" },
                     children: [Field({ name: "entry", type: "BlockChannelStruct" })]
                 }),
 
                 Attribute({
                     name: "BlockApplicationList", id: 0x9, type: "list", access: "R V", conformance: "BA",
-                    details: "This attribute shall indicate a set of applications that shall be blocked when the Content Control " +
-                        "feature is activated.",
+                    details: "Indicates a set of applications that shall be blocked when the Content Control feature is activated.",
                     xref: { document: "cluster", section: "6.13.7.10" },
                     children: [Field({ name: "entry", type: "AppInfoStruct" })]
                 }),
@@ -18215,10 +18232,10 @@ export const SpecMatter = Matter({
                     name: "BlockContentTimeWindow", id: 0xa, type: "list", access: "R V", conformance: "BTW",
                     constraint: "max 7",
 
-                    details: "This attribute shall indicate a set of periods during which the playback of content on media device " +
-                        "shall be blocked when the Content Control feature is activated. The media device shall reject any " +
-                        "request to play content during one period of this attribute. If it is entering any one period of " +
-                        "this attribute, the media device shall block content which is playing and generate an event " +
+                    details: "Indicates a set of periods during which the playback of content on media device shall be blocked " +
+                        "when the Content Control feature is activated. The media device shall reject any request to play " +
+                        "content during one period of this attribute. If it is entering any one period of this attribute, " +
+                        "the media device shall block content which is playing and generate an event " +
                         "EnteringBlockContentTimeWindow. There shall not be multiple entries in this attribute list for the " +
                         "same day of week.",
 
@@ -18998,29 +19015,25 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "TemperatureSetpoint", id: 0x0, type: "temperature", access: "R V", conformance: "TN",
                     constraint: "minTemperature to maxTemperature",
-                    details: "This attribute shall represent the desired Temperature Setpoint on the device.",
+                    details: "Indicates the desired Temperature Setpoint on the device.",
                     xref: { document: "cluster", section: "8.2.5.1" }
                 }),
 
                 Attribute({
                     name: "MinTemperature", id: 0x1, type: "temperature", access: "R V", conformance: "TN",
                     constraint: "max (MaxTemperature - 1)", quality: "F",
-                    details: "This attribute shall represent the minimum temperature to which the TemperatureSetpoint attribute " +
-                        "may be set.",
+                    details: "Indicates the minimum temperature to which the TemperatureSetpoint attribute may be set.",
                     xref: { document: "cluster", section: "8.2.5.2" }
                 }),
 
                 Attribute({
                     name: "MaxTemperature", id: 0x2, type: "temperature", access: "R V", conformance: "TN",
                     constraint: "desc", quality: "F",
-
-                    details: "This attribute shall represent the maximum temperature to which the TemperatureSetpoint attribute " +
-                        "may be set." +
+                    details: "Indicates the maximum temperature to which the TemperatureSetpoint attribute may be set." +
                         "\n" +
                         "If the Step attribute is supported, this attribute shall be such that MaxTemperature = " +
                         "MinTemperature + Step * n, where n is an integer and n > 0. If the Step attribute is not supported, " +
                         "this attribute shall be such that MaxTemperature > MinTemperature.",
-
                     xref: { document: "cluster", section: "8.2.5.3" }
                 }),
 
@@ -19028,8 +19041,8 @@ export const SpecMatter = Matter({
                     name: "Step", id: 0x3, type: "temperature", access: "R V", conformance: "STEP",
                     constraint: "max (MaxTemperature - MinTemperature)", quality: "F",
 
-                    details: "This attribute shall represent the discrete value by which the TemperatureSetpoint attribute can be " +
-                        "changed via the SetTemperature command." +
+                    details: "Indicates the discrete value by which the TemperatureSetpoint attribute can be changed via the " +
+                        "SetTemperature command." +
                         "\n" +
                         "For example, if the value of MinTemperature is 25.00C (2500) and the Step value is 0.50C (50), " +
                         "valid values of the TargetTemperature field of the SetTemperature command would be 25.50C (2550), " +
@@ -19041,9 +19054,9 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SelectedTemperatureLevel", id: 0x4, type: "uint8", access: "R V", conformance: "TL",
                     constraint: "0 to 31",
-                    details: "This attribute shall represent the currently selected temperature level setting of the server. This " +
-                        "attribute shall be the positional index of the list item in the SupportedTemperatureLevels list " +
-                        "that represents the currently selected temperature level setting of the server.",
+                    details: "Indicates the currently selected temperature level setting of the server. This attribute shall be " +
+                        "the positional index of the list item in the SupportedTemperatureLevels list that represents the " +
+                        "currently selected temperature level setting of the server.",
                     xref: { document: "cluster", section: "8.2.5.5" }
                 }),
 
@@ -19051,11 +19064,11 @@ export const SpecMatter = Matter({
                     name: "SupportedTemperatureLevels", id: 0x5, type: "list", access: "R V", conformance: "TL",
                     constraint: "max 32[max 16]",
 
-                    details: "This attribute shall represent the list of supported temperature level settings that may be " +
-                        "selected via the TargetTemperatureLevel field in the SetTemperature command. Each string is " +
-                        "readable text that describes each temperature level setting in a way that can be easily understood " +
-                        "by humans. For example, a washing machine can have temperature levels like \"Cold\", \"Warm\", and " +
-                        "\"Hot\". Each string is specified by the manufacturer." +
+                    details: "Indicates the list of supported temperature level settings that may be selected via the " +
+                        "TargetTemperatureLevel field in the SetTemperature command. Each string is readable text that " +
+                        "describes each temperature level setting in a way that can be easily understood by humans. For " +
+                        "example, a washing machine can have temperature levels like \"Cold\", \"Warm\", and \"Hot\". Each string " +
+                        "is specified by the manufacturer." +
                         "\n" +
                         "Each item in this list shall represent a unique temperature level. Each entry in this list shall " +
                         "have a unique value. The entries in this list shall appear in order of increasing temperature level " +
@@ -19392,7 +19405,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "SupportedDrynessLevels", id: 0x0, type: "list", conformance: "M", constraint: "1 to 4",
-                    details: "This attribute shall indicate the list of supported dryness levels available to the appliance in the" +
+                    details: "Indicates the list of supported dryness levels available to the appliance in the" +
                         "\n" +
                         "currently selected mode. The dryness level values are determined by the manufacturer. At least one " +
                         "dryness level value shall be provided in the SupportedDrynessLevels list. The list of dryness " +
@@ -19405,8 +19418,8 @@ export const SpecMatter = Matter({
                     name: "SelectedDrynessLevel", id: 0x1, type: "DrynessLevelEnum", access: "RW VO", conformance: "M",
                     constraint: "desc", quality: "X",
 
-                    details: "This attribute shall indicate the currently-selected dryness level and it shall be the index into " +
-                        "the SupportedDrynessLevels list of the selected dryness level." +
+                    details: "Indicates the currently-selected dryness level and it shall be the index into the " +
+                        "SupportedDrynessLevels list of the selected dryness level." +
                         "\n" +
                         "If an attempt is made to write this attribute with a value other than null or a value contained in " +
                         "SupportedDrynessLevels, a CONSTRAINT_ERROR response shall be sent as the response. If an attempt is " +
@@ -19528,7 +19541,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "CookTime", id: 0x0, type: "elapsed-s", access: "R V", conformance: "M",
                     constraint: "1 to maxCookTime", default: 30,
-                    details: "This attribute shall indicate the total cook time associated with the operation of the device." +
+                    details: "Indicates the total cook time associated with the operation of the device." +
                         "\n" +
                         "This attribute shall remain unchanged during the operation of the oven unless the value is changed " +
                         "via a command or out-of-band action.",
@@ -19538,7 +19551,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "MaxCookTime", id: 0x1, type: "elapsed-s", access: "R V", conformance: "M",
                     constraint: "1 to 86400", quality: "F",
-                    details: "This attribute shall indicate the maximum value to which the CookTime attribute can be set.",
+                    details: "Indicates the maximum value to which the CookTime attribute can be set.",
                     xref: { document: "cluster", section: "8.13.5.2" }
                 }),
 
@@ -19546,7 +19559,7 @@ export const SpecMatter = Matter({
                     name: "PowerSetting", id: 0x2, type: "uint8", access: "R V", conformance: "PWRNUM",
                     constraint: "desc",
 
-                    details: "This attribute shall indicate the power level associated with the operation of the device." +
+                    details: "Indicates the power level associated with the operation of the device." +
                         "\n" +
                         "If the MinPower, MaxPower, and PowerStep attributes are not supported, the minimum value of this " +
                         "attribute shall be 10, the maximum value of this attribute shall be 100, the value shall be in even " +
@@ -19564,8 +19577,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "MinPower", id: 0x3, type: "uint8", access: "R V", conformance: "PWRLMTS",
                     constraint: "1 to maxPower", default: 10, quality: "F",
-                    details: "This attribute shall indicate the minimum power level that can be set on the server. The value of " +
-                        "this attribute shall be less than or equal to the value of MaxPower. The value of this attribute" +
+                    details: "Indicates the minimum power level that can be set on the server. The value of this attribute shall " +
+                        "be less than or equal to the value of MaxPower. The value of this attribute" +
                         "\n" +
                         "shall be an integer multiple of PowerStep.",
                     xref: { document: "cluster", section: "8.13.5.4" }
@@ -19574,16 +19587,16 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "MaxPower", id: 0x4, type: "uint8", access: "R V", conformance: "PWRLMTS",
                     constraint: "minPower to 100", default: 100, quality: "F",
-                    details: "This attribute shall indicate the maximum power level that can be set on the server. The value of " +
-                        "this attribute shall be greater than or equal to the value of MinPower. The value of this attribute " +
-                        "shall be an integer multiple of PowerStep.",
+                    details: "Indicates the maximum power level that can be set on the server. The value of this attribute shall " +
+                        "be greater than or equal to the value of MinPower. The value of this attribute shall be an integer " +
+                        "multiple of PowerStep.",
                     xref: { document: "cluster", section: "8.13.5.5" }
                 }),
 
                 Attribute({
                     name: "PowerStep", id: 0x5, type: "uint8", access: "R V", conformance: "PWRLMTS",
                     constraint: "1 to (MaxPower - MinPower)", default: 10, quality: "F",
-                    details: "This attribute shall indicate the increment of power that can be set on the server." +
+                    details: "Indicates the increment of power that can be set on the server." +
                         "\n" +
                         "For example, if MinPower is 1, MaxPower is 10, and PowerSetting can be set to any integer between " +
                         "MinPower and MaxPower, PowerStep would be set to 1.",
@@ -19593,7 +19606,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SupportedWatts", id: 0x6, type: "list", access: "R V", conformance: "P, WATTS",
                     constraint: "1 to 10", quality: "F",
-                    details: "This attribute shall indicate the list of power levels (in W) supported by the server.",
+                    details: "Indicates the list of power levels (in W) supported by the server.",
                     xref: { document: "cluster", section: "8.13.5.7" },
                     children: [Field({ name: "entry", type: "uint16" })]
                 }),
@@ -19601,8 +19614,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SelectedWattIndex", id: 0x7, type: "uint8", access: "R V", conformance: "P, WATTS",
                     constraint: "desc",
-                    details: "This attribute shall indicate the index into the list of SupportedWatts of the currently selected " +
-                        "power setting." +
+                    details: "Indicates the index into the list of SupportedWatts of the currently selected power setting." +
                         "\n" +
                         "The index shall be a valid index into the SupportedWatts list.",
                     xref: { document: "cluster", section: "8.13.5.8" }
@@ -19610,7 +19622,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "WattRating", id: 0x8, type: "uint16", access: "R V", conformance: "O", quality: "F",
-                    details: "This attribute shall indicate the rating, in Watts, of the microwave power of the oven." +
+                    details: "Indicates the rating, in Watts, of the microwave power of the oven." +
                         "\n" +
                         "Supporting this attribute can assist clients in suggesting cooking settings for various foods and " +
                         "beverages.",
@@ -19968,7 +19980,7 @@ export const SpecMatter = Matter({
                     name: "EsaType", id: 0x0, type: "ESATypeEnum", access: "R V", conformance: "M", default: 255,
                     quality: "F",
 
-                    details: "This attribute shall indicate the type of ESA." +
+                    details: "Indicates the type of ESA." +
                         "\n" +
                         "This attribute enables an EMS to understand some of the basic properties about how the energy may " +
                         "be consumed, generated, and stored by the ESA." +
@@ -19989,9 +20001,9 @@ export const SpecMatter = Matter({
                     name: "EsaCanGenerate", id: 0x1, type: "bool", access: "R V", conformance: "M", default: true,
                     quality: "F",
 
-                    details: "This attribute shall indicate whether the ESA is classed as a generator or load. This allows an EMS " +
-                        "to understand whether the power values reported by the ESA need to have their sign inverted when " +
-                        "dealing with forecasts and adjustments." +
+                    details: "Indicates whether the ESA is classed as a generator or load. This allows an EMS to understand " +
+                        "whether the power values reported by the ESA need to have their sign inverted when dealing with " +
+                        "forecasts and adjustments." +
                         "\n" +
                         "For example, a solar PV inverter (being a generator) may produce positive values to indicate " +
                         "generation, however an EMS when predicting the total home load would need to subtract these " +
@@ -20014,7 +20026,7 @@ export const SpecMatter = Matter({
                     name: "EsaState", id: 0x2, type: "ESAStateEnum", access: "R V", conformance: "M",
                     constraint: "desc", default: 0,
 
-                    details: "This attribute shall indicate the current state of the ESA." +
+                    details: "Indicates the current state of the ESA." +
                         "\n" +
                         "If the ESA is in the Offline or Fault state it cannot be controlled by an EMS, and may not be able " +
                         "to report its Forecast information. An EMS may subscribe to the ESAState to get notified about " +
@@ -20030,8 +20042,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "AbsMinPower", id: 0x3, type: "power-mW", access: "R V", conformance: "M", default: 0,
 
-                    details: "This attribute shall indicate the minimum electrical power that the ESA can consume when switched " +
-                        "on. This does not include when in power save or standby modes." +
+                    details: "Indicates the minimum electrical power that the ESA can consume when switched on. This does not " +
+                        "include when in power save or standby modes." +
                         "\n" +
                         "Note that for Generator ESAs that can charge an internal battery (such as a battery storage " +
                         "inverter), the AbsMinPower will be a negative number representing the maximum power that the ESA " +
@@ -20043,8 +20055,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "AbsMaxPower", id: 0x4, type: "power-mW", access: "R V", conformance: "M", default: 0,
 
-                    details: "This attribute shall indicate the maximum electrical power that the ESA can consume when switched " +
-                        "on." +
+                    details: "Indicates the maximum electrical power that the ESA can consume when switched on." +
                         "\n" +
                         "The value of the AbsMaxPower attribute shall be limited" +
                         "\n" +
@@ -20065,8 +20076,8 @@ export const SpecMatter = Matter({
                     name: "PowerAdjustmentCapability", id: 0x5, type: "list", access: "R V", conformance: "PA",
                     constraint: "max 8", default: null, quality: "X",
 
-                    details: "This attribute shall indicate how the ESA can be adjusted at the current time. This attribute " +
-                        "SHOULD be updated regularly by ESAs." +
+                    details: "Indicates how the ESA can be adjusted at the current time. This attribute SHOULD be updated " +
+                        "regularly by ESAs." +
                         "\n" +
                         "For example, a battery storage inverter may need to regulate its internal temperature, or the " +
                         "charging rate of the battery may be limited due to cold temperatures, or a change in the state of " +
@@ -20106,9 +20117,9 @@ export const SpecMatter = Matter({
                     name: "OptOutState", id: 0x7, type: "OptOutStateEnum", access: "R V",
                     conformance: "PA | STA | PAU | FA | CON", constraint: "desc", default: 0,
 
-                    details: "This attribute shall indicate the current Opt-Out state of the ESA. The ESA may have a local user " +
-                        "interface to allow the user to control this OptOutState. An EMS may subscribe to the OptOutState to " +
-                        "get notified about changes in operational state." +
+                    details: "Indicates the current Opt-Out state of the ESA. The ESA may have a local user interface to allow " +
+                        "the user to control this OptOutState. An EMS may subscribe to the OptOutState to get notified about " +
+                        "changes in operational state." +
                         "\n" +
                         "If the ESA is in the LocalOptOut or OptOut states, so it cannot be controlled by an EMS for local " +
                         "optimization reasons, it shall reject any commands which have the AdjustmentCauseEnum value " +
@@ -21180,9 +21191,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "State", id: 0x0, type: "StateEnum", access: "R V", conformance: "M", quality: "X",
 
-                    details: "This attribute shall indicate the current status of the EVSE. This higher-level status is partly " +
-                        "derived from the signaling protocol as communicated between the EVSE and the vehicle through the " +
-                        "pilot signal." +
+                    details: "Indicates the current status of the EVSE. This higher-level status is partly derived from the " +
+                        "signaling protocol as communicated between the EVSE and the vehicle through the pilot signal." +
                         "\n" +
                         "The State attribute shall change when the EVSE detects change of condition of the EV (plugged in or " +
                         "unplugged, whether the vehicle is asking for demand or not, and if it is charging or discharging)." +
@@ -21199,21 +21209,17 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "SupplyState", id: 0x1, type: "SupplyStateEnum", access: "R V", conformance: "M",
-                    details: "This attribute shall indicate whether the EV is currently allowed to charge from or discharge to " +
-                        "the EVSE.",
+                    details: "Indicates whether the EV is currently allowed to charge from or discharge to the EVSE.",
                     xref: { document: "cluster", section: "9.3.8.2" }
                 }),
 
                 Attribute({
                     name: "FaultState", id: 0x2, type: "FaultStateEnum", access: "R V", conformance: "M",
-
-                    details: "This attribute shall indicate the type of fault detected by the EVSE (internally or as detected in " +
-                        "the pilot signal)." +
+                    details: "Indicates the type of fault detected by the EVSE (internally or as detected in the pilot signal)." +
                         "\n" +
                         "When the SupplyState attribute is DisabledError, the FaultState attribute will be one of the values " +
                         "listed in FaultStateEnum, except NoError. For all values of SupplyState other than DisabledError, " +
                         "the FaultState attribute shall be NoError.",
-
                     xref: { document: "cluster", section: "9.3.8.3" }
                 }),
 
@@ -21221,8 +21227,7 @@ export const SpecMatter = Matter({
                     name: "ChargingEnabledUntil", id: 0x3, type: "epoch-s", access: "R V", conformance: "M", default: 0,
                     quality: "X N",
 
-                    details: "This attribute shall indicate the time, in UTC, that the EVSE will automatically stop current flow " +
-                        "to the EV." +
+                    details: "Indicates the time, in UTC, that the EVSE will automatically stop current flow to the EV." +
                         "\n" +
                         "A null value indicates the EVSE is always enabled for charging." +
                         "\n" +
@@ -21239,8 +21244,7 @@ export const SpecMatter = Matter({
                     name: "DischargingEnabledUntil", id: 0x4, type: "epoch-s", access: "R V", conformance: "V2X",
                     default: 0, quality: "X N",
 
-                    details: "This attribute shall indicate the time, in UTC, that the EVSE will automatically stop current flow " +
-                        "from the EV." +
+                    details: "Indicates the time, in UTC, that the EVSE will automatically stop current flow from the EV." +
                         "\n" +
                         "A null value indicates the EVSE is always enabled for discharging." +
                         "\n" +
@@ -21256,17 +21260,17 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "CircuitCapacity", id: 0x5, type: "amperage-mA", access: "R V", conformance: "M",
                     constraint: "min 0", default: 0, quality: "N",
-                    details: "This attribute shall indicate the capacity that the circuit that the EVSE is connected to can " +
-                        "provide. It is intended to allow implementation of a self-managed network of EVSEs. It is assumed " +
-                        "that the device will allow the setting of such values by an installer.",
+                    details: "Indicates the capacity that the circuit that the EVSE is connected to can provide. It is intended " +
+                        "to allow implementation of a self-managed network of EVSEs. It is assumed that the device will " +
+                        "allow the setting of such values by an installer.",
                     xref: { document: "cluster", section: "9.3.8.6" }
                 }),
 
                 Attribute({
                     name: "MinimumChargeCurrent", id: 0x6, type: "amperage-mA", access: "R V", conformance: "M",
                     constraint: "min 0", default: 6000, quality: "N",
-                    details: "This attribute shall indicate the minimum current that can be delivered by the EVSE to the EV. The " +
-                        "attribute can be set using the EnableCharging command.",
+                    details: "Indicates the minimum current that can be delivered by the EVSE to the EV. The attribute can be set " +
+                        "using the EnableCharging command.",
                     xref: { document: "cluster", section: "9.3.8.7" }
                 }),
 
@@ -21274,7 +21278,7 @@ export const SpecMatter = Matter({
                     name: "MaximumChargeCurrent", id: 0x7, type: "amperage-mA", access: "R V", conformance: "M",
                     constraint: "min 0", default: 0, quality: "N",
 
-                    details: "This attribute shall indicate the maximum current that can be delivered by the EVSE to the EV." +
+                    details: "Indicates the maximum current that can be delivered by the EVSE to the EV." +
                         "\n" +
                         "This shall represent the actual maximum current offered to the EV at any time. Note that the EV can " +
                         "draw less current than this value. For example, the EV may be limiting its power draw based on the " +
@@ -21300,8 +21304,8 @@ export const SpecMatter = Matter({
                     name: "MaximumDischargeCurrent", id: 0x8, type: "amperage-mA", access: "R V", conformance: "V2X",
                     constraint: "min 0", default: 0, quality: "N",
 
-                    details: "This attribute shall indicate the maximum current that can be received by the EVSE from the EV. " +
-                        "This attribute can be set using the EnableDischarging command." +
+                    details: "Indicates the maximum current that can be received by the EVSE from the EV. This attribute can be " +
+                        "set using the EnableDischarging command." +
                         "\n" +
                         "This attribute value shall be the minimum of:" +
                         "\n" +
@@ -21318,10 +21322,10 @@ export const SpecMatter = Matter({
                     name: "UserMaximumChargeCurrent", id: 0x9, type: "amperage-mA", access: "RW VM", conformance: "O",
                     constraint: "desc", default: 0, quality: "N",
 
-                    details: "This attribute shall indicate a maximum current that can set by the consumer (e.g. via an app) as a " +
-                        "preference to further reduce the charging rate. This may be desirable if the home owner has a solar " +
-                        "PV or battery storage system which may only be able to deliver a limited amount of power. The " +
-                        "consumer can manually control how much they allow the EV to take." +
+                    details: "Indicates a maximum current that can set by the consumer (e.g. via an app) as a preference to " +
+                        "further reduce the charging rate. This may be desirable if the home owner has a solar PV or battery " +
+                        "storage system which may only be able to deliver a limited amount of power. The consumer can " +
+                        "manually control how much they allow the EV to take." +
                         "\n" +
                         "This attribute value shall be limited by the EVSE to be in the range of:" +
                         "\n" +
@@ -21341,8 +21345,8 @@ export const SpecMatter = Matter({
                     name: "RandomizationDelayWindow", id: 0xa, type: "elapsed-s", access: "RW VM", conformance: "O",
                     constraint: "0 to 86400", default: 600, quality: "N",
 
-                    details: "This attribute shall indicate the size of a random window over which the EVSE will randomize the " +
-                        "start of a charging session. This value is in seconds." +
+                    details: "Indicates the size of a random window over which the EVSE will randomize the start of a charging " +
+                        "session. This value is in seconds." +
                         "\n" +
                         "This is a feature that is mandated in some markets (such as UK) where the EVSE should by default " +
                         "randomize its start time within the randomization window. By default in the UK this should be 600s." +
@@ -21357,8 +21361,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "NextChargeStartTime", id: 0x23, type: "epoch-s", access: "R V", conformance: "PREF",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the time, in UTC, when the EVSE plans to start the next scheduled " +
-                        "charge based on the charging preferences." +
+                    details: "Indicates the time, in UTC, when the EVSE plans to start the next scheduled charge based on the " +
+                        "charging preferences." +
                         "\n" +
                         "If this is null it indicates that there is no scheduled charging, or that the vehicle is not " +
                         "plugged in.",
@@ -21368,8 +21372,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "NextChargeTargetTime", id: 0x24, type: "epoch-s", access: "R V", conformance: "PREF",
                     default: null, quality: "X",
-                    details: "This attribute shall indicate the time, in UTC, when the EVSE SHOULD complete the next scheduled " +
-                        "charge based on the charging preferences." +
+                    details: "Indicates the time, in UTC, when the EVSE SHOULD complete the next scheduled charge based on the " +
+                        "charging preferences." +
                         "\n" +
                         "If this is null it indicates that there is no scheduled charging, or that the vehicle is not " +
                         "plugged in.",
@@ -21379,8 +21383,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "NextChargeRequiredEnergy", id: 0x25, type: "energy-mWh", access: "R V", conformance: "PREF",
                     constraint: "min 0", default: null, quality: "X",
-                    details: "This attribute shall indicate the amount of energy that the EVSE is going to attempt to add to the " +
-                        "vehicle in the next charging target." +
+                    details: "Indicates the amount of energy that the EVSE is going to attempt to add to the vehicle in the next " +
+                        "charging target." +
                         "\n" +
                         "If this is null it indicates that there is no scheduled charging, or that the EVSE is using the " +
                         "TargetSoC method to charge the vehicle.",
@@ -21391,8 +21395,7 @@ export const SpecMatter = Matter({
                     name: "NextChargeTargetSoC", id: 0x26, type: "percent", access: "R V", conformance: "PREF",
                     default: null, quality: "X",
 
-                    details: "This attribute shall indicate the target SoC the EVSE is going to attempt to reach when the vehicle " +
-                        "is next charged." +
+                    details: "Indicates the target SoC the EVSE is going to attempt to reach when the vehicle is next charged." +
                         "\n" +
                         "If this is null it indicates that there is no scheduled charging, or that the EVSE cannot obtain " +
                         "the current State of Charge from the vehicle." +
@@ -21406,7 +21409,7 @@ export const SpecMatter = Matter({
                     name: "ApproximateEvEfficiency", id: 0x27, type: "uint16", access: "RW VM", conformance: "[PREF]",
                     constraint: "desc", default: null, quality: "X N",
 
-                    details: "This attribute shall indicate the vehicle efficiency rating for a connected vehicle." +
+                    details: "Indicates the vehicle efficiency rating for a connected vehicle." +
                         "\n" +
                         "This can be used to help indicate to the user approximately how many miles or km of range will be " +
                         "added. It allows user interfaces to display to the user simpler terms that they can relate to " +
@@ -21440,25 +21443,25 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "StateOfCharge", id: 0x30, type: "percent", access: "R V", conformance: "SOC", default: null,
                     quality: "X",
-                    details: "This attribute shall indicate the state of charge of the EV battery in steps of 1%. The values are " +
-                        "in the 0-100%. This attribute is only available on EVSEs which can read the state of charge from " +
-                        "the vehicle and that support the SOC feature. If the StateOfCharge cannot be read from the vehicle " +
-                        "it shall be returned with a NULL value.",
+                    details: "Indicates the state of charge of the EV battery in steps of 1%. The values are in the 0-100%. This " +
+                        "attribute is only available on EVSEs which can read the state of charge from the vehicle and that " +
+                        "support the SOC feature. If the StateOfCharge cannot be read from the vehicle it shall be returned " +
+                        "with a NULL value.",
                     xref: { document: "cluster", section: "9.3.8.17" }
                 }),
 
                 Attribute({
                     name: "BatteryCapacity", id: 0x31, type: "energy-mWh", access: "R V", conformance: "SOC",
                     constraint: "min 0", default: null, quality: "X",
-                    details: "This attribute shall indicate the capacity of the EV battery in mWh. This value is always positive.",
+                    details: "Indicates the capacity of the EV battery in mWh. This value is always positive.",
                     xref: { document: "cluster", section: "9.3.8.18" }
                 }),
 
                 Attribute({
                     name: "VehicleId", id: 0x32, type: "string", access: "R V", conformance: "PNC",
                     constraint: "max 32", default: null, quality: "X",
-                    details: "This attribute shall indicate the vehicle ID read by the EVSE via ISO-15118 using the PNC feature, " +
-                        "if the EVSE supports this capability." +
+                    details: "Indicates the vehicle ID read by the EVSE via ISO-15118 using the PNC feature, if the EVSE supports " +
+                        "this capability." +
                         "\n" +
                         "The field may be based on the e-Mobility Account Identifier (EMAID). A null value shall indicate " +
                         "that this is unknown.",
@@ -22135,8 +22138,7 @@ export const SpecMatter = Matter({
                     name: "EnergyBalances", id: 0x0, type: "list", access: "R V", conformance: "BALA",
                     constraint: "2 to 10", quality: "F",
 
-                    details: "This attribute shall indicate a list of BalanceStructs, each representing a step along a linear " +
-                        "scale" +
+                    details: "Indicates a list of BalanceStructs, each representing a step along a linear scale" +
                         "\n" +
                         "of relative priorities. A Step field with a value of zero shall indicate that the device SHOULD " +
                         "entirely favor the priority specified by the first element in EnergyPriorities; whereas a Step " +
@@ -22160,9 +22162,9 @@ export const SpecMatter = Matter({
                     name: "CurrentEnergyBalance", id: 0x1, type: "uint8", access: "RW VO", conformance: "BALA",
                     quality: "N",
 
-                    details: "This attribute shall indicate the current preference of the user for balancing different priorities " +
-                        "during device use. The value of this attribute is the index, 0-based, into the EnergyBalances " +
-                        "attribute for the currently selected balance." +
+                    details: "Indicates the current preference of the user for balancing different priorities during device use. " +
+                        "The value of this attribute is the index, 0-based, into the EnergyBalances attribute for the " +
+                        "currently selected balance." +
                         "\n" +
                         "If an attempt is made to set this attribute to an index outside the maximum index for " +
                         "EnergyBalances, a response with the status code CONSTRAINT_ERROR shall be returned." +
@@ -22187,9 +22189,9 @@ export const SpecMatter = Matter({
                     name: "EnergyPriorities", id: 0x2, type: "list", access: "R V", conformance: "BALA",
                     constraint: "2", quality: "F",
 
-                    details: "This attribute shall indicate two extremes for interpreting the values in the EnergyBalances " +
-                        "attribute. These two priorities shall be in opposition to each other; e.g. Comfort vs. Efficiency " +
-                        "or Speed vs. WaterConsumption." +
+                    details: "Indicates two extremes for interpreting the values in the EnergyBalances attribute. These two " +
+                        "priorities shall be in opposition to each other; e.g. Comfort vs. Efficiency or Speed vs. " +
+                        "WaterConsumption." +
                         "\n" +
                         "If the value of EnergyPriorities changes after an update to represent a new balance between " +
                         "priorities, the value of the CurrentEnergyBalance attribute shall be set to its default.",
@@ -22202,8 +22204,8 @@ export const SpecMatter = Matter({
                     name: "LowPowerModeSensitivities", id: 0x3, type: "list", access: "R V", conformance: "LPMS",
                     constraint: "2 to 10", quality: "F",
 
-                    details: "This attribute shall indicate a list of BalanceStructs, each representing a condition or set of " +
-                        "conditions for the device to enter a low power mode." +
+                    details: "Indicates a list of BalanceStructs, each representing a condition or set of conditions for the " +
+                        "device to enter a low power mode." +
                         "\n" +
                         "This shall contain at least two BalanceStructs." +
                         "\n" +
@@ -22218,9 +22220,9 @@ export const SpecMatter = Matter({
                     name: "CurrentLowPowerModeSensitivity", id: 0x4, type: "uint8", access: "RW VO",
                     conformance: "LPMS", quality: "N",
 
-                    details: "This attribute shall indicate the current preference of the user for determining when the device " +
-                        "should enter a low power mode. The value of this attribute is the index, 0-based, into the " +
-                        "LowPowerModeSensitivities attribute for the currently selected preference." +
+                    details: "Indicates the current preference of the user for determining when the device should enter a low " +
+                        "power mode. The value of this attribute is the index, 0-based, into the LowPowerModeSensitivities " +
+                        "attribute for the currently selected preference." +
                         "\n" +
                         "If an attempt is made to set this attribute to an index outside the maximum index for " +
                         "LowPowerModeSensitivities, a response with the status code CONSTRAINT_ERROR shall be returned." +
@@ -22743,7 +22745,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "date", type: "struct", description: "Date", isSeed: true,
+            name: "date", type: "struct", description: "Date", isSeed: true, metatype: "date",
             details: "This data type shall be a struct as defined below." +
                 "\n" +
                 "Valid combinations using null fields are",
@@ -23397,7 +23399,7 @@ export const SpecMatter = Matter({
                 }),
 
                 Field({
-                    name: "Label", id: 0x3, type: "string", conformance: "MfgCode, null, O", constraint: "max 64",
+                    name: "Label", id: 0x3, type: "string", conformance: "MfgCode != null, O", constraint: "max 64",
                     default: null, quality: "X",
 
                     details: "The Label field, if present, shall contain human-readable text suitable for display on a client. " +
@@ -23916,6 +23918,17 @@ export const SpecMatter = Matter({
                             details: "The type of change as appropriate.",
                             xref: { document: "core", section: "9.10.7.1.3" }
                         }),
+
+                        Field({
+                            name: "LatestValue", id: 0x4, type: "AccessControlEntryStruct", access: "S", conformance: "M",
+                            quality: "X",
+                            details: "The latest value of the changed entry." +
+                                "\n" +
+                                "This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if " +
+                                "resources are scarce.",
+                            xref: { document: "core", section: "9.10.7.1.4" }
+                        }),
+
                         Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
@@ -23957,6 +23970,22 @@ export const SpecMatter = Matter({
                                 "occurred via a CASE or PASE session; the other shall be null.",
 
                             xref: { document: "core", section: "9.10.7.2.2" }
+                        }),
+
+                        Field({
+                            name: "ChangeType", id: 0x3, type: "ChangeTypeEnum", access: "S", conformance: "M",
+                            details: "The type of change as appropriate.",
+                            xref: { document: "core", section: "9.10.7.2.3" }
+                        }),
+
+                        Field({
+                            name: "LatestValue", id: 0x4, type: "AccessControlExtensionStruct", access: "S", conformance: "M",
+                            quality: "X",
+                            details: "The latest value of the changed extension." +
+                                "\n" +
+                                "This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if " +
+                                "resources are scarce.",
+                            xref: { document: "core", section: "9.10.7.2.4" }
                         }),
 
                         Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
@@ -24073,6 +24102,81 @@ export const SpecMatter = Matter({
                                 "use the Group auth mode.",
 
                             xref: { document: "core", section: "9.10.4.5.1" }
+                        }),
+
+                        Field({
+                            name: "AuthMode", id: 0x2, type: "AccessControlEntryAuthModeEnum", access: "S", conformance: "M",
+                            details: "The AuthMode field shall specify the authentication mode required by this Access Control Entry.",
+                            xref: { document: "core", section: "9.10.4.5.2" }
+                        }),
+
+                        Field({
+                            name: "Subjects", id: 0x3, type: "list", access: "S", conformance: "M",
+                            constraint: "max subjectsPerAccessControlEntry", quality: "X",
+
+                            details: "The subjects field shall specify a list of Subject IDs, to which this Access Control Entry grants " +
+                                "access." +
+                                "\n" +
+                                "Device types may impose additional constraints on the minimum number of subjects per Access Control " +
+                                "Entry." +
+                                "\n" +
+                                "An attempt to create an entry with more subjects than the node can support shall result in a " +
+                                "RESOURCE_EXHAUSTED error and the entry shall NOT be created." +
+                                "\n" +
+                                "### Subject ID shall be of type uint64 with semantics depending on the entry’s AuthMode as follows:" +
+                                "\n" +
+                                "Subject Semantics" +
+                                "\n" +
+                                "An empty subjects list indicates a wildcard; that is, this entry shall grant access to any Node " +
+                                "that successfully authenticates via AuthMode. The subjects list shall NOT be empty if the entry’s " +
+                                "AuthMode is PASE." +
+                                "\n" +
+                                "The PASE AuthMode is reserved for future use (see Section 6.6.2.8, “Bootstrapping of the Access " +
+                                "Control Cluster”). An attempt to write an entry with AuthMode set to PASE shall fail with a status " +
+                                "code of CONSTRAINT_ERROR." +
+                                "\n" +
+                                "For PASE authentication, the Passcode ID identifies the required passcode verifier, and shall be 0 " +
+                                "for the default commissioning passcode." +
+                                "\n" +
+                                "For CASE authentication, the Subject ID is a distinguished name within the Operational Certificate " +
+                                "shared during CASE session establishment, the type of which is determined by its range to be one of:" +
+                                "\n" +
+                                "  • a Node ID, which identifies the required source node directly (by ID)" +
+                                "\n" +
+                                "  • a CASE Authenticated Tag, which identifies the required source node indirectly (by tag)" +
+                                "\n" +
+                                "For Group authentication, the Group ID identifies the required group, as defined in the Group Key " +
+                                "Management Cluster.",
+
+                            xref: { document: "core", section: "9.10.4.5.3" },
+                            children: [Field({ name: "entry", type: "subject-id" })]
+                        }),
+
+                        Field({
+                            name: "Targets", id: 0x4, type: "list", access: "S", conformance: "M",
+                            constraint: "max targetsPerAccessControlEntry", quality: "X",
+
+                            details: "The targets field shall specify a list of AccessControlTargetStruct, which define the clusters on " +
+                                "this Node to which this Access Control Entry grants access." +
+                                "\n" +
+                                "Device types may impose additional constraints on the minimum number of targets per Access Control " +
+                                "Entry." +
+                                "\n" +
+                                "An attempt to create an entry with more targets than the node can support shall result in a " +
+                                "RESOURCE_EXHAUSTED error and the entry shall NOT be created." +
+                                "\n" +
+                                "A single target shall contain at least one field (Cluster, Endpoint, or DeviceType), and shall NOT " +
+                                "contain both an Endpoint field and a DeviceType field." +
+                                "\n" +
+                                "A target grants access based on the presence of fields as follows:" +
+                                "\n" +
+                                "Target Semantics" +
+                                "\n" +
+                                "An empty targets list indicates a wildcard: that is, this entry shall grant access to all cluster " +
+                                "instances on all endpoints on this Node.",
+
+                            xref: { document: "core", section: "9.10.4.5.4" },
+                            children: [Field({ name: "entry", type: "AccessControlTargetStruct" })]
                         }),
 
                         Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
@@ -25194,25 +25298,25 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "IdleModeDuration", id: 0x0, type: "uint32", access: "R V", conformance: "M",
                     constraint: "1 to 64800", default: 1, quality: "F",
-                    details: "This attribute shall indicate the maximum interval in seconds the server can stay in idle mode. The " +
-                        "IdleModeDuration shall NOT be smaller than the ActiveModeDuration.",
+                    details: "Indicates the maximum interval in seconds the server can stay in idle mode. The IdleModeDuration " +
+                        "shall NOT be smaller than the ActiveModeDuration.",
                     xref: { document: "core", section: "9.17.6.1" }
                 }),
 
                 Attribute({
                     name: "ActiveModeDuration", id: 0x1, type: "uint32", access: "R V", conformance: "M", default: 300,
                     quality: "F",
-                    details: "This attribute shall indicate the minimum interval in milliseconds the server typically will stay " +
-                        "in active mode after initial transition out of idle mode. The ActiveModeDuration does not include " +
-                        "the ActiveModeThreshold.",
+                    details: "Indicates the minimum interval in milliseconds the server typically will stay in active mode after " +
+                        "initial transition out of idle mode. The ActiveModeDuration does not include the " +
+                        "ActiveModeThreshold.",
                     xref: { document: "core", section: "9.17.6.2" }
                 }),
 
                 Attribute({
                     name: "ActiveModeThreshold", id: 0x2, type: "uint16", access: "R V", conformance: "M", default: 300,
                     quality: "F",
-                    details: "This attribute shall indicate the minimum amount of time in milliseconds the server typically will " +
-                        "stay active after network activity when in active mode.",
+                    details: "Indicates the minimum amount of time in milliseconds the server typically will stay active after " +
+                        "network activity when in active mode.",
                     xref: { document: "core", section: "9.17.6.3" }
                 }),
 
@@ -25237,8 +25341,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ClientsSupportedPerFabric", id: 0x5, type: "uint16", access: "R V", conformance: "CIP",
                     constraint: "min 1", default: 1, quality: "F",
-                    details: "This attribute shall indicate the maximum number of entries that the server is able to store for " +
-                        "each fabric in the RegisteredClients attribute.",
+                    details: "Indicates the maximum number of entries that the server is able to store for each fabric in the " +
+                        "RegisteredClients attribute.",
                     xref: { document: "core", section: "9.17.6.6" }
                 }),
 
@@ -25246,12 +25350,11 @@ export const SpecMatter = Matter({
                     name: "UserActiveModeTriggerHint", id: 0x6, type: "UserActiveModeTriggerBitmap", access: "R V",
                     conformance: "P, UAT", constraint: "desc", default: 0, quality: "F",
 
-                    details: "This attribute shall indicate which user action(s) will trigger the ICD to switch to Active mode. " +
-                        "If the attribute indicates support for a trigger that is dependent on the " +
-                        "UserActiveModeTriggerInstruction in the UserActiveModeTriggerHint table, the " +
-                        "UserActiveModeTriggerInstruction attribute shall be implemented and shall provide the required " +
-                        "information, unless specified otherwise in the requirement column of the UserActiveModeTriggerHint " +
-                        "table." +
+                    details: "Indicates which user action(s) will trigger the ICD to switch to Active mode. If the attribute " +
+                        "indicates support for a trigger that is dependent on the UserActiveModeTriggerInstruction in the " +
+                        "UserActiveModeTriggerHint table, the UserActiveModeTriggerInstruction attribute shall be " +
+                        "implemented and shall provide the required information, unless specified otherwise in the " +
+                        "requirement column of the UserActiveModeTriggerHint table." +
                         "\n" +
                         "ActuateSensorLightsBlink, ResetButtonLightsBlink and SetupButtonLightsBlink (i.e. bits 7, 9 and 14) " +
                         "have a dependency on the UserActiveModeTriggerInstruction attribute but do not require the " +
@@ -25300,7 +25403,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "OperatingMode", id: 0x8, type: "OperatingModeEnum", access: "R V", conformance: "P, LITS",
-                    details: "This attribute shall indicate the operating mode of the ICD as specified in the OperatingModeEnum." +
+                    details: "Indicates the operating mode of the ICD as specified in the OperatingModeEnum." +
                         "\n" +
                         "  • If the ICD is operating as a LIT ICD, OperatingMode shall be LIT." +
                         "\n" +
@@ -25615,8 +25718,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "NodeLabel", id: 0x5, type: "string", access: "RW VM", conformance: "M", constraint: "max 32",
                     default: "", quality: "N",
-                    details: "This attribute shall represent a user defined name for the Node. This attribute SHOULD be set " +
-                        "during initial commissioning and may be updated by further reconfigurations.",
+                    details: "Indicates a user defined name for the Node. This attribute SHOULD be set during initial " +
+                        "commissioning and may be updated by further reconfigurations.",
                     xref: { document: "core", section: "11.1.5.6" }
                 }),
 
@@ -25851,10 +25954,10 @@ export const SpecMatter = Matter({
                     name: "MaxPathsPerInvoke", id: 0x16, type: "uint16", access: "R V", conformance: "M",
                     constraint: "min 1", default: 1, quality: "F",
 
-                    details: "This attribute shall indicate the maximum number of elements in a single InvokeRequests list (see " +
-                        "Section 8.8.2, “Invoke Request Action”) that the Node is able to process. Note that since this " +
-                        "attribute may change over time, both increasing and decreasing, as software versions change for a " +
-                        "given Node, clients SHOULD take care not to assume forever unchanging values and SHOULD NOT" +
+                    details: "Indicates the maximum number of elements in a single InvokeRequests list (see Section 8.8.2, " +
+                        "“Invoke Request Action”) that the Node is able to process. Note that since this attribute may " +
+                        "change over time, both increasing and decreasing, as software versions change for a given Node, " +
+                        "clients SHOULD take care not to assume forever unchanging values and SHOULD NOT" +
                         "\n" +
                         "cache this value permanently at Commissioning time." +
                         "\n" +
@@ -26096,19 +26199,19 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "MaxGroupsPerFabric", id: 0x2, type: "uint16", access: "R V", conformance: "M", default: 0,
                     quality: "F",
-                    details: "This attribute shall indicate the maximum number of groups that this node supports per fabric. The " +
-                        "value of this attribute shall be set to be no less than the required minimum supported groups as " +
-                        "specified in Group Limits. The length of the GroupKeyMap and GroupTable list attributes shall NOT " +
-                        "exceed the value of the MaxGroupsPerFabric attribute multiplied by the number of supported fabrics.",
+                    details: "Indicates the maximum number of groups that this node supports per fabric. The value of this " +
+                        "attribute shall be set to be no less than the required minimum supported groups as specified in " +
+                        "Group Limits. The length of the GroupKeyMap and GroupTable list attributes shall NOT exceed the " +
+                        "value of the MaxGroupsPerFabric attribute multiplied by the number of supported fabrics.",
                     xref: { document: "core", section: "11.2.6.3" }
                 }),
 
                 Attribute({
                     name: "MaxGroupKeysPerFabric", id: 0x3, type: "uint16", access: "R V", conformance: "M",
                     constraint: "1 to 65535", default: 1, quality: "F",
-                    details: "This attribute shall indicate the maximum number of group key sets this node supports per fabric. " +
-                        "The value of this attribute shall be set according to the minimum number of group key sets to " +
-                        "support as specified in Group Limits.",
+                    details: "Indicates the maximum number of group key sets this node supports per fabric. The value of this " +
+                        "attribute shall be set according to the minimum number of group key sets to support as specified in " +
+                        "Group Limits.",
                     xref: { document: "core", section: "11.2.6.4" }
                 }),
 
@@ -26542,8 +26645,8 @@ export const SpecMatter = Matter({
                     name: "HourFormat", id: 0x0, type: "HourFormatEnum", access: "RW VM", conformance: "M",
                     quality: "N",
 
-                    details: "This attribute shall represent the format that the Node is currently configured to use when " +
-                        "conveying the hour unit of time." +
+                    details: "Indicates the format that the Node is currently configured to use when conveying the hour unit of " +
+                        "time." +
                         "\n" +
                         "If not UseActiveLocale, this value shall take priority over any unit implied through the " +
                         "ActiveLocale attribute." +
@@ -26558,8 +26661,7 @@ export const SpecMatter = Matter({
                     name: "ActiveCalendarType", id: 0x1, type: "CalendarTypeEnum", access: "RW VM",
                     conformance: "CALFMT", quality: "N",
 
-                    details: "This attribute shall represent the calendar format that the Node is currently configured to use " +
-                        "when conveying dates." +
+                    details: "Indicates the calendar format that the Node is currently configured to use when conveying dates." +
                         "\n" +
                         "If not UseActiveLocale, this value shall take priority over any unit implied through the " +
                         "ActiveLocale attribute." +
@@ -26573,10 +26675,10 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SupportedCalendarTypes", id: 0x2, type: "list", access: "R V", conformance: "CALFMT",
                     constraint: "desc", quality: "F",
-                    details: "This attribute shall represent a list of CalendarTypeEnum values that are supported by the Node. " +
-                        "The list shall NOT contain any duplicate entries. The ordering of items within the list SHOULD NOT " +
-                        "express any meaning. The maximum length of the SupportedCalendarTypes list shall be equivalent to " +
-                        "the number of enumerations within CalendarTypeEnum.",
+                    details: "Indicates a list of CalendarTypeEnum values that are supported by the Node. The list shall NOT " +
+                        "contain any duplicate entries. The ordering of items within the list SHOULD NOT express any " +
+                        "meaning. The maximum length of the SupportedCalendarTypes list shall be equivalent to the number of " +
+                        "enumerations within CalendarTypeEnum.",
                     xref: { document: "core", section: "11.4.6.3" },
                     children: [Field({ name: "entry", type: "CalendarTypeEnum" })]
                 }),
@@ -26780,17 +26882,17 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "Status", id: 0x0, type: "PowerSourceStatusEnum", access: "R V", conformance: "M",
                     constraint: "desc",
-                    details: "This attribute shall indicate the participation of this power source in providing power to the Node " +
-                        "as specified in PowerSourceStatusEnum.",
+                    details: "Indicates the participation of this power source in providing power to the Node as specified in " +
+                        "PowerSourceStatusEnum.",
                     xref: { document: "core", section: "11.7.7.1" }
                 }),
 
                 Attribute({
                     name: "Order", id: 0x1, type: "uint8", access: "R V", conformance: "M", quality: "N",
 
-                    details: "This attribute shall indicate the relative preference with which the Node will select this source " +
-                        "to provide power. A source with a lower order shall be selected by the Node to provide power before " +
-                        "any other source with a higher order, if the lower order source is available (see Status)." +
+                    details: "Indicates the relative preference with which the Node will select this source to provide power. A " +
+                        "source with a lower order shall be selected by the Node to provide power before any other source " +
+                        "with a higher order, if the lower order source is available (see Status)." +
                         "\n" +
                         "Note, Order is read-only and therefore NOT intended to allow clients control over power source " +
                         "selection.",
@@ -26810,61 +26912,60 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "WiredAssessedInputVoltage", id: 0x3, type: "uint32", access: "R V", conformance: "[WIRED]",
                     quality: "X C",
-                    details: "This attribute shall indicate the assessed RMS or DC voltage currently provided by the hard-wired " +
-                        "source, in mV (millivolts). A value of NULL shall indicate the Node is currently unable to assess " +
-                        "the value. If the wired source is not connected, but the Node is still able to assess a value, then " +
-                        "the assessed value may be reported.",
+                    details: "Indicates the assessed RMS or DC voltage currently provided by the hard-wired source, in mV " +
+                        "(millivolts). A value of NULL shall indicate the Node is currently unable to assess the value. If " +
+                        "the wired source is not connected, but the Node is still able to assess a value, then the assessed " +
+                        "value may be reported.",
                     xref: { document: "core", section: "11.7.7.4" }
                 }),
 
                 Attribute({
                     name: "WiredAssessedInputFrequency", id: 0x4, type: "uint16", access: "R V", conformance: "[WIRED]",
                     quality: "X C",
-                    details: "This attribute shall indicate the assessed frequency of the voltage, currently provided by the " +
-                        "hard-wired source, in Hz. A value of NULL shall indicate the Node is currently unable to assess the " +
-                        "value. If the wired source is not connected, but the Node is still able to assess a value, then the " +
-                        "assessed value may be reported.",
+                    details: "Indicates the assessed frequency of the voltage, currently provided by the hard-wired source, in " +
+                        "Hz. A value of NULL shall indicate the Node is currently unable to assess the value. If the wired " +
+                        "source is not connected, but the Node is still able to assess a value, then the assessed value may " +
+                        "be reported.",
                     xref: { document: "core", section: "11.7.7.5" }
                 }),
 
                 Attribute({
                     name: "WiredCurrentType", id: 0x5, type: "WiredCurrentTypeEnum", access: "R V",
                     conformance: "WIRED", constraint: "desc", quality: "F",
-                    details: "This attribute shall indicate the type of current the Node expects to be provided by the hard- " +
-                        "wired source as specified in WiredCurrentTypeEnum.",
+                    details: "Indicates the type of current the Node expects to be provided by the hard- wired source as " +
+                        "specified in WiredCurrentTypeEnum.",
                     xref: { document: "core", section: "11.7.7.6" }
                 }),
 
                 Attribute({
                     name: "WiredAssessedCurrent", id: 0x6, type: "uint32", access: "R V", conformance: "[WIRED]",
                     quality: "X C",
-                    details: "This attribute shall indicate the assessed instantaneous current draw of the Node on the hard- " +
-                        "wired source, in mA (milliamps). A value of NULL shall indicate the Node is currently unable to " +
-                        "assess the value. If the wired source is not connected, but the Node is still able to assess a " +
-                        "value, then the assessed value may be reported.",
+                    details: "Indicates the assessed instantaneous current draw of the Node on the hard- wired source, in mA " +
+                        "(milliamps). A value of NULL shall indicate the Node is currently unable to assess the value. If " +
+                        "the wired source is not connected, but the Node is still able to assess a value, then the assessed " +
+                        "value may be reported.",
                     xref: { document: "core", section: "11.7.7.7" }
                 }),
 
                 Attribute({
                     name: "WiredNominalVoltage", id: 0x7, type: "uint32", access: "R V", conformance: "[WIRED]",
                     quality: "F",
-                    details: "This attribute shall indicate the nominal voltage, printed as part of the Node’s regulatory " +
-                        "compliance label in mV (millivolts), expected to be provided by the hard-wired source.",
+                    details: "Indicates the nominal voltage, printed as part of the Node’s regulatory compliance label in mV " +
+                        "(millivolts), expected to be provided by the hard-wired source.",
                     xref: { document: "core", section: "11.7.7.8" }
                 }),
 
                 Attribute({
                     name: "WiredMaximumCurrent", id: 0x8, type: "uint32", access: "R V", conformance: "[WIRED]",
                     quality: "F",
-                    details: "This attribute shall indicate the maximum current, printed as part of the Node’s regulatory " +
-                        "compliance label in mA (milliamps), expected to be provided by the hard-wired source.",
+                    details: "Indicates the maximum current, printed as part of the Node’s regulatory compliance label in mA " +
+                        "(milliamps), expected to be provided by the hard-wired source.",
                     xref: { document: "core", section: "11.7.7.9" }
                 }),
 
                 Attribute({
                     name: "WiredPresent", id: 0x9, type: "bool", access: "R V", conformance: "[WIRED]",
-                    details: "This attribute shall indicate if the Node detects that the hard-wired power source is properly " +
-                        "connected.",
+                    details: "Indicates if the Node detects that the hard-wired power source is properly connected.",
                     xref: { document: "core", section: "11.7.7.10" }
                 }),
 
@@ -26872,15 +26973,15 @@ export const SpecMatter = Matter({
                     name: "ActiveWiredFaults", id: 0xa, type: "list", access: "R V", conformance: "[WIRED]",
                     constraint: "max 8",
 
-                    details: "This attribute shall indicate the set of wired faults currently detected by the Node on this power " +
-                        "source. This set is represented as a list of WiredFaultEnum. When the Node detects a fault has been " +
-                        "raised, the appropriate WiredFaultEnum value shall be added to this list, provided it is not " +
-                        "already present. This list shall NOT contain more than one instance of a specific WiredFaultEnum " +
-                        "value. When the Node detects all conditions contributing to a fault have been cleared, the " +
-                        "corresponding WiredFaultEnum value shall be removed from this list. An empty list shall indicate " +
-                        "there are currently no active faults. The order of this list SHOULD have no significance. Clients " +
-                        "interested in monitoring changes in active faults may subscribe to this attribute, or they may " +
-                        "subscribe to WiredFaultChange.",
+                    details: "Indicates the set of wired faults currently detected by the Node on this power source. This set is " +
+                        "represented as a list of WiredFaultEnum. When the Node detects a fault has been raised, the " +
+                        "appropriate WiredFaultEnum value shall be added to this list, provided it is not already present. " +
+                        "This list shall NOT contain more than one instance of a specific WiredFaultEnum value. When the " +
+                        "Node detects all conditions contributing to a fault have been cleared, the corresponding " +
+                        "WiredFaultEnum value shall be removed from this list. An empty list shall indicate there are " +
+                        "currently no active faults. The order of this list SHOULD have no significance. Clients interested " +
+                        "in monitoring changes in active faults may subscribe to this attribute, or they may subscribe to " +
+                        "WiredFaultChange.",
 
                     xref: { document: "core", section: "11.7.7.11" },
                     children: [Field({ name: "entry", type: "WiredFaultEnum" })]
@@ -26888,57 +26989,55 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "BatVoltage", id: 0xb, type: "uint32", access: "R V", conformance: "[BAT]", quality: "X C",
-                    details: "This attribute shall indicate the currently measured output voltage of the battery in mV " +
-                        "(millivolts). A value of NULL shall indicate the Node is currently unable to assess the value.",
+                    details: "Indicates the currently measured output voltage of the battery in mV (millivolts). A value of NULL " +
+                        "shall indicate the Node is currently unable to assess the value.",
                     xref: { document: "core", section: "11.7.7.12" }
                 }),
 
                 Attribute({
                     name: "BatPercentRemaining", id: 0xc, type: "uint8", access: "R V", conformance: "[BAT]",
                     constraint: "0 to 200", quality: "X C",
-                    details: "This attribute shall indicate the estimated percentage of battery charge remaining until the " +
-                        "battery will no longer be able to provide power to the Node. Values are expressed in half percent " +
-                        "units, ranging from 0 to 200. E.g. a value of 48 is equivalent to 24%. A value of NULL shall " +
-                        "indicate the Node is currently unable to assess the value.",
+                    details: "Indicates the estimated percentage of battery charge remaining until the battery will no longer be " +
+                        "able to provide power to the Node. Values are expressed in half percent units, ranging from 0 to " +
+                        "200. E.g. a value of 48 is equivalent to 24%. A value of NULL shall indicate the Node is currently " +
+                        "unable to assess the value.",
                     xref: { document: "core", section: "11.7.7.13" }
                 }),
 
                 Attribute({
                     name: "BatTimeRemaining", id: 0xd, type: "uint32", access: "R V", conformance: "[BAT]",
                     quality: "X C",
-                    details: "This attribute shall indicate the estimated time in seconds before the battery will no longer be " +
-                        "able to provide power to the Node. A value of NULL shall indicate the Node is currently unable to " +
-                        "assess the value.",
+                    details: "Indicates the estimated time in seconds before the battery will no longer be able to provide power " +
+                        "to the Node. A value of NULL shall indicate the Node is currently unable to assess the value.",
                     xref: { document: "core", section: "11.7.7.14" }
                 }),
 
                 Attribute({
                     name: "BatChargeLevel", id: 0xe, type: "BatChargeLevelEnum", access: "R V", conformance: "BAT",
                     constraint: "desc",
-                    details: "This attribute shall indicate a coarse ranking of the charge level of the battery, used to indicate " +
-                        "when intervention is required as specified in BatChargeLevelEnum.",
+                    details: "Indicates a coarse ranking of the charge level of the battery, used to indicate when intervention " +
+                        "is required as specified in BatChargeLevelEnum.",
                     xref: { document: "core", section: "11.7.7.15" }
                 }),
 
                 Attribute({
                     name: "BatReplacementNeeded", id: 0xf, type: "bool", access: "R V", conformance: "BAT",
-                    details: "This attribute shall indicate if the battery needs to be replaced. Replacement may be simple " +
-                        "routine maintenance, such as with a single use, non-rechargeable cell. Replacement, however, may " +
-                        "also indicate end of life, or serious fault with a rechargeable or even non-replaceable cell.",
+                    details: "Indicates if the battery needs to be replaced. Replacement may be simple routine maintenance, such " +
+                        "as with a single use, non-rechargeable cell. Replacement, however, may also indicate end of life, " +
+                        "or serious fault with a rechargeable or even non-replaceable cell.",
                     xref: { document: "core", section: "11.7.7.16" }
                 }),
 
                 Attribute({
                     name: "BatReplaceability", id: 0x10, type: "BatReplaceabilityEnum", access: "R V",
                     conformance: "BAT", quality: "F",
-                    details: "This attribute shall indicate the replaceability of the battery as specified in " +
-                        "BatReplaceabilityEnum.",
+                    details: "Indicates the replaceability of the battery as specified in BatReplaceabilityEnum.",
                     xref: { document: "core", section: "11.7.7.17" }
                 }),
 
                 Attribute({
                     name: "BatPresent", id: 0x11, type: "bool", access: "R V", conformance: "[BAT]",
-                    details: "This attribute shall indicate whether the Node detects that the batteries are properly installed.",
+                    details: "Indicates whether the Node detects that the batteries are properly installed.",
                     xref: { document: "core", section: "11.7.7.18" }
                 }),
 
@@ -26946,15 +27045,14 @@ export const SpecMatter = Matter({
                     name: "ActiveBatFaults", id: 0x12, type: "list", access: "R V", conformance: "[BAT]",
                     constraint: "max 8",
 
-                    details: "This attribute shall indicate the set of battery faults currently detected by the Node on this " +
-                        "power source. This set is represented as a list of BatFaultEnum. When the Node detects a fault has " +
-                        "been raised, the appropriate BatFaultEnum value shall be added to this list, provided it is not " +
-                        "already present. This list shall NOT contain more than one instance of a specific BatFaultEnum " +
-                        "value. When the Node detects all conditions contributing to a fault have been cleared, the " +
-                        "corresponding BatFaultEnum value shall be removed from this list. An empty list shall indicate " +
-                        "there are currently no active faults. The order of this list SHOULD have no significance. Clients " +
-                        "interested in monitoring changes in active faults may subscribe to this attribute, or they may " +
-                        "subscribe to BatFaultChange.",
+                    details: "Indicates the set of battery faults currently detected by the Node on this power source. This set " +
+                        "is represented as a list of BatFaultEnum. When the Node detects a fault has been raised, the " +
+                        "appropriate BatFaultEnum value shall be added to this list, provided it is not already present. " +
+                        "This list shall NOT contain more than one instance of a specific BatFaultEnum value. When the Node " +
+                        "detects all conditions contributing to a fault have been cleared, the corresponding BatFaultEnum " +
+                        "value shall be removed from this list. An empty list shall indicate there are currently no active " +
+                        "faults. The order of this list SHOULD have no significance. Clients interested in monitoring " +
+                        "changes in active faults may subscribe to this attribute, or they may subscribe to BatFaultChange.",
 
                     xref: { document: "core", section: "11.7.7.19" },
                     children: [Field({ name: "entry", type: "BatFaultEnum" })]
@@ -26972,78 +27070,75 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "BatCommonDesignation", id: 0x14, type: "BatCommonDesignationEnum", access: "R V",
                     conformance: "[REPLC]", constraint: "desc", quality: "F",
-                    details: "This attribute shall indicate the ID of the common or colloquial designation of the battery, as " +
-                        "specified in BatCommonDesignationEnum.",
+                    details: "Indicates the ID of the common or colloquial designation of the battery, as specified in " +
+                        "BatCommonDesignationEnum.",
                     xref: { document: "core", section: "11.7.7.21" }
                 }),
 
                 Attribute({
                     name: "BatAnsiDesignation", id: 0x15, type: "string", access: "R V", conformance: "[REPLC]",
                     constraint: "max 20", quality: "F",
-                    details: "This attribute shall indicate the string representing the ANSI designation for the battery as " +
-                        "specified in ANSI C18.",
+                    details: "Indicates the string representing the ANSI designation for the battery as specified in ANSI C18.",
                     xref: { document: "core", section: "11.7.7.22" }
                 }),
 
                 Attribute({
                     name: "BatIecDesignation", id: 0x16, type: "string", access: "R V", conformance: "[REPLC]",
                     constraint: "max 20", quality: "F",
-                    details: "This attribute shall indicate the string representing the IEC designation for the battery as " +
-                        "specified in IEC 60086.",
+                    details: "Indicates the string representing the IEC designation for the battery as specified in IEC 60086.",
                     xref: { document: "core", section: "11.7.7.23" }
                 }),
 
                 Attribute({
                     name: "BatApprovedChemistry", id: 0x17, type: "BatApprovedChemistryEnum", access: "R V",
                     conformance: "[REPLC]", constraint: "desc", quality: "F",
-                    details: "This attribute shall indicate the ID of the preferred chemistry of the battery source as specified " +
-                        "in BatApprovedChemistryEnum.",
+                    details: "Indicates the ID of the preferred chemistry of the battery source as specified in " +
+                        "BatApprovedChemistryEnum.",
                     xref: { document: "core", section: "11.7.7.24" }
                 }),
 
                 Attribute({
                     name: "BatCapacity", id: 0x18, type: "uint32", access: "R V", conformance: "[REPLC | RECHG]",
                     quality: "F",
-                    details: "This attribute shall indicate the preferred minimum charge capacity rating in mAh of individual, " +
-                        "user- or factory-serviceable battery cells or packs in the battery source.",
+                    details: "Indicates the preferred minimum charge capacity rating in mAh of individual, user- or " +
+                        "factory-serviceable battery cells or packs in the battery source.",
                     xref: { document: "core", section: "11.7.7.25" }
                 }),
 
                 Attribute({
                     name: "BatQuantity", id: 0x19, type: "uint8", access: "R V", conformance: "REPLC", quality: "F",
-                    details: "This attribute shall indicate the quantity of individual, user- or factory-serviceable battery " +
-                        "cells or packs in the battery source.",
+                    details: "Indicates the quantity of individual, user- or factory-serviceable battery cells or packs in the " +
+                        "battery source.",
                     xref: { document: "core", section: "11.7.7.26" }
                 }),
 
                 Attribute({
                     name: "BatChargeState", id: 0x1a, type: "BatChargeStateEnum", access: "R V", conformance: "RECHG",
                     constraint: "desc",
-                    details: "This attribute shall indicate the current state of the battery source with respect to charging as " +
-                        "specified in BatChargeStateEnum.",
+                    details: "Indicates the current state of the battery source with respect to charging as specified in " +
+                        "BatChargeStateEnum.",
                     xref: { document: "core", section: "11.7.7.27" }
                 }),
 
                 Attribute({
                     name: "BatTimeToFullCharge", id: 0x1b, type: "uint32", access: "R V", conformance: "[RECHG]",
                     quality: "X C",
-                    details: "This attribute shall indicate the estimated time in seconds before the battery source will be at " +
-                        "full charge. A value of NULL shall indicate the Node is currently unable to assess the value.",
+                    details: "Indicates the estimated time in seconds before the battery source will be at full charge. A value " +
+                        "of NULL shall indicate the Node is currently unable to assess the value.",
                     xref: { document: "core", section: "11.7.7.28" }
                 }),
 
                 Attribute({
                     name: "BatFunctionalWhileCharging", id: 0x1c, type: "bool", access: "R V", conformance: "RECHG",
-                    details: "This attribute shall indicate whether the Node can remain operational while the battery source is " +
-                        "charging.",
+                    details: "Indicates whether the Node can remain operational while the battery source is charging.",
                     xref: { document: "core", section: "11.7.7.29" }
                 }),
 
                 Attribute({
                     name: "BatChargingCurrent", id: 0x1d, type: "uint32", access: "R V", conformance: "[RECHG]",
                     quality: "X C",
-                    details: "This attribute shall indicate assessed current in mA (milliamps) presently supplied to charge the " +
-                        "battery source. A value of NULL shall indicate the Node is currently unable to assess the value.",
+                    details: "Indicates assessed current in mA (milliamps) presently supplied to charge the battery source. A " +
+                        "value of NULL shall indicate the Node is currently unable to assess the value.",
                     xref: { document: "core", section: "11.7.7.30" }
                 }),
 
@@ -27051,15 +27146,15 @@ export const SpecMatter = Matter({
                     name: "ActiveBatChargeFaults", id: 0x1e, type: "list", access: "R V", conformance: "[RECHG]",
                     constraint: "max 16",
 
-                    details: "This attribute shall indicate the set of charge faults currently detected by the Node on this power " +
-                        "source. This set is represented as a list of BatChargeFaultEnum. When the Node detects a fault has " +
-                        "been raised, the appropriate BatChargeFaultEnum value shall be added to this list, provided it is " +
-                        "not already present. This list shall NOT contain more than one instance of a specific " +
-                        "BatChargeFaultEnum value. When the Node detects all conditions contributing to a fault have been " +
-                        "cleared, the corresponding BatChargeFaultEnum value shall be removed from this list. An empty list " +
-                        "shall indicate there are currently no active faults. The order of this list SHOULD have no " +
-                        "significance. Clients interested in monitoring changes in active faults may subscribe to this " +
-                        "attribute, or they may subscribe to the BatFaultChange event.",
+                    details: "Indicates the set of charge faults currently detected by the Node on this power source. This set is " +
+                        "represented as a list of BatChargeFaultEnum. When the Node detects a fault has been raised, the " +
+                        "appropriate BatChargeFaultEnum value shall be added to this list, provided it is not already " +
+                        "present. This list shall NOT contain more than one instance of a specific BatChargeFaultEnum value. " +
+                        "When the Node detects all conditions contributing to a fault have been cleared, the corresponding " +
+                        "BatChargeFaultEnum value shall be removed from this list. An empty list shall indicate there are " +
+                        "currently no active faults. The order of this list SHOULD have no significance. Clients interested " +
+                        "in monitoring changes in active faults may subscribe to this attribute, or they may subscribe to " +
+                        "the BatFaultChange event.",
 
                     xref: { document: "core", section: "11.7.7.31" },
                     children: [Field({ name: "entry", type: "BatChargeFaultEnum" })]
@@ -27068,10 +27163,9 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "EndpointList", id: 0x1f, type: "list", access: "R V", conformance: "M",
 
-                    details: "This attribute shall indicate a list of endpoints that are powered by the source defined by this " +
-                        "cluster. Multiple instances of this cluster may list the same endpoint, because it is possible for " +
-                        "power for an endpoint to come from multiple sources. In that case the Order attribute indicates " +
-                        "their priority." +
+                    details: "Indicates a list of endpoints that are powered by the source defined by this cluster. Multiple " +
+                        "instances of this cluster may list the same endpoint, because it is possible for power for an " +
+                        "endpoint to come from multiple sources. In that case the Order attribute indicates their priority." +
                         "\n" +
                         "For each power source on a node, there shall only be one instance of this cluster." +
                         "\n" +
@@ -27604,8 +27698,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "AvailableEndpoints", id: 0x0, type: "list", access: "R V", conformance: "SET",
                     constraint: "max 20", quality: "F",
-                    details: "This attribute shall indicate the list of endpoints capable of providing power to and/or consuming " +
-                        "power from the endpoint hosting this server.",
+                    details: "Indicates the list of endpoints capable of providing power to and/or consuming power from the " +
+                        "endpoint hosting this server.",
                     xref: { document: "core", section: "11.8.5.1" },
                     children: [Field({ name: "entry", type: "endpoint-no" })]
                 }),
@@ -27613,9 +27707,9 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ActiveEndpoints", id: 0x1, type: "list", access: "R V", conformance: "DYPF",
                     constraint: "max 20", quality: "N",
-                    details: "This attribute shall indicate the current list of endpoints currently providing or consuming power " +
-                        "to or from the endpoint hosting this server. This list shall be a subset of the value of the " +
-                        "AvailableEndpoints attribute.",
+                    details: "Indicates the current list of endpoints currently providing or consuming power to or from the " +
+                        "endpoint hosting this server. This list shall be a subset of the value of the AvailableEndpoints " +
+                        "attribute.",
                     xref: { document: "core", section: "11.8.5.2" },
                     children: [Field({ name: "entry", type: "endpoint-no" })]
                 })
@@ -27677,8 +27771,8 @@ export const SpecMatter = Matter({
                     name: "Networks", id: 0x1, type: "list", access: "R A", conformance: "M",
                     constraint: "max maxNetworks", default: [],
 
-                    details: "This attribute shall indicate the network configurations that are usable on the network interface " +
-                        "represented by this cluster server instance." +
+                    details: "Indicates the network configurations that are usable on the network interface represented by this " +
+                        "cluster server instance." +
                         "\n" +
                         "The order of configurations in the list reflects precedence. That is, any time the Node attempts to " +
                         "connect to the network it shall attempt to do so using the configurations in Networks Attribute in " +
@@ -27700,8 +27794,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ScanMaxTimeSeconds", id: 0x2, type: "uint8", access: "R V", conformance: "WI | TH",
                     constraint: "desc", quality: "F",
-                    details: "This attribute shall indicate the maximum duration taken, in seconds, by the network interface on " +
-                        "this cluster server instance to provide scan results." +
+                    details: "Indicates the maximum duration taken, in seconds, by the network interface on this cluster server " +
+                        "instance to provide scan results." +
                         "\n" +
                         "See Section 11.9.7.1, “ScanNetworks Command” for usage.",
                     xref: { document: "core", section: "11.9.6.3" }
@@ -27710,11 +27804,10 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ConnectMaxTimeSeconds", id: 0x3, type: "uint8", access: "R V", conformance: "WI | TH",
                     constraint: "desc", quality: "F",
-                    details: "This attribute shall indicate the maximum duration taken, in seconds, by the network interface on " +
-                        "this cluster server instance to report a successful or failed network connection indication. This " +
-                        "maximum time shall account for all operations needed until a successful network connection is " +
-                        "deemed to have occurred, including, for example, obtaining IP addresses, or the execution of " +
-                        "necessary internal retries.",
+                    details: "Indicates the maximum duration taken, in seconds, by the network interface on this cluster server " +
+                        "instance to report a successful or failed network connection indication. This maximum time shall " +
+                        "account for all operations needed until a successful network connection is deemed to have occurred, " +
+                        "including, for example, obtaining IP addresses, or the execution of necessary internal retries.",
                     xref: { document: "core", section: "11.9.6.4" }
                 }),
 
@@ -27722,9 +27815,8 @@ export const SpecMatter = Matter({
                     name: "InterfaceEnabled", id: 0x4, type: "bool", access: "RW VA", conformance: "M", default: true,
                     quality: "N",
 
-                    details: "This attribute shall indicate whether the associated network interface is enabled or not. By " +
-                        "default all network interfaces SHOULD be enabled during initial commissioning (InterfaceEnabled set " +
-                        "to true)." +
+                    details: "Indicates whether the associated network interface is enabled or not. By default all network " +
+                        "interfaces SHOULD be enabled during initial commissioning (InterfaceEnabled set to true)." +
                         "\n" +
                         "It is undefined what happens if InterfaceEnabled is written to false on the same interface as that " +
                         "which is used to write the value. In that case, it is possible that the Administrator would have to " +
@@ -27747,11 +27839,10 @@ export const SpecMatter = Matter({
                     name: "LastNetworkingStatus", id: 0x5, type: "NetworkCommissioningStatusEnum", access: "R A",
                     conformance: "M", default: null, quality: "X",
 
-                    details: "This attribute shall indicate the status of the last attempt either scan or connect to an " +
-                        "operational network, using this interface, whether by invocation of the ConnectNetwork command or " +
-                        "by autonomous connection after loss of connectivity or during initial establishment. If no such " +
-                        "attempt was made, or no network configurations exist in the Networks attribute, then this attribute " +
-                        "shall be set to null." +
+                    details: "Indicates the status of the last attempt either scan or connect to an operational network, using " +
+                        "this interface, whether by invocation of the ConnectNetwork command or by autonomous connection " +
+                        "after loss of connectivity or during initial establishment. If no such attempt was made, or no " +
+                        "network configurations exist in the Networks attribute, then this attribute shall be set to null." +
                         "\n" +
                         "This attribute is present to assist with error recovery during Network commissioning and to assist " +
                         "in non-concurrent networking commissioning flows.",
@@ -27763,11 +27854,10 @@ export const SpecMatter = Matter({
                     name: "LastNetworkId", id: 0x6, type: "octstr", access: "R A", conformance: "M",
                     constraint: "1 to 32", default: null, quality: "X",
 
-                    details: "This attribute shall indicate the NetworkID used in the last attempt to connect to an operational " +
-                        "network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous " +
-                        "connection after loss of connectivity or during initial establishment. If no such attempt was made, " +
-                        "or no network configurations exist in the Networks attribute, then this attribute shall be set to " +
-                        "null." +
+                    details: "Indicates the NetworkID used in the last attempt to connect to an operational network, using this " +
+                        "interface, whether by invocation of the ConnectNetwork command or by autonomous connection after " +
+                        "loss of connectivity or during initial establishment. If no such attempt was made, or no network " +
+                        "configurations exist in the Networks attribute, then this attribute shall be set to null." +
                         "\n" +
                         "If a network configuration is removed from the Networks attribute using the RemoveNetwork command " +
                         "after a connection attempt, this field may indicate a NetworkID that is no longer configured on the " +
@@ -27783,8 +27873,8 @@ export const SpecMatter = Matter({
                     name: "LastConnectErrorValue", id: 0x7, type: "int32", access: "R A", conformance: "M",
                     default: null, quality: "X",
 
-                    details: "This attribute shall indicate the ErrorValue used in the last failed attempt to connect to an " +
-                        "operational network, using this interface, whether by invocation of the ConnectNetwork command or by" +
+                    details: "Indicates the ErrorValue used in the last failed attempt to connect to an operational network, " +
+                        "using this interface, whether by invocation of the ConnectNetwork command or by" +
                         "\n" +
                         "autonomous connection after loss of connectivity or during initial establishment. If no such " +
                         "attempt was made, or no network configurations exist in the Networks attribute, then this attribute " +
@@ -27802,8 +27892,8 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SupportedWiFiBands", id: 0x8, type: "list", access: "R V", conformance: "WI",
                     constraint: "min 1", quality: "F",
-                    details: "This attribute shall indicate all the frequency bands supported by the Wi-Fi interface configured " +
-                        "by the cluster instance.",
+                    details: "Indicates all the frequency bands supported by the Wi-Fi interface configured by the cluster " +
+                        "instance.",
                     xref: { document: "core", section: "11.9.6.9" },
                     children: [Field({ name: "entry", type: "WiFiBandEnum" })]
                 }),
@@ -27812,8 +27902,8 @@ export const SpecMatter = Matter({
                     name: "SupportedThreadFeatures", id: 0x9, type: "ThreadCapabilitiesBitmap", access: "R V",
                     conformance: "TH", quality: "F",
 
-                    details: "This attribute shall indicate all of the Thread features supported by the Thread interface " +
-                        "configured by the cluster instance." +
+                    details: "Indicates all of the Thread features supported by the Thread interface configured by the cluster " +
+                        "instance." +
                         "\n" +
                         "This attribute is primarily used to determine the most important general capabilities of the Thread " +
                         "interface associated with the cluster instance, as opposed to the current runtime dynamic " +
@@ -27825,8 +27915,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "ThreadVersion", id: 0xa, type: "uint16", access: "R V", conformance: "TH", quality: "F",
-                    details: "This attribute shall indicate the Thread version supported by the Thread interface configured by " +
-                        "the cluster instance." +
+                    details: "Indicates the Thread version supported by the Thread interface configured by the cluster instance." +
                         "\n" +
                         "The format shall match the value mapping found in the \"Version TLV\" section of Thread " +
                         "specification. For example, Thread 1.3.0 would have ThreadVersion set to 4.",
@@ -28713,7 +28802,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "RegulatoryConfig", id: 0x2, type: "RegulatoryLocationTypeEnum", access: "R V",
                     conformance: "M", default: { type: "reference", name: "LocationCapability" },
-                    details: "This attribute shall indicate the regulatory configuration for the product." +
+                    details: "Indicates the regulatory configuration for the product." +
                         "\n" +
                         "Note that the country code is part of Basic Information Cluster and therefore NOT listed on the " +
                         "RegulatoryConfig attribute.",
@@ -28743,9 +28832,9 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "SupportsConcurrentConnection", id: 0x4, type: "bool", access: "R V", conformance: "M",
                     default: true, quality: "F",
-                    details: "This attribute shall indicate whether this device supports \"concurrent connection flow\" " +
-                        "commissioning mode (see Section 5.5, “Commissioning Flows”). If false, the device only supports " +
-                        "\"non-concurrent connection flow\" mode.",
+                    details: "Indicates whether this device supports \"concurrent connection flow\" commissioning mode (see Section " +
+                        "5.5, “Commissioning Flows”). If false, the device only supports \"non-concurrent connection flow\" " +
+                        "mode.",
                     xref: { document: "core", section: "11.10.5.5" }
                 }),
 
@@ -30275,7 +30364,7 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "PartitionId", id: 0x9, type: "uint32", access: "R V", conformance: "M", quality: "X",
                     details: "The PartitionId attribute shall indicate the Thread Leader Partition Id for the Thread network to " +
-                        "which the Node is joined. This attribute shall be null if not attached to a Thread network.",
+                        "which the Node is joined. Null if not attached to a Thread network.",
                     xref: { document: "core", section: "11.14.6.10" }
                 }),
 
@@ -30283,7 +30372,7 @@ export const SpecMatter = Matter({
                     name: "Weighting", id: 0xa, type: "uint16", access: "R V", conformance: "M", constraint: "max 255",
                     quality: "X",
                     details: "The Weighting attribute shall indicate the Thread Leader Weight used when operating in the Leader " +
-                        "role. This attribute shall be null if not attached to a Thread network.",
+                        "role. Null if not attached to a Thread network.",
                     xref: { document: "core", section: "11.14.6.11" }
                 }),
 
@@ -30291,7 +30380,7 @@ export const SpecMatter = Matter({
                     name: "DataVersion", id: 0xb, type: "uint16", access: "R V", conformance: "M",
                     constraint: "max 255", quality: "X",
                     details: "The DataVersion attribute shall indicate the full Network Data Version the Node currently uses. " +
-                        "This attribute shall be null if not attached to a Thread network.",
+                        "Null if not attached to a Thread network.",
                     xref: { document: "core", section: "11.14.6.12" }
                 }),
 
@@ -30300,7 +30389,7 @@ export const SpecMatter = Matter({
                     constraint: "max 255", quality: "X",
                     details: "The StableDataVersion attribute shall indicate the Network Data Version for the stable subset of" +
                         "\n" +
-                        "data the Node currently uses. This attribute shall be null if not attached to a Thread network.",
+                        "data the Node currently uses. Null if not attached to a Thread network.",
                     xref: { document: "core", section: "11.14.6.13" }
                 }),
 
@@ -30308,8 +30397,8 @@ export const SpecMatter = Matter({
                     name: "LeaderRouterId", id: 0xd, type: "uint8", access: "R V", conformance: "M",
                     constraint: "max 62", quality: "X",
                     details: "The LeaderRouterId attribute shall indicate the 8-bit LeaderRouterId the Node shall attempt to " +
-                        "utilize upon becoming a router or leader on the Thread network. This attribute shall be null if not " +
-                        "attached to a Thread network.",
+                        "utilize upon becoming a router or leader on the Thread network. Null if not attached to a Thread " +
+                        "network.",
                     xref: { document: "core", section: "11.14.6.14" }
                 }),
 
@@ -30702,20 +30791,20 @@ export const SpecMatter = Matter({
                 Attribute({
                     name: "ActiveTimestamp", id: 0x38, type: "uint64", access: "R V", conformance: "O", default: 0,
                     quality: "X",
-                    details: "This attribute shall be null when there is no dataset configured.",
+                    details: "Null when there is no dataset configured.",
                     xref: { document: "core", section: "11.14.6.57" }
                 }),
 
                 Attribute({
                     name: "PendingTimestamp", id: 0x39, type: "uint64", access: "R V", conformance: "O", default: 0,
                     quality: "X",
-                    details: "This attribute shall be null when there is no dataset configured.",
+                    details: "Null when there is no dataset configured.",
                     xref: { document: "core", section: "11.14.6.58" }
                 }),
 
                 Attribute({
                     name: "Delay", id: 0x3a, type: "uint32", access: "R V", conformance: "O", default: 0, quality: "X",
-                    details: "This attribute shall be null when there is no dataset configured.",
+                    details: "Null when there is no dataset configured.",
                     xref: { document: "core", section: "11.14.6.59" }
                 }),
 
@@ -30723,7 +30812,7 @@ export const SpecMatter = Matter({
                     name: "SecurityPolicy", id: 0x3b, type: "SecurityPolicy", access: "R V", conformance: "M",
                     quality: "X",
                     details: "The SecurityPolicy attribute indicates the current security policies for the Thread partition to " +
-                        "which a Node is connected. This attribute shall be null when there is no dataset configured.",
+                        "which a Node is connected. Null when there is no dataset configured.",
                     xref: { document: "core", section: "11.14.6.60" }
                 }),
 
@@ -30734,7 +30823,7 @@ export const SpecMatter = Matter({
                         "band. The channels are represented in most significant bit order, with bit value 1 meaning " +
                         "selected, bit value 0 meaning unselected. For example, the most significant bit of the left-most " +
                         "byte indicates channel 0. If channel 0 and channel 10 are selected, the mask would be: 80 20 00 00. " +
-                        "This attribute shall be null when there is no dataset configured.",
+                        "Null when there is no dataset configured.",
                     xref: { document: "core", section: "11.14.6.61" }
                 }),
 
@@ -31055,14 +31144,14 @@ export const SpecMatter = Matter({
                         Field({
                             name: "RotationTime", id: 0x0, type: "uint16", conformance: "M",
                             details: "This field shall specify the interval of time, in hours, that Thread security keys are rotated. " +
-                                "This attribute shall be null when there is no dataset configured.",
+                                "Null when there is no dataset configured.",
                             xref: { document: "core", section: "11.14.5.6.1" }
                         }),
 
                         Field({
                             name: "Flags", id: 0x1, type: "uint16", conformance: "M",
-                            details: "This field shall specify the flags as specified in Thread 1.3.0 section 8.10.1.15. This attribute " +
-                                "shall be null when there is no dataset configured.",
+                            details: "This field shall specify the flags as specified in Thread 1.3.0 section 8.10.1.15. Null when there " +
+                                "is no dataset configured.",
                             xref: { document: "core", section: "11.14.5.6.2" }
                         })
                     ]
@@ -33167,8 +33256,8 @@ export const SpecMatter = Matter({
                     name: "WindowStatus", id: 0x0, type: "CommissioningWindowStatusEnum", access: "R V",
                     conformance: "M",
 
-                    details: "This attribute shall indicate whether a new Commissioning window has been opened by an " +
-                        "Administrator, using either the OCW command or the OBCW command." +
+                    details: "Indicates whether a new Commissioning window has been opened by an Administrator, using either the " +
+                        "OCW command or the OBCW command." +
                         "\n" +
                         "This attribute shall revert to WindowNotOpen upon expiry of a commissioning window." +
                         "\n" +
@@ -33421,38 +33510,314 @@ export const SpecMatter = Matter({
                     xref: { document: "core", section: "11.20.6.5.1" },
 
                     children: [
-                        Field({ name: "VendorId", id: 0x0, type: "vendor-id", conformance: "M" }),
-                        Field({ name: "ProductId", id: 0x1, type: "uint16", conformance: "M" }),
-                        Field({ name: "SoftwareVersion", id: 0x2, type: "uint32", conformance: "M" }),
+                        Field({
+                            name: "VendorId", id: 0x0, type: "vendor-id", conformance: "M",
+                            details: "The value shall be the Vendor ID applying to the OTA Requestor’s Node and shall match the value " +
+                                "reported by the Basic Information Cluster VendorID attribute.",
+                            xref: { document: "core", section: "11.20.6.5.1.1" }
+                        }),
+
+                        Field({
+                            name: "ProductId", id: 0x1, type: "uint16", conformance: "M",
+                            details: "The value shall be the Product ID applying to the OTA Requestor’s Node and shall match the value " +
+                                "reported by the Basic Information Cluster ProductID attribute.",
+                            xref: { document: "core", section: "11.20.6.5.1.2" }
+                        }),
+
+                        Field({
+                            name: "SoftwareVersion", id: 0x2, type: "uint32", conformance: "M",
+                            details: "The SoftwareVersion included in the request payload shall provide the value representing the " +
+                                "current version running on the OTA Requestor invoking the command. This version shall be equal to " +
+                                "the Software Version attribute of the Basic Information Cluster.",
+                            xref: { document: "core", section: "11.20.6.5.1.3" }
+                        }),
+
                         Field({
                             name: "ProtocolsSupported", id: 0x3, type: "list", conformance: "M", constraint: "max 8",
+
+                            details: "This field shall contain a list of all download protocols supported by the OTA Requestor." +
+                                "\n" +
+                                "This field shall be used by the OTA Provider to generate the correct URI for the location of the " +
+                                "Software Image when one is found to be available. The values of BDX Synchronous and BDX " +
+                                "Asynchronous shall always be supported by an OTA Provider. Furthermore, OTA Providers with access " +
+                                "to external networking SHOULD support the HTTPS protocol. OTA Providers may support other protocols." +
+                                "\n" +
+                                "The algorithm to select the specific protocol to use in a given Software Image URI is " +
+                                "implementation-dependent, provided that the rules in Section 11.20.3.3.1, “Download Protocol " +
+                                "selection” are followed." +
+                                "\n" +
+                                "See Section 11.20.3.2, “Querying the OTA Provider” and Section 11.20.3.5, “Transfer of OTA Software " +
+                                "Update images” for more details about usage of this field.",
+
+                            xref: { document: "core", section: "11.20.6.5.1.4" },
                             children: [Field({ name: "entry", type: "DownloadProtocolEnum" })]
                         }),
-                        Field({ name: "HardwareVersion", id: 0x4, type: "uint16", conformance: "O" }),
-                        Field({ name: "Location", id: 0x5, type: "string", conformance: "O", constraint: "2" }),
-                        Field({ name: "RequestorCanConsent", id: 0x6, type: "bool", conformance: "O", default: true }),
+
                         Field({
-                            name: "MetadataForProvider", id: 0x7, type: "octstr", conformance: "O", constraint: "max 512"
+                            name: "HardwareVersion", id: 0x4, type: "uint16", conformance: "O",
+                            details: "The value of this field, if present, shall contain the OTA Requestor’s hardware version, and shall " +
+                                "be equal to the HardwareVersion attribute of the Basic Information Cluster.",
+                            xref: { document: "core", section: "11.20.6.5.1.5" }
+                        }),
+
+                        Field({
+                            name: "Location", id: 0x5, type: "string", conformance: "O", constraint: "2",
+                            details: "The location, if present, shall provide the same value as the Basic Information Cluster Location " +
+                                "attribute for the OTA Requestor as configured. This may be used by the OTA Provider logic to allow " +
+                                "per-region selection of the Software Image.",
+                            xref: { document: "core", section: "11.20.6.5.1.6" }
+                        }),
+
+                        Field({
+                            name: "RequestorCanConsent", id: 0x6, type: "bool", conformance: "O", default: true,
+                            details: "This field shall be set to true by an OTA Requestor that is capable of obtaining user consent for " +
+                                "OTA application by virtue of built-in user interface capabilities. Otherwise, it shall be false." +
+                                "\n" +
+                                "See Section 11.20.3.4, “Obtaining user consent for updating software” for application details about " +
+                                "usage.",
+                            xref: { document: "core", section: "11.20.6.5.1.7" }
+                        }),
+
+                        Field({
+                            name: "MetadataForProvider", id: 0x7, type: "octstr", conformance: "O", constraint: "max 512",
+
+                            details: "This optional field, if present, shall consist of a top-level anonymous list; each list element " +
+                                "shall have a profile-specific tag encoded in fully-qualified form. Each list element shall contain " +
+                                "a manufacturer-specific payload, which the OTA Requestor invoking this command wants to expose to " +
+                                "the receiving OTA Provider. This payload may be used for any purpose and SHOULD be as small as " +
+                                "practical." +
+                                "\n" +
+                                "The use of this field SHOULD be restricted to Vendor-specific usage and shall NOT be used as a " +
+                                "selector required to match for the selection of a Software Image in production environments, unless " +
+                                "absolutely necessary, as the interpretation of this field may be ambiguous to OTA Providers " +
+                                "implementing the Cluster in a compliant but divergent way from the sender." +
+                                "\n" +
+                                "An example of usage for this field is for an OTA Requestor to provide specific data about grouping " +
+                                "or authentication in field trial environments, where the OTA Provider is likely to understand it " +
+                                "and be able to act upon it, either for special selection of image, or recording of activity." +
+                                "\n" +
+                                "An OTA Provider shall report the availability of Software Images, if one is found to be applicable " +
+                                "using the other provided fields, even if the MetadataForProvider field is deemed to contain invalid " +
+                                "or unknown information. That is, the contents of the MetadataForProvider field shall NOT be used to " +
+                                "deny a software update to an OTA Requestor, unless both OTA Requestor and OTA Provider have an " +
+                                "externally agreed-upon policy whereby strictly correct additional MetadataForProvider is expected " +
+                                "to fulfill the OTA Software Update process." +
+                                "\n" +
+                                "Usage of the QueryImage Command" +
+                                "\n" +
+                                "OTA Requestors shall send a QueryImage command to the OTA Provider to determine the availability of " +
+                                "a new Software Image." +
+                                "\n" +
+                                "See Section 11.20.3.2, “Querying the OTA Provider” for full details about the OTA Software Update " +
+                                "Query flow which makes use of this command.",
+
+                            xref: { document: "core", section: "11.20.6.5.1.8" }
                         })
                     ]
                 }),
 
                 Command({
                     name: "QueryImageResponse", id: 0x1, conformance: "M", direction: "response",
-                    xref: { document: "core", section: "11.20.6.5.10" },
+                    xref: { document: "core", section: "11.20.6.5.2" },
 
                     children: [
-                        Field({ name: "Status", id: 0x0, type: "StatusEnum", conformance: "M" }),
-                        Field({ name: "DelayedActionTime", id: 0x1, type: "uint32", conformance: "O" }),
-                        Field({ name: "ImageUri", id: 0x2, type: "string", conformance: "O", constraint: "max 256" }),
-                        Field({ name: "SoftwareVersion", id: 0x3, type: "uint32", conformance: "O" }),
                         Field({
-                            name: "SoftwareVersionString", id: 0x4, type: "string", conformance: "O", constraint: "1 to 64"
+                            name: "Status", id: 0x0, type: "StatusEnum", conformance: "M",
+                            details: "This field shall contain the primary response regarding the availability of a Software Image." +
+                                "\n" +
+                                "See Section 11.20.3.2, “Querying the OTA Provider” for details about the possible values for this " +
+                                "field and their meaning.",
+                            xref: { document: "core", section: "11.20.6.5.2.1" }
                         }),
-                        Field({ name: "UpdateToken", id: 0x5, type: "octstr", conformance: "O", constraint: "8 to 32" }),
-                        Field({ name: "UserConsentNeeded", id: 0x6, type: "bool", conformance: "O", default: true }),
+
                         Field({
-                            name: "MetadataForRequestor", id: 0x7, type: "octstr", conformance: "O", constraint: "max 512"
+                            name: "DelayedActionTime", id: 0x1, type: "uint32", conformance: "O",
+
+                            details: "This field shall convey the minimum time to wait, in seconds from the time of this response, before " +
+                                "sending another QueryImage command or beginning a download from the OTA Provider. OTA Requestors " +
+                                "shall respect this minimum delay, unless they had previously restarted and lost track of it. OTA " +
+                                "Providers SHOULD expect OTA Requestors to follow this value to their best capability, however, a " +
+                                "restarting Node may come back sooner, due to having lost track of this state response." +
+                                "\n" +
+                                "The DelayedActionTime field shall only be present if the Status field is set to Busy." +
+                                "\n" +
+                                "See Section 11.20.3.2, “Querying the OTA Provider” for details about the rules regarding this field.",
+
+                            xref: { document: "core", section: "11.20.6.5.2.2" }
+                        }),
+
+                        Field({
+                            name: "ImageUri", id: 0x2, type: "string", conformance: "O", constraint: "max 256",
+
+                            details: "This field, when present, shall contain a URI where the OTA Requestor SHOULD download a Software " +
+                                "Image. The syntax of the ImageURI field shall follow the URI syntax as specified in RFC 3986." +
+                                "\n" +
+                                "This field shall be present if it appears in a QueryImageResponse with a Status of UpdateAvailable." +
+                                "\n" +
+                                "If the ImageURI specifies a BDX Protocol bdx: scheme, then the following rules describe the " +
+                                "location to be used for download:" +
+                                "\n" +
+                                "  1. The URI’s scheme field shall be exactly bdx in lowercase characters." +
+                                "\n" +
+                                "  2. The URI’s authority field shall contain only the host portion and shall use string " +
+                                "     representation of the Operational Node ID of the Node where to proceed with the download, on " +
+                                "     the same Fabric on which the OTA Requestor received the QueryImageResponse." +
+                                "\n" +
+                                "  3. The encoding of the Node ID in the host field shall use an uppercase hexadecimal format, using " +
+                                "     exactly 16 characters to encode the network byte order value of the NodeID, in a similar " +
+                                "     fashion as the Node Identifier portion of the Operational Instance Name." +
+                                "\n" +
+                                "    a. The Operational Node ID in the host field shall match the NodeID of the OTA Provider " +
+                                "       responding with the QueryImageResponse. The usage of a different Node ID than that of the " +
+                                "       provider is reserved for future use. This constraint reduces the number of independent" +
+                                "\n" +
+                                "CASE secure channel sessions that have to be maintained to proceed with OTA software updates, thus " +
+                                "reducing energy and resource utilization for the software update process." +
+                                "\n" +
+                                "4. The user section of the authority field shall be absent, as there are no \"users\" to be " +
+                                "considered." +
+                                "\n" +
+                                "5. The port section of the authority field shall be absent, as the port for transport shall be " +
+                                "determined through Operational Discovery of the target Node." +
+                                "\n" +
+                                "6. The URI shall not contain a query field." +
+                                "\n" +
+                                "7. The URI shall not contain a fragment field." +
+                                "\n" +
+                                "8. The path field shall employ absolute path representation and shall contain the file designator " +
+                                "of the software image to download at the BDX server. When used with the BDX server, the leading / " +
+                                "separating the URI authority from the path shall be omitted. When contacting the BDX server, " +
+                                "further processing of the file designator shall NOT be done, including handling of URL-encoded " +
+                                "escape sequences. Rather, the exact octets of the path, as received shall be the values used by " +
+                                "both client and server in handling the file designator." +
+                                "\n" +
+                                "  a. The path shall only contain valid URI characters." +
+                                "\n" +
+                                "These rules above for BDX URIs simplify parsing for OTA Requestors receiving Image URIs. The " +
+                                "following example procedure shows how the format constraints simplify the extraction of the " +
+                                "necessary data to reach the BDX server for download." +
+                                "\n" +
+                                "  1. Verify that the URI is 24 characters or longer, which is the minimum length of a valid BDX URI " +
+                                "     with all elements present, for example bdx://00112233AABBCCDD/0." +
+                                "\n" +
+                                "  2. Verify the presence of prefix bdx:// indicating a BDX URI." +
+                                "\n" +
+                                "  3. Extract the next 16 characters and convert from uppercase hexadecimal to a 64-bit scalar " +
+                                "     value, considering network byte order. This is the destination Node ID." +
+                                "\n" +
+                                "  4. Verify the presence of a path separator / and skip it." +
+                                "\n" +
+                                "  5. Extract the remaining characters of the string as the file designator to employ when " +
+                                "     initiating the BDX transfer." +
+                                "\n" +
+                                "Example ImageURI values are below, and illustrate some but not all of valid and invalid cases:" +
+                                "\n" +
+                                "  • Synchronous or Asynchronous BDX Protocol:" +
+                                "\n" +
+                                "    ◦ Valid: bdx://8899AABBCCDDEEFF/the_file_designator123" +
+                                "\n" +
+                                "      ▪ Node ID: 0x8899AABBCCDDEEFF" +
+                                "\n" +
+                                "      ▪ File designator: the_file_designator123" +
+                                "\n" +
+                                "    ◦ Valid: bdx://0099AABBCCDDEE77/the%20file%20designator/some_more" +
+                                "\n" +
+                                "      ▪ Node ID: 0x0099AABBCCDDEE77" +
+                                "\n" +
+                                "      ▪ File designator: the%20file%20designator/some_more. Note that the %20 are retained and not " +
+                                "        converted to ASCII 0x20 (space). The file designator is the path as received verbatim, " +
+                                "        after the first '/' (U+002F / SOLIDUS) following the host." +
+                                "\n" +
+                                "    ◦ Invalid: bdx://99AABBCCDDEE77/the_file_designator123" +
+                                "\n" +
+                                "      ▪ Node ID: Invalid since it is not exactly 16 characters long, due to having omitted leading " +
+                                "        zeros." +
+                                "\n" +
+                                "    ◦ Invalid: bdx://0099aabbccddee77/the_file_designator123" +
+                                "\n" +
+                                "      ▪ Node ID: Invalid since lowercase hexadecimal was used." +
+                                "\n" +
+                                "    ◦ Invalid: bdx:8899AABBCCDDEEFF/the_file_designator123" +
+                                "\n" +
+                                "      ▪ Invalid since bdx scheme does not contain an authority, that is, it does not have // after " +
+                                "        the first :." +
+                                "\n" +
+                                "  • HTTP over TLS:" +
+                                "\n" +
+                                "    ◦ Valid: https://example.domain:8466/software/image.bin" +
+                                "\n" +
+                                "See Section 11.20.3.2, “Querying the OTA Provider” for additional details about the flow.",
+
+                            xref: { document: "core", section: "11.20.6.5.2.3" }
+                        }),
+
+                        Field({
+                            name: "SoftwareVersion", id: 0x3, type: "uint32", conformance: "O",
+
+                            details: "This field indicates the version of the image being provided to the OTA Requestor by the OTA " +
+                                "Provider when the Status is UpdateAvailable." +
+                                "\n" +
+                                "This field shall be present if it appears in a QueryImageResponse with a Status of UpdateAvailable." +
+                                "\n" +
+                                "See Section 11.20.3.2, “Querying the OTA Provider” for additional details about the flow and " +
+                                "acceptable values.",
+
+                            xref: { document: "core", section: "11.20.6.5.2.4" }
+                        }),
+
+                        Field({
+                            name: "SoftwareVersionString", id: 0x4, type: "string", conformance: "O", constraint: "1 to 64",
+
+                            details: "This field provides a string version of the image being provided to the OTA Requestor by the OTA " +
+                                "Provider when the Status is UpdateAvailable." +
+                                "\n" +
+                                "This field shall be present if it appears in a QueryImageResponse with a Status of UpdateAvailable." +
+                                "\n" +
+                                "See Section 11.20.3.2, “Querying the OTA Provider” for additional details about the flow and " +
+                                "acceptable values.",
+
+                            xref: { document: "core", section: "11.20.6.5.2.5" }
+                        }),
+
+                        Field({
+                            name: "UpdateToken", id: 0x5, type: "octstr", conformance: "O", constraint: "8 to 32",
+                            details: "This optional field shall be present when the Status field contains UpdateAvailable." +
+                                "\n" +
+                                "See Section 11.20.3.6.1, “UpdateToken usage” for additional details about the generation and usage " +
+                                "of UpdateToken.",
+                            xref: { document: "core", section: "11.20.6.5.2.6" }
+                        }),
+
+                        Field({
+                            name: "UserConsentNeeded", id: 0x6, type: "bool", conformance: "O", default: true,
+
+                            details: "This field, if present, shall only be interpreted if the OTA Requestor had previously indicated a " +
+                                "value of True in the RequestorCanConsent field of the QueryImageRequest. This field, when present " +
+                                "and set to True, shall indicate that a capable OTA Requestor must obtain user-visible consent prior " +
+                                "to downloading the OTA Software Image." +
+                                "\n" +
+                                "See Section 11.20.3.4, “Obtaining user consent for updating software” for application details about " +
+                                "usage.",
+
+                            xref: { document: "core", section: "11.20.6.5.2.7" }
+                        }),
+
+                        Field({
+                            name: "MetadataForRequestor", id: 0x7, type: "octstr", conformance: "O", constraint: "max 512",
+
+                            details: "This optional field, if present, shall consist of a top-level anonymous list; each list element " +
+                                "shall have a profile-specific tag encoded in fully-qualified form. Each list element shall contain " +
+                                "a manufacturer-specific payload, which the OTA Provider wants to expose to the receiving OTA " +
+                                "Requestor. This payload may be used for any purpose and SHOULD be as small as practical." +
+                                "\n" +
+                                "The presence of this field shall NOT be required for correct operation of any OTA Provider " +
+                                "compliant with this Cluster specification." +
+                                "\n" +
+                                "The data for this field does not exist in any Distributed Compliance Ledger record and SHOULD only " +
+                                "be emitted by an OTA Provider with this additional knowledge if it has knowledge that the receiving " +
+                                "OTA Requestor may be able to use it.",
+
+                            xref: { document: "core", section: "11.20.6.5.2.8" }
                         })
                     ]
                 }),
@@ -33460,29 +33825,122 @@ export const SpecMatter = Matter({
                 Command({
                     name: "ApplyUpdateRequest", id: 0x2, access: "O", conformance: "M", direction: "request",
                     response: "ApplyUpdateResponse",
-                    xref: { document: "core", section: "11.20.6.5.19" },
+                    xref: { document: "core", section: "11.20.6.5.3" },
+
                     children: [
-                        Field({ name: "UpdateToken", id: 0x0, type: "octstr", conformance: "M", constraint: "8 to 32" }),
-                        Field({ name: "NewVersion", id: 0x1, type: "uint32", conformance: "M" })
+                        Field({
+                            name: "UpdateToken", id: 0x0, type: "octstr", conformance: "M", constraint: "8 to 32",
+                            details: "This field shall contain the UpdateToken as specified in Section 11.20.3.6.1, “UpdateToken usage”. " +
+                                "This field may be used by the OTA Provider to track minimal lifecycle state to allow finer-grained " +
+                                "scheduling of the application of Software Images by OTA Requestors.",
+                            xref: { document: "core", section: "11.20.6.5.3.1" }
+                        }),
+
+                        Field({
+                            name: "NewVersion", id: 0x1, type: "uint32", conformance: "M",
+
+                            details: "The NewVersion field included in the request payload shall provide the SoftwareVersion value of the " +
+                                "new Software Image which the OTA Requestor is ready to start applying. The OTA Provider may use " +
+                                "this new version to track or record Software Image application by OTA Requestors." +
+                                "\n" +
+                                "When Generated" +
+                                "\n" +
+                                "The ApplyUpdateRequest Command shall be invoked by an OTA Requestor once it is ready to apply a " +
+                                "previously downloaded Software Image." +
+                                "\n" +
+                                "Effect on Receipt" +
+                                "\n" +
+                                "Upon receipt of this command the OTA Provider shall respond with an Action field consistent with " +
+                                "the next action the OTA Requestor should take, including any possible time delay." +
+                                "\n" +
+                                "The OTA Provider shall NOT refer to previously stored state about any download progress to reply. " +
+                                "If any state keeping is done by the OTA Provider, it shall only relate to the UpdateToken and the " +
+                                "history of prior ApplyUpdateRequest commands." +
+                                "\n" +
+                                "See Section 11.20.3.6, “Applying a software update” for a description of the flow in response to an " +
+                                "OTA Provider receiving an invocation of this command." +
+                                "\n" +
+                                "Handling Error Cases" +
+                                "\n" +
+                                "See Section 11.20.3.6, “Applying a software update” for all error-handling information.",
+
+                            xref: { document: "core", section: "11.20.6.5.3.2" }
+                        })
                     ]
                 }),
 
                 Command({
                     name: "ApplyUpdateResponse", id: 0x3, conformance: "M", direction: "response",
-                    xref: { document: "core", section: "11.20.6.5.22" },
+                    xref: { document: "core", section: "11.20.6.5.4" },
+
                     children: [
-                        Field({ name: "Action", id: 0x0, type: "ApplyUpdateActionEnum", conformance: "M" }),
-                        Field({ name: "DelayedActionTime", id: 0x1, type: "uint32", conformance: "M" })
+                        Field({
+                            name: "Action", id: 0x0, type: "ApplyUpdateActionEnum", conformance: "M",
+                            details: "The Action field shall express the action that the OTA Provider requests from the OTA Requestor. " +
+                                "See Section 11.20.3.6, “Applying a software update” for a description of the Action values provided " +
+                                "in response to an OTA Provider receiving an invocation of this command.",
+                            xref: { document: "core", section: "11.20.6.5.4.1" }
+                        }),
+
+                        Field({
+                            name: "DelayedActionTime", id: 0x1, type: "uint32", conformance: "M",
+                            details: "The minimum time period the OTA Requestor shall wait before executing the Action, in seconds from " +
+                                "receipt." +
+                                "\n" +
+                                "If this field has a value higher than 86400 seconds (24 hours), then the OTA Requestor may assume a " +
+                                "value of 86400, in order to reduce undue Software Image application delays.",
+                            xref: { document: "core", section: "11.20.6.5.4.2" }
+                        })
                     ]
                 }),
 
                 Command({
                     name: "NotifyUpdateApplied", id: 0x4, access: "O", conformance: "M", direction: "request",
                     response: "status",
-                    xref: { document: "core", section: "11.20.6.5.25" },
+                    xref: { document: "core", section: "11.20.6.5.5" },
+
                     children: [
-                        Field({ name: "UpdateToken", id: 0x0, type: "octstr", conformance: "M", constraint: "8 to 32" }),
-                        Field({ name: "SoftwareVersion", id: 0x1, type: "uint32", conformance: "M" })
+                        Field({
+                            name: "UpdateToken", id: 0x0, type: "octstr", conformance: "M", constraint: "8 to 32",
+                            details: "This field shall contain the UpdateToken as specified in Section 11.20.3.6.1, “UpdateToken usage”.",
+                            xref: { document: "core", section: "11.20.6.5.5.1" }
+                        }),
+
+                        Field({
+                            name: "SoftwareVersion", id: 0x1, type: "uint32", conformance: "M",
+
+                            details: "The SoftwareVersion included in the request payload shall provide the same value as the " +
+                                "SoftwareVersion attribute in the invoking OTA Requestor’s Basic Information Cluster, and SHOULD be " +
+                                "consistent with the value representing a new version running on the Node invoking the command." +
+                                "\n" +
+                                "When Generated" +
+                                "\n" +
+                                "The NotifyUpdateApplied command SHOULD be invoked in the following two circumstances:" +
+                                "\n" +
+                                "  1. An OTA Requestor has just successfully applied a Software Image it had obtained from a " +
+                                "     previous QueryImage response." +
+                                "\n" +
+                                "  2. An OTA Requestor has just successfully applied a Software Image it had obtained through means " +
+                                "     different than those of this Cluster." +
+                                "\n" +
+                                "An OTA Provider may use the state of invocation of this command to help track the progress of " +
+                                "update for OTA Requestors it knows require a new OTA Software Image. However, due to the " +
+                                "possibility that an OTA Requestor may never come back (e.g. device removed from Fabric altogether, " +
+                                "or a critical malfunction), an OTA Provider shall NOT expect every OTA Requestor to invoke this " +
+                                "command for correct operation of the OTA Provider." +
+                                "\n" +
+                                "This command shall be considered optional and shall not result in reduced availability of the OTA " +
+                                "Provider functionality if OTA Requestors never invoke this command." +
+                                "\n" +
+                                "Effect on Receipt" +
+                                "\n" +
+                                "An OTA Provider receiving an invocation of this command may log it internally." +
+                                "\n" +
+                                "On receiving this command, an OTA Provider may use the information to update its bookkeeping of " +
+                                "cached Software Images, or use it for other similar administrative purposes.",
+
+                            xref: { document: "core", section: "11.20.6.5.5.2" }
+                        })
                     ]
                 }),
 
@@ -33625,12 +34083,33 @@ export const SpecMatter = Matter({
                     xref: { document: "core", section: "11.20.7.7.1" },
 
                     children: [
-                        Field({ name: "PreviousState", id: 0x0, type: "UpdateStateEnum", conformance: "M", default: 0 }),
-                        Field({ name: "NewState", id: 0x1, type: "UpdateStateEnum", conformance: "M" }),
-                        Field({ name: "Reason", id: 0x2, type: "ChangeReasonEnum", conformance: "M" }),
+                        Field({
+                            name: "PreviousState", id: 0x0, type: "UpdateStateEnum", conformance: "M", default: 0,
+                            details: "This field shall be set to the state that preceded the transition causing this event to be " +
+                                "generated, if such a state existed. If no previous state exists, the value shall be Unknown.",
+                            xref: { document: "core", section: "11.20.7.7.1.1" }
+                        }),
+
+                        Field({
+                            name: "NewState", id: 0x1, type: "UpdateStateEnum", conformance: "M",
+                            details: "This field shall be set to the state now in effect through the transition causing this event to be " +
+                                "generated.",
+                            xref: { document: "core", section: "11.20.7.7.1.2" }
+                        }),
+
+                        Field({
+                            name: "Reason", id: 0x2, type: "ChangeReasonEnum", conformance: "M",
+                            details: "This field shall be set to the reason why this event was generated.",
+                            xref: { document: "core", section: "11.20.7.7.1.3" }
+                        }),
+
                         Field({
                             name: "TargetSoftwareVersion", id: 0x3, type: "uint32", conformance: "M", default: null,
-                            quality: "X"
+                            quality: "X",
+                            details: "This field shall be set to the target SoftwareVersion which is the subject of the operation, " +
+                                "whenever the NewState is Downloading, Applying or RollingBack. Otherwise TargetSoftwareVersion " +
+                                "shall be null.",
+                            xref: { document: "core", section: "11.20.7.7.1.4" }
                         })
                     ]
                 }),
@@ -33640,27 +34119,63 @@ export const SpecMatter = Matter({
                     details: "This event shall be generated whenever a new version starts executing after being applied due to a " +
                         "software update. This event SHOULD be generated even if a software update was done using means " +
                         "outside of this cluster.",
-                    xref: { document: "core", section: "11.20.7.7.6" },
+                    xref: { document: "core", section: "11.20.7.7.2" },
+
                     children: [
-                        Field({ name: "SoftwareVersion", id: 0x0, type: "uint32", conformance: "M" }),
-                        Field({ name: "ProductId", id: 0x1, type: "uint16", conformance: "M" })
+                        Field({
+                            name: "SoftwareVersion", id: 0x0, type: "uint32", conformance: "M",
+                            details: "This field shall be set to the same value as the one available in the Software Version attribute of " +
+                                "the Basic Information Cluster for the newly executing version.",
+                            xref: { document: "core", section: "11.20.7.7.2.1" }
+                        }),
+
+                        Field({
+                            name: "ProductId", id: 0x1, type: "uint16", conformance: "M",
+                            details: "This field shall be set to the ProductID applying to the executing version, as reflected by the " +
+                                "Basic Information Cluster. This can be used to detect a product updating its definition due to a " +
+                                "large-scale functional update that may impact aspects of the product reflected in the DeviceModel " +
+                                "schema of the Distributed Compliance Ledger.",
+                            xref: { document: "core", section: "11.20.7.7.2.2" }
+                        })
                     ]
                 }),
 
                 Event({
                     name: "DownloadError", id: 0x2, access: "V", conformance: "M", priority: "info",
                     details: "This event shall be generated whenever an error occurs during OTA Requestor download operation.",
-                    xref: { document: "core", section: "11.20.7.7.9" },
+                    xref: { document: "core", section: "11.20.7.7.3" },
 
                     children: [
-                        Field({ name: "SoftwareVersion", id: 0x0, type: "uint32", conformance: "M" }),
-                        Field({ name: "BytesDownloaded", id: 0x1, type: "uint64", conformance: "M" }),
+                        Field({
+                            name: "SoftwareVersion", id: 0x0, type: "uint32", conformance: "M",
+                            details: "This field shall be set to the value of the SoftwareVersion being downloaded, matching the " +
+                                "SoftwareVersion field of the QueryImageResponse that caused the failing download to take place.",
+                            xref: { document: "core", section: "11.20.7.7.3.1" }
+                        }),
+
+                        Field({
+                            name: "BytesDownloaded", id: 0x1, type: "uint64", conformance: "M",
+                            details: "This field shall be set to the number of bytes that have been downloaded during the failing " +
+                                "transfer that caused this event to be generated.",
+                            xref: { document: "core", section: "11.20.7.7.3.2" }
+                        }),
+
                         Field({
                             name: "ProgressPercent", id: 0x2, type: "uint8", conformance: "M", constraint: "0 to 100",
-                            default: null, quality: "X"
+                            default: null, quality: "X",
+                            details: "This field shall be set to the nearest integer percent value reflecting how far within the transfer " +
+                                "the failure occurred during the failing transfer that caused this event to be generated, unless the " +
+                                "total length of the transfer is unknown, in which case it shall be null.",
+                            xref: { document: "core", section: "11.20.7.7.3.3" }
                         }),
+
                         Field({
-                            name: "PlatformCode", id: 0x3, type: "int64", conformance: "M", default: null, quality: "X"
+                            name: "PlatformCode", id: 0x3, type: "int64", conformance: "M", default: null, quality: "X",
+                            details: "This field SHOULD be set to some internal product-specific error code, closest in " +
+                                "temporal/functional proximity to the failure that caused this event to be generated. Otherwise, it " +
+                                "shall be null. This event field may be used for debugging purposes and no uniform definition exists " +
+                                "related to its meaning.",
+                            xref: { document: "core", section: "11.20.7.7.3.4" }
                         })
                     ]
                 }),
@@ -33676,16 +34191,90 @@ export const SpecMatter = Matter({
                     xref: { document: "core", section: "11.20.7.6.1" },
 
                     children: [
-                        Field({ name: "ProviderNodeId", id: 0x0, type: "node-id", access: "F", conformance: "M" }),
-                        Field({ name: "VendorId", id: 0x1, type: "vendor-id", access: "F", conformance: "M" }),
                         Field({
-                            name: "AnnouncementReason", id: 0x2, type: "AnnouncementReasonEnum", access: "F", conformance: "M"
+                            name: "ProviderNodeId", id: 0x0, type: "node-id", access: "F", conformance: "M",
+                            details: "This field shall contain the Node ID of a Node implementing the OTA Provider cluster server, on the " +
+                                "accessing fabric.",
+                            xref: { document: "core", section: "11.20.7.6.1.1" }
                         }),
+
+                        Field({
+                            name: "VendorId", id: 0x1, type: "vendor-id", access: "F", conformance: "M",
+                            details: "This field shall contain the assigned Vendor ID of the Node invoking this command, as it would " +
+                                "appear in that Node’s Basic Information Cluster VendorID attribute.",
+                            xref: { document: "core", section: "11.20.7.6.1.2" }
+                        }),
+
+                        Field({
+                            name: "AnnouncementReason", id: 0x2, type: "AnnouncementReasonEnum", access: "F", conformance: "M",
+                            details: "This field shall contain a value expressing the reason for the announcement.",
+                            xref: { document: "core", section: "11.20.7.6.1.3" }
+                        }),
+
                         Field({
                             name: "MetadataForNode", id: 0x3, type: "octstr", access: "F", conformance: "O",
-                            constraint: "max 512"
+                            constraint: "max 512",
+
+                            details: "This optional field, if present, shall consist of a top-level anonymous list; each list element " +
+                                "shall have a profile-specific tag encoded in fully-qualified form. Each list element shall contain " +
+                                "a manufacturer-specific payload, which the Node invoking this command wants to expose to the " +
+                                "receiving Node. This payload may be used for any purpose and SHOULD be as small as practical, " +
+                                "especially if invoked to groups, in order to reduce networking burden of these payloads." +
+                                "\n" +
+                                "This field SHOULD only be included if the sending OTA Provider has knowledge that some recipient " +
+                                "can make use of it.",
+
+                            xref: { document: "core", section: "11.20.7.6.1.4" }
                         }),
-                        Field({ name: "Endpoint", id: 0x4, type: "endpoint-no", access: "F", conformance: "M" }),
+
+                        Field({
+                            name: "Endpoint", id: 0x4, type: "endpoint-no", access: "F", conformance: "M",
+
+                            details: "This field shall contain the endpoint number which has the OTA Provider device type and OTA " +
+                                "Software Update Provider cluster server on the ProviderNodeID. This is provided to avoid having to " +
+                                "do discovery of the location of that endpoint by walking over all endpoints and checking their " +
+                                "Descriptor Cluster." +
+                                "\n" +
+                                "When Generated" +
+                                "\n" +
+                                "An OTA Provider may invoke this command directly to an OTA Requestor, to announce its presence as " +
+                                "an OTA Provider on the Fabric." +
+                                "\n" +
+                                "These announcements, if made, SHOULD be made at most once every 24 hours for any given target Node, " +
+                                "to assist OTA Requestors in discovering available OTA Provider resources, unless the " +
+                                "AnnouncementReason is UrgentUpdateAvailable, in which case this command may be more frequent." +
+                                "\n" +
+                                "Any invocation shall be made with a delay of at least 1 second between invocations from a given OTA " +
+                                "Provider, to reduce burden on the networking infrastructure and affect a form of serialized jitter. " +
+                                "It is recommended to offset the first announcement of a round (i.e. new set of announcements after " +
+                                "a previous complete set) by a random delay time with a distribution span of >= 60 seconds to jitter " +
+                                "announcement schedules over time." +
+                                "\n" +
+                                "Effect on Receipt" +
+                                "\n" +
+                                "On receipt of this command, an OTA Requestor SHOULD consider the new ProviderNodeID and " +
+                                "AnnouncementReason to possibly query for new software sooner than it would have with its default " +
+                                "behavior." +
+                                "\n" +
+                                "The OTA Requestor SHOULD NOT update entries in the DefaultOTAProviders list based on announcements." +
+                                "\n" +
+                                "The receiving Node may ignore the content of the announcement if it is unable or unwilling to " +
+                                "further query OTA Providers temporarily, or if its provider list is full. If the announcement is " +
+                                "ignored, the response SHOULD be SUCCESS." +
+                                "\n" +
+                                "Depending on the value of the AnnouncementReason field, the OTA Requestor may have to query the OTA " +
+                                "Provider. See Section 11.20.7.6.1.3, “AnnouncementReason Field” for the different values and their " +
+                                "meaning." +
+                                "\n" +
+                                "If present, the MetadataForNode field’s may be used by a receiving OTA Requestor in any way it " +
+                                "deems satisfactory. The MetadataForNode field SHOULD be empty under most normal operational " +
+                                "circumstance, but can be useful in environments such as field trials or integration test " +
+                                "environments to hint at additional capabilities which OTA Requestors may use in a particular " +
+                                "Vendor-specific context.",
+
+                            xref: { document: "core", section: "11.20.7.6.1.5" }
+                        }),
+
                         Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 }),
@@ -33697,55 +34286,108 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "SimpleAnnouncement", id: 0x0, conformance: "M",
-                            description: "An OTA Provider is announcing its presence."
+                            description: "An OTA Provider is announcing its presence.",
+                            details: "An OTA Provider is announcing its presence, but there is no implication that an OTA Requestor would " +
+                                "have a new Software Image available if it queried immediately.",
+                            xref: { document: "core", section: "11.20.7.4.1.1" }
                         }),
+
                         Field({
                             name: "UpdateAvailable", id: 0x1, conformance: "M",
-                            description: "An OTA Provider is announcing, either to a single Node or to a group of Nodes, that a new Software Image MAY be available."
+                            description: "An OTA Provider is announcing, either to a single Node or to a group of Nodes, that a new Software Image MAY be available.",
+                            details: "An OTA Provider is announcing, either to a single Node or to a group of Nodes, that a new Software " +
+                                "Image may be available. The details may only be obtained by executing a OTA Software Update Query " +
+                                "procedure. A receiving OTA Requestor SHOULD only query the indicated OTA Provider at the " +
+                                "ProviderLocation at its next upcoming OTA Provider query.",
+                            xref: { document: "core", section: "11.20.7.4.1.2" }
                         }),
+
                         Field({
                             name: "UrgentUpdateAvailable", id: 0x2, conformance: "M",
-                            description: "An OTA Provider is announcing, either to a single Node or to a group of Nodes, that a new Software Image MAY be available, which contains an update that needs to be applied urgently."
+                            description: "An OTA Provider is announcing, either to a single Node or to a group of Nodes, that a new Software Image MAY be available, which contains an update that needs to be applied urgently.",
+
+                            details: "An OTA Provider is announcing, either to a single Node or to a group of Nodes, that a new Software " +
+                                "Image may be available, which contains an update that needs to be applied urgently. The details may " +
+                                "only be obtained by executing a OTA Software Update Query procedure. A receiving OTA Requestor " +
+                                "SHOULD query the indicated OTA Provider at the ProviderLocation after a random jitter delay between " +
+                                "1 and 600 seconds. This particular reason SHOULD only be employed when an urgent update is " +
+                                "available, such as an important security update, or just after initial commissioning of a device, " +
+                                "to assist OTA Requestors in more rapidly obtaining updated software.",
+
+                            xref: { document: "core", section: "11.20.7.4.1.3" }
                         })
                     ]
                 }),
 
                 Datatype({
                     name: "UpdateStateEnum", type: "enum8",
-                    xref: { document: "core", section: "11.20.7.4.5" },
+                    xref: { document: "core", section: "11.20.7.4.2" },
 
                     children: [
                         Field({
-                            name: "Unknown", id: 0x0, conformance: "M", description: "Current state is not yet determined."
+                            name: "Unknown", id: 0x0, conformance: "M", description: "Current state is not yet determined.",
+                            details: "This value shall indicate that the current state is not yet determined. Nodes SHOULD attempt a " +
+                                "better state reporting.",
+                            xref: { document: "core", section: "11.20.7.4.2.1" }
                         }),
+
                         Field({
                             name: "Idle", id: 0x1, conformance: "M",
-                            description: "Indicate a Node not yet in the process of software update."
+                            description: "Indicate a Node not yet in the process of software update.",
+                            details: "This value shall indicate a Node not yet in the process of software update, for example because it " +
+                                "is awaiting the moment when a query will be made.",
+                            xref: { document: "core", section: "11.20.7.4.2.2" }
                         }),
+
                         Field({
                             name: "Querying", id: 0x2, conformance: "M",
-                            description: "Indicate a Node in the process of querying an OTA Provider."
+                            description: "Indicate a Node in the process of querying an OTA Provider.",
+                            details: "This value shall indicate a Node in the process of querying an OTA Provider with QueryImage " +
+                                "command, including during the process of awaiting a response to that command.",
+                            xref: { document: "core", section: "11.20.7.4.2.3" }
                         }),
+
                         Field({
                             name: "DelayedOnQuery", id: 0x3, conformance: "M",
-                            description: "Indicate a Node waiting after a Busy response."
+                            description: "Indicate a Node waiting after a Busy response.",
+                            details: "This value shall indicate a Node waiting because it received a prior QueryImageResponse with a " +
+                                "Status field indicating Busy.",
+                            xref: { document: "core", section: "11.20.7.4.2.4" }
                         }),
+
                         Field({
                             name: "Downloading", id: 0x4, conformance: "M",
-                            description: "Indicate a Node currently in the process of downloading a software update."
+                            description: "Indicate a Node currently in the process of downloading a software update.",
+                            details: "This value shall indicate a Node currently in the process of downloading a software update.",
+                            xref: { document: "core", section: "11.20.7.4.2.5" }
                         }),
+
                         Field({
                             name: "Applying", id: 0x5, conformance: "M",
-                            description: "Indicate a Node currently in the process of verifying and applying a software update."
+                            description: "Indicate a Node currently in the process of verifying and applying a software update.",
+                            details: "This value shall indicate a Node currently in the process of verifying and applying a software " +
+                                "update.",
+                            xref: { document: "core", section: "11.20.7.4.2.6" }
                         }),
+
                         Field({
                             name: "DelayedOnApply", id: 0x6, conformance: "M",
-                            description: "Indicate a Node waiting caused by AwaitNextAction response."
+                            description: "Indicate a Node waiting caused by AwaitNextAction response.",
+                            details: "This value shall indicate a Node waiting because it received a prior ApplyUpdateResponse with an " +
+                                "Action field set to AwaitNextAction.",
+                            xref: { document: "core", section: "11.20.7.4.2.7" }
                         }),
+
                         Field({
                             name: "RollingBack", id: 0x7, conformance: "M",
-                            description: "Indicate a Node in the process of recovering to a previous version."
+                            description: "Indicate a Node in the process of recovering to a previous version.",
+                            details: "This value shall indicate a Node in the process of recovering to a previous version from a new " +
+                                "version that was applied, but that could not remain in force, for reasons such as invalid data " +
+                                "detected on boot, or significant runtime issues such as reboot loops. Eventually, the next state " +
+                                "seen SHOULD be Unknown or Idle.",
+                            xref: { document: "core", section: "11.20.7.4.2.8" }
                         }),
+
                         Field({
                             name: "DelayedOnUserConsent", id: 0x8, conformance: "M",
                             description: "Indicate a Node is capable of user consent."
@@ -33755,46 +34397,71 @@ export const SpecMatter = Matter({
 
                 Datatype({
                     name: "ChangeReasonEnum", type: "enum8",
-                    xref: { document: "core", section: "11.20.7.4.15" },
+                    xref: { document: "core", section: "11.20.7.4.3" },
 
                     children: [
                         Field({
                             name: "Unknown", id: 0x0, conformance: "M",
-                            description: "The reason for a state change is unknown."
+                            description: "The reason for a state change is unknown.",
+                            details: "This value shall indicate that the reason for a state change is unknown.",
+                            xref: { document: "core", section: "11.20.7.4.3.1" }
                         }),
+
                         Field({
                             name: "Success", id: 0x1, conformance: "M",
-                            description: "The reason for a state change is the success of a prior operation."
+                            description: "The reason for a state change is the success of a prior operation.",
+                            details: "This value shall indicate that the reason for a state change is the success of a prior operation.",
+                            xref: { document: "core", section: "11.20.7.4.3.2" }
                         }),
+
                         Field({
                             name: "Failure", id: 0x2, conformance: "M",
-                            description: "The reason for a state change is the failure of a prior operation."
+                            description: "The reason for a state change is the failure of a prior operation.",
+                            details: "This value shall indicate that the reason for a state change is the failure of a prior operation.",
+                            xref: { document: "core", section: "11.20.7.4.3.3" }
                         }),
+
                         Field({
                             name: "TimeOut", id: 0x3, conformance: "M",
-                            description: "The reason for a state change is a time-out."
+                            description: "The reason for a state change is a time-out.",
+                            details: "This value shall indicate that the reason for a state change is a time-out condition as determined " +
+                                "by the OTA Requestor.",
+                            xref: { document: "core", section: "11.20.7.4.3.4" }
                         }),
+
                         Field({
                             name: "DelayByProvider", id: 0x4, conformance: "O",
-                            description: "The reason for a state change is a request by the OTA Provider to wait."
+                            description: "The reason for a state change is a request by the OTA Provider to wait.",
+                            details: "This value shall indicate that the reason for a state change is a request by the OTA Provider to " +
+                                "await for a delay.",
+                            xref: { document: "core", section: "11.20.7.4.3.5" }
                         })
                     ]
                 }),
 
                 Datatype({
-                    name: "DelayByProvider Value", type: "struct",
+                    name: "ProviderLocation", type: "struct",
+                    details: "This structure encodes a fabric-scoped location of an OTA provider on a given fabric.",
+                    xref: { document: "core", section: "11.20.7.4.4" },
 
-                    details: "This value shall indicate that the reason for a state change is a request by the OTA Provider to " +
-                        "await for a delay." +
-                        "\n" +
-                        "### ProviderLocation Type" +
-                        "\n" +
-                        "This structure encodes a fabric-scoped location of an OTA provider on a given fabric.",
-
-                    xref: { document: "core", section: "11.20.7.4.20" },
                     children: [
-                        Field({ name: "ProviderNodeId", id: 0x1, type: "node-id", access: "F", conformance: "M" }),
-                        Field({ name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M" }),
+                        Field({
+                            name: "ProviderNodeId", id: 0x1, type: "node-id", access: "F", conformance: "M",
+                            details: "This field shall contain the Node ID of the OTA Provider to contact within the Fabric identified by " +
+                                "the FabricIndex.",
+                            xref: { document: "core", section: "11.20.7.4.4.1" }
+                        }),
+
+                        Field({
+                            name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M",
+                            details: "This field shall contain the endpoint number which has the OTA Provider device type and OTA" +
+                                "\n" +
+                                "Software Update Provider cluster server on the ProviderNodeID. This is provided to avoid having to " +
+                                "do discovery of the location of that endpoint by walking over all endpoints and checking their " +
+                                "Descriptor Cluster.",
+                            xref: { document: "core", section: "11.20.7.4.4.2" }
+                        }),
+
                         Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
                     ]
                 })

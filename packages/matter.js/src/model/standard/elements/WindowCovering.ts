@@ -71,21 +71,7 @@ export const WindowCovering = Cluster({
             name: "Type", id: 0x0, type: "TypeEnum", access: "R V", conformance: "M", constraint: "desc",
             default: 0, quality: "F",
             details: "This attribute shall identify the type of window covering.",
-            xref: { document: "cluster", section: "5.3.6.2" },
-
-            children: [
-                Field({ name: "Rollershade", id: 0x0, conformance: "LF & !TL" }),
-                Field({ name: "Rollershade2Motor", id: 0x1, conformance: "LF & !TL" }),
-                Field({ name: "RollershadeExterior", id: 0x2, conformance: "LF & !TL" }),
-                Field({ name: "RollershadeExterior2Motor", id: 0x3, conformance: "LF & !TL" }),
-                Field({ name: "Drapery", id: 0x4, conformance: "LF & !TL" }),
-                Field({ name: "Awning", id: 0x5, conformance: "LF & !TL" }),
-                Field({ name: "Shutter", id: 0x6, conformance: "LF | TL" }),
-                Field({ name: "TiltBlindTiltOnly", id: 0x7, conformance: "!LF & TL" }),
-                Field({ name: "TiltBlindLift", id: 0x8, conformance: "LF & TL" }),
-                Field({ name: "ProjectorScreen", id: 0x9, conformance: "LF & !TL" }),
-                Field({ name: "Unknown", id: 0xff, conformance: "O" })
-            ]
+            xref: { document: "cluster", section: "5.3.6.2" }
         }),
 
         Attribute({
@@ -145,17 +131,7 @@ export const WindowCovering = Cluster({
                 "\n" +
                 "To change settings, devices shall write to the Mode attribute. The behavior causing the setting or " +
                 "clearing of each bit is vendor specific.",
-            xref: { document: "cluster", section: "5.3.6.9" },
-
-            children: [
-                Field({ name: "Operational", constraint: "0" }),
-                Field({ name: "OnlineReserved", constraint: "1" }),
-                Field({ name: "LiftMovementReversed", constraint: "2" }),
-                Field({ name: "LiftPositionAware", constraint: "3" }),
-                Field({ name: "TiltPositionAware", constraint: "4" }),
-                Field({ name: "LiftEncoderControlled", constraint: "5" }),
-                Field({ name: "TiltEncoderControlled", constraint: "6" })
-            ]
+            xref: { document: "cluster", section: "5.3.6.9" }
         }),
 
         Attribute({
@@ -176,24 +152,9 @@ export const WindowCovering = Cluster({
 
         Attribute({
             name: "OperationalStatus", id: 0xa, type: "OperationalStatusBitmap", access: "R V",
-            conformance: "M", constraint: "0b00xx xxxx", default: 0, quality: "P",
+            conformance: "M", default: 0, quality: "P",
             details: "This attribute shall indicate the currently ongoing operations and applies to all type of devices.",
-            xref: { document: "cluster", section: "5.3.6.16" },
-
-            children: [
-                Field({
-                    name: "Global", type: "MovementStatus", constraint: "0 to 2",
-                    description: "Movement status of the cover"
-                }),
-                Field({
-                    name: "Lift", type: "MovementStatus", constraint: "2 to 4",
-                    description: "Movement status of the cover's lift function"
-                }),
-                Field({
-                    name: "Tilt", type: "MovementStatus", constraint: "4 to 6",
-                    description: "Movement status of the cover's tilt function"
-                })
-            ]
+            xref: { document: "cluster", section: "5.3.6.16" }
         }),
 
         Attribute({
@@ -214,35 +175,7 @@ export const WindowCovering = Cluster({
                 "main category indicated by the Type attribute." +
                 "\n" +
                 "The table below helps to match the EndProductType attribute with the Type attribute.",
-            xref: { document: "cluster", section: "5.3.6.17" },
-
-            children: [
-                Field({ name: "RollerShade", id: 0x0, conformance: "LF" }),
-                Field({ name: "RomanShade", id: 0x1, conformance: "LF" }),
-                Field({ name: "BalloonShade", id: 0x2, conformance: "LF" }),
-                Field({ name: "WovenWood", id: 0x3, conformance: "LF" }),
-                Field({ name: "PleatedShade", id: 0x4, conformance: "LF" }),
-                Field({ name: "CellularShade", id: 0x5, conformance: "LF" }),
-                Field({ name: "LayeredShade", id: 0x6, conformance: "LF" }),
-                Field({ name: "LayeredShade2D", id: 0x7, conformance: "LF" }),
-                Field({ name: "SheerShade", id: 0x8, conformance: "LF & TL" }),
-                Field({ name: "TiltOnlyInteriorBlind", id: 0x9, conformance: "TL" }),
-                Field({ name: "InteriorBlind", id: 0xa, conformance: "LF & TL" }),
-                Field({ name: "VerticalBlindStripCurtain", id: 0xb, conformance: "LF & TL" }),
-                Field({ name: "InteriorVenetianBlind", id: 0xc, conformance: "LF & TL" }),
-                Field({ name: "ExteriorVenetianBlind", id: 0xd, conformance: "LF & TL" }),
-                Field({ name: "LateralLeftCurtain", id: 0xe, conformance: "LF" }),
-                Field({ name: "LateralRightCurtain", id: 0xf, conformance: "LF" }),
-                Field({ name: "CentralCurtain", id: 0x10, conformance: "LF" }),
-                Field({ name: "RollerShutter", id: 0x11, conformance: "LF" }),
-                Field({ name: "ExteriorVerticalScreen", id: 0x12, conformance: "LF" }),
-                Field({ name: "AwningTerrace", id: 0x13, conformance: "LF" }),
-                Field({ name: "AwningVerticalScreen", id: 0x14, conformance: "LF" }),
-                Field({ name: "TiltOnlyPergola", id: 0x15, conformance: "LF | TL" }),
-                Field({ name: "SwingingShutter", id: 0x16, conformance: "LF | TL" }),
-                Field({ name: "SlidingShutter", id: 0x17, conformance: "LF | TL" }),
-                Field({ name: "Unknown", id: 0xff, conformance: "O" })
-            ]
+            xref: { document: "cluster", section: "5.3.6.17" }
         }),
 
         Attribute({
@@ -302,8 +235,8 @@ export const WindowCovering = Cluster({
         }),
 
         Attribute({
-            name: "Mode", id: 0x17, type: "ModeBitmap", access: "RW VM", conformance: "M", constraint: "0",
-            default: 0, quality: "N",
+            name: "Mode", id: 0x17, type: "ModeBitmap", access: "RW VM", conformance: "M", default: 0,
+            quality: "N",
 
             details: "The Mode attribute allows configuration of the window covering, such as: reversing the motor " +
                 "direction, placing the window covering into calibration mode, placing the motor into maintenance " +
@@ -314,14 +247,7 @@ export const WindowCovering = Cluster({
                 "any write interaction to the Mode attribute, with an unsupported mode bit or any out of bounds bits " +
                 "set, must be ignored and a response containing the status of CONSTRAINT_ERROR will be returned.",
 
-            xref: { document: "cluster", section: "5.3.6.22" },
-
-            children: [
-                Field({ name: "MotorDirectionReversed", constraint: "0" }),
-                Field({ name: "CalibrationMode", constraint: "1" }),
-                Field({ name: "MaintenanceMode", constraint: "2" }),
-                Field({ name: "LedFeedback", constraint: "3" })
-            ]
+            xref: { document: "cluster", section: "5.3.6.22" }
         }),
 
         Attribute({
@@ -646,10 +572,29 @@ export const WindowCovering = Cluster({
                 "  • 11b = Reserved",
 
             xref: { document: "cluster", section: "5.3.5.3" },
+
             children: [
-                Field({ name: "Global", constraint: "0 to 2", description: "Global operational state." }),
-                Field({ name: "Lift", constraint: "2 to 4", description: "Lift operational state." }),
-                Field({ name: "Tilt", constraint: "4 to 6", description: "Tilt operational state." })
+                Field({
+                    name: "Global", type: "MovementStatus", constraint: "0 to 2",
+                    description: "Global operational state.",
+                    details: "These bits shall indicate in which direction the covering is currently moving or if it has stopped. " +
+                        "Global operational state shall always reflect the overall motion of the device.",
+                    xref: { document: "cluster", section: "5.3.5.3.1" }
+                }),
+
+                Field({
+                    name: "Lift", type: "MovementStatus", constraint: "2 to 4", description: "Lift operational state.",
+                    details: "These bits shall indicate in which direction the covering’s lift is currently moving or if it has " +
+                        "stopped.",
+                    xref: { document: "cluster", section: "5.3.5.3.2" }
+                }),
+
+                Field({
+                    name: "Tilt", type: "MovementStatus", constraint: "4 to 6", description: "Tilt operational state.",
+                    details: "These bits shall indicate in which direction the covering’s tilt is currently moving or if it has " +
+                        "stopped.",
+                    xref: { document: "cluster", section: "5.3.5.3.3" }
+                })
             ]
         }),
 
@@ -704,26 +649,30 @@ export const WindowCovering = Cluster({
         }),
 
         Datatype({
-            name: "TypeEnum", type: "enum8",
+            name: "TypeEnum", type: "enum8", asOf: "1.2",
             xref: { document: "cluster", section: "5.3.5.5" },
 
             children: [
-                Field({ name: "RollerShade", id: 0x0, conformance: "LF", description: "RollerShade" }),
-                Field({ name: "RollerShade2Motor", id: 0x1, conformance: "LF", description: "RollerShade - 2 Motor" }),
-                Field({ name: "RollerShadeExterior", id: 0x2, conformance: "LF", description: "RollerShade - Exterior" }),
+                Field({ name: "Rollershade", id: 0x0, conformance: "LF & !TL", description: "RollerShade" }),
                 Field({
-                    name: "RollerShadeExterior2Motor", id: 0x3, conformance: "LF",
+                    name: "Rollershade2Motor", id: 0x1, conformance: "LF & !TL", description: "RollerShade - 2 Motor"
+                }),
+                Field({
+                    name: "RollershadeExterior", id: 0x2, conformance: "LF & !TL",
+                    description: "RollerShade - Exterior"
+                }),
+                Field({
+                    name: "RollershadeExterior2Motor", id: 0x3, conformance: "LF & !TL",
                     description: "RollerShade - Exterior - 2 Motor"
                 }),
-                Field({ name: "Drapery", id: 0x4, conformance: "LF", description: "Drapery (curtain)" }),
-                Field({ name: "Awning", id: 0x5, conformance: "LF", description: "Awning" }),
+                Field({ name: "Drapery", id: 0x4, conformance: "LF & !TL", description: "Drapery (curtain)" }),
+                Field({ name: "Awning", id: 0x5, conformance: "LF & !TL", description: "Awning" }),
                 Field({ name: "Shutter", id: 0x6, conformance: "LF | TL", description: "Shutter" }),
-                Field({ name: "TiltBlindTiltOnly", id: 0x7, conformance: "TL", description: "Tilt Blind - Tilt Only" }),
                 Field({
-                    name: "TiltBlindLiftAndTilt", id: 0x8, conformance: "LF & TL",
-                    description: "Tilt Blind - Lift & Tilt"
+                    name: "TiltBlindTiltOnly", id: 0x7, conformance: "!LF & TL", description: "Tilt Blind - Tilt Only"
                 }),
-                Field({ name: "ProjectorScreen", id: 0x9, conformance: "LF", description: "Projector Screen" }),
+                Field({ name: "TiltBlindLift", id: 0x8, conformance: "LF & TL", description: "Tilt Blind - Lift & Tilt" }),
+                Field({ name: "ProjectorScreen", id: 0x9, conformance: "LF & !TL", description: "Projector Screen" }),
                 Field({ name: "Unknown", id: 0xff, conformance: "O", description: "Unknown" })
             ]
         }),

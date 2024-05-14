@@ -8,14 +8,8 @@ import { FabricIndex } from "@project-chip/matter.js/elements/FabricIndex";
 import { Logger } from "@project-chip/matter.js/log";
 import { AnyElement, DatatypeElement, FieldElement, Metatype } from "@project-chip/matter.js/model";
 import { addDocumentation } from "./add-documentation.js";
-import {
-    fixConformanceErrors,
-    fixConstraintErrors,
-    fixDefaultErrors,
-    fixTypeErrors,
-    fixTypeIdentifier,
-} from "./fixes.js";
-import { Bits, Code, Identifier, Integer, LowerIdentifier, NoSpace, Str } from "./html-translators.js";
+import { fixConstraintErrors, fixDefaultErrors, fixTypeErrors, fixTypeIdentifier } from "./fixes.js";
+import { Bits, ConformanceCode, Identifier, Integer, LowerIdentifier, NoSpace, Str } from "./html-translators.js";
 import { HtmlReference } from "./spec-types.js";
 import {
     Alias,
@@ -135,7 +129,7 @@ const FieldSchema = {
     quality: Optional(Str),
     default: Optional(NoSpace),
     access: Optional(Str),
-    conformance: Optional(Code),
+    conformance: Optional(ConformanceCode),
     children: Children(translateValueChildren),
 
     // This only applies to the "global elements" table in the core spec
@@ -154,11 +148,6 @@ export function translateFields<T extends AnyElement.Type<FieldRecord>>(
 
     records = records.filter(r => {
         fixTypeErrors(r);
-
-        if (fixConformanceErrors(r) === false) {
-            return false;
-        }
-
         fixConstraintErrors(r);
         fixDefaultErrors(r);
 
@@ -213,7 +202,7 @@ export function translateValueChildren(
             let records = translateTable("value", definition, {
                 id: Alias(Integer, ...ids),
                 name: Alias(Identifier, ...names),
-                conformance: Optional(Code),
+                conformance: Optional(ConformanceCode),
                 description: Optional(Alias(Str, "summary", "notes")),
                 meaning: Optional(Str),
             });
@@ -359,6 +348,9 @@ export function selectMetatype(typeName: string) {
         case "single":
         case "double":
             return Metatype.float;
+
+        case "date":
+            return Metatype.date;
     }
 
     if (typeName.startsWith("uint")) {

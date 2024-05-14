@@ -10,6 +10,9 @@ import { Specification } from "@project-chip/matter.js/model";
  * An HTML table
  */
 export type Table = {
+    /** Used to identify split tables */
+    firstRowIdentity?: string;
+
     /** Field names */
     fields: string[];
 

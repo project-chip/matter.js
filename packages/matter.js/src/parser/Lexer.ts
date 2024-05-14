@@ -216,9 +216,10 @@ function* lex(
                 {
                     const base = current.value;
                     if (peeked.value === "=") {
+                        const type = `${base}${peeked.value}` as BasicToken.Operator;
                         next();
                         yield {
-                            type: `${base}${peeked.value}` as BasicToken.Operator,
+                            type,
                             startLine: line,
                             startChar: char,
                         };

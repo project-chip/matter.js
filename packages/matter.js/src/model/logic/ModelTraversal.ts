@@ -60,7 +60,11 @@ export class ModelTraversal {
 
     /**
      * Determine the type for a model.  This is the string name of the base model.  Usually this is simply the type
-     * field but we infer the type of some datatypes based on their parent's type.
+     * field but we infer the type in some cases where it is not supplied explicitly:
+     *
+     * - Children of maps and enums are uints of corresponding size
+     * - Models that shadow another model in their parent's inheritance effectively inherit from the shadow so have
+     *   their own name as the type name
      */
     getTypeName(model: Model | undefined): string | undefined {
         if (!model) {
@@ -103,10 +107,11 @@ export class ModelTraversal {
                     }
                 }
 
-                // If I override a field my type is the same as the overridden field
-                const overridden = ancestor.children.select(name, [model.tag], this.dismissed);
-                if (overridden?.type) {
-                    result = overridden.type;
+                // If I shadow a field my type is the same as the overridden field
+                const shadow = ancestor.children.select(name, [model.tag], this.dismissed);
+                if (shadow?.type) {
+                    // The shadow's name is the same as mine so this is actually my own name
+                    result = shadow.name;
                     return false;
                 }
             });

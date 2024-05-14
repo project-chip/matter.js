@@ -519,6 +519,36 @@ export const ScenesManagement = Cluster({
                     xref: { document: "cluster", section: "1.4.7.2.3" }
                 }),
 
+                Field({
+                    name: "SceneValid", id: 0x3, type: "bool", access: "S", conformance: "M", default: true,
+
+                    details: "This field shall indicate whether the state of the server corresponds to that associated with the " +
+                        "CurrentScene and CurrentGroup fields of the SceneInfoStruct they belong to. TRUE indicates that " +
+                        "these fields are valid, FALSE indicates that they are not valid." +
+                        "\n" +
+                        "This field shall be set to False for all other fabrics when an attribute with the Scenes (\"S\") " +
+                        "designation in the Quality column of another cluster present on the same endpoint is modified or " +
+                        "when the current scene is modified by a fabric through the RecallScene or StoreScene commands, " +
+                        "regardless of the fabric-scoped access quality of the command." +
+                        "\n" +
+                        "In the event where the SceneValid field is set to False for a fabric, the CurrentScene and " +
+                        "CurrentGroup fields shall be the last invoked scene and group for that fabric. In the event where " +
+                        "no scene was previously invoked for that fabric, the CurrentScene and CurrentGroup fields shall be " +
+                        "their default values.",
+
+                    xref: { document: "cluster", section: "1.4.7.2.4" }
+                }),
+
+                Field({
+                    name: "RemainingCapacity", id: 0x4, type: "uint8", access: "F", conformance: "M",
+                    constraint: "max 253",
+                    details: "This field shall indicate the remaining capacity of the Scene Table on this endpoint for the " +
+                        "accessing fabric. Note that this value may change between reads, even if no entries are added or " +
+                        "deleted on the accessing fabric, due to other clients associated with other fabrics adding or " +
+                        "deleting entries that impact the resource usage on the device.",
+                    xref: { document: "cluster", section: "1.4.7.2.5" }
+                }),
+
                 Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),

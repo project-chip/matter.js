@@ -52,6 +52,8 @@ function extractUsefulDocumentation(p: HTMLElement) {
         .replace(/, derived from \w+,/, "")
         .replace(/\([^)]*$/, "")
         .replace(/\s\s+/, "  ")
+        .replace(/This attribute shall (?:indicate|represent)/, "Indicates")
+        .replace(/This attribute shall be null/, "Null")
         .trim();
 }
 

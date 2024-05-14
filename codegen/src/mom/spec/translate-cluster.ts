@@ -17,8 +17,15 @@ import {
 } from "@project-chip/matter.js/model";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
-import { fixConformanceErrors } from "./fixes.js";
-import { Code, Identifier, Integer, LowerIdentifier, NoSpace, Str, UpperIdentifier } from "./html-translators.js";
+import {
+    ConformanceCode,
+    Identifier,
+    Integer,
+    LowerIdentifier,
+    NoSpace,
+    Str,
+    UpperIdentifier,
+} from "./html-translators.js";
 import { ClusterReference } from "./spec-types.js";
 import { translateDatatype, translateFields, translateValueChildren } from "./translate-datatype.js";
 import { Alias, Children, Optional, translateRecordsToMatter, translateTable } from "./translate-table.js";
@@ -172,7 +179,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
     function translateFeatures() {
         const records = translateTable("feature", definition.features, {
             constraint: Alias(Integer, "bit", "id"),
-            conformance: Optional(Code),
+            conformance: Optional(ConformanceCode),
             details: Optional(Alias(Str, "description", "summary")),
 
             // Must define after details which uses description column
@@ -184,10 +191,6 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             // We let Model handle translation to the proper type
             default: Optional(Alias(NoSpace, "def")),
         });
-
-        for (const record of records) {
-            fixConformanceErrors(record);
-        }
 
         const values = translateRecordsToMatter("feature", records, FieldElement);
         values &&
@@ -216,6 +219,7 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
         }
         for (const attributeSet of attributeSets) {
             const attributes = translateFields(AttributeElement, attributeSet);
+
             if (attributes) {
                 children.push(...attributes);
             }
@@ -229,9 +233,9 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
             direction: Optional(Str),
             response: Optional(Identifier),
             access: Optional(Str),
-            conformance: Optional(Code),
+            conformance: Optional(ConformanceCode),
             children: Children(translateValueChildren),
-        }).filter(r => r.conformance !== "Zigbee");
+        });
 
         const commands = translateRecordsToMatter("command", records, r => {
             let direction: CommandElement.Direction | undefined;
@@ -271,7 +275,7 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
             name: Identifier,
             priority: Optional(LowerIdentifier),
             access: Optional(Str),
-            conformance: Optional(Code),
+            conformance: Optional(ConformanceCode),
             children: Children(translateValueChildren),
         });
 

@@ -20,11 +20,11 @@ export function MergedModel(
     priorities = MergedModel.DefaultPriorities,
 ): Model {
     const priority = new PriorityHandler(priorities || MergedModel.DefaultPriorities);
-    const visitor = new MergeTraversal<Model>(priority, (variants, recurse) => {
+    const visitor = new MergeTraversal<Model>(revision, priority, (variants, recurse) => {
         const merged = merge(variants);
 
         if (variants.tag === ElementTag.Cluster) {
-            reparentToCanonicalParent(priority, variants);
+            reparentToCanonicalParent(revision, priority, variants);
         }
 
         // If the manual override specifies a type but no children, ignore children from other variants.  This allows us
@@ -44,14 +44,7 @@ export function MergedModel(
             }
         }
 
-        // Kick out any children that are inapplicable given the target Matter revision
-        const children = recurse().filter(
-            child =>
-                (child.asOf === undefined || child.asOf >= revision) &&
-                (child.until === undefined || child.until < revision),
-        );
-
-        merged.children = children;
+        merged.children = recurse();
 
         return merged;
     });
@@ -90,7 +83,7 @@ export function MergedModel(
                 }
             }
         }
-        if (properties.default === "RV") debugger;
+
         return Model.create(properties as AnyElement);
     }
 }
@@ -100,10 +93,11 @@ export function MergedModel(
  */
 class MergeTraversal<S> extends ModelVariantTraversal<S> {
     constructor(
+        revision: Specification.Revision,
         public priority: PriorityHandler,
         public visitor: (variants: VariantDetail, recurse: () => S[]) => S,
     ) {
-        super(priority.get("*", "type"));
+        super(revision, priority.get("*", "type"));
     }
 
     visit(variants: VariantDetail, recurse: () => S[]) {
@@ -223,12 +217,16 @@ class PriorityHandler {
  * cluster-scoped type, not the other way around.  We know this is true because CHIP doesn't support direct children and
  * the structures we build ourselves are already in the preferred format.
  */
-function reparentToCanonicalParent(priority: PriorityHandler, variants: VariantDetail) {
+function reparentToCanonicalParent(
+    revision: Specification.Revision,
+    priority: PriorityHandler,
+    variants: VariantDetail,
+) {
     // Collect datatypes from which we move children so we can discard
     const deparented = Array<Model>();
 
     // Now visit the tree and reparent as necessary
-    const traversal = new MergeTraversal(priority, (variants, recurse) => {
+    const traversal = new MergeTraversal(revision, priority, (variants, recurse) => {
         // Determine the canonical type for this element
         const type = traversal.chooseType(variants);
         if (!(type instanceof ValueModel)) {

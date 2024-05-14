@@ -149,6 +149,17 @@ export const AccessControl = Cluster({
                     details: "The type of change as appropriate.",
                     xref: { document: "core", section: "9.10.7.1.3" }
                 }),
+
+                Field({
+                    name: "LatestValue", id: 0x4, type: "AccessControlEntryStruct", access: "S", conformance: "M",
+                    quality: "X",
+                    details: "The latest value of the changed entry." +
+                        "\n" +
+                        "This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if " +
+                        "resources are scarce.",
+                    xref: { document: "core", section: "9.10.7.1.4" }
+                }),
+
                 Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
@@ -190,6 +201,22 @@ export const AccessControl = Cluster({
                         "occurred via a CASE or PASE session; the other shall be null.",
 
                     xref: { document: "core", section: "9.10.7.2.2" }
+                }),
+
+                Field({
+                    name: "ChangeType", id: 0x3, type: "ChangeTypeEnum", access: "S", conformance: "M",
+                    details: "The type of change as appropriate.",
+                    xref: { document: "core", section: "9.10.7.2.3" }
+                }),
+
+                Field({
+                    name: "LatestValue", id: 0x4, type: "AccessControlExtensionStruct", access: "S", conformance: "M",
+                    quality: "X",
+                    details: "The latest value of the changed extension." +
+                        "\n" +
+                        "This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if " +
+                        "resources are scarce.",
+                    xref: { document: "core", section: "9.10.7.2.4" }
                 }),
 
                 Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
@@ -298,6 +325,81 @@ export const AccessControl = Cluster({
                         "use the Group auth mode.",
 
                     xref: { document: "core", section: "9.10.4.5.1" }
+                }),
+
+                Field({
+                    name: "AuthMode", id: 0x2, type: "AccessControlEntryAuthModeEnum", access: "S", conformance: "M",
+                    details: "The AuthMode field shall specify the authentication mode required by this Access Control Entry.",
+                    xref: { document: "core", section: "9.10.4.5.2" }
+                }),
+
+                Field({
+                    name: "Subjects", id: 0x3, type: "list", access: "S", conformance: "M",
+                    constraint: "max subjectsPerAccessControlEntry", quality: "X",
+
+                    details: "The subjects field shall specify a list of Subject IDs, to which this Access Control Entry grants " +
+                        "access." +
+                        "\n" +
+                        "Device types may impose additional constraints on the minimum number of subjects per Access Control " +
+                        "Entry." +
+                        "\n" +
+                        "An attempt to create an entry with more subjects than the node can support shall result in a " +
+                        "RESOURCE_EXHAUSTED error and the entry shall NOT be created." +
+                        "\n" +
+                        "### Subject ID shall be of type uint64 with semantics depending on the entry’s AuthMode as follows:" +
+                        "\n" +
+                        "Subject Semantics" +
+                        "\n" +
+                        "An empty subjects list indicates a wildcard; that is, this entry shall grant access to any Node " +
+                        "that successfully authenticates via AuthMode. The subjects list shall NOT be empty if the entry’s " +
+                        "AuthMode is PASE." +
+                        "\n" +
+                        "The PASE AuthMode is reserved for future use (see Section 6.6.2.8, “Bootstrapping of the Access " +
+                        "Control Cluster”). An attempt to write an entry with AuthMode set to PASE shall fail with a status " +
+                        "code of CONSTRAINT_ERROR." +
+                        "\n" +
+                        "For PASE authentication, the Passcode ID identifies the required passcode verifier, and shall be 0 " +
+                        "for the default commissioning passcode." +
+                        "\n" +
+                        "For CASE authentication, the Subject ID is a distinguished name within the Operational Certificate " +
+                        "shared during CASE session establishment, the type of which is determined by its range to be one of:" +
+                        "\n" +
+                        "  • a Node ID, which identifies the required source node directly (by ID)" +
+                        "\n" +
+                        "  • a CASE Authenticated Tag, which identifies the required source node indirectly (by tag)" +
+                        "\n" +
+                        "For Group authentication, the Group ID identifies the required group, as defined in the Group Key " +
+                        "Management Cluster.",
+
+                    xref: { document: "core", section: "9.10.4.5.3" },
+                    children: [Field({ name: "entry", type: "subject-id" })]
+                }),
+
+                Field({
+                    name: "Targets", id: 0x4, type: "list", access: "S", conformance: "M",
+                    constraint: "max targetsPerAccessControlEntry", quality: "X",
+
+                    details: "The targets field shall specify a list of AccessControlTargetStruct, which define the clusters on " +
+                        "this Node to which this Access Control Entry grants access." +
+                        "\n" +
+                        "Device types may impose additional constraints on the minimum number of targets per Access Control " +
+                        "Entry." +
+                        "\n" +
+                        "An attempt to create an entry with more targets than the node can support shall result in a " +
+                        "RESOURCE_EXHAUSTED error and the entry shall NOT be created." +
+                        "\n" +
+                        "A single target shall contain at least one field (Cluster, Endpoint, or DeviceType), and shall NOT " +
+                        "contain both an Endpoint field and a DeviceType field." +
+                        "\n" +
+                        "A target grants access based on the presence of fields as follows:" +
+                        "\n" +
+                        "Target Semantics" +
+                        "\n" +
+                        "An empty targets list indicates a wildcard: that is, this entry shall grant access to all cluster " +
+                        "instances on all endpoints on this Node.",
+
+                    xref: { document: "core", section: "9.10.4.5.4" },
+                    children: [Field({ name: "entry", type: "AccessControlTargetStruct" })]
                 }),
 
                 Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })

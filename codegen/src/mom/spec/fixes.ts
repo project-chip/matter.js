@@ -83,31 +83,28 @@ export function fixConstraintErrors(record: { constraint?: string }) {
     }
 }
 
-export function fixConformanceErrors(record: { conformance?: string }) {
-    let { conformance } = record;
+export function fixConformance(conformance?: string) {
     if (!conformance) {
         return;
     }
 
-    if (conformance === "Zigbee") {
-        return false;
+    if (conformance.match(/\[?Zigbee\]?(?:, D)?/)) {
+        return "D";
     }
 
     if (conformance === "Matter!Zigbee") {
-        delete record.conformance;
         return;
     }
 
     // This is global FabricScoped attribute.  We only install on fabric-scoped structs so if it's present it's
     // mandatory
     if (conformance.match(/fabric\s*-\s*scoped/i)) {
-        record.conformance = "M";
-        return;
+        return "M";
     }
 
     conformance = conformance?.replace(/\|CO N/, "|CON").replace("PIRUnoccupiedToOccupied", "PirUnoccupiedToOccupied");
 
-    record.conformance = conformance;
+    return conformance;
 }
 
 export function fixDefaultErrors(record: { default?: string; type?: string }) {
