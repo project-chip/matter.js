@@ -33,7 +33,7 @@ MatterSpecification.v11.Core § 11.10.4.1.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L51)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:51](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L51)
 
 ___
 
@@ -52,7 +52,7 @@ MatterSpecification.v11.Core § 11.10.4.1.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L31)
 
 ___
 
@@ -71,4 +71,4 @@ MatterSpecification.v11.Core § 11.10.4.1.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L41)

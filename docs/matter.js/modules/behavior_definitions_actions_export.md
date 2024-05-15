@@ -55,9 +55,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:158](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L158)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:152](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L152)
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:312](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L312)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:300](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L300)
 
 ___
 
@@ -75,7 +75,7 @@ MatterSpecification.v11.Core § 9.14.6.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:142](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L142)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:138](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L138)
 
 ___
 
@@ -90,15 +90,13 @@ or Active, depending on the actions (see examples 4 and 6).
 Example: disable a "wakeup" experience for a period of 1 week when going on holiday (to prevent them from turning on
 in the morning while you’re not at home). After this period, the wakeup experience will control the lights as before.
 
-This field shall indicate the requested duration in seconds.
-
 **`See`**
 
 MatterSpecification.v11.Core § 9.14.6.12
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:156](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L156)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:150](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L150)
 
 ___
 
@@ -116,7 +114,7 @@ MatterSpecification.v11.Core § 9.14.6.9
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:119](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L119)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:117](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L117)
 
 ___
 
@@ -131,15 +129,13 @@ Example: enable a "presence mimicking" behavior for the lights in your home duri
 used to indicated the length of your absence from home. After that period, the presence mimicking behavior will no
 longer control these lights.
 
-This field shall indicate the requested duration in seconds.
-
 **`See`**
 
 MatterSpecification.v11.Core § 9.14.6.10
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:133](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L133)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:129](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L129)
 
 ___
 
@@ -158,7 +154,7 @@ MatterSpecification.v11.Core § 9.14.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L21)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L21)
 
 ___
 
@@ -182,7 +178,7 @@ MatterSpecification.v11.Core § 9.14.6.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L36)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:36](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L36)
 
 ___
 
@@ -201,7 +197,7 @@ MatterSpecification.v11.Core § 9.14.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L80)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L80)
 
 ___
 
@@ -219,15 +215,13 @@ transitionary nature while the latter is more permanent) and on the other hand t
 differently in the implementation of the action (e.g. a Pause would be automatically resumed after some hours or
 during a nightly reset, while an Disable would remain in effect until explicitly enabled again).
 
-This field shall indicate the requested duration in seconds.
-
 **`See`**
 
 MatterSpecification.v11.Core § 9.14.6.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:97](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L97)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:95](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L95)
 
 ___
 
@@ -249,7 +243,7 @@ MatterSpecification.v11.Core § 9.14.6.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L110)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:108](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L108)
 
 ___
 
@@ -272,7 +266,7 @@ MatterSpecification.v11.Core § 9.14.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L50)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:50](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L50)
 
 ___
 
@@ -292,7 +286,7 @@ MatterSpecification.v11.Core § 9.14.6.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L61)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:61](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L61)
 
 ___
 
@@ -310,7 +304,7 @@ MatterSpecification.v11.Core § 9.14.6.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L70)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:70](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L70)
 
 ## Variables
 
@@ -322,8 +316,8 @@ ActionsBehavior is the base class for objects that support interaction with [Act
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:16](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/actions/ActionsBehavior.ts#L23)

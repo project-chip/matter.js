@@ -37,7 +37,7 @@ TypeFromSchema.bytesDownloaded
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:177
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:175
 
 ___
 
@@ -51,7 +51,7 @@ TypeFromSchema.platformCode
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:179
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:177
 
 ___
 
@@ -65,7 +65,7 @@ TypeFromSchema.progressPercent
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:178
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:176
 
 ___
 
@@ -79,4 +79,4 @@ TypeFromSchema.softwareVersion
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:176
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:174

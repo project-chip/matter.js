@@ -42,4 +42,4 @@ TypeFromSchema.groupKeySetIDs
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:400
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:413

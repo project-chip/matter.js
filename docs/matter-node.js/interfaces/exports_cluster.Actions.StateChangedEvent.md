@@ -30,13 +30,19 @@ MatterSpecification.v11.Core § 9.14.7.1
 
 • **actionId**: `number`
 
+This field shall be set to the ActionID of the action which has changed state.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.7.1.1
+
 #### Inherited from
 
 TypeFromSchema.actionId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:572
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:593
 
 ___
 
@@ -49,7 +55,7 @@ ActionID.
 
 **`See`**
 
-MatterSpecification.v11.Core § 9.14.7.1.1
+MatterSpecification.v11.Core § 9.14.7.1.2
 
 #### Inherited from
 
@@ -57,7 +63,7 @@ TypeFromSchema.invokeId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:579
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:600
 
 ___
 
@@ -69,7 +75,7 @@ This field shall be set to state that the action has changed to.
 
 **`See`**
 
-MatterSpecification.v11.Core § 9.14.7.1.2
+MatterSpecification.v11.Core § 9.14.7.1.3
 
 #### Inherited from
 
@@ -77,4 +83,4 @@ TypeFromSchema.newState
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:585
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:606

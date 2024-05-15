@@ -8,7 +8,7 @@ This structure encodes a fabric-scoped location of an OTA provider on a given fa
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.19.7.4.20
+MatterSpecification.v11.Core § 11.19.7.4.21
 
 ## Hierarchy
 

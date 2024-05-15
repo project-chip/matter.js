@@ -29,13 +29,20 @@ MatterSpecification.v11.Core § 11.16.10.3
 
 • `Optional` **name**: `string`
 
+Current time zone name. This name SHOULD use the country/city format specified by the IANA time zone
+database [https://www.iana.org/time-zones].
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.16.10.3.2
+
 #### Inherited from
 
 TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:109](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:120](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L120)
 
 ___
 
@@ -43,10 +50,16 @@ ___
 
 • **offset**: `number`
 
+Current time zone offset from UTC in seconds.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.16.10.3.1
+
 #### Inherited from
 
 TypeFromSchema.offset
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:108](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L108)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:112](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L112)

@@ -34,8 +34,8 @@ BooleanStateBehavior is the base class for objects that support interaction with
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts#L15)
+[packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts:15](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts#L15)
 
-[packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts#L18)
+[packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts:18](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts#L18)
 
-[packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts#L20)
+[packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts:20](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/boolean-state/BooleanStateBehavior.ts#L20)

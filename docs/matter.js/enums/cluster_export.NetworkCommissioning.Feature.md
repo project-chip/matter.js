@@ -30,7 +30,7 @@ Ethernet related features
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1046](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1046)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1057](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1057)
 
 ___
 
@@ -44,7 +44,7 @@ Thread related features
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1039](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1039)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1050](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1050)
 
 ___
 
@@ -58,4 +58,4 @@ Wi-Fi related features
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1032](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1032)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1043](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1043)

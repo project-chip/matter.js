@@ -4,11 +4,6 @@
 
 [cluster/export](../modules/cluster_export.md).[GeneralCommissioning](../modules/cluster_export.GeneralCommissioning.md).CommissioningCompleteResponse
 
-This field shall contain the result of the operation, based on the behavior specified in the functional
-description of the CommissioningComplete command.
-
-See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.9.6.7
@@ -32,13 +27,19 @@ MatterSpecification.v11.Core § 11.9.6.7
 
 • **debugText**: `string`
 
+See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.9.6.7.2
+
 #### Inherited from
 
 TypeFromSchema.debugText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:207](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L207)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:216](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L216)
 
 ___
 
@@ -46,10 +47,17 @@ ___
 
 • **errorCode**: [`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)
 
+This field shall contain the result of the operation, based on the behavior specified in the functional
+description of the CommissioningComplete command.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.9.6.7.1
+
 #### Inherited from
 
 TypeFromSchema.errorCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:206](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L206)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:209](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L209)

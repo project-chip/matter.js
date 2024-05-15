@@ -42,7 +42,7 @@ GeneralCommissioningBehavior.State.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L196)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
 
 ## Properties
 
@@ -54,7 +54,7 @@ Set to false to prevent the controller from changing the country code during com
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts:224](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts#L224)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts:224](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts#L224)
 
 ___
 
@@ -75,7 +75,7 @@ GeneralCommissioningBehavior.State.basicCommissioningInfo
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:255](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L255)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:259](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L259)
 
 ___
 
@@ -108,7 +108,7 @@ GeneralCommissioningBehavior.State.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:247](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L247)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:251](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L251)
 
 ___
 
@@ -120,7 +120,7 @@ Set to an array of two-letter country codes to limit the countries the controlle
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts:229](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts#L229)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts:229](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts#L229)
 
 ___
 
@@ -151,7 +151,7 @@ GeneralCommissioningBehavior.State.locationCapability
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:283](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L283)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:287](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L287)
 
 ___
 
@@ -174,7 +174,7 @@ GeneralCommissioningBehavior.State.regulatoryConfig
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:265](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L265)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:269](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L269)
 
 ___
 
@@ -196,4 +196,4 @@ GeneralCommissioningBehavior.State.supportsConcurrentConnection
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:296](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L296)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:300](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L300)

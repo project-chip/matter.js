@@ -32,7 +32,7 @@ Color loop is supported.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:1722
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:1715
 
 ___
 
@@ -46,7 +46,7 @@ Supports specification of color temperature.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:1734
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:1727
 
 ___
 
@@ -60,7 +60,7 @@ Enhanced hue is supported.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:1716
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:1709
 
 ___
 
@@ -74,7 +74,7 @@ Supports color specification via hue/saturation.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:1710
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:1703
 
 ___
 
@@ -88,4 +88,4 @@ Supports color specification via XY.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:1728
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:1721

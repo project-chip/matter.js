@@ -28,7 +28,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:102
+packages/matter.js/dist/esm/util/Observable.d.ts:133
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:110
+packages/matter.js/dist/esm/util/Observable.d.ts:141
 
 ___
 
@@ -64,7 +64,7 @@ untyped instance and allow any argument.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:101
+packages/matter.js/dist/esm/util/Observable.d.ts:132
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:113
+packages/matter.js/dist/esm/util/Observable.d.ts:144
 
 ___
 
@@ -101,4 +101,4 @@ an untyped emitter and allow any argument.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:109
+packages/matter.js/dist/esm/util/Observable.d.ts:140

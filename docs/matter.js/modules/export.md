@@ -23,6 +23,7 @@
 ### Type Aliases
 
 - [CommissioningControllerOptions](export.md#commissioningcontrolleroptions)
+- [CommissioningServerCommands](export.md#commissioningservercommands)
 - [MatterServerOptions](export.md#matterserveroptions)
 - [NodeCommissioningOptions](export.md#nodecommissioningoptions)
 - [NodeOptions](export.md#nodeoptions)
@@ -42,7 +43,25 @@ Constructor options for the CommissioningController class
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/CommissioningController.ts#L47)
+[packages/matter.js/src/CommissioningController.ts:47](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/CommissioningController.ts#L47)
+
+___
+
+### CommissioningServerCommands
+
+Ƭ **CommissioningServerCommands**: `Object`
+
+Commands exposed by the CommissioningServer
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `testEventTrigger` | [`ClusterServerHandlers`](cluster_export.md#clusterserverhandlers)\<typeof [`GeneralDiagnosticsCluster`](cluster_export.md#generaldiagnosticscluster-1)\>[``"testEventTrigger"``] | Provide a means for certification tests to trigger some test-plan-specific events. |
+
+#### Defined in
+
+[packages/matter.js/src/CommissioningServer.ts:202](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/CommissioningServer.ts#L202)
 
 ___
 
@@ -60,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/MatterServer.ts#L32)
+[packages/matter.js/src/MatterServer.ts:32](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterServer.ts#L32)
 
 ___
 
@@ -72,7 +91,7 @@ Options needed to commission a new node
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/CommissioningController.ts#L106)
+[packages/matter.js/src/CommissioningController.ts:106](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/CommissioningController.ts#L106)
 
 ___
 
@@ -89,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/MatterServer.ts#L20)
+[packages/matter.js/src/MatterServer.ts:20](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterServer.ts#L20)
 
 ## Variables
 
@@ -99,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/CommissioningServer.ts#L76)
+[packages/matter.js/src/CommissioningServer.ts:77](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/CommissioningServer.ts#L77)
 
 ___
 
@@ -116,4 +135,4 @@ MatterSpecification.v11.Core § 7.1.1
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/CommissioningServer.ts#L86)
+[packages/matter.js/src/CommissioningServer.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/CommissioningServer.ts#L87)

@@ -12,33 +12,24 @@
 
 ### Properties
 
-- [caseAuthenticatedTags](exports_fabric.FabricBuilder.md#caseauthenticatedtags)
+- [#private](exports_fabric.FabricBuilder.md##private)
+
+### Accessors
+
 - [fabricId](exports_fabric.FabricBuilder.md#fabricid)
 - [fabricIndex](exports_fabric.FabricBuilder.md#fabricindex)
-- [identityProtectionKey](exports_fabric.FabricBuilder.md#identityprotectionkey)
-- [intermediateCACert](exports_fabric.FabricBuilder.md#intermediatecacert)
 - [keyPair](exports_fabric.FabricBuilder.md#keypair)
-- [label](exports_fabric.FabricBuilder.md#label)
 - [nodeId](exports_fabric.FabricBuilder.md#nodeid)
-- [operationalCert](exports_fabric.FabricBuilder.md#operationalcert)
-- [rootCert](exports_fabric.FabricBuilder.md#rootcert)
-- [rootNodeId](exports_fabric.FabricBuilder.md#rootnodeid)
-- [rootPublicKey](exports_fabric.FabricBuilder.md#rootpublickey)
-- [rootVendorId](exports_fabric.FabricBuilder.md#rootvendorid)
+- [publicKey](exports_fabric.FabricBuilder.md#publickey)
 
 ### Methods
 
 - [build](exports_fabric.FabricBuilder.md#build)
 - [createCertificateSigningRequest](exports_fabric.FabricBuilder.md#createcertificatesigningrequest)
-- [getFabricId](exports_fabric.FabricBuilder.md#getfabricid)
-- [getFabricIndex](exports_fabric.FabricBuilder.md#getfabricindex)
-- [getNodeId](exports_fabric.FabricBuilder.md#getnodeid)
-- [getPublicKey](exports_fabric.FabricBuilder.md#getpublickey)
 - [hasRootCert](exports_fabric.FabricBuilder.md#hasrootcert)
 - [initializeFromFabricForUpdate](exports_fabric.FabricBuilder.md#initializefromfabricforupdate)
 - [matchesToFabric](exports_fabric.FabricBuilder.md#matchestofabric)
 - [setIdentityProtectionKey](exports_fabric.FabricBuilder.md#setidentityprotectionkey)
-- [setIntermediateCACert](exports_fabric.FabricBuilder.md#setintermediatecacert)
 - [setOperationalCert](exports_fabric.FabricBuilder.md#setoperationalcert)
 - [setRootCert](exports_fabric.FabricBuilder.md#setrootcert)
 - [setRootNodeId](exports_fabric.FabricBuilder.md#setrootnodeid)
@@ -56,99 +47,37 @@
 
 ## Properties
 
-### caseAuthenticatedTags
+### #private
 
-• `Private` **caseAuthenticatedTags**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:100
-
-___
-
-### fabricId
-
-• `Private` `Optional` **fabricId**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:93
-
-___
-
-### fabricIndex
-
-• `Private` `Optional` **fabricIndex**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:98
-
-___
-
-### identityProtectionKey
-
-• `Private` `Optional` **identityProtectionKey**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:97
-
-___
-
-### intermediateCACert
-
-• `Private` `Optional` **intermediateCACert**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:91
-
-___
-
-### keyPair
-
-• `Private` **keyPair**: `any`
+• `Private` **#private**: `any`
 
 #### Defined in
 
 packages/matter.js/dist/esm/fabric/Fabric.d.ts:88
 
-___
+## Accessors
 
-### label
+### fabricId
 
-• `Private` **label**: `any`
+• `get` **fabricId**(): `undefined` \| [`FabricId`](../modules/exports_datatype.md#fabricid)
 
-#### Defined in
+#### Returns
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:99
-
-___
-
-### nodeId
-
-• `Private` `Optional` **nodeId**: `any`
+`undefined` \| [`FabricId`](../modules/exports_datatype.md#fabricid)
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:94
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:101
 
 ___
 
-### operationalCert
+### fabricIndex
 
-• `Private` `Optional` **operationalCert**: `any`
+• `get` **fabricIndex**(): `undefined` \| [`FabricIndex`](../modules/exports_datatype.md#fabricindex)
 
-#### Defined in
+#### Returns
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:92
-
-___
-
-### rootCert
-
-• `Private` `Optional` **rootCert**: `any`
+`undefined` \| [`FabricIndex`](../modules/exports_datatype.md#fabricindex)
 
 #### Defined in
 
@@ -156,29 +85,41 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:90
 
 ___
 
-### rootNodeId
+### keyPair
 
-• `Private` `Optional` **rootNodeId**: `any`
+• `get` **keyPair**(): [`PrivateKey`](../interfaces/crypto_export.PrivateKey.md)
 
-#### Defined in
+#### Returns
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:95
-
-___
-
-### rootPublicKey
-
-• `Private` `Optional` **rootPublicKey**: `any`
+[`PrivateKey`](../interfaces/crypto_export.PrivateKey.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:96
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:102
 
 ___
 
-### rootVendorId
+### nodeId
 
-• `Private` `Optional` **rootVendorId**: `any`
+• `get` **nodeId**(): `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
+
+#### Returns
+
+`undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:100
+
+___
+
+### publicKey
+
+• `get` **publicKey**(): `Uint8Array`
+
+#### Returns
+
+`Uint8Array`
 
 #### Defined in
 
@@ -202,7 +143,7 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:89
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:115
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:103
 
 ___
 
@@ -216,63 +157,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:103
-
-___
-
-### getFabricId
-
-▸ **getFabricId**(): `undefined` \| [`FabricId`](../modules/exports_datatype.md#fabricid)
-
-#### Returns
-
-`undefined` \| [`FabricId`](../modules/exports_datatype.md#fabricid)
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:114
-
-___
-
-### getFabricIndex
-
-▸ **getFabricIndex**(): `undefined` \| [`FabricIndex`](../modules/exports_datatype.md#fabricindex)
-
-#### Returns
-
-`undefined` \| [`FabricIndex`](../modules/exports_datatype.md#fabricindex)
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:102
-
-___
-
-### getNodeId
-
-▸ **getNodeId**(): `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
-
-#### Returns
-
-`undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:113
-
-___
-
-### getPublicKey
-
-▸ **getPublicKey**(): `Uint8Array`
-
-#### Returns
-
-`Uint8Array`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:101
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:91
 
 ___
 
@@ -286,7 +171,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:105
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:93
 
 ___
 
@@ -306,7 +191,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:111
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:98
 
 ___
 
@@ -326,7 +211,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:112
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:99
 
 ___
 
@@ -346,39 +231,20 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:110
-
-___
-
-### setIntermediateCACert
-
-▸ **setIntermediateCACert**(`certificate`): `this`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `certificate` | `Uint8Array` |
-
-#### Returns
-
-`this`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:107
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:97
 
 ___
 
 ### setOperationalCert
 
-▸ **setOperationalCert**(`operationalCert`): `this`
+▸ **setOperationalCert**(`operationalCert`, `intermediateCACert?`): `this`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `operationalCert` | `Uint8Array` |
+| `intermediateCACert?` | `Uint8Array` |
 
 #### Returns
 
@@ -386,7 +252,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:106
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:94
 
 ___
 
@@ -406,7 +272,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:104
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:92
 
 ___
 
@@ -426,7 +292,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:109
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:96
 
 ___
 
@@ -446,4 +312,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:108
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:95

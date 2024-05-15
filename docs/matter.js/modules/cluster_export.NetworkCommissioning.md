@@ -83,7 +83,7 @@ These elements and properties are present in all NetworkCommissioning clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1052](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1052)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1063](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1063)
 
 ___
 
@@ -93,9 +93,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1253](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1253)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1264](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1264)
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1255](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1255)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1266](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1266)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1229](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1229)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1240](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1240)
 
 ___
 
@@ -119,9 +119,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1314](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1314)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1325](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1325)
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1316](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1316)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1327](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1327)
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1262](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1262)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1273](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1273)
 
 ___
 
@@ -154,7 +154,7 @@ A NetworkCommissioningCluster supports these elements if it supports feature Thr
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:991](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L991)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1002](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1002)
 
 ___
 
@@ -170,7 +170,7 @@ MatterSpecification.v11.Core § 11.8.7.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:633](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L633)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:711](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L711)
 
 ___
 
@@ -186,7 +186,7 @@ MatterSpecification.v11.Core § 11.8.7.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:574](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L574)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:643](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L643)
 
 ___
 
@@ -202,7 +202,7 @@ MatterSpecification.v11.Core § 11.8.7.9
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:440](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L440)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:443](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L443)
 
 ___
 
@@ -220,34 +220,13 @@ Before generating a ConnectNetworkResponse, the server shall:
   • Set the LastConnectErrorValue attribute value to the ErrorValue matching the response, including setting it
     to null if the ErrorValue is not applicable.
 
-The NetworkingStatus field shall indicate the status of the last connection attempt, taking one of these values:
-
-  • Success: Connection succeeded.
-
-  • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the attempt to
-    join the network.
-
-  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
-
-  • NetworkIdNotFound: The network identifier was not found among the added network configurations in Networks
-    attribute.
-
-  • RegulatoryError: Could not connect to a network due to lack of regulatory configuration.
-
-  • UnknownError: An internal error occurred during the operation.
-
-  • Association errors (see also description of errors in Section 11.8.5.3, “NetworkCommissioningStatusEnum”):
-    AuthFailure, UnsupportedSecurity, OtherConnectionFailure, IPV6Failed, IPBindFailed
-
-See Section 11.8.7.2.2, “DebugText Field” for usage.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.8.7.10
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:486](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L486)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:480](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L480)
 
 ___
 
@@ -265,30 +244,13 @@ NetworkingStatus matching the response.
 Before generating a NetworkConfigResponse, the server shall set the LastNetworkID attribute value to the
 NetworkID that was used in the command for which an invocation caused the response to be generated.
 
-The NetworkingStatus field shall indicate the status of the last operation attempting to modify the Networks
-attribute configuration, taking one of these values:
-
-  • Success: Operation succeeded.
-
-  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
-
-  • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section 11.8.6.1,
-    “MaxNetworks Attribute”.
-
-  • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the added
-    network configurations in Networks attribute.
-
-  • UnknownError: An internal error occurred during the operation.
-
-See Section 11.8.7.2.2, “DebugText Field” for usage.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.8.7.8
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:389](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L389)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:385](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L385)
 
 ___
 
@@ -304,7 +266,7 @@ MatterSpecification.v11.Core § 11.8.5.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:662](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L662)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:743](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L743)
 
 ___
 
@@ -320,7 +282,7 @@ MatterSpecification.v11.Core § 11.8.7.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:347](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L347)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:347](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L347)
 
 ___
 
@@ -336,7 +298,7 @@ MatterSpecification.v11.Core § 11.8.7.11
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:556](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L556)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:559](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L559)
 
 ___
 
@@ -352,7 +314,7 @@ MatterSpecification.v11.Core § 11.8.7.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L28)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:28](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L28)
 
 ___
 
@@ -374,7 +336,7 @@ MatterSpecification.v11.Core § 11.8.7.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:266](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L266)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:266](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L266)
 
 ___
 
@@ -390,7 +352,7 @@ MatterSpecification.v11.Core § 11.8.5.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:230](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L230)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:230](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L230)
 
 ___
 
@@ -406,7 +368,7 @@ MatterSpecification.v11.Core § 11.8.5.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L196)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:196](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L196)
 
 ___
 
@@ -425,7 +387,7 @@ A NetworkCommissioningCluster supports these elements if it supports feature WiF
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:959](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L959)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:973](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L973)
 
 ___
 
@@ -451,7 +413,7 @@ ThreadNetworkInterface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:712](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L712)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:793](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L793)
 
 ___
 
@@ -478,4 +440,4 @@ MatterSpecification.v11.Core § 11.8.5.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L131)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:131](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L131)

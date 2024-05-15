@@ -21,6 +21,7 @@ To maintain type safety, implementers define events as observable child properti
 
 ### Methods
 
+- [[dispose]](util_export.EventEmitter-1.md#[dispose])
 - [addListener](util_export.EventEmitter-1.md#addlistener)
 - [emit](util_export.EventEmitter-1.md#emit)
 - [removeListener](util_export.EventEmitter-1.md#removelistener)
@@ -47,9 +48,23 @@ To maintain type safety, implementers define events as observable child properti
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:94
+packages/matter.js/dist/esm/util/Observable.d.ts:124
 
 ## Methods
+
+### [dispose]
+
+▸ **[dispose]**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Observable.d.ts:125
+
+___
 
 ### addListener
 
@@ -76,7 +91,7 @@ packages/matter.js/dist/esm/util/Observable.d.ts:94
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:92
+packages/matter.js/dist/esm/util/Observable.d.ts:122
 
 ___
 
@@ -105,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:91
+packages/matter.js/dist/esm/util/Observable.d.ts:121
 
 ___
 
@@ -134,4 +149,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:93
+packages/matter.js/dist/esm/util/Observable.d.ts:123

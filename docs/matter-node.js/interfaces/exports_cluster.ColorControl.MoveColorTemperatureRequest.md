@@ -87,7 +87,7 @@ ___
 
 ### moveMode
 
-• **moveMode**: `number`
+• **moveMode**: [`MoveMode`](../enums/exports_cluster.ColorControl.MoveMode.md)
 
 This field is identical to the MoveMode field of the MoveHue command of the Color Control cluster
 

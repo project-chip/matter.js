@@ -22,6 +22,7 @@ export class MdnsService {
     #scanner?: MdnsScanner;
     readonly #construction: AsyncConstruction<MdnsService>;
     readonly #enableIpv4: boolean;
+    readonly limitedToNetInterface?: string;
 
     get enableIpv4() {
         return this.#enableIpv4;
@@ -33,20 +34,19 @@ export class MdnsService {
 
         const vars = environment.get(VariableService);
         this.#enableIpv4 = vars.boolean("mdns.ipv4") ?? options?.ipv4 ?? true;
+        this.limitedToNetInterface = vars.get("mdns.networkInterface", options?.networkInterface);
 
         this.#construction = AsyncConstruction(this, async () => {
-            const vars = environment.get(VariableService);
             const network = environment.get(Network);
 
-            const netInterface = vars.get("mdns.networkInterface", options?.networkInterface);
             this.#broadcaster = await MdnsBroadcaster.create(network, {
                 enableIpv4: this.enableIpv4,
-                multicastInterface: netInterface,
+                multicastInterface: this.limitedToNetInterface,
             });
 
             this.#scanner = await MdnsScanner.create(network, {
                 enableIpv4: this.enableIpv4,
-                netInterface: netInterface,
+                netInterface: this.limitedToNetInterface,
             });
         });
     }

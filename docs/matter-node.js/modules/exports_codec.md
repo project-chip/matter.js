@@ -56,34 +56,26 @@
 - [BITS\_PADDING](exports_codec.md#bits_padding)
 - [BYTES\_KEY](exports_codec.md#bytes_key)
 - [ELEMENTS\_KEY](exports_codec.md#elements_key)
-- [EcdsaWithSHA256\_X962](exports_codec.md#ecdsawithsha256_x962)
-- [KeyUsage\_Signature\_ContentCommited\_X509](exports_codec.md#keyusage_signature_contentcommited_x509)
-- [KeyUsage\_Signature\_X509](exports_codec.md#keyusage_signature_x509)
 - [MAX\_MDNS\_MESSAGE\_SIZE](exports_codec.md#max_mdns_message_size)
 - [MAX\_MESSAGE\_SIZE](exports_codec.md#max_message_size)
 - [OBJECT\_ID\_KEY](exports_codec.md#object_id_key)
-- [SHA256\_CMS](exports_codec.md#sha256_cms)
+- [RAW\_DATA\_KEY](exports_codec.md#raw_data_key)
 - [TAG\_ID\_KEY](exports_codec.md#tag_id_key)
+- [TYPE\_OVERRIDE\_KEY](exports_codec.md#type_override_key)
 
 ### Functions
 
 - [AAAARecord](exports_codec.md#aaaarecord)
 - [ARecord](exports_codec.md#arecord)
-- [AuthorityKeyIdentifier\_X509](exports_codec.md#authoritykeyidentifier_x509)
-- [BasicConstraints\_X509](exports_codec.md#basicconstraints_x509)
 - [BitByteArray](exports_codec.md#bitbytearray)
 - [ContextTagged](exports_codec.md#contexttagged)
 - [ContextTaggedBytes](exports_codec.md#contexttaggedbytes)
+- [DatatypeOverride](exports_codec.md#datatypeoverride)
 - [DerObject](exports_codec.md#derobject)
-- [ExtendedKeyUsage\_X509](exports_codec.md#extendedkeyusage_x509)
 - [ObjectId](exports_codec.md#objectid)
-- [OrganisationName\_X520](exports_codec.md#organisationname_x520)
-- [Pkcs7Data](exports_codec.md#pkcs7data)
-- [Pkcs7SignedData](exports_codec.md#pkcs7signeddata)
 - [PtrRecord](exports_codec.md#ptrrecord)
-- [PublicKeyEcPrime256v1\_X962](exports_codec.md#publickeyecprime256v1_x962)
+- [RawBytes](exports_codec.md#rawbytes)
 - [SrvRecord](exports_codec.md#srvrecord)
-- [SubjectKeyIdentifier\_X509](exports_codec.md#subjectkeyidentifier_x509)
 - [TxtRecord](exports_codec.md#txtrecord)
 
 ## Type Aliases
@@ -103,7 +95,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:36
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:50
 
 ___
 
@@ -233,36 +225,6 @@ packages/matter.js/dist/esm/codec/DerCodec.d.ts:5
 
 ___
 
-### EcdsaWithSHA256\_X962
-
-• `Const` **EcdsaWithSHA256\_X962**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:74
-
-___
-
-### KeyUsage\_Signature\_ContentCommited\_X509
-
-• `Const` **KeyUsage\_Signature\_ContentCommited\_X509**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:85
-
-___
-
-### KeyUsage\_Signature\_X509
-
-• `Const` **KeyUsage\_Signature\_X509**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:84
-
-___
-
 ### MAX\_MDNS\_MESSAGE\_SIZE
 
 • `Const` **MAX\_MDNS\_MESSAGE\_SIZE**: ``1232``
@@ -300,13 +262,13 @@ packages/matter.js/dist/esm/codec/DerCodec.d.ts:2
 
 ___
 
-### SHA256\_CMS
+### RAW\_DATA\_KEY
 
-• `Const` **SHA256\_CMS**: `any`
+• `Const` **RAW\_DATA\_KEY**: ``"_raw"``
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:75
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:8
 
 ___
 
@@ -317,6 +279,16 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/codec/DerCodec.d.ts:3
+
+___
+
+### TYPE\_OVERRIDE\_KEY
+
+• `Const` **TYPE\_OVERRIDE\_KEY**: ``"_type"``
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:7
 
 ## Functions
 
@@ -366,46 +338,6 @@ packages/matter.js/dist/esm/codec/DnsCodec.d.ts:13
 
 ___
 
-### AuthorityKeyIdentifier\_X509
-
-▸ **AuthorityKeyIdentifier_X509**(`identifier`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `identifier` | `Uint8Array` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:78
-
-___
-
-### BasicConstraints\_X509
-
-▸ **BasicConstraints_X509**(`constraints`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `constraints` | `any` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:79
-
-___
-
 ### BitByteArray
 
 ▸ **BitByteArray**(`data`, `padding?`): `Object`
@@ -429,7 +361,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:23
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:30
 
 ___
 
@@ -455,7 +387,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:28
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:35
 
 ___
 
@@ -481,7 +413,33 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:32
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:39
+
+___
+
+### DatatypeOverride
+
+▸ **DatatypeOverride**(`type`, `value`): `Object`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `type` | [`DerType`](../enums/exports_codec.DerType.md) |
+| `value` | `any` |
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `_raw` | `any` |
+| `_type` | [`DerType`](../enums/exports_codec.DerType.md) |
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:43
 
 ___
 
@@ -502,29 +460,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:22
-
-___
-
-### ExtendedKeyUsage\_X509
-
-▸ **ExtendedKeyUsage_X509**(`«destructured»`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `clientAuth` | `boolean` |
-| › `serverAuth` | `boolean` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:80
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:29
 
 ___
 
@@ -549,67 +485,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:18
-
-___
-
-### OrganisationName\_X520
-
-▸ **OrganisationName_X520**(`name`): `any`[]
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-
-#### Returns
-
-`any`[]
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:76
-
-___
-
-### Pkcs7Data
-
-▸ **Pkcs7Data**(`data`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `data` | `any` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:86
-
-___
-
-### Pkcs7SignedData
-
-▸ **Pkcs7SignedData**(`data`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `data` | `any` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:87
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:25
 
 ___
 
@@ -636,15 +512,15 @@ packages/matter.js/dist/esm/codec/DnsCodec.d.ts:12
 
 ___
 
-### PublicKeyEcPrime256v1\_X962
+### RawBytes
 
-▸ **PublicKeyEcPrime256v1_X962**(`key`): `Object`
+▸ **RawBytes**(`bytes`): `Object`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `key` | `Uint8Array` |
+| `bytes` | `Uint8Array` |
 
 #### Returns
 
@@ -652,21 +528,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `bytes` | \{ `_bytes`: `Uint8Array` ; `_padding`: `number` ; `_tag`: `number`  } |
-| `bytes._bytes` | `Uint8Array` |
-| `bytes._padding` | `number` |
-| `bytes._tag` | `number` |
-| `type` | \{ `algorithm`: \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  } ; `curve`: \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  }  } |
-| `type.algorithm` | \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  } |
-| `type.algorithm._bytes` | `Uint8Array` |
-| `type.algorithm._tag` | `number` |
-| `type.curve` | \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  } |
-| `type.curve._bytes` | `Uint8Array` |
-| `type.curve._tag` | `number` |
+| `_bytes` | `Uint8Array` |
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:57
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:47
 
 ___
 
@@ -690,26 +556,6 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/codec/DnsCodec.d.ts:16
-
-___
-
-### SubjectKeyIdentifier\_X509
-
-▸ **SubjectKeyIdentifier_X509**(`identifier`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `identifier` | `Uint8Array` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/codec/DerCodec.d.ts:77
 
 ___
 

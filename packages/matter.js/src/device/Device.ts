@@ -35,6 +35,16 @@ export const WrapCommandHandler = <C extends Cluster<any, any, any, any, any>>(
     }
     const mergedHandler = {} as any;
     for (const key in handler) {
+        if (
+            key.endsWith("AttributeGetter") ||
+            key.endsWith("AttributeSetter") ||
+            key.endsWith("AttributeValidator") ||
+            key === "initializeClusterServer" ||
+            key === "destroyClusterServer"
+        ) {
+            mergedHandler[key] = (handler as any)[key];
+            continue;
+        }
         mergedHandler[key] = async (...args: any[]) => {
             if (commandHandler.hasHandler(key)) {
                 return await commandHandler.executeHandler(key, ...args);

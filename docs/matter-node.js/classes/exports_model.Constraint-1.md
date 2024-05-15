@@ -33,6 +33,7 @@ so we keep it in the same section.
 - [desc](exports_model.Constraint-1.md#desc)
 - [entry](exports_model.Constraint-1.md#entry)
 - [errors](exports_model.Constraint-1.md#errors)
+- [in](exports_model.Constraint-1.md#in)
 - [max](exports_model.Constraint-1.md#max)
 - [min](exports_model.Constraint-1.md#min)
 - [parts](exports_model.Constraint-1.md#parts)
@@ -76,7 +77,7 @@ Initialize from a Constraint.Definition or the constraint DSL defined by the Mat
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:26
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:27
 
 ## Properties
 
@@ -118,7 +119,7 @@ Constraint.Ast.entry
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:22
 
 ___
 
@@ -133,6 +134,20 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:14
+
+___
+
+### in
+
+• `Optional` **in**: [`FieldValue`](../modules/exports_model.md#fieldvalue)
+
+#### Implementation of
+
+Constraint.Ast.in
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:21
 
 ___
 
@@ -174,7 +189,7 @@ Constraint.Ast.parts
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:22
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:23
 
 ___
 
@@ -329,7 +344,7 @@ Test a value against a constraint.  Does not recurse into arrays.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:30
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:31
 
 ___
 
@@ -347,7 +362,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:31
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:32
 
 ___
 

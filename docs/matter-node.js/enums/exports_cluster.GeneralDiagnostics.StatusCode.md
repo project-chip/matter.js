@@ -24,4 +24,4 @@ MatterSpecification.v11.Core § 11.11.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:392
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:415

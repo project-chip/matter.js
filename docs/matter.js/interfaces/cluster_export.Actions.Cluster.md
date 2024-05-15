@@ -83,7 +83,7 @@ Identity.attributes
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L86)
+[packages/matter.js/src/cluster/ClusterType.ts:86](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/ClusterType.ts#L86)
 
 ___
 
@@ -97,7 +97,7 @@ Identity.base
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:92](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L92)
+[packages/matter.js/src/cluster/ClusterType.ts:92](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/ClusterType.ts#L92)
 
 ___
 
@@ -110,13 +110,13 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `disableAction` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command disables a certain action or automation, and shall change the action’s state to Inactive. Example: disable a motion sensor to no longer control the lights in an area. **`See`** MatterSpecification.v11.Core § 9.14.6.11 |
-| `disableActionWithDuration` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command disables a certain action or automation, and shall change the action’s state to Disabled. After the specified Duration, the action or automation will re-start, and the action’s state shall change to either Inactive or Active, depending on the actions (see examples 4 and 6). Example: disable a "wakeup" experience for a period of 1 week when going on holiday (to prevent them from turning on in the morning while you’re not at home). After this period, the wakeup experience will control the lights as before. This field shall indicate the requested duration in seconds. **`See`** MatterSpecification.v11.Core § 9.14.6.12 |
+| `disableActionWithDuration` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command disables a certain action or automation, and shall change the action’s state to Disabled. After the specified Duration, the action or automation will re-start, and the action’s state shall change to either Inactive or Active, depending on the actions (see examples 4 and 6). Example: disable a "wakeup" experience for a period of 1 week when going on holiday (to prevent them from turning on in the morning while you’re not at home). After this period, the wakeup experience will control the lights as before. **`See`** MatterSpecification.v11.Core § 9.14.6.12 |
 | `enableAction` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command enables a certain action or automation. Afterwards, the action’s state shall be Active. Example: enable a motion sensor to control the lights in an area. **`See`** MatterSpecification.v11.Core § 9.14.6.9 |
-| `enableActionWithDuration` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command enables a certain action or automation, and shall change the action’s state to be Active. After the specified Duration, the action or automation will stop, and the action’s state shall change to Disabled. Example: enable a "presence mimicking" behavior for the lights in your home during a vacation; the Duration field is used to indicated the length of your absence from home. After that period, the presence mimicking behavior will no longer control these lights. This field shall indicate the requested duration in seconds. **`See`** MatterSpecification.v11.Core § 9.14.6.10 |
+| `enableActionWithDuration` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command enables a certain action or automation, and shall change the action’s state to be Active. After the specified Duration, the action or automation will stop, and the action’s state shall change to Disabled. Example: enable a "presence mimicking" behavior for the lights in your home during a vacation; the Duration field is used to indicated the length of your absence from home. After that period, the presence mimicking behavior will no longer control these lights. **`See`** MatterSpecification.v11.Core § 9.14.6.10 |
 | `instantAction` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command triggers an action (state change) on the involved endpoints, in a "fire and forget" manner. Afterwards, the action’s state shall be Inactive. Example: recall a scene on a number of lights. **`See`** MatterSpecification.v11.Core § 9.14.6.1 |
 | `instantActionWithTransition` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | It is recommended that, where possible (e.g., it is not possible for attributes with Boolean data type), a gradual transition SHOULD take place from the old to the new state over this time period. However, the exact transition is manufacturer dependent. This command triggers an action (state change) on the involved endpoints, with a specified time to transition from the current state to the new state. During the transition, the action’s state shall be Active. Afterwards, the action’s state shall be Inactive. Example: recall a scene on a number of lights, with a specified transition time. **`See`** MatterSpecification.v11.Core § 9.14.6.2 |
 | `pauseAction` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command pauses an ongoing action, and shall change the action’s state to Paused. Example: pause a dynamic lighting effect (the lights stay at their current color) which was previously started with StartAction. **`See`** MatterSpecification.v11.Core § 9.14.6.6 |
-| `pauseActionWithDuration` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command pauses an ongoing action, and shall change the action’s state to Paused. After the specified Duration, the ongoing action will be automatically resumed. which shall change the action’s state to Active. Example: pause a dynamic lighting effect (the lights stay at their current color) for 10 minutes (Duration=600). The difference between Pause/Resume and Disable/Enable is on the one hand semantic (the former is more of a transitionary nature while the latter is more permanent) and on the other hand these can be implemented slightly differently in the implementation of the action (e.g. a Pause would be automatically resumed after some hours or during a nightly reset, while an Disable would remain in effect until explicitly enabled again). This field shall indicate the requested duration in seconds. **`See`** MatterSpecification.v11.Core § 9.14.6.7 |
+| `pauseActionWithDuration` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command pauses an ongoing action, and shall change the action’s state to Paused. After the specified Duration, the ongoing action will be automatically resumed. which shall change the action’s state to Active. Example: pause a dynamic lighting effect (the lights stay at their current color) for 10 minutes (Duration=600). The difference between Pause/Resume and Disable/Enable is on the one hand semantic (the former is more of a transitionary nature while the latter is more permanent) and on the other hand these can be implemented slightly differently in the implementation of the action (e.g. a Pause would be automatically resumed after some hours or during a nightly reset, while an Disable would remain in effect until explicitly enabled again). **`See`** MatterSpecification.v11.Core § 9.14.6.7 |
 | `resumeAction` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command resumes a previously paused action, and shall change the action’s state to Active. The difference between ResumeAction and StartAction is that ResumeAction will continue the action from the state where it was paused, while StartAction will start the action from the beginning. Example: resume a dynamic lighting effect (the lights' colors will change gradually, continuing from the point they were paused). **`See`** MatterSpecification.v11.Core § 9.14.6.8 |
 | `startAction` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command triggers the commencement of an action on the involved endpoints. Afterwards, the action’s state shall be Active. Example: start a dynamic lighting pattern (such as gradually rotating the colors around the setpoints of the scene) on a set of lights. Example: start a sequence of events such as a wake-up experience involving lights moving through several brightness/color combinations and the window covering gradually opening. **`See`** MatterSpecification.v11.Core § 9.14.6.3 |
 | `startActionWithDuration` | [`OptionalCommand`](cluster_export.OptionalCommand.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command triggers the commencement of an action on the involved endpoints, and shall change the action’s state to Active. After the specified Duration, the action will stop, and the action’s state shall change to Inactive. Example: start a dynamic lighting pattern (such as gradually rotating the colors around the setpoints of the scene) on a set of lights for 1 hour (Duration=3600). **`See`** MatterSpecification.v11.Core § 9.14.6.4 |
@@ -128,7 +128,7 @@ Identity.commands
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L89)
+[packages/matter.js/src/cluster/ClusterType.ts:89](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/ClusterType.ts#L89)
 
 ___
 
@@ -140,8 +140,8 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `actionFailed` | [`Event`](cluster_export.Event.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `error`: [`FieldType`](tlv_export.FieldType.md)\<[`ActionError`](../enums/cluster_export.Actions.ActionError.md)\> ; `invokeId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `newState`: [`FieldType`](tlv_export.FieldType.md)\<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>, `any`\> | This event shall be generated when there is some error which prevents the action from its normal planned execution and the most recent command using that ActionID used an InvokeID data field. It provides feedback to the client about the non-successful progress of the action. Example: When InstantActionWithTransition is invoked (with an InvokeID data field), and another controller changes the state of one or more of the involved endpoints during the transition, thus interrupting the transition triggered by the action, two events would be generated: • StateChanged when the transition starts (NewState=Active) • ActionFailed when the interrupting command occurs (NewState=Inactive, Error=interrupted) Example: When InstantActionWithTransition is invoked (with an InvokeID data field = 1), and the same client invokes an InstantAction with (the same or another ActionId and) InvokeID = 2, and this second command interrupts the transition triggered by the first command, these events would be generated: • StateChanged (InvokeID=1, NewState=Active) when the transition starts • ActionFailed (InvokeID=2, NewState=Inactive, Error=interrupted) when the second command interrupts the transition • StateChanged (InvokeID=2, NewState=Inactive) upon the execution of the action for the second command This event shall have the following data fields: This field shall be set to the ActionID of the action which encountered an error. This field shall be set to the InvokeID which was provided to the most recent command referencing this ActionID. This field shall be set to state that the action is in at the time of generating the event. **`See`** MatterSpecification.v11.Core § 9.14.7.2 |
-| `stateChanged` | [`Event`](cluster_export.Event.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `newState`: [`FieldType`](tlv_export.FieldType.md)\<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>, `any`\> | This event shall be generated when there is a change in the State of an ActionID during the execution of an action and the most recent command using that ActionID used an InvokeID data field. It provides feedback to the client about the progress of the action. Example: When InstantActionWithTransition is invoked (with an InvokeID data field), two StateChanged events will be generated: • one when the transition starts (NewState=Active) • one when the transition completed (NewState=Inactive) This event shall have the following data fields: This field shall be set to the ActionID of the action which has changed state. **`See`** MatterSpecification.v11.Core § 9.14.7.1 |
+| `actionFailed` | [`Event`](cluster_export.Event.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `error`: [`FieldType`](tlv_export.FieldType.md)\<[`ActionError`](../enums/cluster_export.Actions.ActionError.md)\> ; `invokeId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `newState`: [`FieldType`](tlv_export.FieldType.md)\<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>, `any`\> | This event shall be generated when there is some error which prevents the action from its normal planned execution and the most recent command using that ActionID used an InvokeID data field. It provides feedback to the client about the non-successful progress of the action. Example: When InstantActionWithTransition is invoked (with an InvokeID data field), and another controller changes the state of one or more of the involved endpoints during the transition, thus interrupting the transition triggered by the action, two events would be generated: • StateChanged when the transition starts (NewState=Active) • ActionFailed when the interrupting command occurs (NewState=Inactive, Error=interrupted) Example: When InstantActionWithTransition is invoked (with an InvokeID data field = 1), and the same client invokes an InstantAction with (the same or another ActionId and) InvokeID = 2, and this second command interrupts the transition triggered by the first command, these events would be generated: • StateChanged (InvokeID=1, NewState=Active) when the transition starts • ActionFailed (InvokeID=2, NewState=Inactive, Error=interrupted) when the second command interrupts the transition • StateChanged (InvokeID=2, NewState=Inactive) upon the execution of the action for the second command **`See`** MatterSpecification.v11.Core § 9.14.7.2 |
+| `stateChanged` | [`Event`](cluster_export.Event.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `newState`: [`FieldType`](tlv_export.FieldType.md)\<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>, `any`\> | This event shall be generated when there is a change in the State of an ActionID during the execution of an action and the most recent command using that ActionID used an InvokeID data field. It provides feedback to the client about the progress of the action. Example: When InstantActionWithTransition is invoked (with an InvokeID data field), two StateChanged events will be generated: • one when the transition starts (NewState=Active) • one when the transition completed (NewState=Inactive) **`See`** MatterSpecification.v11.Core § 9.14.7.1 |
 
 #### Inherited from
 
@@ -149,7 +149,7 @@ Identity.events
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L90)
+[packages/matter.js/src/cluster/ClusterType.ts:90](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/ClusterType.ts#L90)
 
 ___
 
@@ -163,7 +163,7 @@ Identity.extensions
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:93](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L93)
+[packages/matter.js/src/cluster/ClusterType.ts:93](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/ClusterType.ts#L93)
 
 ___
 
@@ -177,7 +177,7 @@ Identity.features
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L84)
+[packages/matter.js/src/cluster/ClusterType.ts:84](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/ClusterType.ts#L84)
 
 ___
 
@@ -191,7 +191,7 @@ Identity.id
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L81)
+[packages/matter.js/src/cluster/ClusterType.ts:81](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/ClusterType.ts#L81)
 
 ___
 
@@ -205,7 +205,7 @@ Identity.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L82)
+[packages/matter.js/src/cluster/ClusterType.ts:82](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/ClusterType.ts#L82)
 
 ___
 
@@ -219,7 +219,7 @@ Identity.revision
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:83](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L83)
+[packages/matter.js/src/cluster/ClusterType.ts:83](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/ClusterType.ts#L83)
 
 ___
 
@@ -233,7 +233,7 @@ Identity.supportedFeatures
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:85](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L85)
+[packages/matter.js/src/cluster/ClusterType.ts:85](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/ClusterType.ts#L85)
 
 ___
 
@@ -247,7 +247,7 @@ Identity.unknown
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L91)
+[packages/matter.js/src/cluster/ClusterType.ts:91](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/ClusterType.ts#L91)
 
 ## Methods
 
@@ -279,7 +279,7 @@ Identity.alter
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L74)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:74](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L74)
 
 ___
 
@@ -311,7 +311,7 @@ Identity.enable
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L88)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:88](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L88)
 
 ___
 
@@ -343,7 +343,7 @@ Identity.set
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L81)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:81](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L81)
 
 ___
 
@@ -375,4 +375,4 @@ Identity.with
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L67)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:67](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L67)

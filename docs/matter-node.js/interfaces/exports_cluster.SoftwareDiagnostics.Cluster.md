@@ -98,7 +98,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `softwareFault` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `faultRecording`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`Uint8Array`\> ; `id`: [`FieldType`](exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`string`\>  }\>, `any`\> | The SoftwareFault Event shall be generated when a software fault takes place on the Node. The ID field shall be set to the ID of the software thread in which the last software fault occurred. The Name field shall be set to a manufacturer-specified name or prefix of the software thread in which the last software fault occurred. **`See`** MatterSpecification.v11.Core § 11.12.8.1 |
+| `softwareFault` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `faultRecording`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`Uint8Array`\> ; `id`: [`FieldType`](exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`string`\>  }\>, `any`\> | The SoftwareFault Event shall be generated when a software fault takes place on the Node. **`See`** MatterSpecification.v11.Core § 11.12.8.1 |
 
 #### Inherited from
 

@@ -31,4 +31,4 @@ Information on the source of an element.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/definitions/Specification.d.ts:26
+packages/matter.js/dist/esm/model/definitions/Specification.d.ts:28

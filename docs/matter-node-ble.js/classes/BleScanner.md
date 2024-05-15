@@ -53,7 +53,7 @@
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L40)
+[matter-node-ble.js/src/ble/BleScanner.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L40)
 
 ## Properties
 
@@ -63,7 +63,7 @@
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L38)
+[matter-node-ble.js/src/ble/BleScanner.ts:38](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L38)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L40)
+[matter-node-ble.js/src/ble/BleScanner.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L40)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
+[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
 
 ## Methods
 
@@ -106,7 +106,7 @@ Some identifiers are identical to the official DNS-SD identifiers, others are cu
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L167)
+[matter-node-ble.js/src/ble/BleScanner.ts:167](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L167)
 
 ___
 
@@ -133,7 +133,7 @@ be over.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L89)
+[matter-node-ble.js/src/ble/BleScanner.ts:89](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L89)
 
 ___
 
@@ -153,7 +153,7 @@ Close the scanner server and free resources.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:269](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L269)
+[matter-node-ble.js/src/ble/BleScanner.ts:269](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L269)
 
 ___
 
@@ -181,7 +181,7 @@ vendorId, etc.) and returns as soon as minimum one was found or the timeout is o
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:218](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L218)
+[matter-node-ble.js/src/ble/BleScanner.ts:218](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L218)
 
 ___
 
@@ -211,7 +211,7 @@ called when it is discovered.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:235](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L235)
+[matter-node-ble.js/src/ble/BleScanner.ts:235](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L235)
 
 ___
 
@@ -231,7 +231,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:128](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L128)
+[matter-node-ble.js/src/ble/BleScanner.ts:128](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L128)
 
 ___
 
@@ -252,7 +252,7 @@ and return them.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:208](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L208)
+[matter-node-ble.js/src/ble/BleScanner.ts:208](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L208)
 
 ___
 
@@ -277,7 +277,7 @@ promise.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L76)
+[matter-node-ble.js/src/ble/BleScanner.ts:76](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L76)
 
 ___
 
@@ -297,7 +297,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:180](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L180)
+[matter-node-ble.js/src/ble/BleScanner.ts:180](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L180)
 
 ___
 
@@ -323,7 +323,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:265](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L265)
+[matter-node-ble.js/src/ble/BleScanner.ts:265](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L265)
 
 ___
 
@@ -343,7 +343,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L46)
+[matter-node-ble.js/src/ble/BleScanner.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L46)
 
 ___
 
@@ -364,7 +364,7 @@ DNS-SD queries.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:213](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L213)
+[matter-node-ble.js/src/ble/BleScanner.ts:213](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L213)
 
 ___
 
@@ -385,7 +385,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L94)
+[matter-node-ble.js/src/ble/BleScanner.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L94)
 
 ___
 
@@ -410,4 +410,4 @@ The promise will be resolved when the timer runs out latest.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L58)
+[matter-node-ble.js/src/ble/BleScanner.ts:58](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L58)

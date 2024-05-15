@@ -23,6 +23,7 @@
 ### Type Aliases
 
 - [CommissioningControllerOptions](export.md#commissioningcontrolleroptions)
+- [CommissioningServerCommands](export.md#commissioningservercommands)
 - [MatterServerOptions](export.md#matterserveroptions)
 - [NodeCommissioningOptions](export.md#nodecommissioningoptions)
 - [NodeOptions](export.md#nodeoptions)
@@ -43,6 +44,24 @@ Constructor options for the CommissioningController class
 #### Defined in
 
 packages/matter.js/dist/esm/CommissioningController.d.ts:29
+
+___
+
+### CommissioningServerCommands
+
+Ƭ **CommissioningServerCommands**: `Object`
+
+Commands exposed by the CommissioningServer
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `testEventTrigger` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`GeneralDiagnosticsCluster`](exports_cluster.md#generaldiagnosticscluster-1)\>[``"testEventTrigger"``] | Provide a means for certification tests to trigger some test-plan-specific events. |
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningServer.d.ts:125
 
 ___
 
@@ -99,7 +118,7 @@ packages/matter.js/dist/esm/MatterServer.d.ts:10
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:25
+packages/matter.js/dist/esm/CommissioningServer.d.ts:26
 
 ___
 
@@ -116,4 +135,4 @@ MatterSpecification.v11.Core § 7.1.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:32
+packages/matter.js/dist/esm/CommissioningServer.d.ts:33

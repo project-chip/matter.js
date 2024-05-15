@@ -37,7 +37,7 @@ Trying to AddNOC instead of UpdateNOC against an existing Fabric.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:443
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:446
 
 ___
 
@@ -49,7 +49,7 @@ Invalid CaseAdminSubject field for an AddNOC command.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:439
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:442
 
 ___
 
@@ -61,7 +61,7 @@ FabricIndex argument is invalid.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:451
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:454
 
 ___
 
@@ -73,7 +73,7 @@ Any other validation error in NOC chain
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:427
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:430
 
 ___
 
@@ -85,7 +85,7 @@ The Node Operational ID in the NOC is not formatted correctly.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:423
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:426
 
 ___
 
@@ -97,7 +97,7 @@ Public Key in the NOC does not match the public key in the NOCSR
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:419
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:422
 
 ___
 
@@ -109,7 +109,7 @@ Label already exists on another Fabric.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:447
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:450
 
 ___
 
@@ -121,7 +121,7 @@ No record of prior CSR for which this NOC could match
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:431
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:434
 
 ___
 
@@ -133,7 +133,7 @@ OK, no error
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:415
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:418
 
 ___
 
@@ -145,4 +145,4 @@ NOCs table full, cannot add another one
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:435
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:438

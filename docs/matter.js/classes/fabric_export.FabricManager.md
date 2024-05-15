@@ -25,6 +25,7 @@
 ### Methods
 
 - [addFabric](fabric_export.FabricManager.md#addfabric)
+- [findByKeypair](fabric_export.FabricManager.md#findbykeypair)
 - [findFabricFromDestinationId](fabric_export.FabricManager.md#findfabricfromdestinationid)
 - [getFabrics](fabric_export.FabricManager.md#getfabrics)
 - [getNextFabricIndex](fabric_export.FabricManager.md#getnextfabricindex)
@@ -52,7 +53,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L36)
+[packages/matter.js/src/fabric/FabricManager.ts:37](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L37)
 
 ## Properties
 
@@ -70,7 +71,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L30)
+[packages/matter.js/src/fabric/FabricManager.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L31)
 
 ___
 
@@ -80,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L29)
+[packages/matter.js/src/fabric/FabricManager.ts:30](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L30)
 
 ___
 
@@ -90,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L27)
+[packages/matter.js/src/fabric/FabricManager.ts:28](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L28)
 
 ___
 
@@ -100,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L28)
+[packages/matter.js/src/fabric/FabricManager.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L29)
 
 ___
 
@@ -110,7 +111,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L26)
+[packages/matter.js/src/fabric/FabricManager.ts:27](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L27)
 
 ## Accessors
 
@@ -130,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L47)
+[packages/matter.js/src/fabric/FabricManager.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L48)
 
 ## Methods
 
@@ -150,7 +151,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L73)
+[packages/matter.js/src/fabric/FabricManager.ts:74](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L74)
+
+___
+
+### findByKeypair
+
+▸ **findByKeypair**(`keypair`): `undefined` \| [`Fabric`](fabric_export.Fabric.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `keypair` | [`Key`](../interfaces/crypto_export.Key.md) |
+
+#### Returns
+
+`undefined` \| [`Fabric`](fabric_export.Fabric.md)
+
+#### Defined in
+
+[packages/matter.js/src/fabric/FabricManager.ts:119](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L119)
 
 ___
 
@@ -171,7 +192,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:108](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L108)
+[packages/matter.js/src/fabric/FabricManager.ts:109](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L109)
 
 ___
 
@@ -185,7 +206,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:104](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L104)
+[packages/matter.js/src/fabric/FabricManager.ts:105](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L105)
 
 ___
 
@@ -199,7 +220,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L51)
+[packages/matter.js/src/fabric/FabricManager.ts:52](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L52)
 
 ___
 
@@ -213,7 +234,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L40)
+[packages/matter.js/src/fabric/FabricManager.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L41)
 
 ___
 
@@ -227,7 +248,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L62)
+[packages/matter.js/src/fabric/FabricManager.ts:63](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L63)
 
 ___
 
@@ -247,7 +268,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:93](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L93)
+[packages/matter.js/src/fabric/FabricManager.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L94)
 
 ___
 
@@ -267,7 +288,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:130](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L130)
+[packages/matter.js/src/fabric/FabricManager.ts:140](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L140)
 
 ___
 
@@ -287,4 +308,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:118](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/FabricManager.ts#L118)
+[packages/matter.js/src/fabric/FabricManager.ts:128](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/fabric/FabricManager.ts#L128)

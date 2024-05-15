@@ -36,4 +36,4 @@ TypeFromSchema.groupKeySet
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:292
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:299

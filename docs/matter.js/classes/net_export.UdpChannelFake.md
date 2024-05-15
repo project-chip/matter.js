@@ -54,7 +54,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L33)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L31)
 
 ## Properties
 
@@ -64,7 +64,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L35)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L33)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L31)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L29)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L34)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:32](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L32)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L29)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:27](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L27)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L30)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:28](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L28)
 
 ## Accessors
 
@@ -122,7 +122,7 @@ UdpChannel.port
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L62)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:60](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L60)
 
 ## Methods
 
@@ -136,7 +136,7 @@ UdpChannel.port
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L58)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:56](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L56)
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L51)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:49](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L49)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L41)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:39](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L39)
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L47)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:45](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L45)
 
 ___
 
@@ -225,4 +225,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/UdpChannelFake.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/UdpChannelFake.ts#L16)
+[packages/matter.js/src/net/fake/UdpChannelFake.ts:15](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/net/fake/UdpChannelFake.ts#L15)

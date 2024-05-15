@@ -9,10 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.9.0 (2024-05-14)
 * Matter-Core functionality:
   * Feature: cluster default implementations for the following clusters were added/updated:
     * BooleanState: Automatically emit the StateChange event when enabled for the cluster and the stateValue changes
+    * ColorControl: Implemented all features and commands as defined by specification with an optional transition logic managed by matter.js
     * LevelControl: Implemented all non-Frequency command handlers as defined by specification with an optional transition logic managed by matter.js
     * LocalizationConfiguration: Implemented activeLocale validation
     * LowPower: Implemented event `enterLowPowerMode` to be emitted when the sleep command gets called
@@ -25,9 +26,13 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Adds additional logging information for PASE and CASE to better understand errors without debug logging
   * Enhancement: Adds several Optimizations and adjustments for Obervers (e.g. Observable.isObserved)
   * Fix: Corrects returned errors for two commands on OperationalCredentials cluster 
-* matter.js New API code flows:
+* matter.js Legacy API:
+  * Breaking: The object type for providing custom production certificates has changed to be now in sync with the DeviceCertification class (just the property names changed)
+  * Feature: Added on demand certification determination via an async certificate provider method (alternative to provideing certs directly) to determine certificates on first commissioning request
+* matter.js New API:
   * Breaking: The name of the *$Change Events for attributes and such are changed to *$Changed . Please adjust your code!
   * Breaking: Introduced ExtensionInterface to define extensible/custom methods for behavior/Cluster-Server implementation to be available when extending this class (needed because of a TS bug 27965)
+  * Feature: Added on demand certification determination via an async certificate provider method (alternative to provideing certs directly) to determine certificates on first commissioning request
   * Enhancement: Optimized constraint validations and conformance error messages
   * Enhancement: Conditionally enables the ReachableChanged event on the Root Endpoint BasicInformation cluster if the reachable attribute is defined in the defaults
   * Enhancement: Allow to register events directly when initializing endpoints like in legacy API
@@ -36,6 +41,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Allows "fieldName$Changed" and "fieldName$Changing" event handlers to be async
   * Enhancement: Adds Conformance validation for enums, fieldname references and some more cases
   * Enhancement: Makes various config variables apply dynamically
+  * Enhancement: Added environment variable `network.interfaceNameTypeMap' to allow mapping of network interface names to types (Wifi, Thread, Ethernet)
   * Fix: Fixes some issues around event handling in the new API and makes sure events are not de-registered on factory resets
   * Fix: Corrects the returned status error code when an Enum value is set to an invalid value
   * Fix: Fixes a floating promise in FailsafeTimer; it tended to kill a test run without an easy way to identify the cause

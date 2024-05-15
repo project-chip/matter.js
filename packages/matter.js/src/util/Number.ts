@@ -49,3 +49,23 @@ export function toHex(value: number | bigint) {
     const hex = value.toString(16);
     return hex.length % 2 === 0 ? hex : `0${hex}`;
 }
+
+/**
+ * Makes sure a value is within min and max. It sets the value to min or max in case it is below or above the range.
+ */
+export function cropValueRange(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
+}
+
+/**
+ * Adds a value to another value and wraps around on the min and max values.
+ */
+export function addValueWithOverflow(value: number, add: number, min: number, max: number): number {
+    const newValue = value + add;
+    if (newValue < min) {
+        return newValue + max + 1;
+    } else if (newValue > max) {
+        return newValue - max - 1;
+    }
+    return newValue;
+}
