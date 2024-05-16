@@ -80,7 +80,7 @@ export const SoftwareDiagnostics = Cluster({
                 }),
 
                 Field({
-                    name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "max 8", default: "",
+                    name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "max 8",
                     details: "The Name field shall be set to a manufacturer-specified name or prefix of the software thread in " +
                         "which the last software fault occurred.",
                     xref: { document: "core", section: "11.13.8.1.2" }
@@ -133,7 +133,7 @@ export const SoftwareDiagnostics = Cluster({
                 }),
 
                 Field({
-                    name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "max 8", default: "",
+                    name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "max 8",
                     details: "The Name field shall be set to a vendor defined name or prefix of the software thread that is " +
                         "static for the duration of the thread.",
                     xref: { document: "core", section: "11.13.5.1.2" }

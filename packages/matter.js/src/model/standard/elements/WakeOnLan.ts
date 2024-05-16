@@ -47,8 +47,8 @@ export const WakeOnLan = Cluster({
         Attribute({
             name: "MacAddress", id: 0x0, type: "string", access: "R V", conformance: "O", constraint: "max 12",
             quality: "F",
-            details: "This attribute shall indicate the current MAC address of the device. Only 48-bit MAC Addresses " +
-                "shall be used for this attribute as required by the Wake on LAN protocol." +
+            details: "Indicates the current MAC address of the device. Only 48-bit MAC Addresses shall be used for this " +
+                "attribute as required by the Wake on LAN protocol." +
                 "\n" +
                 "Format of this attribute shall be an upper-case hex-encoded string representing the hex address, " +
                 "like 12345678ABCD.",
@@ -59,8 +59,8 @@ export const WakeOnLan = Cluster({
             name: "LinkLocalAddress", id: 0x1, type: "ipv6adr", access: "R V", conformance: "O",
             constraint: "desc", quality: "F",
 
-            details: "This attribute shall indicate the current link-local address of the device. Only 128-bit IPv6 link- " +
-                "local addresses shall be used for this attribute." +
+            details: "Indicates the current link-local address of the device. Only 128-bit IPv6 link- local addresses " +
+                "shall be used for this attribute." +
                 "\n" +
                 "NOTE" +
                 "\n" +

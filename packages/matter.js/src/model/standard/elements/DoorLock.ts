@@ -187,24 +187,23 @@ export const DoorLock = Cluster({
         Attribute({
             name: "LockType", id: 0x1, type: "LockTypeEnum", access: "R V", conformance: "M",
             constraint: "desc",
-            details: "This attribute shall indicate the type of door lock as defined in LockTypeEnum.",
+            details: "Indicates the type of door lock as defined in LockTypeEnum.",
             xref: { document: "cluster", section: "5.2.9.3" }
         }),
 
         Attribute({
             name: "ActuatorEnabled", id: 0x2, type: "bool", access: "R V", conformance: "M",
-            details: "This attribute shall indicate if the lock is currently able to (Enabled) or not able to (Disabled) " +
-                "process remote Lock, Unlock, or Unlock with Timeout commands.",
+            details: "Indicates if the lock is currently able to (Enabled) or not able to (Disabled) process remote Lock, " +
+                "Unlock, or Unlock with Timeout commands.",
             xref: { document: "cluster", section: "5.2.9.4" }
         }),
 
         Attribute({
             name: "DoorState", id: 0x3, type: "DoorStateEnum", access: "R V", conformance: "DPS",
             constraint: "desc", quality: "X P",
-            details: "This attribute shall indicate the current door state as defined in DoorStateEnum." +
+            details: "Indicates the current door state as defined in DoorStateEnum." +
                 "\n" +
-                "This attribute shall be null only if an internal error prevents the retrieval of the current door " +
-                "state.",
+                "Null only if an internal error prevents the retrieval of the current door state.",
             xref: { document: "cluster", section: "5.2.9.5" }
         }),
 
@@ -232,77 +231,76 @@ export const DoorLock = Cluster({
         Attribute({
             name: "NumberOfLogRecordsSupported", id: 0x10, type: "uint16", access: "R V", conformance: "LOG",
             default: 0, quality: "F",
-            details: "This attribute shall indicate the number of available log records.",
+            details: "Indicates the number of available log records.",
             xref: { document: "cluster", section: "5.2.9.9" }
         }),
 
         Attribute({
             name: "NumberOfTotalUsersSupported", id: 0x11, type: "uint16", access: "R V", conformance: "USR",
             default: 0, quality: "F",
-            details: "This attribute shall indicate the number of total users supported by the lock.",
+            details: "Indicates the number of total users supported by the lock.",
             xref: { document: "cluster", section: "5.2.9.10" }
         }),
 
         Attribute({
             name: "NumberOfPinUsersSupported", id: 0x12, type: "uint16", access: "R V", conformance: "PIN",
             default: 0, quality: "F",
-            details: "This attribute shall indicate the number of PIN users supported.",
+            details: "Indicates the number of PIN users supported.",
             xref: { document: "cluster", section: "5.2.9.11" }
         }),
 
         Attribute({
             name: "NumberOfRfidUsersSupported", id: 0x13, type: "uint16", access: "R V", conformance: "RID",
             default: 0, quality: "F",
-            details: "This attribute shall indicate the number of RFID users supported.",
+            details: "Indicates the number of RFID users supported.",
             xref: { document: "cluster", section: "5.2.9.12" }
         }),
 
         Attribute({
             name: "NumberOfWeekDaySchedulesSupportedPerUser", id: 0x14, type: "uint8", access: "R V",
             conformance: "WDSCH", default: 0, quality: "F",
-            details: "This attribute shall indicate the number of configurable week day schedule supported per user.",
+            details: "Indicates the number of configurable week day schedule supported per user.",
             xref: { document: "cluster", section: "5.2.9.13" }
         }),
 
         Attribute({
             name: "NumberOfYearDaySchedulesSupportedPerUser", id: 0x15, type: "uint8", access: "R V",
             conformance: "YDSCH", default: 0, quality: "F",
-            details: "This attribute shall indicate the number of configurable year day schedule supported per user.",
+            details: "Indicates the number of configurable year day schedule supported per user.",
             xref: { document: "cluster", section: "5.2.9.14" }
         }),
 
         Attribute({
             name: "NumberOfHolidaySchedulesSupported", id: 0x16, type: "uint8", access: "R V",
             conformance: "HDSCH", default: 0, quality: "F",
-            details: "This attribute shall indicate the number of holiday schedules supported for the entire door lock " +
-                "device.",
+            details: "Indicates the number of holiday schedules supported for the entire door lock device.",
             xref: { document: "cluster", section: "5.2.9.15" }
         }),
 
         Attribute({
             name: "MaxPinCodeLength", id: 0x17, type: "uint8", access: "R V", conformance: "PIN", quality: "F",
-            details: "This attribute shall indicate the maximum length in bytes of a PIN Code on this device.",
+            details: "Indicates the maximum length in bytes of a PIN Code on this device.",
             xref: { document: "cluster", section: "5.2.9.16" }
         }),
         Attribute({
             name: "MinPinCodeLength", id: 0x18, type: "uint8", access: "R V", conformance: "PIN", quality: "F",
-            details: "This attribute shall indicate the minimum length in bytes of a PIN Code on this device.",
+            details: "Indicates the minimum length in bytes of a PIN Code on this device.",
             xref: { document: "cluster", section: "5.2.9.17" }
         }),
 
         Attribute({
             name: "MaxRfidCodeLength", id: 0x19, type: "uint8", access: "R V", conformance: "RID", quality: "F",
-            details: "This attribute shall indicate the maximum length in bytes of a RFID Code on this device. The value " +
-                "depends on the RFID code range specified by the manufacturer, if media anti-collision identifiers " +
-                "(UID) are used as RFID code, a value of 20 (equals 10 Byte ISO 14443A UID) is recommended.",
+            details: "Indicates the maximum length in bytes of a RFID Code on this device. The value depends on the RFID " +
+                "code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as " +
+                "RFID code, a value of 20 (equals 10 Byte ISO 14443A UID) is recommended.",
             xref: { document: "cluster", section: "5.2.9.18" }
         }),
 
         Attribute({
             name: "MinRfidCodeLength", id: 0x1a, type: "uint8", access: "R V", conformance: "RID", quality: "F",
-            details: "This attribute shall indicate the minimum length in bytes of a RFID Code on this device. The value " +
-                "depends on the RFID code range specified by the manufacturer, if media anti-collision identifiers " +
-                "(UID) are used as RFID code, a value of 8 (equals 4 Byte ISO 14443A UID) is recommended.",
+            details: "Indicates the minimum length in bytes of a RFID Code on this device. The value depends on the RFID " +
+                "code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as " +
+                "RFID code, a value of 8 (equals 4 Byte ISO 14443A UID) is recommended.",
             xref: { document: "cluster", section: "5.2.9.19" }
         }),
 
@@ -318,7 +316,7 @@ export const DoorLock = Cluster({
             name: "NumberOfCredentialsSupportedPerUser", id: 0x1c, type: "uint8", access: "R V",
             conformance: "USR", default: 0, quality: "F",
 
-            details: "This attribute shall indicate the number of credentials that could be assigned for each user." +
+            details: "Indicates the number of credentials that could be assigned for each user." +
                 "\n" +
                 "Depending on the value of NumberOfRFIDUsersSupported and NumberOfPINUsersSupported it may not be " +
                 "possible to assign that number of credentials for a user." +
@@ -348,38 +346,37 @@ export const DoorLock = Cluster({
         Attribute({
             name: "Language", id: 0x21, type: "string", access: "R[W] VM", conformance: "O",
             constraint: "max 3", quality: "P",
-            details: "This attribute shall indicate the language for the on-screen or audible user interface using a 2- " +
-                "byte language code from ISO-639-1.",
+            details: "Indicates the language for the on-screen or audible user interface using a 2- byte language code " +
+                "from ISO-639-1.",
             xref: { document: "cluster", section: "5.2.9.23" }
         }),
 
         Attribute({
             name: "LedSettings", id: 0x22, type: "LEDSettingEnum", access: "R[W] VM", conformance: "O",
             default: 0, quality: "P",
-            details: "This attribute shall indicate the settings for the LED support, as defined by LEDSettingEnum.",
+            details: "Indicates the settings for the LED support, as defined by LEDSettingEnum.",
             xref: { document: "cluster", section: "5.2.9.24" }
         }),
 
         Attribute({
             name: "AutoRelockTime", id: 0x23, type: "uint32", access: "R[W] VM", conformance: "O", quality: "P",
-            details: "This attribute shall indicate the number of seconds to wait after unlocking a lock before it " +
-                "automatically locks again. 0=disabled. If set, unlock operations from any source will be timed. For " +
-                "one time unlock with timeout use the specific command.",
+            details: "Indicates the number of seconds to wait after unlocking a lock before it automatically locks again. " +
+                "0=disabled. If set, unlock operations from any source will be timed. For one time unlock with " +
+                "timeout use the specific command.",
             xref: { document: "cluster", section: "5.2.9.25" }
         }),
 
         Attribute({
             name: "SoundVolume", id: 0x24, type: "SoundVolumeEnum", access: "R[W] VM", conformance: "O",
             default: 0, quality: "P",
-            details: "This attribute shall indicate the sound volume on a door lock as defined by SoundVolumeEnum.",
+            details: "Indicates the sound volume on a door lock as defined by SoundVolumeEnum.",
             xref: { document: "cluster", section: "5.2.9.26" }
         }),
 
         Attribute({
             name: "OperatingMode", id: 0x25, type: "OperatingModeEnum", access: "R[W] VM", conformance: "M",
             constraint: "desc", default: 0, quality: "P",
-            details: "This attribute shall indicate the current operating mode of the lock as defined in " +
-                "OperatingModeEnum.",
+            details: "Indicates the current operating mode of the lock as defined in OperatingModeEnum.",
             xref: { document: "cluster", section: "5.2.9.27" }
         }),
 
@@ -396,10 +393,9 @@ export const DoorLock = Cluster({
             name: "DefaultConfigurationRegister", id: 0x27, type: "ConfigurationRegisterBitmap", access: "R V",
             conformance: "O", default: 0, quality: "P",
 
-            details: "This attribute shall represent the default configurations as they are physically set on the device " +
-                "(example: hardware dip switch setting, etc…) and represents the default setting for some of the " +
-                "attributes within this cluster (for example: LED, Auto Lock, Sound Volume, and Operating Mode " +
-                "attributes)." +
+            details: "Indicates the default configurations as they are physically set on the device (example: hardware " +
+                "dip switch setting, etc…) and represents the default setting for some of the attributes within this " +
+                "cluster (for example: LED, Auto Lock, Sound Volume, and Operating Mode attributes)." +
                 "\n" +
                 "This is a read-only attribute and is intended to allow clients to determine what changes may need " +
                 "to be made without having to query all the included attributes. It may be beneficial for the " +
@@ -455,11 +451,11 @@ export const DoorLock = Cluster({
             name: "LocalProgrammingFeatures", id: 0x2c, type: "LocalProgrammingFeaturesBitmap",
             access: "R[W] VA", conformance: "O", default: 0, quality: "P",
 
-            details: "This attribute shall indicate the local programming features that will be disabled when " +
-                "EnableLocalProgramming attribute is set to False. If a door lock doesn’t support disabling one " +
-                "aspect of local programming it shall return CONSTRAINT_ERROR during a write operation of this " +
-                "attribute. If the EnableLocalProgramming attribute is set to True then all local programming " +
-                "features shall be enabled regardless of the bits set to 0 in this attribute." +
+            details: "Indicates the local programming features that will be disabled when EnableLocalProgramming " +
+                "attribute is set to False. If a door lock doesn’t support disabling one aspect of local programming " +
+                "it shall return CONSTRAINT_ERROR during a write operation of this attribute. If the " +
+                "EnableLocalProgramming attribute is set to True then all local programming features shall be " +
+                "enabled regardless of the bits set to 0 in this attribute." +
                 "\n" +
                 "The features that can be disabled from local programming are defined in " +
                 "LocalProgrammingFeaturesBitmap.",
@@ -471,13 +467,12 @@ export const DoorLock = Cluster({
             name: "WrongCodeEntryLimit", id: 0x30, type: "uint8", access: "R[W] VA", conformance: "PIN | RID",
             constraint: "1 to 255", quality: "P",
 
-            details: "This attribute shall indicate the number of incorrect Pin codes or RFID presentment attempts a user " +
-                "is allowed to enter before the lock will enter a lockout state. The value of this attribute is " +
-                "compared to all failing forms of credential presentation, including Pin codes used in an Unlock " +
-                "Command when RequirePINforRemoteOperation is set to true. Valid range is 1-255 incorrect attempts. " +
-                "The lockout state will be for the duration of UserCodeTemporaryDisableTime. If the attribute " +
-                "accepts writes and an attempt to write the value 0 is made, the device shall respond with " +
-                "CONSTRAINT_ERROR." +
+            details: "Indicates the number of incorrect Pin codes or RFID presentment attempts a user is allowed to enter " +
+                "before the lock will enter a lockout state. The value of this attribute is compared to all failing " +
+                "forms of credential presentation, including Pin codes used in an Unlock Command when " +
+                "RequirePINforRemoteOperation is set to true. Valid range is 1-255 incorrect attempts. The lockout " +
+                "state will be for the duration of UserCodeTemporaryDisableTime. If the attribute accepts writes and " +
+                "an attempt to write the value 0 is made, the device shall respond with CONSTRAINT_ERROR." +
                 "\n" +
                 "The lock may reset the counter used to track incorrect credential presentations as required by " +
                 "internal logic, environmental events, or other reasons. The lock shall reset the counter if a valid " +
@@ -489,10 +484,10 @@ export const DoorLock = Cluster({
         Attribute({
             name: "UserCodeTemporaryDisableTime", id: 0x31, type: "uint8", access: "R[W] VA",
             conformance: "PIN | RID", constraint: "1 to 255", quality: "P",
-            details: "This attribute shall indicate the number of seconds that the lock shuts down following wrong code " +
-                "entry. Valid range is 1-255 seconds. Device can shut down to lock user out for specified amount of " +
-                "time. (Makes it difficult to try and guess a PIN for the device.) If the attribute accepts writes " +
-                "and an attempt to write the attribute to 0 is made, the device shall respond with CONSTRAINT_ERROR.",
+            details: "Indicates the number of seconds that the lock shuts down following wrong code entry. Valid range is " +
+                "1-255 seconds. Device can shut down to lock user out for specified amount of time. (Makes it " +
+                "difficult to try and guess a PIN for the device.) If the attribute accepts writes and an attempt to " +
+                "write the attribute to 0 is made, the device shall respond with CONSTRAINT_ERROR.",
             xref: { document: "cluster", section: "5.2.9.36" }
         }),
 
@@ -500,10 +495,10 @@ export const DoorLock = Cluster({
             name: "SendPinOverTheAir", id: 0x32, type: "bool", access: "R[W] VA", conformance: "[!USR & PIN]",
             default: true, quality: "P",
 
-            details: "This attribute shall indicate the door locks ability to send PINs over the air. If the attribute is " +
-                "True it is ok for the door lock server to send PINs over the air. This attribute determines the " +
-                "behavior of the server’s TX operation. If it is false, then it is not ok for the device to send PIN " +
-                "in any messages over the air." +
+            details: "Indicates the door locks ability to send PINs over the air. If the attribute is True it is ok for " +
+                "the door lock server to send PINs over the air. This attribute determines the behavior of the " +
+                "server’s TX operation. If it is false, then it is not ok for the device to send PIN in any messages " +
+                "over the air." +
                 "\n" +
                 "The PIN field within any door lock cluster message shall keep the first octet unchanged and masks " +
                 "the actual code by replacing with 0xFF. For example (PIN \"1234\" ): If the attribute value is True, " +
@@ -516,9 +511,9 @@ export const DoorLock = Cluster({
         Attribute({
             name: "RequirePinForRemoteOperation", id: 0x33, type: "bool", access: "R[W] VA",
             conformance: "COTA & PIN", default: true, quality: "P",
-            details: "This attribute shall indicate if the door lock requires an optional PIN. If this attribute is set " +
-                "to True, the door lock server requires that an optional PINs be included in the payload of remote " +
-                "lock operation events like Lock, Unlock, Unlock with Timeout and Toggle in order to function.",
+            details: "Indicates if the door lock requires an optional PIN. If this attribute is set to True, the door " +
+                "lock server requires that an optional PINs be included in the payload of remote lock operation " +
+                "events like Lock, Unlock, Unlock with Timeout and Toggle in order to function.",
             xref: { document: "cluster", section: "5.2.9.38" }
         }),
 
@@ -530,9 +525,9 @@ export const DoorLock = Cluster({
         Attribute({
             name: "ExpiringUserTimeout", id: 0x35, type: "uint16", access: "R[W] VA", conformance: "[USR]",
             constraint: "1 to 2880", quality: "P",
-            details: "This attribute shall indicate the number of minutes a PIN, RFID, Fingerprint, or other credential " +
-                "associated with a user of type ExpiringUser shall remain valid after its first use before expiring. " +
-                "When the credential expires the UserStatus for the corresponding user record shall be set to " +
+            details: "Indicates the number of minutes a PIN, RFID, Fingerprint, or other credential associated with a " +
+                "user of type ExpiringUser shall remain valid after its first use before expiring. When the " +
+                "credential expires the UserStatus for the corresponding user record shall be set to " +
                 "OccupiedDisabled.",
             xref: { document: "cluster", section: "5.2.9.39" }
         }),
@@ -1800,8 +1795,7 @@ export const DoorLock = Cluster({
                 }),
 
                 Field({
-                    name: "UserName", id: 0x2, type: "string", conformance: "M", constraint: "max 10", default: "",
-                    quality: "X",
+                    name: "UserName", id: 0x2, type: "string", conformance: "M", constraint: "max 10", quality: "X",
 
                     details: "This field shall contain a string to use as a human readable identifier for the user. If UserName " +
                         "is null then:" +
@@ -1934,12 +1928,10 @@ export const DoorLock = Cluster({
                 }),
 
                 Field({
-                    name: "UserName", id: 0x1, type: "string", conformance: "M", constraint: "max 10", default: "",
-                    quality: "X",
+                    name: "UserName", id: 0x1, type: "string", conformance: "M", constraint: "max 10", quality: "X",
                     details: "This field shall contain a string to use as a human readable identifier for the user.",
                     xref: { document: "cluster", section: "5.2.10.36.2" }
                 }),
-
                 Field({
                     name: "UserUniqueId", id: 0x2, type: "uint32", conformance: "M", default: 0, quality: "X",
                     details: "See UserUniqueID field.",
@@ -3163,6 +3155,15 @@ export const DoorLock = Cluster({
                         "into.",
                     xref: { document: "cluster", section: "5.2.6.26.2" }
                 })
+            ]
+        }),
+
+        Datatype({
+            name: "StatusCodeEnum", type: "enum8",
+            xref: { document: "cluster", section: "5.2.7.1" },
+            children: [
+                Field({ name: "Duplicate", id: 0x2, description: "Entry would cause a duplicate credential/ID." }),
+                Field({ name: "Occupied", id: 0x3, description: "Entry would replace an occupied slot." })
             ]
         })
     ]

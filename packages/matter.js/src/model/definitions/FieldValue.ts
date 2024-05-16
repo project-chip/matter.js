@@ -8,9 +8,8 @@ import { UnexpectedDataError } from "../../common/MatterError.js";
 import { serialize as stringSerialize } from "../../util/String.js";
 
 /**
- * A FieldValue represents a concrete value for a datatype.  Most values are
- * primitives but some values we encode with specialized typed objects so we
- * can capture the original semantic meaning.
+ * A FieldValue represents a concrete value for a datatype.  Most values are primitives but some values we encode with
+ * specialized typed objects so we can capture the original semantic meaning.
  */
 export type FieldValue =
     | null
@@ -26,8 +25,7 @@ export type FieldValue =
     | FieldValue.Celsius;
 
 export namespace FieldValue {
-    // Typing with constants should be just as type safe as using an enum but
-    // simplifies type definitions
+    // Typing with constants should be just as type safe as using an enum but simplifies type definitions
 
     export const percent = "percent";
     export type percent = typeof percent;
@@ -42,8 +40,7 @@ export namespace FieldValue {
     export type properties = typeof properties;
 
     /**
-     * If a field value isn't a primitive type, it's an object with a type
-     * field indicating one of these types.
+     * If a field value isn't a primitive type, it's an object with a type field indicating one of these types.
      */
     export type Type = percent | celsius | reference | properties;
 
@@ -55,8 +52,8 @@ export namespace FieldValue {
     }
 
     /**
-     * Flag for an invalid value.  Not part of the FieldValue union but
-     * returned when casting to a field value if the cast is impossible
+     * Flag for an invalid value.  Not part of the FieldValue union but returned when casting to a field value if the
+     * cast is impossible
      */
     export const Invalid: unique symbol = Symbol("invalid");
     export type Invalid = typeof Invalid;
@@ -128,8 +125,7 @@ export namespace FieldValue {
     }
 
     /**
-     * Given a type name as a hint, do our best to convert a field value to a
-     * number.
+     * Given a type name as a hint, do our best to convert a field value to a number.
      */
     export function numericValue(value: FieldValue | undefined, typeName?: string) {
         if (typeof value === "boolean") {

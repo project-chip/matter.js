@@ -62,8 +62,8 @@ export const ElectricalEnergyMeasurement = Cluster({
         Attribute({
             name: "Accuracy", id: 0x0, type: "MeasurementAccuracyStruct", access: "R V", conformance: "M",
             quality: "F",
-            details: "This attribute shall indicate the accuracy of energy measurement by this server. The value of the " +
-                "MeasurementType field on this MeasurementAccuracyStruct shall be ElectricalEnergy.",
+            details: "Indicates the accuracy of energy measurement by this server. The value of the MeasurementType field " +
+                "on this MeasurementAccuracyStruct shall be ElectricalEnergy.",
             xref: { document: "cluster", section: "2.12.6.1" }
         }),
 
@@ -71,8 +71,8 @@ export const ElectricalEnergyMeasurement = Cluster({
             name: "CumulativeEnergyImported", id: 0x1, type: "EnergyMeasurementStruct", access: "R V",
             conformance: "IMPE & CUME", default: null, quality: "X Q",
 
-            details: "This attribute shall indicate the most recent measurement of cumulative energy imported by the " +
-                "server over the lifetime of the device, and the timestamp of when the measurement was recorded." +
+            details: "Indicates the most recent measurement of cumulative energy imported by the server over the lifetime " +
+                "of the device, and the timestamp of when the measurement was recorded." +
                 "\n" +
                 "The reporting interval of this attribute shall be manufacturer dependent. The server may choose to " +
                 "omit publication of deltas considered not meaningful." +
@@ -92,8 +92,8 @@ export const ElectricalEnergyMeasurement = Cluster({
             name: "CumulativeEnergyExported", id: 0x2, type: "EnergyMeasurementStruct", access: "R V",
             conformance: "EXPE & CUME", default: null, quality: "X Q",
 
-            details: "This attribute shall indicate the most recent measurement of cumulative energy exported by the " +
-                "server over the lifetime of the device, and the timestamp of when the measurement was recorded." +
+            details: "Indicates the most recent measurement of cumulative energy exported by the server over the lifetime " +
+                "of the device, and the timestamp of when the measurement was recorded." +
                 "\n" +
                 "The reporting interval of this attribute shall be manufacturer dependent. The server may choose to " +
                 "omit publication of deltas considered not meaningful." +
@@ -113,8 +113,8 @@ export const ElectricalEnergyMeasurement = Cluster({
             name: "PeriodicEnergyImported", id: 0x3, type: "EnergyMeasurementStruct", access: "R V",
             conformance: "IMPE & PERE", default: null, quality: "X Q",
 
-            details: "This attribute shall indicate the most recent measurement of energy imported by the server and the " +
-                "period during which it was measured." +
+            details: "Indicates the most recent measurement of energy imported by the server and the period during which " +
+                "it was measured." +
                 "\n" +
                 "The reporting interval of this attribute shall be manufacturer dependent. The server may choose to " +
                 "omit publication of deltas considered not meaningful." +
@@ -134,8 +134,8 @@ export const ElectricalEnergyMeasurement = Cluster({
             name: "PeriodicEnergyExported", id: 0x4, type: "EnergyMeasurementStruct", access: "R V",
             conformance: "EXPE & PERE", default: null, quality: "X Q",
 
-            details: "This attribute shall indicate the most recent measurement of energy exported by the server and the " +
-                "period during which it was measured." +
+            details: "Indicates the most recent measurement of energy exported by the server and the period during which " +
+                "it was measured." +
                 "\n" +
                 "The reporting interval of this attribute shall be manufacturer dependent. The server may choose to " +
                 "omit publication of deltas considered not meaningful." +
@@ -154,7 +154,7 @@ export const ElectricalEnergyMeasurement = Cluster({
         Attribute({
             name: "CumulativeEnergyReset", id: 0x5, type: "CumulativeEnergyResetStruct", access: "R V",
             conformance: "[CUME]", default: null, quality: "X",
-            details: "This attribute shall indicate when cumulative measurements were most recently zero.",
+            details: "Indicates when cumulative measurements were most recently zero.",
             xref: { document: "cluster", section: "2.12.6.6" }
         }),
 

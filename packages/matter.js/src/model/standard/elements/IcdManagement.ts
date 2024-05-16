@@ -62,25 +62,25 @@ export const IcdManagement = Cluster({
         Attribute({
             name: "IdleModeDuration", id: 0x0, type: "uint32", access: "R V", conformance: "M",
             constraint: "1 to 64800", default: 1, quality: "F",
-            details: "This attribute shall indicate the maximum interval in seconds the server can stay in idle mode. The " +
-                "IdleModeDuration shall NOT be smaller than the ActiveModeDuration.",
+            details: "Indicates the maximum interval in seconds the server can stay in idle mode. The IdleModeDuration " +
+                "shall NOT be smaller than the ActiveModeDuration.",
             xref: { document: "core", section: "9.17.6.1" }
         }),
 
         Attribute({
             name: "ActiveModeDuration", id: 0x1, type: "uint32", access: "R V", conformance: "M", default: 300,
             quality: "F",
-            details: "This attribute shall indicate the minimum interval in milliseconds the server typically will stay " +
-                "in active mode after initial transition out of idle mode. The ActiveModeDuration does not include " +
-                "the ActiveModeThreshold.",
+            details: "Indicates the minimum interval in milliseconds the server typically will stay in active mode after " +
+                "initial transition out of idle mode. The ActiveModeDuration does not include the " +
+                "ActiveModeThreshold.",
             xref: { document: "core", section: "9.17.6.2" }
         }),
 
         Attribute({
             name: "ActiveModeThreshold", id: 0x2, type: "uint16", access: "R V", conformance: "M", default: 300,
             quality: "F",
-            details: "This attribute shall indicate the minimum amount of time in milliseconds the server typically will " +
-                "stay active after network activity when in active mode.",
+            details: "Indicates the minimum amount of time in milliseconds the server typically will stay active after " +
+                "network activity when in active mode.",
             xref: { document: "core", section: "9.17.6.3" }
         }),
 
@@ -105,8 +105,8 @@ export const IcdManagement = Cluster({
         Attribute({
             name: "ClientsSupportedPerFabric", id: 0x5, type: "uint16", access: "R V", conformance: "CIP",
             constraint: "min 1", default: 1, quality: "F",
-            details: "This attribute shall indicate the maximum number of entries that the server is able to store for " +
-                "each fabric in the RegisteredClients attribute.",
+            details: "Indicates the maximum number of entries that the server is able to store for each fabric in the " +
+                "RegisteredClients attribute.",
             xref: { document: "core", section: "9.17.6.6" }
         }),
 
@@ -114,12 +114,11 @@ export const IcdManagement = Cluster({
             name: "UserActiveModeTriggerHint", id: 0x6, type: "UserActiveModeTriggerBitmap", access: "R V",
             conformance: "P, UAT", constraint: "desc", default: 0, quality: "F",
 
-            details: "This attribute shall indicate which user action(s) will trigger the ICD to switch to Active mode. " +
-                "If the attribute indicates support for a trigger that is dependent on the " +
-                "UserActiveModeTriggerInstruction in the UserActiveModeTriggerHint table, the " +
-                "UserActiveModeTriggerInstruction attribute shall be implemented and shall provide the required " +
-                "information, unless specified otherwise in the requirement column of the UserActiveModeTriggerHint " +
-                "table." +
+            details: "Indicates which user action(s) will trigger the ICD to switch to Active mode. If the attribute " +
+                "indicates support for a trigger that is dependent on the UserActiveModeTriggerInstruction in the " +
+                "UserActiveModeTriggerHint table, the UserActiveModeTriggerInstruction attribute shall be " +
+                "implemented and shall provide the required information, unless specified otherwise in the " +
+                "requirement column of the UserActiveModeTriggerHint table." +
                 "\n" +
                 "ActuateSensorLightsBlink, ResetButtonLightsBlink and SetupButtonLightsBlink (i.e. bits 7, 9 and 14) " +
                 "have a dependency on the UserActiveModeTriggerInstruction attribute but do not require the " +
@@ -168,7 +167,7 @@ export const IcdManagement = Cluster({
 
         Attribute({
             name: "OperatingMode", id: 0x8, type: "OperatingModeEnum", access: "R V", conformance: "P, LITS",
-            details: "This attribute shall indicate the operating mode of the ICD as specified in the OperatingModeEnum." +
+            details: "Indicates the operating mode of the ICD as specified in the OperatingModeEnum." +
                 "\n" +
                 "  • If the ICD is operating as a LIT ICD, OperatingMode shall be LIT." +
                 "\n" +

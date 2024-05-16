@@ -68,7 +68,7 @@ export const Thermostat = Cluster({
             name: "LocalTemperature", id: 0x0, type: "temperature", access: "R V", conformance: "M",
             default: null, quality: "X P",
 
-            details: "This attribute shall indicate the current Calculated Local Temperature, when available." +
+            details: "Indicates the current Calculated Local Temperature, when available." +
                 "\n" +
                 "  • If the LTNE feature is not supported:" +
                 "\n" +
@@ -87,16 +87,15 @@ export const Thermostat = Cluster({
         Attribute({
             name: "OutdoorTemperature", id: 0x1, type: "temperature", access: "R V", conformance: "O",
             default: null, quality: "X",
-            details: "This attribute shall indicate the outdoor temperature, as measured locally or remotely (over the " +
-                "network).",
+            details: "Indicates the outdoor temperature, as measured locally or remotely (over the network).",
             xref: { document: "cluster", section: "4.3.9.4" }
         }),
 
         Attribute({
             name: "Occupancy", id: 0x2, type: "OccupancyBitmap", access: "R V", conformance: "OCC",
             constraint: "desc", default: 1,
-            details: "This attribute shall indicate whether the heated/cooled space is occupied or not, as measured " +
-                "locally or remotely (over the network).",
+            details: "Indicates whether the heated/cooled space is occupied or not, as measured locally or remotely (over " +
+                "the network).",
             xref: { document: "cluster", section: "4.3.9.5" }
         }),
 
@@ -114,8 +113,8 @@ export const Thermostat = Cluster({
         Attribute({
             name: "AbsMinCoolSetpointLimit", id: 0x5, type: "temperature", access: "R V", conformance: "[COOL]",
             constraint: "desc", default: { type: "celsius", value: 16 }, quality: "F",
-            details: "This attribute shall indicate the absolute minimum level that the cooling setpoint may be set to. " +
-                "This is a limitation imposed by the manufacturer." +
+            details: "Indicates the absolute minimum level that the cooling setpoint may be set to. This is a limitation " +
+                "imposed by the manufacturer." +
                 "\n" +
                 "Refer to Setpoint Limits for constraints",
             xref: { document: "cluster", section: "4.3.9.8" }
@@ -124,8 +123,8 @@ export const Thermostat = Cluster({
         Attribute({
             name: "AbsMaxCoolSetpointLimit", id: 0x6, type: "temperature", access: "R V", conformance: "[COOL]",
             constraint: "desc", default: { type: "celsius", value: 32 }, quality: "F",
-            details: "This attribute shall indicate the absolute maximum level that the cooling setpoint may be set to. " +
-                "This is a limitation imposed by the manufacturer." +
+            details: "Indicates the absolute maximum level that the cooling setpoint may be set to. This is a limitation " +
+                "imposed by the manufacturer." +
                 "\n" +
                 "Refer to Setpoint Limits for constraints",
             xref: { document: "cluster", section: "4.3.9.9" }
@@ -134,9 +133,9 @@ export const Thermostat = Cluster({
         Attribute({
             name: "PiCoolingDemand", id: 0x7, type: "uint8", access: "R V", conformance: "[COOL]",
             constraint: "0 to 100", quality: "P",
-            details: "This attribute shall indicate the level of cooling demanded by the PI (proportional integral) " +
-                "control loop in use by the thermostat (if any), in percent. This value is 0 when the thermostat is " +
-                "in “off” or “heating” mode." +
+            details: "Indicates the level of cooling demanded by the PI (proportional integral) control loop in use by " +
+                "the thermostat (if any), in percent. This value is 0 when the thermostat is in “off” or “heating” " +
+                "mode." +
                 "\n" +
                 "This attribute is reported regularly and may be used to control a cooling device.",
             xref: { document: "cluster", section: "4.3.9.10" }
@@ -145,8 +144,8 @@ export const Thermostat = Cluster({
         Attribute({
             name: "PiHeatingDemand", id: 0x8, type: "uint8", access: "R V", conformance: "[HEAT]",
             constraint: "0 to 100", quality: "P",
-            details: "This attribute shall indicate the level of heating demanded by the PI loop in percent. This value " +
-                "is 0 when the thermostat is in “off” or “cooling” mode." +
+            details: "Indicates the level of heating demanded by the PI loop in percent. This value is 0 when the " +
+                "thermostat is in “off” or “cooling” mode." +
                 "\n" +
                 "This attribute is reported regularly and may be used to control a heating device.",
             xref: { document: "cluster", section: "4.3.9.11" }
@@ -155,10 +154,10 @@ export const Thermostat = Cluster({
         Attribute({
             name: "HvacSystemTypeConfiguration", id: 0x9, type: "HVACSystemTypeBitmap", access: "R[W] VM",
             conformance: "D", constraint: "desc", default: 0, quality: "N",
-            details: "This attribute shall indicate the HVAC system type controlled by the thermostat. If the thermostat " +
-                "uses physical DIP switches to set these parameters, this information shall be available read-only " +
-                "from the DIP switches. If these parameters are set via software, there shall be read/write access " +
-                "in order to provide remote programming capability.",
+            details: "Indicates the HVAC system type controlled by the thermostat. If the thermostat uses physical DIP " +
+                "switches to set these parameters, this information shall be available read-only from the DIP " +
+                "switches. If these parameters are set via software, there shall be read/write access in order to " +
+                "provide remote programming capability.",
             xref: { document: "cluster", section: "4.3.9.12" }
         }),
 
@@ -167,9 +166,8 @@ export const Thermostat = Cluster({
             conformance: "[!LTNE]", constraint: "-2.5°C to 2.5°C", default: { type: "celsius", value: 0 },
             quality: "N",
 
-            details: "This attribute shall indicate the offset the Thermostat server shall make to the measured " +
-                "temperature (locally or remotely) to adjust the Calculated Local Temperature prior to using, " +
-                "displaying or reporting it." +
+            details: "Indicates the offset the Thermostat server shall make to the measured temperature (locally or " +
+                "remotely) to adjust the Calculated Local Temperature prior to using, displaying or reporting it." +
                 "\n" +
                 "The purpose of this attribute is to adjust the calibration of the Thermostat server per the user’s " +
                 "preferences (e.g., to match if there are multiple servers displaying different values for the same " +
@@ -187,7 +185,7 @@ export const Thermostat = Cluster({
             name: "OccupiedCoolingSetpoint", id: 0x11, type: "temperature", access: "RW VO",
             conformance: "COOL", constraint: "desc", default: { type: "celsius", value: 26 }, quality: "N S",
 
-            details: "This attribute shall indicate the cooling mode setpoint when the room is occupied." +
+            details: "Indicates the cooling mode setpoint when the room is occupied." +
                 "\n" +
                 "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that " +
                 "these constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned." +
@@ -202,7 +200,7 @@ export const Thermostat = Cluster({
             name: "OccupiedHeatingSetpoint", id: 0x12, type: "temperature", access: "RW VO",
             conformance: "HEAT", constraint: "desc", default: { type: "celsius", value: 20 }, quality: "N S",
 
-            details: "This attribute shall indicate the heating mode setpoint when the room is occupied." +
+            details: "Indicates the heating mode setpoint when the room is occupied." +
                 "\n" +
                 "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that " +
                 "these constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned." +
@@ -218,7 +216,7 @@ export const Thermostat = Cluster({
             conformance: "COOL & OCC", constraint: "desc", default: { type: "celsius", value: 26 },
             quality: "N",
 
-            details: "This attribute shall indicate the cooling mode setpoint when the room is unoccupied." +
+            details: "Indicates the cooling mode setpoint when the room is unoccupied." +
                 "\n" +
                 "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that " +
                 "these constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned." +
@@ -233,7 +231,7 @@ export const Thermostat = Cluster({
             conformance: "HEAT & OCC", constraint: "desc", default: { type: "celsius", value: 20 },
             quality: "N",
 
-            details: "This attribute shall indicate the heating mode setpoint when the room is unoccupied." +
+            details: "Indicates the heating mode setpoint when the room is unoccupied." +
                 "\n" +
                 "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that " +
                 "these constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned." +
@@ -247,7 +245,7 @@ export const Thermostat = Cluster({
             name: "MinHeatSetpointLimit", id: 0x15, type: "temperature", access: "RW VM", conformance: "[HEAT]",
             constraint: "desc", default: { type: "reference", name: "AbsMinHeatSetpointLimit" }, quality: "N",
 
-            details: "This attribute shall indicate the minimum level that the heating setpoint may be set to." +
+            details: "Indicates the minimum level that the heating setpoint may be set to." +
                 "\n" +
                 "This attribute, and the following three attributes, allow the user to define setpoint limits more " +
                 "constrictive than the manufacturer imposed ones. Limiting users (e.g., in a commercial building) to " +
@@ -266,7 +264,7 @@ export const Thermostat = Cluster({
             name: "MaxHeatSetpointLimit", id: 0x16, type: "temperature", access: "RW VM", conformance: "[HEAT]",
             constraint: "desc", default: { type: "reference", name: "AbsMaxHeatSetpointLimit" }, quality: "N",
 
-            details: "This attribute shall indicate the maximum level that the heating setpoint may be set to." +
+            details: "Indicates the maximum level that the heating setpoint may be set to." +
                 "\n" +
                 "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute to a value " +
                 "which conflicts with setpoint values then those setpoints shall be adjusted by the minimum amount " +
@@ -281,7 +279,7 @@ export const Thermostat = Cluster({
             name: "MinCoolSetpointLimit", id: 0x17, type: "temperature", access: "RW VM", conformance: "[COOL]",
             constraint: "desc", default: { type: "reference", name: "AbsMinCoolSetpointLimit" }, quality: "N",
 
-            details: "This attribute shall indicate the minimum level that the cooling setpoint may be set to." +
+            details: "Indicates the minimum level that the cooling setpoint may be set to." +
                 "\n" +
                 "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute to a value " +
                 "which conflicts with setpoint values then those setpoints shall be adjusted by the minimum amount " +
@@ -296,7 +294,7 @@ export const Thermostat = Cluster({
             name: "MaxCoolSetpointLimit", id: 0x18, type: "temperature", access: "RW VM", conformance: "[COOL]",
             constraint: "desc", default: { type: "reference", name: "AbsMaxCoolSetpointLimit" }, quality: "N",
 
-            details: "This attribute shall indicate the maximum level that the cooling setpoint may be set to." +
+            details: "Indicates the maximum level that the cooling setpoint may be set to." +
                 "\n" +
                 "Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute to a value " +
                 "which conflicts with setpoint values then those setpoints shall be adjusted by the minimum amount " +
@@ -328,8 +326,8 @@ export const Thermostat = Cluster({
             name: "RemoteSensing", id: 0x1a, type: "RemoteSensingBitmap", access: "RW VM", conformance: "O",
             default: 0, quality: "N",
 
-            details: "This attribute shall indicate when the local temperature, outdoor temperature and occupancy are " +
-                "being sensed by remote networked sensors, rather than internal sensors." +
+            details: "Indicates when the local temperature, outdoor temperature and occupancy are being sensed by remote " +
+                "networked sensors, rather than internal sensors." +
                 "\n" +
                 "If the LTNE feature is present in the server, the LocalTemperature RemoteSensing bit value shall " +
                 "always report a value of 0." +
@@ -343,23 +341,23 @@ export const Thermostat = Cluster({
         Attribute({
             name: "ControlSequenceOfOperation", id: 0x1b, type: "ControlSequenceOfOperationEnum",
             access: "RW VM", conformance: "M", constraint: "desc", default: 4, quality: "N",
-            details: "This attribute shall indicate the overall operating environment of the thermostat, and thus the " +
-                "possible system modes that the thermostat can operate in.",
+            details: "Indicates the overall operating environment of the thermostat, and thus the possible system modes " +
+                "that the thermostat can operate in.",
             xref: { document: "cluster", section: "4.3.9.24" }
         }),
 
         Attribute({
             name: "SystemMode", id: 0x1c, type: "SystemModeEnum", access: "RW VM", conformance: "M",
             constraint: "desc", default: 1, quality: "N S",
-            details: "This attribute shall indicate the current operating mode of the thermostat. Its value shall be " +
-                "limited by the ControlSequenceOfOperation attribute.",
+            details: "Indicates the current operating mode of the thermostat. Its value shall be limited by the " +
+                "ControlSequenceOfOperation attribute.",
             xref: { document: "cluster", section: "4.3.9.25" }
         }),
 
         Attribute({
             name: "AlarmMask", id: 0x1d, type: "AlarmCodeBitmap", access: "R V", conformance: "D",
             constraint: "desc", default: 0,
-            details: "This attribute shall indicate whether each of the alarms in AlarmCodeBitmap is enabled." +
+            details: "Indicates whether each of the alarms in AlarmCodeBitmap is enabled." +
                 "\n" +
                 "When the Alarms cluster is implemented on a device, and one of the alarm conditions included in " +
                 "AlarmCodeBitmap occurs, an alarm notification is generated, with the alarm code field set as listed " +
@@ -370,9 +368,9 @@ export const Thermostat = Cluster({
         Attribute({
             name: "ThermostatRunningMode", id: 0x1e, type: "ThermostatRunningModeEnum", access: "R V",
             conformance: "[AUTO]", constraint: "desc", default: 0,
-            details: "This attribute shall indicate the running mode of the thermostat. This attribute uses the same " +
-                "values as SystemModeEnum but can only be Off, Cool or Heat. This attribute is intended to provide " +
-                "additional information when the thermostat’s system mode is in auto mode.",
+            details: "Indicates the running mode of the thermostat. This attribute uses the same values as SystemModeEnum " +
+                "but can only be Off, Cool or Heat. This attribute is intended to provide additional information " +
+                "when the thermostat’s system mode is in auto mode.",
             xref: { document: "cluster", section: "4.3.9.27" }
         }),
 
@@ -380,8 +378,8 @@ export const Thermostat = Cluster({
             name: "StartOfWeek", id: 0x20, type: "StartOfWeekEnum", access: "R V", conformance: "SCH",
             constraint: "desc", quality: "F",
 
-            details: "This attribute shall indicate the day of the week that this thermostat considers to be the start of " +
-                "week for weekly setpoint scheduling." +
+            details: "Indicates the day of the week that this thermostat considers to be the start of week for weekly " +
+                "setpoint scheduling." +
                 "\n" +
                 "This attribute may be able to be used as the base to determine if the device supports weekly " +
                 "scheduling by reading the attribute. Successful response means that the weekly scheduling is " +
@@ -393,36 +391,34 @@ export const Thermostat = Cluster({
         Attribute({
             name: "NumberOfWeeklyTransitions", id: 0x21, type: "uint8", access: "R V", conformance: "SCH",
             default: 0, quality: "F",
-            details: "This attribute shall indicate how many weekly schedule transitions the thermostat is capable of " +
-                "handling.",
+            details: "Indicates how many weekly schedule transitions the thermostat is capable of handling.",
             xref: { document: "cluster", section: "4.3.9.29" }
         }),
 
         Attribute({
             name: "NumberOfDailyTransitions", id: 0x22, type: "uint8", access: "R V", conformance: "SCH",
             default: 0, quality: "F",
-            details: "This attribute shall indicate how many daily schedule transitions the thermostat is capable of " +
-                "handling.",
+            details: "Indicates how many daily schedule transitions the thermostat is capable of handling.",
             xref: { document: "cluster", section: "4.3.9.30" }
         }),
 
         Attribute({
             name: "TemperatureSetpointHold", id: 0x23, type: "TemperatureSetpointHoldEnum", access: "RW VM",
             conformance: "O", constraint: "desc", default: 0, quality: "N",
-            details: "This attribute shall indicate the temperature hold status on the thermostat. If hold status is on, " +
-                "the thermostat SHOULD maintain the temperature setpoint for the current mode until a system mode " +
-                "change. If hold status is off, the thermostat SHOULD follow the setpoint transitions specified by " +
-                "its internal scheduling program. If the thermostat supports setpoint hold for a specific duration, " +
-                "it SHOULD also implement the TemperatureSetpointHoldDuration attribute.",
+            details: "Indicates the temperature hold status on the thermostat. If hold status is on, the thermostat " +
+                "SHOULD maintain the temperature setpoint for the current mode until a system mode change. If hold " +
+                "status is off, the thermostat SHOULD follow the setpoint transitions specified by its internal " +
+                "scheduling program. If the thermostat supports setpoint hold for a specific duration, it SHOULD " +
+                "also implement the TemperatureSetpointHoldDuration attribute.",
             xref: { document: "cluster", section: "4.3.9.31" }
         }),
 
         Attribute({
             name: "TemperatureSetpointHoldDuration", id: 0x24, type: "uint16", access: "RW VM",
             conformance: "O", constraint: "max 1440", default: null, quality: "X N",
-            details: "This attribute shall indicate the period in minutes for which a setpoint hold is active. " +
-                "Thermostats that support hold for a specified duration SHOULD implement this attribute. The null " +
-                "value indicates the field is unused. All other values are reserved.",
+            details: "Indicates the period in minutes for which a setpoint hold is active. Thermostats that support hold " +
+                "for a specified duration SHOULD implement this attribute. The null value indicates the field is " +
+                "unused. All other values are reserved.",
             xref: { document: "cluster", section: "4.3.9.32" }
         }),
 
@@ -430,11 +426,11 @@ export const Thermostat = Cluster({
             name: "ThermostatProgrammingOperationMode", id: 0x25, type: "ProgrammingOperationModeBitmap",
             access: "RW VM", conformance: "O", constraint: "desc", default: 0, quality: "P",
 
-            details: "This attribute shall indicate the operational state of the thermostat’s programming. The thermostat " +
-                "shall modify its programming operation when this attribute is modified by a client and update this " +
-                "attribute when its programming operation is modified locally by a user. The thermostat may support " +
-                "more than one active ProgrammingOperationModeBitmap. For example, the thermostat may operate " +
-                "simultaneously in Schedule Programming Mode and Recovery Mode." +
+            details: "Indicates the operational state of the thermostat’s programming. The thermostat shall modify its " +
+                "programming operation when this attribute is modified by a client and update this attribute when " +
+                "its programming operation is modified locally by a user. The thermostat may support more than one " +
+                "active ProgrammingOperationModeBitmap. For example, the thermostat may operate simultaneously in " +
+                "Schedule Programming Mode and Recovery Mode." +
                 "\n" +
                 "Thermostats which contain a schedule may use this attribute to control how that schedule is used, " +
                 "even if they do not support the ScheduleConfiguration feature." +
@@ -453,8 +449,8 @@ export const Thermostat = Cluster({
         Attribute({
             name: "ThermostatRunningState", id: 0x29, type: "RelayStateBitmap", access: "R V", conformance: "O",
             constraint: "desc",
-            details: "This attribute shall indicate the current relay state of the heat, cool, and fan relays. " +
-                "Unimplemented outputs shall be treated as if they were Off.",
+            details: "Indicates the current relay state of the heat, cool, and fan relays. Unimplemented outputs shall be " +
+                "treated as if they were Off.",
             xref: { document: "cluster", section: "4.3.9.34" }
         }),
 
@@ -462,8 +458,8 @@ export const Thermostat = Cluster({
             name: "SetpointChangeSource", id: 0x30, type: "SetpointChangeSourceEnum", access: "R V",
             conformance: "O", constraint: "desc", default: 0,
 
-            details: "This attribute shall indicate the source of the current active OccupiedCoolingSetpoint or " +
-                "OccupiedHeatingSetpoint (i.e., who or what determined the current setpoint)." +
+            details: "Indicates the source of the current active OccupiedCoolingSetpoint or OccupiedHeatingSetpoint " +
+                "(i.e., who or what determined the current setpoint)." +
                 "\n" +
                 "This attribute enables service providers to determine whether changes to setpoints were initiated " +
                 "due to occupant comfort, scheduled programming or some other source (e.g., electric utility or " +
@@ -476,22 +472,18 @@ export const Thermostat = Cluster({
         Attribute({
             name: "SetpointChangeAmount", id: 0x31, type: "TemperatureDifference", access: "R V",
             conformance: "O", default: null, quality: "X",
-
-            details: "This attribute shall indicate the delta between the current active OccupiedCoolingSetpoint or " +
-                "OccupiedHeatingSetpoint and the previous active setpoint. This attribute is meant to accompany the " +
-                "SetpointChangeSource attribute; devices implementing SetpointChangeAmount SHOULD also implement " +
-                "SetpointChangeSource." +
+            details: "Indicates the delta between the current active OccupiedCoolingSetpoint or OccupiedHeatingSetpoint " +
+                "and the previous active setpoint. This attribute is meant to accompany the SetpointChangeSource " +
+                "attribute; devices implementing SetpointChangeAmount SHOULD also implement SetpointChangeSource." +
                 "\n" +
                 "The null value indicates that the previous setpoint was unknown.",
-
             xref: { document: "cluster", section: "4.3.9.36" }
         }),
 
         Attribute({
             name: "SetpointChangeSourceTimestamp", id: 0x32, type: "epoch-s", access: "R V", conformance: "O",
             default: 0,
-            details: "This attribute shall indicate the time in UTC at which the SetpointChangeAmount attribute change " +
-                "was recorded.",
+            details: "Indicates the time in UTC at which the SetpointChangeAmount attribute change was recorded.",
             xref: { document: "cluster", section: "4.3.9.37" }
         }),
 
@@ -499,11 +491,11 @@ export const Thermostat = Cluster({
             name: "OccupiedSetback", id: 0x34, type: "UnsignedTemperature", access: "RW VM", conformance: "SB",
             constraint: "occupiedSetbackMin to occupiedSetbackMax", default: null, quality: "X N",
 
-            details: "This attribute shall indicate the amount that the Thermostat server will allow the Calculated Local " +
-                "Temperature to float above the OccupiedCoolingSetpoint (i.e., OccupiedCoolingSetpoint + " +
-                "OccupiedSetback) or below the OccupiedHeatingSetpoint setpoint (i.e., OccupiedHeatingSetpoint – " +
-                "OccupiedSetback) before initiating a state change to bring the temperature back to the user’s " +
-                "desired setpoint. This attribute is sometimes also referred to as the “span.”" +
+            details: "Indicates the amount that the Thermostat server will allow the Calculated Local Temperature to " +
+                "float above the OccupiedCoolingSetpoint (i.e., OccupiedCoolingSetpoint + OccupiedSetback) or below " +
+                "the OccupiedHeatingSetpoint setpoint (i.e., OccupiedHeatingSetpoint – OccupiedSetback) before " +
+                "initiating a state change to bring the temperature back to the user’s desired setpoint. This " +
+                "attribute is sometimes also referred to as the “span.”" +
                 "\n" +
                 "The purpose of this attribute is to allow remote configuration of the span between the desired " +
                 "setpoint and the measured temperature to help prevent over-cycling and reduce energy bills, though " +
@@ -526,8 +518,8 @@ export const Thermostat = Cluster({
         Attribute({
             name: "OccupiedSetbackMin", id: 0x35, type: "UnsignedTemperature", access: "R V", conformance: "SB",
             constraint: "max occupiedSetbackMax", default: null, quality: "X F",
-            details: "This attribute shall indicate the minimum value that the Thermostat server will allow the " +
-                "OccupiedSetback attribute to be configured by a user." +
+            details: "Indicates the minimum value that the Thermostat server will allow the OccupiedSetback attribute to " +
+                "be configured by a user." +
                 "\n" +
                 "The null value indicates the attribute is unused.",
             xref: { document: "cluster", section: "4.3.9.39" }
@@ -536,8 +528,8 @@ export const Thermostat = Cluster({
         Attribute({
             name: "OccupiedSetbackMax", id: 0x36, type: "UnsignedTemperature", access: "R V", conformance: "SB",
             constraint: "occupiedSetbackMin to 25.4°C", default: null, quality: "X F",
-            details: "This attribute shall indicate the maximum value that the Thermostat server will allow the " +
-                "OccupiedSetback attribute to be configured by a user." +
+            details: "Indicates the maximum value that the Thermostat server will allow the OccupiedSetback attribute to " +
+                "be configured by a user." +
                 "\n" +
                 "The null value indicates the attribute is unused.",
             xref: { document: "cluster", section: "4.3.9.40" }
@@ -548,11 +540,11 @@ export const Thermostat = Cluster({
             conformance: "SB & OCC", constraint: "unoccupiedSetbackMin to unoccupiedSetbackMax", default: null,
             quality: "X N",
 
-            details: "This attribute shall indicate the amount that the Thermostat server will allow the Calculated Local " +
-                "Temperature to float above the UnoccupiedCoolingSetpoint (i.e., UnoccupiedCoolingSetpoint + " +
-                "UnoccupiedSetback) or below the UnoccupiedHeatingSetpoint setpoint (i.e., UnoccupiedHeatingSetpoint " +
-                "- UnoccupiedSetback) before initiating a state change to bring the temperature back to the user’s " +
-                "desired setpoint. This attribute is sometimes also referred to as the “span.”" +
+            details: "Indicates the amount that the Thermostat server will allow the Calculated Local Temperature to " +
+                "float above the UnoccupiedCoolingSetpoint (i.e., UnoccupiedCoolingSetpoint + UnoccupiedSetback) or " +
+                "below the UnoccupiedHeatingSetpoint setpoint (i.e., UnoccupiedHeatingSetpoint - UnoccupiedSetback) " +
+                "before initiating a state change to bring the temperature back to the user’s desired setpoint. This " +
+                "attribute is sometimes also referred to as the “span.”" +
                 "\n" +
                 "The purpose of this attribute is to allow remote configuration of the span between the desired " +
                 "setpoint and the measured temperature to help prevent over-cycling and reduce energy bills, though " +
@@ -576,8 +568,8 @@ export const Thermostat = Cluster({
         Attribute({
             name: "UnoccupiedSetbackMin", id: 0x38, type: "UnsignedTemperature", access: "R V",
             conformance: "SB & OCC", constraint: "max unoccupiedSetbackMax", default: null, quality: "X F",
-            details: "This attribute shall indicate the minimum value that the Thermostat server will allow the " +
-                "UnoccupiedSetback attribute to be configured by a user." +
+            details: "Indicates the minimum value that the Thermostat server will allow the UnoccupiedSetback attribute " +
+                "to be configured by a user." +
                 "\n" +
                 "The null value indicates the attribute is unused.",
             xref: { document: "cluster", section: "4.3.9.42" }
@@ -587,8 +579,8 @@ export const Thermostat = Cluster({
             name: "UnoccupiedSetbackMax", id: 0x39, type: "UnsignedTemperature", access: "R V",
             conformance: "SB & OCC", constraint: "unoccupiedSetbackMin to 25.4°C", default: null,
             quality: "X F",
-            details: "This attribute shall indicate the maximum value that the Thermostat server will allow the " +
-                "UnoccupiedSetback attribute to be configured by a user." +
+            details: "Indicates the maximum value that the Thermostat server will allow the UnoccupiedSetback attribute " +
+                "to be configured by a user." +
                 "\n" +
                 "The null value indicates the attribute is unused.",
             xref: { document: "cluster", section: "4.3.9.43" }
@@ -598,9 +590,9 @@ export const Thermostat = Cluster({
             name: "EmergencyHeatDelta", id: 0x3a, type: "UnsignedTemperature", access: "RW VM",
             conformance: "O", default: { type: "celsius", value: 25 }, quality: "N",
 
-            details: "This attribute shall indicate the delta between the Calculated Local Temperature and the " +
-                "OccupiedHeatingSetpoint or UnoccupiedHeatingSetpoint attributes at which the Thermostat server will " +
-                "operate in emergency heat mode." +
+            details: "Indicates the delta between the Calculated Local Temperature and the OccupiedHeatingSetpoint or " +
+                "UnoccupiedHeatingSetpoint attributes at which the Thermostat server will operate in emergency heat " +
+                "mode." +
                 "\n" +
                 "If the difference between the Calculated Local Temperature and OccupiedCoolingSetpoint or " +
                 "UnoccupiedCoolingSetpoint is greater than or equal to the EmergencyHeatDelta and the Thermostat " +
@@ -631,59 +623,57 @@ export const Thermostat = Cluster({
         Attribute({
             name: "AcType", id: 0x40, type: "ACTypeEnum", access: "RW VM", conformance: "O", constraint: "desc",
             default: 0, quality: "N",
-            details: "This attribute shall indicate the type of Mini Split ACTypeEnum of Mini Split AC is defined " +
-                "depending on how Cooling and Heating condition is achieved by Mini Split AC.",
+            details: "Indicates the type of Mini Split ACTypeEnum of Mini Split AC is defined depending on how Cooling " +
+                "and Heating condition is achieved by Mini Split AC.",
             xref: { document: "cluster", section: "4.3.9.45" }
         }),
 
         Attribute({
             name: "AcCapacity", id: 0x41, type: "uint16", access: "RW VM", conformance: "O", default: 0,
             quality: "N",
-            details: "This attribute shall indicate capacity of Mini Split AC in terms of the format defined by the " +
-                "ACCapacityFormat attribute",
+            details: "Indicates capacity of Mini Split AC in terms of the format defined by the ACCapacityFormat attribute",
             xref: { document: "cluster", section: "4.3.9.46" }
         }),
 
         Attribute({
             name: "AcRefrigerantType", id: 0x42, type: "ACRefrigerantTypeEnum", access: "RW VM",
             conformance: "O", constraint: "desc", default: 0, quality: "N",
-            details: "This attribute shall indicate type of refrigerant used within the Mini Split AC.",
+            details: "Indicates type of refrigerant used within the Mini Split AC.",
             xref: { document: "cluster", section: "4.3.9.47" }
         }),
 
         Attribute({
             name: "AcCompressorType", id: 0x43, type: "ACCompressorTypeEnum", access: "RW VM", conformance: "O",
             constraint: "desc", default: 0, quality: "N",
-            details: "This attribute shall indicate the type of compressor used within the Mini Split AC.",
+            details: "Indicates the type of compressor used within the Mini Split AC.",
             xref: { document: "cluster", section: "4.3.9.48" }
         }),
 
         Attribute({
             name: "AcErrorCode", id: 0x44, type: "ACErrorCodeBitmap", access: "RW VM", conformance: "O",
             default: 0,
-            details: "This attribute shall indicate the type of errors encountered within the Mini Split AC.",
+            details: "Indicates the type of errors encountered within the Mini Split AC.",
             xref: { document: "cluster", section: "4.3.9.49" }
         }),
 
         Attribute({
             name: "AcLouverPosition", id: 0x45, type: "ACLouverPositionEnum", access: "RW VM", conformance: "O",
             constraint: "desc", default: 0, quality: "N",
-            details: "This attribute shall indicate the position of Louver on the AC.",
+            details: "Indicates the position of Louver on the AC.",
             xref: { document: "cluster", section: "4.3.9.50" }
         }),
 
         Attribute({
             name: "AcCoilTemperature", id: 0x46, type: "temperature", access: "R V", conformance: "O",
             default: null, quality: "X",
-            details: "This attribute shall indicate the temperature of the AC coil, as measured locally or remotely (over " +
-                "the network).",
+            details: "Indicates the temperature of the AC coil, as measured locally or remotely (over the network).",
             xref: { document: "cluster", section: "4.3.9.51" }
         }),
 
         Attribute({
             name: "AcCapacityFormat", id: 0x47, type: "ACCapacityFormatEnum", access: "RW VM", conformance: "O",
             constraint: "desc", default: 0, quality: "N",
-            details: "This attribute shall indicate the format for the ACCapacity attribute.",
+            details: "Indicates the format for the ACCapacity attribute.",
             xref: { document: "cluster", section: "4.3.9.52" }
         }),
 
@@ -1327,10 +1317,7 @@ export const Thermostat = Cluster({
                 Field({
                     name: "Heat", id: 0x4, conformance: "[HEAT]", description: "Demand is only generated for Heating"
                 }),
-                Field({
-                    name: "EmergencyHeat", id: 0x5, conformance: "[HEAT]",
-                    description: "2nd stage heating is in use to achieve desired temperature"
-                }),
+                Field({ name: "EmergencyHeat", id: 0x5, conformance: "[HEAT]" }),
                 Field({ name: "Precooling", id: 0x6, conformance: "[COOL]", description: "(see Terms)" }),
                 Field({ name: "FanOnly", id: 0x7, conformance: "O" }),
                 Field({ name: "Dry", id: 0x8, conformance: "O" }),

@@ -66,29 +66,25 @@ export const TemperatureControl = Cluster({
         Attribute({
             name: "TemperatureSetpoint", id: 0x0, type: "temperature", access: "R V", conformance: "TN",
             constraint: "minTemperature to maxTemperature",
-            details: "This attribute shall represent the desired Temperature Setpoint on the device.",
+            details: "Indicates the desired Temperature Setpoint on the device.",
             xref: { document: "cluster", section: "8.2.5.1" }
         }),
 
         Attribute({
             name: "MinTemperature", id: 0x1, type: "temperature", access: "R V", conformance: "TN",
             constraint: "max (MaxTemperature - 1)", quality: "F",
-            details: "This attribute shall represent the minimum temperature to which the TemperatureSetpoint attribute " +
-                "may be set.",
+            details: "Indicates the minimum temperature to which the TemperatureSetpoint attribute may be set.",
             xref: { document: "cluster", section: "8.2.5.2" }
         }),
 
         Attribute({
             name: "MaxTemperature", id: 0x2, type: "temperature", access: "R V", conformance: "TN",
             constraint: "desc", quality: "F",
-
-            details: "This attribute shall represent the maximum temperature to which the TemperatureSetpoint attribute " +
-                "may be set." +
+            details: "Indicates the maximum temperature to which the TemperatureSetpoint attribute may be set." +
                 "\n" +
                 "If the Step attribute is supported, this attribute shall be such that MaxTemperature = " +
                 "MinTemperature + Step * n, where n is an integer and n > 0. If the Step attribute is not supported, " +
                 "this attribute shall be such that MaxTemperature > MinTemperature.",
-
             xref: { document: "cluster", section: "8.2.5.3" }
         }),
 
@@ -96,8 +92,8 @@ export const TemperatureControl = Cluster({
             name: "Step", id: 0x3, type: "temperature", access: "R V", conformance: "STEP",
             constraint: "max (MaxTemperature - MinTemperature)", quality: "F",
 
-            details: "This attribute shall represent the discrete value by which the TemperatureSetpoint attribute can be " +
-                "changed via the SetTemperature command." +
+            details: "Indicates the discrete value by which the TemperatureSetpoint attribute can be changed via the " +
+                "SetTemperature command." +
                 "\n" +
                 "For example, if the value of MinTemperature is 25.00C (2500) and the Step value is 0.50C (50), " +
                 "valid values of the TargetTemperature field of the SetTemperature command would be 25.50C (2550), " +
@@ -109,9 +105,9 @@ export const TemperatureControl = Cluster({
         Attribute({
             name: "SelectedTemperatureLevel", id: 0x4, type: "uint8", access: "R V", conformance: "TL",
             constraint: "0 to 31",
-            details: "This attribute shall represent the currently selected temperature level setting of the server. This " +
-                "attribute shall be the positional index of the list item in the SupportedTemperatureLevels list " +
-                "that represents the currently selected temperature level setting of the server.",
+            details: "Indicates the currently selected temperature level setting of the server. This attribute shall be " +
+                "the positional index of the list item in the SupportedTemperatureLevels list that represents the " +
+                "currently selected temperature level setting of the server.",
             xref: { document: "cluster", section: "8.2.5.5" }
         }),
 
@@ -119,11 +115,11 @@ export const TemperatureControl = Cluster({
             name: "SupportedTemperatureLevels", id: 0x5, type: "list", access: "R V", conformance: "TL",
             constraint: "max 32[max 16]",
 
-            details: "This attribute shall represent the list of supported temperature level settings that may be " +
-                "selected via the TargetTemperatureLevel field in the SetTemperature command. Each string is " +
-                "readable text that describes each temperature level setting in a way that can be easily understood " +
-                "by humans. For example, a washing machine can have temperature levels like \"Cold\", \"Warm\", and " +
-                "\"Hot\". Each string is specified by the manufacturer." +
+            details: "Indicates the list of supported temperature level settings that may be selected via the " +
+                "TargetTemperatureLevel field in the SetTemperature command. Each string is readable text that " +
+                "describes each temperature level setting in a way that can be easily understood by humans. For " +
+                "example, a washing machine can have temperature levels like \"Cold\", \"Warm\", and \"Hot\". Each string " +
+                "is specified by the manufacturer." +
                 "\n" +
                 "Each item in this list shall represent a unique temperature level. Each entry in this list shall " +
                 "have a unique value. The entries in this list shall appear in order of increasing temperature level " +

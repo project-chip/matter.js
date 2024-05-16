@@ -13,7 +13,6 @@ import {
     LevelControlBehavior as BaseLevelControlBehavior
 } from "../../../behavior/definitions/level-control/LevelControlBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -63,13 +62,6 @@ export namespace DimmerSwitchRequirements {
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The Scenes cluster is optional per the Matter specification
-     *
-     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
-     */
-    export const ScenesBehavior = BaseScenesBehavior;
-
-    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = { mandatory: { Identify: IdentifyServer } };
@@ -79,7 +71,7 @@ export namespace DimmerSwitchRequirements {
      */
     export const client = {
         mandatory: { Identify: IdentifyBehavior, OnOff: OnOffBehavior, LevelControl: LevelControlBehavior },
-        optional: { Groups: GroupsBehavior, Scenes: ScenesBehavior }
+        optional: { Groups: GroupsBehavior }
     };
 }
 

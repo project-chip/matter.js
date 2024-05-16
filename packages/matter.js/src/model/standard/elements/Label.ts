@@ -37,14 +37,14 @@ export const Label = Cluster({
 
             children: [
                 Field({
-                    name: "Label", id: 0x0, type: "string", conformance: "M", constraint: "max 16", default: "",
+                    name: "Label", id: 0x0, type: "string", conformance: "M", constraint: "max 16",
                     details: "The Label or Value semantic is not defined here. Label examples: \"room\", \"zone\", \"group\", " +
                         "\"direction\".",
                     xref: { document: "core", section: "9.7.4.1.1" }
                 }),
 
                 Field({
-                    name: "Value", id: 0x1, type: "string", conformance: "M", constraint: "max 16", default: "",
+                    name: "Value", id: 0x1, type: "string", conformance: "M", constraint: "max 16",
                     details: "The Label or Value semantic is not defined here. The Value is a discriminator for a Label that may " +
                         "have multiple instances. Label:Value examples: \"room\":\"bedroom 2\", \"orientation\":\"North\", " +
                         "\"floor\":\"2\", \"direction\":\"up\"",

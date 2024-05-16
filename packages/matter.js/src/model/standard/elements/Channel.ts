@@ -417,21 +417,21 @@ export const Channel = Cluster({
                 }),
 
                 Field({
-                    name: "Name", id: 0x2, type: "string", conformance: "O", default: "",
+                    name: "Name", id: 0x2, type: "string", conformance: "O",
                     details: "This field shall indicate the marketing name for the channel, such as “The CW\" or \"Comedy Central\". " +
                         "This field is optional, but SHOULD be provided when known.",
                     xref: { document: "cluster", section: "6.6.5.5.3" }
                 }),
 
                 Field({
-                    name: "CallSign", id: 0x3, type: "string", conformance: "O", default: "",
+                    name: "CallSign", id: 0x3, type: "string", conformance: "O",
                     details: "This field shall indicate the call sign of the channel, such as \"PBS\". This field is optional, but " +
                         "SHOULD be provided when known.",
                     xref: { document: "cluster", section: "6.6.5.5.4" }
                 }),
 
                 Field({
-                    name: "AffiliateCallSign", id: 0x4, type: "string", conformance: "O", default: "",
+                    name: "AffiliateCallSign", id: 0x4, type: "string", conformance: "O",
                     details: "This field shall indicate the local affiliate call sign, such as \"KCTS\". This field is optional, but" +
                         "\n" +
                         "SHOULD be provided when known.",
@@ -439,7 +439,7 @@ export const Channel = Cluster({
                 }),
 
                 Field({
-                    name: "Identifier", id: 0x5, type: "string", conformance: "O", default: "",
+                    name: "Identifier", id: 0x5, type: "string", conformance: "O",
                     details: "This shall indicate the unique identifier for a specific channel. This field is optional, but " +
                         "SHOULD be provided when MajorNumber and MinorNumber are not available.",
                     xref: { document: "cluster", section: "6.6.5.5.6" }
@@ -468,14 +468,14 @@ export const Channel = Cluster({
                 }),
 
                 Field({
-                    name: "LineupName", id: 0x1, type: "string", conformance: "O", default: "",
+                    name: "LineupName", id: 0x1, type: "string", conformance: "O",
                     details: "This field shall indicate the name of the provider lineup, for example \"Comcast King County\". This " +
                         "field is optional, but SHOULD be provided when known.",
                     xref: { document: "cluster", section: "6.6.5.6.2" }
                 }),
 
                 Field({
-                    name: "PostalCode", id: 0x2, type: "string", conformance: "O", default: "",
+                    name: "PostalCode", id: 0x2, type: "string", conformance: "O",
                     details: "This field shall indicate the postal code (zip code) for the location of the device, such as " +
                         "\"98052\". This field is optional, but SHOULD be provided when known.",
                     xref: { document: "cluster", section: "6.6.5.6.3" }
@@ -531,7 +531,7 @@ export const Channel = Cluster({
                 }),
 
                 Field({
-                    name: "Subtitle", id: 0x5, type: "string", conformance: "O", constraint: "max 255", default: "",
+                    name: "Subtitle", id: 0x5, type: "string", conformance: "O", constraint: "max 255",
                     details: "This field shall indicate the subtitle for the specific program. For example, “Maybe Today\" which " +
                         "is an episode name for “MCIS: Los Angeles”. This field is optional but shall be provided if " +
                         "applicable and known.",
@@ -539,7 +539,7 @@ export const Channel = Cluster({
                 }),
 
                 Field({
-                    name: "Description", id: 0x6, type: "string", conformance: "O", constraint: "max 8192", default: "",
+                    name: "Description", id: 0x6, type: "string", conformance: "O", constraint: "max 8192",
                     details: "This field shall indicate the brief description for the specific program. For example, a " +
                         "description of an episode. This field is optional but shall be provided if known.",
                     xref: { document: "cluster", section: "6.6.5.7.7" }
@@ -571,7 +571,6 @@ export const Channel = Cluster({
 
                 Field({
                     name: "ThumbnailUrl", id: 0x9, type: "string", conformance: "O", constraint: "max 8192",
-                    default: "",
                     details: "This field shall represent a url of a thumbnail that clients can use to render an image for the " +
                         "program.",
                     xref: { document: "cluster", section: "6.6.5.7.10" }
@@ -579,20 +578,19 @@ export const Channel = Cluster({
 
                 Field({
                     name: "PosterArtUrl", id: 0xa, type: "string", conformance: "O", constraint: "max 8192",
-                    default: "",
                     details: "This field shall represent a url of a poster that clients can use to render an image for the " +
                         "program on the detail view.",
                     xref: { document: "cluster", section: "6.6.5.7.11" }
                 }),
 
                 Field({
-                    name: "DvbiUrl", id: 0xb, type: "string", conformance: "O", constraint: "max 8192", default: "",
+                    name: "DvbiUrl", id: 0xb, type: "string", conformance: "O", constraint: "max 8192",
                     details: "This field shall represent the DVB-I url associated to the program.",
                     xref: { document: "cluster", section: "6.6.5.7.12" }
                 }),
 
                 Field({
-                    name: "ReleaseDate", id: 0xc, type: "string", conformance: "O", constraint: "max 30", default: "",
+                    name: "ReleaseDate", id: 0xc, type: "string", conformance: "O", constraint: "max 30",
                     details: "This field shall be a string, in ISO 8601 format, representing the date on which the program was " +
                         "released. This field is optional but when provided, the year shall be provided as part of the " +
                         "string.",
@@ -601,7 +599,6 @@ export const Channel = Cluster({
 
                 Field({
                     name: "ParentalGuidanceText", id: 0xd, type: "string", conformance: "O", constraint: "max 255",
-                    default: "",
                     details: "This field shall represent a string providing additional information on the parental guidance. This " +
                         "field is optional.",
                     xref: { document: "cluster", section: "6.6.5.7.14" }
@@ -661,7 +658,7 @@ export const Channel = Cluster({
                     xref: { document: "cluster", section: "6.6.5.8.1" }
                 }),
                 Field({
-                    name: "SubCategory", id: 0x1, type: "string", conformance: "O", constraint: "max 256", default: "",
+                    name: "SubCategory", id: 0x1, type: "string", conformance: "O", constraint: "max 256",
                     details: "This field shall represent the sub-category or sub-genre of the program. Ex. Local.",
                     xref: { document: "cluster", section: "6.6.5.8.2" }
                 })
@@ -721,7 +718,7 @@ export const Channel = Cluster({
                 }),
 
                 Field({
-                    name: "After", id: 0x1, type: "string", conformance: "O", constraint: "max 8192", default: "",
+                    name: "After", id: 0x1, type: "string", conformance: "O", constraint: "max 8192",
                     details: "This field shall indicate the cursor that pinpoints the start of the upcoming data page. In a " +
                         "Cursor- based pagination system, the field acts as a reference point, ensuring the set of results " +
                         "corresponds directly to the data following the specified cursor. In a Offset-based pagination " +
@@ -731,7 +728,7 @@ export const Channel = Cluster({
                 }),
 
                 Field({
-                    name: "Before", id: 0x2, type: "string", conformance: "O", constraint: "max 8192", default: "",
+                    name: "Before", id: 0x2, type: "string", conformance: "O", constraint: "max 8192",
                     details: "This field shall indicate the cursor that pinpoints the end of the upcoming data page. In a Cursor- " +
                         "based pagination system, the field acts as a reference point, ensuring the set of results " +
                         "corresponds directly to the data preceding the specified cursor. In a Offset-based pagination " +

@@ -63,7 +63,7 @@ export const Messages = Cluster({
         Attribute({
             name: "Messages", id: 0x0, type: "list", access: "R F V", conformance: "M", constraint: "max 8",
             default: [],
-            details: "This attribute shall indicate a list of queued messages." +
+            details: "Indicates a list of queued messages." +
                 "\n" +
                 "In addition to filtering based upon fabric, to preserve user privacy, the server may further limit " +
                 "the set of messages returned in a read request. At minimum, the server shall return to a client " +
@@ -75,8 +75,8 @@ export const Messages = Cluster({
         Attribute({
             name: "ActiveMessageIDs", id: 0x1, type: "list", access: "R V", conformance: "M",
             constraint: "max 8", default: [],
-            details: "This attribute shall indicate a list of the MessageIDs of the Messages currently being presented. " +
-                "If this list is empty, no messages are currently being presented." +
+            details: "Indicates a list of the MessageIDs of the Messages currently being presented. If this list is " +
+                "empty, no messages are currently being presented." +
                 "\n" +
                 "This list shall NOT be fabric-scoped; it shall contain MessageIDs for all Messages being presented, " +
                 "no matter what fabric the client that queued them is on.",

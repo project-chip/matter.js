@@ -63,55 +63,51 @@ export const PulseWidthModulation = Cluster({
         Attribute({
             name: "CurrentLevel", id: 0x0, type: "uint8", access: "R V", conformance: "M",
             constraint: "minLevel to maxLevel", default: null, quality: "X N S",
-            details: "This attribute shall indicate the current level of this device. The meaning of 'level' is device " +
-                "dependent.",
+            details: "Indicates the current level of this device. The meaning of 'level' is device dependent.",
             xref: { document: "cluster", section: "1.6.6.2" }
         }),
 
         Attribute({
             name: "RemainingTime", id: 0x1, type: "uint16", access: "R V", conformance: "LT", default: 0,
-            details: "This attribute shall indicate the time remaining until the current command is complete - it is " +
-                "specified in 1/10ths of a second.",
+            details: "Indicates the time remaining until the current command is complete - it is specified in 1/10ths of " +
+                "a second.",
             xref: { document: "cluster", section: "1.6.6.3" }
         }),
 
         Attribute({
             name: "MinLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[!LT]",
             constraint: "0 to maxLevel", default: 0,
-            details: "This attribute shall indicate the minimum value of CurrentLevel that is capable of being assigned.",
+            details: "Indicates the minimum value of CurrentLevel that is capable of being assigned.",
             xref: { document: "cluster", section: "1.6.6.4" }
         }),
 
         Attribute({
             name: "MaxLevel", id: 0x3, type: "uint8", access: "R V", conformance: "O",
             constraint: "minLevel to 254", default: 254,
-            details: "This attribute shall indicate the maximum value of CurrentLevel that is capable of being assigned.",
+            details: "Indicates the maximum value of CurrentLevel that is capable of being assigned.",
             xref: { document: "cluster", section: "1.6.6.5" }
         }),
 
         Attribute({
             name: "CurrentFrequency", id: 0x4, type: "uint16", access: "R V", conformance: "FQ",
             constraint: "minFrequency to maxFrequency", default: 0, quality: "S P",
-            details: "This attribute shall indicate the frequency at which the device is at CurrentLevel. A " +
-                "CurrentFrequency of 0 is unknown.",
+            details: "Indicates the frequency at which the device is at CurrentLevel. A CurrentFrequency of 0 is unknown.",
             xref: { document: "cluster", section: "1.6.6.6" }
         }),
 
         Attribute({
             name: "MinFrequency", id: 0x5, type: "uint16", access: "R V", conformance: "FQ",
             constraint: "0 to maxFrequency", default: 0,
-            details: "This attribute shall indicate the minimum value of CurrentFrequency that is capable of being " +
-                "assigned. MinFrequency shall be less than or equal to MaxFrequency. A value of 0 indicates " +
-                "undefined.",
+            details: "Indicates the minimum value of CurrentFrequency that is capable of being assigned. MinFrequency " +
+                "shall be less than or equal to MaxFrequency. A value of 0 indicates undefined.",
             xref: { document: "cluster", section: "1.6.6.7" }
         }),
 
         Attribute({
             name: "MaxFrequency", id: 0x6, type: "uint16", access: "R V", conformance: "FQ",
             constraint: "min minFrequency", default: 0,
-            details: "This attribute shall indicate the maximum value of CurrentFrequency that is capable of being " +
-                "assigned. MaxFrequency shall be greater than or equal to MinFrequency. A value of 0 indicates " +
-                "undefined.",
+            details: "Indicates the maximum value of CurrentFrequency that is capable of being assigned. MaxFrequency " +
+                "shall be greater than or equal to MinFrequency. A value of 0 indicates undefined.",
             xref: { document: "cluster", section: "1.6.6.8" }
         }),
 
@@ -119,9 +115,8 @@ export const PulseWidthModulation = Cluster({
             name: "OnOffTransitionTime", id: 0x10, type: "uint16", access: "RW VO", conformance: "O",
             default: 0,
 
-            details: "This attribute shall indicate the time taken to move to or from the target level when On or Off " +
-                "commands are received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a " +
-                "second." +
+            details: "Indicates the time taken to move to or from the target level when On or Off commands are received " +
+                "by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a second." +
                 "\n" +
                 "The actual time taken SHOULD be as close to OnOffTransitionTime as the device is able. Please note " +
                 "that if the device is not able to move at a variable rate, the OnOffTransitionTime attribute SHOULD " +
@@ -134,10 +129,10 @@ export const PulseWidthModulation = Cluster({
             name: "OnLevel", id: 0x11, type: "uint8", access: "RW VO", conformance: "M",
             constraint: "minLevel to maxLevel", default: null, quality: "X",
 
-            details: "This attribute shall indicate the value that the CurrentLevel attribute is set to when the OnOff " +
-                "attribute of an On/Off cluster on the same endpoint is set to TRUE, as a result of processing an " +
-                "On/Off cluster command. If the OnLevel attribute is not implemented, or is set to the null value, " +
-                "it has no effect. For more details see Effect of On/Off Commands on the CurrentLevel Attribute." +
+            details: "Indicates the value that the CurrentLevel attribute is set to when the OnOff attribute of an On/Off " +
+                "cluster on the same endpoint is set to TRUE, as a result of processing an On/Off cluster command. " +
+                "If the OnLevel attribute is not implemented, or is set to the null value, it has no effect. For " +
+                "more details see Effect of On/Off Commands on the CurrentLevel Attribute." +
                 "\n" +
                 "OnLevel represents a mandatory field that was previously not present or optional. Implementers " +
                 "should be aware that older devices may not implement it.",
@@ -148,27 +143,27 @@ export const PulseWidthModulation = Cluster({
         Attribute({
             name: "OnTransitionTime", id: 0x12, type: "uint16", access: "RW VO", conformance: "O",
             default: null, quality: "X",
-            details: "This attribute shall indicate the time taken to move the current level from the minimum level to " +
-                "the maximum level when an On command is received by an On/Off cluster on the same endpoint. It is " +
-                "specified in 1/10ths of a second. If this attribute is not implemented, or contains a null value, " +
-                "the OnOffTransitionTime shall be used instead.",
+            details: "Indicates the time taken to move the current level from the minimum level to the maximum level when " +
+                "an On command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of " +
+                "a second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
+                "shall be used instead.",
             xref: { document: "cluster", section: "1.6.6.12" }
         }),
 
         Attribute({
             name: "OffTransitionTime", id: 0x13, type: "uint16", access: "RW VO", conformance: "O",
             default: null, quality: "X",
-            details: "This attribute shall indicate the time taken to move the current level from the maximum level to " +
-                "the minimum level when an Off command is received by an On/Off cluster on the same endpoint. It is " +
-                "specified in 1/10ths of a second. If this attribute is not implemented, or contains a null value, " +
-                "the OnOffTransitionTime shall be used instead.",
+            details: "Indicates the time taken to move the current level from the maximum level to the minimum level when " +
+                "an Off command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of " +
+                "a second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
+                "shall be used instead.",
             xref: { document: "cluster", section: "1.6.6.13" }
         }),
 
         Attribute({
             name: "DefaultMoveRate", id: 0x14, type: "uint8", access: "RW VO", conformance: "O", quality: "X",
-            details: "This attribute shall indicate the movement rate, in units per second, when a Move command is " +
-                "received with a null value Rate parameter.",
+            details: "Indicates the movement rate, in units per second, when a Move command is received with a null value " +
+                "Rate parameter.",
             xref: { document: "cluster", section: "1.6.6.14" }
         }),
 
@@ -176,7 +171,7 @@ export const PulseWidthModulation = Cluster({
             name: "Options", id: 0xf, type: "OptionsBitmap", access: "RW VO", conformance: "M",
             constraint: "desc", default: 0,
 
-            details: "This attribute shall indicate the selected options of the device." +
+            details: "Indicates the selected options of the device." +
                 "\n" +
                 "The Options attribute is a bitmap that determines the default behavior of some cluster commands. " +
                 "Each command that is dependent on the Options attribute shall first construct a temporary Options " +
@@ -204,9 +199,9 @@ export const PulseWidthModulation = Cluster({
             name: "StartUpCurrentLevel", id: 0x4000, type: "uint8", access: "RW VM", conformance: "LT",
             constraint: "desc", quality: "X N",
 
-            details: "This attribute shall indicate the desired startup level for a device when it is supplied with power " +
-                "and this level shall be reflected in the CurrentLevel attribute. The values of the " +
-                "StartUpCurrentLevel attribute are listed below:" +
+            details: "Indicates the desired startup level for a device when it is supplied with power and this level " +
+                "shall be reflected in the CurrentLevel attribute. The values of the StartUpCurrentLevel attribute " +
+                "are listed below:" +
                 "\n" +
                 "This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentLevel " +
                 "attribute shall return to its value prior to the restart.",

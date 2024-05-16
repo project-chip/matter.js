@@ -49,8 +49,8 @@ export const PowerTopology = Cluster({
         Attribute({
             name: "AvailableEndpoints", id: 0x0, type: "list", access: "R V", conformance: "SET",
             constraint: "max 20", quality: "F",
-            details: "This attribute shall indicate the list of endpoints capable of providing power to and/or consuming " +
-                "power from the endpoint hosting this server.",
+            details: "Indicates the list of endpoints capable of providing power to and/or consuming power from the " +
+                "endpoint hosting this server.",
             xref: { document: "core", section: "11.8.5.1" },
             children: [Field({ name: "entry", type: "endpoint-no" })]
         }),
@@ -58,9 +58,9 @@ export const PowerTopology = Cluster({
         Attribute({
             name: "ActiveEndpoints", id: 0x1, type: "list", access: "R V", conformance: "DYPF",
             constraint: "max 20", quality: "N",
-            details: "This attribute shall indicate the current list of endpoints currently providing or consuming power " +
-                "to or from the endpoint hosting this server. This list shall be a subset of the value of the " +
-                "AvailableEndpoints attribute.",
+            details: "Indicates the current list of endpoints currently providing or consuming power to or from the " +
+                "endpoint hosting this server. This list shall be a subset of the value of the AvailableEndpoints " +
+                "attribute.",
             xref: { document: "core", section: "11.8.5.2" },
             children: [Field({ name: "entry", type: "endpoint-no" })]
         })

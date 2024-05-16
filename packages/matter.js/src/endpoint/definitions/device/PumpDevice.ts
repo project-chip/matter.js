@@ -14,7 +14,6 @@ import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definiti
 import {
     LevelControlServer as BaseLevelControlServer
 } from "../../../behavior/definitions/level-control/LevelControlServer.js";
-import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
 import {
     TemperatureMeasurementServer as BaseTemperatureMeasurementServer
@@ -80,13 +79,6 @@ export namespace PumpRequirements {
      * We provide this alias to the default implementation {@link LevelControlServer} for convenience.
      */
     export const LevelControlServer = BaseLevelControlServer;
-
-    /**
-     * The Scenes cluster is optional per the Matter specification
-     *
-     * We provide this alias to the default implementation {@link ScenesServer} for convenience.
-     */
-    export const ScenesServer = BaseScenesServer;
 
     /**
      * The Groups cluster is optional per the Matter specification
@@ -156,7 +148,6 @@ export namespace PumpRequirements {
 
         optional: {
             LevelControl: LevelControlServer,
-            Scenes: ScenesServer,
             Groups: GroupsServer,
             TemperatureMeasurement: TemperatureMeasurementServer,
             PressureMeasurement: PressureMeasurementServer,

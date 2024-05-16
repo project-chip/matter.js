@@ -48,7 +48,7 @@ export const ScenesManagement = Cluster({
             name: "LastConfiguredBy", id: 0x0, type: "node-id", access: "R V", conformance: "O", default: null,
             quality: "X",
 
-            details: "This attribute shall indicate the Node ID of the node that last configured the Scene Table." +
+            details: "Indicates the Node ID of the node that last configured the Scene Table." +
                 "\n" +
                 "The null value indicates that the server has not been configured, or that the identifier of the " +
                 "node that last configured the Scenes Management cluster is not known." +
@@ -61,18 +61,18 @@ export const ScenesManagement = Cluster({
         Attribute({
             name: "SceneTableSize", id: 0x1, type: "uint16", access: "R V", conformance: "M",
             constraint: "desc", default: 16, quality: "F",
-            details: "This attribute shall indicate the number of entries in the Scene Table on this endpoint. This is " +
-                "the total across all fabrics; note that a single fabric cannot use all those entries (see Handling " +
-                "of fabric- scoping). The minimum size of this table, (i.e., the minimum number of scenes to support " +
-                "across all fabrics per endpoint) shall be 16, unless a device type in which this cluster is used, " +
-                "defines a larger value in the device type definition.",
+            details: "Indicates the number of entries in the Scene Table on this endpoint. This is the total across all " +
+                "fabrics; note that a single fabric cannot use all those entries (see Handling of fabric- scoping). " +
+                "The minimum size of this table, (i.e., the minimum number of scenes to support across all fabrics " +
+                "per endpoint) shall be 16, unless a device type in which this cluster is used, defines a larger " +
+                "value in the device type definition.",
             xref: { document: "cluster", section: "1.4.8.2" }
         }),
 
         Attribute({
             name: "FabricSceneInfo", id: 0x2, type: "list", access: "R F V", conformance: "M",
             constraint: "desc",
-            details: "This attribute shall indicate a list of fabric scoped information about scenes on this endpoint." +
+            details: "Indicates a list of fabric scoped information about scenes on this endpoint." +
                 "\n" +
                 "The number of list entries for this attribute shall NOT exceed the number of supported fabrics by " +
                 "the device.",

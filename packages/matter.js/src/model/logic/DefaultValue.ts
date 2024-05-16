@@ -16,11 +16,14 @@ import { ValueModel } from "../models/index.js";
  * This code assumes defaults have been previously validated (e.g. by model validator).  It throws errors for a few
  * structural issues but generally returns undefined if the model's default value cannot be converted to the correct
  * type.
+ *
+ * @param model the model from which the default value is extracted
+ * @param ifValid some structs only have partial defaults defined so would be invalid; do not return these
  */
-export function DefaultValue(model: ValueModel): any {
-    const value = castValue(model);
+export function DefaultValue(model: ValueModel, ifValid = false): any {
+    const value = castValue(model, model.default);
     if (value === undefined) {
-        return buildValue(model);
+        return buildValue(model, ifValid);
     }
     return value;
 }
@@ -28,8 +31,7 @@ export function DefaultValue(model: ValueModel): any {
 /**
  * When an explicit value is present, cast to native JS type.
  */
-function castValue(model: ValueModel) {
-    const modelDefault = model.default;
+function castValue(model: ValueModel, modelDefault?: FieldValue): unknown {
     if (modelDefault === undefined) {
         return;
     }
@@ -91,6 +93,10 @@ function castValue(model: ValueModel) {
 
         case Metatype.array:
             if (Array.isArray(modelDefault)) {
+                const entry = model.member("entry");
+                if (entry instanceof ValueModel) {
+                    return modelDefault.map(value => castValue(entry, value));
+                }
                 return modelDefault;
             }
             return;
@@ -107,7 +113,7 @@ function castValue(model: ValueModel) {
  * When an explicit default value is not present, for some types we generate
  * a default from the structure.
  */
-function buildValue(model: ValueModel) {
+function buildValue(model: ValueModel, ifValid: boolean) {
     switch (model.effectiveMetatype) {
         case Metatype.array:
             // We don't really build default array values except in the case of
@@ -124,14 +130,14 @@ function buildValue(model: ValueModel) {
             return;
 
         case Metatype.object:
-            return buildObject(model);
+            return buildObject(model, ifValid);
 
         case Metatype.bitmap:
             return buildBitmap(model);
     }
 }
 
-function buildObject(model: ValueModel) {
+function buildObject(model: ValueModel, ifValid: boolean) {
     let result: { [key: string]: any } | undefined;
 
     for (const child of model.members) {
@@ -147,6 +153,12 @@ function buildObject(model: ValueModel) {
             }
 
             result[name] = value;
+            continue;
+        }
+
+        if (ifValid && !child.nullable) {
+            // We can't create a valid default object because we don't have default values for all nullable fields
+            return;
         }
     }
 

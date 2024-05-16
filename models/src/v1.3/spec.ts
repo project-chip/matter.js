@@ -3666,7 +3666,6 @@ export const SpecMatter = Matter({
 
                         Field({
                             name: "ErrorStateLabel", id: 0x1, type: "string", conformance: "desc", constraint: "max 64",
-                            default: "",
                             details: "This field shall be present if the ErrorStateID is from the set reserved for Manufacturer Specific " +
                                 "Errors, otherwise it shall NOT be present. If present, this shall contain a human-readable " +
                                 "description of the ErrorStateID; e.g. for a manufacturer specific ErrorStateID of \"0x80\" the " +
@@ -3676,7 +3675,6 @@ export const SpecMatter = Matter({
 
                         Field({
                             name: "ErrorStateDetails", id: 0x2, type: "string", conformance: "O", constraint: "max 64",
-                            default: "",
                             details: "This shall be a human-readable string that provides details about the error condition. As an " +
                                 "example, if the ErrorStateID indicates that the device is a Robotic Vacuum that is stuck, the " +
                                 "ErrorStateDetails contains \"left wheel blocked\".",
@@ -10744,6 +10742,15 @@ export const SpecMatter = Matter({
                             description: "Valve is transitioning between closed and open positions or between levels"
                         })
                     ]
+                }),
+
+                Datatype({
+                    name: "StatusCodeEnum", type: "enum8",
+                    xref: { document: "cluster", section: "4.6.6.1" },
+                    children: [Field({
+                        name: "FailureDueToFault", id: 0x2,
+                        description: "The requested action could not be performed due to a fault on the valve."
+                    })]
                 })
             ]
         }),
@@ -12533,8 +12540,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "UserName", id: 0x2, type: "string", conformance: "M", constraint: "max 10", default: "",
-                            quality: "X",
+                            name: "UserName", id: 0x2, type: "string", conformance: "M", constraint: "max 10", quality: "X",
 
                             details: "This field shall contain a string to use as a human readable identifier for the user. If UserName " +
                                 "is null then:" +
@@ -12667,12 +12673,10 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "UserName", id: 0x1, type: "string", conformance: "M", constraint: "max 10", default: "",
-                            quality: "X",
+                            name: "UserName", id: 0x1, type: "string", conformance: "M", constraint: "max 10", quality: "X",
                             details: "This field shall contain a string to use as a human readable identifier for the user.",
                             xref: { document: "cluster", section: "5.2.10.36.2" }
                         }),
-
                         Field({
                             name: "UserUniqueId", id: 0x2, type: "uint32", conformance: "M", default: 0, quality: "X",
                             details: "See UserUniqueID field.",
@@ -13938,6 +13942,15 @@ export const SpecMatter = Matter({
                             xref: { document: "cluster", section: "5.2.6.26.2" }
                         })
                     ]
+                }),
+
+                Datatype({
+                    name: "StatusCodeEnum", type: "enum8",
+                    xref: { document: "cluster", section: "5.2.7.1" },
+                    children: [
+                        Field({ name: "Duplicate", id: 0x2, description: "Entry would cause a duplicate credential/ID." }),
+                        Field({ name: "Occupied", id: 0x3, description: "Entry would replace an occupied slot." })
+                    ]
                 })
             ]
         }),
@@ -14085,14 +14098,19 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "TargetPositionLiftPer2Cent100ths", id: 0xb, type: "percent100ths", access: "R V",
+                    name: "TargetPositionLiftPercent100ths", id: 0xb, type: "percent100ths", access: "R V",
                     conformance: "LF & PA_LF", default: null, quality: "X S P",
-                    xref: { document: "cluster", section: "5.3.6" }
+                    details: "Indicates the position where the window covering lift will go or is moving to as a percentage (Unit " +
+                        "0.01%).",
+                    xref: { document: "cluster", section: "5.3.6.14" }
                 }),
+
                 Attribute({
-                    name: "TargetPositionTiltPer2Cent100ths", id: 0xc, type: "percent100ths", access: "R V",
+                    name: "TargetPositionTiltPercent100ths", id: 0xc, type: "percent100ths", access: "R V",
                     conformance: "TL & PA_TL", default: null, quality: "X S P",
-                    xref: { document: "cluster", section: "5.3.6" }
+                    details: "Indicates the position where the window covering tilt will go or is moving to as a percentage (Unit " +
+                        "0.01%).",
+                    xref: { document: "cluster", section: "5.3.6.15" }
                 }),
 
                 Attribute({
@@ -14106,14 +14124,19 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "CurrentPositionLiftPer1Cent100ths", id: 0xe, type: "percent100ths", access: "R V",
+                    name: "CurrentPositionLiftPercent100ths", id: 0xe, type: "percent100ths", access: "R V",
                     conformance: "LF & PA_LF", constraint: "0 to 10000", default: null, quality: "X N P",
-                    xref: { document: "cluster", section: "5.3.6" }
+                    details: "Indicates the actual position as a percentage with a minimal step of 0.01%. E.g Max 10000 equals " +
+                        "100.00%.",
+                    xref: { document: "cluster", section: "5.3.6.10" }
                 }),
+
                 Attribute({
-                    name: "CurrentPositionTiltPer1Cent100ths", id: 0xf, type: "percent100ths", access: "R V",
+                    name: "CurrentPositionTiltPercent100ths", id: 0xf, type: "percent100ths", access: "R V",
                     conformance: "TL & PA_TL", constraint: "0 to 10000", default: null, quality: "X N P",
-                    xref: { document: "cluster", section: "5.3.6" }
+                    details: "Indicates the actual position as a percentage with a minimal step of 0.01%. E.g Max 10000 equals " +
+                        "100.00%.",
+                    xref: { document: "cluster", section: "5.3.6.11" }
                 }),
 
                 Attribute({
@@ -14917,7 +14940,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "VendorName", id: 0x0, type: "string", access: "R V", conformance: "O", constraint: "max 32",
-                    default: "", quality: "F",
+                    quality: "F",
                     details: "This attribute shall specify a human readable (displayable) name of the vendor for the Content App.",
                     xref: { document: "cluster", section: "6.3.5.1" }
                 }),
@@ -15774,21 +15797,21 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Name", id: 0x2, type: "string", conformance: "O", default: "",
+                            name: "Name", id: 0x2, type: "string", conformance: "O",
                             details: "This field shall indicate the marketing name for the channel, such as “The CW\" or \"Comedy Central\". " +
                                 "This field is optional, but SHOULD be provided when known.",
                             xref: { document: "cluster", section: "6.6.5.5.3" }
                         }),
 
                         Field({
-                            name: "CallSign", id: 0x3, type: "string", conformance: "O", default: "",
+                            name: "CallSign", id: 0x3, type: "string", conformance: "O",
                             details: "This field shall indicate the call sign of the channel, such as \"PBS\". This field is optional, but " +
                                 "SHOULD be provided when known.",
                             xref: { document: "cluster", section: "6.6.5.5.4" }
                         }),
 
                         Field({
-                            name: "AffiliateCallSign", id: 0x4, type: "string", conformance: "O", default: "",
+                            name: "AffiliateCallSign", id: 0x4, type: "string", conformance: "O",
                             details: "This field shall indicate the local affiliate call sign, such as \"KCTS\". This field is optional, but" +
                                 "\n" +
                                 "SHOULD be provided when known.",
@@ -15796,7 +15819,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Identifier", id: 0x5, type: "string", conformance: "O", default: "",
+                            name: "Identifier", id: 0x5, type: "string", conformance: "O",
                             details: "This shall indicate the unique identifier for a specific channel. This field is optional, but " +
                                 "SHOULD be provided when MajorNumber and MinorNumber are not available.",
                             xref: { document: "cluster", section: "6.6.5.5.6" }
@@ -15825,14 +15848,14 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "LineupName", id: 0x1, type: "string", conformance: "O", default: "",
+                            name: "LineupName", id: 0x1, type: "string", conformance: "O",
                             details: "This field shall indicate the name of the provider lineup, for example \"Comcast King County\". This " +
                                 "field is optional, but SHOULD be provided when known.",
                             xref: { document: "cluster", section: "6.6.5.6.2" }
                         }),
 
                         Field({
-                            name: "PostalCode", id: 0x2, type: "string", conformance: "O", default: "",
+                            name: "PostalCode", id: 0x2, type: "string", conformance: "O",
                             details: "This field shall indicate the postal code (zip code) for the location of the device, such as " +
                                 "\"98052\". This field is optional, but SHOULD be provided when known.",
                             xref: { document: "cluster", section: "6.6.5.6.3" }
@@ -15888,7 +15911,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Subtitle", id: 0x5, type: "string", conformance: "O", constraint: "max 255", default: "",
+                            name: "Subtitle", id: 0x5, type: "string", conformance: "O", constraint: "max 255",
                             details: "This field shall indicate the subtitle for the specific program. For example, “Maybe Today\" which " +
                                 "is an episode name for “MCIS: Los Angeles”. This field is optional but shall be provided if " +
                                 "applicable and known.",
@@ -15896,7 +15919,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Description", id: 0x6, type: "string", conformance: "O", constraint: "max 8192", default: "",
+                            name: "Description", id: 0x6, type: "string", conformance: "O", constraint: "max 8192",
                             details: "This field shall indicate the brief description for the specific program. For example, a " +
                                 "description of an episode. This field is optional but shall be provided if known.",
                             xref: { document: "cluster", section: "6.6.5.7.7" }
@@ -15928,7 +15951,6 @@ export const SpecMatter = Matter({
 
                         Field({
                             name: "ThumbnailUrl", id: 0x9, type: "string", conformance: "O", constraint: "max 8192",
-                            default: "",
                             details: "This field shall represent a url of a thumbnail that clients can use to render an image for the " +
                                 "program.",
                             xref: { document: "cluster", section: "6.6.5.7.10" }
@@ -15936,20 +15958,19 @@ export const SpecMatter = Matter({
 
                         Field({
                             name: "PosterArtUrl", id: 0xa, type: "string", conformance: "O", constraint: "max 8192",
-                            default: "",
                             details: "This field shall represent a url of a poster that clients can use to render an image for the " +
                                 "program on the detail view.",
                             xref: { document: "cluster", section: "6.6.5.7.11" }
                         }),
 
                         Field({
-                            name: "DvbiUrl", id: 0xb, type: "string", conformance: "O", constraint: "max 8192", default: "",
+                            name: "DvbiUrl", id: 0xb, type: "string", conformance: "O", constraint: "max 8192",
                             details: "This field shall represent the DVB-I url associated to the program.",
                             xref: { document: "cluster", section: "6.6.5.7.12" }
                         }),
 
                         Field({
-                            name: "ReleaseDate", id: 0xc, type: "string", conformance: "O", constraint: "max 30", default: "",
+                            name: "ReleaseDate", id: 0xc, type: "string", conformance: "O", constraint: "max 30",
                             details: "This field shall be a string, in ISO 8601 format, representing the date on which the program was " +
                                 "released. This field is optional but when provided, the year shall be provided as part of the " +
                                 "string.",
@@ -15958,7 +15979,6 @@ export const SpecMatter = Matter({
 
                         Field({
                             name: "ParentalGuidanceText", id: 0xd, type: "string", conformance: "O", constraint: "max 255",
-                            default: "",
                             details: "This field shall represent a string providing additional information on the parental guidance. This " +
                                 "field is optional.",
                             xref: { document: "cluster", section: "6.6.5.7.14" }
@@ -16018,7 +16038,7 @@ export const SpecMatter = Matter({
                             xref: { document: "cluster", section: "6.6.5.8.1" }
                         }),
                         Field({
-                            name: "SubCategory", id: 0x1, type: "string", conformance: "O", constraint: "max 256", default: "",
+                            name: "SubCategory", id: 0x1, type: "string", conformance: "O", constraint: "max 256",
                             details: "This field shall represent the sub-category or sub-genre of the program. Ex. Local.",
                             xref: { document: "cluster", section: "6.6.5.8.2" }
                         })
@@ -16078,7 +16098,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "After", id: 0x1, type: "string", conformance: "O", constraint: "max 8192", default: "",
+                            name: "After", id: 0x1, type: "string", conformance: "O", constraint: "max 8192",
                             details: "This field shall indicate the cursor that pinpoints the start of the upcoming data page. In a " +
                                 "Cursor- based pagination system, the field acts as a reference point, ensuring the set of results " +
                                 "corresponds directly to the data following the specified cursor. In a Offset-based pagination " +
@@ -16088,7 +16108,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Before", id: 0x2, type: "string", conformance: "O", constraint: "max 8192", default: "",
+                            name: "Before", id: 0x2, type: "string", conformance: "O", constraint: "max 8192",
                             details: "This field shall indicate the cursor that pinpoints the end of the upcoming data page. In a Cursor- " +
                                 "based pagination system, the field acts as a reference point, ensuring the set of results " +
                                 "corresponds directly to the data preceding the specified cursor. In a Offset-based pagination " +
@@ -18765,6 +18785,47 @@ export const SpecMatter = Matter({
                                 "be greater than StartMinute. If the EndHour is equal to 23 and the EndMinute is equal to 59, all " +
                                 "contents shall be blocked until 23:59:59.",
                             xref: { document: "cluster", section: "6.13.5.6.4" }
+                        })
+                    ]
+                }),
+
+                Datatype({
+                    name: "StatusCodeEnum", type: "enum8",
+                    xref: { document: "cluster", section: "6.13.6.1" },
+
+                    children: [
+                        Field({
+                            name: "InvalidPinCode", id: 0x2,
+                            description: "Provided PIN Code does not match the current PIN code."
+                        }),
+                        Field({
+                            name: "InvalidRating", id: 0x3,
+                            description: "Provided Rating is out of scope of the corresponding Rating list."
+                        }),
+                        Field({ name: "InvalidChannel", id: 0x4, description: "Provided Channel(s) is invalid." }),
+                        Field({ name: "ChannelAlreadyExist", id: 0x5, description: "Provided Channel(s) already exists." }),
+                        Field({
+                            name: "ChannelNotExist", id: 0x6,
+                            description: "Provided Channel(s) doesn’t exist in BlockChannelList attribute."
+                        }),
+                        Field({
+                            name: "UnidentifiableApplication", id: 0x7,
+                            description: "Provided Application(s) is not identified."
+                        }),
+                        Field({
+                            name: "ApplicationAlreadyExist", id: 0x8, description: "Provided Application(s) already exists."
+                        }),
+                        Field({
+                            name: "ApplicationNotExist", id: 0x9,
+                            description: "Provided Application(s) doesn’t exist in BlockApplicationList attribute."
+                        }),
+                        Field({
+                            name: "TimeWindowAlreadyExist", id: 0xa,
+                            description: "Provided time Window already exists in BlockContentTimeWindow attribute."
+                        }),
+                        Field({
+                            name: "TimeWindowNotExist", id: 0xb,
+                            description: "Provided time window doesn’t exist in BlockContentTimeWindow attribute."
                         })
                     ]
                 })
@@ -22746,9 +22807,7 @@ export const SpecMatter = Matter({
 
         Datatype({
             name: "date", type: "struct", description: "Date", isSeed: true, metatype: "date",
-            details: "This data type shall be a struct as defined below." +
-                "\n" +
-                "Valid combinations using null fields are",
+            details: "This data type shall be a struct as defined below.",
             xref: { document: "core", section: "7.18.2.4" },
 
             children: [
@@ -22973,7 +23032,7 @@ export const SpecMatter = Matter({
         }),
 
         Datatype({
-            name: "status", type: "enum8", description: "Status Code", isSeed: true,
+            name: "status", type: "enum8", description: "Status Code", isSeed: true, metatype: "enum",
 
             details: "An enumeration value that means a success or error status. A status code is indicated as a response " +
                 "to an action in an interaction (see Interaction Model)." +
@@ -23712,14 +23771,14 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "Label", id: 0x0, type: "string", conformance: "M", constraint: "max 16", default: "",
+                            name: "Label", id: 0x0, type: "string", conformance: "M", constraint: "max 16",
                             details: "The Label or Value semantic is not defined here. Label examples: \"room\", \"zone\", \"group\", " +
                                 "\"direction\".",
                             xref: { document: "core", section: "9.7.4.1.1" }
                         }),
 
                         Field({
-                            name: "Value", id: 0x1, type: "string", conformance: "M", constraint: "max 16", default: "",
+                            name: "Value", id: 0x1, type: "string", conformance: "M", constraint: "max 16",
                             details: "The Label or Value semantic is not defined here. The Value is a discriminator for a Label that may " +
                                 "have multiple instances. Label:Value examples: \"room\":\"bedroom 2\", \"orientation\":\"North\", " +
                                 "\"floor\":\"2\", \"direction\":\"up\"",
@@ -24437,7 +24496,6 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "SetupUrl", id: 0x2, type: "string", access: "R V", conformance: "O", constraint: "max 512",
-                    default: "",
 
                     details: "The SetupURL attribute (when provided) shall indicate a URL; its syntax shall follow the syntax as " +
                         "specified in RFC 3986, max. 512 ASCII characters. The location referenced by this URL shall provide " +
@@ -30163,7 +30221,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "max 8", default: "",
+                            name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "max 8",
                             details: "The Name field shall be set to a manufacturer-specified name or prefix of the software thread in " +
                                 "which the last software fault occurred.",
                             xref: { document: "core", section: "11.13.8.1.2" }
@@ -30216,7 +30274,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "max 8", default: "",
+                            name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "max 8",
                             details: "The Name field shall be set to a vendor defined name or prefix of the software thread that is " +
                                 "static for the duration of the thread.",
                             xref: { document: "core", section: "11.13.5.1.2" }
@@ -32401,6 +32459,14 @@ export const SpecMatter = Matter({
                             xref: { document: "core", section: "11.17.6.7.3" }
                         })
                     ]
+                }),
+
+                Datatype({
+                    name: "StatusCodeEnum", type: "enum8",
+                    xref: { document: "core", section: "11.17.7.1" },
+                    children: [Field({
+                        name: "TimeNotAccepted", id: 0x2, description: "Node rejected the attempt to set the UTC time"
+                    })]
                 })
             ]
         }),
@@ -33489,6 +33555,25 @@ export const SpecMatter = Matter({
                         Field({
                             name: "BasicWindowOpen", id: 0x2, conformance: "BC",
                             description: "A Basic Commissioning Method window is open"
+                        })
+                    ]
+                }),
+
+                Datatype({
+                    name: "StatusCodeEnum", type: "enum8",
+                    xref: { document: "core", section: "11.19.6.1" },
+
+                    children: [
+                        Field({
+                            name: "Busy", id: 0x2,
+                            description: "Could not be completed because another commissioning is in progress"
+                        }),
+                        Field({
+                            name: "PakeParameterError", id: 0x3,
+                            description: "Provided PAKE parameters were incorrectly formatted or otherwise invalid"
+                        }),
+                        Field({
+                            name: "WindowNotOpen", id: 0x4, description: "No commissioning window was currently open"
                         })
                     ]
                 })

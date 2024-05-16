@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DatatypeElement as Datatype, FieldElement as Field } from "../../elements/index.js";
 
 export const status = Datatype({
-    name: "status", type: "enum8", description: "Status Code", isSeed: true,
+    name: "status", type: "enum8", description: "Status Code", isSeed: true, metatype: "enum",
 
     details: "An enumeration value that means a success or error status. A status code is indicated as a response " +
         "to an action in an interaction (see Interaction Model)." +

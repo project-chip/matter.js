@@ -73,7 +73,7 @@ export const BooleanStateConfiguration = Cluster({
         Attribute({
             name: "CurrentSensitivityLevel", id: 0x0, type: "uint8", access: "RW VO", conformance: "SENSLVL",
             constraint: "max SupportedSensitivityLevels - 1", quality: "N",
-            details: "This attribute shall indicate the currently selected sensitivity level." +
+            details: "Indicates the currently selected sensitivity level." +
                 "\n" +
                 "If a write interaction to this attribute contains an unsupported sensitivity value, a " +
                 "CONSTRAINT_ERROR status shall be returned.",
@@ -84,7 +84,7 @@ export const BooleanStateConfiguration = Cluster({
             name: "SupportedSensitivityLevels", id: 0x1, type: "uint8", access: "R V", conformance: "SENSLVL",
             constraint: "2 to 10", quality: "F",
 
-            details: "This attribute shall indicate the number of supported sensitivity levels by the device." +
+            details: "Indicates the number of supported sensitivity levels by the device." +
                 "\n" +
                 "These supported sensitivity levels shall be ordered by sensitivity, where a value of 0 shall be " +
                 "considered the lowest sensitivity level (least sensitive) and the highest supported value shall be " +
@@ -99,7 +99,7 @@ export const BooleanStateConfiguration = Cluster({
         Attribute({
             name: "DefaultSensitivityLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[SENSLVL]",
             constraint: "max SupportedSensitivityLevels - 1", quality: "F",
-            details: "This attribute shall indicate the default sensitivity level selected by the manufacturer.",
+            details: "Indicates the default sensitivity level selected by the manufacturer.",
             xref: { document: "cluster", section: "1.8.6.3" }
         }),
 
@@ -107,9 +107,9 @@ export const BooleanStateConfiguration = Cluster({
             name: "AlarmsActive", id: 0x3, type: "AlarmModeBitmap", access: "R V", conformance: "VIS | AUD",
             default: 0,
 
-            details: "This attribute shall indicate which specific alarm modes on the server are currently active. When " +
-                "the sensor is no longer triggered, this attribute shall be set to the inactive state, by setting " +
-                "the bit to 0, for all supported alarm modes." +
+            details: "Indicates which specific alarm modes on the server are currently active. When the sensor is no " +
+                "longer triggered, this attribute shall be set to the inactive state, by setting the bit to 0, for " +
+                "all supported alarm modes." +
                 "\n" +
                 "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit " +
                 "shall indicate whether the alarm mode inactive or not:" +
@@ -125,9 +125,9 @@ export const BooleanStateConfiguration = Cluster({
             name: "AlarmsSuppressed", id: 0x4, type: "AlarmModeBitmap", access: "R V", conformance: "SPRS",
             default: 0,
 
-            details: "This attribute shall indicate which specific alarm modes on the server are currently suppressed. " +
-                "When the sensor is no longer triggered, this attribute shall be set to the unsuppressed state, by " +
-                "setting the bit to 0, for all supported alarm modes." +
+            details: "Indicates which specific alarm modes on the server are currently suppressed. When the sensor is no " +
+                "longer triggered, this attribute shall be set to the unsuppressed state, by setting the bit to 0, " +
+                "for all supported alarm modes." +
                 "\n" +
                 "If an alarm mode is not supported, the bit indicating this alarm mode shall always be 0. A bit " +
                 "shall indicate whether the alarm mode is suppressed or not:" +
@@ -143,8 +143,8 @@ export const BooleanStateConfiguration = Cluster({
             name: "AlarmsEnabled", id: 0x5, type: "AlarmModeBitmap", access: "R V", conformance: "[VIS | AUD]",
             quality: "N",
 
-            details: "This attribute shall indicate the alarm modes that will be emitted if the sensor is triggered. If " +
-                "an alarm mode is not supported, the bit indicating this alarm mode shall always be 0." +
+            details: "Indicates the alarm modes that will be emitted if the sensor is triggered. If an alarm mode is not " +
+                "supported, the bit indicating this alarm mode shall always be 0." +
                 "\n" +
                 "A bit shall indicate whether the alarm mode is enabled or disabled:" +
                 "\n" +
@@ -159,8 +159,8 @@ export const BooleanStateConfiguration = Cluster({
             name: "AlarmsSupported", id: 0x6, type: "AlarmModeBitmap", access: "R V", conformance: "VIS | AUD",
             default: 0, quality: "F",
 
-            details: "This attribute shall indicate the alarms supported by the sensor. A bit shall indicate whether the " +
-                "alarm mode is supported:" +
+            details: "Indicates the alarms supported by the sensor. A bit shall indicate whether the alarm mode is " +
+                "supported:" +
                 "\n" +
                 "  • 0 = Not supported" +
                 "\n" +
@@ -172,7 +172,7 @@ export const BooleanStateConfiguration = Cluster({
         Attribute({
             name: "SensorFault", id: 0x7, type: "SensorFaultBitmap", access: "R V", conformance: "O",
             default: 0,
-            details: "This attribute shall indicate any faults registered by the device.",
+            details: "Indicates any faults registered by the device.",
             xref: { document: "cluster", section: "1.8.6.8" }
         }),
 

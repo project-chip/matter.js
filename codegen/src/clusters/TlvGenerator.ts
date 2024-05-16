@@ -62,7 +62,7 @@ export class TlvGenerator {
     /**
      * Import TLV type with automatic file naming.  Returns the name.
      */
-    importTlv(fileOrDirectory: string, name: string) {
+    importTlv(fileOrDirectory: string, name: string, as?: string) {
         if (fileOrDirectory === "datatype") {
             fileOrDirectory = `${fileOrDirectory}/${name.replace(/^Tlv/, "")}.js`;
         } else if (fileOrDirectory === "tlv") {
@@ -72,12 +72,20 @@ export class TlvGenerator {
         } else {
             fileOrDirectory = `${fileOrDirectory}.js`;
         }
+
+        if (as) {
+            name = `${name} as ${as}`;
+        }
+
         this.file.addImport(fileOrDirectory, name);
         return name;
     }
 
     /**
      * Reference a TLV type.  Adds definitions to the file as necessary.
+     *
+     * @param model the model to reference
+     * @param as imports the model aliased as a different name
      *
      * @return the referencing TS expression as a string
      */
@@ -193,12 +201,14 @@ export class TlvGenerator {
             return;
         }
 
+        // The model we're actually interested in is the defining model
         const defining: ValueModel = model.definingModel ?? model;
         let name = defining.name;
 
-        // If there is a name collision, prefix the name with the parent's name
-        if (this.#scopedNames.has(name) && defining.parent && !(defining instanceof ClusterModel)) {
-            name = `${defining.parent.name}${name}`;
+        // If the model is owned by another cluster, we will need to prefix the type with the owner's namespace
+        let otherOwner = defining.owner(ClusterModel);
+        if (otherOwner === this.cluster) {
+            otherOwner = undefined;
         }
 
         // Specialize the name based on the model type
@@ -207,6 +217,17 @@ export class TlvGenerator {
         }
         if (defining instanceof EventModel && !name.endsWith("Event")) {
             name += "Event";
+        }
+
+        // If there is a name collision, prefix the name with the parent's name
+        //
+        // This will break if:
+        //   - The model is owned by another cluster that had a name collision so changed the name
+        //   - The other cluster doesn't actually use the model so doesn't define it
+        //
+        // These are both edge cases and currently not an issue so we ignore.
+        if (!otherOwner && this.#scopedNames.has(name) && defining.parent && !(defining instanceof ClusterModel)) {
+            name = `${defining.parent.name}${name}`;
         }
 
         // For enums and bitmaps we create a TypeScript value object, for other types we create a TLV definition
@@ -221,7 +242,13 @@ export class TlvGenerator {
 
         // We reserve the name "Type".  Plus it's kind of ambiguous
         if (name == "Type") {
-            name = `${this.cluster.name}Type`;
+            name = `${(otherOwner ?? this.cluster).name}Type`;
+        }
+
+        // Add owning cluster scope if necessary
+        if (otherOwner) {
+            this.file.addImport(`cluster/definitions/${otherOwner.name}Cluster.js`, otherOwner.name);
+            name = `${otherOwner.name}.${name}`;
         }
 
         return name;
@@ -288,6 +315,7 @@ export class TlvGenerator {
 
     #defineEnum(name: string, model: ValueModel) {
         const enumBlock = this.definitions.expressions(`export enum ${name} {`, "}");
+
         this.definitions.insertingBefore(enumBlock, () => {
             model.children.forEach(child => {
                 let name = child.name;
@@ -298,12 +326,11 @@ export class TlvGenerator {
                 enumBlock.atom(`${asObjectKey(name)} = ${child.id}`).document(child);
             });
         });
+
         return enumBlock;
     }
 
     #defineStruct(name: string, model: ValueModel) {
-        this.importTlv("tlv", "TlvObject");
-
         const struct = this.definitions.expressions(`export const ${name} = TlvObject({`, "})");
         this.definitions.insertingBefore(struct, () => {
             model.children.forEach(field => {
@@ -330,6 +357,7 @@ export class TlvGenerator {
             return;
         }
 
+        this.importTlv("tlv", "TlvObject");
         this.file.addImport("tlv/TlvSchema.js", "TypeFromSchema");
         const intf = this.definitions.atom(
             `export interface ${name.substring(3)} extends TypeFromSchema<typeof ${name}> {}`,
@@ -389,18 +417,28 @@ export class TlvGenerator {
             return;
         }
 
-        // Special case - use StatusCode enum.  The cluster can technically define cluster-specific status codes so this
-        // should probably use an extension type at some point but AFAICT InteractionProtocol only allows for codes in
-        // its enum to be used currently
-        if (model.isGlobal && model.name === status.name) {
-            this.importTlv("protocol/interaction/StatusCode", "StatusCode");
-            return "StatusCode";
+        // Special case for status codes.  "Status code" in door lock cluster seems to be the global status codes
+        // instead of the local one.  So always reference the global one until we see something different
+        if (defining.isGlobal && defining.name === status.name) {
+            let as;
+            if (this.cluster?.get(DatatypeModel, "StatusCodeEnum")) {
+                // StatusCode would conflict with local type so import as an alias
+                as = "GlobalStatusCode";
+            }
+
+            this.importTlv("protocol/interaction/StatusCode", "StatusCode", as);
+            return as ?? "StatusCode";
         }
 
         // Determine what we'll call this thing.  Name should be defined
         const name = this.nameFor(model);
         if (name === undefined) {
             return;
+        }
+
+        // If the name is qualified then generation is handled by the defining cluster so we do no generation here
+        if (name.indexOf(".") !== -1) {
+            return name;
         }
 
         // If the type is already defined we reference the existing definition
@@ -410,14 +448,6 @@ export class TlvGenerator {
 
         // Record name usage
         this.#definedDatatypes.add(model);
-
-        // If the type is defined in a different cluster, load the cluster type rather than defining.  This will fail if
-        // the other cluster does not actually use the type.  Currently not an issue.
-        const definingScope = defining.owner(ClusterModel);
-        if (definingScope && definingScope !== this.cluster) {
-            this.file.addImport(`cluster/definitions/${definingScope.name}Cluster.js`, definingScope.name);
-            return `${definingScope.name}.${name}`;
-        }
 
         // Define the type
         let definition: Entry | undefined;

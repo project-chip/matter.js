@@ -49,7 +49,7 @@ export const MicrowaveOvenControl = Cluster({
         Attribute({
             name: "CookTime", id: 0x0, type: "elapsed-s", access: "R V", conformance: "M",
             constraint: "1 to maxCookTime", default: 30,
-            details: "This attribute shall indicate the total cook time associated with the operation of the device." +
+            details: "Indicates the total cook time associated with the operation of the device." +
                 "\n" +
                 "This attribute shall remain unchanged during the operation of the oven unless the value is changed " +
                 "via a command or out-of-band action.",
@@ -59,7 +59,7 @@ export const MicrowaveOvenControl = Cluster({
         Attribute({
             name: "MaxCookTime", id: 0x1, type: "elapsed-s", access: "R V", conformance: "M",
             constraint: "1 to 86400", quality: "F",
-            details: "This attribute shall indicate the maximum value to which the CookTime attribute can be set.",
+            details: "Indicates the maximum value to which the CookTime attribute can be set.",
             xref: { document: "cluster", section: "8.13.5.2" }
         }),
 
@@ -67,7 +67,7 @@ export const MicrowaveOvenControl = Cluster({
             name: "PowerSetting", id: 0x2, type: "uint8", access: "R V", conformance: "PWRNUM",
             constraint: "desc",
 
-            details: "This attribute shall indicate the power level associated with the operation of the device." +
+            details: "Indicates the power level associated with the operation of the device." +
                 "\n" +
                 "If the MinPower, MaxPower, and PowerStep attributes are not supported, the minimum value of this " +
                 "attribute shall be 10, the maximum value of this attribute shall be 100, the value shall be in even " +
@@ -85,8 +85,8 @@ export const MicrowaveOvenControl = Cluster({
         Attribute({
             name: "MinPower", id: 0x3, type: "uint8", access: "R V", conformance: "PWRLMTS",
             constraint: "1 to maxPower", default: 10, quality: "F",
-            details: "This attribute shall indicate the minimum power level that can be set on the server. The value of " +
-                "this attribute shall be less than or equal to the value of MaxPower. The value of this attribute" +
+            details: "Indicates the minimum power level that can be set on the server. The value of this attribute shall " +
+                "be less than or equal to the value of MaxPower. The value of this attribute" +
                 "\n" +
                 "shall be an integer multiple of PowerStep.",
             xref: { document: "cluster", section: "8.13.5.4" }
@@ -95,16 +95,16 @@ export const MicrowaveOvenControl = Cluster({
         Attribute({
             name: "MaxPower", id: 0x4, type: "uint8", access: "R V", conformance: "PWRLMTS",
             constraint: "minPower to 100", default: 100, quality: "F",
-            details: "This attribute shall indicate the maximum power level that can be set on the server. The value of " +
-                "this attribute shall be greater than or equal to the value of MinPower. The value of this attribute " +
-                "shall be an integer multiple of PowerStep.",
+            details: "Indicates the maximum power level that can be set on the server. The value of this attribute shall " +
+                "be greater than or equal to the value of MinPower. The value of this attribute shall be an integer " +
+                "multiple of PowerStep.",
             xref: { document: "cluster", section: "8.13.5.5" }
         }),
 
         Attribute({
             name: "PowerStep", id: 0x5, type: "uint8", access: "R V", conformance: "PWRLMTS",
             constraint: "1 to (MaxPower - MinPower)", default: 10, quality: "F",
-            details: "This attribute shall indicate the increment of power that can be set on the server." +
+            details: "Indicates the increment of power that can be set on the server." +
                 "\n" +
                 "For example, if MinPower is 1, MaxPower is 10, and PowerSetting can be set to any integer between " +
                 "MinPower and MaxPower, PowerStep would be set to 1.",
@@ -114,7 +114,7 @@ export const MicrowaveOvenControl = Cluster({
         Attribute({
             name: "SupportedWatts", id: 0x6, type: "list", access: "R V", conformance: "P, WATTS",
             constraint: "1 to 10", quality: "F",
-            details: "This attribute shall indicate the list of power levels (in W) supported by the server.",
+            details: "Indicates the list of power levels (in W) supported by the server.",
             xref: { document: "cluster", section: "8.13.5.7" },
             children: [Field({ name: "entry", type: "uint16" })]
         }),
@@ -122,8 +122,7 @@ export const MicrowaveOvenControl = Cluster({
         Attribute({
             name: "SelectedWattIndex", id: 0x7, type: "uint8", access: "R V", conformance: "P, WATTS",
             constraint: "desc",
-            details: "This attribute shall indicate the index into the list of SupportedWatts of the currently selected " +
-                "power setting." +
+            details: "Indicates the index into the list of SupportedWatts of the currently selected power setting." +
                 "\n" +
                 "The index shall be a valid index into the SupportedWatts list.",
             xref: { document: "cluster", section: "8.13.5.8" }
@@ -131,7 +130,7 @@ export const MicrowaveOvenControl = Cluster({
 
         Attribute({
             name: "WattRating", id: 0x8, type: "uint16", access: "R V", conformance: "O", quality: "F",
-            details: "This attribute shall indicate the rating, in Watts, of the microwave power of the oven." +
+            details: "Indicates the rating, in Watts, of the microwave power of the oven." +
                 "\n" +
                 "Supporting this attribute can assist clients in suggesting cooking settings for various foods and " +
                 "beverages.",

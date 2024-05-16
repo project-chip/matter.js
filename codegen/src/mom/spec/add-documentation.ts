@@ -47,6 +47,7 @@ function extractUsefulDocumentation(p: HTMLElement) {
         .replace(/ as described in the table below:/, "")
         .replace(/,? using(?: the)? data as follows:$/, ".")
         .replace(/Here are some examples:/, "")
+        .replace(/Valid combinations using null fields are shown below:/, "")
         .replace(/,? shown below:$/, "")
         .replace(/ such that:$/, "")
         .replace(/, derived from \w+,/, "")

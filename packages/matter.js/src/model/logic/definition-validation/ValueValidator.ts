@@ -103,7 +103,8 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             // Metatype doesn't handle this case because otherwise you'd never be able to have a string called "empty".
             // In this case though the data likely comes from the spec so we're going to take a flyer and say you can
             // never have "empty" as a default value
-            defaultValue = "";
+            delete this.model.default;
+            return;
         }
         const cast = Metatype.cast(metatype, defaultValue);
         if (cast === FieldValue.Invalid) {

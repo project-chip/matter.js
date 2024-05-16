@@ -11,7 +11,6 @@ import { TimeSyncServer as BaseTimeSyncServer } from "../../../behavior/definiti
 import { DoorLockBehavior as BaseDoorLockBehavior } from "../../../behavior/definitions/door-lock/DoorLockBehavior.js";
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -60,13 +59,6 @@ export namespace DoorLockControllerRequirements {
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The Scenes cluster is optional per the Matter specification
-     *
-     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
-     */
-    export const ScenesBehavior = BaseScenesBehavior;
-
-    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = { optional: { Identify: IdentifyServer, TimeSync: TimeSyncServer }, mandatory: {} };
@@ -76,7 +68,7 @@ export namespace DoorLockControllerRequirements {
      */
     export const client = {
         mandatory: { DoorLock: DoorLockBehavior },
-        optional: { Identify: IdentifyBehavior, Groups: GroupsBehavior, Scenes: ScenesBehavior }
+        optional: { Identify: IdentifyBehavior, Groups: GroupsBehavior }
     };
 }
 

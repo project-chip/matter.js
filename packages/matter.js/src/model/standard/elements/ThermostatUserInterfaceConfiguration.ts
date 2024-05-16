@@ -26,15 +26,14 @@ export const ThermostatUserInterfaceConfiguration = Cluster({
         Attribute({
             name: "TemperatureDisplayMode", id: 0x0, type: "TemperatureDisplayModeEnum", access: "RW VO",
             conformance: "M", constraint: "desc", default: 0,
-            details: "This attribute shall indicate the units of the temperature displayed on the thermostat screen.",
+            details: "Indicates the units of the temperature displayed on the thermostat screen.",
             xref: { document: "cluster", section: "4.5.6.1" }
         }),
 
         Attribute({
             name: "KeypadLockout", id: 0x1, type: "KeypadLockoutEnum", access: "RW VM", conformance: "M",
             constraint: "desc", default: 0,
-            details: "This attribute shall indicate the level of functionality that is available to the user via the " +
-                "keypad.",
+            details: "Indicates the level of functionality that is available to the user via the keypad.",
             xref: { document: "cluster", section: "4.5.6.2" }
         }),
 

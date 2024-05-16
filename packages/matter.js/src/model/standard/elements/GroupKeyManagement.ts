@@ -71,19 +71,19 @@ export const GroupKeyManagement = Cluster({
         Attribute({
             name: "MaxGroupsPerFabric", id: 0x2, type: "uint16", access: "R V", conformance: "M", default: 0,
             quality: "F",
-            details: "This attribute shall indicate the maximum number of groups that this node supports per fabric. The " +
-                "value of this attribute shall be set to be no less than the required minimum supported groups as " +
-                "specified in Group Limits. The length of the GroupKeyMap and GroupTable list attributes shall NOT " +
-                "exceed the value of the MaxGroupsPerFabric attribute multiplied by the number of supported fabrics.",
+            details: "Indicates the maximum number of groups that this node supports per fabric. The value of this " +
+                "attribute shall be set to be no less than the required minimum supported groups as specified in " +
+                "Group Limits. The length of the GroupKeyMap and GroupTable list attributes shall NOT exceed the " +
+                "value of the MaxGroupsPerFabric attribute multiplied by the number of supported fabrics.",
             xref: { document: "core", section: "11.2.6.3" }
         }),
 
         Attribute({
             name: "MaxGroupKeysPerFabric", id: 0x3, type: "uint16", access: "R V", conformance: "M",
             constraint: "1 to 65535", default: 1, quality: "F",
-            details: "This attribute shall indicate the maximum number of group key sets this node supports per fabric. " +
-                "The value of this attribute shall be set according to the minimum number of group key sets to " +
-                "support as specified in Group Limits.",
+            details: "Indicates the maximum number of group key sets this node supports per fabric. The value of this " +
+                "attribute shall be set according to the minimum number of group key sets to support as specified in " +
+                "Group Limits.",
             xref: { document: "core", section: "11.2.6.4" }
         }),
 

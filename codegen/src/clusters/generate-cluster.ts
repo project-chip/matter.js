@@ -61,7 +61,7 @@ export function generateCluster(file: ClusterFile) {
     gen.populateComponent(variance.base, base);
 
     // Generate status codes even if they aren't referenced directly
-    const status = cluster.get(DatatypeModel, "StatusCode");
+    const status = cluster.get(DatatypeModel, "StatusCodeEnum");
     if (status) {
         gen.tlv.reference(status);
     }

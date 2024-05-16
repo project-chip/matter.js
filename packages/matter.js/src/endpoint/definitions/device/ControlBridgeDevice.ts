@@ -9,7 +9,6 @@
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
 import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
 import {
     LevelControlBehavior as BaseLevelControlBehavior
@@ -59,13 +58,6 @@ export namespace ControlBridgeRequirements {
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The Scenes cluster is required by the Matter specification
-     *
-     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
-     */
-    export const ScenesBehavior = BaseScenesBehavior;
-
-    /**
      * The OnOff cluster is required by the Matter specification
      *
      * We provide this alias to the default implementation {@link OnOffBehavior} for convenience.
@@ -112,7 +104,6 @@ export namespace ControlBridgeRequirements {
         mandatory: {
             Identify: IdentifyBehavior,
             Groups: GroupsBehavior,
-            Scenes: ScenesBehavior,
             OnOff: OnOffBehavior,
             LevelControl: LevelControlBehavior,
             ColorControl: ColorControlBehavior

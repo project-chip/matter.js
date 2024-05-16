@@ -46,8 +46,8 @@ export const AdministratorCommissioning = Cluster({
             name: "WindowStatus", id: 0x0, type: "CommissioningWindowStatusEnum", access: "R V",
             conformance: "M",
 
-            details: "This attribute shall indicate whether a new Commissioning window has been opened by an " +
-                "Administrator, using either the OCW command or the OBCW command." +
+            details: "Indicates whether a new Commissioning window has been opened by an Administrator, using either the " +
+                "OCW command or the OBCW command." +
                 "\n" +
                 "This attribute shall revert to WindowNotOpen upon expiry of a commissioning window." +
                 "\n" +
@@ -278,6 +278,23 @@ export const AdministratorCommissioning = Cluster({
                     name: "BasicWindowOpen", id: 0x2, conformance: "BC",
                     description: "A Basic Commissioning Method window is open"
                 })
+            ]
+        }),
+
+        Datatype({
+            name: "StatusCodeEnum", type: "enum8",
+            xref: { document: "core", section: "11.19.6.1" },
+
+            children: [
+                Field({
+                    name: "Busy", id: 0x2,
+                    description: "Could not be completed because another commissioning is in progress"
+                }),
+                Field({
+                    name: "PakeParameterError", id: 0x3,
+                    description: "Provided PAKE parameters were incorrectly formatted or otherwise invalid"
+                }),
+                Field({ name: "WindowNotOpen", id: 0x4, description: "No commissioning window was currently open" })
             ]
         })
     ]

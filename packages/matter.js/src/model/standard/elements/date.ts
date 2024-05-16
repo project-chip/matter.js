@@ -11,9 +11,7 @@ import { DatatypeElement as Datatype, FieldElement as Field } from "../../elemen
 
 export const date = Datatype({
     name: "date", type: "struct", description: "Date", isSeed: true, metatype: "date",
-    details: "This data type shall be a struct as defined below." +
-        "\n" +
-        "Valid combinations using null fields are",
+    details: "This data type shall be a struct as defined below.",
     xref: { document: "core", section: "7.18.2.4" },
 
     children: [

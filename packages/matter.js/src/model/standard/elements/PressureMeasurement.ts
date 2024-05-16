@@ -34,7 +34,7 @@ export const PressureMeasurement = Cluster({
         Attribute({
             name: "MeasuredValue", id: 0x0, type: "int16", access: "R V", conformance: "M",
             constraint: "minMeasuredValue to maxMeasuredValue", quality: "X P",
-            details: "This attribute shall represent the pressure in kPa as follows:" +
+            details: "Indicates the pressure in kPa as follows:" +
                 "\n" +
                 "MeasuredValue = 10 x Pressure [kPa]" +
                 "\n" +
@@ -45,8 +45,8 @@ export const PressureMeasurement = Cluster({
         Attribute({
             name: "MinMeasuredValue", id: 0x1, type: "int16", access: "R V", conformance: "M",
             constraint: "-32767 to maxMeasuredValue1", quality: "X",
-            details: "This attribute shall indicate the minimum value of MeasuredValue that can be measured. See Measured " +
-                "Value for more details." +
+            details: "Indicates the minimum value of MeasuredValue that can be measured. See Measured Value for more " +
+                "details." +
                 "\n" +
                 "The null value indicates that the value is not available.",
             xref: { document: "cluster", section: "2.4.5.2" }
@@ -55,8 +55,8 @@ export const PressureMeasurement = Cluster({
         Attribute({
             name: "MaxMeasuredValue", id: 0x2, type: "int16", access: "R V", conformance: "M",
             constraint: "minMeasuredValue1 to 32767", quality: "X",
-            details: "This attribute shall indicate the maximum value of MeasuredValue that can be measured. See Measured " +
-                "Value for more details." +
+            details: "Indicates the maximum value of MeasuredValue that can be measured. See Measured Value for more " +
+                "details." +
                 "\n" +
                 "The null value indicates that the value is not available.",
             xref: { document: "cluster", section: "2.4.5.3" }
@@ -72,7 +72,7 @@ export const PressureMeasurement = Cluster({
         Attribute({
             name: "ScaledValue", id: 0x10, type: "int16", access: "R V", conformance: "EXT",
             constraint: "minScaledValue to maxScaledValue", default: 0, quality: "X",
-            details: "This attribute shall represent the pressure in Pascals as follows:" +
+            details: "Indicates the pressure in Pascals as follows:" +
                 "\n" +
                 "ScaledValue = 10Scale x Pressure [Pa]" +
                 "\n" +
@@ -83,23 +83,23 @@ export const PressureMeasurement = Cluster({
         Attribute({
             name: "MinScaledValue", id: 0x11, type: "int16", access: "R V", conformance: "EXT",
             constraint: "-32767 to maxScaledValue1", default: 0, quality: "X",
-            details: "This attribute shall indicate the minimum value of ScaledValue that can be measured. The null value " +
-                "indicates that the value is not available.",
+            details: "Indicates the minimum value of ScaledValue that can be measured. The null value indicates that the " +
+                "value is not available.",
             xref: { document: "cluster", section: "2.4.5.6" }
         }),
 
         Attribute({
             name: "MaxScaledValue", id: 0x12, type: "int16", access: "R V", conformance: "EXT",
             constraint: "minScaledValue1 to 32767", default: 0, quality: "X",
-            details: "This attribute shall indicate the maximum value of ScaledValue that can be measured. The null value " +
-                "indicates that the value is not available.",
+            details: "Indicates the maximum value of ScaledValue that can be measured. The null value indicates that the " +
+                "value is not available.",
             xref: { document: "cluster", section: "2.4.5.7" }
         }),
 
         Attribute({
             name: "ScaledTolerance", id: 0x13, type: "uint16", access: "R V", conformance: "[EXT]",
             constraint: "0 to 2048", default: 0,
-            details: "This attribute shall indicate the magnitude of the possible error that is associated with Scaled" +
+            details: "Indicates the magnitude of the possible error that is associated with Scaled" +
                 "\n" +
                 "Value. The true value is located in the range" +
                 "\n" +
@@ -110,7 +110,7 @@ export const PressureMeasurement = Cluster({
         Attribute({
             name: "Scale", id: 0x14, type: "int8", access: "R V", conformance: "EXT", constraint: "-127 to 127",
             default: 0,
-            details: "This attribute shall indicate the base 10 exponent used to obtain ScaledValue (see ScaledValue).",
+            details: "Indicates the base 10 exponent used to obtain ScaledValue (see ScaledValue).",
             xref: { document: "cluster", section: "2.4.5.9" }
         })
     ]

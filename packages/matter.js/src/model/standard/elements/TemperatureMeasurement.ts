@@ -21,16 +21,15 @@ export const TemperatureMeasurement = Cluster({
         Attribute({
             name: "MeasuredValue", id: 0x0, type: "temperature", access: "R V", conformance: "M",
             constraint: "minMeasuredValue to maxMeasuredValue", quality: "X P",
-            details: "This attribute shall indicate the measured temperature. The null value indicates that the " +
-                "temperature is unknown.",
+            details: "Indicates the measured temperature. The null value indicates that the temperature is unknown.",
             xref: { document: "cluster", section: "2.3.4.1" }
         }),
 
         Attribute({
             name: "MinMeasuredValue", id: 0x1, type: "temperature", access: "R V", conformance: "M",
             constraint: "-27315 to maxMeasuredValue1", default: -27315, quality: "X",
-            details: "This attribute shall indicate the minimum value of MeasuredValue that is capable of being measured. " +
-                "See Measured Value for more details." +
+            details: "Indicates the minimum value of MeasuredValue that is capable of being measured. See Measured Value " +
+                "for more details." +
                 "\n" +
                 "The null value indicates that the value is not available.",
             xref: { document: "cluster", section: "2.3.4.2" }

@@ -173,8 +173,8 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
             };
         }
 
-        // Cluster spec convention is one cluster per sub-section except the
-        // first sub-section which summarizes the section
+        // Cluster spec convention is one cluster per sub-section except the first sub-section which summarizes the
+        // section
         if (ref.xref.document === Specification.Cluster) {
             const sectionPath = ref.xref.section.split(".");
             if (sectionPath.length === 2 && sectionPath[1] !== "1") {
@@ -224,34 +224,24 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                 break;
 
             case "statuscodes":
-                defineElement("statusCodes", subref);
+                if (subref.table) {
+                    // Until 1.3 status codes were in a specialized table in the "status codes" sections
+                    defineElement("statusCodes", subref);
+                } else {
+                    // After 1.3 the people that wanted it to be a proper datatype won halfway and it was moved into a
+                    // "StatusCodeEnum Type" section, but still nested under a "Status Codes" section that only has a
+                    // single subsection.  Mmm committees
+                    collectDatatypes(definition, subref);
+                }
                 break;
 
             case "datatypes":
-                // Datatypes are different than everybody else.  The types
-                // themselves are defined in subsections
-                collectors.push({
-                    subsection: subref.xref.section,
-                    collector(datatypeRef) {
-                        if (!definition.datatypes) {
-                            definition.datatypes = [];
-                        }
-                        datatypeRef.name = datatypeRef.name.replace(/\s+type$/i, "");
-                        logger.debug(`datatype ${datatypeRef.name} § ${datatypeRef.xref.section}`);
-                        definition.datatypes.push(datatypeRef);
-                        if (datatypeRef.table) {
-                            // Probably a struct, enum or bitmap.  These are
-                            // sometimes followed with sections that detail
-                            // individual items
-                            collectDetails(datatypeRef);
-                        }
-                    },
-                });
+                // Datatypes are different than everybody else.  The types themselves are defined in subsections
+                collectDatatypes(definition, subref);
                 break;
 
             default:
-                // "Attribute Set" is suffixed to sections containing a subset
-                // of attributes
+                // "Attribute Set" is suffixed to sections containing a subset of attributes
                 if (name.endsWith("attributeset")) {
                     if (!definition.attributeSets) {
                         definition.attributeSets = [];
@@ -266,6 +256,25 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
         }
     }
 
+    function collectDatatypes(definition: ClusterReference, subref: HtmlReference) {
+        collectors.push({
+            subsection: subref.xref.section,
+            collector(datatypeRef) {
+                if (!definition.datatypes) {
+                    definition.datatypes = [];
+                }
+                datatypeRef.name = datatypeRef.name.replace(/\s+type$/i, "");
+                logger.debug(`datatype ${datatypeRef.name} § ${datatypeRef.xref.section}`);
+                definition.datatypes.push(datatypeRef);
+                if (datatypeRef.table) {
+                    // Probably a struct, enum or bitmap.  These are sometimes followed with sections that
+                    // detail individual items
+                    collectDetails(datatypeRef);
+                }
+            },
+        });
+    }
+
     function collectDetails(ref: HtmlReference) {
         collectors.push({
             subsection: ref.detailSection ?? ref.xref.section,
@@ -275,8 +284,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                 }
                 ref.details.push(subref);
 
-                // Attempt to collect sub-details if the new section is more
-                // specific than the current section
+                // Attempt to collect sub-details if the new section is more specific than the current section
                 if (subref.xref.section > ref.xref.section) {
                     collectDetails(subref);
                 }
@@ -301,8 +309,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
         }
 
         if (!ref.table) {
-            // Sometimes there's a section with no table to indicate no
-            // elements
+            // Sometimes there's a section with no table to indicate no elements
             if (ref.prose?.[0]?.textContent?.match(/(?:this cluster has no|no cluster specific)/i)) {
                 return;
             }

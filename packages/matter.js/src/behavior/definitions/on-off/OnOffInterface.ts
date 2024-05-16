@@ -52,7 +52,7 @@ export namespace OnOffInterface {
         toggle(): MaybePromise;
     }
 
-    export interface LevelControlForLighting {
+    export interface Lighting {
         /**
          * The OffWithEffect command allows devices to be turned off using enhanced ways of fading.
          *
@@ -86,6 +86,6 @@ export namespace OnOffInterface {
 export type OnOffInterface = {
     components: [
         { flags: {}, methods: OnOffInterface.Base },
-        { flags: { levelControlForLighting: true }, methods: OnOffInterface.LevelControlForLighting }
+        { flags: { lighting: true }, methods: OnOffInterface.Lighting }
     ]
 };

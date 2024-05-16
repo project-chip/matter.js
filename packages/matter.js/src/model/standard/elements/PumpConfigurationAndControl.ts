@@ -67,8 +67,7 @@ export const PumpConfigurationAndControl = Cluster({
             details: "This attribute specifies the maximum pressure the pump can achieve. It is a physical limit, and " +
                 "does not apply to any specific control mode or operation mode." +
                 "\n" +
-                "Valid range is -3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is -3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.1" }
         }),
 
@@ -78,8 +77,7 @@ export const PumpConfigurationAndControl = Cluster({
             details: "This attribute specifies the maximum speed the pump can achieve. It is a physical limit, and does " +
                 "not apply to any specific control mode or operation mode." +
                 "\n" +
-                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is " +
-                "invalid.",
+                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.2" }
         }),
 
@@ -89,8 +87,7 @@ export const PumpConfigurationAndControl = Cluster({
             details: "This attribute specifies the maximum flow the pump can achieve. It is a physical limit, and does " +
                 "not apply to any specific control mode or operation mode." +
                 "\n" +
-                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value " +
-                "is invalid.",
+                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.3" }
         }),
 
@@ -100,8 +97,7 @@ export const PumpConfigurationAndControl = Cluster({
             details: "This attribute specifies the minimum pressure the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantPressure." +
                 "\n" +
-                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.4" }
         }),
 
@@ -111,8 +107,7 @@ export const PumpConfigurationAndControl = Cluster({
             details: "This attribute specifies the maximum pressure the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantPressure." +
                 "\n" +
-                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.5" }
         }),
 
@@ -122,8 +117,7 @@ export const PumpConfigurationAndControl = Cluster({
             details: "This attribute specifies the minimum compensated pressure the pump can achieve when it is working " +
                 "with the ControlMode attribute set to ProportionalPressure." +
                 "\n" +
-                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.6" }
         }),
 
@@ -133,8 +127,7 @@ export const PumpConfigurationAndControl = Cluster({
             details: "This attribute specifies the maximum compensated pressure the pump can achieve when it is working " +
                 "with the ControlMode attribute set to ProportionalPressure." +
                 "\n" +
-                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.7" }
         }),
 
@@ -144,8 +137,7 @@ export const PumpConfigurationAndControl = Cluster({
             details: "This attribute specifies the minimum speed the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantSpeed." +
                 "\n" +
-                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is " +
-                "invalid.",
+                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.8" }
         }),
 
@@ -155,22 +147,18 @@ export const PumpConfigurationAndControl = Cluster({
             details: "This attribute specifies the maximum speed the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantSpeed." +
                 "\n" +
-                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is " +
-                "invalid.",
+                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.9" }
         }),
 
         Attribute({
             name: "MinConstFlow", id: 0x9, type: "uint16", access: "R V", conformance: "FLW, [AUTO]",
             default: null, quality: "X F",
-
             details: "This attribute specifies the minimum flow the pump can achieve when it is working with the Con" +
                 "\n" +
                 "trolMode attribute set to ConstantFlow." +
                 "\n" +
-                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value " +
-                "is invalid.",
-
+                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.10" }
         }),
 
@@ -180,8 +168,7 @@ export const PumpConfigurationAndControl = Cluster({
             details: "This attribute specifies the maximum flow the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantFlow." +
                 "\n" +
-                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value " +
-                "is invalid.",
+                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.11" }
         }),
 
@@ -191,8 +178,7 @@ export const PumpConfigurationAndControl = Cluster({
             details: "This attribute specifies the minimum temperature the pump can maintain in the system when it is " +
                 "working with the ControlMode attribute set to ConstantTemperature." +
                 "\n" +
-                "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.12" }
         }),
 
@@ -205,8 +191,7 @@ export const PumpConfigurationAndControl = Cluster({
                 "\n" +
                 "MaxConstTemp shall be greater than or equal to MinConstTemp" +
                 "\n" +
-                "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). Null if the value is invalid.",
 
             xref: { document: "cluster", section: "4.2.7.13" }
         }),
@@ -344,7 +329,7 @@ export const PumpConfigurationAndControl = Cluster({
                 "\n" +
                 "Valid range is 0 kWh to 4,294,967,294 kWh." +
                 "\n" +
-                "This attribute shall be null if the value is unknown.",
+                "Null if the value is unknown.",
 
             xref: { document: "cluster", section: "4.2.7.21" }
         }),

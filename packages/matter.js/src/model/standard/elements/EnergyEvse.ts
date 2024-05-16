@@ -146,9 +146,8 @@ export const EnergyEvse = Cluster({
         Attribute({
             name: "State", id: 0x0, type: "StateEnum", access: "R V", conformance: "M", quality: "X",
 
-            details: "This attribute shall indicate the current status of the EVSE. This higher-level status is partly " +
-                "derived from the signaling protocol as communicated between the EVSE and the vehicle through the " +
-                "pilot signal." +
+            details: "Indicates the current status of the EVSE. This higher-level status is partly derived from the " +
+                "signaling protocol as communicated between the EVSE and the vehicle through the pilot signal." +
                 "\n" +
                 "The State attribute shall change when the EVSE detects change of condition of the EV (plugged in or " +
                 "unplugged, whether the vehicle is asking for demand or not, and if it is charging or discharging)." +
@@ -165,21 +164,17 @@ export const EnergyEvse = Cluster({
 
         Attribute({
             name: "SupplyState", id: 0x1, type: "SupplyStateEnum", access: "R V", conformance: "M",
-            details: "This attribute shall indicate whether the EV is currently allowed to charge from or discharge to " +
-                "the EVSE.",
+            details: "Indicates whether the EV is currently allowed to charge from or discharge to the EVSE.",
             xref: { document: "cluster", section: "9.3.8.2" }
         }),
 
         Attribute({
             name: "FaultState", id: 0x2, type: "FaultStateEnum", access: "R V", conformance: "M",
-
-            details: "This attribute shall indicate the type of fault detected by the EVSE (internally or as detected in " +
-                "the pilot signal)." +
+            details: "Indicates the type of fault detected by the EVSE (internally or as detected in the pilot signal)." +
                 "\n" +
                 "When the SupplyState attribute is DisabledError, the FaultState attribute will be one of the values " +
                 "listed in FaultStateEnum, except NoError. For all values of SupplyState other than DisabledError, " +
                 "the FaultState attribute shall be NoError.",
-
             xref: { document: "cluster", section: "9.3.8.3" }
         }),
 
@@ -187,8 +182,7 @@ export const EnergyEvse = Cluster({
             name: "ChargingEnabledUntil", id: 0x3, type: "epoch-s", access: "R V", conformance: "M", default: 0,
             quality: "X N",
 
-            details: "This attribute shall indicate the time, in UTC, that the EVSE will automatically stop current flow " +
-                "to the EV." +
+            details: "Indicates the time, in UTC, that the EVSE will automatically stop current flow to the EV." +
                 "\n" +
                 "A null value indicates the EVSE is always enabled for charging." +
                 "\n" +
@@ -205,8 +199,7 @@ export const EnergyEvse = Cluster({
             name: "DischargingEnabledUntil", id: 0x4, type: "epoch-s", access: "R V", conformance: "V2X",
             default: 0, quality: "X N",
 
-            details: "This attribute shall indicate the time, in UTC, that the EVSE will automatically stop current flow " +
-                "from the EV." +
+            details: "Indicates the time, in UTC, that the EVSE will automatically stop current flow from the EV." +
                 "\n" +
                 "A null value indicates the EVSE is always enabled for discharging." +
                 "\n" +
@@ -222,17 +215,17 @@ export const EnergyEvse = Cluster({
         Attribute({
             name: "CircuitCapacity", id: 0x5, type: "amperage-mA", access: "R V", conformance: "M",
             constraint: "min 0", default: 0, quality: "N",
-            details: "This attribute shall indicate the capacity that the circuit that the EVSE is connected to can " +
-                "provide. It is intended to allow implementation of a self-managed network of EVSEs. It is assumed " +
-                "that the device will allow the setting of such values by an installer.",
+            details: "Indicates the capacity that the circuit that the EVSE is connected to can provide. It is intended " +
+                "to allow implementation of a self-managed network of EVSEs. It is assumed that the device will " +
+                "allow the setting of such values by an installer.",
             xref: { document: "cluster", section: "9.3.8.6" }
         }),
 
         Attribute({
             name: "MinimumChargeCurrent", id: 0x6, type: "amperage-mA", access: "R V", conformance: "M",
             constraint: "min 0", default: 6000, quality: "N",
-            details: "This attribute shall indicate the minimum current that can be delivered by the EVSE to the EV. The " +
-                "attribute can be set using the EnableCharging command.",
+            details: "Indicates the minimum current that can be delivered by the EVSE to the EV. The attribute can be set " +
+                "using the EnableCharging command.",
             xref: { document: "cluster", section: "9.3.8.7" }
         }),
 
@@ -240,7 +233,7 @@ export const EnergyEvse = Cluster({
             name: "MaximumChargeCurrent", id: 0x7, type: "amperage-mA", access: "R V", conformance: "M",
             constraint: "min 0", default: 0, quality: "N",
 
-            details: "This attribute shall indicate the maximum current that can be delivered by the EVSE to the EV." +
+            details: "Indicates the maximum current that can be delivered by the EVSE to the EV." +
                 "\n" +
                 "This shall represent the actual maximum current offered to the EV at any time. Note that the EV can " +
                 "draw less current than this value. For example, the EV may be limiting its power draw based on the " +
@@ -266,8 +259,8 @@ export const EnergyEvse = Cluster({
             name: "MaximumDischargeCurrent", id: 0x8, type: "amperage-mA", access: "R V", conformance: "V2X",
             constraint: "min 0", default: 0, quality: "N",
 
-            details: "This attribute shall indicate the maximum current that can be received by the EVSE from the EV. " +
-                "This attribute can be set using the EnableDischarging command." +
+            details: "Indicates the maximum current that can be received by the EVSE from the EV. This attribute can be " +
+                "set using the EnableDischarging command." +
                 "\n" +
                 "This attribute value shall be the minimum of:" +
                 "\n" +
@@ -284,10 +277,10 @@ export const EnergyEvse = Cluster({
             name: "UserMaximumChargeCurrent", id: 0x9, type: "amperage-mA", access: "RW VM", conformance: "O",
             constraint: "desc", default: 0, quality: "N",
 
-            details: "This attribute shall indicate a maximum current that can set by the consumer (e.g. via an app) as a " +
-                "preference to further reduce the charging rate. This may be desirable if the home owner has a solar " +
-                "PV or battery storage system which may only be able to deliver a limited amount of power. The " +
-                "consumer can manually control how much they allow the EV to take." +
+            details: "Indicates a maximum current that can set by the consumer (e.g. via an app) as a preference to " +
+                "further reduce the charging rate. This may be desirable if the home owner has a solar PV or battery " +
+                "storage system which may only be able to deliver a limited amount of power. The consumer can " +
+                "manually control how much they allow the EV to take." +
                 "\n" +
                 "This attribute value shall be limited by the EVSE to be in the range of:" +
                 "\n" +
@@ -307,8 +300,8 @@ export const EnergyEvse = Cluster({
             name: "RandomizationDelayWindow", id: 0xa, type: "elapsed-s", access: "RW VM", conformance: "O",
             constraint: "0 to 86400", default: 600, quality: "N",
 
-            details: "This attribute shall indicate the size of a random window over which the EVSE will randomize the " +
-                "start of a charging session. This value is in seconds." +
+            details: "Indicates the size of a random window over which the EVSE will randomize the start of a charging " +
+                "session. This value is in seconds." +
                 "\n" +
                 "This is a feature that is mandated in some markets (such as UK) where the EVSE should by default " +
                 "randomize its start time within the randomization window. By default in the UK this should be 600s." +
@@ -323,8 +316,8 @@ export const EnergyEvse = Cluster({
         Attribute({
             name: "NextChargeStartTime", id: 0x23, type: "epoch-s", access: "R V", conformance: "PREF",
             default: null, quality: "X",
-            details: "This attribute shall indicate the time, in UTC, when the EVSE plans to start the next scheduled " +
-                "charge based on the charging preferences." +
+            details: "Indicates the time, in UTC, when the EVSE plans to start the next scheduled charge based on the " +
+                "charging preferences." +
                 "\n" +
                 "If this is null it indicates that there is no scheduled charging, or that the vehicle is not " +
                 "plugged in.",
@@ -334,8 +327,8 @@ export const EnergyEvse = Cluster({
         Attribute({
             name: "NextChargeTargetTime", id: 0x24, type: "epoch-s", access: "R V", conformance: "PREF",
             default: null, quality: "X",
-            details: "This attribute shall indicate the time, in UTC, when the EVSE SHOULD complete the next scheduled " +
-                "charge based on the charging preferences." +
+            details: "Indicates the time, in UTC, when the EVSE SHOULD complete the next scheduled charge based on the " +
+                "charging preferences." +
                 "\n" +
                 "If this is null it indicates that there is no scheduled charging, or that the vehicle is not " +
                 "plugged in.",
@@ -345,8 +338,8 @@ export const EnergyEvse = Cluster({
         Attribute({
             name: "NextChargeRequiredEnergy", id: 0x25, type: "energy-mWh", access: "R V", conformance: "PREF",
             constraint: "min 0", default: null, quality: "X",
-            details: "This attribute shall indicate the amount of energy that the EVSE is going to attempt to add to the " +
-                "vehicle in the next charging target." +
+            details: "Indicates the amount of energy that the EVSE is going to attempt to add to the vehicle in the next " +
+                "charging target." +
                 "\n" +
                 "If this is null it indicates that there is no scheduled charging, or that the EVSE is using the " +
                 "TargetSoC method to charge the vehicle.",
@@ -357,8 +350,7 @@ export const EnergyEvse = Cluster({
             name: "NextChargeTargetSoC", id: 0x26, type: "percent", access: "R V", conformance: "PREF",
             default: null, quality: "X",
 
-            details: "This attribute shall indicate the target SoC the EVSE is going to attempt to reach when the vehicle " +
-                "is next charged." +
+            details: "Indicates the target SoC the EVSE is going to attempt to reach when the vehicle is next charged." +
                 "\n" +
                 "If this is null it indicates that there is no scheduled charging, or that the EVSE cannot obtain " +
                 "the current State of Charge from the vehicle." +
@@ -372,7 +364,7 @@ export const EnergyEvse = Cluster({
             name: "ApproximateEvEfficiency", id: 0x27, type: "uint16", access: "RW VM", conformance: "[PREF]",
             constraint: "desc", default: null, quality: "X N",
 
-            details: "This attribute shall indicate the vehicle efficiency rating for a connected vehicle." +
+            details: "Indicates the vehicle efficiency rating for a connected vehicle." +
                 "\n" +
                 "This can be used to help indicate to the user approximately how many miles or km of range will be " +
                 "added. It allows user interfaces to display to the user simpler terms that they can relate to " +
@@ -406,25 +398,25 @@ export const EnergyEvse = Cluster({
         Attribute({
             name: "StateOfCharge", id: 0x30, type: "percent", access: "R V", conformance: "SOC", default: null,
             quality: "X",
-            details: "This attribute shall indicate the state of charge of the EV battery in steps of 1%. The values are " +
-                "in the 0-100%. This attribute is only available on EVSEs which can read the state of charge from " +
-                "the vehicle and that support the SOC feature. If the StateOfCharge cannot be read from the vehicle " +
-                "it shall be returned with a NULL value.",
+            details: "Indicates the state of charge of the EV battery in steps of 1%. The values are in the 0-100%. This " +
+                "attribute is only available on EVSEs which can read the state of charge from the vehicle and that " +
+                "support the SOC feature. If the StateOfCharge cannot be read from the vehicle it shall be returned " +
+                "with a NULL value.",
             xref: { document: "cluster", section: "9.3.8.17" }
         }),
 
         Attribute({
             name: "BatteryCapacity", id: 0x31, type: "energy-mWh", access: "R V", conformance: "SOC",
             constraint: "min 0", default: null, quality: "X",
-            details: "This attribute shall indicate the capacity of the EV battery in mWh. This value is always positive.",
+            details: "Indicates the capacity of the EV battery in mWh. This value is always positive.",
             xref: { document: "cluster", section: "9.3.8.18" }
         }),
 
         Attribute({
             name: "VehicleId", id: 0x32, type: "string", access: "R V", conformance: "PNC",
             constraint: "max 32", default: null, quality: "X",
-            details: "This attribute shall indicate the vehicle ID read by the EVSE via ISO-15118 using the PNC feature, " +
-                "if the EVSE supports this capability." +
+            details: "Indicates the vehicle ID read by the EVSE via ISO-15118 using the PNC feature, if the EVSE supports " +
+                "this capability." +
                 "\n" +
                 "The field may be based on the e-Mobility Account Identifier (EMAID). A null value shall indicate " +
                 "that this is unknown.",

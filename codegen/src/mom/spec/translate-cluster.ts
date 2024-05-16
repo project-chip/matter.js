@@ -210,7 +210,7 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
     translateAttributes();
     translateEvents();
     translateCommands();
-    translateStatusCodes();
+    translatePre13StatusCodes();
 
     function translateAttributes() {
         const attributeSets = [definition.attributes];
@@ -308,14 +308,14 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
         events && children.push(...events);
     }
 
-    function translateStatusCodes() {
+    function translatePre13StatusCodes() {
         const records = translateTable("statusCodes", definition.statusCodes, {
             id: Alias(Integer, "statuscode"),
             name: Alias(Identifier, "value"),
             details: Alias(Str, "summary"),
         });
         const statusCodes = translateRecordsToMatter("statusCodes", records, FieldElement);
-        statusCodes && children.push(DatatypeElement({ name: "StatusCode", type: "status", children: statusCodes }));
+        statusCodes && children.push(DatatypeElement({ name: "StatusCodeEnum", children: statusCodes }));
     }
 }
 

@@ -127,9 +127,9 @@ export namespace OnOff {
     export interface OnWithTimedOffRequest extends TypeFromSchema<typeof TlvOnWithTimedOffRequest> {}
 
     /**
-     * A OnOffCluster supports these elements if it supports feature LevelControlForLighting.
+     * A OnOffCluster supports these elements if it supports feature Lighting.
      */
-    export const LevelControlForLightingComponent = MutableCluster.Component({
+    export const LightingComponent = MutableCluster.Component({
         attributes: {
             /**
              * In order to support the use case where the user gets back the last setting of a set of devices (e.g.
@@ -229,11 +229,11 @@ export namespace OnOff {
      */
     export enum Feature {
         /**
-         * LevelControlForLighting
+         * Lighting
          *
          * Behavior that supports lighting applications.
          */
-        LevelControlForLighting = "LevelControlForLighting"
+        Lighting = "Lighting"
     }
 
     /**
@@ -246,11 +246,11 @@ export namespace OnOff {
 
         features: {
             /**
-             * LevelControlForLighting
+             * Lighting
              *
              * Behavior that supports lighting applications.
              */
-            levelControlForLighting: BitFlag(0)
+            lighting: BitFlag(0)
         },
 
         attributes: {
@@ -290,7 +290,7 @@ export namespace OnOff {
          * This metadata controls which OnOffCluster elements matter.js activates for specific feature combinations.
          */
         extensions: MutableCluster.Extensions(
-            { flags: { levelControlForLighting: true }, component: LevelControlForLightingComponent }
+            { flags: { lighting: true }, component: LightingComponent }
         )
     });
 
@@ -311,7 +311,7 @@ export namespace OnOff {
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
-    const LT = { levelControlForLighting: true };
+    const LT = { lighting: true };
 
     /**
      * @see {@link Complete}
@@ -325,19 +325,19 @@ export namespace OnOff {
         attributes: {
             ...Cluster.attributes,
             globalSceneControl: MutableCluster.AsConditional(
-                LevelControlForLightingComponent.attributes.globalSceneControl,
+                LightingComponent.attributes.globalSceneControl,
                 { mandatoryIf: [LT] }
             ),
             onTime: MutableCluster.AsConditional(
-                LevelControlForLightingComponent.attributes.onTime,
+                LightingComponent.attributes.onTime,
                 { mandatoryIf: [LT] }
             ),
             offWaitTime: MutableCluster.AsConditional(
-                LevelControlForLightingComponent.attributes.offWaitTime,
+                LightingComponent.attributes.offWaitTime,
                 { mandatoryIf: [LT] }
             ),
             startUpOnOff: MutableCluster.AsConditional(
-                LevelControlForLightingComponent.attributes.startUpOnOff,
+                LightingComponent.attributes.startUpOnOff,
                 { mandatoryIf: [LT] }
             )
         },
@@ -345,15 +345,15 @@ export namespace OnOff {
         commands: {
             ...Cluster.commands,
             offWithEffect: MutableCluster.AsConditional(
-                LevelControlForLightingComponent.commands.offWithEffect,
+                LightingComponent.commands.offWithEffect,
                 { mandatoryIf: [LT] }
             ),
             onWithRecallGlobalScene: MutableCluster.AsConditional(
-                LevelControlForLightingComponent.commands.onWithRecallGlobalScene,
+                LightingComponent.commands.onWithRecallGlobalScene,
                 { mandatoryIf: [LT] }
             ),
             onWithTimedOff: MutableCluster.AsConditional(
-                LevelControlForLightingComponent.commands.onWithTimedOff,
+                LightingComponent.commands.onWithTimedOff,
                 { mandatoryIf: [LT] }
             )
         }

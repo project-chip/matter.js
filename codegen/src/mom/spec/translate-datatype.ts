@@ -63,6 +63,10 @@ export function translateDatatype(definition: HtmlReference): DatatypeElement | 
     type = fixTypeIdentifier(type);
 
     if (name.match(/enum$/i) || type?.match(/^enum/i)) {
+        if (name === "StatusCodeEnum") {
+            type = "enum8";
+        }
+
         if (!type) {
             logger.warn(`no base detected, guessing enum8`);
             type = "enum8";
@@ -351,6 +355,9 @@ export function selectMetatype(typeName: string) {
 
         case "date":
             return Metatype.date;
+
+        case "status":
+            return Metatype.enum;
     }
 
     if (typeName.startsWith("uint")) {

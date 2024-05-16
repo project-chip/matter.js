@@ -131,7 +131,7 @@ export const ThreadNetworkDiagnostics = Cluster({
         Attribute({
             name: "PartitionId", id: 0x9, type: "uint32", access: "R V", conformance: "M", quality: "X",
             details: "The PartitionId attribute shall indicate the Thread Leader Partition Id for the Thread network to " +
-                "which the Node is joined. This attribute shall be null if not attached to a Thread network.",
+                "which the Node is joined. Null if not attached to a Thread network.",
             xref: { document: "core", section: "11.14.6.10" }
         }),
 
@@ -139,7 +139,7 @@ export const ThreadNetworkDiagnostics = Cluster({
             name: "Weighting", id: 0xa, type: "uint16", access: "R V", conformance: "M", constraint: "max 255",
             quality: "X",
             details: "The Weighting attribute shall indicate the Thread Leader Weight used when operating in the Leader " +
-                "role. This attribute shall be null if not attached to a Thread network.",
+                "role. Null if not attached to a Thread network.",
             xref: { document: "core", section: "11.14.6.11" }
         }),
 
@@ -147,7 +147,7 @@ export const ThreadNetworkDiagnostics = Cluster({
             name: "DataVersion", id: 0xb, type: "uint16", access: "R V", conformance: "M",
             constraint: "max 255", quality: "X",
             details: "The DataVersion attribute shall indicate the full Network Data Version the Node currently uses. " +
-                "This attribute shall be null if not attached to a Thread network.",
+                "Null if not attached to a Thread network.",
             xref: { document: "core", section: "11.14.6.12" }
         }),
 
@@ -156,7 +156,7 @@ export const ThreadNetworkDiagnostics = Cluster({
             constraint: "max 255", quality: "X",
             details: "The StableDataVersion attribute shall indicate the Network Data Version for the stable subset of" +
                 "\n" +
-                "data the Node currently uses. This attribute shall be null if not attached to a Thread network.",
+                "data the Node currently uses. Null if not attached to a Thread network.",
             xref: { document: "core", section: "11.14.6.13" }
         }),
 
@@ -164,8 +164,8 @@ export const ThreadNetworkDiagnostics = Cluster({
             name: "LeaderRouterId", id: 0xd, type: "uint8", access: "R V", conformance: "M",
             constraint: "max 62", quality: "X",
             details: "The LeaderRouterId attribute shall indicate the 8-bit LeaderRouterId the Node shall attempt to " +
-                "utilize upon becoming a router or leader on the Thread network. This attribute shall be null if not " +
-                "attached to a Thread network.",
+                "utilize upon becoming a router or leader on the Thread network. Null if not attached to a Thread " +
+                "network.",
             xref: { document: "core", section: "11.14.6.14" }
         }),
 
@@ -558,20 +558,20 @@ export const ThreadNetworkDiagnostics = Cluster({
         Attribute({
             name: "ActiveTimestamp", id: 0x38, type: "uint64", access: "R V", conformance: "O", default: 0,
             quality: "X",
-            details: "This attribute shall be null when there is no dataset configured.",
+            details: "Null when there is no dataset configured.",
             xref: { document: "core", section: "11.14.6.57" }
         }),
 
         Attribute({
             name: "PendingTimestamp", id: 0x39, type: "uint64", access: "R V", conformance: "O", default: 0,
             quality: "X",
-            details: "This attribute shall be null when there is no dataset configured.",
+            details: "Null when there is no dataset configured.",
             xref: { document: "core", section: "11.14.6.58" }
         }),
 
         Attribute({
             name: "Delay", id: 0x3a, type: "uint32", access: "R V", conformance: "O", default: 0, quality: "X",
-            details: "This attribute shall be null when there is no dataset configured.",
+            details: "Null when there is no dataset configured.",
             xref: { document: "core", section: "11.14.6.59" }
         }),
 
@@ -579,7 +579,7 @@ export const ThreadNetworkDiagnostics = Cluster({
             name: "SecurityPolicy", id: 0x3b, type: "SecurityPolicy", access: "R V", conformance: "M",
             quality: "X",
             details: "The SecurityPolicy attribute indicates the current security policies for the Thread partition to " +
-                "which a Node is connected. This attribute shall be null when there is no dataset configured.",
+                "which a Node is connected. Null when there is no dataset configured.",
             xref: { document: "core", section: "11.14.6.60" }
         }),
 
@@ -590,7 +590,7 @@ export const ThreadNetworkDiagnostics = Cluster({
                 "band. The channels are represented in most significant bit order, with bit value 1 meaning " +
                 "selected, bit value 0 meaning unselected. For example, the most significant bit of the left-most " +
                 "byte indicates channel 0. If channel 0 and channel 10 are selected, the mask would be: 80 20 00 00. " +
-                "This attribute shall be null when there is no dataset configured.",
+                "Null when there is no dataset configured.",
             xref: { document: "core", section: "11.14.6.61" }
         }),
 
@@ -901,14 +901,14 @@ export const ThreadNetworkDiagnostics = Cluster({
                 Field({
                     name: "RotationTime", id: 0x0, type: "uint16", conformance: "M",
                     details: "This field shall specify the interval of time, in hours, that Thread security keys are rotated. " +
-                        "This attribute shall be null when there is no dataset configured.",
+                        "Null when there is no dataset configured.",
                     xref: { document: "core", section: "11.14.5.6.1" }
                 }),
 
                 Field({
                     name: "Flags", id: 0x1, type: "uint16", conformance: "M",
-                    details: "This field shall specify the flags as specified in Thread 1.3.0 section 8.10.1.15. This attribute " +
-                        "shall be null when there is no dataset configured.",
+                    details: "This field shall specify the flags as specified in Thread 1.3.0 section 8.10.1.15. Null when there " +
+                        "is no dataset configured.",
                     xref: { document: "core", section: "11.14.5.6.2" }
                 })
             ]

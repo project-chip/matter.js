@@ -80,27 +80,26 @@ export const Switch = Cluster({
         Attribute({
             name: "NumberOfPositions", id: 0x0, type: "uint8", access: "R V", conformance: "M",
             constraint: "min 2", default: 2, quality: "F",
-            details: "This attribute shall indicate the maximum number of positions the switch has. Any kind of switch " +
-                "has a minimum of 2 positions. Also see Multi Position Details for the case NumberOfPositions>2.",
+            details: "Indicates the maximum number of positions the switch has. Any kind of switch has a minimum of 2 " +
+                "positions. Also see Multi Position Details for the case NumberOfPositions>2.",
             xref: { document: "cluster", section: "1.13.5.1" }
         }),
 
         Attribute({
             name: "CurrentPosition", id: 0x1, type: "uint8", access: "R V", conformance: "M",
             constraint: "max numberOfPositions1", default: 0, quality: "N",
-            details: "This attribute shall indicate the position of the switch. The valid range is zero to " +
-                "NumberOfPositions-1. CurrentPosition value 0 shall be assigned to the default position of the " +
-                "switch: for example the \"open\" state of a rocker switch, or the \"idle\" state of a push button " +
-                "switch.",
+            details: "Indicates the position of the switch. The valid range is zero to NumberOfPositions-1. " +
+                "CurrentPosition value 0 shall be assigned to the default position of the switch: for example the " +
+                "\"open\" state of a rocker switch, or the \"idle\" state of a push button switch.",
             xref: { document: "cluster", section: "1.13.5.2" }
         }),
 
         Attribute({
             name: "MultiPressMax", id: 0x2, type: "uint8", access: "R V", conformance: "MSM",
             constraint: "min 2", default: 2, quality: "F",
-            details: "This attribute shall indicate how many consecutive presses can be detected and reported by a " +
-                "momentary switch which supports multi-press (e.g. it will report the value 3 if it can detect " +
-                "single press, double press and triple press, but not quad press and beyond).",
+            details: "Indicates how many consecutive presses can be detected and reported by a momentary switch which " +
+                "supports multi-press (e.g. it will report the value 3 if it can detect single press, double press " +
+                "and triple press, but not quad press and beyond).",
             xref: { document: "cluster", section: "1.13.5.3" }
         }),
 

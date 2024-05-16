@@ -59,7 +59,7 @@ export const GeneralCommissioning = Cluster({
         Attribute({
             name: "RegulatoryConfig", id: 0x2, type: "RegulatoryLocationTypeEnum", access: "R V",
             conformance: "M", default: { type: "reference", name: "LocationCapability" },
-            details: "This attribute shall indicate the regulatory configuration for the product." +
+            details: "Indicates the regulatory configuration for the product." +
                 "\n" +
                 "Note that the country code is part of Basic Information Cluster and therefore NOT listed on the " +
                 "RegulatoryConfig attribute.",
@@ -89,9 +89,9 @@ export const GeneralCommissioning = Cluster({
         Attribute({
             name: "SupportsConcurrentConnection", id: 0x4, type: "bool", access: "R V", conformance: "M",
             default: true, quality: "F",
-            details: "This attribute shall indicate whether this device supports \"concurrent connection flow\" " +
-                "commissioning mode (see Section 5.5, “Commissioning Flows”). If false, the device only supports " +
-                "\"non-concurrent connection flow\" mode.",
+            details: "Indicates whether this device supports \"concurrent connection flow\" commissioning mode (see Section " +
+                "5.5, “Commissioning Flows”). If false, the device only supports \"non-concurrent connection flow\" " +
+                "mode.",
             xref: { document: "core", section: "11.10.5.5" }
         }),
 

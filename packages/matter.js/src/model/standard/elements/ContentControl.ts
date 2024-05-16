@@ -77,8 +77,8 @@ export const ContentControl = Cluster({
 
         Attribute({
             name: "Enabled", id: 0x0, type: "bool", access: "R V", conformance: "M",
-            details: "This attribute shall indicate whether the Content Control feature implemented on a media device is " +
-                "turned off (FALSE) or turned on (TRUE).",
+            details: "Indicates whether the Content Control feature implemented on a media device is turned off (FALSE) " +
+                "or turned on (TRUE).",
             xref: { document: "cluster", section: "6.13.7.1" }
         }),
 
@@ -105,11 +105,11 @@ export const ContentControl = Cluster({
             name: "OnDemandRatingThreshold", id: 0x2, type: "string", access: "R V", conformance: "OCR",
             constraint: "max 8",
 
-            details: "This attribute shall indicate a threshold rating as a content filter which is compared with the " +
-                "rating for on-demand content. For example, if the on-demand content rating is greater than or equal " +
-                "to OnDemandRatingThreshold, for a rating system that is ordered from lower viewer age to higher " +
-                "viewer age, then on-demand content is not appropriate for the User and the Node shall prevent the " +
-                "playback of content." +
+            details: "Indicates a threshold rating as a content filter which is compared with the rating for on-demand " +
+                "content. For example, if the on-demand content rating is greater than or equal to " +
+                "OnDemandRatingThreshold, for a rating system that is ordered from lower viewer age to higher viewer " +
+                "age, then on-demand content is not appropriate for the User and the Node shall prevent the playback " +
+                "of content." +
                 "\n" +
                 "This attribute shall be set to one of the values present in the OnDemandRatings attribute." +
                 "\n" +
@@ -123,9 +123,9 @@ export const ContentControl = Cluster({
         Attribute({
             name: "ScheduledContentRatings", id: 0x3, type: "list", access: "R V", conformance: "SCR",
 
-            details: "This attribute shall indicate a collection of ratings which ScheduledContentRatingThreshold can be " +
-                "set to. The items should honor metadata of the scheduled content rating system for the country or " +
-                "region where the media device has been provisioned." +
+            details: "Indicates a collection of ratings which ScheduledContentRatingThreshold can be set to. The items " +
+                "should honor metadata of the scheduled content rating system for the country or region where the " +
+                "media device has been provisioned." +
                 "\n" +
                 "The media device shall have a way to determine which scheduled content rating system applies and " +
                 "then populate this attribute. For example, this can be done by examining the Location attribute in " +
@@ -142,11 +142,10 @@ export const ContentControl = Cluster({
             name: "ScheduledContentRatingThreshold", id: 0x4, type: "string", access: "R V", conformance: "SCR",
             constraint: "max 8",
 
-            details: "This attribute shall indicate a threshold rating as a content filter which is used to compare with " +
-                "the rating for scheduled content. For example, if the scheduled content rating is greater than or " +
-                "equal to ScheduledContentRatingThreshold for a rating system that is ordered from lower viewer age " +
-                "to higher viewer age, then the scheduled content is not appropriate for the User and shall be " +
-                "blocked." +
+            details: "Indicates a threshold rating as a content filter which is used to compare with the rating for " +
+                "scheduled content. For example, if the scheduled content rating is greater than or equal to " +
+                "ScheduledContentRatingThreshold for a rating system that is ordered from lower viewer age to higher " +
+                "viewer age, then the scheduled content is not appropriate for the User and shall be blocked." +
                 "\n" +
                 "This attribute shall be set to one of the values present in the ScheduledContentRatings attribute." +
                 "\n" +
@@ -160,8 +159,8 @@ export const ContentControl = Cluster({
         Attribute({
             name: "ScreenDailyTime", id: 0x5, type: "elapsed-s", access: "R V", conformance: "ST",
             constraint: "max 86400",
-            details: "This attribute shall indicate the amount of time (in seconds) which the User is allowed to spend " +
-                "watching TV within one day when the Content Control feature is activated.",
+            details: "Indicates the amount of time (in seconds) which the User is allowed to spend watching TV within one " +
+                "day when the Content Control feature is activated.",
             xref: { document: "cluster", section: "6.13.7.6" }
         }),
 
@@ -169,9 +168,9 @@ export const ContentControl = Cluster({
             name: "RemainingScreenTime", id: 0x6, type: "elapsed-s", access: "R V", conformance: "ST",
             constraint: "max 86400",
 
-            details: "This attribute shall indicate the remaining screen time (in seconds) which the User is allowed to " +
-                "spend watching TV for the current day when the Content Control feature is activated. When this " +
-                "value equals 0, the media device shall terminate the playback of content." +
+            details: "Indicates the remaining screen time (in seconds) which the User is allowed to spend watching TV for " +
+                "the current day when the Content Control feature is activated. When this value equals 0, the media " +
+                "device shall terminate the playback of content." +
                 "\n" +
                 "This attribute shall be updated when the AddBonusTime command is received and processed " +
                 "successfully (with the correct PIN).",
@@ -182,8 +181,8 @@ export const ContentControl = Cluster({
         Attribute({
             name: "BlockUnrated", id: 0x7, type: "bool", access: "R V", conformance: "BU",
 
-            details: "This attribute shall indicate whether the playback of unrated content is allowed when the Content " +
-                "Control feature is activated. If this attribute equals FALSE, then playback of unrated content" +
+            details: "Indicates whether the playback of unrated content is allowed when the Content Control feature is " +
+                "activated. If this attribute equals FALSE, then playback of unrated content" +
                 "\n" +
                 "shall be permitted. Otherwise, the media device shall prevent the playback of unrated content." +
                 "\n" +
@@ -196,16 +195,14 @@ export const ContentControl = Cluster({
 
         Attribute({
             name: "BlockChannelList", id: 0x8, type: "list", access: "R V", conformance: "BC",
-            details: "This attribute shall indicate a set of channels that shall be blocked when the Content Control " +
-                "feature is activated.",
+            details: "Indicates a set of channels that shall be blocked when the Content Control feature is activated.",
             xref: { document: "cluster", section: "6.13.7.9" },
             children: [Field({ name: "entry", type: "BlockChannelStruct" })]
         }),
 
         Attribute({
             name: "BlockApplicationList", id: 0x9, type: "list", access: "R V", conformance: "BA",
-            details: "This attribute shall indicate a set of applications that shall be blocked when the Content Control " +
-                "feature is activated.",
+            details: "Indicates a set of applications that shall be blocked when the Content Control feature is activated.",
             xref: { document: "cluster", section: "6.13.7.10" },
             children: [Field({ name: "entry", type: "AppInfoStruct" })]
         }),
@@ -214,10 +211,10 @@ export const ContentControl = Cluster({
             name: "BlockContentTimeWindow", id: 0xa, type: "list", access: "R V", conformance: "BTW",
             constraint: "max 7",
 
-            details: "This attribute shall indicate a set of periods during which the playback of content on media device " +
-                "shall be blocked when the Content Control feature is activated. The media device shall reject any " +
-                "request to play content during one period of this attribute. If it is entering any one period of " +
-                "this attribute, the media device shall block content which is playing and generate an event " +
+            details: "Indicates a set of periods during which the playback of content on media device shall be blocked " +
+                "when the Content Control feature is activated. The media device shall reject any request to play " +
+                "content during one period of this attribute. If it is entering any one period of this attribute, " +
+                "the media device shall block content which is playing and generate an event " +
                 "EnteringBlockContentTimeWindow. There shall not be multiple entries in this attribute list for the " +
                 "same day of week.",
 
@@ -747,6 +744,45 @@ export const ContentControl = Cluster({
                         "be greater than StartMinute. If the EndHour is equal to 23 and the EndMinute is equal to 59, all " +
                         "contents shall be blocked until 23:59:59.",
                     xref: { document: "cluster", section: "6.13.5.6.4" }
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "StatusCodeEnum", type: "enum8",
+            xref: { document: "cluster", section: "6.13.6.1" },
+
+            children: [
+                Field({
+                    name: "InvalidPinCode", id: 0x2,
+                    description: "Provided PIN Code does not match the current PIN code."
+                }),
+                Field({
+                    name: "InvalidRating", id: 0x3,
+                    description: "Provided Rating is out of scope of the corresponding Rating list."
+                }),
+                Field({ name: "InvalidChannel", id: 0x4, description: "Provided Channel(s) is invalid." }),
+                Field({ name: "ChannelAlreadyExist", id: 0x5, description: "Provided Channel(s) already exists." }),
+                Field({
+                    name: "ChannelNotExist", id: 0x6,
+                    description: "Provided Channel(s) doesn’t exist in BlockChannelList attribute."
+                }),
+                Field({
+                    name: "UnidentifiableApplication", id: 0x7,
+                    description: "Provided Application(s) is not identified."
+                }),
+                Field({ name: "ApplicationAlreadyExist", id: 0x8, description: "Provided Application(s) already exists." }),
+                Field({
+                    name: "ApplicationNotExist", id: 0x9,
+                    description: "Provided Application(s) doesn’t exist in BlockApplicationList attribute."
+                }),
+                Field({
+                    name: "TimeWindowAlreadyExist", id: 0xa,
+                    description: "Provided time Window already exists in BlockContentTimeWindow attribute."
+                }),
+                Field({
+                    name: "TimeWindowNotExist", id: 0xb,
+                    description: "Provided time window doesn’t exist in BlockContentTimeWindow attribute."
                 })
             ]
         })

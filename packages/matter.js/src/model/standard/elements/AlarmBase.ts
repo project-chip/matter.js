@@ -38,33 +38,32 @@ export const AlarmBase = Cluster({
 
         Attribute({
             name: "Mask", id: 0x0, type: "AlarmBitmap", access: "R V", conformance: "M", default: 0,
-            details: "This attribute shall indicate a bitmap where each bit set in the Mask attribute corresponds to an " +
-                "alarm that shall be enabled.",
+            details: "Indicates a bitmap where each bit set in the Mask attribute corresponds to an alarm that shall be " +
+                "enabled.",
             xref: { document: "cluster", section: "1.15.6.1" }
         }),
 
         Attribute({
             name: "Latch", id: 0x1, type: "AlarmBitmap", access: "R V", conformance: "RESET", default: 0,
             quality: "F",
-            details: "This attribute shall indicate a bitmap where each bit set in the Latch attribute shall indicate " +
-                "that the corresponding alarm will be latched when set, and will not reset to inactive when the " +
-                "underlying condition which caused the alarm is no longer present, and so requires an explicit reset " +
-                "using the Reset command.",
+            details: "Indicates a bitmap where each bit set in the Latch attribute shall indicate that the corresponding " +
+                "alarm will be latched when set, and will not reset to inactive when the underlying condition which " +
+                "caused the alarm is no longer present, and so requires an explicit reset using the Reset command.",
             xref: { document: "cluster", section: "1.15.6.2" }
         }),
 
         Attribute({
             name: "State", id: 0x2, type: "AlarmBitmap", access: "R V", conformance: "M", default: 0,
-            details: "This attribute shall indicate a bitmap where each bit shall represent the state of an alarm. The " +
-                "value of true means the alarm is active, otherwise the alarm is inactive.",
+            details: "Indicates a bitmap where each bit shall represent the state of an alarm. The value of true means " +
+                "the alarm is active, otherwise the alarm is inactive.",
             xref: { document: "cluster", section: "1.15.6.3" }
         }),
 
         Attribute({
             name: "Supported", id: 0x3, type: "AlarmBitmap", access: "R V", conformance: "M", default: 0,
             quality: "F",
-            details: "This attribute shall indicate a bitmap where each bit shall represent whether or not an alarm is " +
-                "supported. The value of true means the alarm is supported, otherwise the alarm is not supported." +
+            details: "Indicates a bitmap where each bit shall represent whether or not an alarm is supported. The value " +
+                "of true means the alarm is supported, otherwise the alarm is not supported." +
                 "\n" +
                 "If an alarm is not supported, the corresponding bit in Mask, Latch, and State shall be false.",
             xref: { document: "cluster", section: "1.15.6.4" }

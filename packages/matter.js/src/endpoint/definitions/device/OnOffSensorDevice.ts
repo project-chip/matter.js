@@ -10,7 +10,6 @@ import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definiti
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
 import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
 import {
     LevelControlBehavior as BaseLevelControlBehavior
 } from "../../../behavior/definitions/level-control/LevelControlBehavior.js";
@@ -59,13 +58,6 @@ export namespace OnOffSensorRequirements {
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The Scenes cluster is optional per the Matter specification
-     *
-     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
-     */
-    export const ScenesBehavior = BaseScenesBehavior;
-
-    /**
      * The LevelControl cluster is optional per the Matter specification
      *
      * We provide this alias to the default implementation {@link LevelControlBehavior} for convenience.
@@ -92,7 +84,6 @@ export namespace OnOffSensorRequirements {
 
         optional: {
             Groups: GroupsBehavior,
-            Scenes: ScenesBehavior,
             LevelControl: LevelControlBehavior,
             ColorControl: ColorControlBehavior
         }

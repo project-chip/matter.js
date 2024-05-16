@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { TimeSync } from "../../../cluster/definitions/TimeSyncCluster.js";
+import { TimeSynchronization } from "../../../cluster/definitions/TimeSynchronizationCluster.js";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { TimeSyncInterface } from "./TimeSyncInterface.js";
 
@@ -18,7 +18,7 @@ import { TimeSyncInterface } from "./TimeSyncInterface.js";
  */
 export const TimeSyncBehavior = ClusterBehavior
     .withInterface<TimeSyncInterface>()
-    .for(TimeSync.Cluster);
+    .for(TimeSynchronization.Cluster);
 
 type TimeSyncBehaviorType = InstanceType<typeof TimeSyncBehavior>;
 export interface TimeSyncBehavior extends TimeSyncBehaviorType {}

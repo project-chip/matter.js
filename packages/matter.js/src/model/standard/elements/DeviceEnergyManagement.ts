@@ -281,7 +281,7 @@ export const DeviceEnergyManagement = Cluster({
             name: "EsaType", id: 0x0, type: "ESATypeEnum", access: "R V", conformance: "M", default: 255,
             quality: "F",
 
-            details: "This attribute shall indicate the type of ESA." +
+            details: "Indicates the type of ESA." +
                 "\n" +
                 "This attribute enables an EMS to understand some of the basic properties about how the energy may " +
                 "be consumed, generated, and stored by the ESA." +
@@ -302,9 +302,9 @@ export const DeviceEnergyManagement = Cluster({
             name: "EsaCanGenerate", id: 0x1, type: "bool", access: "R V", conformance: "M", default: true,
             quality: "F",
 
-            details: "This attribute shall indicate whether the ESA is classed as a generator or load. This allows an EMS " +
-                "to understand whether the power values reported by the ESA need to have their sign inverted when " +
-                "dealing with forecasts and adjustments." +
+            details: "Indicates whether the ESA is classed as a generator or load. This allows an EMS to understand " +
+                "whether the power values reported by the ESA need to have their sign inverted when dealing with " +
+                "forecasts and adjustments." +
                 "\n" +
                 "For example, a solar PV inverter (being a generator) may produce positive values to indicate " +
                 "generation, however an EMS when predicting the total home load would need to subtract these " +
@@ -327,7 +327,7 @@ export const DeviceEnergyManagement = Cluster({
             name: "EsaState", id: 0x2, type: "ESAStateEnum", access: "R V", conformance: "M",
             constraint: "desc", default: 0,
 
-            details: "This attribute shall indicate the current state of the ESA." +
+            details: "Indicates the current state of the ESA." +
                 "\n" +
                 "If the ESA is in the Offline or Fault state it cannot be controlled by an EMS, and may not be able " +
                 "to report its Forecast information. An EMS may subscribe to the ESAState to get notified about " +
@@ -343,8 +343,8 @@ export const DeviceEnergyManagement = Cluster({
         Attribute({
             name: "AbsMinPower", id: 0x3, type: "power-mW", access: "R V", conformance: "M", default: 0,
 
-            details: "This attribute shall indicate the minimum electrical power that the ESA can consume when switched " +
-                "on. This does not include when in power save or standby modes." +
+            details: "Indicates the minimum electrical power that the ESA can consume when switched on. This does not " +
+                "include when in power save or standby modes." +
                 "\n" +
                 "Note that for Generator ESAs that can charge an internal battery (such as a battery storage " +
                 "inverter), the AbsMinPower will be a negative number representing the maximum power that the ESA " +
@@ -356,8 +356,7 @@ export const DeviceEnergyManagement = Cluster({
         Attribute({
             name: "AbsMaxPower", id: 0x4, type: "power-mW", access: "R V", conformance: "M", default: 0,
 
-            details: "This attribute shall indicate the maximum electrical power that the ESA can consume when switched " +
-                "on." +
+            details: "Indicates the maximum electrical power that the ESA can consume when switched on." +
                 "\n" +
                 "The value of the AbsMaxPower attribute shall be limited" +
                 "\n" +
@@ -378,8 +377,8 @@ export const DeviceEnergyManagement = Cluster({
             name: "PowerAdjustmentCapability", id: 0x5, type: "list", access: "R V", conformance: "PA",
             constraint: "max 8", default: null, quality: "X",
 
-            details: "This attribute shall indicate how the ESA can be adjusted at the current time. This attribute " +
-                "SHOULD be updated regularly by ESAs." +
+            details: "Indicates how the ESA can be adjusted at the current time. This attribute SHOULD be updated " +
+                "regularly by ESAs." +
                 "\n" +
                 "For example, a battery storage inverter may need to regulate its internal temperature, or the " +
                 "charging rate of the battery may be limited due to cold temperatures, or a change in the state of " +
@@ -419,9 +418,9 @@ export const DeviceEnergyManagement = Cluster({
             name: "OptOutState", id: 0x7, type: "OptOutStateEnum", access: "R V",
             conformance: "PA | STA | PAU | FA | CON", constraint: "desc", default: 0,
 
-            details: "This attribute shall indicate the current Opt-Out state of the ESA. The ESA may have a local user " +
-                "interface to allow the user to control this OptOutState. An EMS may subscribe to the OptOutState to " +
-                "get notified about changes in operational state." +
+            details: "Indicates the current Opt-Out state of the ESA. The ESA may have a local user interface to allow " +
+                "the user to control this OptOutState. An EMS may subscribe to the OptOutState to get notified about " +
+                "changes in operational state." +
                 "\n" +
                 "If the ESA is in the LocalOptOut or OptOut states, so it cannot be controlled by an EMS for local " +
                 "optimization reasons, it shall reject any commands which have the AdjustmentCauseEnum value " +

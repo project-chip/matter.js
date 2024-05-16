@@ -10,10 +10,28 @@ import { fixConformance } from "./fixes.js";
 
 /** String, trimmed with whitespace collapsed */
 export const Str = (el: HTMLElement) => {
-    // Remove footnote references
+    // Remove footnote references.  We can reliably detect these by looking for spans that contain only a single
+    // digit
     for (const child of el.querySelectorAll("span")) {
         if (child.textContent?.match(/^[*0-9]$/)) {
             child.remove();
+        }
+    }
+
+    // Except in some places in 1.2 and 1.3 where the malformatted columns confuse Adobe and it sticks footnotes in the
+    // middle of a symbol.  This we have to go through some contortions to detect correctly
+    for (const child of el.querySelectorAll("p")) {
+        if (
+            // P starts with text
+            child.firstChild?.nodeType === 3 /** TEXT_CONTENT */ &&
+            // Containing a single digit
+            child.firstChild.textContent?.match(/^[0-9]$/) &&
+            // Followed by a span
+            (child.firstChild.nextSibling as Element)?.tagName === "SPAN" &&
+            // That doesn't indicate numeric arity
+            ["st", "nd", "rd", "th"].indexOf(child.firstChild.nextSibling?.textContent as string) === -1
+        ) {
+            child.firstChild?.remove();
         }
     }
 

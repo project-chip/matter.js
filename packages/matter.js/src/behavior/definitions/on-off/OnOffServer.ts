@@ -13,7 +13,7 @@ import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagno
 import { OnOffBehavior } from "./OnOffBehavior.js";
 import { OnWithTimedOffRequest } from "./OnOffInterface.js";
 
-const Base = OnOffBehavior.with(OnOff.Feature.LevelControlForLighting);
+const Base = OnOffBehavior.with(OnOff.Feature.Lighting);
 
 /**
  * This is the default server implementation of {@link OnOffBehavior}.
@@ -27,10 +27,7 @@ export class OnOffServer extends Base {
     protected declare internal: OnOffServer.Internal;
 
     override initialize() {
-        if (
-            this.features.levelControlForLighting &&
-            this.#getBootReason() !== GeneralDiagnostics.BootReason.SoftwareUpdateCompleted
-        ) {
+        if (this.features.lighting && this.#getBootReason() !== GeneralDiagnostics.BootReason.SoftwareUpdateCompleted) {
             const startUpOnOffValue = this.state.startUpOnOff ?? null;
             const currentOnOffStatus = this.state.onOff;
             if (startUpOnOffValue !== null) {
@@ -53,7 +50,7 @@ export class OnOffServer extends Base {
 
     override on(): MaybePromise<void> {
         this.state.onOff = true;
-        if (this.features.levelControlForLighting) {
+        if (this.features.lighting) {
             if (!this.timedOnTimer.isRunning) {
                 if (this.delayedOffTimer.isRunning) {
                     this.delayedOffTimer.stop();
@@ -65,7 +62,7 @@ export class OnOffServer extends Base {
 
     override off(): MaybePromise<void> {
         this.state.onOff = false;
-        if (this.features.levelControlForLighting) {
+        if (this.features.lighting) {
             if (this.timedOnTimer.isRunning) {
                 this.timedOnTimer.stop();
                 if ((this.state.offWaitTime ?? 0) > 0) {

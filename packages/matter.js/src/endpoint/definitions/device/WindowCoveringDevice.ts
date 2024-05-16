@@ -11,7 +11,6 @@ import {
     WindowCoveringServer as BaseWindowCoveringServer
 } from "../../../behavior/definitions/window-covering/WindowCoveringServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
-import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -49,18 +48,11 @@ export namespace WindowCoveringRequirements {
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The Scenes cluster is optional per the Matter specification
-     *
-     * We provide this alias to the default implementation {@link ScenesServer} for convenience.
-     */
-    export const ScenesServer = BaseScenesServer;
-
-    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
         mandatory: { Identify: IdentifyServer, WindowCovering: WindowCoveringServer },
-        optional: { Groups: GroupsServer, Scenes: ScenesServer }
+        optional: { Groups: GroupsServer }
     };
 }
 

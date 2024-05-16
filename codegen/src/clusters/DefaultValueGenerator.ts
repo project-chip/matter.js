@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Metatype, ValueModel } from "@project-chip/matter.js/model";
+import { DefaultValue, Metatype, ValueModel } from "@project-chip/matter.js/model";
 import { Properties } from "@project-chip/matter.js/util";
 import { camelize, serialize } from "../util/string.js";
 import { SpecializedNumbers, WrappedConstantKeys } from "./NumberConstants.js";
@@ -16,7 +16,7 @@ import { TlvGenerator } from "./TlvGenerator.js";
 export class DefaultValueGenerator {
     constructor(private tlv: TlvGenerator) {}
 
-    create(model: ValueModel, defaultValue = model.effectiveDefault) {
+    create(model: ValueModel, defaultValue = DefaultValue(model, true)) {
         // TODO - don't currently have a way to express "this field should default to the value of another field" as
         // indicated by model.default.reference
 

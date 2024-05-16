@@ -48,10 +48,10 @@ export const OperationalState = Cluster({
             name: "PhaseList", id: 0x0, type: "list", access: "R V", conformance: "M",
             constraint: "max 32[max 64]", quality: "X",
 
-            details: "This attribute shall indicate a list of names of different phases that the device can go through " +
-                "for the selected function or mode. The list may not be in sequence order. For example in a washing " +
-                "machine this could include items such as \"pre-soak\", \"rinse\", and \"spin\". These phases are " +
-                "manufacturer specific and may change when a different function or mode is selected." +
+            details: "Indicates a list of names of different phases that the device can go through for the selected " +
+                "function or mode. The list may not be in sequence order. For example in a washing machine this " +
+                "could include items such as \"pre-soak\", \"rinse\", and \"spin\". These phases are manufacturer specific " +
+                "and may change when a different function or mode is selected." +
                 "\n" +
                 "A null value indicates that the device does not present phases during its operation. When this " +
                 "attribute’s value is null, the CurrentPhase attribute shall also be set to null.",
@@ -69,8 +69,7 @@ export const OperationalState = Cluster({
                 "where the first item in that list is an index of 0. Thus, this attribute shall have a maximum value " +
                 "that is \"length(PhaseList) - 1\"." +
                 "\n" +
-                "This attribute shall be null if the PhaseList attribute is null or if the PhaseList attribute is an " +
-                "empty list.",
+                "Null if the PhaseList attribute is null or if the PhaseList attribute is an empty list.",
 
             xref: { document: "cluster", section: "1.14.5.2" }
         }),
@@ -79,10 +78,10 @@ export const OperationalState = Cluster({
             name: "CountdownTime", id: 0x2, type: "elapsed-s", access: "R V", conformance: "O",
             constraint: "max 259200", default: null, quality: "X C",
 
-            details: "This attribute shall represent the estimated time left before the operation is completed, in " +
-                "seconds. Changes to this value shall NOT be reported in a subscription (note the C Quality). A " +
-                "Client implementation may periodically poll this value to ensure alignment of any local rendering " +
-                "of the CountdownTime with the device provided value." +
+            details: "Indicates the estimated time left before the operation is completed, in seconds. Changes to this " +
+                "value shall NOT be reported in a subscription (note the C Quality). A Client implementation may " +
+                "periodically poll this value to ensure alignment of any local rendering of the CountdownTime with " +
+                "the device provided value." +
                 "\n" +
                 "A value of 0 means that the operation has completed." +
                 "\n" +
@@ -432,7 +431,6 @@ export const OperationalState = Cluster({
 
                 Field({
                     name: "ErrorStateLabel", id: 0x1, type: "string", conformance: "desc", constraint: "max 64",
-                    default: "",
                     details: "This field shall be present if the ErrorStateID is from the set reserved for Manufacturer Specific " +
                         "Errors, otherwise it shall NOT be present. If present, this shall contain a human-readable " +
                         "description of the ErrorStateID; e.g. for a manufacturer specific ErrorStateID of \"0x80\" the " +
@@ -442,7 +440,6 @@ export const OperationalState = Cluster({
 
                 Field({
                     name: "ErrorStateDetails", id: 0x2, type: "string", conformance: "O", constraint: "max 64",
-                    default: "",
                     details: "This shall be a human-readable string that provides details about the error condition. As an " +
                         "example, if the ErrorStateID indicates that the device is a Robotic Vacuum that is stuck, the " +
                         "ErrorStateDetails contains \"left wheel blocked\".",

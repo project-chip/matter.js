@@ -44,8 +44,8 @@ export const TimeFormatLocalization = Cluster({
             name: "HourFormat", id: 0x0, type: "HourFormatEnum", access: "RW VM", conformance: "M",
             quality: "N",
 
-            details: "This attribute shall represent the format that the Node is currently configured to use when " +
-                "conveying the hour unit of time." +
+            details: "Indicates the format that the Node is currently configured to use when conveying the hour unit of " +
+                "time." +
                 "\n" +
                 "If not UseActiveLocale, this value shall take priority over any unit implied through the " +
                 "ActiveLocale attribute." +
@@ -60,8 +60,7 @@ export const TimeFormatLocalization = Cluster({
             name: "ActiveCalendarType", id: 0x1, type: "CalendarTypeEnum", access: "RW VM",
             conformance: "CALFMT", constraint: "in supportedCalendarTypes", quality: "N",
 
-            details: "This attribute shall represent the calendar format that the Node is currently configured to use " +
-                "when conveying dates." +
+            details: "Indicates the calendar format that the Node is currently configured to use when conveying dates." +
                 "\n" +
                 "If not UseActiveLocale, this value shall take priority over any unit implied through the " +
                 "ActiveLocale attribute." +
@@ -75,10 +74,10 @@ export const TimeFormatLocalization = Cluster({
         Attribute({
             name: "SupportedCalendarTypes", id: 0x2, type: "list", access: "R V", conformance: "CALFMT",
             constraint: "desc", quality: "F",
-            details: "This attribute shall represent a list of CalendarTypeEnum values that are supported by the Node. " +
-                "The list shall NOT contain any duplicate entries. The ordering of items within the list SHOULD NOT " +
-                "express any meaning. The maximum length of the SupportedCalendarTypes list shall be equivalent to " +
-                "the number of enumerations within CalendarTypeEnum.",
+            details: "Indicates a list of CalendarTypeEnum values that are supported by the Node. The list shall NOT " +
+                "contain any duplicate entries. The ordering of items within the list SHOULD NOT express any " +
+                "meaning. The maximum length of the SupportedCalendarTypes list shall be equivalent to the number of " +
+                "enumerations within CalendarTypeEnum.",
             xref: { document: "core", section: "11.4.6.3" },
             children: [Field({ name: "entry", type: "CalendarTypeEnum" })]
         }),

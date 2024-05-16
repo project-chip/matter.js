@@ -25,7 +25,7 @@ export const LaundryDryerControls = Cluster({
 
         Attribute({
             name: "SupportedDrynessLevels", id: 0x0, type: "list", conformance: "M", constraint: "1 to 4",
-            details: "This attribute shall indicate the list of supported dryness levels available to the appliance in the" +
+            details: "Indicates the list of supported dryness levels available to the appliance in the" +
                 "\n" +
                 "currently selected mode. The dryness level values are determined by the manufacturer. At least one " +
                 "dryness level value shall be provided in the SupportedDrynessLevels list. The list of dryness " +
@@ -38,8 +38,8 @@ export const LaundryDryerControls = Cluster({
             name: "SelectedDrynessLevel", id: 0x1, type: "DrynessLevelEnum", access: "RW VO", conformance: "M",
             constraint: "desc", quality: "X",
 
-            details: "This attribute shall indicate the currently-selected dryness level and it shall be the index into " +
-                "the SupportedDrynessLevels list of the selected dryness level." +
+            details: "Indicates the currently-selected dryness level and it shall be the index into the " +
+                "SupportedDrynessLevels list of the selected dryness level." +
                 "\n" +
                 "If an attempt is made to write this attribute with a value other than null or a value contained in " +
                 "SupportedDrynessLevels, a CONSTRAINT_ERROR response shall be sent as the response. If an attempt is " +

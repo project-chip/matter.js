@@ -9,7 +9,6 @@
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
 import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
-import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
 import {
     LevelControlServer as BaseLevelControlServer
 } from "../../../behavior/definitions/level-control/LevelControlServer.js";
@@ -54,13 +53,6 @@ export namespace HeatingCoolingUnitRequirements {
     export const OnOffServer = BaseOnOffServer;
 
     /**
-     * The Scenes cluster is optional per the Matter specification
-     *
-     * We provide this alias to the default implementation {@link ScenesServer} for convenience.
-     */
-    export const ScenesServer = BaseScenesServer;
-
-    /**
      * The LevelControl cluster is optional per the Matter specification
      *
      * We provide this alias to the default implementation {@link LevelControlServer} for convenience.
@@ -86,7 +78,7 @@ export namespace HeatingCoolingUnitRequirements {
      */
     export const server = {
         mandatory: { Identify: IdentifyServer, Groups: GroupsServer, OnOff: OnOffServer },
-        optional: { Scenes: ScenesServer, LevelControl: LevelControlServer, FanControl: FanControlServer }
+        optional: { LevelControl: LevelControlServer, FanControl: FanControlServer }
     };
 
     /**

@@ -50,8 +50,7 @@ export const EnergyPreference = Cluster({
             name: "EnergyBalances", id: 0x0, type: "list", access: "R V", conformance: "BALA",
             constraint: "2 to 10", quality: "F",
 
-            details: "This attribute shall indicate a list of BalanceStructs, each representing a step along a linear " +
-                "scale" +
+            details: "Indicates a list of BalanceStructs, each representing a step along a linear scale" +
                 "\n" +
                 "of relative priorities. A Step field with a value of zero shall indicate that the device SHOULD " +
                 "entirely favor the priority specified by the first element in EnergyPriorities; whereas a Step " +
@@ -75,9 +74,9 @@ export const EnergyPreference = Cluster({
             name: "CurrentEnergyBalance", id: 0x1, type: "uint8", access: "RW VO", conformance: "BALA",
             quality: "N",
 
-            details: "This attribute shall indicate the current preference of the user for balancing different priorities " +
-                "during device use. The value of this attribute is the index, 0-based, into the EnergyBalances " +
-                "attribute for the currently selected balance." +
+            details: "Indicates the current preference of the user for balancing different priorities during device use. " +
+                "The value of this attribute is the index, 0-based, into the EnergyBalances attribute for the " +
+                "currently selected balance." +
                 "\n" +
                 "If an attempt is made to set this attribute to an index outside the maximum index for " +
                 "EnergyBalances, a response with the status code CONSTRAINT_ERROR shall be returned." +
@@ -102,9 +101,9 @@ export const EnergyPreference = Cluster({
             name: "EnergyPriorities", id: 0x2, type: "list", access: "R V", conformance: "BALA",
             constraint: "2", quality: "F",
 
-            details: "This attribute shall indicate two extremes for interpreting the values in the EnergyBalances " +
-                "attribute. These two priorities shall be in opposition to each other; e.g. Comfort vs. Efficiency " +
-                "or Speed vs. WaterConsumption." +
+            details: "Indicates two extremes for interpreting the values in the EnergyBalances attribute. These two " +
+                "priorities shall be in opposition to each other; e.g. Comfort vs. Efficiency or Speed vs. " +
+                "WaterConsumption." +
                 "\n" +
                 "If the value of EnergyPriorities changes after an update to represent a new balance between " +
                 "priorities, the value of the CurrentEnergyBalance attribute shall be set to its default.",
@@ -117,8 +116,8 @@ export const EnergyPreference = Cluster({
             name: "LowPowerModeSensitivities", id: 0x3, type: "list", access: "R V", conformance: "LPMS",
             constraint: "2 to 10", quality: "F",
 
-            details: "This attribute shall indicate a list of BalanceStructs, each representing a condition or set of " +
-                "conditions for the device to enter a low power mode." +
+            details: "Indicates a list of BalanceStructs, each representing a condition or set of conditions for the " +
+                "device to enter a low power mode." +
                 "\n" +
                 "This shall contain at least two BalanceStructs." +
                 "\n" +
@@ -133,9 +132,9 @@ export const EnergyPreference = Cluster({
             name: "CurrentLowPowerModeSensitivity", id: 0x4, type: "uint8", access: "RW VO",
             conformance: "LPMS", quality: "N",
 
-            details: "This attribute shall indicate the current preference of the user for determining when the device " +
-                "should enter a low power mode. The value of this attribute is the index, 0-based, into the " +
-                "LowPowerModeSensitivities attribute for the currently selected preference." +
+            details: "Indicates the current preference of the user for determining when the device should enter a low " +
+                "power mode. The value of this attribute is the index, 0-based, into the LowPowerModeSensitivities " +
+                "attribute for the currently selected preference." +
                 "\n" +
                 "If an attempt is made to set this attribute to an index outside the maximum index for " +
                 "LowPowerModeSensitivities, a response with the status code CONSTRAINT_ERROR shall be returned." +

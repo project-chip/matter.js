@@ -31,7 +31,7 @@ export const ApplicationBasic = Cluster({
 
         Attribute({
             name: "VendorName", id: 0x0, type: "string", access: "R V", conformance: "O", constraint: "max 32",
-            default: "", quality: "F",
+            quality: "F",
             details: "This attribute shall specify a human readable (displayable) name of the vendor for the Content App.",
             xref: { document: "cluster", section: "6.3.5.1" }
         }),

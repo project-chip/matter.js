@@ -15,7 +15,7 @@ import { Descriptor } from "../cluster/definitions/DescriptorCluster.js";
 import { GeneralCommissioning } from "../cluster/definitions/GeneralCommissioningCluster.js";
 import { NetworkCommissioning } from "../cluster/definitions/NetworkCommissioningCluster.js";
 import { OperationalCredentials } from "../cluster/definitions/OperationalCredentialsCluster.js";
-import { TimeSyncCluster } from "../cluster/definitions/TimeSyncCluster.js";
+import { TimeSynchronizationCluster } from "../cluster/definitions/TimeSynchronizationCluster.js";
 import { MatterError, UnexpectedDataError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { ClusterId } from "../datatype/ClusterId.js";
@@ -208,7 +208,7 @@ export class ControllerCommissioner {
         this.commissioningSteps.push({
             stepNumber: 5,
             subStepNumber: 2,
-            name: "TimeSync.SynchronizeTime",
+            name: "TimeSynchronization.SynchronizeTime",
             stepLogic: () => this.synchronizeTime(),
         });
 
@@ -587,9 +587,11 @@ export class ControllerCommissioner {
     private async synchronizeTime() {
         if (
             this.collectedCommissioningData.rootServerList !== undefined &&
-            this.collectedCommissioningData.rootServerList.find(clusterId => clusterId === TimeSyncCluster.id)
+            this.collectedCommissioningData.rootServerList.find(
+                clusterId => clusterId === TimeSynchronizationCluster.id,
+            )
         ) {
-            logger.debug("TimeSync cluster is supported");
+            logger.debug("TimeSynchronization cluster is supported");
             // TODO: implement
         }
         return {

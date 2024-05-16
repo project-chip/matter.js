@@ -16,7 +16,6 @@ import {
     ColorControlBehavior as BaseColorControlBehavior
 } from "../../../behavior/definitions/color-control/ColorControlBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -73,13 +72,6 @@ export namespace ColorDimmerSwitchRequirements {
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The Scenes cluster is optional per the Matter specification
-     *
-     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
-     */
-    export const ScenesBehavior = BaseScenesBehavior;
-
-    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = { mandatory: { Identify: IdentifyServer } };
@@ -95,7 +87,7 @@ export namespace ColorDimmerSwitchRequirements {
             ColorControl: ColorControlBehavior
         },
 
-        optional: { Groups: GroupsBehavior, Scenes: ScenesBehavior }
+        optional: { Groups: GroupsBehavior }
     };
 }
 

@@ -705,6 +705,14 @@ export const TimeSynchronization = Cluster({
                     xref: { document: "core", section: "11.17.6.7.3" }
                 })
             ]
+        }),
+
+        Datatype({
+            name: "StatusCodeEnum", type: "enum8",
+            xref: { document: "core", section: "11.17.7.1" },
+            children: [
+                Field({ name: "TimeNotAccepted", id: 0x2, description: "Node rejected the attempt to set the UTC time" })
+            ]
         })
     ]
 });

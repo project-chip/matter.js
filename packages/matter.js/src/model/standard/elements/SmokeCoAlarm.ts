@@ -44,12 +44,12 @@ export const SmokeCoAlarm = Cluster({
             name: "ExpressedState", id: 0x0, type: "ExpressedStateEnum", access: "R V", conformance: "M",
             quality: "N",
 
-            details: "This attribute shall indicate the visibly- and audibly-expressed state of the alarm. When multiple " +
-                "alarm conditions are being reflected in the server, this attribute shall indicate the condition " +
-                "with the highest priority. Priority order of conditions is determined by the manufacturer and shall " +
-                "be supplied as a part of certification procedure. If the value of ExpressedState is not Normal, the " +
-                "attribute corresponding to the value shall NOT be Normal. For example, if the ExpressedState is set " +
-                "to SmokeAlarm, the value of the SmokeState will indicate the severity of the alarm (Warning or " +
+            details: "Indicates the visibly- and audibly-expressed state of the alarm. When multiple alarm conditions are " +
+                "being reflected in the server, this attribute shall indicate the condition with the highest " +
+                "priority. Priority order of conditions is determined by the manufacturer and shall be supplied as a " +
+                "part of certification procedure. If the value of ExpressedState is not Normal, the attribute " +
+                "corresponding to the value shall NOT be Normal. For example, if the ExpressedState is set to " +
+                "SmokeAlarm, the value of the SmokeState will indicate the severity of the alarm (Warning or " +
                 "Critical). Clients SHOULD also read the other attributes to be aware of further alarm conditions " +
                 "beyond the one indicated in ExpressedState." +
                 "\n" +
@@ -63,95 +63,93 @@ export const SmokeCoAlarm = Cluster({
         Attribute({
             name: "SmokeState", id: 0x1, type: "AlarmStateEnum", access: "R V", conformance: "SMOKE",
             quality: "N",
-            details: "This attribute shall indicate whether the device’s smoke sensor is currently triggering a smoke " +
-                "alarm.",
+            details: "Indicates whether the device’s smoke sensor is currently triggering a smoke alarm.",
             xref: { document: "cluster", section: "2.11.6.2" }
         }),
 
         Attribute({
             name: "CoState", id: 0x2, type: "AlarmStateEnum", access: "R V", conformance: "CO", quality: "N",
-            details: "This attribute shall indicate whether the device’s CO sensor is currently triggering a CO alarm.",
+            details: "Indicates whether the device’s CO sensor is currently triggering a CO alarm.",
             xref: { document: "cluster", section: "2.11.6.3" }
         }),
 
         Attribute({
             name: "BatteryAlert", id: 0x3, type: "AlarmStateEnum", access: "R V", conformance: "M",
             quality: "N",
-            details: "This attribute shall indicate whether the power resource fault detection mechanism is currently " +
-                "triggered at the device. If the detection mechanism is triggered, this attribute shall be set to " +
-                "Warning or Critical, otherwise it shall be set to Normal. The battery state shall also be reflected " +
-                "in the Power Source cluster representing the device’s battery using the appropriate supported " +
-                "attributes and events.",
+            details: "Indicates whether the power resource fault detection mechanism is currently triggered at the " +
+                "device. If the detection mechanism is triggered, this attribute shall be set to Warning or " +
+                "Critical, otherwise it shall be set to Normal. The battery state shall also be reflected in the " +
+                "Power Source cluster representing the device’s battery using the appropriate supported attributes " +
+                "and events.",
             xref: { document: "cluster", section: "2.11.6.4" }
         }),
 
         Attribute({
             name: "DeviceMuted", id: 0x4, type: "MuteStateEnum", access: "R V", conformance: "O", quality: "N",
-            details: "This attribute shall indicate the whether the audible expression of the device is currently muted. " +
-                "Audible expression is typically a horn or speaker pattern.",
+            details: "Indicates the whether the audible expression of the device is currently muted. Audible expression " +
+                "is typically a horn or speaker pattern.",
             xref: { document: "cluster", section: "2.11.6.5" }
         }),
 
         Attribute({
             name: "TestInProgress", id: 0x5, type: "bool", access: "R V", conformance: "M",
-            details: "This attribute shall indicate whether the device self-test is currently activated. If the device " +
-                "self- test is activated, this attribute shall be set to True, otherwise it shall be set to False.",
+            details: "Indicates whether the device self-test is currently activated. If the device self- test is " +
+                "activated, this attribute shall be set to True, otherwise it shall be set to False.",
             xref: { document: "cluster", section: "2.11.6.6" }
         }),
 
         Attribute({
             name: "HardwareFaultAlert", id: 0x6, type: "bool", access: "R V", conformance: "M", quality: "N",
-            details: "This attribute shall indicate whether the hardware fault detection mechanism is currently " +
-                "triggered. If the detection mechanism is triggered, this attribute shall be set to True, otherwise " +
-                "it shall be set to False.",
+            details: "Indicates whether the hardware fault detection mechanism is currently triggered. If the detection " +
+                "mechanism is triggered, this attribute shall be set to True, otherwise it shall be set to False.",
             xref: { document: "cluster", section: "2.11.6.7" }
         }),
 
         Attribute({
             name: "EndOfServiceAlert", id: 0x7, type: "EndOfServiceEnum", access: "R V", conformance: "M",
             quality: "N",
-            details: "This attribute shall indicate whether the end-of-service has been triggered at the device. This " +
-                "attribute shall be set to Expired when the device reaches the end-of-service.",
+            details: "Indicates whether the end-of-service has been triggered at the device. This attribute shall be set " +
+                "to Expired when the device reaches the end-of-service.",
             xref: { document: "cluster", section: "2.11.6.8" }
         }),
 
         Attribute({
             name: "InterconnectSmokeAlarm", id: 0x8, type: "AlarmStateEnum", access: "R V", conformance: "O",
-            details: "This attribute shall indicate whether the interconnected smoke alarm is currently triggering by " +
-                "branching devices. When the interconnected smoke alarm is being triggered, this attribute shall be " +
-                "set to Warning or Critical, otherwise it shall be set to Normal.",
+            details: "Indicates whether the interconnected smoke alarm is currently triggering by branching devices. When " +
+                "the interconnected smoke alarm is being triggered, this attribute shall be set to Warning or " +
+                "Critical, otherwise it shall be set to Normal.",
             xref: { document: "cluster", section: "2.11.6.9" }
         }),
 
         Attribute({
             name: "InterconnectCoAlarm", id: 0x9, type: "AlarmStateEnum", access: "R V", conformance: "O",
-            details: "This attribute shall indicate whether the interconnected CO alarm is currently triggering by " +
-                "branching devices. When the interconnected CO alarm is being triggered, this attribute shall be set " +
-                "to Warning or Critical, otherwise it shall be set to Normal.",
+            details: "Indicates whether the interconnected CO alarm is currently triggering by branching devices. When " +
+                "the interconnected CO alarm is being triggered, this attribute shall be set to Warning or Critical, " +
+                "otherwise it shall be set to Normal.",
             xref: { document: "cluster", section: "2.11.6.10" }
         }),
 
         Attribute({
             name: "ContaminationState", id: 0xa, type: "ContaminationStateEnum", access: "R V",
             conformance: "[SMOKE]",
-            details: "This attribute shall indicate the contamination level of the smoke sensor.",
+            details: "Indicates the contamination level of the smoke sensor.",
             xref: { document: "cluster", section: "2.11.6.11" }
         }),
 
         Attribute({
             name: "SmokeSensitivityLevel", id: 0xb, type: "SensitivityEnum", access: "RW VM",
             conformance: "[SMOKE]",
-            details: "This attribute shall indicate the sensitivity level of the smoke sensor configured on the device.",
+            details: "Indicates the sensitivity level of the smoke sensor configured on the device.",
             xref: { document: "cluster", section: "2.11.6.12" }
         }),
 
         Attribute({
             name: "ExpiryDate", id: 0xc, type: "epoch-s", access: "R V", conformance: "O", quality: "F",
-            details: "This attribute shall indicate the date when the device reaches its stated expiry date. After the " +
-                "ExpiryDate has been reached, the EndOfServiceAlert shall start to be triggered. To account for " +
-                "better customer experience across time zones, the EndOfServiceAlert may be delayed by up to 24 " +
-                "hours after the ExpiryDate. Similarly, clients may delay any actions based on the ExpiryDate by up " +
-                "to 24 hours to best align with the local time zone.",
+            details: "Indicates the date when the device reaches its stated expiry date. After the ExpiryDate has been " +
+                "reached, the EndOfServiceAlert shall start to be triggered. To account for better customer " +
+                "experience across time zones, the EndOfServiceAlert may be delayed by up to 24 hours after the " +
+                "ExpiryDate. Similarly, clients may delay any actions based on the ExpiryDate by up to 24 hours to " +
+                "best align with the local time zone.",
             xref: { document: "cluster", section: "2.11.6.13" }
         }),
 

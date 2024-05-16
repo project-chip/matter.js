@@ -62,13 +62,12 @@ export const FanControl = Cluster({
             name: "FanMode", id: 0x0, type: "FanModeEnum", access: "RW VO", conformance: "M",
             constraint: "0 to 6", default: 0, quality: "N",
 
-            details: "This attribute shall indicate the current speed mode of the fan. This attribute may be written by " +
-                "the client to request a different fan mode. A server shall return INVALID_IN_STATE to indicate that " +
-                "the fan is not in a state where the FanMode can be changed to the requested value. A server may " +
-                "have FanMode values that it can never be set to. For example, where this cluster appears on the " +
-                "same or another endpoint as other clusters with a system dependency, for example the Thermostat " +
-                "cluster, attempting to set the FanMode attribute of this cluster to Off may not be allowed by the " +
-                "system." +
+            details: "Indicates the current speed mode of the fan. This attribute may be written by the client to request " +
+                "a different fan mode. A server shall return INVALID_IN_STATE to indicate that the fan is not in a " +
+                "state where the FanMode can be changed to the requested value. A server may have FanMode values " +
+                "that it can never be set to. For example, where this cluster appears on the same or another " +
+                "endpoint as other clusters with a system dependency, for example the Thermostat cluster, attempting " +
+                "to set the FanMode attribute of this cluster to Off may not be allowed by the system." +
                 "\n" +
                 "This attribute shall be set to one of the values in FanModeEnum." +
                 "\n" +
@@ -93,10 +92,10 @@ export const FanControl = Cluster({
             name: "PercentSetting", id: 0x2, type: "percent", access: "RW VO", conformance: "M",
             constraint: "0 to 100", default: 0, quality: "X",
 
-            details: "This attribute shall indicate the speed setting for the fan. This attribute may be written by the " +
-                "client to indicate a new fan speed. If the client writes null to this attribute, the attribute " +
-                "value shall NOT change. A server shall return INVALID_IN_STATE to indicate that the fan is not in a " +
-                "state where the PercentSetting can be changed to the requested value." +
+            details: "Indicates the speed setting for the fan. This attribute may be written by the client to indicate a " +
+                "new fan speed. If the client writes null to this attribute, the attribute value shall NOT change. A " +
+                "server shall return INVALID_IN_STATE to indicate that the fan is not in a state where the " +
+                "PercentSetting can be changed to the requested value." +
                 "\n" +
                 "If this is successfully written to 0, the server shall set the FanMode attribute value to Off.",
 
@@ -106,18 +105,18 @@ export const FanControl = Cluster({
         Attribute({
             name: "PercentCurrent", id: 0x3, type: "percent", access: "R V", conformance: "M",
             constraint: "0 to 100",
-            details: "This attribute shall indicate the actual currently operating fan speed, or zero to indicate that " +
-                "the fan is off. There may be a temporary mismatch between the value of this attribute and the value " +
-                "of the PercentSetting attribute due to other system requirements that would not allow the fan to " +
-                "operate at the requested setting. See Percent Rules for more details.",
+            details: "Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There " +
+                "may be a temporary mismatch between the value of this attribute and the value of the PercentSetting " +
+                "attribute due to other system requirements that would not allow the fan to operate at the requested " +
+                "setting. See Percent Rules for more details.",
             xref: { document: "cluster", section: "4.4.6.4" }
         }),
 
         Attribute({
             name: "SpeedMax", id: 0x4, type: "uint8", access: "R V", conformance: "SPD", constraint: "1 to 100",
             quality: "F",
-            details: "This attribute shall indicate that the fan has one speed (value of 1) or the maximum speed, if the " +
-                "fan is capable of multiple speeds.",
+            details: "Indicates that the fan has one speed (value of 1) or the maximum speed, if the fan is capable of " +
+                "multiple speeds.",
             xref: { document: "cluster", section: "4.4.6.5" }
         }),
 
@@ -125,10 +124,10 @@ export const FanControl = Cluster({
             name: "SpeedSetting", id: 0x5, type: "uint8", access: "RW VO", conformance: "SPD",
             constraint: "0 to speedMax", default: 0, quality: "X",
 
-            details: "This attribute shall indicate the speed setting for the fan. This attribute may be written by the " +
-                "client to indicate a new fan speed. If the client writes null to this attribute, the attribute " +
-                "value shall NOT change. A server shall return INVALID_IN_STATE to indicate that the fan is not in a " +
-                "state where the SpeedSetting can be changed to the requested value." +
+            details: "Indicates the speed setting for the fan. This attribute may be written by the client to indicate a " +
+                "new fan speed. If the client writes null to this attribute, the attribute value shall NOT change. A " +
+                "server shall return INVALID_IN_STATE to indicate that the fan is not in a state where the " +
+                "SpeedSetting can be changed to the requested value." +
                 "\n" +
                 "If this is successfully written to 0, the server shall set the FanMode attribute value to Off. " +
                 "Please see the Speed Rules for details on other values.",
@@ -139,10 +138,10 @@ export const FanControl = Cluster({
         Attribute({
             name: "SpeedCurrent", id: 0x6, type: "uint8", access: "R V", conformance: "SPD",
             constraint: "0 to speedMax", quality: "P",
-            details: "This attribute shall indicate the actual currently operating fan speed, or zero to indicate that " +
-                "the fan is off. There may be a temporary mismatch between the value of this attribute and the value " +
-                "of the SpeedSetting attribute due to other system requirements that would not allow the fan to " +
-                "operate at the requested setting.",
+            details: "Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There " +
+                "may be a temporary mismatch between the value of this attribute and the value of the SpeedSetting " +
+                "attribute due to other system requirements that would not allow the fan to operate at the requested " +
+                "setting.",
             xref: { document: "cluster", section: "4.4.6.7" }
         }),
 
@@ -200,9 +199,9 @@ export const FanControl = Cluster({
         Attribute({
             name: "AirflowDirection", id: 0xb, type: "AirflowDirectionEnum", access: "RW VO",
             conformance: "DIR", constraint: "desc", default: 0, quality: "P",
-            details: "This attribute shall indicate the current airflow direction of the fan. This attribute may be " +
-                "written by the client to indicate a new airflow direction for the fan. This attribute shall be set " +
-                "to one of the values in the AirflowDirectionEnum table.",
+            details: "Indicates the current airflow direction of the fan. This attribute may be written by the client to " +
+                "indicate a new airflow direction for the fan. This attribute shall be set to one of the values in " +
+                "the AirflowDirectionEnum table.",
             xref: { document: "cluster", section: "4.4.6.12" }
         }),
 

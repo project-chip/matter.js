@@ -79,19 +79,29 @@ function addFeatureNode(
     }
 
     /**
+     * Extract a feature name.
+     */
+    function extractName(node: Conformance.Ast): string {
+        if (node.type === Conformance.Special.Name) {
+            return node.param;
+        }
+        unsupported();
+        return ""; // Unreachable
+    }
+
+    /**
      * Extract a flag for a single feature.  Fails unless the AST is for NAME or !NAME.
      */
-    function extractFeature(node: Conformance.Ast) {
+    function extractFeatureFlag(node: Conformance.Ast) {
         switch (node.type) {
             case Conformance.Special.Name:
                 return { [node.param]: true };
 
             case Conformance.Operator.NOT:
-                if (node.param.type === Conformance.Special.Name) {
-                    return { [node.param.param]: false };
-                } else {
-                    unsupported();
-                }
+                return { [extractName(node.param)]: false };
+
+            default:
+                unsupported();
         }
     }
 
@@ -106,7 +116,7 @@ function addFeatureNode(
                 break;
 
             default:
-                Object.assign(flags, extractFeature(node));
+                Object.assign(flags, extractFeatureFlag(node));
                 break;
         }
     }
@@ -197,19 +207,33 @@ function addFeatureNode(
             break;
 
         case Conformance.Special.OptionalIf:
-            if (node.param.type === Conformance.AND) {
-                addDependencyRequirement(feature.name, node.param);
-            } else {
-                const flags = FeatureBitmap({ [feature.name]: true });
-                addExclusivityRequirement(flags, node.param);
-                illegal.push(flags);
+            switch (node.param.type) {
+                case Conformance.AND:
+                case Conformance.Special.Name:
+                    addDependencyRequirement(feature.name, node.param);
+                    break;
+
+                case Conformance.OR: {
+                    const flags = FeatureBitmap({ [feature.name]: true });
+                    addExclusivityRequirement(flags, node.param);
+                    illegal.push(flags);
+                    break;
+                }
+
+                case Conformance.Operator.NOT: {
+                    illegal.push({ [feature.name]: true, [extractName(node.param.param)]: true });
+                    break;
+                }
+
+                default:
+                    unsupported();
             }
             break;
 
         case Conformance.Operator.AND: {
             // Handles simple conjunctions like "FOO & BAR" and "(STA|PAU|FA|CON) & !SFR"
             const lhsFeatures = extractDisjunctFeatures(node.param.lhs);
-            const rhsFeature = extractFeature(node.param.rhs);
+            const rhsFeature = extractFeatureFlag(node.param.rhs);
 
             for (const lhsFeature in lhsFeatures) {
                 illegal.push({

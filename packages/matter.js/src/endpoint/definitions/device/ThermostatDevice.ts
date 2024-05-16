@@ -9,7 +9,6 @@
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { ThermostatServer as BaseThermostatServer } from "../../../behavior/definitions/thermostat/ThermostatServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
-import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
 import {
     ThermostatUserInterfaceConfigurationServer as BaseThermostatUserInterfaceConfigurationServer
 } from "../../../behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationServer.js";
@@ -65,13 +64,6 @@ export namespace ThermostatRequirements {
      * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
-
-    /**
-     * The Scenes cluster is optional per the Matter specification
-     *
-     * We provide this alias to the default implementation {@link ScenesServer} for convenience.
-     */
-    export const ScenesServer = BaseScenesServer;
 
     /**
      * The ThermostatUserInterfaceConfiguration cluster is optional per the Matter specification
@@ -131,7 +123,6 @@ export namespace ThermostatRequirements {
 
         optional: {
             Groups: GroupsServer,
-            Scenes: ScenesServer,
             ThermostatUserInterfaceConfiguration: ThermostatUserInterfaceConfigurationServer,
             TimeSync: TimeSyncServer
         }

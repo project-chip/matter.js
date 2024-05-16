@@ -131,10 +131,9 @@ export const ModeSelect = Cluster({
             name: "OnMode", id: 0x5, type: "uint8", access: "RW VO", conformance: "DEPONOFF",
             constraint: "desc", default: null, quality: "X N",
 
-            details: "This attribute shall indicate the value of CurrentMode that depends on the state of the On/Off " +
-                "cluster on the same endpoint. If this attribute is not present or is set to null, it shall NOT have " +
-                "an effect, otherwise the CurrentMode attribute shall depend on the OnOff attribute of the On/Off " +
-                "cluster" +
+            details: "Indicates the value of CurrentMode that depends on the state of the On/Off cluster on the same " +
+                "endpoint. If this attribute is not present or is set to null, it shall NOT have an effect, " +
+                "otherwise the CurrentMode attribute shall depend on the OnOff attribute of the On/Off cluster" +
                 "\n" +
                 "The value of this field shall match the Mode field of one of the entries in the SupportedModes " +
                 "attribute.",

@@ -76,7 +76,7 @@ export const ModeBase = Cluster({
             name: "CurrentMode", id: 0x1, type: "uint8", access: "R V", conformance: "M", constraint: "desc",
             quality: "N S",
 
-            details: "This attribute shall indicate the current mode of the server." +
+            details: "Indicates the current mode of the server." +
                 "\n" +
                 "The value of this field shall match the Mode field of one of the entries in the SupportedModes " +
                 "attribute." +
@@ -93,8 +93,7 @@ export const ModeBase = Cluster({
             name: "StartUpMode", id: 0x2, type: "uint8", access: "RW VO", conformance: "O", constraint: "desc",
             quality: "X N",
 
-            details: "This attribute shall indicate the desired startup mode for the server when it is supplied with " +
-                "power." +
+            details: "Indicates the desired startup mode for the server when it is supplied with power." +
                 "\n" +
                 "If this attribute is not null, the CurrentMode attribute shall be set to the StartUpMode value, " +
                 "when the server is powered up, except in the case when the OnMode attribute overrides the " +
@@ -115,10 +114,9 @@ export const ModeBase = Cluster({
             name: "OnMode", id: 0x3, type: "uint8", access: "RW VO", conformance: "DEPONOFF",
             constraint: "desc", default: null, quality: "X N",
 
-            details: "This attribute shall indicate whether the value of CurrentMode depends on the state of the On/Off " +
-                "cluster on the same endpoint. If this attribute is not present or is set to null, there is no " +
-                "dependency, otherwise the CurrentMode attribute shall depend on the OnOff attribute in the On/Off " +
-                "cluster" +
+            details: "Indicates whether the value of CurrentMode depends on the state of the On/Off cluster on the same " +
+                "endpoint. If this attribute is not present or is set to null, there is no dependency, otherwise the " +
+                "CurrentMode attribute shall depend on the OnOff attribute in the On/Off cluster" +
                 "\n" +
                 "The value of this field shall match the Mode field of one of the entries in the SupportedModes " +
                 "attribute.",

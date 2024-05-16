@@ -39,9 +39,9 @@ export const TargetNavigator = Cluster({
 
         Attribute({
             name: "TargetList", id: 0x0, type: "list", access: "R V", conformance: "M",
-            details: "This attribute shall represent a list of targets that can be navigated to within the experience " +
-                "presented to the user by the Endpoint (Video Player or Content App). The list shall not contain any " +
-                "entries with the same Identifier in the TargetInfoStruct object.",
+            details: "Indicates a list of targets that can be navigated to within the experience presented to the user by " +
+                "the Endpoint (Video Player or Content App). The list shall not contain any entries with the same " +
+                "Identifier in the TargetInfoStruct object.",
             xref: { document: "cluster", section: "6.11.5.1" },
             children: [Field({ name: "entry", type: "TargetInfoStruct" })]
         }),
@@ -49,14 +49,11 @@ export const TargetNavigator = Cluster({
         Attribute({
             name: "CurrentTarget", id: 0x1, type: "uint8", access: "R V", conformance: "O", constraint: "desc",
             default: 0,
-
-            details: "This attribute shall represent the Identifier for the target which is currently in foreground on " +
-                "the corresponding Endpoint (Video Player or Content App), or 0xFF to indicate that no target is in " +
-                "the foreground." +
+            details: "Indicates the Identifier for the target which is currently in foreground on the corresponding " +
+                "Endpoint (Video Player or Content App), or 0xFF to indicate that no target is in the foreground." +
                 "\n" +
                 "When not 0xFF, the CurrentTarget shall be an Identifier value contained within one of the " +
                 "TargetInfoStruct objects in the TargetList attribute.",
-
             xref: { document: "cluster", section: "6.11.5.2" }
         }),
 

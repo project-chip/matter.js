@@ -46,7 +46,7 @@ class DimmableBaseDevice extends extendPublicHandlerMethods<typeof OnOffBaseDevi
                     this.commandHandler,
                     getClusterInitialAttributeValues(
                         attributeInitialValues,
-                        OnOff.Cluster.with(OnOff.Feature.LevelControlForLighting),
+                        OnOff.Cluster.with(OnOff.Feature.Lighting),
                     ),
                     this.isLighting,
                 ),

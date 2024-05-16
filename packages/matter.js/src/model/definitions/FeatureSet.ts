@@ -61,8 +61,8 @@ export namespace FeatureSet {
      * Normalize the feature map and list of supported feature names into sets of "all" and "supported" features by
      * abbreviation.
      *
-     * The input feature set may reference features by short name ("LT") or long name ("levelControlForLighting").  Name
-     * match is case insensitive.
+     * The input feature set may reference features by short name ("LT") or long name ("lighting").  Name match is case
+     * insensitive.
      */
     export function normalize(featureMap: ValueModel, supportedFeatures?: FeatureSet) {
         const featuresAvailable = new FeatureSet();

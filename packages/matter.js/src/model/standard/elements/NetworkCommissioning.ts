@@ -70,8 +70,8 @@ export const NetworkCommissioning = Cluster({
             name: "Networks", id: 0x1, type: "list", access: "R A", conformance: "M",
             constraint: "max maxNetworks", default: [],
 
-            details: "This attribute shall indicate the network configurations that are usable on the network interface " +
-                "represented by this cluster server instance." +
+            details: "Indicates the network configurations that are usable on the network interface represented by this " +
+                "cluster server instance." +
                 "\n" +
                 "The order of configurations in the list reflects precedence. That is, any time the Node attempts to " +
                 "connect to the network it shall attempt to do so using the configurations in Networks Attribute in " +
@@ -93,8 +93,8 @@ export const NetworkCommissioning = Cluster({
         Attribute({
             name: "ScanMaxTimeSeconds", id: 0x2, type: "uint8", access: "R V", conformance: "WI | TH",
             constraint: "desc", quality: "F",
-            details: "This attribute shall indicate the maximum duration taken, in seconds, by the network interface on " +
-                "this cluster server instance to provide scan results." +
+            details: "Indicates the maximum duration taken, in seconds, by the network interface on this cluster server " +
+                "instance to provide scan results." +
                 "\n" +
                 "See Section 11.9.7.1, “ScanNetworks Command” for usage.",
             xref: { document: "core", section: "11.9.6.3" }
@@ -103,11 +103,10 @@ export const NetworkCommissioning = Cluster({
         Attribute({
             name: "ConnectMaxTimeSeconds", id: 0x3, type: "uint8", access: "R V", conformance: "WI | TH",
             constraint: "desc", quality: "F",
-            details: "This attribute shall indicate the maximum duration taken, in seconds, by the network interface on " +
-                "this cluster server instance to report a successful or failed network connection indication. This " +
-                "maximum time shall account for all operations needed until a successful network connection is " +
-                "deemed to have occurred, including, for example, obtaining IP addresses, or the execution of " +
-                "necessary internal retries.",
+            details: "Indicates the maximum duration taken, in seconds, by the network interface on this cluster server " +
+                "instance to report a successful or failed network connection indication. This maximum time shall " +
+                "account for all operations needed until a successful network connection is deemed to have occurred, " +
+                "including, for example, obtaining IP addresses, or the execution of necessary internal retries.",
             xref: { document: "core", section: "11.9.6.4" }
         }),
 
@@ -115,9 +114,8 @@ export const NetworkCommissioning = Cluster({
             name: "InterfaceEnabled", id: 0x4, type: "bool", access: "RW VA", conformance: "M", default: true,
             quality: "N",
 
-            details: "This attribute shall indicate whether the associated network interface is enabled or not. By " +
-                "default all network interfaces SHOULD be enabled during initial commissioning (InterfaceEnabled set " +
-                "to true)." +
+            details: "Indicates whether the associated network interface is enabled or not. By default all network " +
+                "interfaces SHOULD be enabled during initial commissioning (InterfaceEnabled set to true)." +
                 "\n" +
                 "It is undefined what happens if InterfaceEnabled is written to false on the same interface as that " +
                 "which is used to write the value. In that case, it is possible that the Administrator would have to " +
@@ -140,11 +138,10 @@ export const NetworkCommissioning = Cluster({
             name: "LastNetworkingStatus", id: 0x5, type: "NetworkCommissioningStatusEnum", access: "R A",
             conformance: "M", default: null, quality: "X",
 
-            details: "This attribute shall indicate the status of the last attempt either scan or connect to an " +
-                "operational network, using this interface, whether by invocation of the ConnectNetwork command or " +
-                "by autonomous connection after loss of connectivity or during initial establishment. If no such " +
-                "attempt was made, or no network configurations exist in the Networks attribute, then this attribute " +
-                "shall be set to null." +
+            details: "Indicates the status of the last attempt either scan or connect to an operational network, using " +
+                "this interface, whether by invocation of the ConnectNetwork command or by autonomous connection " +
+                "after loss of connectivity or during initial establishment. If no such attempt was made, or no " +
+                "network configurations exist in the Networks attribute, then this attribute shall be set to null." +
                 "\n" +
                 "This attribute is present to assist with error recovery during Network commissioning and to assist " +
                 "in non-concurrent networking commissioning flows.",
@@ -156,11 +153,10 @@ export const NetworkCommissioning = Cluster({
             name: "LastNetworkId", id: 0x6, type: "octstr", access: "R A", conformance: "M",
             constraint: "1 to 32", default: null, quality: "X",
 
-            details: "This attribute shall indicate the NetworkID used in the last attempt to connect to an operational " +
-                "network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous " +
-                "connection after loss of connectivity or during initial establishment. If no such attempt was made, " +
-                "or no network configurations exist in the Networks attribute, then this attribute shall be set to " +
-                "null." +
+            details: "Indicates the NetworkID used in the last attempt to connect to an operational network, using this " +
+                "interface, whether by invocation of the ConnectNetwork command or by autonomous connection after " +
+                "loss of connectivity or during initial establishment. If no such attempt was made, or no network " +
+                "configurations exist in the Networks attribute, then this attribute shall be set to null." +
                 "\n" +
                 "If a network configuration is removed from the Networks attribute using the RemoveNetwork command " +
                 "after a connection attempt, this field may indicate a NetworkID that is no longer configured on the " +
@@ -176,8 +172,8 @@ export const NetworkCommissioning = Cluster({
             name: "LastConnectErrorValue", id: 0x7, type: "int32", access: "R A", conformance: "M",
             default: null, quality: "X",
 
-            details: "This attribute shall indicate the ErrorValue used in the last failed attempt to connect to an " +
-                "operational network, using this interface, whether by invocation of the ConnectNetwork command or by" +
+            details: "Indicates the ErrorValue used in the last failed attempt to connect to an operational network, " +
+                "using this interface, whether by invocation of the ConnectNetwork command or by" +
                 "\n" +
                 "autonomous connection after loss of connectivity or during initial establishment. If no such " +
                 "attempt was made, or no network configurations exist in the Networks attribute, then this attribute " +
@@ -195,8 +191,8 @@ export const NetworkCommissioning = Cluster({
         Attribute({
             name: "SupportedWiFiBands", id: 0x8, type: "list", access: "R V", conformance: "WI",
             constraint: "min 1", quality: "F",
-            details: "This attribute shall indicate all the frequency bands supported by the Wi-Fi interface configured " +
-                "by the cluster instance.",
+            details: "Indicates all the frequency bands supported by the Wi-Fi interface configured by the cluster " +
+                "instance.",
             xref: { document: "core", section: "11.9.6.9" },
             children: [Field({ name: "entry", type: "WiFiBandEnum" })]
         }),
@@ -205,8 +201,8 @@ export const NetworkCommissioning = Cluster({
             name: "SupportedThreadFeatures", id: 0x9, type: "ThreadCapabilitiesBitmap", access: "R V",
             conformance: "TH", quality: "F",
 
-            details: "This attribute shall indicate all of the Thread features supported by the Thread interface " +
-                "configured by the cluster instance." +
+            details: "Indicates all of the Thread features supported by the Thread interface configured by the cluster " +
+                "instance." +
                 "\n" +
                 "This attribute is primarily used to determine the most important general capabilities of the Thread " +
                 "interface associated with the cluster instance, as opposed to the current runtime dynamic " +
@@ -218,8 +214,7 @@ export const NetworkCommissioning = Cluster({
 
         Attribute({
             name: "ThreadVersion", id: 0xa, type: "uint16", access: "R V", conformance: "TH", quality: "F",
-            details: "This attribute shall indicate the Thread version supported by the Thread interface configured by " +
-                "the cluster instance." +
+            details: "Indicates the Thread version supported by the Thread interface configured by the cluster instance." +
                 "\n" +
                 "The format shall match the value mapping found in the \"Version TLV\" section of Thread " +
                 "specification. For example, Thread 1.3.0 would have ThreadVersion set to 4.",

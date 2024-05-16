@@ -50,8 +50,8 @@ export const ValveConfigurationAndControl = Cluster({
         Attribute({
             name: "OpenDuration", id: 0x0, type: "elapsed-s", access: "R V", conformance: "M",
             constraint: "min 1", default: null, quality: "X",
-            details: "This attribute shall indicate the total duration, in seconds, for which the valve will remain open " +
-                "for this current opening." +
+            details: "Indicates the total duration, in seconds, for which the valve will remain open for this current " +
+                "opening." +
                 "\n" +
                 "A value of null shall indicate the duration is not set, meaning that the valve will remain open " +
                 "until closed by the user or some other automation.",
@@ -61,8 +61,8 @@ export const ValveConfigurationAndControl = Cluster({
         Attribute({
             name: "DefaultOpenDuration", id: 0x1, type: "elapsed-s", access: "RW VO", conformance: "M",
             constraint: "min 1", default: null, quality: "X N",
-            details: "This attribute shall indicate the default duration, in seconds, for which the valve will remain " +
-                "open, if the OpenDuration field is not present in the Open command." +
+            details: "Indicates the default duration, in seconds, for which the valve will remain open, if the " +
+                "OpenDuration field is not present in the Open command." +
                 "\n" +
                 "A value of null shall indicate the duration is not set, meaning that the valve will remain open " +
                 "until closed by the user or some other automation.",
@@ -73,10 +73,9 @@ export const ValveConfigurationAndControl = Cluster({
             name: "AutoCloseTime", id: 0x2, type: "epoch-us", access: "R V", conformance: "TS", default: null,
             quality: "X",
 
-            details: "This attribute shall indicate the UTC time when the valve will close, depending on value of the " +
-                "OpenDuration attribute." +
+            details: "Indicates the UTC time when the valve will close, depending on value of the OpenDuration attribute." +
                 "\n" +
-                "This attribute shall be null:" +
+                "Null:" +
                 "\n" +
                 "  • When OpenDuration is null, or" +
                 "\n" +
@@ -99,8 +98,7 @@ export const ValveConfigurationAndControl = Cluster({
             name: "RemainingDuration", id: 0x3, type: "elapsed-s", access: "R V", conformance: "M",
             default: null, quality: "X Q",
 
-            details: "This attribute shall indicate the remaining duration, in seconds, until the valve closes. This " +
-                "attribute shall be null:" +
+            details: "Indicates the remaining duration, in seconds, until the valve closes. Null:" +
                 "\n" +
                 "  • When OpenDuration is null, or" +
                 "\n" +
@@ -132,7 +130,7 @@ export const ValveConfigurationAndControl = Cluster({
         Attribute({
             name: "CurrentState", id: 0x4, type: "ValveStateEnum", access: "R V", conformance: "M",
             default: null, quality: "X",
-            details: "This attribute shall indicate the current state of the valve." +
+            details: "Indicates the current state of the valve." +
                 "\n" +
                 "A value of null shall indicate that the current state is not known.",
             xref: { document: "cluster", section: "4.6.7.5" }
@@ -141,7 +139,7 @@ export const ValveConfigurationAndControl = Cluster({
         Attribute({
             name: "TargetState", id: 0x5, type: "ValveStateEnum", access: "R V", conformance: "M",
             default: null, quality: "X",
-            details: "This attribute shall indicate the target state, while changing the state, of the valve." +
+            details: "Indicates the target state, while changing the state, of the valve." +
                 "\n" +
                 "A value of null shall indicate that no target position is set, since the change in state is either " +
                 "done or failed.",
@@ -152,10 +150,10 @@ export const ValveConfigurationAndControl = Cluster({
             name: "CurrentLevel", id: 0x6, type: "percent", access: "R V", conformance: "LVL", default: null,
             quality: "X",
 
-            details: "This attribute shall indicate the current level of the valve as a percentage value, between fully " +
-                "closed and fully open. During a transition from one level to another level, the valve SHOULD keep " +
-                "this attribute updated to the best of its ability, in order to represent the actual level of the " +
-                "valve during the movement." +
+            details: "Indicates the current level of the valve as a percentage value, between fully closed and fully " +
+                "open. During a transition from one level to another level, the valve SHOULD keep this attribute " +
+                "updated to the best of its ability, in order to represent the actual level of the valve during the " +
+                "movement." +
                 "\n" +
                 "A value of 100 percent shall indicate the fully open position. A value of 0 percent shall indicate " +
                 "the fully closed position." +
@@ -169,8 +167,7 @@ export const ValveConfigurationAndControl = Cluster({
             name: "TargetLevel", id: 0x7, type: "percent", access: "R V", conformance: "LVL", default: null,
             quality: "X",
 
-            details: "This attribute shall indicate the target level of the valve as a percentage value, between fully " +
-                "closed and fully open." +
+            details: "Indicates the target level of the valve as a percentage value, between fully closed and fully open." +
                 "\n" +
                 "The interpretation of the percentage value is the same as for the CurrentLevel attribute." +
                 "\n" +
@@ -184,9 +181,9 @@ export const ValveConfigurationAndControl = Cluster({
             name: "DefaultOpenLevel", id: 0x8, type: "percent", access: "RW VO", conformance: "[LVL]",
             constraint: "1 to 100", default: 100, quality: "N",
 
-            details: "This attribute shall indicate the default value used for the TargetLevel attribute, when a valve " +
-                "transitions from the closed to the open state, caused by an Open command, if a TargetLevel field is " +
-                "not present in the Open command." +
+            details: "Indicates the default value used for the TargetLevel attribute, when a valve transitions from the " +
+                "closed to the open state, caused by an Open command, if a TargetLevel field is not present in the " +
+                "Open command." +
                 "\n" +
                 "If the LevelStep attribute is present and the value of a write interaction to this attribute field " +
                 "is not 100, the value shall be a supported value as defined by the LevelStep attribute, such that " +
@@ -199,7 +196,7 @@ export const ValveConfigurationAndControl = Cluster({
 
         Attribute({
             name: "ValveFault", id: 0x9, type: "ValveFaultBitmap", access: "R V", conformance: "O", default: 0,
-            details: "This attribute shall indicate any faults registered by the valve.",
+            details: "Indicates any faults registered by the valve.",
             xref: { document: "cluster", section: "4.6.7.10" }
         }),
 
@@ -207,7 +204,7 @@ export const ValveConfigurationAndControl = Cluster({
             name: "LevelStep", id: 0xa, type: "uint8", access: "R V", conformance: "[LVL]",
             constraint: "1 to 50", default: 1, quality: "F",
 
-            details: "This attribute shall indicate the step size the valve can support." +
+            details: "Indicates the step size the valve can support." +
                 "\n" +
                 "The step size defined by this attribute is counted from 0 and the final step towards 100 may be " +
                 "different than what is defined in this attribute. For example, if the value of this attribute is " +
@@ -309,6 +306,15 @@ export const ValveConfigurationAndControl = Cluster({
                     description: "Valve is transitioning between closed and open positions or between levels"
                 })
             ]
+        }),
+
+        Datatype({
+            name: "StatusCodeEnum", type: "enum8",
+            xref: { document: "cluster", section: "4.6.6.1" },
+            children: [Field({
+                name: "FailureDueToFault", id: 0x2,
+                description: "The requested action could not be performed due to a fault on the valve."
+            })]
         })
     ]
 });

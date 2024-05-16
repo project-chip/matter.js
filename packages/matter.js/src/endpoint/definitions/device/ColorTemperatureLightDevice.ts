@@ -8,7 +8,6 @@
 
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
-import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
 import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
 import {
     LevelControlServer as BaseLevelControlServer
@@ -45,25 +44,11 @@ export namespace ColorTemperatureLightRequirements {
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The Scenes cluster is required by the Matter specification
-     *
-     * This version of {@link ScenesServer} is specialized per the specification.
-     */
-    export const ScenesServer = BaseScenesServer
-        .alter({
-            commands: {
-                enhancedAddScene: { optional: false },
-                enhancedViewScene: { optional: false },
-                copyScene: { optional: false }
-            }
-        });
-
-    /**
      * The OnOff cluster is required by the Matter specification
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
-    export const OnOffServer = BaseOnOffServer.with("LevelControlForLighting");
+    export const OnOffServer = BaseOnOffServer.with("Lighting");
 
     /**
      * The LevelControl cluster is required by the Matter specification
@@ -96,7 +81,6 @@ export namespace ColorTemperatureLightRequirements {
         mandatory: {
             Identify: IdentifyServer,
             Groups: GroupsServer,
-            Scenes: ScenesServer,
             OnOff: OnOffServer,
             LevelControl: LevelControlServer,
             ColorControl: ColorControlServer
@@ -113,7 +97,6 @@ export const ColorTemperatureLightDeviceDefinition = MutableEndpoint({
     behaviors: SupportedBehaviors(
         ColorTemperatureLightRequirements.server.mandatory.Identify,
         ColorTemperatureLightRequirements.server.mandatory.Groups,
-        ColorTemperatureLightRequirements.server.mandatory.Scenes,
         ColorTemperatureLightRequirements.server.mandatory.OnOff,
         ColorTemperatureLightRequirements.server.mandatory.LevelControl,
         ColorTemperatureLightRequirements.server.mandatory.ColorControl

@@ -10,7 +10,6 @@ import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definiti
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
 import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -53,13 +52,6 @@ export namespace OnOffLightSwitchRequirements {
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The Scenes cluster is optional per the Matter specification
-     *
-     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
-     */
-    export const ScenesBehavior = BaseScenesBehavior;
-
-    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = { mandatory: { Identify: IdentifyServer } };
@@ -69,7 +61,7 @@ export namespace OnOffLightSwitchRequirements {
      */
     export const client = {
         mandatory: { Identify: IdentifyBehavior, OnOff: OnOffBehavior },
-        optional: { Groups: GroupsBehavior, Scenes: ScenesBehavior }
+        optional: { Groups: GroupsBehavior }
     };
 }
 

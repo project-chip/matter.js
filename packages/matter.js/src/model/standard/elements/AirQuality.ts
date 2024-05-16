@@ -50,8 +50,7 @@ export const AirQuality = Cluster({
         Attribute({
             name: "AirQuality", id: 0x0, type: "AirQualityEnum", access: "R V", conformance: "M",
             constraint: "desc", default: 0,
-            details: "This attribute shall indicate a value from AirQualityEnum that is indicative of the currently " +
-                "measured air quality.",
+            details: "Indicates a value from AirQualityEnum that is indicative of the currently measured air quality.",
             xref: { document: "cluster", section: "2.9.6.1" }
         }),
 

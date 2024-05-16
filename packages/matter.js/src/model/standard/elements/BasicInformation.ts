@@ -65,8 +65,8 @@ export const BasicInformation = Cluster({
         Attribute({
             name: "NodeLabel", id: 0x5, type: "string", access: "RW VM", conformance: "M", constraint: "max 32",
             default: "", quality: "N",
-            details: "This attribute shall represent a user defined name for the Node. This attribute SHOULD be set " +
-                "during initial commissioning and may be updated by further reconfigurations.",
+            details: "Indicates a user defined name for the Node. This attribute SHOULD be set during initial " +
+                "commissioning and may be updated by further reconfigurations.",
             xref: { document: "core", section: "11.1.5.6" }
         }),
 
@@ -301,10 +301,10 @@ export const BasicInformation = Cluster({
             name: "MaxPathsPerInvoke", id: 0x16, type: "uint16", access: "R V", conformance: "M",
             constraint: "min 1", default: 1, quality: "F",
 
-            details: "This attribute shall indicate the maximum number of elements in a single InvokeRequests list (see " +
-                "Section 8.8.2, “Invoke Request Action”) that the Node is able to process. Note that since this " +
-                "attribute may change over time, both increasing and decreasing, as software versions change for a " +
-                "given Node, clients SHOULD take care not to assume forever unchanging values and SHOULD NOT" +
+            details: "Indicates the maximum number of elements in a single InvokeRequests list (see Section 8.8.2, " +
+                "“Invoke Request Action”) that the Node is able to process. Note that since this attribute may " +
+                "change over time, both increasing and decreasing, as software versions change for a given Node, " +
+                "clients SHOULD take care not to assume forever unchanging values and SHOULD NOT" +
                 "\n" +
                 "cache this value permanently at Commissioning time." +
                 "\n" +

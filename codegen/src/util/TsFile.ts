@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InternalError } from "@project-chip/matter.js/common";
 import { Specification } from "@project-chip/matter.js/model";
 import { serialize } from "@project-chip/matter.js/util";
 import { readMatterFile, writeMatterFile } from "./file.js";
@@ -616,6 +617,16 @@ export class TsFile extends Block {
     }
 
     addImport(file: string, name?: string) {
+        if (file.startsWith(".")) {
+            if (!file.endsWith(".js")) {
+                throw new InternalError(`Local import of ${file} has no .js suffix`);
+            }
+        }
+
+        if (file.match(/\.[a-z]+\.[a-z]+$/)) {
+            throw new InternalError(`Import of ${file} has multiple suffices`);
+        }
+
         let list = this.imports.get(file);
         if (!list) {
             list = new Array<string>();

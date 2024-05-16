@@ -117,7 +117,7 @@ export const createDefaultOnOffClusterServer = (
     attributeInitialValues?: AttributeInitialValues<typeof OnOff.Complete.attributes>,
     isLighting = false,
 ) => {
-    const cluster = isLighting ? OnOff.Cluster.with(OnOff.Feature.LevelControlForLighting) : OnOff.Cluster;
+    const cluster = isLighting ? OnOff.Cluster.with(OnOff.Feature.Lighting) : OnOff.Cluster;
     return ClusterServer(
         cluster,
         attributeInitialValues ?? {

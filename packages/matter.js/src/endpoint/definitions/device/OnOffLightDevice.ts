@@ -8,7 +8,6 @@
 
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
-import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
 import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
 import {
     LevelControlServer as BaseLevelControlServer
@@ -45,25 +44,11 @@ export namespace OnOffLightRequirements {
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The Scenes cluster is required by the Matter specification
-     *
-     * This version of {@link ScenesServer} is specialized per the specification.
-     */
-    export const ScenesServer = BaseScenesServer
-        .alter({
-            commands: {
-                enhancedAddScene: { optional: false },
-                enhancedViewScene: { optional: false },
-                copyScene: { optional: false }
-            }
-        });
-
-    /**
      * The OnOff cluster is required by the Matter specification
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
-    export const OnOffServer = BaseOnOffServer.with("LevelControlForLighting");
+    export const OnOffServer = BaseOnOffServer.with("Lighting");
 
     /**
      * The LevelControl cluster is optional per the Matter specification
@@ -91,7 +76,7 @@ export namespace OnOffLightRequirements {
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
-        mandatory: { Identify: IdentifyServer, Groups: GroupsServer, Scenes: ScenesServer, OnOff: OnOffServer },
+        mandatory: { Identify: IdentifyServer, Groups: GroupsServer, OnOff: OnOffServer },
         optional: { LevelControl: LevelControlServer }
     };
 
@@ -110,7 +95,6 @@ export const OnOffLightDeviceDefinition = MutableEndpoint({
     behaviors: SupportedBehaviors(
         OnOffLightRequirements.server.mandatory.Identify,
         OnOffLightRequirements.server.mandatory.Groups,
-        OnOffLightRequirements.server.mandatory.Scenes,
         OnOffLightRequirements.server.mandatory.OnOff
     )
 });

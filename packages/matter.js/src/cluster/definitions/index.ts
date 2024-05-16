@@ -8,7 +8,6 @@
 
 export { IdentifyCluster, Identify } from "./IdentifyCluster.js";
 export { GroupsCluster, Groups } from "./GroupsCluster.js";
-export { ScenesCluster, Scenes } from "./ScenesCluster.js";
 export { OnOffCluster, OnOff } from "./OnOffCluster.js";
 export { LevelControlCluster, LevelControl } from "./LevelControlCluster.js";
 export { PulseWidthModulationCluster, PulseWidthModulation } from "./PulseWidthModulationCluster.js";
@@ -80,7 +79,7 @@ export { SoftwareDiagnosticsCluster, SoftwareDiagnostics } from "./SoftwareDiagn
 export { ThreadNetworkDiagnosticsCluster, ThreadNetworkDiagnostics } from "./ThreadNetworkDiagnosticsCluster.js";
 export { WiFiNetworkDiagnosticsCluster, WiFiNetworkDiagnostics } from "./WiFiNetworkDiagnosticsCluster.js";
 export { EthernetNetworkDiagnosticsCluster, EthernetNetworkDiagnostics } from "./EthernetNetworkDiagnosticsCluster.js";
-export { TimeSyncCluster, TimeSync } from "./TimeSyncCluster.js";
+export { TimeSynchronizationCluster, TimeSynchronization } from "./TimeSynchronizationCluster.js";
 export { OperationalCredentialsCluster, OperationalCredentials } from "./OperationalCredentialsCluster.js";
 export { AdministratorCommissioningCluster, AdministratorCommissioning } from "./AdministratorCommissioningCluster.js";
 export { OtaSoftwareUpdateProviderCluster, OtaSoftwareUpdateProvider } from "./OtaSoftwareUpdateProviderCluster.js";

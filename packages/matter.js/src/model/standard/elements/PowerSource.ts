@@ -53,17 +53,17 @@ export const PowerSource = Cluster({
         Attribute({
             name: "Status", id: 0x0, type: "PowerSourceStatusEnum", access: "R V", conformance: "M",
             constraint: "desc",
-            details: "This attribute shall indicate the participation of this power source in providing power to the Node " +
-                "as specified in PowerSourceStatusEnum.",
+            details: "Indicates the participation of this power source in providing power to the Node as specified in " +
+                "PowerSourceStatusEnum.",
             xref: { document: "core", section: "11.7.7.1" }
         }),
 
         Attribute({
             name: "Order", id: 0x1, type: "uint8", access: "R V", conformance: "M", quality: "N",
 
-            details: "This attribute shall indicate the relative preference with which the Node will select this source " +
-                "to provide power. A source with a lower order shall be selected by the Node to provide power before " +
-                "any other source with a higher order, if the lower order source is available (see Status)." +
+            details: "Indicates the relative preference with which the Node will select this source to provide power. A " +
+                "source with a lower order shall be selected by the Node to provide power before any other source " +
+                "with a higher order, if the lower order source is available (see Status)." +
                 "\n" +
                 "Note, Order is read-only and therefore NOT intended to allow clients control over power source " +
                 "selection.",
@@ -83,61 +83,60 @@ export const PowerSource = Cluster({
         Attribute({
             name: "WiredAssessedInputVoltage", id: 0x3, type: "uint32", access: "R V", conformance: "[WIRED]",
             quality: "X C",
-            details: "This attribute shall indicate the assessed RMS or DC voltage currently provided by the hard-wired " +
-                "source, in mV (millivolts). A value of NULL shall indicate the Node is currently unable to assess " +
-                "the value. If the wired source is not connected, but the Node is still able to assess a value, then " +
-                "the assessed value may be reported.",
+            details: "Indicates the assessed RMS or DC voltage currently provided by the hard-wired source, in mV " +
+                "(millivolts). A value of NULL shall indicate the Node is currently unable to assess the value. If " +
+                "the wired source is not connected, but the Node is still able to assess a value, then the assessed " +
+                "value may be reported.",
             xref: { document: "core", section: "11.7.7.4" }
         }),
 
         Attribute({
             name: "WiredAssessedInputFrequency", id: 0x4, type: "uint16", access: "R V", conformance: "[WIRED]",
             quality: "X C",
-            details: "This attribute shall indicate the assessed frequency of the voltage, currently provided by the " +
-                "hard-wired source, in Hz. A value of NULL shall indicate the Node is currently unable to assess the " +
-                "value. If the wired source is not connected, but the Node is still able to assess a value, then the " +
-                "assessed value may be reported.",
+            details: "Indicates the assessed frequency of the voltage, currently provided by the hard-wired source, in " +
+                "Hz. A value of NULL shall indicate the Node is currently unable to assess the value. If the wired " +
+                "source is not connected, but the Node is still able to assess a value, then the assessed value may " +
+                "be reported.",
             xref: { document: "core", section: "11.7.7.5" }
         }),
 
         Attribute({
             name: "WiredCurrentType", id: 0x5, type: "WiredCurrentTypeEnum", access: "R V",
             conformance: "WIRED", constraint: "desc", quality: "F",
-            details: "This attribute shall indicate the type of current the Node expects to be provided by the hard- " +
-                "wired source as specified in WiredCurrentTypeEnum.",
+            details: "Indicates the type of current the Node expects to be provided by the hard- wired source as " +
+                "specified in WiredCurrentTypeEnum.",
             xref: { document: "core", section: "11.7.7.6" }
         }),
 
         Attribute({
             name: "WiredAssessedCurrent", id: 0x6, type: "uint32", access: "R V", conformance: "[WIRED]",
             quality: "X C",
-            details: "This attribute shall indicate the assessed instantaneous current draw of the Node on the hard- " +
-                "wired source, in mA (milliamps). A value of NULL shall indicate the Node is currently unable to " +
-                "assess the value. If the wired source is not connected, but the Node is still able to assess a " +
-                "value, then the assessed value may be reported.",
+            details: "Indicates the assessed instantaneous current draw of the Node on the hard- wired source, in mA " +
+                "(milliamps). A value of NULL shall indicate the Node is currently unable to assess the value. If " +
+                "the wired source is not connected, but the Node is still able to assess a value, then the assessed " +
+                "value may be reported.",
             xref: { document: "core", section: "11.7.7.7" }
         }),
 
         Attribute({
             name: "WiredNominalVoltage", id: 0x7, type: "uint32", access: "R V", conformance: "[WIRED]",
             quality: "F",
-            details: "This attribute shall indicate the nominal voltage, printed as part of the Node’s regulatory " +
-                "compliance label in mV (millivolts), expected to be provided by the hard-wired source.",
+            details: "Indicates the nominal voltage, printed as part of the Node’s regulatory compliance label in mV " +
+                "(millivolts), expected to be provided by the hard-wired source.",
             xref: { document: "core", section: "11.7.7.8" }
         }),
 
         Attribute({
             name: "WiredMaximumCurrent", id: 0x8, type: "uint32", access: "R V", conformance: "[WIRED]",
             quality: "F",
-            details: "This attribute shall indicate the maximum current, printed as part of the Node’s regulatory " +
-                "compliance label in mA (milliamps), expected to be provided by the hard-wired source.",
+            details: "Indicates the maximum current, printed as part of the Node’s regulatory compliance label in mA " +
+                "(milliamps), expected to be provided by the hard-wired source.",
             xref: { document: "core", section: "11.7.7.9" }
         }),
 
         Attribute({
             name: "WiredPresent", id: 0x9, type: "bool", access: "R V", conformance: "[WIRED]",
-            details: "This attribute shall indicate if the Node detects that the hard-wired power source is properly " +
-                "connected.",
+            details: "Indicates if the Node detects that the hard-wired power source is properly connected.",
             xref: { document: "core", section: "11.7.7.10" }
         }),
 
@@ -145,15 +144,15 @@ export const PowerSource = Cluster({
             name: "ActiveWiredFaults", id: 0xa, type: "list", access: "R V", conformance: "[WIRED]",
             constraint: "max 8",
 
-            details: "This attribute shall indicate the set of wired faults currently detected by the Node on this power " +
-                "source. This set is represented as a list of WiredFaultEnum. When the Node detects a fault has been " +
-                "raised, the appropriate WiredFaultEnum value shall be added to this list, provided it is not " +
-                "already present. This list shall NOT contain more than one instance of a specific WiredFaultEnum " +
-                "value. When the Node detects all conditions contributing to a fault have been cleared, the " +
-                "corresponding WiredFaultEnum value shall be removed from this list. An empty list shall indicate " +
-                "there are currently no active faults. The order of this list SHOULD have no significance. Clients " +
-                "interested in monitoring changes in active faults may subscribe to this attribute, or they may " +
-                "subscribe to WiredFaultChange.",
+            details: "Indicates the set of wired faults currently detected by the Node on this power source. This set is " +
+                "represented as a list of WiredFaultEnum. When the Node detects a fault has been raised, the " +
+                "appropriate WiredFaultEnum value shall be added to this list, provided it is not already present. " +
+                "This list shall NOT contain more than one instance of a specific WiredFaultEnum value. When the " +
+                "Node detects all conditions contributing to a fault have been cleared, the corresponding " +
+                "WiredFaultEnum value shall be removed from this list. An empty list shall indicate there are " +
+                "currently no active faults. The order of this list SHOULD have no significance. Clients interested " +
+                "in monitoring changes in active faults may subscribe to this attribute, or they may subscribe to " +
+                "WiredFaultChange.",
 
             xref: { document: "core", section: "11.7.7.11" },
             children: [Field({ name: "entry", type: "WiredFaultEnum" })]
@@ -161,57 +160,55 @@ export const PowerSource = Cluster({
 
         Attribute({
             name: "BatVoltage", id: 0xb, type: "uint32", access: "R V", conformance: "[BAT]", quality: "X C",
-            details: "This attribute shall indicate the currently measured output voltage of the battery in mV " +
-                "(millivolts). A value of NULL shall indicate the Node is currently unable to assess the value.",
+            details: "Indicates the currently measured output voltage of the battery in mV (millivolts). A value of NULL " +
+                "shall indicate the Node is currently unable to assess the value.",
             xref: { document: "core", section: "11.7.7.12" }
         }),
 
         Attribute({
             name: "BatPercentRemaining", id: 0xc, type: "uint8", access: "R V", conformance: "[BAT]",
             constraint: "0 to 200", quality: "X C",
-            details: "This attribute shall indicate the estimated percentage of battery charge remaining until the " +
-                "battery will no longer be able to provide power to the Node. Values are expressed in half percent " +
-                "units, ranging from 0 to 200. E.g. a value of 48 is equivalent to 24%. A value of NULL shall " +
-                "indicate the Node is currently unable to assess the value.",
+            details: "Indicates the estimated percentage of battery charge remaining until the battery will no longer be " +
+                "able to provide power to the Node. Values are expressed in half percent units, ranging from 0 to " +
+                "200. E.g. a value of 48 is equivalent to 24%. A value of NULL shall indicate the Node is currently " +
+                "unable to assess the value.",
             xref: { document: "core", section: "11.7.7.13" }
         }),
 
         Attribute({
             name: "BatTimeRemaining", id: 0xd, type: "uint32", access: "R V", conformance: "[BAT]",
             quality: "X C",
-            details: "This attribute shall indicate the estimated time in seconds before the battery will no longer be " +
-                "able to provide power to the Node. A value of NULL shall indicate the Node is currently unable to " +
-                "assess the value.",
+            details: "Indicates the estimated time in seconds before the battery will no longer be able to provide power " +
+                "to the Node. A value of NULL shall indicate the Node is currently unable to assess the value.",
             xref: { document: "core", section: "11.7.7.14" }
         }),
 
         Attribute({
             name: "BatChargeLevel", id: 0xe, type: "BatChargeLevelEnum", access: "R V", conformance: "BAT",
             constraint: "desc",
-            details: "This attribute shall indicate a coarse ranking of the charge level of the battery, used to indicate " +
-                "when intervention is required as specified in BatChargeLevelEnum.",
+            details: "Indicates a coarse ranking of the charge level of the battery, used to indicate when intervention " +
+                "is required as specified in BatChargeLevelEnum.",
             xref: { document: "core", section: "11.7.7.15" }
         }),
 
         Attribute({
             name: "BatReplacementNeeded", id: 0xf, type: "bool", access: "R V", conformance: "BAT",
-            details: "This attribute shall indicate if the battery needs to be replaced. Replacement may be simple " +
-                "routine maintenance, such as with a single use, non-rechargeable cell. Replacement, however, may " +
-                "also indicate end of life, or serious fault with a rechargeable or even non-replaceable cell.",
+            details: "Indicates if the battery needs to be replaced. Replacement may be simple routine maintenance, such " +
+                "as with a single use, non-rechargeable cell. Replacement, however, may also indicate end of life, " +
+                "or serious fault with a rechargeable or even non-replaceable cell.",
             xref: { document: "core", section: "11.7.7.16" }
         }),
 
         Attribute({
             name: "BatReplaceability", id: 0x10, type: "BatReplaceabilityEnum", access: "R V",
             conformance: "BAT", quality: "F",
-            details: "This attribute shall indicate the replaceability of the battery as specified in " +
-                "BatReplaceabilityEnum.",
+            details: "Indicates the replaceability of the battery as specified in BatReplaceabilityEnum.",
             xref: { document: "core", section: "11.7.7.17" }
         }),
 
         Attribute({
             name: "BatPresent", id: 0x11, type: "bool", access: "R V", conformance: "[BAT]",
-            details: "This attribute shall indicate whether the Node detects that the batteries are properly installed.",
+            details: "Indicates whether the Node detects that the batteries are properly installed.",
             xref: { document: "core", section: "11.7.7.18" }
         }),
 
@@ -219,15 +216,14 @@ export const PowerSource = Cluster({
             name: "ActiveBatFaults", id: 0x12, type: "list", access: "R V", conformance: "[BAT]",
             constraint: "max 8",
 
-            details: "This attribute shall indicate the set of battery faults currently detected by the Node on this " +
-                "power source. This set is represented as a list of BatFaultEnum. When the Node detects a fault has " +
-                "been raised, the appropriate BatFaultEnum value shall be added to this list, provided it is not " +
-                "already present. This list shall NOT contain more than one instance of a specific BatFaultEnum " +
-                "value. When the Node detects all conditions contributing to a fault have been cleared, the " +
-                "corresponding BatFaultEnum value shall be removed from this list. An empty list shall indicate " +
-                "there are currently no active faults. The order of this list SHOULD have no significance. Clients " +
-                "interested in monitoring changes in active faults may subscribe to this attribute, or they may " +
-                "subscribe to BatFaultChange.",
+            details: "Indicates the set of battery faults currently detected by the Node on this power source. This set " +
+                "is represented as a list of BatFaultEnum. When the Node detects a fault has been raised, the " +
+                "appropriate BatFaultEnum value shall be added to this list, provided it is not already present. " +
+                "This list shall NOT contain more than one instance of a specific BatFaultEnum value. When the Node " +
+                "detects all conditions contributing to a fault have been cleared, the corresponding BatFaultEnum " +
+                "value shall be removed from this list. An empty list shall indicate there are currently no active " +
+                "faults. The order of this list SHOULD have no significance. Clients interested in monitoring " +
+                "changes in active faults may subscribe to this attribute, or they may subscribe to BatFaultChange.",
 
             xref: { document: "core", section: "11.7.7.19" },
             children: [Field({ name: "entry", type: "BatFaultEnum" })]
@@ -245,78 +241,75 @@ export const PowerSource = Cluster({
         Attribute({
             name: "BatCommonDesignation", id: 0x14, type: "BatCommonDesignationEnum", access: "R V",
             conformance: "[REPLC]", constraint: "desc", quality: "F",
-            details: "This attribute shall indicate the ID of the common or colloquial designation of the battery, as " +
-                "specified in BatCommonDesignationEnum.",
+            details: "Indicates the ID of the common or colloquial designation of the battery, as specified in " +
+                "BatCommonDesignationEnum.",
             xref: { document: "core", section: "11.7.7.21" }
         }),
 
         Attribute({
             name: "BatAnsiDesignation", id: 0x15, type: "string", access: "R V", conformance: "[REPLC]",
             constraint: "max 20", quality: "F",
-            details: "This attribute shall indicate the string representing the ANSI designation for the battery as " +
-                "specified in ANSI C18.",
+            details: "Indicates the string representing the ANSI designation for the battery as specified in ANSI C18.",
             xref: { document: "core", section: "11.7.7.22" }
         }),
 
         Attribute({
             name: "BatIecDesignation", id: 0x16, type: "string", access: "R V", conformance: "[REPLC]",
             constraint: "max 20", quality: "F",
-            details: "This attribute shall indicate the string representing the IEC designation for the battery as " +
-                "specified in IEC 60086.",
+            details: "Indicates the string representing the IEC designation for the battery as specified in IEC 60086.",
             xref: { document: "core", section: "11.7.7.23" }
         }),
 
         Attribute({
             name: "BatApprovedChemistry", id: 0x17, type: "BatApprovedChemistryEnum", access: "R V",
             conformance: "[REPLC]", constraint: "desc", quality: "F",
-            details: "This attribute shall indicate the ID of the preferred chemistry of the battery source as specified " +
-                "in BatApprovedChemistryEnum.",
+            details: "Indicates the ID of the preferred chemistry of the battery source as specified in " +
+                "BatApprovedChemistryEnum.",
             xref: { document: "core", section: "11.7.7.24" }
         }),
 
         Attribute({
             name: "BatCapacity", id: 0x18, type: "uint32", access: "R V", conformance: "[REPLC | RECHG]",
             quality: "F",
-            details: "This attribute shall indicate the preferred minimum charge capacity rating in mAh of individual, " +
-                "user- or factory-serviceable battery cells or packs in the battery source.",
+            details: "Indicates the preferred minimum charge capacity rating in mAh of individual, user- or " +
+                "factory-serviceable battery cells or packs in the battery source.",
             xref: { document: "core", section: "11.7.7.25" }
         }),
 
         Attribute({
             name: "BatQuantity", id: 0x19, type: "uint8", access: "R V", conformance: "REPLC", quality: "F",
-            details: "This attribute shall indicate the quantity of individual, user- or factory-serviceable battery " +
-                "cells or packs in the battery source.",
+            details: "Indicates the quantity of individual, user- or factory-serviceable battery cells or packs in the " +
+                "battery source.",
             xref: { document: "core", section: "11.7.7.26" }
         }),
 
         Attribute({
             name: "BatChargeState", id: 0x1a, type: "BatChargeStateEnum", access: "R V", conformance: "RECHG",
             constraint: "desc",
-            details: "This attribute shall indicate the current state of the battery source with respect to charging as " +
-                "specified in BatChargeStateEnum.",
+            details: "Indicates the current state of the battery source with respect to charging as specified in " +
+                "BatChargeStateEnum.",
             xref: { document: "core", section: "11.7.7.27" }
         }),
 
         Attribute({
             name: "BatTimeToFullCharge", id: 0x1b, type: "uint32", access: "R V", conformance: "[RECHG]",
             quality: "X C",
-            details: "This attribute shall indicate the estimated time in seconds before the battery source will be at " +
-                "full charge. A value of NULL shall indicate the Node is currently unable to assess the value.",
+            details: "Indicates the estimated time in seconds before the battery source will be at full charge. A value " +
+                "of NULL shall indicate the Node is currently unable to assess the value.",
             xref: { document: "core", section: "11.7.7.28" }
         }),
 
         Attribute({
             name: "BatFunctionalWhileCharging", id: 0x1c, type: "bool", access: "R V", conformance: "RECHG",
-            details: "This attribute shall indicate whether the Node can remain operational while the battery source is " +
-                "charging.",
+            details: "Indicates whether the Node can remain operational while the battery source is charging.",
             xref: { document: "core", section: "11.7.7.29" }
         }),
 
         Attribute({
             name: "BatChargingCurrent", id: 0x1d, type: "uint32", access: "R V", conformance: "[RECHG]",
             quality: "X C",
-            details: "This attribute shall indicate assessed current in mA (milliamps) presently supplied to charge the " +
-                "battery source. A value of NULL shall indicate the Node is currently unable to assess the value.",
+            details: "Indicates assessed current in mA (milliamps) presently supplied to charge the battery source. A " +
+                "value of NULL shall indicate the Node is currently unable to assess the value.",
             xref: { document: "core", section: "11.7.7.30" }
         }),
 
@@ -324,15 +317,15 @@ export const PowerSource = Cluster({
             name: "ActiveBatChargeFaults", id: 0x1e, type: "list", access: "R V", conformance: "[RECHG]",
             constraint: "max 16",
 
-            details: "This attribute shall indicate the set of charge faults currently detected by the Node on this power " +
-                "source. This set is represented as a list of BatChargeFaultEnum. When the Node detects a fault has " +
-                "been raised, the appropriate BatChargeFaultEnum value shall be added to this list, provided it is " +
-                "not already present. This list shall NOT contain more than one instance of a specific " +
-                "BatChargeFaultEnum value. When the Node detects all conditions contributing to a fault have been " +
-                "cleared, the corresponding BatChargeFaultEnum value shall be removed from this list. An empty list " +
-                "shall indicate there are currently no active faults. The order of this list SHOULD have no " +
-                "significance. Clients interested in monitoring changes in active faults may subscribe to this " +
-                "attribute, or they may subscribe to the BatFaultChange event.",
+            details: "Indicates the set of charge faults currently detected by the Node on this power source. This set is " +
+                "represented as a list of BatChargeFaultEnum. When the Node detects a fault has been raised, the " +
+                "appropriate BatChargeFaultEnum value shall be added to this list, provided it is not already " +
+                "present. This list shall NOT contain more than one instance of a specific BatChargeFaultEnum value. " +
+                "When the Node detects all conditions contributing to a fault have been cleared, the corresponding " +
+                "BatChargeFaultEnum value shall be removed from this list. An empty list shall indicate there are " +
+                "currently no active faults. The order of this list SHOULD have no significance. Clients interested " +
+                "in monitoring changes in active faults may subscribe to this attribute, or they may subscribe to " +
+                "the BatFaultChange event.",
 
             xref: { document: "core", section: "11.7.7.31" },
             children: [Field({ name: "entry", type: "BatChargeFaultEnum" })]
@@ -341,10 +334,9 @@ export const PowerSource = Cluster({
         Attribute({
             name: "EndpointList", id: 0x1f, type: "list", access: "R V", conformance: "M",
 
-            details: "This attribute shall indicate a list of endpoints that are powered by the source defined by this " +
-                "cluster. Multiple instances of this cluster may list the same endpoint, because it is possible for " +
-                "power for an endpoint to come from multiple sources. In that case the Order attribute indicates " +
-                "their priority." +
+            details: "Indicates a list of endpoints that are powered by the source defined by this cluster. Multiple " +
+                "instances of this cluster may list the same endpoint, because it is possible for power for an " +
+                "endpoint to come from multiple sources. In that case the Order attribute indicates their priority." +
                 "\n" +
                 "For each power source on a node, there shall only be one instance of this cluster." +
                 "\n" +
