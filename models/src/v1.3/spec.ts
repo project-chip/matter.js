@@ -3654,6 +3654,30 @@ export const SpecMatter = Matter({
                 }),
 
                 Datatype({
+                    name: "GeneralErrorStateEnum", type: "enum8",
+                    details: "The following table defines the generally applicable ErrorState values.",
+                    xref: { document: "cluster", section: "1.14.4.3.1" },
+
+                    children: [
+                        Field({
+                            name: "NoError", id: 0x0, conformance: "M", description: "The device is not in an error state"
+                        }),
+                        Field({
+                            name: "UnableToStartOrResume", id: 0x1, conformance: "M",
+                            description: "The device is unable to start or resume operation"
+                        }),
+                        Field({
+                            name: "UnableToCompleteOperation", id: 0x2, conformance: "M",
+                            description: "The device was unable to complete the current operation"
+                        }),
+                        Field({
+                            name: "CommandInvalidInState", id: 0x3, conformance: "M",
+                            description: "The device cannot process the command in its current state"
+                        })
+                    ]
+                }),
+
+                Datatype({
                     name: "ErrorStateStruct", type: "struct",
                     xref: { document: "cluster", section: "1.14.4.4" },
 

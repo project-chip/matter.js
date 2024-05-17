@@ -6,7 +6,7 @@
 
 import { camelize } from "../../util/string.js";
 import { Words } from "../../util/words.js";
-import { fixConformance } from "./fixes.js";
+import { repairConformance } from "./repairs/aspect-repairs.js";
 
 /** String, trimmed with whitespace collapsed */
 export const Str = (el: HTMLElement) => {
@@ -150,7 +150,7 @@ export const Identifier = (el: HTMLElement) => {
 };
 
 /** Conformance definition */
-export const ConformanceCode = (el: HTMLElement) => fixConformance(Code(el));
+export const ConformanceCode = (el: HTMLElement) => repairConformance(Code(el));
 
 /** Identifier, all lowercase.  Used for matching so "_" removed */
 export const LowerIdentifier = (el: HTMLElement) => Identifier(el).toLowerCase();

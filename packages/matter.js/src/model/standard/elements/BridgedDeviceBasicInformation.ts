@@ -47,7 +47,6 @@ export const BridgedDeviceBasicInformation = Cluster({
     xref: { document: "core", section: "9.13" },
 
     children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
         Attribute({
             name: "DataModelRevision", id: 0x0, conformance: "X",
             xref: { document: "core", section: "9.13.4" }

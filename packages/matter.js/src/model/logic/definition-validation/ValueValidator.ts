@@ -9,6 +9,7 @@ import { DefinitionError, FieldValue, Metatype } from "../../definitions/index.j
 import { ClusterModel, ValueModel } from "../../models/index.js";
 import * as Elements from "../../standard/elements/index.js";
 import { ModelValidator } from "./ModelValidator.js";
+import { ValidationExceptions } from "./ValidationExceptions.js";
 
 /**
  * Validates models that extend DataModel.
@@ -144,16 +145,24 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
                 : (Elements as unknown as Record<string, ValueModel>)[this.model.type]?.metatype;
         switch (metatype) {
             case Metatype.object:
-                if (this.model.metatype || !this.model.children.length) {
+                if (!this.model.children.length) {
                     this.error("CHILDLESS_STRUCT", `struct element with no children`);
                 }
                 break;
 
             case Metatype.enum:
             case Metatype.bitmap:
-                if (!this.model.children.length && !this.model.isSeed) {
+                // Only validate models that inherit directly from base enum types
+                const base = this.model.base;
+                if (!base || !base.isSeed || !base.name.startsWith("enum") || this.model.parent?.name === "semtag") {
+                    break;
+                }
+
+                // Model must have members unless there is an explicit exception
+                if (!this.model.members.length && !ValidationExceptions.AllowedEmptyEnums.has(this.model.path)) {
                     this.error(`CHILDLESS_${metatype.toUpperCase()}`, `${this.model.type} with no children`);
                 }
+
                 if (metatype == Metatype.enum) {
                     this.validateEnumKeys();
                 } else {

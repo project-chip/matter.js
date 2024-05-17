@@ -6,8 +6,8 @@
 
 import { InternalError } from "@project-chip/matter.js/common";
 import { AttributeElement, DatatypeElement, FieldElement, Metatype, ValueElement } from "@project-chip/matter.js/model";
-import { fixTypeIdentifier } from "./fixes.js";
 import { ByteSize, Identifier, Integer, Str } from "./html-translators.js";
+import { repairTypeIdentifier } from "./repairs/type-repairs.js";
 import { GlobalReference } from "./spec-types.js";
 import {
     FieldRecord,
@@ -106,8 +106,8 @@ function* translateDatatypes(ref: GlobalReference): Generator<DatatypeElement> {
                 return;
             }
 
-            name = fixTypeIdentifier(name);
-            type = fixTypeIdentifier(type);
+            name = repairTypeIdentifier(name);
+            type = repairTypeIdentifier(type);
 
             const element = DatatypeElement({
                 name,

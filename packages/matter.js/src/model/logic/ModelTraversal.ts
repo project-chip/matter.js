@@ -34,6 +34,11 @@ export class ModelTraversal {
         if (this.operationDepth > OPERATION_DEPTH_LIMIT) {
             throw new InternalError("Likely cycle detected (or OPERATION_DEPTH_LIMIT needs to be bumped)");
         }
+
+        if (toDismiss && this.dismissed?.has(toDismiss)) {
+            toDismiss = undefined;
+        }
+
         if (toDismiss) {
             if (!this.dismissed) {
                 this.dismissed = new Set();
@@ -137,10 +142,25 @@ export class ModelTraversal {
      * Find the model a model derives from, if any.
      */
     findBase(model: Model | undefined): Model | undefined {
+        if (!model) {
+            return;
+        }
+
         return this.operationWithDismissal(model, () => {
-            if (!model) {
-                return;
+            // If I override another element (same identity and tag in parent's inheritance hierarchy) then I implicitly
+            // inherit from the shadow.
+            //
+            // Semantics would be wonky if the model designates a different type than the shadow, but we support this by
+            // ignoring the shadow in this case.
+            const shadow = this.findShadow(model);
+            if (
+                shadow !== undefined &&
+                (model.type === undefined || model.type === shadow.type || model.type === shadow.name)
+            ) {
+                return shadow;
             }
+
+            // Obtain the name of my base type
             const type = this.getTypeName(model);
             if (type === undefined) {
                 return;
@@ -283,15 +303,6 @@ export class ModelTraversal {
         return this.operation(() => {
             let aspect = (model as any)[symbol] as Aspect<any> | undefined;
 
-            const shadowedAspect = this.findAspect(this.findShadow(model), symbol);
-            if (shadowedAspect) {
-                if (aspect) {
-                    aspect = shadowedAspect.extend(aspect);
-                } else {
-                    aspect = shadowedAspect;
-                }
-            }
-
             const inheritedAspect = this.findAspect(this.findBase(model), symbol);
             if (inheritedAspect) {
                 if (aspect) {
@@ -407,7 +418,7 @@ export class ModelTraversal {
     }
 
     /**
-     * Retrieve all children of a specific type, inherited or otherwise.
+     * Retrieve all children of a specific type, inherited, shadowed or otherwise.
      */
     findMembers(scope: Model, allowedTags: ElementTag[]) {
         const members = Array<Model>();

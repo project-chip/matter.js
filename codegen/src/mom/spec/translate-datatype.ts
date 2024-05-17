@@ -8,8 +8,10 @@ import { FabricIndex } from "@project-chip/matter.js/elements/FabricIndex";
 import { Logger } from "@project-chip/matter.js/log";
 import { AnyElement, DatatypeElement, FieldElement, Metatype } from "@project-chip/matter.js/model";
 import { addDocumentation } from "./add-documentation.js";
-import { fixConstraintErrors, fixDefaultErrors, fixTypeErrors, fixTypeIdentifier } from "./fixes.js";
 import { Bits, ConformanceCode, Identifier, Integer, LowerIdentifier, NoSpace, Str } from "./html-translators.js";
+import { repairConstraint } from "./repairs/aspect-repairs.js";
+import { repairDefaultValue } from "./repairs/default-value-repairs.js";
+import { repairType, repairTypeIdentifier } from "./repairs/type-repairs.js";
 import { HtmlReference } from "./spec-types.js";
 import {
     Alias,
@@ -27,7 +29,7 @@ const logger = Logger.get("translate-cluster");
  * Translate the HTML description of a datatype into a DatatypeElement.
  */
 export function translateDatatype(definition: HtmlReference): DatatypeElement | undefined {
-    let name = fixTypeIdentifier(definition.name);
+    let name = repairTypeIdentifier(definition.name);
 
     const text = definition.prose?.[0] ? Str(definition.prose?.[0]) : undefined;
     if (!text) {
@@ -60,7 +62,7 @@ export function translateDatatype(definition: HtmlReference): DatatypeElement | 
 
     let description: string | undefined;
 
-    type = fixTypeIdentifier(type);
+    type = repairTypeIdentifier(type);
 
     if (name.match(/enum$/i) || type?.match(/^enum/i)) {
         if (name === "StatusCodeEnum") {
@@ -151,9 +153,9 @@ export function translateFields<T extends AnyElement.Type<FieldRecord>>(
     let records = translateTable(type.Tag, fields, FieldSchema);
 
     records = records.filter(r => {
-        fixTypeErrors(r);
-        fixConstraintErrors(r);
-        fixDefaultErrors(r);
+        repairType(r);
+        repairConstraint(r);
+        repairDefaultValue(r);
 
         return true;
     });

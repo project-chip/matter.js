@@ -1317,7 +1317,10 @@ export const Thermostat = Cluster({
                 Field({
                     name: "Heat", id: 0x4, conformance: "[HEAT]", description: "Demand is only generated for Heating"
                 }),
-                Field({ name: "EmergencyHeat", id: 0x5, conformance: "[HEAT]" }),
+                Field({
+                    name: "EmergencyHeat", id: 0x5, conformance: "[HEAT]",
+                    description: "2nd stage heating is in use to achieve desired temperature"
+                }),
                 Field({ name: "Precooling", id: 0x6, conformance: "[COOL]", description: "(see Terms)" }),
                 Field({ name: "FanOnly", id: 0x7, conformance: "O" }),
                 Field({ name: "Dry", id: 0x8, conformance: "O" }),

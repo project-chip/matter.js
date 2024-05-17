@@ -6,7 +6,7 @@
 
 import { InternalError } from "../../common/MatterError.js";
 import { camelize } from "../../util/String.js";
-import { DefinitionError, ElementTag, Specification } from "../definitions/index.js";
+import { DefinitionError, ElementTag, Metatype, Specification } from "../definitions/index.js";
 import { AnyElement, BaseElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Children } from "./Children.js";
@@ -64,17 +64,25 @@ export abstract class Model {
             if (this.parent.tag === ElementTag.Cluster) {
                 switch (this.tag) {
                     case ElementTag.Attribute:
-                        return `${this.parent.path}.state.${camelize(this.name)}`;
+                        return `${this.parent.path}.state.${camelize(this.name, false)}`;
 
                     case ElementTag.Command:
-                        return `${this.parent.path}.${camelize(this.name)}`;
+                        return `${this.parent.path}.${camelize(this.name, false)}`;
 
                     case ElementTag.Event:
-                        return `${this.parent.path}.events.${camelize(this.name)}`;
+                        return `${this.parent.path}.events.${camelize(this.name, false)}`;
                 }
             }
 
-            return `${this.parent.path}.${this.name}`;
+            const parent = this.parent;
+            if (parent.tag !== ElementTag.Cluster) {
+                const parentMetatype = (parent as { effectiveMetatype?: Metatype })?.effectiveMetatype;
+                if (parentMetatype === Metatype.object || parentMetatype === Metatype.array) {
+                    return `${parent.path}.${camelize(this.name, false)}`;
+                }
+            }
+
+            return `${parent.path}.${this.name}`;
         } else {
             return this.name;
         }

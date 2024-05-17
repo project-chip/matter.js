@@ -158,9 +158,19 @@ export const WindowCovering = Cluster({
         }),
 
         Attribute({
-            name: "2Cent100ths", id: 0xc, type: "percent100ths", access: "R V", conformance: "TL & PA_TL",
-            default: null, quality: "X S P",
-            xref: { document: "cluster", section: "5.3.6" }
+            name: "TargetPositionLiftPercent100ths", id: 0xb, type: "percent100ths", access: "R V",
+            conformance: "LF & PA_LF", default: null, quality: "X S P",
+            details: "Indicates the position where the window covering lift will go or is moving to as a percentage (Unit " +
+                "0.01%).",
+            xref: { document: "cluster", section: "5.3.6.14" }
+        }),
+
+        Attribute({
+            name: "TargetPositionTiltPercent100ths", id: 0xc, type: "percent100ths", access: "R V",
+            conformance: "TL & PA_TL", default: null, quality: "X S P",
+            details: "Indicates the position where the window covering tilt will go or is moving to as a percentage (Unit " +
+                "0.01%).",
+            xref: { document: "cluster", section: "5.3.6.15" }
         }),
 
         Attribute({
@@ -174,9 +184,19 @@ export const WindowCovering = Cluster({
         }),
 
         Attribute({
-            name: "1Cent100ths", id: 0xf, type: "percent100ths", access: "R V", conformance: "TL & PA_TL",
-            constraint: "0 to 10000", default: null, quality: "X N P",
-            xref: { document: "cluster", section: "5.3.6" }
+            name: "CurrentPositionLiftPercent100ths", id: 0xe, type: "percent100ths", access: "R V",
+            conformance: "LF & PA_LF", constraint: "0 to 10000", default: null, quality: "X N P",
+            details: "Indicates the actual position as a percentage with a minimal step of 0.01%. E.g Max 10000 equals " +
+                "100.00%.",
+            xref: { document: "cluster", section: "5.3.6.10" }
+        }),
+
+        Attribute({
+            name: "CurrentPositionTiltPercent100ths", id: 0xf, type: "percent100ths", access: "R V",
+            conformance: "TL & PA_TL", constraint: "0 to 10000", default: null, quality: "X N P",
+            details: "Indicates the actual position as a percentage with a minimal step of 0.01%. E.g Max 10000 equals " +
+                "100.00%.",
+            xref: { document: "cluster", section: "5.3.6.11" }
         }),
 
         Attribute({

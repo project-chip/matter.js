@@ -8,6 +8,7 @@ import { InternalError } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
 import { Specification } from "@project-chip/matter.js/model";
 import { camelize } from "../../util/string.js";
+import { ScanDirective, repairIncomingHtml } from "./repairs/cluster-html-repairs.js";
 import { scanDocument } from "./scan-document.js";
 import { ClusterReference, GlobalReference, HtmlReference } from "./spec-types.js";
 
@@ -30,64 +31,6 @@ interface SubsectionCollector {
     collector: (ref: HtmlReference) => void;
 }
 
-enum ScanDirective {
-    // Ignore section in stream
-    IGNORE = 1,
-
-    // Treat as one-level higher than actual in stream
-    POP = 2,
-}
-
-function isCluster(ref: HtmlReference, document: Specification, name: string) {
-    return ref.xref.document === document && ref.name === name;
-}
-
-function isSection(ref: HtmlReference, ...sections: string[]) {
-    return !!sections.find(section => ref.xref.section === section);
-}
-
-// Modify incoming stream to workaround specific spec issues
-function applyPatches(subref: HtmlReference, clusterRef: HtmlReference) {
-    if (isCluster(clusterRef, Specification.Core, "General Commissioning")) {
-        if (isSection(subref, "11.9.6") && subref.name === "Commands" && !subref.table) {
-            // In 1.1 spec, command table is not here...
-            return ScanDirective.IGNORE;
-        }
-
-        if (
-            isSection(subref, "11.9.6.1") &&
-            subref.name === "Common fields in General Commissioning cluster responses" &&
-            subref.table
-        ) {
-            // ...but here
-            subref.name = "Commands";
-            subref.detailSection = "11.9.6";
-        }
-    } else if (isCluster(clusterRef, Specification.Cluster, "Thermostat")) {
-        if (isSection(subref, "4.3.9.6", "4.3.9.7")) {
-            return ScanDirective.IGNORE;
-        }
-
-        if (isSection(subref, "4.3.3.1")) {
-            // In 1.1 spec thermostat features is errantly nested under cluster identifiers
-            return ScanDirective.POP;
-        }
-    } else if (isCluster(clusterRef, Specification.Cluster, "Content Launcher")) {
-        if (isSection(subref, "6.7.3.2")) {
-            // In 1.1. spec, SupportedStreamingProtocols bitmap is not here...
-            return ScanDirective.IGNORE;
-        } else if (isSection(subref, "6.7.3.2.1")) {
-            // ...but here
-            subref.name = "SupportedStreamingProtocols Attribute";
-        }
-    } else if (isCluster(clusterRef, Specification.Cluster, "Door Lock")) {
-        // These two are nested one level too deep in 1.3 spec
-        if (isSection(subref, "5.2.6.25.1", "5.2.6.25.2")) {
-            return ScanDirective.POP;
-        }
-    }
-}
-
 /**
  * Collect the bits that define a cluster.  Here we are just building a tree of HTML nodes.  Conversion to Matter
  * elements happens in translate-cluster.
@@ -104,7 +47,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
 
     for (const subref of scanDocument(clusters)) {
         if (definition) {
-            const directive = applyPatches(subref, definition);
+            const directive = repairIncomingHtml(subref, definition);
 
             switch (directive) {
                 case ScanDirective.IGNORE:
