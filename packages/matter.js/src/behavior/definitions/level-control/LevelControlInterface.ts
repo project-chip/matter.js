@@ -41,22 +41,22 @@ export type StopRequest = TypeFromSchema<typeof LevelControl.TlvStopRequest>;
 /**
  * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
  */
-export type MoveToLevelWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvMoveToLevelWithOnOffRequest>;
+export type MoveToLevelWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvMoveToLevelRequest>;
 
 /**
  * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
  */
-export type MoveWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvMoveWithOnOffRequest>;
+export type MoveWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvMoveRequest>;
 
 /**
  * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
  */
-export type StepWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvStepWithOnOffRequest>;
+export type StepWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvStepRequest>;
 
 /**
  * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
  */
-export type StopWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvStopWithOnOffRequest>;
+export type StopWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvStopRequest>;
 
 /**
  * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.5

@@ -7,7 +7,7 @@
 import { Time, Timer } from "../../../time/Time.js";
 import { Observable } from "../../../util/Observable.js";
 import { IdentifyBehavior } from "./IdentifyBehavior.js";
-import { IdentifyQueryResponse, IdentifyRequest } from "./IdentifyInterface.js";
+import { IdentifyRequest } from "./IdentifyInterface.js";
 
 /**
  * This is the default server implementation of {@link IdentifyBehavior}.
@@ -78,11 +78,6 @@ export class IdentifyServer extends IdentifyBehavior {
 
     override identify({ identifyTime }: IdentifyRequest) {
         this.state.identifyTime = identifyTime;
-    }
-
-    // TODO - don't think we need this as it's Zigbee only (and dumb - just returns attribute value)
-    identifyQuery(): IdentifyQueryResponse {
-        return { timeout: this.state.identifyTime };
     }
 }
 

@@ -35,8 +35,7 @@ export type ClusterVariance = {
 };
 
 /**
- * Analyzes a cluster to determine components, component names and feature
- * flag -> component mapping.
+ * Analyzes a cluster to determine components, component names and feature flag -> component mapping.
  */
 export function ClusterVariance(cluster: ClusterModel): ClusterVariance {
     const inferredComponents = InferredComponents(cluster);

@@ -231,12 +231,20 @@ export class TlvGenerator {
         }
 
         // For enums and bitmaps we create a TypeScript value object, for other types we create a TLV definition
-        if (defining.effectiveMetatype === Metatype.enum) {
-            if (name.endsWith("Enum")) {
-                // This seems a bit redundant
-                name = name.substring(0, name.length - 4);
+        if (defining.effectiveMetatype === Metatype.enum || defining.effectiveMetatype === Metatype.bitmap) {
+            // "Enum" or "Bitmap" suffix seems a bit redundant so drop it.  Unless:
+            //   - There's another datatype model using the name already
+            //   - The suffix is "Bitmap" and there's also "*Enum"; in this case the enum gets the name
+            const withoutSuffix = name.replace(/(Enum|Bitmap)$/, "");
+            if (
+                withoutSuffix !== name &&
+                model.parent?.children.get(DatatypeModel, withoutSuffix) === undefined &&
+                (!name.endsWith("Bitmap") ||
+                    model.parent?.children.get(DatatypeModel, `${withoutSuffix}Enum`) === undefined)
+            ) {
+                name = withoutSuffix;
             }
-        } else if (defining.effectiveMetatype !== Metatype.bitmap) {
+        } else {
             name = `Tlv${name}`;
         }
 
