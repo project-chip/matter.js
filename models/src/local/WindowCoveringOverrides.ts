@@ -233,24 +233,6 @@ LocalMatter.children.push(
                 ],
             },
 
-            // Fix a Spec bug that listed two parameters but only one is relevant
-            {
-                tag: "command",
-                name: "GoToLiftPercentage",
-                id: 0x5,
-
-                children: [
-                    {
-                        tag: "field",
-                        name: "LiftPercent100thsValue",
-                        id: 0x0,
-                        type: "percent100ths",
-                        conformance: "M",
-                        constraint: "desc",
-                    },
-                ],
-            },
-
             // Adjust the constraints for the GoToTiltValue command parameter to allow automatic validation
             {
                 tag: "command",
@@ -268,7 +250,30 @@ LocalMatter.children.push(
                 ],
             },
 
-            // Fix a Spec bug that listed two parameters but only one is relevant
+            // The spec designates conformance for fields incorrectly as O.a (in prose it says if the percent100ths
+            // value is set then the other one should be too)
+            {
+                tag: "command",
+                name: "GoToLiftPercentage",
+                id: 0x5,
+
+                children: [
+                    {
+                        tag: "field",
+                        name: "LiftPercentValue",
+                        type: "percent",
+                        conformance: "O.a+",
+                    },
+                    {
+                        tag: "field",
+                        name: "LiftPercent100thsValue",
+                        type: "percent100ths",
+                        conformance: "O.a+",
+                    },
+                ],
+            },
+
+            // Same issue as for GoToLiftPercentage
             {
                 tag: "command",
                 name: "GoToTiltPercentage",
@@ -276,11 +281,15 @@ LocalMatter.children.push(
                 children: [
                     {
                         tag: "field",
+                        name: "TiltPercentValue",
+                        type: "percent",
+                        conformance: "O.a+",
+                    },
+                    {
+                        tag: "field",
                         name: "TiltPercent100thsValue",
-                        id: 0x0,
                         type: "percent100ths",
-                        conformance: "M",
-                        constraint: "desc",
+                        conformance: "O.a+",
                     },
                 ],
             },

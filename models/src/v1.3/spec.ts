@@ -8661,7 +8661,7 @@ export const SpecMatter = Matter({
                             details: "Supports Occupied and Unoccupied setpoints"
                         }),
                         Field({
-                            name: "SCH", conformance: "D", constraint: "3", description: "ScheduleConfiguration",
+                            name: "SCH", conformance: "O", constraint: "3", description: "ScheduleConfiguration",
                             details: "Supports remote configuration of a weekly schedule of setpoint transitions"
                         }),
                         Field({
@@ -8972,17 +8972,6 @@ export const SpecMatter = Matter({
                     details: "Indicates the current operating mode of the thermostat. Its value shall be limited by the " +
                         "ControlSequenceOfOperation attribute.",
                     xref: { document: "cluster", section: "4.3.9.25" }
-                }),
-
-                Attribute({
-                    name: "AlarmMask", id: 0x1d, type: "AlarmCodeBitmap", access: "R V", conformance: "D",
-                    constraint: "desc", default: 0,
-                    details: "Indicates whether each of the alarms in AlarmCodeBitmap is enabled." +
-                        "\n" +
-                        "When the Alarms cluster is implemented on a device, and one of the alarm conditions included in " +
-                        "AlarmCodeBitmap occurs, an alarm notification is generated, with the alarm code field set as listed " +
-                        "in AlarmCodeBitmap.",
-                    xref: { document: "cluster", section: "4.3.9.26" }
                 }),
 
                 Attribute({
@@ -9467,41 +9456,6 @@ export const SpecMatter = Matter({
                         "Upon receipt, all transitions currently stored shall be cleared and a default response of SUCCESS " +
                         "shall be sent in response. There are no error responses to this command.",
                     xref: { document: "cluster", section: "4.3.10.7" }
-                }),
-
-                Command({
-                    name: "GetRelayStatusLog", id: 0x4, access: "O", conformance: "D", direction: "request",
-                    response: "GetRelayStatusLogResponse",
-
-                    details: "This command is used to query the thermostat internal relay status log. This command has no payload." +
-                        "\n" +
-                        "Upon receipt, the unit shall respond with Relay Status Log command if the relay status log feature " +
-                        "is supported on the unit." +
-                        "\n" +
-                        "The log storing order is First in First Out (FIFO) when the log is generated and stored into the " +
-                        "Queue." +
-                        "\n" +
-                        "The first record in the log (i.e., the oldest) one, is the first to be replaced when there is a new " +
-                        "record and there is no more space in the log. Thus, the newest record will overwrite the oldest one " +
-                        "if there is no space left." +
-                        "\n" +
-                        "The log storing order is Last In First Out (LIFO) when the log is being retrieved from the Queue by " +
-                        "a client device." +
-                        "\n" +
-                        "Once the \"Get Relay Status Log Response\" frame is sent by the Server, the \"Unread Entries\" " +
-                        "attribute SHOULD be decremented to indicate the number of unread records that remain in the queue." +
-                        "\n" +
-                        "If the \"Unread Entries\" attribute reaches zero and the Client sends a new \"Get Relay Status Log " +
-                        "Request\", the Server may send one of the following items as a response:" +
-                        "\n" +
-                        "  i. Resend the last Get Relay Status Log Response or" +
-                        "\n" +
-                        "  ii. Generate new log record at the time of request and send Get Relay Status Log Response with " +
-                        "      the new data" +
-                        "\n" +
-                        "For both cases, the \"Unread Entries\" attribute will remain zero.",
-
-                    xref: { document: "cluster", section: "4.3.10.8" }
                 }),
 
                 Command({
@@ -10099,13 +10053,6 @@ export const SpecMatter = Matter({
                         "present) shall indicate the actual currently operating fan speed, unless otherwise specified below.",
 
                     xref: { document: "cluster", section: "4.4.6.1" }
-                }),
-
-                Attribute({
-                    name: "FanModeSequence", id: 0x1, type: "FanModeSequenceEnum", access: "R[W] VO", conformance: "D",
-                    constraint: "0 to 5", quality: "N",
-                    details: "This attribute indicates the fan speed ranges that shall be supported.",
-                    xref: { document: "cluster", section: "4.4.6.2" }
                 }),
 
                 Attribute({
@@ -36229,11 +36176,7 @@ export const SpecMatter = Matter({
                 Requirement({
                     name: "WindowCovering", id: 0x102, conformance: "M", element: "serverCluster",
                     xref: { document: "device", section: "8.3.4" },
-
                     children: [
-                        Requirement({ name: "ABSOLUTEPOSITION", conformance: "Zigbee", element: "feature" }),
-                        Requirement({ name: "GoToLiftPercentage", conformance: "Zigbee", element: "commandField" }),
-                        Requirement({ name: "GoToTiltPercentage", conformance: "Zigbee", element: "commandField" }),
                         Requirement({ name: "GoToLiftPercentage", conformance: "Matter", element: "commandField" }),
                         Requirement({ name: "GoToTiltPercentage", conformance: "Matter", element: "commandField" })
                     ]
@@ -36272,8 +36215,7 @@ export const SpecMatter = Matter({
                 }),
                 Requirement({
                     name: "WindowCovering", id: 0x102, conformance: "M", element: "clientCluster",
-                    xref: { document: "device", section: "8.4.4" },
-                    children: [Requirement({ name: "ABSOLUTEPOSITION", conformance: "Zigbee", element: "feature" })]
+                    xref: { document: "device", section: "8.4.4" }
                 })
             ]
         }),

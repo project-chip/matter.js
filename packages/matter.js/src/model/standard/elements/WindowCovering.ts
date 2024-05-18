@@ -397,10 +397,14 @@ export const WindowCovering = Cluster({
                 "status SHOULD be returned.",
 
             xref: { document: "cluster", section: "5.3.7.5" },
-            children: [Field({
-                name: "LiftPercent100thsValue", id: 0x0, type: "percent100ths", conformance: "M",
-                constraint: "desc"
-            })]
+
+            children: [
+                Field({ name: "LiftPercentValue", id: 0x0, type: "percent", conformance: "O.a+", constraint: "desc" }),
+                Field({
+                    name: "LiftPercent100thsValue", id: 0x1, type: "percent100ths", conformance: "O.a+",
+                    constraint: "desc"
+                })
+            ]
         }),
 
         Command({
@@ -437,10 +441,14 @@ export const WindowCovering = Cluster({
                 "status SHOULD be returned.",
 
             xref: { document: "cluster", section: "5.3.7.7" },
-            children: [Field({
-                name: "TiltPercent100thsValue", id: 0x0, type: "percent100ths", conformance: "M",
-                constraint: "desc"
-            })]
+
+            children: [
+                Field({ name: "TiltPercentValue", id: 0x0, type: "percent", conformance: "O.a+", constraint: "desc" }),
+                Field({
+                    name: "TiltPercent100thsValue", id: 0x1, type: "percent100ths", conformance: "O.a+",
+                    constraint: "desc"
+                })
+            ]
         }),
 
         Datatype({

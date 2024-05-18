@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InternalError } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
 import {
     ClusterModel,
     ClusterVariance,
     CommandModel,
+    Conformance,
     DatatypeModel,
     FeatureBitmap,
     ValueModel,
@@ -292,6 +294,38 @@ function generateExhaustive(file: ClusterFile, variance: ClusterVariance) {
 
         // Order elements by ID so they appear roughly in spec order
         const ordered = [...elements.keys()].sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+
+        // Elements that appear differently based on conformance but would conflict in the exhaustive cluster need to
+        // be merged and downgraded to be less restrictive.  This won't allow for full enforcement but happens only
+        // rarely and it's not clear if we'll maintain the conditional clusters going forward anyway
+        let prev = ordered[0];
+        for (let i = 1; i < ordered.length; i++) {
+            const current = ordered[i];
+
+            if (current.id === prev.id) {
+                if (prev.conformance.toString() !== current.conformance.toString()) {
+                    prev.conformance = { ast: { type: Conformance.Flag.Optional } };
+                }
+                if (prev.constraint.toString() !== current.constraint.toString()) {
+                    prev.constraint = {};
+                }
+                if (prev.quality.toString() !== current.quality.toString()) {
+                    if (prev.quality.nullable || current.quality.nullable) {
+                        prev.quality = { nullable: true };
+                    } else {
+                        prev.quality = {};
+                    }
+                }
+                if (prev.access.toString() !== current.access.toString()) {
+                    throw new InternalError("Need to implement safe merging of access control");
+                }
+
+                ordered.splice(i, 1);
+                i--;
+            }
+
+            prev = current;
+        }
 
         // Add the elements
         for (const model of ordered) {

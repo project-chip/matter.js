@@ -167,7 +167,7 @@ function addConditions(device: DeviceTypeElement, deviceRef: DeviceReference) {
 }
 
 function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
-    let clusterRecords = translateTable("clusters", deviceRef.clusters, {
+    const clusterRecords = translateTable("clusters", deviceRef.clusters, {
         id: Optional(Alias(Integer, "identifier")),
         name: Alias(ClusterName, "clustername", "cluster"),
         element: Alias((el: HTMLElement) => {
@@ -187,10 +187,6 @@ function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
         quality: Optional(Str),
         conformance: Optional(Str),
     });
-
-    // CSA seems to mix in Zigbee just for old time's sake.  They reference clusters that aren't even in the Matter
-    // cluster spec.  Filter these out
-    clusterRecords = clusterRecords.filter(c => c.conformance !== "[Zigbee]");
 
     const clusters = translateRecordsToMatter("clusters", clusterRecords, RequirementElement);
     if (!clusters?.length) {

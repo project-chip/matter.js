@@ -1421,6 +1421,26 @@ export const DoorLock = Cluster({
                 }),
 
                 Field({
+                    name: "Status", id: 0x2, type: "status", conformance: "M", constraint: "desc", default: 0,
+
+                    details: "Status shall be one of the following values:" +
+                        "\n" +
+                        "  • SUCCESS if both YearDayIndex and UserIndex are valid and there is a corresponding schedule " +
+                        "    entry." +
+                        "\n" +
+                        "  • INVALID_COMMAND if either YearDayIndex and/or UserIndex values are not within valid range" +
+                        "\n" +
+                        "  • NOT_FOUND if no corresponding schedule entry found for YearDayIndex." +
+                        "\n" +
+                        "  • NOT_FOUND if no corresponding user entry found for UserIndex." +
+                        "\n" +
+                        "If this field is SUCCESS, the optional fields for this command shall be present. For other (error) " +
+                        "status values, only the fields up to the status field shall be present.",
+
+                    xref: { document: "cluster", section: "5.2.10.20.3" }
+                }),
+
+                Field({
                     name: "LocalStartTime", id: 0x2, type: "epoch-s", conformance: "O",
                     details: "This field shall indicate the starting time for the Year Day schedule in Epoch Time in Seconds with " +
                         "local time offset based on the local timezone and DST offset on the day represented by the value. " +

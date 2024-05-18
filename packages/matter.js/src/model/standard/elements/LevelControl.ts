@@ -75,6 +75,13 @@ export const LevelControl = Cluster({
         }),
 
         Attribute({
+            name: "MinLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[LT]",
+            constraint: "1 to maxLevel", default: 1,
+            details: "Indicates the minimum value of CurrentLevel that is capable of being assigned.",
+            xref: { document: "cluster", section: "1.6.6.4" }
+        }),
+
+        Attribute({
             name: "MinLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[!LT]",
             constraint: "0 to maxLevel", default: 0,
             details: "Indicates the minimum value of CurrentLevel that is capable of being assigned.",

@@ -14,6 +14,7 @@ import {
     FieldModel,
     MatterModel,
     Metatype,
+    Model,
     ValidateModel,
     ValueModel,
 } from "@project-chip/matter.js/model";
@@ -167,6 +168,65 @@ function patchStatusTypes(cluster: ClusterModel) {
     }
 }
 
+function isZigbee(model: Model, zigbeeFeatures?: string[]) {
+    const conformance = (model as { conformance?: unknown }).conformance?.toString();
+    if (conformance === undefined) {
+        return;
+    }
+    if (conformance.match(/\[?[Zz]igbee\]?(?:, D)?/)) {
+        return true;
+    }
+
+    if (zigbeeFeatures === undefined) {
+        return;
+    }
+    for (const feature of zigbeeFeatures) {
+        if (conformance === feature || conformance === `[${feature}]`) {
+            return true;
+        }
+    }
+}
+
+/**
+ * Eject any element that is zigbee-only.
+ *
+ * The spec randomly litters elements with the undocumented conformance name "Zigbee".  Assuming this indicates the
+ * element is zigbee-only (so, not sure why it is in Matter specification) we do not want it.
+ *
+ * If an element doesn't mention Zigbee directly it may still be Zigbee if it's dependent on a feature that is
+ * Zigbee-only.  So we get rid of these too.  HOWEVER the only place this occurs as of 1.3 is the thermostat SCH
+ * features which is marked deprecated too.  We override back to O until we get confirmation to this question:
+ *
+ *   https://github.com/espressif/esp-matter/issues/923#issuecomment-2105989691
+ *
+ * ...so the feature components of this code are unnecessary.  Leaving as is for now though.
+ */
+function ejectZigbee(model: Model, zigbeeFeatures?: string[]) {
+    if (model instanceof ClusterModel) {
+        for (const feature of model.features) {
+            if (isZigbee(feature)) {
+                if (!zigbeeFeatures) {
+                    zigbeeFeatures = [feature.name];
+                } else {
+                    zigbeeFeatures.push(feature.name);
+                }
+            }
+        }
+    }
+
+    const filtered = [] as Model[];
+    for (const child of model.children) {
+        if (isZigbee(child, zigbeeFeatures)) {
+            continue;
+        }
+        filtered.push(child);
+        ejectZigbee(child, zigbeeFeatures);
+    }
+    if (filtered.length !== model.children.length) {
+        model.children = filtered;
+    }
+}
+
 /**
  * Create and validate the final model for export
  **/
@@ -178,6 +238,8 @@ export function finalizeModel(matter: MatterModel) {
             patchStatusTypes(c);
         }
     });
+
+    ejectZigbee(matter);
 
     logger.info(`validate ${matter.name}`);
 

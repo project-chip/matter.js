@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Model } from "@project-chip/matter.js/model";
+
 export function repairConstraint(record: { constraint?: string }) {
     const { constraint } = record;
     if (!constraint) {
@@ -23,13 +25,28 @@ export function repairConstraint(record: { constraint?: string }) {
     }
 }
 
-export function repairConformance(conformance?: string) {
-    if (!conformance) {
+export function isZigbee(model: Model, zigbeeFeatures?: string[]) {
+    const conformance = (model as { conformance?: unknown }).conformance?.toString();
+    if (conformance === undefined) {
         return;
     }
+    if (conformance.match(/\[?[Zz]igbee\]?(?:, D)?/)) {
+        return true;
+    }
 
-    if (conformance.match(/\[?Zigbee\]?(?:, D)?/)) {
-        return "D";
+    if (zigbeeFeatures === undefined) {
+        return;
+    }
+    for (const feature of zigbeeFeatures) {
+        if (conformance === feature || conformance === `[${feature}]`) {
+            return true;
+        }
+    }
+}
+
+export function repairConformanceRule(conformance?: string) {
+    if (!conformance) {
+        return;
     }
 
     if (conformance === "Matter!Zigbee") {
@@ -45,4 +62,13 @@ export function repairConformance(conformance?: string) {
     conformance = conformance?.replace(/\|CO N/, "|CON").replace("PIRUnoccupiedToOccupied", "PirUnoccupiedToOccupied");
 
     return conformance;
+}
+
+export function repairConformance(record: { name?: string; conformance?: string }) {
+    if (record.name === "SCH" && record.conformance === "[Zigbee], D") {
+        // Assuming this is just laziness and will change until confirmed here:
+        //
+        //   https://github.com/espressif/esp-matter/issues/923#issuecomment-2105989691
+        record.conformance = "O";
+    }
 }

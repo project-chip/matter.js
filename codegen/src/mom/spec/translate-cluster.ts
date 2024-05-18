@@ -26,6 +26,7 @@ import {
     Str,
     UpperIdentifier,
 } from "./html-translators.js";
+import { repairConformance } from "./repairs/aspect-repairs.js";
 import { ClusterReference } from "./spec-types.js";
 import { translateDatatype, translateFields, translateValueChildren } from "./translate-datatype.js";
 import { Alias, Children, Optional, translateRecordsToMatter, translateTable } from "./translate-table.js";
@@ -72,6 +73,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
 
     const { classification, derivesFrom } = translateClassification();
     const revision = translateRevision();
+    let zigbeeFeatures: undefined | Set<string>;
     translateFeatures();
 
     return {
@@ -79,6 +81,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
         classification,
         revision,
         derivesFrom,
+        zigbee: zigbeeFeatures,
     };
 
     function translateIds() {
@@ -191,6 +194,10 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             // We let Model handle translation to the proper type
             default: Optional(Alias(NoSpace, "def")),
         });
+
+        for (const record of records) {
+            repairConformance(record);
+        }
 
         const values = translateRecordsToMatter("feature", records, FieldElement);
         values &&

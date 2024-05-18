@@ -36,7 +36,6 @@ export const WindowCoveringDt = DeviceType({
             name: "WindowCovering", id: 0x102, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "8.3.4" },
             children: [
-                Requirement({ name: "ABSOLUTEPOSITION", conformance: "Zigbee", element: "feature" }),
                 Requirement({ name: "GoToLiftPercentage", conformance: "Matter", element: "commandField" }),
                 Requirement({ name: "GoToTiltPercentage", conformance: "Matter", element: "commandField" })
             ]

@@ -6,6 +6,7 @@
 
 import { InternalError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
+import { Conformance } from "../aspects/Conformance.js";
 import { ElementTag, Specification } from "../definitions/index.js";
 import { AnyElement } from "../elements/index.js";
 import { Model, ValueModel } from "../models/index.js";
@@ -18,6 +19,12 @@ const logger = Logger.get("ModelVariantTraversal");
  * the variant, such as "chip", "spec" or "local".
  */
 export type VariantMap = { [sourceName: string]: Model };
+
+/**
+ * Internal variant map that collects multiple variants within the same model.  This is then spread into individual
+ * VariantMaps, one for each output variant.
+ */
+type VariantMultimap = { [sourceName: string]: Model[] };
 
 /**
  * Input to traverse().
@@ -148,36 +155,34 @@ export abstract class ModelVariantTraversal<S = void> {
 
                 // Visit children
                 const result = Array<S>();
-                for (const mapping of Object.values(mappings)) {
-                    mappings: for (const childVariants of mapping.slots) {
-                        const detail = this.createVariantDetail(childVariants);
+                mappings: for (const childVariants of mappings) {
+                    const detail = this.createVariantDetail(childVariants);
 
-                        // If a cluster child is defined directly in one variant but inherited in another, ignore the
-                        // direct variant so we will continue to properly reflect the inheritance structure.  Only do
-                        // this if the element doesn't actually have overrides though
-                        let inherited = false;
-                        let overrides = false;
-                        if (variants.tag === ElementTag.Cluster) {
-                            for (const k in variants.map) {
-                                if (childVariants[k] === undefined) {
-                                    const inheritedModel = variants.map[k].base?.member(detail.name, [detail.tag]);
-                                    if (inheritedModel) {
-                                        inherited = true;
-                                    }
-                                    continue;
+                    // If a cluster child is defined directly in one variant but inherited in another, ignore the
+                    // direct variant so we will continue to properly reflect the inheritance structure.  Only do
+                    // this if the element doesn't actually have overrides though
+                    let inherited = false;
+                    let overrides = false;
+                    if (variants.tag === ElementTag.Cluster) {
+                        for (const k in variants.map) {
+                            if (childVariants[k] === undefined) {
+                                const inheritedModel = variants.map[k].base?.member(detail.name, [detail.tag]);
+                                if (inheritedModel) {
+                                    inherited = true;
                                 }
-                                const child = childVariants[k];
-                                if (child instanceof ValueModel && child.overridesShadow) {
-                                    overrides = true;
-                                }
+                                continue;
+                            }
+                            const child = childVariants[k];
+                            if (child instanceof ValueModel && child.overridesShadow) {
+                                overrides = true;
                             }
                         }
-                        if (inherited && !overrides) {
-                            continue mappings;
-                        }
-
-                        result.push(this.visitVariants(detail));
                     }
+                    if (inherited && !overrides) {
+                        continue mappings;
+                    }
+
+                    result.push(this.visitVariants(detail));
                 }
 
                 // Remove cluster state
@@ -192,10 +197,117 @@ export abstract class ModelVariantTraversal<S = void> {
         return state;
     }
 
-    private mapChildren(variants: VariantDetail) {
+    /**
+     * Group children across variants with the same identity.
+     */
+    private mapChildren(variants: VariantDetail): VariantMap[] {
+        const multimaps = this.mapChildrenToMultimap(variants);
+
+        const result = Array<VariantMap>();
+
+        // The multimap allows for multiple mapped variants that vary by conformance.  We must match these across
+        // sources to create a "non-multi map". Algorithm is:
+        //
+        //   - If two variants have conformance and it is the same, they match
+        //   - For variants with no conformance matches:
+        //     - If the source contributes a single variant without conformance, it matches all variants
+        //     - Otherwise variants match in insertion order with other unmatched variants
+        //
+        // This allows for conformance override but means:
+        //
+        //  1. To ensure proper matching you must a.) provide conformance, or b.) override variants in insertion
+        //     order (possibly variants even if there's no change)
+        //  2. You cannot override conformance to a conformance value that is already used; matching conformance always
+        //     overrides the matched variant
+
+        for (const multimap of multimaps) {
+            const maps = Array<VariantMap>();
+
+            for (const incomingSource in multimap) {
+                const variants = multimap[incomingSource];
+                let unmatchedIncoming: undefined | Model[];
+
+                function addUnmatched(variant: Model) {
+                    if (unmatchedIncoming) {
+                        unmatchedIncoming.push(variant);
+                    } else {
+                        unmatchedIncoming = [variant];
+                    }
+                }
+
+                // For each variant, match based on conformance or add to "unmatched" set
+                nextIncomingVariant: for (const incomingVariant of variants) {
+                    // Obtain conformance string
+                    const incomingConformance = conformanceStr(incomingVariant);
+                    if (incomingConformance === undefined) {
+                        // Can't match on conformance; fall back to positional insertion
+                        addUnmatched(incomingVariant);
+                        continue;
+                    }
+
+                    // With conformance we search through each variant in each map we've already created.  The first
+                    // match goes to this variant unless another variant in the source matched (which will result in a
+                    // DUPLICATE_CHILD validation error
+                    for (const establishedMap of maps) {
+                        if (establishedMap[incomingSource]) {
+                            // This source has already filled this map
+                            continue;
+                        }
+
+                        for (const establishedSource in establishedMap) {
+                            const establishedConformance = conformanceStr(establishedMap[establishedSource]);
+                            if (
+                                establishedConformance === undefined ||
+                                establishedConformance !== incomingConformance
+                            ) {
+                                // No conformance or conformance doesn't match
+                                continue;
+                            }
+
+                            // Found a match; insert variant
+                            establishedMap[incomingSource] = incomingVariant;
+
+                            continue nextIncomingVariant;
+                        }
+                    }
+
+                    // Conformance doesn't match any established variants.  Use positional insertion
+                    addUnmatched(incomingVariant);
+                }
+
+                // Now insert unmatched variants in insertion order
+                if (!unmatchedIncoming) {
+                    continue;
+                }
+                nextUnmatched: for (const variant of unmatchedIncoming) {
+                    // Insert into first established map this source has not yet contributed to
+                    for (const established of maps) {
+                        if (established[incomingSource] === undefined) {
+                            // This map is open for this source so insert here
+                            established[incomingSource] = variant;
+                            continue nextUnmatched;
+                        }
+                    }
+
+                    // All maps filled by this source; add another map
+                    maps.push({ [incomingSource]: variant });
+                }
+            }
+
+            result.push(...maps);
+        }
+
+        return result;
+    }
+
+    /**
+     * Group children across variants with the same identity allowing for multiple definitions of an identity.  This is
+     * the primary function of {@link mapChildren} but allows for multiple definitions of the same element.
+     */
+    private mapChildrenToMultimap(variants: VariantDetail): VariantMultimap[] {
         type ChildMapping = {
             // List of children associated by ID or name (ID gets priority)
-            slots: VariantMap[];
+            slots: VariantMultimap[];
 
             // Map of IDs to first slot the ID appeared
             idToSlot: { [id: string]: number };
@@ -256,11 +368,15 @@ export abstract class ModelVariantTraversal<S = void> {
                 }
 
                 // Update the slot
-                mapping.slots[slot][sourceName] = child;
+                if (mapping.slots[slot][sourceName]) {
+                    mapping.slots[slot][sourceName].push(child);
+                } else {
+                    mapping.slots[slot][sourceName] = [child];
+                }
             }
         }
 
-        return mappings;
+        return Object.values(mappings).flatMap(v => v.slots);
     }
 
     /**
@@ -514,4 +630,12 @@ function chooseCanonicalNames(
     traversal.traverse(variants.map);
 
     return canonicalNames;
+}
+
+function conformanceStr(model: Model) {
+    const conformance = (model as { conformance?: Conformance }).conformance?.toString();
+    if (conformance === "") {
+        return undefined;
+    }
+    return conformance;
 }
