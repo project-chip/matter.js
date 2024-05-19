@@ -574,8 +574,11 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
         this.#assertMotionLockStatus();
 
         if (this.features.positionAwareLift) {
-            this.state.targetPositionLiftPercent100ths = liftPercent100thsValue;
-            this.#triggerLiftMotion(MovementDirection.DefinedByPosition, this.state.targetPositionLiftPercent100ths);
+            this.state.targetPositionLiftPercent100ths = liftPercent100thsValue ?? null;
+            this.#triggerLiftMotion(
+                MovementDirection.DefinedByPosition,
+                this.state.targetPositionLiftPercent100ths ?? undefined,
+            );
         } else {
             if (liftPercent100thsValue === 0) {
                 this.upOrOpen();
@@ -604,8 +607,11 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
         this.#assertMotionLockStatus();
 
         if (this.features.positionAwareTilt) {
-            this.state.targetPositionTiltPercent100ths = tiltPercent100thsValue;
-            this.#triggerTiltMotion(MovementDirection.DefinedByPosition, this.state.targetPositionTiltPercent100ths);
+            this.state.targetPositionTiltPercent100ths = tiltPercent100thsValue ?? null;
+            this.#triggerTiltMotion(
+                MovementDirection.DefinedByPosition,
+                this.state.targetPositionTiltPercent100ths ?? undefined,
+            );
         } else {
             if (tiltPercent100thsValue === 0) {
                 this.upOrOpen();

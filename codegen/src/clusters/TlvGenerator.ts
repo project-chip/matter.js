@@ -263,6 +263,7 @@ export class TlvGenerator {
     }
 
     #integerTlv(metabase: ValueModel, model: ValueModel) {
+        if (model.name === "FabricIndex") debugger;
         const globalBase = model.globalBase?.name;
         const globalMapping = SpecializedNumbers[globalBase as any];
 
