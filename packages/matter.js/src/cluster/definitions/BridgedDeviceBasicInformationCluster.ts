@@ -18,189 +18,132 @@ import {
 } from "../../cluster/Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
-import { TlvUInt16, TlvUInt32, TlvEnum } from "../../tlv/TlvNumber.js";
+import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
-import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { BasicInformation } from "../../cluster/definitions/BasicInformationCluster.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace BridgedDeviceBasicInformation {
-    export enum ProductFinish {
-        Other = 0,
-        Matte = 1,
-        Satin = 2,
-        Polished = 3,
-        Rugged = 4,
-        Fabric = 5
-    }
-
-    export enum Color {
-        Black = 0,
-        Navy = 1,
-        Green = 2,
-        Teal = 3,
-        Maroon = 4,
-        Purple = 5,
-        Olive = 6,
-        Gray = 7,
-        Blue = 8,
-        Lime = 9,
-        Aqua = 10,
-        Red = 11,
-        Fuchsia = 12,
-        Yellow = 13,
-        White = 14,
-        Nickel = 15,
-        Chrome = 16,
-        Brass = 17,
-        Copper = 18,
-        Silver = 19,
-        Gold = 20
-    }
-
-    export const TlvProductAppearanceStruct = TlvObject({
-        finish: TlvField(0, TlvEnum<ProductFinish>()),
-        primaryColor: TlvField(1, TlvNullable(TlvEnum<Color>()))
-    });
-    export interface ProductAppearanceStruct extends TypeFromSchema<typeof TlvProductAppearanceStruct> {}
-
-    /**
-     * Body of the BridgedDeviceBasicInformation startUp event
-     *
-     * @see {@link MatterSpecification.v11.Core} § 9.13.5
-     */
-    export const TlvStartUpEvent = TlvObject({ softwareVersion: TlvField(0, TlvUInt32) });
-
-    /**
-     * Body of the BridgedDeviceBasicInformation startUp event
-     *
-     * @see {@link MatterSpecification.v11.Core} § 9.13.5
-     */
-    export interface StartUpEvent extends TypeFromSchema<typeof TlvStartUpEvent> {}
-
-    /**
-     * Body of the BridgedDeviceBasicInformation reachableChanged event
-     *
-     * @see {@link MatterSpecification.v11.Core} § 9.13.5.1
-     */
-    export const TlvReachableChangedEvent = TlvObject({ reachableNewValue: TlvField(0, TlvBoolean) });
-
-    /**
-     * Body of the BridgedDeviceBasicInformation reachableChanged event
-     *
-     * @see {@link MatterSpecification.v11.Core} § 9.13.5.1
-     */
-    export interface ReachableChangedEvent extends TypeFromSchema<typeof TlvReachableChangedEvent> {}
-
     /**
      * @see {@link Cluster}
      */
     export const ClusterInstance = MutableCluster({
         id: 0x39,
         name: "BridgedDeviceBasicInformation",
-        revision: 2,
+        revision: 3,
 
         attributes: {
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             vendorName: OptionalFixedAttribute(0x1, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             vendorId: OptionalFixedAttribute(0x2, TlvVendorId),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             productName: OptionalFixedAttribute(0x3, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             nodeLabel: OptionalWritableAttribute(
                 0x5,
                 TlvString.bound({ maxLength: 32 }),
-                { persistent: true, default: "", writeAcl: AccessLevel.Manage }
+                { persistent: true, writeAcl: AccessLevel.Manage }
             ),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
-            hardwareVersion: OptionalFixedAttribute(0x7, TlvUInt16, { default: 0 }),
+            hardwareVersion: OptionalFixedAttribute(0x7, TlvUInt16),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             hardwareVersionString: OptionalFixedAttribute(0x8, TlvString.bound({ minLength: 1, maxLength: 64 })),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
-            softwareVersion: OptionalFixedAttribute(0x9, TlvUInt32, { default: 0 }),
+            softwareVersion: OptionalFixedAttribute(0x9, TlvUInt32),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             softwareVersionString: OptionalFixedAttribute(0xa, TlvString.bound({ minLength: 1, maxLength: 64 })),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             manufacturingDate: OptionalFixedAttribute(0xb, TlvString.bound({ minLength: 8, maxLength: 16 })),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             partNumber: OptionalFixedAttribute(0xc, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             productUrl: OptionalFixedAttribute(0xd, TlvString.bound({ maxLength: 256 })),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             productLabel: OptionalFixedAttribute(0xe, TlvString.bound({ maxLength: 64 })),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             serialNumber: OptionalFixedAttribute(0xf, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
-            reachable: Attribute(0x11, TlvBoolean, { default: true }),
+            reachable: Attribute(0x11, TlvBoolean),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.4
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
             uniqueId: OptionalFixedAttribute(0x12, TlvString.bound({ maxLength: 32 })),
 
-            productAppearance: OptionalFixedAttribute(0x14, TlvProductAppearanceStruct)
+            /**
+             * @see {@link MatterSpecification.v13.Core} § 9.13.4
+             */
+            productAppearance: OptionalFixedAttribute(0x14, BasicInformation.TlvProductAppearanceStruct)
         },
 
         events: {
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.5
+             * @see {@link MatterSpecification.v13.Core} § 9.13.5
              */
-            startUp: OptionalEvent(0x0, EventPriority.Critical, TlvStartUpEvent),
+            startUp: OptionalEvent(0x0, EventPriority.Critical, BasicInformation.TlvStartUpEvent),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.5
+             * @see {@link MatterSpecification.v13.Core} § 9.13.5
              */
             shutDown: OptionalEvent(0x1, EventPriority.Critical, TlvNoArguments),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.13.5
+             * The Leave event SHOULD be generated by the bridge when it detects that the associated device has left
+             * the non-Matter network.
+             *
+             * NOTE
+             *
+             * The FabricIndex field has the X conformance, indicating it shall NOT be present. This event, in the
+             * context of Bridged Device Basic Information cluster, has no usable fields, but the original Basic
+             * Information cluster’s field definition is kept for completeness.
+             *
+             * @see {@link MatterSpecification.v13.Core} § 9.13.5.1
              */
-            leave: OptionalEvent(0x2, EventPriority.Info, TlvNoArguments),
+            leave: OptionalEvent(0x2, EventPriority.Critical, TlvNoArguments),
 
             /**
              * This event shall be generated when there is a change in the Reachable attribute. Its purpose is to
@@ -209,15 +152,13 @@ export namespace BridgedDeviceBasicInformation {
              *
              * After (re)start of a bridge this event may be generated.
              *
-             * @see {@link MatterSpecification.v11.Core} § 9.13.5.1
+             * @see {@link MatterSpecification.v13.Core} § 9.13.5.2
              */
-            reachableChanged: Event(0x3, EventPriority.Info, TlvReachableChangedEvent)
+            reachableChanged: Event(0x3, EventPriority.Critical, BasicInformation.TlvReachableChangedEvent)
         }
-    });
+    })
 
     /**
-     * Bridged Device Basic Information
-     *
      * This Cluster serves two purposes towards a Node communicating with a Bridge:
      *
      *   • Indicate that the functionality on the Endpoint where it is placed (and its Parts) is bridged from a
@@ -241,11 +182,12 @@ export namespace BridgedDeviceBasicInformation {
      * particular attribute is not available, the Bridge SHOULD NOT include the attribute in the cluster for this
      * Bridged Device. See below for Conformance details.
      *
-     * @see {@link MatterSpecification.v11.Core} § 9.13
+     * @see {@link MatterSpecification.v13.Core} § 9.13
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
+
     export const Complete = Cluster;
 }
 

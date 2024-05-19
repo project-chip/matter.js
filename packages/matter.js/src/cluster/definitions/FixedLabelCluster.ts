@@ -24,15 +24,13 @@ export namespace FixedLabel {
 
         attributes: {
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.8.4
+             * @see {@link MatterSpecification.v13.Core} § 9.8.4
              */
             labelList: Attribute(0x0, TlvArray(Label.TlvLabelStruct), { persistent: true, default: [] })
         }
     })
 
     /**
-     * Fixed Label
-     *
      * This cluster provides a feature for the device to tag an endpoint with zero or more read only labels. Examples:
      *
      *   • A bridge can use this to indicate grouping of bridged devices. For example: All bridged devices whose
@@ -43,7 +41,12 @@ export namespace FixedLabel {
      *     LabelList entry "orientation":"up" while the other would have "orientation":"down". Using such indication,
      *     the user interface of a Node controlling this luminaire knows which of the endpoints is which of the lights.
      *
-     * @see {@link MatterSpecification.v11.Core} § 9.8
+     * Note that the TagList in the Descriptor cluster provides an alternative mechanism for such self- description
+     * using standardized tags rather than manufacturer-selected strings, yielding a standardized mechanism for
+     * features defined in the various namespaces. The second example above can be implemented using semantic tags
+     * Direction.Upward and Direction.Downward instead of (or in addition to) the Fixed Label cluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 9.8
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

@@ -9,7 +9,7 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
@@ -17,13 +17,13 @@ export namespace Label {
     /**
      * This is a string tuple with strings that are user defined.
      *
-     * @see {@link MatterSpecification.v11.Core} § 9.7.4.1
+     * @see {@link MatterSpecification.v13.Core} § 9.7.4.1
      */
     export const TlvLabelStruct = TlvObject({
         /**
          * The Label or Value semantic is not defined here. Label examples: "room", "zone", "group", "direction".
          *
-         * @see {@link MatterSpecification.v11.Core} § 9.7.4.1.1
+         * @see {@link MatterSpecification.v13.Core} § 9.7.4.1.1
          */
         label: TlvField(0, TlvString.bound({ maxLength: 16 })),
 
@@ -32,7 +32,7 @@ export namespace Label {
          * multiple instances. Label:Value examples: "room":"bedroom 2", "orientation":"North", "floor":"2",
          * "direction":"up"
          *
-         * @see {@link MatterSpecification.v11.Core} § 9.7.4.1.2
+         * @see {@link MatterSpecification.v13.Core} § 9.7.4.1.2
          */
         value: TlvField(1, TlvString.bound({ maxLength: 16 }))
     });
@@ -40,7 +40,7 @@ export namespace Label {
     /**
      * This is a string tuple with strings that are user defined.
      *
-     * @see {@link MatterSpecification.v11.Core} § 9.7.4.1
+     * @see {@link MatterSpecification.v13.Core} § 9.7.4.1
      */
     export interface LabelStruct extends TypeFromSchema<typeof TlvLabelStruct> {}
 
@@ -53,7 +53,7 @@ export namespace Label {
             /**
              * This is a list of string tuples. Each entry is a LabelStruct.
              *
-             * @see {@link MatterSpecification.v11.Core} § 9.7.5.1
+             * @see {@link MatterSpecification.v13.Core} § 9.7.5.1
              */
             labelList: WritableAttribute(0x0, TlvArray(TlvLabelStruct), { default: [] })
         }

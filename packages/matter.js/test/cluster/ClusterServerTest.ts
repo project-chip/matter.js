@@ -50,6 +50,8 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
+                    specificationVersion: 0x01030000,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -112,6 +114,8 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
+                    specificationVersion: 0x01030000,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -163,6 +167,8 @@ describe("ClusterServer structure", () => {
                         subscriptionsPerFabric: 3,
                     },
                     manufacturingDate: "12345678",
+                    specificationVersion: 0x01030000,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -236,6 +242,8 @@ describe("ClusterServer structure", () => {
                         subscriptionsPerFabric: 3,
                     },
                     reachable: true,
+                    specificationVersion: 0x01030000,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -288,6 +296,8 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
+                    specificationVersion: 0x01030000,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -344,6 +354,8 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
+                    specificationVersion: 0x01030000,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -780,6 +792,8 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
+                    specificationVersion: 0x01030000,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -820,8 +834,6 @@ describe("ClusterServer structure", () => {
             expect(identifyServer.isAttributeSupportedByName("identifyTime")).equal(true);
             expect(identifyServer.isCommandSupported(IdentifyCluster.commands.identify.requestId)).equal(true);
             expect(identifyServer.isCommandSupportedByName("identify")).equal(true);
-            expect(identifyServer.isCommandSupported(Identify.Complete.commands.identifyQuery.requestId)).equal(false);
-            expect(identifyServer.isCommandSupportedByName("identifyQuery")).equal(false);
         });
     });
 });

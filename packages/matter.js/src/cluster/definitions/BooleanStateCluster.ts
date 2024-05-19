@@ -9,7 +9,7 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, OptionalEvent, EventPriority } from "../../cluster/Cluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
@@ -18,14 +18,21 @@ export namespace BooleanState {
     /**
      * Body of the BooleanState stateChange event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.7.5.1
+     * @see {@link MatterSpecification.v13.Cluster} § 1.7.5.1
      */
-    export const TlvStateChangeEvent = TlvObject({ stateValue: TlvField(0, TlvBoolean) });
+    export const TlvStateChangeEvent = TlvObject({
+        /**
+         * This field shall indicate the new value of the StateValue attribute.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.7.5.1.1
+         */
+        stateValue: TlvField(0, TlvBoolean)
+    });
 
     /**
      * Body of the BooleanState stateChange event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.7.5.1
+     * @see {@link MatterSpecification.v13.Cluster} § 1.7.5.1
      */
     export interface StateChangeEvent extends TypeFromSchema<typeof TlvStateChangeEvent> {}
 
@@ -39,31 +46,31 @@ export namespace BooleanState {
 
         attributes: {
             /**
-             * This represents a Boolean state.
+             * This represents a boolean state.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.7.4.1
+             * The semantics of this boolean state are defined by the device type using this cluster.
+             *
+             * For example, in a Contact Sensor device type, FALSE=open or no contact, TRUE=closed or contact.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.7.4.1
              */
             stateValue: Attribute(0x0, TlvBoolean)
         },
 
         events: {
             /**
-             * This event shall be generated when the StateValue attribute changes.
+             * If this event is supported, it shall be generated when the StateValue attribute changes.
              *
-             * The StateValue field shall indicate the new value of the StateValue attribute.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.7.5.1
+             * @see {@link MatterSpecification.v13.Cluster} § 1.7.5.1
              */
             stateChange: OptionalEvent(0x0, EventPriority.Info, TlvStateChangeEvent)
         }
     });
 
     /**
-     * Boolean State
+     * This cluster provides an interface to a boolean state.
      *
-     * This cluster provides an interface to a boolean state called StateValue.
-     *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.7
+     * @see {@link MatterSpecification.v13.Cluster} § 1.7
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

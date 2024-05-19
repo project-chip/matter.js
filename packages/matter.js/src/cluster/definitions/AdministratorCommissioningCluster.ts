@@ -8,7 +8,7 @@
 
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Command, TlvNoResponse, AccessLevel, Attribute } from "../../cluster/Cluster.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvUInt16, TlvEnum, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
@@ -24,22 +24,24 @@ export namespace AdministratorCommissioning {
     /**
      * Input to the AdministratorCommissioning openBasicCommissioningWindow command
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.18.8.2
+     * @see {@link MatterSpecification.v13.Core} § 11.19.8.2
      */
     export const TlvOpenBasicCommissioningWindowRequest = TlvObject({
         /**
          * This field shall specify the time in seconds during which commissioning session establishment is allowed by
          * the Node. This is known as Open Basic Commissioning Window (OBCW). This timeout shall follow guidance as
-         * specified in Announcement Duration.
+         * specified in the initial Announcement Duration.
          *
          * When a Node receives the Open Basic Commissioning Window command, it shall begin advertising on DNS-SD as
          * described in Section 4.3.1, “Commissionable Node Discovery” and for a time period as described in Section
-         * 11.18.8.2.1, “CommissioningTimeout Field”. When the command is received by a SED, it shall enter into active
-         * mode and set its fast-polling interval to SLEEPY_AC
+         * 11.19.8.2.1, “CommissioningTimeout Field”. When the command is received by a ICD, it shall enter into active
+         * mode. The ICD shall remain in Active Mode as long as one of these conditions is met:
          *
-         * TIVE_INTERVAL for at least the entire duration of the CommissioningTimeout.
+         *   • A commissioning window is open.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.18.8.2.1
+         *   • There is an armed fail-safe timer.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 11.19.8.2.1
          */
         commissioningTimeout: TlvField(0, TlvUInt16)
     });
@@ -47,12 +49,12 @@ export namespace AdministratorCommissioning {
     /**
      * Input to the AdministratorCommissioning openBasicCommissioningWindow command
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.18.8.2
+     * @see {@link MatterSpecification.v13.Core} § 11.19.8.2
      */
     export interface OpenBasicCommissioningWindowRequest extends TypeFromSchema<typeof TlvOpenBasicCommissioningWindowRequest> {}
 
     /**
-     * @see {@link MatterSpecification.v11.Core} § 11.18.5.1
+     * @see {@link MatterSpecification.v13.Core} § 11.19.5.1
      */
     export enum CommissioningWindowStatus {
         /**
@@ -74,17 +76,17 @@ export namespace AdministratorCommissioning {
     /**
      * Input to the AdministratorCommissioning openCommissioningWindow command
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.18.8.1
+     * @see {@link MatterSpecification.v13.Core} § 11.19.8.1
      */
     export const TlvOpenCommissioningWindowRequest = TlvObject({
         /**
          * This field shall specify the time in seconds during which commissioning session establishment is allowed by
          * the Node. This is known as Open Commissioning Window (OCW). This timeout value shall follow guidance as
-         * specified in Announcement Duration. The CommissioningTimeout applies only to cessation of any announcements
-         * and to accepting of new commissioning sessions; it does not apply to abortion of connections, i.e., a
-         * commissioning session SHOULD NOT abort prematurely upon expiration of this timeout.
+         * specified in the initial Announcement Duration. The CommissioningTimeout applies only to cessation of any
+         * announcements and to accepting of new commissioning sessions; it does not apply to abortion of connections,
+         * i.e., a commissioning session SHOULD NOT abort prematurely upon expiration of this timeout.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.18.8.1.1
+         * @see {@link MatterSpecification.v13.Core} § 11.19.8.1.1
          */
         commissioningTimeout: TlvField(0, TlvUInt16),
 
@@ -96,7 +98,7 @@ export namespace AdministratorCommissioning {
          * from an ephemeral passcode (See PAKE). It shall be deleted by the Node at the end of commissioning or
          * expiration of OCW, and shall be deleted by the existing Administrator after sending it to the Node(s).
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.18.8.1.2
+         * @see {@link MatterSpecification.v13.Core} § 11.19.8.1.2
          */
         pakePasscodeVerifier: TlvField(1, TlvByteString.bound({ length: 97 })),
 
@@ -105,36 +107,39 @@ export namespace AdministratorCommissioning {
          * Discriminator) for discovery by the new Administrator. The new Administrator can find and filter DNS-SD
          * records by long discriminator to locate and initiate commissioning with the appropriate Node.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.18.8.1.3
+         * @see {@link MatterSpecification.v13.Core} § 11.19.8.1.3
          */
         discriminator: TlvField(2, TlvUInt16.bound({ max: 4095 })),
 
         /**
          * This field shall be used by the Node as the PAKE iteration count associated with the ephemeral PAKE passcode
          * verifier to be used for this commissioning, which shall be sent by the Node to the new Administrator’s
-         * software as response to the PBKDFParamRequest during PASE negotiation. The permitted range of values shall
-         * match the range specified in Section 3.9, “Password-Based Key Derivation Function (PBKDF)”, within the
-         * definition of the Crypto_PBKDFParameterSet.
+         * software as response to the PBKDFParamRequest during PASE negotiation.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.18.8.1.4
+         * The permitted range of values shall match the range specified in Section 3.9, “Password-Based Key Derivation
+         * Function (PBKDF)”, within the definition of the Crypto_PBKDFParameterSet.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 11.19.8.1.4
          */
         iterations: TlvField(3, TlvUInt32.bound({ min: 1000, max: 100000 })),
 
         /**
          * This field shall be used by the Node as the PAKE Salt associated with the ephemeral PAKE passcode verifier
-         * to be used for this commissioning, which shall be sent by the Node to the new
-         *
-         * Administrator’s software as response to the PBKDFParamRequest during PASE negotiation. The constraints on
-         * the value shall match those specified in Section 3.9, “Password-Based Key Derivation Function (PBKDF)”,
-         * within the definition of the Crypto_PBKDFParameterSet.
+         * to be used for this commissioning, which shall be sent by the Node to the new Administrator’s software as
+         * response to the PBKDFParamRequest during PASE negotiation. The constraints on the value shall match those
+         * specified in Section 3.9, “Password-Based Key Derivation Function (PBKDF)”, within the definition of the
+         * Crypto_PBKDFParameterSet.
          *
          * When a Node receives the Open Commissioning Window command, it shall begin advertising on DNS-SD as
          * described in Section 4.3.1, “Commissionable Node Discovery” and for a time period as described in Section
-         * 11.18.8.1.1, “CommissioningTimeout Field”. When the command is received by a SED, it shall enter into active
-         * mode and set its fast-polling interval to SLEEPY_ACTIVE_INTERVAL for at least the entire duration of the
-         * CommissioningTimeout.
+         * 11.19.8.1.1, “CommissioningTimeout Field”. When the command is received by a ICD, it shall enter into active
+         * mode. The ICD shall remain in Active Mode as long as one of these conditions is met:
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.18.8.1.5
+         *   • A commissioning window is open.
+         *
+         *   • There is an armed fail-safe timer.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 11.19.8.1.5
          */
         salt: TlvField(4, TlvByteString.bound({ minLength: 16, maxLength: 32 }))
     });
@@ -142,29 +147,26 @@ export namespace AdministratorCommissioning {
     /**
      * Input to the AdministratorCommissioning openCommissioningWindow command
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.18.8.1
+     * @see {@link MatterSpecification.v13.Core} § 11.19.8.1
      */
     export interface OpenCommissioningWindowRequest extends TypeFromSchema<typeof TlvOpenCommissioningWindowRequest> {}
 
+    /**
+     * @see {@link MatterSpecification.v13.Core} § 11.19.6.1
+     */
     export enum StatusCode {
         /**
          * Could not be completed because another commissioning is in progress
-         *
-         * @see {@link MatterSpecification.v11.Core} § 11.18.6
          */
         Busy = 2,
 
         /**
          * Provided PAKE parameters were incorrectly formatted or otherwise invalid
-         *
-         * @see {@link MatterSpecification.v11.Core} § 11.18.6
          */
         PakeParameterError = 3,
 
         /**
          * No commissioning window was currently open
-         *
-         * @see {@link MatterSpecification.v11.Core} § 11.18.6
          */
         WindowNotOpen = 4
     }
@@ -193,7 +195,7 @@ export namespace AdministratorCommissioning {
              * CommissioningComplete command, see Section 5.5, “Commissioning Flows”. The new Administrator shall
              * discover the Node on the IP network using DNS-based Service Discovery (DNS-SD) for commissioning.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.18.8.2
+             * @see {@link MatterSpecification.v13.Core} § 11.19.8.2
              */
             openBasicCommissioningWindow: Command(
                 0x1,
@@ -208,7 +210,7 @@ export namespace AdministratorCommissioning {
     /**
      * These are optional features supported by AdministratorCommissioningCluster.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.18.4
+     * @see {@link MatterSpecification.v13.Core} § 11.19.4
      */
     export enum Feature {
         /**
@@ -238,15 +240,15 @@ export namespace AdministratorCommissioning {
 
         attributes: {
             /**
-             * This attribute shall indicate whether a new Commissioning window has been opened by an Administrator,
-             * using either the OCW command or the OBCW command.
+             * Indicates whether a new Commissioning window has been opened by an Administrator, using either the OCW
+             * command or the OBCW command.
              *
              * This attribute shall revert to WindowNotOpen upon expiry of a commissioning window.
              *
              * Note that an initial commissioning window is not opened using either the OCW command or the OBCW
              * command, and therefore this attribute shall be set to WindowNotOpen on initial commissioning.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.18.7.1
+             * @see {@link MatterSpecification.v13.Core} § 11.19.7.1
              */
             windowStatus: Attribute(0x0, TlvEnum<CommissioningWindowStatus>()),
 
@@ -260,7 +262,7 @@ export namespace AdministratorCommissioning {
              *
              * When the WindowStatus attribute is set to WindowNotOpen, this attribute shall be set to null.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.18.7.2
+             * @see {@link MatterSpecification.v13.Core} § 11.19.7.2
              */
             adminFabricIndex: Attribute(0x1, TlvNullable(TlvFabricIndex)),
 
@@ -273,7 +275,7 @@ export namespace AdministratorCommissioning {
              *
              * When the WindowStatus attribute is set to WindowNotOpen, this attribute shall be set to null.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.18.7.3
+             * @see {@link MatterSpecification.v13.Core} § 11.19.7.3
              */
             adminVendorId: Attribute(0x2, TlvNullable(TlvVendorId))
         },
@@ -293,9 +295,10 @@ export namespace AdministratorCommissioning {
              * The parameters for OpenCommissioningWindow command are as follows:
              *
              * A current Administrator may invoke this command to put a node in commissioning mode for the next
-             * Administrator. On completion, the command shall return a cluster specific status code from the
-             * enumeration below reflecting success or reasons for failure of the operation. The new Administrator
-             * shall discover the Node on the IP network using DNS-based Service Discovery (DNS-SD) for commissioning.
+             * Administrator. On completion, the command shall return a cluster specific status code from the Section
+             * 11.19.6, “Status Codes” below reflecting success or reasons for failure of the operation. The new
+             * Administrator shall discover the Node on the IP network using DNS-based Service Discovery (DNS-SD) for
+             * commissioning.
              *
              * If any format or validity errors related to the PAKEPasscodeVerifier, Iterations or Salt arguments
              * arise, this command shall fail with a cluster specific status code of PAKEParameterError.
@@ -309,7 +312,7 @@ export namespace AdministratorCommissioning {
              *
              * In case of any other parameter error, this command shall fail with a status code of COMMAND_INVALID.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.18.8.1
+             * @see {@link MatterSpecification.v13.Core} § 11.19.8.1
              */
             openCommissioningWindow: Command(
                 0x0,
@@ -329,7 +332,11 @@ export namespace AdministratorCommissioning {
              * If no commissioning window was open at time of receipt, this command shall fail with a cluster specific
              * status code of WindowNotOpen.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.18.8.3
+             * If the commissioning window was open and the fail-safe was armed when this command is received, the
+             * device shall immediately expire the fail-safe and perform the cleanup steps outlined in Section
+             * 11.10.6.2.2, “Behavior on expiry of Fail-Safe timer”.
+             *
+             * @see {@link MatterSpecification.v13.Core} § 11.19.8.3
              */
             revokeCommissioning: Command(
                 0x2,
@@ -353,10 +360,12 @@ export namespace AdministratorCommissioning {
     export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
-     * Administrator Commissioning
-     *
      * This cluster is used to trigger a Node to allow a new Administrator to commission it. It defines Attributes,
      * Commands and Responses needed for this purpose.
+     *
+     * There are two methods of commissioning, Basic Commissioning which may be supported and is described in Section
+     * 5.6.2, “Basic Commissioning Method (BCM)” and Enhanced Commissioning which shall be supported and is described
+     * in Section 5.6.3, “Enhanced Commissioning Method (ECM)”.
      *
      * For the management of Operational Credentials and Trusted Root Certificates, the Node Operational Credentials
      * cluster is used.
@@ -364,7 +373,7 @@ export namespace AdministratorCommissioning {
      * AdministratorCommissioningCluster supports optional features that you can enable with the
      * AdministratorCommissioningCluster.with() factory method.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.18
+     * @see {@link MatterSpecification.v13.Core} § 11.19
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

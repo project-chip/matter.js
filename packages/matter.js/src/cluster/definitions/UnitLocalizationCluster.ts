@@ -9,14 +9,13 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
-import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace UnitLocalization {
     /**
-     * @see {@link MatterSpecification.v11.Core} § 11.5.5.1
+     * @see {@link MatterSpecification.v13.Core} § 11.5.5.1
      */
     export enum TempUnit {
         /**
@@ -45,12 +44,12 @@ export namespace UnitLocalization {
              * temperature in communication to the user. If provided, this value shall take priority over any unit
              * implied through the ActiveLocale Attribute.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.5.6.1
+             * @see {@link MatterSpecification.v13.Core} § 11.5.6.1
              */
             temperatureUnit: WritableAttribute(
                 0x0,
-                TlvNullable(TlvEnum<TempUnit>()),
-                { persistent: true, default: null, writeAcl: AccessLevel.Manage }
+                TlvEnum<TempUnit>(),
+                { persistent: true, writeAcl: AccessLevel.Manage }
             )
         }
     });
@@ -58,7 +57,7 @@ export namespace UnitLocalization {
     /**
      * These are optional features supported by UnitLocalizationCluster.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.5.4
+     * @see {@link MatterSpecification.v13.Core} § 11.5.4
      */
     export enum Feature {
         /**
@@ -99,12 +98,11 @@ export namespace UnitLocalization {
     export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
-     * Unit Localization
-     *
      * Nodes should be expected to be deployed to any and all regions of the world. These global regions may have
-     * differing preferences for the units in which values are conveyed in communication to a user. As such, Nodes that
-     * visually or audibly convey measurable values to the user need a mechanism by which they can be configured to use
-     * a user’s preferred unit.
+     * differing preferences for the units in which values are conveyed in communication to a
+     *
+     * user. As such, Nodes that visually or audibly convey measurable values to the user need a mechanism by which
+     * they can be configured to use a user’s preferred unit.
      *
      * This cluster supports an interface to a Node. It provides attributes for determining and configuring the units
      * that a Node shall utilize when conveying values in communication to a user.
@@ -112,7 +110,7 @@ export namespace UnitLocalization {
      * UnitLocalizationCluster supports optional features that you can enable with the UnitLocalizationCluster.with()
      * factory method.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.5
+     * @see {@link MatterSpecification.v13.Core} § 11.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

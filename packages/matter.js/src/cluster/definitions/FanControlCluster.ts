@@ -7,126 +7,199 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { FixedAttribute, WritableAttribute, Attribute } from "../../cluster/Cluster.js";
-import { TlvUInt8, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
+import { FixedAttribute, WritableAttribute, Attribute, Command, TlvNoResponse } from "../../cluster/Cluster.js";
+import { TlvUInt8, TlvBitmap, TlvEnum, TlvPercent } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace FanControl {
     /**
-     * The value of the FanControl rockSupport attribute
-     *
-     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.8
+     * @see {@link MatterSpecification.v13.Cluster} § 4.4.5.1
      */
-    export const RockSupport = { rockLeftRight: BitFlag(0), rockUpDown: BitFlag(1), rockRound: BitFlag(2) };
+    export const Rock = {
+        /**
+         * Indicate rock left to right
+         */
+        rockLeftRight: BitFlag(0),
+
+        /**
+         * Indicate rock up and down
+         */
+        rockUpDown: BitFlag(1),
+
+        /**
+         * Indicate rock around
+         */
+        rockRound: BitFlag(2)
+    };
 
     /**
-     * The value of the FanControl rockSetting attribute
-     *
-     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.9
+     * @see {@link MatterSpecification.v13.Cluster} § 4.4.5.2
      */
-    export const RockSetting = { rockLeftRight: BitFlag(0), rockUpDown: BitFlag(1), rockRound: BitFlag(2) };
+    export const Wind = {
+        /**
+         * Indicate sleep wind
+         */
+        sleepWind: BitFlag(0),
+
+        /**
+         * Indicate natural wind
+         */
+        naturalWind: BitFlag(1)
+    };
 
     /**
-     * The value of the FanControl windSupport attribute
-     *
-     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.10
+     * @see {@link MatterSpecification.v13.Cluster} § 4.4.5.4
      */
-    export const WindSupport = { sleepWind: BitFlag(0), naturalWind: BitFlag(1) };
+    export enum AirflowDirection {
+        /**
+         * Airflow is in the forward direction
+         */
+        Forward = 0,
+
+        /**
+         * Airflow is in the reverse direction
+         */
+        Reverse = 1
+    }
 
     /**
-     * The value of the FanControl windSetting attribute
-     *
-     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.11
+     * @see {@link MatterSpecification.v13.Cluster} § 4.4.5.3
      */
-    export const WindSetting = { sleepWind: BitFlag(0), naturalWind: BitFlag(1) };
+    export enum StepDirection {
+        /**
+         * Step moves in increasing direction
+         */
+        Increase = 0,
+
+        /**
+         * Step moves in decreasing direction
+         */
+        Decrease = 1
+    }
 
     /**
-     * The value of the FanControl fanMode attribute
+     * Input to the FanControl step command
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.1
+     * @see {@link MatterSpecification.v13.Cluster} § 4.4.7.1
+     */
+    export const TlvStepRequest = TlvObject({
+        /**
+         * This field shall indicate whether the fan speed increases or decreases to the next step value.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.4.7.1.1
+         */
+        direction: TlvField(0, TlvEnum<StepDirection>()),
+
+        /**
+         * This field shall indicate if the fan speed wraps between highest and lowest step value.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.4.7.1.2
+         */
+        wrap: TlvOptionalField(1, TlvBoolean),
+
+        /**
+         * This field shall indicate that the fan being off (speed value 0) is included as a step value.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.4.7.1.3
+         */
+        lowestOff: TlvOptionalField(2, TlvBoolean)
+    });
+
+    /**
+     * Input to the FanControl step command
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 4.4.7.1
+     */
+    export interface StepRequest extends TypeFromSchema<typeof TlvStepRequest> {}
+
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 4.4.5.5
      */
     export enum FanMode {
         /**
-         * Setting the attribute value to Off shall set the values of these attributes to 0 (zero):
-         *
-         *   • PercentSetting
-         *
-         *   • PercentCurrent
-         *
-         *   • SpeedSetting (if present)
-         *
-         *   • SpeedCurrent (if present)
-         *
-         * 4.4.6.1.2. Low, Medium, High or Unsupported
-         *
-         * If the fan only supports 1 speed then:
-         *
-         *   • only the High attribute value shall be supported
-         *
-         *   • SpeedMax attribute, if present, shall be 1
-         *
-         * If the fan only supports 2 speeds then only the Low and High attribute values shall be supported.
-         *
-         * If a client attempts to write an unsupported value (such as On), the FanMode attribute shall be set to High.
-         *
-         * If the value is High, Medium, or Low the server shall set these percent speed attributes to a single value
-         * in the corresponding range as defined in the percent rules:
-         *
-         *   • PercentSetting
-         *
-         *   • PercentCurrent
-         *
-         * If the value is High, Medium, or Low the server shall set these speed attributes to a single value in the
-         * corresponding range as defined in Speed Rules>:
-         *
-         *   • SpeedSetting (if present)
-         *
-         *   • SpeedCurrent (if present)
-         *
-         * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.1.1
+         * Fan is off
          */
         Off = 0,
 
+        /**
+         * Fan using low speed
+         *
+         * If the fan supports 2 or more speeds, the Low value shall be supported.
+         *
+         * The Low value shall be supported if and only if the FanModeSequence attribute value is less than 4.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.4.5.5.1
+         */
         Low = 1,
+
+        /**
+         * Fan using medium speed
+         *
+         * If the fan supports 3 or more speeds, the Medium value shall be supported.
+         *
+         * The Medium value shall be supported if and only if the FanModeSequence attribute value is 0 or 2.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.4.5.5.2
+         */
         Medium = 2,
+
+        /**
+         * Fan using high speed
+         */
         High = 3,
+
         On = 4,
 
         /**
-         * Setting the attribute value to Auto shall set the values of these attributes to null:
-         *
-         *   • PercentSetting
-         *
-         *   • SpeedSetting (if present)
-         *
-         * These attributes shall indicate the current state of the fan while this attribute value is Auto:
-         *
-         *   • PercentCurrent
-         *
-         *   • SpeedCurrent (if present)
-         *
-         * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.1.3
+         * Fan is using auto mode
          */
         Auto = 5,
 
+        /**
+         * Fan is using smart mode
+         */
         Smart = 6
     }
 
     /**
-     * The value of the FanControl fanModeSequence attribute
-     *
-     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.2
+     * @see {@link MatterSpecification.v13.Cluster} § 4.4.5.6
      */
     export enum FanModeSequence {
+        /**
+         * Fan is capable of off, low, medium and high modes
+         */
         OffLowMedHigh = 0,
+
+        /**
+         * Fan is capable of off, low and high modes
+         */
         OffLowHigh = 1,
+
+        /**
+         * Fan is capable of off, low, medium, high and auto modes
+         */
         OffLowMedHighAuto = 2,
+
+        /**
+         * Fan is capable of off, low, high and auto modes
+         */
         OffLowHighAuto = 3,
-        OffOnAuto = 4,
-        OffOn = 5
+
+        /**
+         * Fan is capable of off, high and auto modes
+         */
+        OffHighAuto = 4,
+
+        /**
+         * Fan is capable of off and high modes
+         */
+        OffHigh = 5
     }
 
     /**
@@ -135,30 +208,34 @@ export namespace FanControl {
     export const MultiSpeedComponent = MutableCluster.Component({
         attributes: {
             /**
-             * This attribute shall indicate that the fan has one speed (value of 1) or the maximum speed, if the fan
-             * is capable of multiple speeds.
+             * Indicates that the fan has one speed (value of 1) or the maximum speed, if the fan is capable of
+             * multiple speeds.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.5
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.5
              */
-            speedMax: FixedAttribute(0x4, TlvUInt8.bound({ min: 1, max: 100 }), { default: 1 }),
+            speedMax: FixedAttribute(0x4, TlvUInt8.bound({ min: 1, max: 100 })),
 
             /**
-             * This attribute shall indicate the speed setting for the fan. This attribute may be written by the client
-             * to indicate a new fan speed. If the client writes null to this attribute, the attribute value shall NOT
-             * change. If this is set to 0, the server shall set the FanMode attribute value to Off. Please see the
-             * Section 4.4.6.6.1 for details on other values.
+             * Indicates the speed setting for the fan. This attribute may be written by the client to indicate a new
+             * fan speed. If the client writes null to this attribute, the attribute value shall NOT change. A server
+             * shall return INVALID_IN_STATE to indicate that the fan is not in a state where the SpeedSetting can be
+             * changed to the requested value.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.6
+             * If this is successfully written to 0, the server shall set the FanMode attribute value to Off. Please
+             * see the Speed Rules for details on other values.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.6
              */
             speedSetting: WritableAttribute(0x5, TlvNullable(TlvUInt8), { default: 0 }),
 
             /**
-             * This attribute shall indicate the actual currently operating fan speed, or zero to indicate that the fan
-             * is off.
+             * Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There may
+             * be a temporary mismatch between the value of this attribute and the value of the SpeedSetting attribute
+             * due to other system requirements that would not allow the fan to operate at the requested setting.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.7
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.7
              */
-            speedCurrent: Attribute(0x6, TlvUInt8, { default: 0 })
+            speedCurrent: Attribute(0x6, TlvUInt8)
         }
     });
 
@@ -168,12 +245,11 @@ export namespace FanControl {
     export const RockingComponent = MutableCluster.Component({
         attributes: {
             /**
-             * This attribute is a bitmap that indicates what rocking motions the server supports. The bitmap is shown
-             * in the table below.
+             * This attribute is a bitmap that indicates what rocking motions the server supports.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.8
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.8
              */
-            rockSupport: FixedAttribute(0x7, TlvBitmap(TlvUInt8, RockSupport)),
+            rockSupport: FixedAttribute(0x7, TlvBitmap(TlvUInt8, Rock)),
 
             /**
              * This attribute is a bitmap that indicates the current active fan rocking motion settings. Each bit shall
@@ -187,11 +263,9 @@ export namespace FanControl {
              * For example: If RockUpDown and RockRound are both set, but this combination is not possible, then only
              * RockUpDown becomes active.
              *
-             * The bitmap is shown in the table below.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.9
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.9
              */
-            rockSetting: WritableAttribute(0x8, TlvBitmap(TlvUInt8, RockSetting))
+            rockSetting: WritableAttribute(0x8, TlvBitmap(TlvUInt8, Rock))
         }
     });
 
@@ -202,11 +276,11 @@ export namespace FanControl {
         attributes: {
             /**
              * This attribute is a bitmap that indicates what wind modes the server supports. At least one wind mode
-             * bit shall be set. The bitmap is shown in the table below.
+             * bit shall be set.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.10
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.10
              */
-            windSupport: FixedAttribute(0x9, TlvBitmap(TlvUInt8, WindSupport)),
+            windSupport: FixedAttribute(0x9, TlvBitmap(TlvUInt8, Wind)),
 
             /**
              * This attribute is a bitmap that indicates the current active fan wind feature settings. Each bit shall
@@ -220,24 +294,71 @@ export namespace FanControl {
              * For example: If Sleep Wind and Natural Wind are set, but this combination is not possible, then only
              * Sleep Wind becomes active.
              *
-             * The bitmap is shown in the table below.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.11
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.11
              */
-            windSetting: WritableAttribute(0xa, TlvBitmap(TlvUInt8, WindSetting))
+            windSetting: WritableAttribute(0xa, TlvBitmap(TlvUInt8, Wind))
+        }
+    });
+
+    /**
+     * A FanControlCluster supports these elements if it supports feature AirflowDirection.
+     */
+    export const AirflowDirectionComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * Indicates the current airflow direction of the fan. This attribute may be written by the client to
+             * indicate a new airflow direction for the fan. This attribute shall be set to one of the values in the
+             * AirflowDirectionEnum table.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.12
+             */
+            airflowDirection: WritableAttribute(
+                0xb,
+                TlvEnum<AirflowDirection>(),
+                { default: AirflowDirection.Forward }
+            )
+        }
+    });
+
+    /**
+     * A FanControlCluster supports these elements if it supports feature Step.
+     */
+    export const StepComponent = MutableCluster.Component({
+        commands: {
+            /**
+             * This command speeds up or slows down the fan, in steps, without the client having to know the fan speed.
+             * This command supports, for example, a user operated wall switch, where the user provides the feedback or
+             * control to stop sending this command when the proper speed is reached. The step speed values are
+             * implementation specific. How many step speeds are implemented is implementation specific.
+             *
+             * This command supports these fields:
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.7.1
+             */
+            step: Command(0x0, TlvStepRequest, 0x0, TlvNoResponse)
         }
     });
 
     /**
      * These are optional features supported by FanControlCluster.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 4.4.5
+     * @see {@link MatterSpecification.v13.Cluster} § 4.4.4
      */
     export enum Feature {
         /**
          * MultiSpeed
          *
-         * 1-100 speeds
+         * Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic speed control
+         * but left it up to the implementer to decide what was supported. Therefore, it is assumed that legacy client
+         * implementations are capable of determining, from the server, the number of speeds supported between 1, 2, or
+         * 3, and whether automatic speed control is supported.
+         *
+         * The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to SpeedMax,
+         * which has a maximum of 100.
+         *
+         * See Speed Rules for more details.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.4.4.1
          */
         MultiSpeed = "MultiSpeed",
 
@@ -260,7 +381,21 @@ export namespace FanControl {
          *
          * Wind emulation supported
          */
-        Wind = "Wind"
+        Wind = "Wind",
+
+        /**
+         * Step
+         *
+         * Step command supported
+         */
+        Step = "Step",
+
+        /**
+         * AirflowDirection
+         *
+         * Airflow Direction attribute is supported
+         */
+        AirflowDirection = "AirflowDirection"
     }
 
     /**
@@ -269,13 +404,23 @@ export namespace FanControl {
     export const Base = MutableCluster.Component({
         id: 0x202,
         name: "FanControl",
-        revision: 2,
+        revision: 4,
 
         features: {
             /**
              * MultiSpeed
              *
-             * 1-100 speeds
+             * Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic speed
+             * control but left it up to the implementer to decide what was supported. Therefore, it is assumed that
+             * legacy client implementations are capable of determining, from the server, the number of speeds
+             * supported between 1, 2, or 3, and whether automatic speed control is supported.
+             *
+             * The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to
+             * SpeedMax, which has a maximum of 100.
+             *
+             * See Speed Rules for more details.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.4.1
              */
             multiSpeed: BitFlag(0),
 
@@ -298,46 +443,73 @@ export namespace FanControl {
              *
              * Wind emulation supported
              */
-            wind: BitFlag(3)
+            wind: BitFlag(3),
+
+            /**
+             * Step
+             *
+             * Step command supported
+             */
+            step: BitFlag(4),
+
+            /**
+             * AirflowDirection
+             *
+             * Airflow Direction attribute is supported
+             */
+            airflowDirection: BitFlag(5)
         },
 
         attributes: {
             /**
-             * This attribute shall indicate the current speed mode of the fan. This attribute may be written by the
-             * client to indicate a new speed mode of the fan. This attribute shall be set to one of the values in the
-             * table below.
+             * Indicates the current speed mode of the fan. This attribute may be written by the client to request a
+             * different fan mode. A server shall return INVALID_IN_STATE to indicate that the fan is not in a state
+             * where the FanMode can be changed to the requested value. A server may have FanMode values that it can
+             * never be set to. For example, where this cluster appears on the same or another endpoint as other
+             * clusters with a system dependency, for example the Thermostat cluster, attempting to set the FanMode
+             * attribute of this cluster to Off may not be allowed by the system.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.1
+             * This attribute shall be set to one of the values in FanModeEnum.
+             *
+             * When the FanMode attribute is successfully written to, the PercentSetting and SpeedSetting (if present)
+             * attributes shall be set to appropriate values, as defined by the Percent Rules and Speed Rules
+             * respectively, unless otherwise specified below.
+             *
+             * When the FanMode attribute is set to any given mode, the PercentCurrent and SpeedCurrent (if present)
+             * shall indicate the actual currently operating fan speed, unless otherwise specified below.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.1
              */
             fanMode: WritableAttribute(0x0, TlvEnum<FanMode>(), { persistent: true, default: FanMode.Off }),
 
             /**
-             * This indicates the fan speed ranges that shall be supported.
+             * This attribute indicates the fan speed ranges that shall be supported.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.2
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.2
              */
-            fanModeSequence: WritableAttribute(
-                0x1,
-                TlvEnum<FanModeSequence>(),
-                { persistent: true, default: FanModeSequence.OffLowMedHighAuto }
-            ),
+            fanModeSequence: FixedAttribute(0x1, TlvEnum<FanModeSequence>()),
 
             /**
-             * This attribute shall indicate the speed setting for the fan. This attribute may be written by the client
-             * to indicate a new fan speed. If the client writes null to this attribute, the attribute value shall NOT
-             * change. If this is set to 0, the server shall set the FanMode attribute value to Off.
+             * Indicates the speed setting for the fan. This attribute may be written by the client to indicate a new
+             * fan speed. If the client writes null to this attribute, the attribute value shall NOT change. A server
+             * shall return INVALID_IN_STATE to indicate that the fan is not in a state where the PercentSetting can be
+             * changed to the requested value.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.3
+             * If this is successfully written to 0, the server shall set the FanMode attribute value to Off.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.3
              */
-            percentSetting: WritableAttribute(0x2, TlvNullable(TlvUInt8.bound({ max: 100 })), { default: 0 }),
+            percentSetting: WritableAttribute(0x2, TlvNullable(TlvPercent), { default: 0 }),
 
             /**
-             * This attribute shall indicate the actual currently operating fan speed, or zero to indicate that the fan
-             * is off. See Section 4.4.6.3.1 for more details.
+             * Indicates the actual currently operating fan speed, or zero to indicate that the fan is off. There may
+             * be a temporary mismatch between the value of this attribute and the value of the PercentSetting
+             * attribute due to other system requirements that would not allow the fan to operate at the requested
+             * setting. See Percent Rules for more details.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.4
+             * @see {@link MatterSpecification.v13.Cluster} § 4.4.6.4
              */
-            percentCurrent: Attribute(0x3, TlvUInt8.bound({ max: 100 }), { default: 0 })
+            percentCurrent: Attribute(0x3, TlvPercent)
         },
 
         /**
@@ -347,7 +519,9 @@ export namespace FanControl {
         extensions: MutableCluster.Extensions(
             { flags: { multiSpeed: true }, component: MultiSpeedComponent },
             { flags: { rocking: true }, component: RockingComponent },
-            { flags: { wind: true }, component: WindComponent }
+            { flags: { wind: true }, component: WindComponent },
+            { flags: { airflowDirection: true }, component: AirflowDirectionComponent },
+            { flags: { step: true }, component: StepComponent }
         )
     });
 
@@ -357,14 +531,12 @@ export namespace FanControl {
     export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
-     * Fan Control
-     *
-     * An interface for controlling a fan in a heating/cooling system.
+     * This cluster specifies an interface to control the speed of a fan.
      *
      * FanControlCluster supports optional features that you can enable with the FanControlCluster.with() factory
      * method.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 4.4
+     * @see {@link MatterSpecification.v13.Cluster} § 4.4
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
@@ -372,6 +544,8 @@ export namespace FanControl {
     const SPD = { multiSpeed: true };
     const RCK = { rocking: true };
     const WND = { wind: true };
+    const DIR = { airflowDirection: true };
+    const STEP = { step: true };
 
     /**
      * @see {@link Complete}
@@ -396,8 +570,14 @@ export namespace FanControl {
             rockSupport: MutableCluster.AsConditional(RockingComponent.attributes.rockSupport, { mandatoryIf: [RCK] }),
             rockSetting: MutableCluster.AsConditional(RockingComponent.attributes.rockSetting, { mandatoryIf: [RCK] }),
             windSupport: MutableCluster.AsConditional(WindComponent.attributes.windSupport, { mandatoryIf: [WND] }),
-            windSetting: MutableCluster.AsConditional(WindComponent.attributes.windSetting, { mandatoryIf: [WND] })
-        }
+            windSetting: MutableCluster.AsConditional(WindComponent.attributes.windSetting, { mandatoryIf: [WND] }),
+            airflowDirection: MutableCluster.AsConditional(
+                AirflowDirectionComponent.attributes.airflowDirection,
+                { mandatoryIf: [DIR] }
+            )
+        },
+
+        commands: { step: MutableCluster.AsConditional(StepComponent.commands.step, { mandatoryIf: [STEP] }) }
     });
 
     /**

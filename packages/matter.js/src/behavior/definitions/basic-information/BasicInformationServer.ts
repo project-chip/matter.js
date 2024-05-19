@@ -55,6 +55,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         setDefault("dataModelRevision", MATTER_DATAMODEL_VERSION);
         setDefault("hardwareVersionString", state.hardwareVersion.toString());
         setDefault("softwareVersionString", state.softwareVersion.toString());
+        setDefault("specificationVersion", 0x01030000);
 
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 

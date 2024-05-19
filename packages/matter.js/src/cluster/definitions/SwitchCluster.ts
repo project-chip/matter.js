@@ -7,9 +7,9 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { FixedAttribute, Event, EventPriority, WritableAttribute } from "../../cluster/Cluster.js";
+import { FixedAttribute, Event, EventPriority, Attribute } from "../../cluster/Cluster.js";
 import { TlvUInt8 } from "../../tlv/TlvNumber.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
@@ -19,24 +19,41 @@ export namespace Switch {
     /**
      * Body of the Switch multiPressOngoing event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.6
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6
      */
     export const TlvMultiPressOngoingEvent = TlvObject({
+        /**
+         * This field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6.1
+         */
         newPosition: TlvField(0, TlvUInt8),
+
+        /**
+         * This field shall contain:
+         *
+         *   • a value of 2 when the second press of a multi-press sequence has been detected,
+         *
+         *   • a value of 3 when the third press of a multi-press sequence has been detected,
+         *
+         *   • a value of N when the Nth press of a multi-press sequence has been detected.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6.2
+         */
         currentNumberOfPressesCounted: TlvField(1, TlvUInt8.bound({ min: 2 }))
     });
 
     /**
      * Body of the Switch multiPressOngoing event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.6
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6
      */
     export interface MultiPressOngoingEvent extends TypeFromSchema<typeof TlvMultiPressOngoingEvent> {}
 
     /**
      * Body of the Switch multiPressComplete event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.7
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.7
      */
     export const TlvMultiPressCompleteEvent = TlvObject({
         previousPosition: TlvField(0, TlvUInt8),
@@ -46,77 +63,112 @@ export namespace Switch {
     /**
      * Body of the Switch multiPressComplete event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.7
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.7
      */
     export interface MultiPressCompleteEvent extends TypeFromSchema<typeof TlvMultiPressCompleteEvent> {}
 
     /**
      * Body of the Switch switchLatched event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.1
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.1
      */
-    export const TlvSwitchLatchedEvent = TlvObject({ newPosition: TlvField(0, TlvUInt8) });
+    export const TlvSwitchLatchedEvent = TlvObject({
+        /**
+         * This field shall indicate the new value of the CurrentPosition attribute, i.e. after the move.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.1.1
+         */
+        newPosition: TlvField(0, TlvUInt8)
+    });
 
     /**
      * Body of the Switch switchLatched event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.1
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.1
      */
     export interface SwitchLatchedEvent extends TypeFromSchema<typeof TlvSwitchLatchedEvent> {}
 
     /**
      * Body of the Switch initialPress event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.2
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.2
      */
-    export const TlvInitialPressEvent = TlvObject({ newPosition: TlvField(0, TlvUInt8) });
+    export const TlvInitialPressEvent = TlvObject({
+        /**
+         * This field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.2.1
+         */
+        newPosition: TlvField(0, TlvUInt8)
+    });
 
     /**
      * Body of the Switch initialPress event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.2
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.2
      */
     export interface InitialPressEvent extends TypeFromSchema<typeof TlvInitialPressEvent> {}
 
     /**
      * Body of the Switch longPress event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.3
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.3
      */
-    export const TlvLongPressEvent = TlvObject({ newPosition: TlvField(0, TlvUInt8) });
+    export const TlvLongPressEvent = TlvObject({
+        /**
+         * This field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.3.1
+         */
+        newPosition: TlvField(0, TlvUInt8)
+    });
 
     /**
      * Body of the Switch longPress event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.3
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.3
      */
     export interface LongPressEvent extends TypeFromSchema<typeof TlvLongPressEvent> {}
 
     /**
      * Body of the Switch longRelease event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.5
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.5
      */
-    export const TlvLongReleaseEvent = TlvObject({ previousPosition: TlvField(0, TlvUInt8) });
+    export const TlvLongReleaseEvent = TlvObject({
+        /**
+         * This field shall indicate the previous value of the CurrentPosition attribute, i.e. just prior to release.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.5.1
+         */
+        previousPosition: TlvField(0, TlvUInt8)
+    });
 
     /**
      * Body of the Switch longRelease event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.5
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.5
      */
     export interface LongReleaseEvent extends TypeFromSchema<typeof TlvLongReleaseEvent> {}
 
     /**
      * Body of the Switch shortRelease event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.4
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.4
      */
-    export const TlvShortReleaseEvent = TlvObject({ previousPosition: TlvField(0, TlvUInt8) });
+    export const TlvShortReleaseEvent = TlvObject({
+        /**
+         * This field shall indicate the previous value of the CurrentPosition attribute, i.e. just prior to release.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.4.1
+         */
+        previousPosition: TlvField(0, TlvUInt8)
+    });
 
     /**
      * Body of the Switch shortRelease event
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.4
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.4
      */
     export interface ShortReleaseEvent extends TypeFromSchema<typeof TlvShortReleaseEvent> {}
 
@@ -126,11 +178,11 @@ export namespace Switch {
     export const MomentarySwitchMultiPressComponent = MutableCluster.Component({
         attributes: {
             /**
-             * This attribute shall indicate how many consecutive presses can be detected and reported by a momentary
-             * switch which supports multi-press (e.g. it will report the value 3 if it can detect single press, double
-             * press and triple press, but not quad press and beyond).
+             * Indicates how many consecutive presses can be detected and reported by a momentary switch which supports
+             * multi-press (e.g. it will report the value 3 if it can detect single press, double press and triple
+             * press, but not quad press and beyond).
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.11.5.3
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.5.3
              */
             multiPressMax: FixedAttribute(0x2, TlvUInt8.bound({ min: 2 }), { default: 2 })
         },
@@ -138,27 +190,15 @@ export namespace Switch {
         events: {
             /**
              * This event shall be generated to indicate how many times the momentary switch has been pressed in a
-             * multi-press sequence, during that sequence. See Section 1.11.9, “Sequence of events for MultiPress”
-             * below.
+             * multi-press sequence, during that sequence. See Multi Press Details below.
              *
-             * The NewPosition field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.
-             *
-             * The CurrentNumberOfPressesCounted field shall contain:
-             *
-             *   • a value of 2 when the second press of a multi-press sequence has been detected,
-             *
-             *   • a value of 3 when the third press of a multi-press sequence has been detected,
-             *
-             *   • a value of N when the Nth press of a multi-press sequence has been detected.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.6
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6
              */
             multiPressOngoing: Event(0x5, EventPriority.Info, TlvMultiPressOngoingEvent),
 
             /**
              * This event shall be generated to indicate how many times the momentary switch has been pressed in a
-             * multi-press sequence, after it has been detected that the sequence has ended. See Section 1.11.9,
-             * “Sequence of events for MultiPress” below.
+             * multi-press sequence, after it has been detected that the sequence has ended. See Multi Press Details.
              *
              * The PreviousPosition field shall indicate the previous value of the CurrentPosition attribute, i.e. just
              * prior to release.
@@ -178,7 +218,7 @@ export namespace Switch {
              *   • a value of N when there were exactly N presses in a multi-press sequence (and the sequence has
              *     ended).
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.7
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.7
              */
             multiPressComplete: Event(0x6, EventPriority.Info, TlvMultiPressCompleteEvent)
         }
@@ -193,9 +233,7 @@ export namespace Switch {
              * This event shall be generated, when the latching switch is moved to a new position. It may have been
              * delayed by debouncing within the switch.
              *
-             * The NewPosition field shall indicate the new value of the CurrentPosition attribute, i.e. after the move.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.1
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.1
              */
             switchLatched: Event(0x0, EventPriority.Info, TlvSwitchLatchedEvent)
         }
@@ -209,9 +247,7 @@ export namespace Switch {
             /**
              * This event shall be generated, when the momentary switch starts to be pressed (after debouncing).
              *
-             * The NewPosition field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.2
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.2
              */
             initialPress: Event(0x1, EventPriority.Info, TlvInitialPressEvent)
         }
@@ -226,22 +262,17 @@ export namespace Switch {
              * This event shall be generated, when the momentary switch has been pressed for a "long" time (this time
              * interval is manufacturer determined (e.g. since it depends on the switch physics)).
              *
-             * The NewPosition field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.3
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.3
              */
             longPress: Event(0x2, EventPriority.Info, TlvLongPressEvent),
 
             /**
              * This event shall be generated, when the momentary switch has been released (after debouncing) and after
              * having been pressed for a long time, i.e. this event shall be generated when the switch is released if a
-             * LongPress event has been generated since since the previous InitialPress event. Also see Section 1.11.8,
+             * LongPress event has been generated since the previous InitialPress event. Also see Section 1.13.7,
              * “Sequence of generated events”.
              *
-             * The PreviousPosition field shall indicate the previous value of the CurrentPosition attribute, i.e. just
-             * prior to release.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.5
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.5
              */
             longRelease: Event(0x4, EventPriority.Info, TlvLongReleaseEvent)
         }
@@ -262,12 +293,9 @@ export namespace Switch {
              *   • If the server does not support the Momentary Switch LongPress (MSL) feature, this event shall be
              *     generated when the switch is released - even when the switch was pressed for a long time.
              *
-             *   • Also see Section 1.11.8, “Sequence of generated events”.
+             *   • Also see Section 1.13.7, “Sequence of generated events”.
              *
-             * The PreviousPosition field shall indicate the previous value of the CurrentPosition attribute, i.e. just
-             * prior to release.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.4
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.4
              */
             shortRelease: Event(0x3, EventPriority.Info, TlvShortReleaseEvent)
         }
@@ -276,31 +304,56 @@ export namespace Switch {
     /**
      * These are optional features supported by SwitchCluster.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11.4
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.4
      */
     export enum Feature {
         /**
          * LatchingSwitch
+         *
+         * This feature is for a switch that maintains its position after being pressed (or turned).
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.1
          */
         LatchingSwitch = "LatchingSwitch",
 
         /**
          * MomentarySwitch
+         *
+         * This feature is for a switch that does not maintain its position after being pressed (or turned). After
+         * releasing, it goes back to its idle position.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.2
          */
         MomentarySwitch = "MomentarySwitch",
 
         /**
          * MomentarySwitchRelease
+         *
+         * This feature is for a momentary switch that can distinguish and report release events. When this feature
+         * flag MSR is present, MS shall be present as well.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.3
          */
         MomentarySwitchRelease = "MomentarySwitchRelease",
 
         /**
          * MomentarySwitchLongPress
+         *
+         * This feature is for a momentary switch that can distinguish and report long presses from short presses. When
+         * this feature flag MSL is present, MS and MSR shall be present as well.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.4
          */
         MomentarySwitchLongPress = "MomentarySwitchLongPress",
 
         /**
          * MomentarySwitchMultiPress
+         *
+         * This feature is for a momentary switch that can distinguish and report double press and potentially multiple
+         * presses with more events, such as triple press, etc. When this feature flag MSM is present, MS and MSR shall
+         * be present as well.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.5
          */
         MomentarySwitchMultiPress = "MomentarySwitchMultiPress"
     }
@@ -316,48 +369,72 @@ export namespace Switch {
         features: {
             /**
              * LatchingSwitch
+             *
+             * This feature is for a switch that maintains its position after being pressed (or turned).
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.1
              */
             latchingSwitch: BitFlag(0),
 
             /**
              * MomentarySwitch
+             *
+             * This feature is for a switch that does not maintain its position after being pressed (or turned). After
+             * releasing, it goes back to its idle position.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.2
              */
             momentarySwitch: BitFlag(1),
 
             /**
              * MomentarySwitchRelease
+             *
+             * This feature is for a momentary switch that can distinguish and report release events. When this feature
+             * flag MSR is present, MS shall be present as well.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.3
              */
             momentarySwitchRelease: BitFlag(2),
 
             /**
              * MomentarySwitchLongPress
+             *
+             * This feature is for a momentary switch that can distinguish and report long presses from short presses.
+             * When this feature flag MSL is present, MS and MSR shall be present as well.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.4
              */
             momentarySwitchLongPress: BitFlag(3),
 
             /**
              * MomentarySwitchMultiPress
+             *
+             * This feature is for a momentary switch that can distinguish and report double press and potentially
+             * multiple presses with more events, such as triple press, etc. When this feature flag MSM is present, MS
+             * and MSR shall be present as well.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.5
              */
             momentarySwitchMultiPress: BitFlag(4)
         },
 
         attributes: {
             /**
-             * This attribute shall indicate the maximum number of positions the switch has. Any kind of switch has a
-             * minimum of 2 positions. Also see Section 1.11.10, “NumberOfPositions > 2” for the case
-             * NumberOfPositions>2.
+             * Indicates the maximum number of positions the switch has. Any kind of switch has a minimum of 2
+             * positions. Also see Multi Position Details for the case NumberOfPositions>2.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.11.5.1
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.5.1
              */
             numberOfPositions: FixedAttribute(0x0, TlvUInt8.bound({ min: 2 }), { default: 2 }),
 
             /**
-             * This attribute shall indicate the position of the switch. The valid range is zero to
-             * NumberOfPositions-1. CurrentPosition value 0 shall be assigned to the default position of the switch:
-             * for example the "open" state of a rocker switch, or the "idle" state of a push button switch.
+             * Indicates the position of the switch. The valid range is zero to NumberOfPositions-1. CurrentPosition
+             * value 0 shall be assigned to the default position of the switch: for example the "open" state of a
+             * rocker switch, or the "idle" state of a push button switch.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.11.5.2
+             * @see {@link MatterSpecification.v13.Cluster} § 1.13.5.2
              */
-            currentPosition: WritableAttribute(0x1, TlvUInt8, { persistent: true, default: 0 })
+            currentPosition: Attribute(0x1, TlvUInt8, { persistent: true, default: 0 })
         },
 
         /**
@@ -385,8 +462,6 @@ export namespace Switch {
     export const ClusterInstance = MutableCluster.ExtensibleOnly(Base);
 
     /**
-     * Switch
-     *
      * This cluster exposes interactions with a switch device, for the purpose of using those interactions by other
      * devices.
      *
@@ -403,7 +478,7 @@ export namespace Switch {
      * Per the Matter specification you cannot use {@link SwitchCluster} without enabling certain feature combinations.
      * You must use the SwitchCluster.with() factory method to obtain a working cluster.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.11
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

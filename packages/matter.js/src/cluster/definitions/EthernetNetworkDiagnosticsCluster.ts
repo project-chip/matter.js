@@ -18,7 +18,7 @@ import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace EthernetNetworkDiagnostics {
     /**
-     * @see {@link MatterSpecification.v11.Core} § 11.15.5.1
+     * @see {@link MatterSpecification.v13.Core} § 11.16.5.1
      */
     export enum PHYRate {
         /**
@@ -81,16 +81,16 @@ export namespace EthernetNetworkDiagnostics {
              * The PacketRxCount attribute shall indicate the number of packets that have been received on the ethernet
              * network interface. The PacketRxCount attribute shall be reset to 0 upon a reboot of the Node.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.15.6.3
+             * @see {@link MatterSpecification.v13.Core} § 11.16.6.3
              */
-            packetRxCount: Attribute(0x2, TlvUInt64, { default: 0 }),
+            packetRxCount: Attribute(0x2, TlvUInt64, { omitChanges: true, default: 0 }),
 
             /**
              * The PacketTxCount attribute shall indicate the number of packets that have been successfully transferred
              * on the ethernet network interface. The PacketTxCount attribute shall be reset to 0 upon a reboot of the
              * Node.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.15.6.4
+             * @see {@link MatterSpecification.v13.Core} § 11.16.6.4
              */
             packetTxCount: Attribute(0x3, TlvUInt64, { omitChanges: true, default: 0 })
         }
@@ -103,9 +103,11 @@ export namespace EthernetNetworkDiagnostics {
         attributes: {
             /**
              * The TxErrCount attribute shall indicate the number of failed packet transmissions that have occurred on
-             * the ethernet network interface. The TxErrCount attribute shall be reset to 0 upon a reboot of the Node.
+             * the ethernet network interface. The TxErrCount attribute shall be reset to 0 upon a
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.15.6.5
+             * reboot of the Node.
+             *
+             * @see {@link MatterSpecification.v13.Core} § 11.16.6.5
              */
             txErrCount: Attribute(0x4, TlvUInt64, { omitChanges: true, default: 0 }),
 
@@ -114,7 +116,7 @@ export namespace EthernetNetworkDiagnostics {
              * to transmit a packet on the ethernet network interface. The CollisionCount attribute shall be reset to 0
              * upon a reboot of the Node.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.15.6.6
+             * @see {@link MatterSpecification.v13.Core} § 11.16.6.6
              */
             collisionCount: Attribute(0x5, TlvUInt64, { omitChanges: true, default: 0 }),
 
@@ -123,7 +125,7 @@ export namespace EthernetNetworkDiagnostics {
              * to lack of buffer memory to retain all packets on the ethernet network interface. The OverrunCount
              * attribute shall be reset to 0 upon a reboot of the Node.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.15.6.7
+             * @see {@link MatterSpecification.v13.Core} § 11.16.6.7
              */
             overrunCount: Attribute(0x6, TlvUInt64, { omitChanges: true, default: 0 })
         }
@@ -149,7 +151,7 @@ export namespace EthernetNetworkDiagnostics {
              *
              * This command has no associated data.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.15.7.1
+             * @see {@link MatterSpecification.v13.Core} § 11.16.7.1
              */
             resetCounts: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
@@ -158,7 +160,7 @@ export namespace EthernetNetworkDiagnostics {
     /**
      * These are optional features supported by EthernetNetworkDiagnosticsCluster.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.15.4
+     * @see {@link MatterSpecification.v13.Core} § 11.16.4
      */
     export enum Feature {
         /**
@@ -209,7 +211,7 @@ export namespace EthernetNetworkDiagnostics {
              * of the Node. A value of null shall indicate that the interface is not currently configured or
              * operational.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.15.6.1
+             * @see {@link MatterSpecification.v13.Core} § 11.16.6.1
              */
             phyRate: OptionalAttribute(0x0, TlvNullable(TlvEnum<PHYRate>()), { default: null }),
 
@@ -217,7 +219,7 @@ export namespace EthernetNetworkDiagnostics {
              * The FullDuplex attribute shall indicate if the Node is currently utilizing the full-duplex operating
              * mode. A value of null shall indicate that the interface is not currently configured or operational.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.15.6.2
+             * @see {@link MatterSpecification.v13.Core} § 11.16.6.2
              */
             fullDuplex: OptionalAttribute(0x1, TlvNullable(TlvBoolean), { default: null }),
 
@@ -226,12 +228,15 @@ export namespace EthernetNetworkDiagnostics {
              * ethernet network interface. A value of null shall indicate that the interface is not currently
              * configured or operational.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.15.6.8
+             * @see {@link MatterSpecification.v13.Core} § 11.16.6.8
              */
             carrierDetect: OptionalAttribute(0x7, TlvNullable(TlvBoolean), { omitChanges: true, default: null }),
 
             /**
-             * @see {@link MatterSpecification.v11.Core} § 11.15.6
+             * The TimeSinceReset attribute shall indicate the duration of time, in minutes, that it has been since the
+             * ethernet network interface has reset for any reason.
+             *
+             * @see {@link MatterSpecification.v13.Core} § 11.16.6.9
              */
             timeSinceReset: OptionalAttribute(0x8, TlvUInt64, { omitChanges: true, default: 0 })
         },
@@ -254,8 +259,6 @@ export namespace EthernetNetworkDiagnostics {
     export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
-     * Ethernet Network Diagnostics
-     *
      * The Ethernet Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may
      * be used by a Node to assist a user or Administrator in diagnosing potential problems. The Ethernet Network
      * Diagnostics Cluster attempts to centralize all metrics that are relevant to a potential Ethernet connection to a
@@ -264,7 +267,7 @@ export namespace EthernetNetworkDiagnostics {
      * EthernetNetworkDiagnosticsCluster supports optional features that you can enable with the
      * EthernetNetworkDiagnosticsCluster.with() factory method.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.15
+     * @see {@link MatterSpecification.v13.Core} § 11.16
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

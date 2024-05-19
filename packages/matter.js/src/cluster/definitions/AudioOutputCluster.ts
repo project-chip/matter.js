@@ -8,7 +8,7 @@
 
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Command, TlvNoResponse, AccessLevel, Attribute } from "../../cluster/Cluster.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -21,21 +21,21 @@ export namespace AudioOutput {
     /**
      * Input to the AudioOutput renameOutput command
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 6.5.4.2
+     * @see {@link MatterSpecification.v13.Cluster} § 6.5.7.2
      */
     export const TlvRenameOutputRequest = TlvObject({ index: TlvField(0, TlvUInt8), name: TlvField(1, TlvString) });
 
     /**
      * Input to the AudioOutput renameOutput command
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 6.5.4.2
+     * @see {@link MatterSpecification.v13.Cluster} § 6.5.7.2
      */
     export interface RenameOutputRequest extends TypeFromSchema<typeof TlvRenameOutputRequest> {}
 
     /**
      * The type of output, expressed as an enum, with the following values:
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 6.5.5.2
+     * @see {@link MatterSpecification.v13.Cluster} § 6.5.5.1
      */
     export enum OutputType {
         /**
@@ -53,20 +53,20 @@ export namespace AudioOutput {
     /**
      * This contains information about an output.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 6.5.5.1
+     * @see {@link MatterSpecification.v13.Cluster} § 6.5.5.2
      */
     export const TlvOutputInfoStruct = TlvObject({
         /**
-         * This shall indicate the unique index into the list of outputs.
+         * This field shall indicate the unique index into the list of outputs.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.5.5.1.1
+         * @see {@link MatterSpecification.v13.Cluster} § 6.5.5.2.1
          */
         index: TlvField(0, TlvUInt8),
 
         /**
-         * This shall indicate the type of output
+         * This field shall indicate the type of output.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.5.5.1.2
+         * @see {@link MatterSpecification.v13.Cluster} § 6.5.5.2.2
          */
         outputType: TlvField(1, TlvEnum<OutputType>()),
 
@@ -74,29 +74,37 @@ export namespace AudioOutput {
          * The device defined and user editable output name, such as “Soundbar”, “Speakers”. This field may be blank,
          * but SHOULD be provided when known.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.5.5.1.3
+         * @see {@link MatterSpecification.v13.Cluster} § 6.5.5.2.3
          */
-        name: TlvField(2, TlvString.bound({ maxLength: 32 }))
+        name: TlvField(2, TlvString)
     });
 
     /**
      * This contains information about an output.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 6.5.5.1
+     * @see {@link MatterSpecification.v13.Cluster} § 6.5.5.2
      */
     export interface OutputInfoStruct extends TypeFromSchema<typeof TlvOutputInfoStruct> {}
 
     /**
      * Input to the AudioOutput selectOutput command
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 6.5.4
+     * @see {@link MatterSpecification.v13.Cluster} § 6.5.7.1
      */
-    export const TlvSelectOutputRequest = TlvObject({ index: TlvField(0, TlvUInt8) });
+    export const TlvSelectOutputRequest = TlvObject({
+        /**
+         * This shall indicate the index field of the OutputInfoStruct from the OutputList attribute in which to change
+         * to.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 6.5.7.1.1
+         */
+        index: TlvField(0, TlvUInt8)
+    });
 
     /**
      * Input to the AudioOutput selectOutput command
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 6.5.4
+     * @see {@link MatterSpecification.v13.Cluster} § 6.5.7.1
      */
     export interface SelectOutputRequest extends TypeFromSchema<typeof TlvSelectOutputRequest> {}
 
@@ -111,7 +119,7 @@ export namespace AudioOutput {
              * Updates to the output name shall appear in the device’s settings menus. Name updates may automatically
              * be sent to the actual device to which the output connects.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 6.5.4.2
+             * @see {@link MatterSpecification.v13.Cluster} § 6.5.7.2
              */
             renameOutput: Command(0x1, TlvRenameOutputRequest, 0x1, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
@@ -120,7 +128,7 @@ export namespace AudioOutput {
     /**
      * These are optional features supported by AudioOutputCluster.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 6.5.2
+     * @see {@link MatterSpecification.v13.Cluster} § 6.5.4
      */
     export enum Feature {
         /**
@@ -150,23 +158,29 @@ export namespace AudioOutput {
 
         attributes: {
             /**
-             * This list provides the outputs supported by the device.
+             * This attribute provides the list of outputs supported by the device.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 6.5.3.1
+             * @see {@link MatterSpecification.v13.Cluster} § 6.5.6.1
              */
-            outputList: Attribute(0x0, TlvArray(TlvOutputInfoStruct)),
+            outputList: Attribute(0x0, TlvArray(TlvOutputInfoStruct), { default: [] }),
 
             /**
-             * This field contains the value of the index field of the currently selected OutputInfoStruct.
+             * This attribute contains the value of the index field of the currently selected OutputInfoStruct.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 6.5.3.2
+             * @see {@link MatterSpecification.v13.Cluster} § 6.5.6.2
              */
-            currentOutput: Attribute(0x1, TlvUInt8, { default: 0 })
+            currentOutput: Attribute(0x1, TlvUInt8)
         },
 
         commands: {
             /**
-             * @see {@link MatterSpecification.v11.Cluster} § 6.5.4
+             * Upon receipt, this shall change the output on the device to the output at a specific index in the Output
+             * List.
+             *
+             * Note that when the current output is set to an output of type HDMI, adjustments to volume via a Speaker
+             * endpoint on the same node may cause HDMI volume up/down commands to be sent to the given HDMI output.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 6.5.7.1
              */
             selectOutput: Command(0x0, TlvSelectOutputRequest, 0x0, TlvNoResponse)
         },
@@ -184,14 +198,19 @@ export namespace AudioOutput {
     export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
-     * Audio Output
-     *
      * This cluster provides an interface for controlling the Output on a Video Player device such as a TV.
+     *
+     * This cluster would be supported on a device with audio outputs like a Video Player device (Smart TV, TV Setup
+     * Top Box, Smart Speaker, etc).
+     *
+     * This cluster provides the list of available outputs and provides commands for selecting and renaming them.
+     *
+     * The cluster server for Audio Output is implemented by a device that has configurable audio output.
      *
      * AudioOutputCluster supports optional features that you can enable with the AudioOutputCluster.with() factory
      * method.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 6.5
+     * @see {@link MatterSpecification.v13.Cluster} § 6.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

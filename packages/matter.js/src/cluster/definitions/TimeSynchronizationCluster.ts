@@ -23,11 +23,11 @@ import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { TlvUInt8, TlvInt32, TlvEpochUs, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvInt32, TlvEpochUs, TlvEnum, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
@@ -104,7 +104,7 @@ export namespace TimeSynchronization {
          */
         trustedTimeSource: TlvField(0, TlvNullable(TlvFabricScopedTrustedTimeSourceStruct)),
 
-        fabricIndex: TlvField(254, TlvUInt8.bound({ min: 1, max: 254 }))
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**

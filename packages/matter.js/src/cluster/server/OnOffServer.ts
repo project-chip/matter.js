@@ -17,7 +17,7 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
     let timedOnTimer: Timer | undefined;
     let delayedOffTimer: Timer | undefined;
 
-    const getTimedOnTimer = (onTime: AttributeServer<number | null>, onOff: AttributeServer<boolean>) => {
+    const getTimedOnTimer = (onTime: AttributeServer<number>, onOff: AttributeServer<boolean>) => {
         if (timedOnTimer === undefined) {
             timedOnTimer = Time.getPeriodicTimer("Delayed on", 100, () => {
                 let time = onTime.getLocal() ?? 0 - 0.1;
@@ -32,7 +32,7 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
         return timedOnTimer;
     };
 
-    const getDelayedOffTimer = (offWaitTime: AttributeServer<number | null>) => {
+    const getDelayedOffTimer = (offWaitTime: AttributeServer<number>) => {
         if (delayedOffTimer === undefined) {
             delayedOffTimer = Time.getTimer("Delayed off", 100, () => {
                 let time = offWaitTime.getLocal() ?? 0 - 0.1;
@@ -118,15 +118,20 @@ export const createDefaultOnOffClusterServer = (
     isLighting = false,
 ) => {
     const cluster = isLighting ? OnOff.Cluster.with(OnOff.Feature.Lighting) : OnOff.Cluster;
-    return ClusterServer(
-        cluster,
-        attributeInitialValues ?? {
+
+    if (!attributeInitialValues) {
+        attributeInitialValues = {
             onOff: false,
             globalSceneControl: isLighting ? false : undefined,
-            onTime: isLighting ? null : undefined,
-            offWaitTime: isLighting ? null : undefined,
+            onTime: isLighting ? 0 : undefined,
+            offWaitTime: isLighting ? 0 : undefined,
             startUpOnOff: isLighting ? null : undefined,
-        },
+        };
+    }
+
+    return ClusterServer(
+        cluster,
+        attributeInitialValues,
         WrapCommandHandler(OnOffClusterDefaultHandler(), commandHandler),
     );
 };

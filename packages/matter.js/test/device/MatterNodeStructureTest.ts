@@ -72,6 +72,8 @@ function addRequiredRootClusters(
                         subscriptionsPerFabric: 3,
                     },
                     serialNumber: `node-matter-0000`,
+                    specificationVersion: 0x01030000,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -191,6 +193,10 @@ function addRequiredRootClusters(
                 testEventTrigger: async () => {
                     /* ignore */
                 },
+                timeSnapshot: async () => ({
+                    systemTimeMs: 0,
+                    posixTimeMs: 0,
+                }),
             },
             {
                 bootReason: true,

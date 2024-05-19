@@ -20,7 +20,7 @@ import { TlvUInt64, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
-import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
@@ -28,14 +28,14 @@ import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace SoftwareDiagnostics {
     /**
-     * @see {@link MatterSpecification.v11.Core} § 11.12.5.1
+     * @see {@link MatterSpecification.v13.Core} § 11.13.5.1
      */
     export const TlvThreadMetricsStruct = TlvObject({
         /**
          * The Id field shall be a server-assigned per-thread unique ID that is constant for the duration of the
          * thread. Efforts SHOULD be made to avoid reusing ID values when possible.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.12.5.1.1
+         * @see {@link MatterSpecification.v13.Core} § 11.13.5.1.1
          */
         id: TlvField(0, TlvUInt64),
 
@@ -43,7 +43,7 @@ export namespace SoftwareDiagnostics {
          * The Name field shall be set to a vendor defined name or prefix of the software thread that is static for the
          * duration of the thread.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.12.5.1.2
+         * @see {@link MatterSpecification.v13.Core} § 11.13.5.1.2
          */
         name: TlvOptionalField(1, TlvString.bound({ maxLength: 8 })),
 
@@ -51,7 +51,7 @@ export namespace SoftwareDiagnostics {
          * The StackFreeCurrent field shall indicate the current amount of stack memory, in bytes, that are not being
          * utilized on the respective thread.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.12.5.1.3
+         * @see {@link MatterSpecification.v13.Core} § 11.13.5.1.3
          */
         stackFreeCurrent: TlvOptionalField(2, TlvUInt32),
 
@@ -61,35 +61,34 @@ export namespace SoftwareDiagnostics {
          * respective thread. This value shall only be reset upon a Node reboot or upon receiving of the
          * ResetWatermarks command.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.12.5.1.4
+         * @see {@link MatterSpecification.v13.Core} § 11.13.5.1.4
          */
         stackFreeMinimum: TlvOptionalField(3, TlvUInt32),
 
         /**
-         * The StackSize field shall indicate the amount of stack memory, in bytes, that has been allocated
+         * The StackSize field shall indicate the amount of stack memory, in bytes, that has been allocated for use by
+         * the respective thread.
          *
-         * for use by the respective thread.
-         *
-         * @see {@link MatterSpecification.v11.Core} § 11.12.5.1.5
+         * @see {@link MatterSpecification.v13.Core} § 11.13.5.1.5
          */
         stackSize: TlvOptionalField(4, TlvUInt32)
     });
 
     /**
-     * @see {@link MatterSpecification.v11.Core} § 11.12.5.1
+     * @see {@link MatterSpecification.v13.Core} § 11.13.5.1
      */
     export interface ThreadMetricsStruct extends TypeFromSchema<typeof TlvThreadMetricsStruct> {}
 
     /**
      * Body of the SoftwareDiagnostics softwareFault event
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.12.8.1
+     * @see {@link MatterSpecification.v13.Core} § 11.13.8.1
      */
     export const TlvSoftwareFaultEvent = TlvObject({
         /**
          * The ID field shall be set to the ID of the software thread in which the last software fault occurred.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.12.8.1.1
+         * @see {@link MatterSpecification.v13.Core} § 11.13.8.1.1
          */
         id: TlvField(0, TlvUInt64),
 
@@ -97,7 +96,7 @@ export namespace SoftwareDiagnostics {
          * The Name field shall be set to a manufacturer-specified name or prefix of the software thread in which the
          * last software fault occurred.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.12.8.1.2
+         * @see {@link MatterSpecification.v13.Core} § 11.13.8.1.2
          */
         name: TlvOptionalField(1, TlvString.bound({ maxLength: 8 })),
 
@@ -106,7 +105,7 @@ export namespace SoftwareDiagnostics {
          * in further diagnosing or debugging a software fault. The FaultRecording field may be used to convey
          * information such as, but not limited to, thread backtraces or register contents.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.12.8.1.3
+         * @see {@link MatterSpecification.v13.Core} § 11.13.8.1.3
          */
         faultRecording: TlvOptionalField(2, TlvByteString.bound({ maxLength: 1024 }))
     });
@@ -114,7 +113,7 @@ export namespace SoftwareDiagnostics {
     /**
      * Body of the SoftwareDiagnostics softwareFault event
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.12.8.1
+     * @see {@link MatterSpecification.v13.Core} § 11.13.8.1
      */
     export interface SoftwareFaultEvent extends TypeFromSchema<typeof TlvSoftwareFaultEvent> {}
 
@@ -128,9 +127,9 @@ export namespace SoftwareDiagnostics {
              * has been used by the Node. This value shall only be reset upon a Node reboot or upon receiving of the
              * ResetWatermarks command.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.12.6.4
+             * @see {@link MatterSpecification.v13.Core} § 11.13.6.4
              */
-            currentHeapHighWatermark: Attribute(0x3, TlvUInt64, { default: 0 })
+            currentHeapHighWatermark: Attribute(0x3, TlvUInt64)
         },
 
         commands: {
@@ -151,7 +150,7 @@ export namespace SoftwareDiagnostics {
              * If implemented, the server shall set the value of the StackFreeMinimum field for every thread to the
              * value of the corresponding thread’s StackFreeCurrent field.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.12.7.1
+             * @see {@link MatterSpecification.v13.Core} § 11.13.7.1
              */
             resetWatermarks: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
@@ -160,7 +159,7 @@ export namespace SoftwareDiagnostics {
     /**
      * These are optional features supported by SoftwareDiagnosticsCluster.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.12.4
+     * @see {@link MatterSpecification.v13.Core} § 11.13.4
      */
     export enum Feature {
         /**
@@ -193,7 +192,7 @@ export namespace SoftwareDiagnostics {
              * The ThreadMetrics attribute shall be a list of ThreadMetricsStruct structs. Each active thread on the
              * Node shall be represented by a single entry within the ThreadMetrics attribute.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.12.6.1
+             * @see {@link MatterSpecification.v13.Core} § 11.13.6.1
              */
             threadMetrics: OptionalAttribute(0x0, TlvArray(TlvThreadMetricsStruct, { maxLength: 64 }), { default: [] }),
 
@@ -201,24 +200,24 @@ export namespace SoftwareDiagnostics {
              * The CurrentHeapFree attribute shall indicate the current amount of heap memory, in bytes, that are free
              * for allocation. The effective amount may be smaller due to heap fragmentation or other reasons.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.12.6.2
+             * @see {@link MatterSpecification.v13.Core} § 11.13.6.2
              */
-            currentHeapFree: OptionalAttribute(0x1, TlvUInt64, { default: 0 }),
+            currentHeapFree: OptionalAttribute(0x1, TlvUInt64),
 
             /**
              * The CurrentHeapUsed attribute shall indicate the current amount of heap memory, in bytes, that is being
              * used.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.12.6.3
+             * @see {@link MatterSpecification.v13.Core} § 11.13.6.3
              */
-            currentHeapUsed: OptionalAttribute(0x2, TlvUInt64, { default: 0 })
+            currentHeapUsed: OptionalAttribute(0x2, TlvUInt64)
         },
 
         events: {
             /**
              * The SoftwareFault Event shall be generated when a software fault takes place on the Node.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.12.8.1
+             * @see {@link MatterSpecification.v13.Core} § 11.13.8.1
              */
             softwareFault: OptionalEvent(0x0, EventPriority.Info, TlvSoftwareFaultEvent)
         },
@@ -236,8 +235,6 @@ export namespace SoftwareDiagnostics {
     export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
-     * Software Diagnostics
-     *
      * The Software Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may be used
      * by a Node to assist a user or Administrator in diagnosing potential problems. The Software Diagnostics Cluster
      * attempts to centralize all metrics that are relevant to the software that may be running on a Node.
@@ -245,7 +242,7 @@ export namespace SoftwareDiagnostics {
      * SoftwareDiagnosticsCluster supports optional features that you can enable with the
      * SoftwareDiagnosticsCluster.with() factory method.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.12
+     * @see {@link MatterSpecification.v13.Core} § 11.13
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

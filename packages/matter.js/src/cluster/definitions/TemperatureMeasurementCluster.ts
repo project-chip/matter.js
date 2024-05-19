@@ -24,53 +24,46 @@ export namespace TemperatureMeasurement {
 
         attributes: {
             /**
-             * Represents the temperature in degrees Celsius as follows:
+             * Indicates the measured temperature. The null value indicates that the temperature is unknown.
              *
-             * MeasuredValue = 100 x temperature [°C]
-             *
-             * Where -273.15°C ≤ temperature ≤ 327.67°C, with a resolution of 0.01°C. The null value indicates that the
-             * temperature is unknown.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.3.4.1
+             * @see {@link MatterSpecification.v13.Cluster} § 2.3.4.1
              */
             measuredValue: Attribute(0x0, TlvNullable(TlvInt16)),
 
             /**
-             * The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that is capable of being
-             * measured. See Measured Value for more details.
+             * Indicates the minimum value of MeasuredValue that is capable of being measured. See Measured Value for
+             * more details.
              *
              * The null value indicates that the value is not available.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.3.4.2
+             * @see {@link MatterSpecification.v13.Cluster} § 2.3.4.2
              */
             minMeasuredValue: Attribute(0x1, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: -27315 }),
 
             /**
-             * The MaxMeasuredValue attribute indicates the maximum value of MeasuredValue that is capable of being
-             * measured. See Measured Value for more details.
+             * This attribute indicates the maximum value of MeasuredValue that is capable of being measured. See
+             * Measured Value for more details.
              *
              * The null value indicates that the value is not available.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.3.4.3
+             * @see {@link MatterSpecification.v13.Cluster} § 2.3.4.3
              */
-            maxMeasuredValue: Attribute(0x2, TlvNullable(TlvInt16), { default: 32767 }),
+            maxMeasuredValue: Attribute(0x2, TlvNullable(TlvInt16.bound({ max: 32767 })), { default: 32767 }),
 
             /**
              * See Measured Value.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.3.4.4
+             * @see {@link MatterSpecification.v13.Cluster} § 2.3.4.4
              */
             tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 }), { default: 0 })
         }
     })
 
     /**
-     * Temperature Measurement
-     *
      * This cluster provides an interface to temperature measurement functionality, including configuration and
      * provision of notifications of temperature measurements.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 2.3
+     * @see {@link MatterSpecification.v13.Cluster} § 2.3
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

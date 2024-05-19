@@ -8,7 +8,7 @@ import { LocalMatter } from "../local.js";
 
 LocalMatter.children.push({
     tag: "cluster",
-    name: "Identify",
+    name: "LevelControl",
 
     children: [
         // Docmentation for "on/off" variants is in prose.  They have the same structure as non-on/off commands

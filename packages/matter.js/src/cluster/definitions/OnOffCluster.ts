@@ -11,16 +11,16 @@ import { Attribute, WritableAttribute, AccessLevel, Command, TlvNoResponse } fro
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvUInt16, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { BitFlag, BitField } from "../../schema/BitmapSchema.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace OnOff {
     /**
-     * @see {@link MatterSpecification.v11.Cluster} § 1.5.5.1
+     * @see {@link MatterSpecification.v13.Cluster} § 1.5.5.2
      */
     export enum StartUpOnOff {
         /**
@@ -40,33 +40,42 @@ export namespace OnOff {
         Toggle = 2
     }
 
-    export enum OnOffEffectIdentifier {
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 1.5.5.3
+     */
+    export enum EffectIdentifier {
+        /**
+         * Delayed All Off
+         */
         DelayedAllOff = 0,
+
+        /**
+         * Dying Light
+         */
         DyingLight = 1
     }
 
     /**
      * Input to the OnOff offWithEffect command
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4
+     * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.4
      */
     export const TlvOffWithEffectRequest = TlvObject({
         /**
-         * The EffectIdentifier field specifies the fading effect to use when turning the device off. This field shall
-         * contain one of the non-reserved values listed in Values of the EffectIdentifier Field of the OffWithEffect
-         * Command.
+         * This field specifies the fading effect to use when turning the device off. This field shall contain one of
+         * the non-reserved values listed in EffectIdentifierEnum.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4.1
+         * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.4.1
          */
-        effectIdentifier: TlvField(0, TlvEnum<OnOffEffectIdentifier>()),
+        effectIdentifier: TlvField(0, TlvEnum<EffectIdentifier>()),
 
         /**
-         * The EffectVariant field is used to indicate which variant of the effect, indicated in the EffectIdentifier
-         * field, SHOULD be triggered. If the server does not support the given variant, it shall use the default
-         * variant. This field is dependent on the value of the EffectIdentifier field and shall contain one of the
-         * non-reserved values listed in Values of the EffectVariant Field of the OffWithEffect Command.
+         * This field is used to indicate which variant of the effect, indicated in the EffectIdentifier field, SHOULD
+         * be triggered. If the server does not support the given variant, it shall use the default variant. This field
+         * is dependent on the value of the EffectIdentifier field and shall contain one of the non-reserved values
+         * listed in either DelayedAllOffEffectVariantEnum or DyingLightEffectVariantEnum.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4.2
+         * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.4.2
          */
         effectVariant: TlvField(1, TlvUInt8)
     });
@@ -74,55 +83,52 @@ export namespace OnOff {
     /**
      * Input to the OnOff offWithEffect command
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4
+     * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.4
      */
     export interface OffWithEffectRequest extends TypeFromSchema<typeof TlvOffWithEffectRequest> {}
 
     /**
-     * The value of OnOff.onOffControl
-     *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6.1
+     * @see {@link MatterSpecification.v13.Cluster} § 1.5.5.1
      */
-    export const OnOffControl = { acceptOnlyWhenOn: BitFlag(0), reserved: BitField(1, 7) };
+    export const OnOffControl = {
+        /**
+         * Indicates a command is only accepted when in On state.
+         */
+        acceptOnlyWhenOn: BitFlag(0)
+    };
 
     /**
      * Input to the OnOff onWithTimedOff command
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6
+     * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.6
      */
     export const TlvOnWithTimedOffRequest = TlvObject({
         /**
-         * The OnOffControl field contains information on how the server is to be operated. This field shall be
-         * formatted as illustrated in Format of the OnOffControl Field of the OnWithTimedOff Command.
+         * This field contains information on how the server is to be operated.
          *
-         * The AcceptOnlyWhenOn sub-field is 1 bit in length and specifies whether the OnWithTimedOff command is to be
-         * processed unconditionally or only when the OnOff attribute is equal to TRUE. If this sub-field is set to 1,
-         * the OnWithTimedOff command shall only be accepted if the OnOff attribute is equal to TRUE. If this sub-field
-         * is set to 0, the OnWithTimedOff command shall be processed unconditionally.
-         *
-         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6.1
+         * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.6.1
          */
         onOffControl: TlvField(0, TlvBitmap(TlvUInt8, OnOffControl)),
 
         /**
-         * The OnTime field is used to adjust the value of the OnTime attribute.
+         * This field is used to adjust the value of the OnTime attribute.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6.2
+         * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.6.2
          */
-        onTime: TlvField(1, TlvNullable(TlvUInt16)),
+        onTime: TlvField(1, TlvUInt16.bound({ max: 65534 })),
 
         /**
-         * The OffWaitTime field is used to adjust the value of the OffWaitTime attribute.
+         * This field is used to adjust the value of the OffWaitTime attribute.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6.3
+         * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.6.3
          */
-        offWaitTime: TlvField(2, TlvNullable(TlvUInt16))
+        offWaitTime: TlvField(2, TlvUInt16.bound({ max: 65534 }))
     });
 
     /**
      * Input to the OnOff onWithTimedOff command
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6
+     * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.6
      */
     export interface OnWithTimedOffRequest extends TypeFromSchema<typeof TlvOnWithTimedOffRequest> {}
 
@@ -137,52 +143,51 @@ export namespace OnOff {
              * and recalled when the devices are turned on. The global scene is defined as the scene that is stored
              * with group identifier 0 and scene identifier 0.
              *
-             * The GlobalSceneControl attribute is defined in order to prevent a second Off command storing the
-             * all-devices-off situation as a global scene, and to prevent a second On command destroying the current
-             * settings by going back to the global scene.
+             * This attribute is defined in order to prevent a second Off command storing the all-devices-off situation
+             * as a global scene, and to prevent a second On command destroying the current settings by going back to
+             * the global scene.
              *
-             * The GlobalSceneControl attribute shall be set to TRUE after the reception of a command which causes the
-             * OnOff attribute to be set to TRUE, such as a standard On command, a MoveToLevel(WithOnOff) command, a
-             * RecallScene command or a OnWithRecallGlobalScene command (see OnWithRecallGlobalScene Command).
+             * This attribute shall be set to TRUE after the reception of a command which causes the OnOff attribute to
+             * be set to TRUE, such as a standard On command, a MoveToLevel(WithOnOff) command, a RecallScene command
+             * or a OnWithRecallGlobalScene command.
              *
-             * The GlobalSceneControl attribute is set to FALSE after reception of a OffWithEffect command.
+             * This attribute is set to FALSE after reception of a OffWithEffect command.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.5.6.2
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.6.3
              */
             globalSceneControl: Attribute(0x4000, TlvBoolean, { default: true }),
 
             /**
-             * The OnTime attribute specifies the length of time (in 1/10ths second) that the ‘On’ state shall be
-             * maintained before automatically transitioning to the ‘Off’ state when using the OnWithTimedOff command.
-             * This attribute can be written at any time, but writing a value only has effect when in the ‘Timed On’
-             * state. See OnWithTimedOff Command for more details.
+             * This attribute specifies the length of time (in 1/10ths second) that the On state shall be maintained
+             * before automatically transitioning to the Off state when using the OnWithTimedOff command. This
+             * attribute can be written at any time, but writing a value only has effect when in the Timed On state.
+             * See OnWithTimedOff for more details.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.5.6.3
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.6.4
              */
-            onTime: WritableAttribute(0x4001, TlvNullable(TlvUInt16), { default: 0 }),
+            onTime: WritableAttribute(0x4001, TlvUInt16, { default: 0 }),
 
             /**
-             * The OffWaitTime attribute specifies the length of time (in 1/10ths second) that the ‘Off’ state shall be
-             * guarded to prevent another OnWithTimedOff command turning the server back to its ‘On’ state (e.g., when
-             * leaving a room, the lights are turned off but an occupancy sensor detects the leaving person and
-             * attempts to turn the lights back on). This attribute can be written at any time, but writing a value
-             * only has an effect when in the ‘Timed On’ state followed by a transition to the ‘Delayed Off' state, or
-             * in the ‘Delayed Off’ state. See OnWithTimedOff Command for more details.
+             * This attribute specifies the length of time (in 1/10ths second) that the Off state shall be guarded to
+             * prevent another OnWithTimedOff command turning the server back to its On state (e.g., when leaving a
+             * room, the lights are turned off but an occupancy sensor detects the leaving person and attempts to turn
+             * the lights back on). This attribute can be written at any time, but writing a value only has an effect
+             * when in the Timed On state followed by a transition to the Delayed Off state, or in the Delayed Off
+             * state. See OnWithTimedOff for more details.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.5.6.4
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.6.5
              */
-            offWaitTime: WritableAttribute(0x4002, TlvNullable(TlvUInt16), { default: 0 }),
+            offWaitTime: WritableAttribute(0x4002, TlvUInt16, { default: 0 }),
 
             /**
-             * The StartUpOnOff attribute shall define the desired startup behavior of a device when it is supplied
-             * with power and this state shall be reflected in the OnOff attribute. If the value is null, the OnOff
-             * attribute is set to its previous value. Otherwise, the behavior is defined in the table defining
-             * StartUpOnOffEnum.
+             * This attribute shall define the desired startup behavior of a device when it is supplied with power and
+             * this state shall be reflected in the OnOff attribute. If the value is null, the OnOff attribute is set
+             * to its previous value. Otherwise, the behavior is defined in the table defining StartUpOnOffEnum.
              *
              * This behavior does not apply to reboots associated with OTA. After an OTA restart, the OnOff attribute
              * shall return to its value prior to the restart.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.5.6.5
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.6.6
              */
             startUpOnOff: WritableAttribute(
                 0x4003,
@@ -195,45 +200,118 @@ export namespace OnOff {
             /**
              * The OffWithEffect command allows devices to be turned off using enhanced ways of fading.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.4
              */
             offWithEffect: Command(0x40, TlvOffWithEffectRequest, 0x40, TlvNoResponse),
 
             /**
-             * The OnWithRecallGlobalScene command allows the recall of the settings when the device was turned off.
+             * This command allows the recall of the settings when the device was turned off.
              *
-             * The OnWithRecallGlobalScene command shall have no parameters.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.5
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.5
              */
             onWithRecallGlobalScene: Command(0x41, TlvNoArguments, 0x41, TlvNoResponse),
 
             /**
-             * The OnWithTimedOff command allows devices to be turned on for a specific duration with a guarded off
-             * duration so that SHOULD the device be subsequently turned off, further OnWithTimedOff commands, received
-             * during this time, are prevented from turning the devices back on. Further
+             * This command allows devices to be turned on for a specific duration with a guarded off duration so that
+             * SHOULD the device be subsequently turned off, further OnWithTimedOff commands, received during this
+             * time, are prevented from turning the devices back on. Further OnWithTimedOff commands received while the
+             * server is turned on, will update the period that the device is turned on.
              *
-             * OnWithTimedOff commands received while the server is turned on, will update the period that the device
-             * is turned on.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.6
              */
             onWithTimedOff: Command(0x42, TlvOnWithTimedOffRequest, 0x42, TlvNoResponse)
         }
     });
 
     /**
+     * A OnOffCluster supports these elements if doesn't support feature OFFONLY.
+     */
+    export const NotOffOnlyComponent = MutableCluster.Component({
+        commands: {
+            /**
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.2
+             */
+            on: Command(0x1, TlvNoArguments, 0x1, TlvNoResponse),
+
+            /**
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.3
+             */
+            toggle: Command(0x2, TlvNoArguments, 0x2, TlvNoResponse)
+        }
+    });
+
+    /**
      * These are optional features supported by OnOffCluster.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.5.4
+     * @see {@link MatterSpecification.v13.Cluster} § 1.5.4
      */
     export enum Feature {
         /**
          * Lighting
          *
-         * Behavior that supports lighting applications.
+         * This cluster is used for a lighting application.
+         *
+         * On receipt of a Level Control cluster command that causes the OnOff attribute to be set to FALSE, the OnTime
+         * attribute shall be set to 0.
+         *
+         * On receipt of a Level Control cluster command that causes the OnOff attribute to be set to TRUE, if the
+         * value of the OnTime attribute is equal to 0, the server shall set the OffWaitTime attribute to 0.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.5.4.1
          */
-        Lighting = "Lighting"
+        Lighting = "Lighting",
+
+        /**
+         * DeadFrontBehavior
+         *
+         * When this feature is supported, the device exposing this server cluster exhibits "dead front" behavior when
+         * the "OnOff" attribute is FALSE (Off). This "dead front" behavior includes:
+         *
+         *   • clusters other than this cluster that are also exposed may respond with failures to Invoke and Write
+         *     interactions. Such failure responses when in a "dead front" shall be with an INVALID_IN_STATE status
+         *     code.
+         *
+         *   • clusters other than this cluster may change the values of their attributes to best-effort values, due to
+         *     the actual values not being defined or available in this state. Device type specifications that require
+         *     support for the DF feature SHOULD define what these best-effort values are.
+         *
+         *   • Report Transactions shall continue to be generated. Such transactions may include best-effort values as
+         *     noted above.
+         *
+         *   • Event generation logic for clusters other than this cluster is unchanged (noting possible use of
+         *     best-effort attribute values as in the preceding bullets).
+         *
+         * When this feature is supported and the OnOff attribute changes from TRUE to FALSE (e.g. when receiving an
+         * Off Command, or due to a manual interaction on the device), it shall start executing this "dead front"
+         * behavior.
+         *
+         * When this feature is supported and the OnOff attribute changes from FALSE to TRUE (e.g. when receiving an On
+         * Command, or due to a manual interaction on the device), it shall stop executing this "dead front" behavior.
+         *
+         * When this feature is supported, and any change of the "dead front" state leads to changes in attributes of
+         * other clusters due to the "dead front" feature, these attribute changes shall NOT be skipped or omitted from
+         * the usual processing associated with attribute changes. For example, if an
+         *
+         * attribute changes from value 4 to null on "dead front" behavior due to an Off command being received, this
+         * change shall be processed for reporting and subscriptions.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.5.4.2
+         */
+        DeadFrontBehavior = "DeadFrontBehavior",
+
+        /**
+         * OffOnly
+         *
+         * When this feature is supported, the Off command shall be supported and the On and Toggle commands shall NOT
+         * be supported.
+         *
+         * This feature is useful for devices which can be turned off via the Off command received by an instance of
+         * this cluster but cannot be turned on via commands received by an instance of this cluster due to regulatory
+         * requirements.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.5.4.3
+         */
+        OffOnly = "OffOnly"
     }
 
     /**
@@ -242,55 +320,104 @@ export namespace OnOff {
     export const Base = MutableCluster.Component({
         id: 0x6,
         name: "OnOff",
-        revision: 4,
+        revision: 6,
 
         features: {
             /**
              * Lighting
              *
-             * Behavior that supports lighting applications.
+             * This cluster is used for a lighting application.
+             *
+             * On receipt of a Level Control cluster command that causes the OnOff attribute to be set to FALSE, the
+             * OnTime attribute shall be set to 0.
+             *
+             * On receipt of a Level Control cluster command that causes the OnOff attribute to be set to TRUE, if the
+             * value of the OnTime attribute is equal to 0, the server shall set the OffWaitTime attribute to 0.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.4.1
              */
-            lighting: BitFlag(0)
+            lighting: BitFlag(0),
+
+            /**
+             * DeadFrontBehavior
+             *
+             * When this feature is supported, the device exposing this server cluster exhibits "dead front" behavior
+             * when the "OnOff" attribute is FALSE (Off). This "dead front" behavior includes:
+             *
+             *   • clusters other than this cluster that are also exposed may respond with failures to Invoke and Write
+             *     interactions. Such failure responses when in a "dead front" shall be with an INVALID_IN_STATE status
+             *     code.
+             *
+             *   • clusters other than this cluster may change the values of their attributes to best-effort values,
+             *     due to the actual values not being defined or available in this state. Device type specifications
+             *     that require support for the DF feature SHOULD define what these best-effort values are.
+             *
+             *   • Report Transactions shall continue to be generated. Such transactions may include best-effort values
+             *     as noted above.
+             *
+             *   • Event generation logic for clusters other than this cluster is unchanged (noting possible use of
+             *     best-effort attribute values as in the preceding bullets).
+             *
+             * When this feature is supported and the OnOff attribute changes from TRUE to FALSE (e.g. when receiving
+             * an Off Command, or due to a manual interaction on the device), it shall start executing this "dead
+             * front" behavior.
+             *
+             * When this feature is supported and the OnOff attribute changes from FALSE to TRUE (e.g. when receiving
+             * an On Command, or due to a manual interaction on the device), it shall stop executing this "dead front"
+             * behavior.
+             *
+             * When this feature is supported, and any change of the "dead front" state leads to changes in attributes
+             * of other clusters due to the "dead front" feature, these attribute changes shall NOT be skipped or
+             * omitted from the usual processing associated with attribute changes. For example, if an
+             *
+             * attribute changes from value 4 to null on "dead front" behavior due to an Off command being received,
+             * this change shall be processed for reporting and subscriptions.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.4.2
+             */
+            deadFrontBehavior: BitFlag(1),
+
+            /**
+             * OffOnly
+             *
+             * When this feature is supported, the Off command shall be supported and the On and Toggle commands shall
+             * NOT be supported.
+             *
+             * This feature is useful for devices which can be turned off via the Off command received by an instance
+             * of this cluster but cannot be turned on via commands received by an instance of this cluster due to
+             * regulatory requirements.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.4.3
+             */
+            offOnly: BitFlag(2)
         },
 
         attributes: {
             /**
-             * The OnOff attribute indicates whether the device type implemented on the endpoint is turned off or
-             * turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively.
+             * This attribute indicates whether the device type implemented on the endpoint is turned off or turned on,
+             * in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.5.6.1
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.6.2
              */
             onOff: Attribute(0x0, TlvBoolean, { scene: true, persistent: true, default: true })
         },
 
         commands: {
             /**
-             * This command does not have any data fields.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.1
+             * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.1
              */
-            off: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse),
-
-            /**
-             * This command does not have any data fields.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.2
-             */
-            on: Command(0x1, TlvNoArguments, 0x1, TlvNoResponse),
-
-            /**
-             * This command does not have any data fields.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.3
-             */
-            toggle: Command(0x2, TlvNoArguments, 0x2, TlvNoResponse)
+            off: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse)
         },
 
         /**
          * This metadata controls which OnOffCluster elements matter.js activates for specific feature combinations.
          */
         extensions: MutableCluster.Extensions(
-            { flags: { lighting: true }, component: LightingComponent }
+            { flags: { lighting: true }, component: LightingComponent },
+            { flags: { offOnly: false }, component: NotOffOnlyComponent },
+            { flags: { lighting: true, offOnly: true }, component: false },
+            { flags: { deadFrontBehavior: true, offOnly: true }, component: false },
+            { flags: { offOnly: true, lighting: false, deadFrontBehavior: true }, component: false }
         )
     });
 
@@ -300,13 +427,11 @@ export namespace OnOff {
     export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
-     * On/Off
-     *
      * Attributes and commands for turning devices on and off.
      *
      * OnOffCluster supports optional features that you can enable with the OnOffCluster.with() factory method.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 1.5
+     * @see {@link MatterSpecification.v13.Cluster} § 1.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
@@ -328,14 +453,8 @@ export namespace OnOff {
                 LightingComponent.attributes.globalSceneControl,
                 { mandatoryIf: [LT] }
             ),
-            onTime: MutableCluster.AsConditional(
-                LightingComponent.attributes.onTime,
-                { mandatoryIf: [LT] }
-            ),
-            offWaitTime: MutableCluster.AsConditional(
-                LightingComponent.attributes.offWaitTime,
-                { mandatoryIf: [LT] }
-            ),
+            onTime: MutableCluster.AsConditional(LightingComponent.attributes.onTime, { mandatoryIf: [LT] }),
+            offWaitTime: MutableCluster.AsConditional(LightingComponent.attributes.offWaitTime, { mandatoryIf: [LT] }),
             startUpOnOff: MutableCluster.AsConditional(
                 LightingComponent.attributes.startUpOnOff,
                 { mandatoryIf: [LT] }
@@ -344,6 +463,8 @@ export namespace OnOff {
 
         commands: {
             ...Cluster.commands,
+            on: MutableCluster.AsConditional(NotOffOnlyComponent.commands.on, { mandatoryIf: [] }),
+            toggle: MutableCluster.AsConditional(NotOffOnlyComponent.commands.toggle, { mandatoryIf: [] }),
             offWithEffect: MutableCluster.AsConditional(
                 LightingComponent.commands.offWithEffect,
                 { mandatoryIf: [LT] }

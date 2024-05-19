@@ -9,7 +9,6 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel, FixedAttribute } from "../../cluster/Cluster.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
-import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
@@ -17,7 +16,7 @@ import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace TimeFormatLocalization {
     /**
-     * @see {@link MatterSpecification.v11.Core} § 11.4.5.2
+     * @see {@link MatterSpecification.v13.Core} § 11.4.5.2
      */
     export enum CalendarType {
         /**
@@ -78,11 +77,16 @@ export namespace TimeFormatLocalization {
         /**
          * Dates conveyed using the Taiwanese calendar
          */
-        Taiwanese = 11
+        Taiwanese = 11,
+
+        /**
+         * calendar implied from active locale
+         */
+        UseActiveLocale = 255
     }
 
     /**
-     * @see {@link MatterSpecification.v11.Core} § 11.4.5.1
+     * @see {@link MatterSpecification.v13.Core} § 11.4.5.1
      */
     export enum HourFormat {
         /**
@@ -93,7 +97,12 @@ export namespace TimeFormatLocalization {
         /**
          * Time conveyed with a 24-hour clock
          */
-        "24Hr" = 1
+        "24Hr" = 1,
+
+        /**
+         * Use active locale clock
+         */
+        UseActiveLocale = 255
     }
 
     /**
@@ -102,25 +111,29 @@ export namespace TimeFormatLocalization {
     export const CalendarFormatComponent = MutableCluster.Component({
         attributes: {
             /**
-             * The ActiveCalendarType attribute shall represent the calendar format that the Node is currently
-             * configured to use when conveying dates. If provided, this value shall take priority over any unit
-             * implied through the ActiveLocale Attribute.
+             * Indicates the calendar format that the Node is currently configured to use when conveying dates.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.4.6.2
+             * If not UseActiveLocale, this value shall take priority over any unit implied through the ActiveLocale
+             * attribute.
+             *
+             * If UseActiveLocale, any unit implied through the ActiveLocale attribute is used as the calendar type,
+             * and if ActiveLocale is not present, the calendar type is unknown.
+             *
+             * @see {@link MatterSpecification.v13.Core} § 11.4.6.2
              */
             activeCalendarType: WritableAttribute(
                 0x1,
-                TlvNullable(TlvEnum<CalendarType>()),
-                { persistent: true, default: null, writeAcl: AccessLevel.Manage }
+                TlvEnum<CalendarType>(),
+                { persistent: true, writeAcl: AccessLevel.Manage }
             ),
 
             /**
-             * The SupportedCalendarTypes attribute shall represent a list of CalendarTypeEnum values that are
-             * supported by the Node. The list shall NOT contain any duplicate entries. The ordering of items within
-             * the list SHOULD NOT express any meaning. The maximum length of the SupportedCalendarTypes list shall be
-             * equivalent to the number of enumerations within CalendarTypeEnum.
+             * Indicates a list of CalendarTypeEnum values that are supported by the Node. The list shall NOT contain
+             * any duplicate entries. The ordering of items within the list SHOULD NOT express any meaning. The maximum
+             * length of the SupportedCalendarTypes list shall be equivalent to the number of enumerations within
+             * CalendarTypeEnum.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.4.6.3
+             * @see {@link MatterSpecification.v13.Core} § 11.4.6.3
              */
             supportedCalendarTypes: FixedAttribute(0x2, TlvArray(TlvEnum<CalendarType>()), { default: [] })
         }
@@ -129,7 +142,7 @@ export namespace TimeFormatLocalization {
     /**
      * These are optional features supported by TimeFormatLocalizationCluster.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.4.4
+     * @see {@link MatterSpecification.v13.Core} § 11.4.4
      */
     export enum Feature {
         /**
@@ -159,17 +172,20 @@ export namespace TimeFormatLocalization {
 
         attributes: {
             /**
-             * The HourFormat attribute shall represent the format that the Node is currently configured to use when
-             * conveying the hour unit of time. If provided, this value shall take priority over any unit
+             * Indicates the format that the Node is currently configured to use when conveying the hour unit of time.
              *
-             * implied through the ActiveLocale Attribute.
+             * If not UseActiveLocale, this value shall take priority over any unit implied through the ActiveLocale
+             * attribute.
              *
-             * @see {@link MatterSpecification.v11.Core} § 11.4.6.1
+             * If UseActiveLocale, any unit implied through the ActiveLocale attribute is used as the hour format, and
+             * if ActiveLocale is not present, the hour format is unknown.
+             *
+             * @see {@link MatterSpecification.v13.Core} § 11.4.6.1
              */
             hourFormat: WritableAttribute(
                 0x0,
-                TlvNullable(TlvEnum<HourFormat>()),
-                { persistent: true, default: null, writeAcl: AccessLevel.Manage }
+                TlvEnum<HourFormat>(),
+                { persistent: true, writeAcl: AccessLevel.Manage }
             )
         },
 
@@ -186,8 +202,6 @@ export namespace TimeFormatLocalization {
     export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
-     * Time Format Localization
-     *
      * Nodes should be expected to be deployed to any and all regions of the world. These global regions may have
      * differing preferences for how dates and times are conveyed. As such, Nodes that visually or audibly convey time
      * information need a mechanism by which they can be configured to use a user’s preferred format.
@@ -198,7 +212,7 @@ export namespace TimeFormatLocalization {
      * TimeFormatLocalizationCluster supports optional features that you can enable with the
      * TimeFormatLocalizationCluster.with() factory method.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.4
+     * @see {@link MatterSpecification.v13.Core} § 11.4
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

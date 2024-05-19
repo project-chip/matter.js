@@ -10,25 +10,27 @@ import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, OptionalWritableAttribute, AccessLevel } from "../../cluster/Cluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvUInt8, TlvBitmap, TlvEnum, TlvUInt16 } from "../../tlv/TlvNumber.js";
-import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace OccupancySensing {
     /**
-     * All other bits are reserved.
-     *
-     * @see {@link MatterSpecification.v11.Cluster} § 2.7.5.1
+     * @see {@link MatterSpecification.v13.Cluster} § 2.7.4.1
      */
-    export const OccupancyBitmap = {
+    export const Occupancy = {
         /**
-         * Indicates the sensed occupancy state; 1 = occupied, 0 = unoccupied.
+         * Indicates the sensed occupancy state
+         *
+         * If this bit is set, it shall indicate the occupied state else if the bit if not set, it shall indicate the
+         * unoccupied state.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 2.7.4.1.1
          */
         occupied: BitFlag(0)
     };
 
     /**
-     * @see {@link MatterSpecification.v11.Cluster} § 2.7.5.2
+     * @see {@link MatterSpecification.v13.Cluster} § 2.7.4.3
      */
     export enum OccupancySensorType {
         /**
@@ -53,7 +55,7 @@ export namespace OccupancySensing {
     }
 
     /**
-     * @see {@link MatterSpecification.v11.Cluster} § 2.7.5.3
+     * @see {@link MatterSpecification.v13.Cluster} § 2.7.4.2
      */
     export const OccupancySensorTypeBitmap = {
         /**
@@ -78,41 +80,39 @@ export namespace OccupancySensing {
     export const ClusterInstance = MutableCluster({
         id: 0x406,
         name: "OccupancySensing",
-        revision: 3,
+        revision: 4,
 
         attributes: {
             /**
-             * The Occupancy attribute indicates the status of occupancy.
+             * This attribute indicates the sensed (processed) status of occupancy.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.6.1
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.1
              */
-            occupancy: Attribute(0x0, TlvBitmap(TlvUInt8, OccupancyBitmap)),
+            occupancy: Attribute(0x0, TlvBitmap(TlvUInt8, Occupancy)),
 
             /**
-             * The OccupancySensorType attribute specifies the type of the occupancy sensor.
+             * This attribute specifies the type of the occupancy sensor.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.6.2
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.2
              */
             occupancySensorType: Attribute(0x1, TlvEnum<OccupancySensorType>()),
 
             /**
-             * The OccupancySensorTypeBitmap attribute specifies the types of the occupancy sensor. A ‘1’ in each bit
-             * position indicates the capability is implemented.
+             * This attribute specifies the types of the occupancy sensor. Each bit position, if set, indicates the
+             * corresponding sensing capability is implemented.
              *
-             * The value of the OccupancySensorTypeBitmap attribute and the OccupancySensorType attribute shall be
-             * aligned as defined below.
+             * The value of the OccupancySensorType shall be aligned to the value of the OccupancySensorTypeBitmap
+             * attribute as defined below.
              *
-             * Table 32. Mapping between OccupancySensorTypeBitmap and OccupancySensorType Attributes
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.6.3
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.3
              */
             occupancySensorTypeBitmap: Attribute(0x2, TlvBitmap(TlvUInt8, OccupancySensorTypeBitmap)),
 
             /**
-             * The PIROccupiedToUnoccupiedDelay attribute specifies the time delay, in seconds, before the PIR sensor
-             * changes to its unoccupied state after the last detection of movement in the sensed area.
+             * This attribute specifies the time delay, in seconds, before the PIR sensor changes to its unoccupied
+             * state after the last detection of movement in the sensed area.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.7.1
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.4
              */
             pirOccupiedToUnoccupiedDelay: OptionalWritableAttribute(
                 0x10,
@@ -121,11 +121,10 @@ export namespace OccupancySensing {
             ),
 
             /**
-             * The PIRUnoccupiedToOccupiedDelay attribute specifies the time delay, in seconds, before the PIR sensor
-             * changes to its occupied state after the detection of movement in the sensed area. This attribute is
-             * mandatory if the PIRUnoccupiedToOccupiedThreshold attribute is implemented.
+             * This attribute specifies the time delay, in seconds, before the PIR sensor changes to its occupied state
+             * after the detection of movement in the sensed area.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.7.2
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.5
              */
             pirUnoccupiedToOccupiedDelay: OptionalWritableAttribute(
                 0x11,
@@ -134,11 +133,10 @@ export namespace OccupancySensing {
             ),
 
             /**
-             * The PIRUnoccupiedToOccupiedThreshold attribute specifies the number of movement detection events that
-             * must occur in the period PIRUnoccupiedToOccupiedDelay, before the PIR sensor changes to its occupied
-             * state. This attribute is mandatory if the PIRUnoccupiedToOccupiedDelay attribute is implemented.
+             * This attribute specifies the number of movement detection events that must occur in the period
+             * PIRUnoccupiedToOccupiedDelay, before the PIR sensor changes to its occupied state.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.7.3
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.6
              */
             pirUnoccupiedToOccupiedThreshold: OptionalWritableAttribute(
                 0x12,
@@ -147,11 +145,10 @@ export namespace OccupancySensing {
             ),
 
             /**
-             * The UltrasonicOccupiedToUnoccupiedDelay attribute and specifies the time delay, in seconds, before the
-             * Ultrasonic sensor changes to its unoccupied state after the last detection of movement in the sensed
-             * area.
+             * This attribute specifies the time delay, in seconds, before the Ultrasonic sensor changes to its
+             * unoccupied state after the last detection of movement in the sensed area.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.8.1
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.7
              */
             ultrasonicOccupiedToUnoccupiedDelay: OptionalWritableAttribute(
                 0x20,
@@ -160,11 +157,10 @@ export namespace OccupancySensing {
             ),
 
             /**
-             * The UltrasonicUnoccupiedToOccupiedDelay attribute and specifies the time delay, in seconds, before the
-             * Ultrasonic sensor changes to its occupied state after the detection of movement in the sensed area. This
-             * attribute is mandatory if the UltrasonicUnoccupiedToOccupiedThreshold attribute is implemented.
+             * This attribute specifies the time delay, in seconds, before the Ultrasonic sensor changes to its
+             * occupied state after the detection of movement in the sensed area.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.8.2
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.8
              */
             ultrasonicUnoccupiedToOccupiedDelay: OptionalWritableAttribute(
                 0x21,
@@ -173,12 +169,10 @@ export namespace OccupancySensing {
             ),
 
             /**
-             * The UltrasonicUnoccupiedToOccupiedThreshold attribute specifies the number of movement detection events
-             * that must occur in the period UltrasonicUnoccupiedToOccupiedDelay, before the Ultrasonic sensor changes
-             * to its occupied state. This attribute is mandatory if the UltrasonicUnoccupiedToOccupiedDelay attribute
-             * is implemented.
+             * This attribute specifies the number of movement detection events that must occur in the period
+             * UltrasonicUnoccupiedToOccupiedDelay, before the Ultrasonic sensor changes to its occupied state.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.8.3
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.9
              */
             ultrasonicUnoccupiedToOccupiedThreshold: OptionalWritableAttribute(
                 0x22,
@@ -187,39 +181,35 @@ export namespace OccupancySensing {
             ),
 
             /**
-             * The PhysicalContactOccupiedToUnoccupiedDelay attribute specifies the time delay, in seconds, before the
-             * physical contact occupancy sensor changes to its unoccupied state after detecting the unoccupied event.
-             * The null value indicates that the sensor does not report occupied to unoccupied transition.
+             * This attribute specifies the time delay, in seconds, before the physical contact occupancy sensor
+             * changes to its unoccupied state after detecting the unoccupied event.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.9.1
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.10
              */
             physicalContactOccupiedToUnoccupiedDelay: OptionalWritableAttribute(
                 0x30,
-                TlvNullable(TlvUInt16),
+                TlvUInt16,
                 { default: 0, writeAcl: AccessLevel.Manage }
             ),
 
             /**
-             * The PhysicalContactUnoccupiedToOccupiedDelay attribute specifies the time delay, in seconds, before the
-             * physical contact sensor changes to its occupied state after the detection of the occupied event.
+             * This attribute specifies the time delay, in seconds, before the physical contact sensor changes to its
+             * occupied state after the detection of the occupied event.
              *
-             * The null value indicates that the sensor does not report unoccupied to occupied transition.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.9.2
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.11
              */
             physicalContactUnoccupiedToOccupiedDelay: OptionalWritableAttribute(
                 0x31,
-                TlvNullable(TlvUInt16),
+                TlvUInt16,
                 { default: 0, writeAcl: AccessLevel.Manage }
             ),
 
             /**
-             * The PhysicalContactUnoccupiedToOccupiedThreshold attribute specifies the number of movement detection
-             * events that must occur in the period PhysicalContactUnoccupiedToOccupiedDelay, before the PIR sensor
-             * changes to its occupied state. This attribute is mandatory if the
-             * PhysicalContactUnoccupiedToOccupiedDelay attribute is implemented.
+             * This attribute specifies the number of movement detection events that must occur in the period
+             * PhysicalContactUnoccupiedToOccupiedDelay, before the PhysicalContact sensor changes to its occupied
+             * state.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.7.9.3
+             * @see {@link MatterSpecification.v13.Cluster} § 2.7.5.12
              */
             physicalContactUnoccupiedToOccupiedThreshold: OptionalWritableAttribute(
                 0x32,
@@ -230,11 +220,10 @@ export namespace OccupancySensing {
     });
 
     /**
-     * Occupancy Sensing
+     * The server cluster provides an interface to occupancy sensing functionality, including configuration and
+     * provision of notifications of occupancy status.
      *
-     * Attributes and commands for configuring occupancy sensing, and reporting occupancy status.
-     *
-     * @see {@link MatterSpecification.v11.Cluster} § 2.7
+     * @see {@link MatterSpecification.v13.Cluster} § 2.7
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

@@ -311,22 +311,22 @@ export const LevelControl = Cluster({
         }),
 
         Command({
-            name: "MoveToLevelWithOnOff", id: 0x4, access: "O", conformance: "M", direction: "request",
+            name: "MoveToLevelWithOnOff", id: 0x4, type: "MoveToLevel", access: "O", conformance: "M",
+            direction: "request", response: "status",
+            xref: { document: "cluster", section: "1.6.7" }
+        }),
+        Command({
+            name: "MoveWithOnOff", id: 0x5, type: "Move", access: "O", conformance: "M", direction: "request",
             response: "status",
             xref: { document: "cluster", section: "1.6.7" }
         }),
         Command({
-            name: "MoveWithOnOff", id: 0x5, access: "O", conformance: "M", direction: "request",
+            name: "StepWithOnOff", id: 0x6, type: "Step", access: "O", conformance: "M", direction: "request",
             response: "status",
             xref: { document: "cluster", section: "1.6.7" }
         }),
         Command({
-            name: "StepWithOnOff", id: 0x6, access: "O", conformance: "M", direction: "request",
-            response: "status",
-            xref: { document: "cluster", section: "1.6.7" }
-        }),
-        Command({
-            name: "StopWithOnOff", id: 0x7, access: "O", conformance: "M", direction: "request",
+            name: "StopWithOnOff", id: 0x7, type: "Stop", access: "O", conformance: "M", direction: "request",
             response: "status",
             xref: { document: "cluster", section: "1.6.7" }
         }),

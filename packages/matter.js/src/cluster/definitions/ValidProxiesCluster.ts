@@ -9,7 +9,7 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { FixedAttribute, Command } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
@@ -20,16 +20,30 @@ export namespace ValidProxies {
     /**
      * Encapsulates the Node ID of a Valid Proxy.
      *
-     * @see {@link MatterSpecification.v11.Core} § 9.15.15.4.1
+     * @see {@link MatterSpecification.v13.Core} § 9.15.14.4.1
      */
     export const TlvValidProxyStruct = TlvObject({ nodeId: TlvField(1, TlvNodeId) });
 
     /**
      * Encapsulates the Node ID of a Valid Proxy.
      *
-     * @see {@link MatterSpecification.v11.Core} § 9.15.15.4.1
+     * @see {@link MatterSpecification.v13.Core} § 9.15.14.4.1
      */
     export interface ValidProxyStruct extends TypeFromSchema<typeof TlvValidProxyStruct> {}
+
+    /**
+     * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery & Assignment Flow”.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 9.15.14.6.2
+     */
+    export const TlvGetValidProxiesResponse = TlvObject({ proxyNodeIdList: TlvField(0, TlvArray(TlvNodeId)) });
+
+    /**
+     * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery & Assignment Flow”.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 9.15.14.6.2
+     */
+    export interface GetValidProxiesResponse extends TypeFromSchema<typeof TlvGetValidProxiesResponse> {}
 
     /**
      * @see {@link Cluster}
@@ -43,26 +57,27 @@ export namespace ValidProxies {
             /**
              * List of valid proxies that can proxy this Node. Each entry in this list is fabric-scoped.
              *
-             * @see {@link MatterSpecification.v11.Core} § 9.15.15.5.1
+             * @see {@link MatterSpecification.v13.Core} § 9.15.14.5.1
              */
             validProxyList: FixedAttribute(0x0, TlvArray(TlvValidProxyStruct), { persistent: true, default: [] })
         },
 
         commands: {
             /**
-             * @see {@link MatterSpecification.v11.Core} § 9.15.15.6
+             * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery &
+             * Assignment Flow”.
+             *
+             * @see {@link MatterSpecification.v13.Core} § 9.15.14.6.1
              */
-            getValidProxiesRequest: Command(0x0, TlvNoArguments, 0x1, TlvNoArguments)
+            getValidProxiesRequest: Command(0x0, TlvNoArguments, 0x1, TlvGetValidProxiesResponse)
         }
     });
 
     /**
-     * Proxy Valid
-     *
      * This cluster provides a means for a device to be told of the valid set of possible proxies that can proxy
      * subscriptions on its behalf as per Section 9.15.7, “Proxy Discovery & Assignment Flow”.
      *
-     * @see {@link MatterSpecification.v11.Core} § 9.15.15
+     * @see {@link MatterSpecification.v13.Core} § 9.15.14
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
