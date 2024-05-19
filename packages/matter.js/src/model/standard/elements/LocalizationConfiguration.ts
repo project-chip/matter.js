@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const LocalizationConfiguration = Cluster({
-    name: "LocalizationConfiguration", id: 0x2b, classification: "node",
+    name: "LocalizationConfiguration", id: 0x2b, classification: "node", pics: "LCFG",
 
     details: "Nodes should be expected to be deployed to any and all regions of the world. These global regions " +
         "may have differing common languages, units of measurements, and numerical formatting standards. As " +

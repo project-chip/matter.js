@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const BooleanStateConfiguration = Cluster({
-    name: "BooleanStateConfiguration", id: 0x80, classification: "application",
+    name: "BooleanStateConfiguration", id: 0x80, classification: "application", pics: "BOOLCFG",
     details: "This cluster is used to configure a boolean sensor, including optional state change alarm features " +
         "and configuration of the sensitivity level associated with the sensor.",
     xref: { document: "cluster", section: "1.8" },

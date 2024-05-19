@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const SmokeCoAlarm = Cluster({
-    name: "SmokeCoAlarm", id: 0x5c, classification: "application",
+    name: "SmokeCoAlarm", id: 0x5c, classification: "application", pics: "SMOKECO",
     details: "This cluster provides an interface for observing and managing the state of smoke and CO alarms.",
     xref: { document: "cluster", section: "2.11" },
 

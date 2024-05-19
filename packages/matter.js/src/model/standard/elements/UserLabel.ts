@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const UserLabel = Cluster({
-    name: "UserLabel", id: 0x41, type: "Label", classification: "endpoint",
+    name: "UserLabel", id: 0x41, type: "Label", classification: "endpoint", pics: "ULABEL",
     details: "This cluster provides a feature to tag an endpoint with zero or more labels.",
     xref: { document: "core", section: "9.9" },
 

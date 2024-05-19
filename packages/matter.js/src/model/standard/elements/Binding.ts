@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const Binding = Cluster({
-    name: "Binding", id: 0x1e, classification: "endpoint",
+    name: "Binding", id: 0x1e, classification: "endpoint", pics: "BIND",
 
     details: "NOTE" +
         "\n" +

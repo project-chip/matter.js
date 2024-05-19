@@ -17,6 +17,7 @@ import {
 
 export const RvcOperationalState = Cluster({
     name: "RvcOperationalState", id: 0x61, type: "OperationalState", classification: "application",
+    pics: "RVCOPSTATE",
     details: "This cluster provides an interface for monitoring the operational state of a Robotic Vacuum Cleaner.",
     xref: { document: "cluster", section: "7.4" },
 

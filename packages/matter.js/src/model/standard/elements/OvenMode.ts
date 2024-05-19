@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { ClusterElement as Cluster, AttributeElement as Attribute } from "../../elements/index.js";
 
 export const OvenMode = Cluster({
-    name: "OvenMode", id: 0x49, type: "ModeBase", classification: "application",
+    name: "OvenMode", id: 0x49, type: "ModeBase", classification: "application", pics: "OTCCM",
     details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
         "enumerated values for oven devices.",
     xref: { document: "cluster", section: "8.11" },

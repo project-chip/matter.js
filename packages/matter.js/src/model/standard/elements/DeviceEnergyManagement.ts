@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const DeviceEnergyManagement = Cluster({
-    name: "DeviceEnergyManagement", id: 0x98, classification: "application",
+    name: "DeviceEnergyManagement", id: 0x98, classification: "application", pics: "DEM",
 
     details: "This cluster allows a client to manage the power draw of a device. An example of such a client " +
         "could be an Energy Management System (EMS) which controls an Energy Smart Appliance (ESA)." +

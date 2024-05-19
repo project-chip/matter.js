@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const IlluminanceMeasurement = Cluster({
-    name: "IlluminanceMeasurement", id: 0x400, classification: "application",
+    name: "IlluminanceMeasurement", id: 0x400, classification: "application", pics: "ILL",
     details: "The Illuminance Measurement cluster provides an interface to illuminance measurement functionality, " +
         "including configuration and provision of notifications of illuminance measurements.",
     xref: { document: "cluster", section: "2.2" },

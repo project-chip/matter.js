@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const Actions = Cluster({
-    name: "Actions", id: 0x25, classification: "application",
+    name: "Actions", id: 0x25, classification: "application", pics: "ACT",
 
     details: "This cluster provides a standardized way for a Node (typically a Bridge, but could be any Node) to " +
         "expose" +

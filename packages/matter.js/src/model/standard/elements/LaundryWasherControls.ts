@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const LaundryWasherControls = Cluster({
-    name: "LaundryWasherControls", id: 0x53, classification: "application",
+    name: "LaundryWasherControls", id: 0x53, classification: "application", pics: "WASHERCTRL",
     details: "This cluster provides a way to access options associated with the operation of a laundry washer " +
         "device type.",
     xref: { document: "cluster", section: "8.6" },

@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const PressureMeasurement = Cluster({
-    name: "PressureMeasurement", id: 0x403, classification: "application",
+    name: "PressureMeasurement", id: 0x403, classification: "application", pics: "PRS",
     details: "This cluster provides an interface to pressure measurement functionality, including configuration " +
         "and provision of notifications of pressure measurements.",
     xref: { document: "cluster", section: "2.4" },

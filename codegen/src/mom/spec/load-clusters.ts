@@ -138,6 +138,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
         const name = camelize(subref.name).toLowerCase();
         switch (name) {
             case "clusterid":
+            case "clusterids":
             case "clusteridentifiers":
                 defineElement("ids", subref);
                 break;

@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const Groups = Cluster({
-    name: "Groups", id: 0x4, classification: "endpoint",
+    name: "Groups", id: 0x4, classification: "endpoint", pics: "G",
 
     details: "The Groups cluster manages, per endpoint, the content of the node-wide Group Table that is part of " +
         "the underlying interaction layer." +

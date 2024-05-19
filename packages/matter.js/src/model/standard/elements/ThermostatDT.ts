@@ -52,11 +52,11 @@ export const ThermostatDt = DeviceType({
             xref: { document: "device", section: "9.1.4" }
         }),
         Requirement({
-            name: "TimeSync", id: 0x38, conformance: "P, O", element: "serverCluster",
+            name: "TimeSynchronization", id: 0x38, conformance: "P, O", element: "serverCluster",
             xref: { document: "device", section: "9.1.4" }
         }),
         Requirement({
-            name: "TimeSync", id: 0x38, conformance: "P, O", element: "clientCluster",
+            name: "TimeSynchronization", id: 0x38, conformance: "P, O", element: "clientCluster",
             xref: { document: "device", section: "9.1.4" }
         }),
         Requirement({

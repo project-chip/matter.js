@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const Label = Cluster({
-    name: "Label", classification: "endpoint",
+    name: "Label", classification: "endpoint", pics: "LABEL",
     details: "This cluster provides a feature to tag an endpoint with zero or more labels. This is a base cluster " +
         "that requires a derived cluster to create an instance.",
     xref: { document: "core", section: "9.7" },

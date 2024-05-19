@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const EnergyEvse = Cluster({
-    name: "EnergyEvse", id: 0x99, classification: "application",
+    name: "EnergyEvse", id: 0x99, classification: "application", pics: "EEVSE",
 
     details: "Electric Vehicle Supply Equipment (EVSE) is equipment used to charge an Electric Vehicle (EV) or " +
         "Plug-In Hybrid Electric Vehicle. This cluster provides an interface to the functionality of " +

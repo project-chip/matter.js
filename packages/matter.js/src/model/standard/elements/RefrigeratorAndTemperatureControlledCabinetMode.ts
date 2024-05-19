@@ -15,7 +15,7 @@ import {
 
 export const RefrigeratorAndTemperatureControlledCabinetMode = Cluster({
     name: "RefrigeratorAndTemperatureControlledCabinetMode", id: 0x52, type: "ModeBase",
-    classification: "application",
+    classification: "application", pics: "TCCM",
     details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
         "enumerated values for refrigerator and temperature controlled cabinet devices.",
     xref: { document: "cluster", section: "8.7" },

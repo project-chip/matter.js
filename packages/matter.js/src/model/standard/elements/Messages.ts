@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const Messages = Cluster({
-    name: "Messages", id: 0x97, classification: "application",
+    name: "Messages", id: 0x97, classification: "application", pics: "MESS",
     details: "This cluster provides an interface for passing messages to be presented by a device.",
     xref: { document: "cluster", section: "1.16" },
 

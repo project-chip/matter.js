@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const NetworkCommissioning = Cluster({
-    name: "NetworkCommissioning", id: 0x31, classification: "node",
+    name: "NetworkCommissioning", id: 0x31, classification: "node", pics: "CNET",
 
     details: "Network commissioning is part of the overall Node commissioning. The main goal of Network " +
         "Commissioning Cluster is to associate a Node with or manage a Node’s one or more network " +

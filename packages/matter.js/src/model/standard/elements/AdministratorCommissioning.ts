@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const AdministratorCommissioning = Cluster({
-    name: "AdministratorCommissioning", id: 0x3c, classification: "node",
+    name: "AdministratorCommissioning", id: 0x3c, classification: "node", pics: "CADMIN",
 
     details: "This cluster is used to trigger a Node to allow a new Administrator to commission it. It defines " +
         "Attributes, Commands and Responses needed for this purpose." +

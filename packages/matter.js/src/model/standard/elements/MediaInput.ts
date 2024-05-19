@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const MediaInput = Cluster({
-    name: "MediaInput", id: 0x507, classification: "application",
+    name: "MediaInput", id: 0x507, classification: "application", pics: "MEDIAINPUT",
 
     details: "This cluster provides an interface for controlling the Input Selector on a media device such as a " +
         "Video Player." +

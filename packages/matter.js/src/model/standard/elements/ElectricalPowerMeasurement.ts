@@ -17,6 +17,7 @@ import {
 
 export const ElectricalPowerMeasurement = Cluster({
     name: "ElectricalPowerMeasurement", id: 0x90, asOf: "1.3", classification: "application",
+    pics: "EPM",
     details: "This cluster provides a mechanism for querying data about electrical power as measured by the " +
         "server.",
     xref: { document: "cluster", section: "2.13" },

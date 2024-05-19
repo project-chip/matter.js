@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const AirQuality = Cluster({
-    name: "AirQuality", id: 0x5b, classification: "application",
+    name: "AirQuality", id: 0x5b, classification: "application", pics: "AIRQUAL",
     details: "This cluster provides an interface to air quality classification using distinct levels with " +
         "human-readable labels.",
     xref: { document: "cluster", section: "2.9" },

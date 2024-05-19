@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const TemperatureControl = Cluster({
-    name: "TemperatureControl", id: 0x56, classification: "application",
+    name: "TemperatureControl", id: 0x56, classification: "application", pics: "TCTL",
 
     details: "This cluster provides an interface to the setpoint temperature on devices such as washers, " +
         "refrigerators, and water heaters. The setpoint temperature is the temperature to which a device " +

@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const BooleanState = Cluster({
-    name: "BooleanState", id: 0x45, classification: "application",
+    name: "BooleanState", id: 0x45, classification: "application", pics: "BOOL",
     details: "This cluster provides an interface to a boolean state.",
     xref: { document: "cluster", section: "1.7" },
 

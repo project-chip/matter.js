@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const Channel = Cluster({
-    name: "Channel", id: 0x504, asOf: "1.3", classification: "application",
+    name: "Channel", id: 0x504, asOf: "1.3", classification: "application", pics: "CHANNEL",
 
     details: "This cluster provides an interface for controlling the current Channel on a device or endpoint." +
         "\n" +

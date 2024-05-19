@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const OccupancySensing = Cluster({
-    name: "OccupancySensing", id: 0x406, classification: "application",
+    name: "OccupancySensing", id: 0x406, classification: "application", pics: "OCC",
     details: "The server cluster provides an interface to occupancy sensing functionality, including " +
         "configuration and provision of notifications of occupancy status.",
     xref: { document: "cluster", section: "2.7" },

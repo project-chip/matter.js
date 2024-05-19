@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const GroupKeyManagement = Cluster({
-    name: "GroupKeyManagement", id: 0x3f, classification: "node",
+    name: "GroupKeyManagement", id: 0x3f, classification: "node", pics: "GRPKEY",
 
     details: "The Group Key Management cluster manages group keys for the node. The cluster is scoped to the node " +
         "and is a singleton for the node. This cluster maintains a list of groups supported by the node. " +

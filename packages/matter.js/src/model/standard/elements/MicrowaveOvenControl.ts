@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const MicrowaveOvenControl = Cluster({
-    name: "MicrowaveOvenControl", id: 0x5f, classification: "application",
+    name: "MicrowaveOvenControl", id: 0x5f, classification: "application", pics: "MWOCTRL",
     details: "This cluster defines the requirements for the Microwave Oven Control cluster." +
         "\n" +
         "This cluster has dependencies with the Operational State and Microwave Oven Mode clusters. The " +

@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const DiagnosticLogs = Cluster({
-    name: "DiagnosticLogs", id: 0x32, classification: "node",
+    name: "DiagnosticLogs", id: 0x32, classification: "node", pics: "DLOG",
 
     details: "This Cluster supports an interface to a Node. It provides commands for retrieving unstructured " +
         "diagnostic logs from a Node that may be used to aid in diagnostics. It will often be the case that " +

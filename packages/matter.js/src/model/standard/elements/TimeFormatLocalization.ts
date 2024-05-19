@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const TimeFormatLocalization = Cluster({
-    name: "TimeFormatLocalization", id: 0x2c, classification: "node",
+    name: "TimeFormatLocalization", id: 0x2c, classification: "node", pics: "LTIME",
 
     details: "Nodes should be expected to be deployed to any and all regions of the world. These global regions " +
         "may have differing preferences for how dates and times are conveyed. As such, Nodes that visually " +

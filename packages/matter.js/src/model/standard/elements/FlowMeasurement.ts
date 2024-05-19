@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { ClusterElement as Cluster, AttributeElement as Attribute } from "../../elements/index.js";
 
 export const FlowMeasurement = Cluster({
-    name: "FlowMeasurement", id: 0x404, classification: "application",
+    name: "FlowMeasurement", id: 0x404, classification: "application", pics: "FLW",
     details: "This cluster provides an interface to flow measurement functionality, including configuration and " +
         "provision of notifications of flow measurements.",
     xref: { document: "cluster", section: "2.5" },

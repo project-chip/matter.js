@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const AudioOutput = Cluster({
-    name: "AudioOutput", id: 0x50b, classification: "application",
+    name: "AudioOutput", id: 0x50b, classification: "application", pics: "AUDIOOUTPUT",
 
     details: "This cluster provides an interface for controlling the Output on a Video Player device such as a TV." +
         "\n" +

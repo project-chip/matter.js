@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const DishwasherMode = Cluster({
-    name: "DishwasherMode", id: 0x59, type: "ModeBase", classification: "application",
+    name: "DishwasherMode", id: 0x59, type: "ModeBase", classification: "application", pics: "DISHM",
     details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
         "enumerated values for dishwasher devices.",
     xref: { document: "cluster", section: "8.3" },

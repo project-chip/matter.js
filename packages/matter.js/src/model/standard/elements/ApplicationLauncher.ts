@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const ApplicationLauncher = Cluster({
-    name: "ApplicationLauncher", id: 0x50c, classification: "application",
+    name: "ApplicationLauncher", id: 0x50c, classification: "application", pics: "APPLAUNCHER",
 
     details: "This cluster provides an interface for launching applications on a Video Player device such as a TV." +
         "\n" +

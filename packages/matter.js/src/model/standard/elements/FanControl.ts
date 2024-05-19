@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const FanControl = Cluster({
-    name: "FanControl", id: 0x202, classification: "application",
+    name: "FanControl", id: 0x202, classification: "application", pics: "FAN",
     details: "This cluster specifies an interface to control the speed of a fan.",
     xref: { document: "cluster", section: "4.4" },
 

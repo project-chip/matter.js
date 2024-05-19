@@ -33,6 +33,11 @@ import { Alias, Children, Optional, translateRecordsToMatter, translateTable } f
 
 const logger = Logger.get("translate-cluster");
 
+function logCluster(cluster: ClusterElement, revision?: number) {
+    const idStr = cluster.id === undefined ? "(no ID)" : `0x${cluster.id.toString(16)}`;
+    logger.debug(`${idStr} ${cluster.name}`, Diagnostic.dict({ rev: revision, cls: cluster.classification }));
+}
+
 // Translate from DOM -> MOM
 export function* translateCluster(definition: ClusterReference) {
     const children = Array<ClusterElement.Child>();
@@ -45,39 +50,81 @@ export function* translateCluster(definition: ClusterReference) {
     translateInvokable(definition, children);
     translateDatatypes(definition, children);
 
-    for (const [id, name] of metadata.ids.entries()) {
-        const idStr = id === undefined ? "(no ID)" : `0x${id.toString(16)}`;
-        logger.debug(`${idStr} ${name}`, Diagnostic.dict({ rev: metadata.revision, cls: metadata.classification }));
-        const cluster = ClusterElement({
-            id: id,
-            name: name,
-            classification: metadata.classification,
-            children: children,
-            type: metadata.derivesFrom,
-            xref: definition.xref,
-        });
+    const idStr = metadata.id === undefined ? "(no ID)" : `0x${metadata.id.toString(16)}`;
+    logger.debug(
+        `${idStr} ${metadata.name}`,
+        Diagnostic.dict({ rev: metadata.revision, cls: metadata.classification }),
+    );
 
-        addDocumentation(cluster, definition);
+    const cluster = ClusterElement({
+        id: metadata.id,
+        name: metadata.name,
+        pics: metadata.pics,
+        classification: metadata.classification,
+        children: children,
+        type: metadata.derivesFrom,
+        xref: definition.xref,
+    });
 
-        yield cluster;
+    logCluster(cluster, metadata.revision);
+
+    addDocumentation(cluster, definition);
+
+    yield cluster;
+
+    if (metadata.aliases) {
+        for (const { id, name, pics } of metadata.aliases) {
+            const cluster = ClusterElement({
+                id,
+                name,
+                pics,
+                type: metadata.name,
+            });
+
+            logCluster(cluster);
+
+            yield cluster;
+        }
     }
 }
 
 // Load misc. values related to cluster definition
 function translateMetadata(definition: ClusterReference, children: Array<ClusterElement.Child>) {
+    const { classification, derivesFrom, pics } = translateClassification();
+
     const ids = translateIds();
     if (!ids) {
         logger.warn(`no IDs for ${definition.name}, skipping`);
         return;
     }
 
-    const { classification, derivesFrom } = translateClassification();
     const revision = translateRevision();
     let zigbeeFeatures: undefined | Set<string>;
     translateFeatures();
 
+    let id: number | undefined;
+    let name: string;
+    let aliases: { id?: number; name: string; pics?: string }[] | undefined;
+
+    if (definition.ids?.name === "Cluster IDs") {
+        // Section is a list of aliases
+        name = camelize(definition.name.replace(/ Clusters?$/i, ""), true);
+        aliases = ids;
+    } else {
+        // Section is a base cluster plus aliases
+        ({ id, name } = ids[0]);
+        aliases = [];
+        for (let i = 1; i < ids.length; i++) {
+            const { id, name, pics } = ids[i];
+            aliases.push({ id, name, pics });
+        }
+    }
+
     return {
-        ids,
+        id,
+        name,
+        pics,
+        aliases,
         classification,
         revision,
         derivesFrom,
@@ -86,18 +133,18 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
 
     function translateIds() {
         const ids = translateTable("id", definition.ids, {
-            // Core spec uses "identifier", cluster spec uses "id".
-            // Because why would you to conform to a standard when you're
-            // defining a standard?  Normalize to "id"
+            // Core spec uses "identifier", cluster spec uses "id". Because why would you to conform to a standard when
+            // you're defining a standard?  Normalize to "id"
             //
             // Note that ID is optional because base clusters may have no ID
             id: Alias(Str, "identifier"),
             name: Identifier,
+            pics: Optional(Alias(UpperIdentifier, "picscode")),
         });
 
-        // Some tables list the primary ID twice; only accept the secondary
-        // instance in core spec; only accept the primary in cluster spec
-        const uniqueIds = new Map<number | undefined, string>();
+        // Some tables list the primary ID twice in 1.1 spec; only accept the secondary instance in core spec; only
+        // accept the primary in cluster spec
+        const uniqueIds = new Map<number | undefined, { name: string; pics?: string }>();
         for (const record of ids) {
             const idStr = record.id.trim().toLowerCase();
             let id;
@@ -112,19 +159,23 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
                 }
             }
 
+            let name;
+
             if (id === 0x8) {
                 // Level control table is just kind of fubar
-                uniqueIds.set(id, "LevelControl");
+                name = "LevelControl";
             } else {
-                uniqueIds.set(id, camelize(record.name || definition.name, true));
+                name = camelize(record.name || definition.name, true);
             }
+
+            uniqueIds.set(id, { name, pics: record.pics ?? pics });
         }
 
         if (!uniqueIds.size) {
             return false;
         }
 
-        return uniqueIds;
+        return [...uniqueIds.entries()].map(([id, { name, pics }]) => ({ id, name, pics }));
     }
 
     function translateClassification() {
@@ -132,6 +183,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             hierarchy: Optional(Str),
             role: Optional(LowerIdentifier),
             scope: Optional(Alias(LowerIdentifier, "context")),
+            pics: Optional(Alias(UpperIdentifier, "picscode")),
         });
 
         let classification: ClusterElement.Classification;
@@ -154,7 +206,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             }
         }
 
-        return { classification, derivesFrom };
+        return { classification, derivesFrom, pics: classifications[0]?.pics };
     }
 
     function translateRevision() {

@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const ModeSelect = Cluster({
-    name: "ModeSelect", id: 0x50, classification: "application",
+    name: "ModeSelect", id: 0x50, classification: "application", pics: "MOD",
 
     details: "This cluster provides an interface for controlling a characteristic of a device that can be set to " +
         "one of several predefined values. For example, the light pattern of a disco ball, the mode of a " +

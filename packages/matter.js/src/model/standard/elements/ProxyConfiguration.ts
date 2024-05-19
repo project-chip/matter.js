@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const ProxyConfiguration = Cluster({
-    name: "ProxyConfiguration", id: 0x42, classification: "node",
+    name: "ProxyConfiguration", id: 0x42, classification: "node", pics: "PXCFG",
     details: "This cluster provides a means for a proxy-capable device to be told the set of Nodes it shall proxy.",
     xref: { document: "core", section: "9.15.13" },
 

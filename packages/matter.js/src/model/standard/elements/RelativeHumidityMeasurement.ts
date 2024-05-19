@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { ClusterElement as Cluster, AttributeElement as Attribute } from "../../elements/index.js";
 
 export const RelativeHumidityMeasurement = Cluster({
-    name: "RelativeHumidityMeasurement", id: 0x405, classification: "application",
+    name: "RelativeHumidityMeasurement", id: 0x405, classification: "application", pics: "RH",
     details: "This is a base cluster. The server cluster provides an interface to water content measurement " +
         "functionality. The measurement is reportable and may be configured for reporting. Water content " +
         "measurements currently is, but are not limited to relative humidity.",

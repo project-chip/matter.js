@@ -11,7 +11,7 @@ import { ClusterElement as Cluster, AttributeElement as Attribute } from "../../
 
 export const OvenCavityOperationalState = Cluster({
     name: "OvenCavityOperationalState", id: 0x48, type: "OperationalState",
-    classification: "application",
+    classification: "application", pics: "OVENOPSTATE",
     details: "This cluster provides an interface for monitoring the operational state of an oven.",
     xref: { document: "cluster", section: "8.10" },
     children: [Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 })]

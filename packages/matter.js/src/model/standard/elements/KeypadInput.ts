@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const KeypadInput = Cluster({
-    name: "KeypadInput", id: 0x509, classification: "application",
+    name: "KeypadInput", id: 0x509, classification: "application", pics: "KEYPADINPUT",
 
     details: "This cluster provides an interface for key code based input and control on a device like a Video " +
         "Player or an endpoint like a Content App. This may include text or action commands such as UP, " +

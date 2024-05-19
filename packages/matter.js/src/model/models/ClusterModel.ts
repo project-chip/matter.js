@@ -23,6 +23,7 @@ export class ClusterModel extends Model implements ClusterElement {
     override tag: ClusterElement.Tag = ClusterElement.Tag;
     override id?: Mei;
     classification?: ClusterElement.Classification;
+    pics?: string;
     override isTypeScope = true;
     singleton?: boolean;
     supportedFeatures?: FeatureSet;

@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const Switch = Cluster({
-    name: "Switch", id: 0x3b, classification: "application",
+    name: "Switch", id: 0x3b, classification: "application", pics: "SWTCH",
 
     details: "This cluster exposes interactions with a switch device, for the purpose of using those interactions " +
         "by other devices." +

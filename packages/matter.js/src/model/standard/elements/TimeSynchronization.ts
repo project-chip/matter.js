@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const TimeSynchronization = Cluster({
-    name: "TimeSynchronization", id: 0x38, classification: "node",
+    name: "TimeSynchronization", id: 0x38, classification: "node", pics: "TIMESYNC",
 
     details: "Accurate time is required for a number of reasons, including scheduling, display and validating " +
         "security materials." +

@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const ValveConfigurationAndControl = Cluster({
-    name: "ValveConfigurationAndControl", id: 0x81, classification: "application",
+    name: "ValveConfigurationAndControl", id: 0x81, classification: "application", pics: "VALCC",
     details: "This cluster is used to configure a valve.",
     xref: { document: "cluster", section: "4.6" },
 

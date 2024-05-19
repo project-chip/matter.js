@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const OnOff = Cluster({
-    name: "OnOff", id: 0x6, classification: "application",
+    name: "OnOff", id: 0x6, classification: "application", pics: "OO",
     details: "Attributes and commands for turning devices on and off.",
     xref: { document: "cluster", section: "1.5" },
 

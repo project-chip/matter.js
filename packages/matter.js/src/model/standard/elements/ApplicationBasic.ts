@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const ApplicationBasic = Cluster({
-    name: "ApplicationBasic", id: 0x50d, classification: "application",
+    name: "ApplicationBasic", id: 0x50d, classification: "application", pics: "APBSC",
 
     details: "This cluster provides information about a Content App running on a Video Player device which is " +
         "represented as an endpoint (see Device Type Library document)." +

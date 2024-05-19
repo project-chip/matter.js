@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const Descriptor = Cluster({
-    name: "Descriptor", id: 0x1d, classification: "endpoint",
+    name: "Descriptor", id: 0x1d, classification: "endpoint", pics: "DESC",
 
     details: "NOTE" +
         "\n" +

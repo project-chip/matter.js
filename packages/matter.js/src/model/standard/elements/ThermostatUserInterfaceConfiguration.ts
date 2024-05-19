@@ -16,6 +16,7 @@ import {
 
 export const ThermostatUserInterfaceConfiguration = Cluster({
     name: "ThermostatUserInterfaceConfiguration", id: 0x204, classification: "application",
+    pics: "TSUIC",
     details: "This cluster provides an interface to allow configuration of the user interface for a thermostat, " +
         "or a thermostat controller device, that supports a keypad and LCD screen.",
     xref: { document: "cluster", section: "4.5" },

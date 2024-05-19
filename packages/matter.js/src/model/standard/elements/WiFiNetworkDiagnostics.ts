@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const WiFiNetworkDiagnostics = Cluster({
-    name: "WiFiNetworkDiagnostics", id: 0x36, classification: "node",
+    name: "WiFiNetworkDiagnostics", id: 0x36, classification: "node", pics: "DGWIFI",
     details: "The Wi-Fi Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics " +
         "that may be used by a Node to assist a user or Administrator in diagnosing potential problems. The " +
         "Wi-Fi Network Diagnostics Cluster attempts to centralize all metrics that are relevant to a " +

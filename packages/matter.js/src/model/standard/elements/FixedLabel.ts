@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const FixedLabel = Cluster({
-    name: "FixedLabel", id: 0x40, type: "Label", classification: "endpoint",
+    name: "FixedLabel", id: 0x40, type: "Label", classification: "endpoint", pics: "FLABEL",
 
     details: "This cluster provides a feature for the device to tag an endpoint with zero or more read only " +
         "labels. Examples:" +

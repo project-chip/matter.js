@@ -16,7 +16,7 @@ import {
 
 export const BridgedDeviceBasicInformation = Cluster({
     name: "BridgedDeviceBasicInformation", id: 0x39, type: "BasicInformation",
-    classification: "endpoint",
+    classification: "endpoint", pics: "BRBINFO",
 
     details: "This Cluster serves two purposes towards a Node communicating with a Bridge:" +
         "\n" +

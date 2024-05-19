@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const EnergyPreference = Cluster({
-    name: "EnergyPreference", id: 0x9b, classification: "application",
+    name: "EnergyPreference", id: 0x9b, classification: "application", pics: "EPREF",
     details: "This cluster provides an interface to specify preferences for how devices should consume energy." +
         "\n" +
         "NOTE Support for Energy Preference cluster is provisional.",

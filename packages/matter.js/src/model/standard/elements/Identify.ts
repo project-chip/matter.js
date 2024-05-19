@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const Identify = Cluster({
-    name: "Identify", id: 0x3, classification: "endpoint",
+    name: "Identify", id: 0x3, classification: "endpoint", pics: "I",
 
     details: "This cluster supports an endpoint identification state (e.g., flashing a light), that indicates to " +
         "an observer (e.g., an installer) which of several nodes and/or endpoints it is. It also supports a " +

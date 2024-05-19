@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const MediaPlayback = Cluster({
-    name: "MediaPlayback", id: 0x506, classification: "application",
+    name: "MediaPlayback", id: 0x506, classification: "application", pics: "MEDIAPLAYBACK",
     details: "This cluster provides an interface for controlling Media Playback (PLAY, PAUSE, etc) on a media " +
         "device such as a TV, Set-top Box, or Smart Speaker." +
         "\n" +

@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { ClusterElement as Cluster, AttributeElement as Attribute } from "../../elements/index.js";
 
 export const TemperatureMeasurement = Cluster({
-    name: "TemperatureMeasurement", id: 0x402, classification: "application",
+    name: "TemperatureMeasurement", id: 0x402, classification: "application", pics: "TMP",
     details: "This cluster provides an interface to temperature measurement functionality, including " +
         "configuration and provision of notifications of temperature measurements.",
     xref: { document: "cluster", section: "2.3" },

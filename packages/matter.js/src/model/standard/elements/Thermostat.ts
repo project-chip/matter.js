@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const Thermostat = Cluster({
-    name: "Thermostat", id: 0x201, asOf: "1.3", classification: "application",
+    name: "Thermostat", id: 0x201, asOf: "1.3", classification: "application", pics: "TSTAT",
     details: "This cluster provides an interface to the functionality of a thermostat.",
     xref: { document: "cluster", section: "4.3" },
 

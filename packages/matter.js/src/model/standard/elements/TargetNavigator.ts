@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const TargetNavigator = Cluster({
-    name: "TargetNavigator", id: 0x505, classification: "application",
+    name: "TargetNavigator", id: 0x505, classification: "application", pics: "TGTNAV",
 
     details: "This cluster provides an interface for UX navigation within a set of targets on a device or " +
         "endpoint." +

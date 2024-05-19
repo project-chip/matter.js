@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const IcdManagement = Cluster({
-    name: "IcdManagement", id: 0x46, classification: "node",
+    name: "IcdManagement", id: 0x46, classification: "node", pics: "ICDM",
 
     details: "ICD Management Cluster enables configuration of the ICD’s behavior and ensuring that listed clients " +
         "can be notified when an intermittently connected device, ICD, is available for communication." +

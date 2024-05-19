@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const UnitLocalization = Cluster({
-    name: "UnitLocalization", id: 0x2d, classification: "node",
+    name: "UnitLocalization", id: 0x2d, classification: "node", pics: "LUNIT",
 
     details: "Nodes should be expected to be deployed to any and all regions of the world. These global regions " +
         "may have differing preferences for the units in which values are conveyed in communication to a" +

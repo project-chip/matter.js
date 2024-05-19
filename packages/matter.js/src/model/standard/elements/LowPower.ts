@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const LowPower = Cluster({
-    name: "LowPower", id: 0x508, classification: "application",
+    name: "LowPower", id: 0x508, classification: "application", pics: "LOWPOWER",
 
     details: "This cluster provides an interface for managing low power mode on a device." +
         "\n" +

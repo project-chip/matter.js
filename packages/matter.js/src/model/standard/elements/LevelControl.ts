@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const LevelControl = Cluster({
-    name: "LevelControl", id: 0x8, classification: "application",
+    name: "LevelControl", id: 0x8, classification: "application", pics: "LVL",
     details: "This cluster provides an interface for controlling a characteristic of a device that can be set to " +
         "a level, for example the brightness of a light, the degree of closure of a door, or the power " +
         "output of a heater.",

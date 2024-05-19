@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const MicrowaveOvenMode = Cluster({
-    name: "MicrowaveOvenMode", id: 0x5e, type: "ModeBase", classification: "application",
+    name: "MicrowaveOvenMode", id: 0x5e, type: "ModeBase", classification: "application", pics: "MWOM",
     details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
         "enumerated values for Microwave Oven devices.",
     xref: { document: "cluster", section: "8.12" },

@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { ClusterElement as Cluster, AttributeElement as Attribute } from "../../elements/index.js";
 
 export const WakeOnLan = Cluster({
-    name: "WakeOnLan", id: 0x503, classification: "application",
+    name: "WakeOnLan", id: 0x503, classification: "application", pics: "WAKEONLAN",
 
     details: "This cluster provides an interface for managing low power mode on a device that supports the Wake " +
         "On LAN or Wake On Wireless LAN (WLAN) protocol (see [Wake On LAN])." +

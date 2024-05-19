@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const ModeBase = Cluster({
-    name: "ModeBase", classification: "application",
+    name: "ModeBase", classification: "application", pics: "MODB",
 
     details: "This cluster provides an interface for controlling a characteristic of a device that can be set to " +
         "one of several predefined values. For example, the light pattern of a disco ball, the mode of a " +

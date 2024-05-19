@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const PumpConfigurationAndControl = Cluster({
-    name: "PumpConfigurationAndControl", id: 0x200, classification: "application",
+    name: "PumpConfigurationAndControl", id: 0x200, classification: "application", pics: "PCC",
     details: "The Pump Configuration and Control cluster provides an interface for the setup and control of pump " +
         "devices, and the automatic reporting of pump status information. Note that control of pump speed is " +
         "not included – speed is controlled by the On/Off and Level Control clusters.",

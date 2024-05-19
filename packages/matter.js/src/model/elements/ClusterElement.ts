@@ -22,6 +22,11 @@ export interface ClusterElement extends BaseElement {
     tag: `${ClusterElement.Tag}`;
 
     /**
+     * The cluster's PICS code.
+     */
+    pics?: string;
+
+    /**
      * Marks a cluster as a singleton per the Matter specification.
      */
     singleton?: boolean;

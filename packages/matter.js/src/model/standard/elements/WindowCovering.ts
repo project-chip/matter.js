@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const WindowCovering = Cluster({
-    name: "WindowCovering", id: 0x102, classification: "application",
+    name: "WindowCovering", id: 0x102, classification: "application", pics: "WNCV",
     details: "The window covering cluster provides an interface for controlling and adjusting automatic window " +
         "coverings such as drapery motors, automatic shades, curtains and blinds.",
     xref: { document: "cluster", section: "5.3" },

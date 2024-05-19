@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const OperationalCredentials = Cluster({
-    name: "OperationalCredentials", id: 0x3e, classification: "node",
+    name: "OperationalCredentials", id: 0x3e, classification: "node", pics: "OPCREDS",
     details: "This cluster is used to add or remove Node Operational credentials on a Commissionee or Node, as " +
         "well as manage the associated Fabrics.",
     xref: { document: "core", section: "11.18" },

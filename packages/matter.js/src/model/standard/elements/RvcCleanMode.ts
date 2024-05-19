@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const RvcCleanMode = Cluster({
-    name: "RvcCleanMode", id: 0x55, type: "ModeBase", classification: "application",
+    name: "RvcCleanMode", id: 0x55, type: "ModeBase", classification: "application", pics: "RVCCLEANM",
     details: "This cluster is derived from the Mode Base cluster to define specifics for Robotic Vacuum Cleaner " +
         "devices. It also defines a namespace for the cleaning type for these devices.",
     xref: { document: "cluster", section: "7.3" },

@@ -52,7 +52,7 @@ export const RootNodeDt = DeviceType({
             xref: { document: "device", section: "2.1.5" }
         }),
         Requirement({
-            name: "TimeSync", id: 0x38, conformance: "O", element: "serverCluster", quality: "I",
+            name: "TimeSynchronization", id: 0x38, conformance: "O", element: "serverCluster", quality: "I",
             xref: { document: "device", section: "2.1.5" }
         }),
         Requirement({

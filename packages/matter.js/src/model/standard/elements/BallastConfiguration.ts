@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const BallastConfiguration = Cluster({
-    name: "BallastConfiguration", id: 0x301, classification: "application",
+    name: "BallastConfiguration", id: 0x301, classification: "application", pics: "BC",
     details: "This cluster is used for configuring a lighting ballast." +
         "\n" +
         "NOTE Support for Ballast Configuration cluster is provisional.",

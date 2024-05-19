@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const ElectricalEnergyMeasurement = Cluster({
-    name: "ElectricalEnergyMeasurement", id: 0x91, classification: "application",
+    name: "ElectricalEnergyMeasurement", id: 0x91, classification: "application", pics: "EEM",
     details: "This cluster provides a mechanism for querying data about the electrical energy imported or " +
         "provided by the server.",
     xref: { document: "cluster", section: "2.12" },

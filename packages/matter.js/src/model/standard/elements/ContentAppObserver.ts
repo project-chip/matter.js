@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const ContentAppObserver = Cluster({
-    name: "ContentAppObserver", id: 0x510, classification: "application",
+    name: "ContentAppObserver", id: 0x510, classification: "application", pics: "APPOBSERVER",
 
     details: "This cluster provides an interface for sending targeted commands to an Observer of a Content App on " +
         "a Video Player device such as a Streaming Media Player, Smart TV or Smart Screen." +

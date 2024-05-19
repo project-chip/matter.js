@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const ThreadNetworkDiagnostics = Cluster({
-    name: "ThreadNetworkDiagnostics", id: 0x35, classification: "node",
+    name: "ThreadNetworkDiagnostics", id: 0x35, classification: "node", pics: "DGTHREAD",
     details: "The Thread Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics " +
         "that may be used by a Node to assist a user or Administrator in diagnosing potential problems. The " +
         "Thread Network Diagnostics Cluster attempts to centralize all metrics that are relevant to a " +

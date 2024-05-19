@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const GeneralDiagnostics = Cluster({
-    name: "GeneralDiagnostics", id: 0x33, classification: "node",
+    name: "GeneralDiagnostics", id: 0x33, classification: "node", pics: "DGGEN",
     details: "The General Diagnostics Cluster, along with other diagnostics clusters, provide a means to acquire " +
         "standardized diagnostics metrics that may be used by a Node to assist a user or Administrator in " +
         "diagnosing potential problems. The General Diagnostics Cluster attempts to centralize all metrics " +

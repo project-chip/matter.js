@@ -16,6 +16,7 @@ import {
 
 export const DishwasherAlarm = Cluster({
     name: "DishwasherAlarm", id: 0x5d, type: "AlarmBase", classification: "application",
+    pics: "DISHALM",
     details: "This cluster is a derived cluster of the Alarm Base cluster.",
     xref: { document: "cluster", section: "8.4" },
 

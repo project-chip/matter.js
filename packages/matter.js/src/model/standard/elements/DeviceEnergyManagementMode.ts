@@ -15,6 +15,7 @@ import {
 
 export const DeviceEnergyManagementMode = Cluster({
     name: "DeviceEnergyManagementMode", id: 0x9f, type: "ModeBase", classification: "application",
+    pics: "DEMM",
     details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
         "enumerated values for Device Energy Management devices." +
         "\n" +

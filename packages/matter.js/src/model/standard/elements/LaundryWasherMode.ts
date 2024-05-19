@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const LaundryWasherMode = Cluster({
-    name: "LaundryWasherMode", id: 0x51, type: "ModeBase", classification: "application",
+    name: "LaundryWasherMode", id: 0x51, type: "ModeBase", classification: "application", pics: "LWM",
     details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
         "enumerated values for laundry washer as well as laundry dryer devices.",
     xref: { document: "cluster", section: "8.5" },

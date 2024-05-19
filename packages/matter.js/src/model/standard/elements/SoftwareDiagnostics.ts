@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const SoftwareDiagnostics = Cluster({
-    name: "SoftwareDiagnostics", id: 0x34, classification: "node",
+    name: "SoftwareDiagnostics", id: 0x34, classification: "node", pics: "DGSW",
     details: "The Software Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that " +
         "may be used by a Node to assist a user or Administrator in diagnosing potential problems. The " +
         "Software Diagnostics Cluster attempts to centralize all metrics that are relevant to the software " +

@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const AccountLogin = Cluster({
-    name: "AccountLogin", id: 0x50e, classification: "application",
+    name: "AccountLogin", id: 0x50e, classification: "application", pics: "ALOGIN",
 
     details: "This cluster provides commands that facilitate user account login on a Content App or a node. For " +
         "example, a Content App running on a Video Player device, which is represented as an endpoint (see " +

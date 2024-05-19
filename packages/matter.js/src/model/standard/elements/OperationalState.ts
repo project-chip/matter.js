@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const OperationalState = Cluster({
-    name: "OperationalState", id: 0x60, classification: "application",
+    name: "OperationalState", id: 0x60, classification: "application", pics: "OPSTATE",
 
     details: "This cluster supports remotely monitoring and, where supported, changing the operational state of " +
         "any device where a state machine is a part of the operation." +

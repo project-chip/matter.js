@@ -23,7 +23,7 @@ export const SpecMatter = Matter({
 
     children: [
         Cluster({
-            name: "Identify", id: 0x3, classification: "endpoint",
+            name: "Identify", id: 0x3, classification: "endpoint", pics: "I",
 
             details: "This cluster supports an endpoint identification state (e.g., flashing a light), that indicates to " +
                 "an observer (e.g., an installer) which of several nodes and/or endpoints it is. It also supports a " +
@@ -179,7 +179,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "Groups", id: 0x4, classification: "endpoint",
+            name: "Groups", id: 0x4, classification: "endpoint", pics: "G",
 
             details: "The Groups cluster manages, per endpoint, the content of the node-wide Group Table that is part of " +
                 "the underlying interaction layer." +
@@ -444,7 +444,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ScenesManagement", id: 0x62, classification: "application",
+            name: "ScenesManagement", id: 0x62, classification: "application", pics: "S",
 
             details: "The Scenes Management cluster provides attributes and commands for setting up and recalling scenes. " +
                 "Each scene corresponds to a set of stored values of specified attributes for one or more clusters " +
@@ -1143,7 +1143,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "OnOff", id: 0x6, classification: "application",
+            name: "OnOff", id: 0x6, classification: "application", pics: "OO",
             details: "Attributes and commands for turning devices on and off.",
             xref: { document: "cluster", section: "1.5" },
 
@@ -1427,7 +1427,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "LevelControl", id: 0x8, classification: "application",
+            name: "LevelControl", id: 0x8, classification: "application", pics: "LVL",
             details: "This cluster provides an interface for controlling a characteristic of a device that can be set to " +
                 "a level, for example the brightness of a light, the degree of closure of a door, or the power " +
                 "output of a heater.",
@@ -1795,377 +1795,10 @@ export const SpecMatter = Matter({
             ]
         }),
 
-        Cluster({
-            name: "PulseWidthModulation", id: 0x1c, classification: "application",
-            details: "This cluster provides an interface for controlling a characteristic of a device that can be set to " +
-                "a level, for example the brightness of a light, the degree of closure of a door, or the power " +
-                "output of a heater.",
-            xref: { document: "cluster", section: "1.6" },
-
-            children: [
-                Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 5 }),
-
-                Attribute({
-                    name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
-                    xref: { document: "cluster", section: "1.6.4" },
-
-                    children: [
-                        Field({
-                            name: "OO", conformance: "O", constraint: "0", default: 1, description: "OnOff",
-                            details: "Dependency with the On/Off cluster"
-                        }),
-
-                        Field({
-                            name: "LT", conformance: "O", constraint: "1", default: 0, description: "Lighting",
-
-                            details: "This feature supports an interface for controlling the level of a light source. For the " +
-                                "CurrentLevel attribute:" +
-                                "\n" +
-                                "A value of 0x00 shall NOT be used." +
-                                "\n" +
-                                "A value of 0x01 shall indicate the minimum level that can be attained on a device. A value of 0xFE " +
-                                "shall indicate the maximum level that can be attained on a device. A value of null shall represent " +
-                                "an undefined value." +
-                                "\n" +
-                                "All other values are application specific gradations from the minimum to the maximum level.",
-
-                            xref: { document: "cluster", section: "1.6.4.2" }
-                        }),
-
-                        Field({
-                            name: "FQ", conformance: "P", constraint: "2", default: 0, description: "Frequency",
-                            details: "NOTE The Frequency feature is provisional.",
-                            xref: { document: "cluster", section: "1.6.4.3" }
-                        })
-                    ]
-                }),
-
-                Attribute({
-                    name: "CurrentLevel", id: 0x0, type: "uint8", access: "R V", conformance: "M",
-                    constraint: "minLevel to maxLevel", default: null, quality: "X N S",
-                    details: "Indicates the current level of this device. The meaning of 'level' is device dependent.",
-                    xref: { document: "cluster", section: "1.6.6.2" }
-                }),
-
-                Attribute({
-                    name: "RemainingTime", id: 0x1, type: "uint16", access: "R V", conformance: "LT", default: 0,
-                    details: "Indicates the time remaining until the current command is complete - it is specified in 1/10ths of " +
-                        "a second.",
-                    xref: { document: "cluster", section: "1.6.6.3" }
-                }),
-
-                Attribute({
-                    name: "MinLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[LT]",
-                    constraint: "1 to maxLevel", default: 1,
-                    details: "Indicates the minimum value of CurrentLevel that is capable of being assigned.",
-                    xref: { document: "cluster", section: "1.6.6.4" }
-                }),
-
-                Attribute({
-                    name: "MinLevel", id: 0x2, type: "uint8", access: "R V", conformance: "[!LT]",
-                    constraint: "0 to maxLevel", default: 0,
-                    details: "Indicates the minimum value of CurrentLevel that is capable of being assigned.",
-                    xref: { document: "cluster", section: "1.6.6.4" }
-                }),
-
-                Attribute({
-                    name: "MaxLevel", id: 0x3, type: "uint8", access: "R V", conformance: "O",
-                    constraint: "minLevel to 254", default: 254,
-                    details: "Indicates the maximum value of CurrentLevel that is capable of being assigned.",
-                    xref: { document: "cluster", section: "1.6.6.5" }
-                }),
-
-                Attribute({
-                    name: "CurrentFrequency", id: 0x4, type: "uint16", access: "R V", conformance: "FQ",
-                    constraint: "minFrequency to maxFrequency", default: 0, quality: "S P",
-                    details: "Indicates the frequency at which the device is at CurrentLevel. A CurrentFrequency of 0 is unknown.",
-                    xref: { document: "cluster", section: "1.6.6.6" }
-                }),
-
-                Attribute({
-                    name: "MinFrequency", id: 0x5, type: "uint16", access: "R V", conformance: "FQ",
-                    constraint: "0 to maxFrequency", default: 0,
-                    details: "Indicates the minimum value of CurrentFrequency that is capable of being assigned. MinFrequency " +
-                        "shall be less than or equal to MaxFrequency. A value of 0 indicates undefined.",
-                    xref: { document: "cluster", section: "1.6.6.7" }
-                }),
-
-                Attribute({
-                    name: "MaxFrequency", id: 0x6, type: "uint16", access: "R V", conformance: "FQ",
-                    constraint: "min minFrequency", default: 0,
-                    details: "Indicates the maximum value of CurrentFrequency that is capable of being assigned. MaxFrequency " +
-                        "shall be greater than or equal to MinFrequency. A value of 0 indicates undefined.",
-                    xref: { document: "cluster", section: "1.6.6.8" }
-                }),
-
-                Attribute({
-                    name: "OnOffTransitionTime", id: 0x10, type: "uint16", access: "RW VO", conformance: "O",
-                    default: 0,
-
-                    details: "Indicates the time taken to move to or from the target level when On or Off commands are received " +
-                        "by an On/Off cluster on the same endpoint. It is specified in 1/10ths of a second." +
-                        "\n" +
-                        "The actual time taken SHOULD be as close to OnOffTransitionTime as the device is able. Please note " +
-                        "that if the device is not able to move at a variable rate, the OnOffTransitionTime attribute SHOULD " +
-                        "NOT be implemented.",
-
-                    xref: { document: "cluster", section: "1.6.6.10" }
-                }),
-
-                Attribute({
-                    name: "OnLevel", id: 0x11, type: "uint8", access: "RW VO", conformance: "M",
-                    constraint: "minLevel to maxLevel", default: null, quality: "X",
-
-                    details: "Indicates the value that the CurrentLevel attribute is set to when the OnOff attribute of an On/Off " +
-                        "cluster on the same endpoint is set to TRUE, as a result of processing an On/Off cluster command. " +
-                        "If the OnLevel attribute is not implemented, or is set to the null value, it has no effect. For " +
-                        "more details see Effect of On/Off Commands on the CurrentLevel Attribute." +
-                        "\n" +
-                        "OnLevel represents a mandatory field that was previously not present or optional. Implementers " +
-                        "should be aware that older devices may not implement it.",
-
-                    xref: { document: "cluster", section: "1.6.6.11" }
-                }),
-
-                Attribute({
-                    name: "OnTransitionTime", id: 0x12, type: "uint16", access: "RW VO", conformance: "O",
-                    default: null, quality: "X",
-                    details: "Indicates the time taken to move the current level from the minimum level to the maximum level when " +
-                        "an On command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of " +
-                        "a second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
-                        "shall be used instead.",
-                    xref: { document: "cluster", section: "1.6.6.12" }
-                }),
-
-                Attribute({
-                    name: "OffTransitionTime", id: 0x13, type: "uint16", access: "RW VO", conformance: "O",
-                    default: null, quality: "X",
-                    details: "Indicates the time taken to move the current level from the maximum level to the minimum level when " +
-                        "an Off command is received by an On/Off cluster on the same endpoint. It is specified in 1/10ths of " +
-                        "a second. If this attribute is not implemented, or contains a null value, the OnOffTransitionTime " +
-                        "shall be used instead.",
-                    xref: { document: "cluster", section: "1.6.6.13" }
-                }),
-
-                Attribute({
-                    name: "DefaultMoveRate", id: 0x14, type: "uint8", access: "RW VO", conformance: "O", quality: "X",
-                    details: "Indicates the movement rate, in units per second, when a Move command is received with a null value " +
-                        "Rate parameter.",
-                    xref: { document: "cluster", section: "1.6.6.14" }
-                }),
-
-                Attribute({
-                    name: "Options", id: 0xf, type: "OptionsBitmap", access: "RW VO", conformance: "M",
-                    constraint: "desc", default: 0,
-
-                    details: "Indicates the selected options of the device." +
-                        "\n" +
-                        "The Options attribute is a bitmap that determines the default behavior of some cluster commands. " +
-                        "Each command that is dependent on the Options attribute shall first construct a temporary Options " +
-                        "bitmap that is in effect during the command processing. The temporary Options bitmap has the same " +
-                        "format and meaning as the Options attribute, but includes any bits that may be overridden by " +
-                        "command fields." +
-                        "\n" +
-                        "This attribute is meant to be changed only during commissioning." +
-                        "\n" +
-                        "Command execution shall NOT continue beyond the Options processing if all of these criteria are " +
-                        "true:" +
-                        "\n" +
-                        "  • The command is one of the ‘without On/Off’ commands: Move, Move to Level, Step, or Stop." +
-                        "\n" +
-                        "  • The On/Off cluster exists on the same endpoint as this cluster." +
-                        "\n" +
-                        "  • The OnOff attribute of the On/Off cluster, on this endpoint, is FALSE." +
-                        "\n" +
-                        "  • The value of the ExecuteIfOff bit is 0.",
-
-                    xref: { document: "cluster", section: "1.6.6.9" }
-                }),
-
-                Attribute({
-                    name: "StartUpCurrentLevel", id: 0x4000, type: "uint8", access: "RW VM", conformance: "LT",
-                    constraint: "desc", quality: "X N",
-
-                    details: "Indicates the desired startup level for a device when it is supplied with power and this level " +
-                        "shall be reflected in the CurrentLevel attribute. The values of the StartUpCurrentLevel attribute " +
-                        "are listed below:" +
-                        "\n" +
-                        "This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentLevel " +
-                        "attribute shall return to its value prior to the restart.",
-
-                    xref: { document: "cluster", section: "1.6.6.15" }
-                }),
-
-                Command({
-                    name: "MoveToLevel", id: 0x0, access: "O", conformance: "M", direction: "request",
-                    response: "status",
-                    xref: { document: "cluster", section: "1.6.7.1" },
-
-                    children: [
-                        Field({ name: "Level", id: 0x0, type: "uint8", conformance: "M", constraint: "0 to 254" }),
-                        Field({ name: "TransitionTime", id: 0x1, type: "uint16", conformance: "M", quality: "X" }),
-                        Field({
-                            name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0
-                        }),
-                        Field({
-                            name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0
-                        })
-                    ]
-                }),
-
-                Command({
-                    name: "Move", id: 0x1, access: "O", conformance: "M", direction: "request", response: "status",
-                    xref: { document: "cluster", section: "1.6.7.2" },
-
-                    children: [
-                        Field({
-                            name: "MoveMode", id: 0x0, type: "MoveModeEnum", conformance: "M", constraint: "desc",
-                            details: "This field shall be one of the non-reserved values in MoveModeEnum.",
-                            xref: { document: "cluster", section: "1.6.7.2.1" }
-                        }),
-
-                        Field({
-                            name: "Rate", id: 0x1, type: "uint8", conformance: "M", quality: "X",
-
-                            details: "This field shall indicate the rate of movement in units per second. The actual rate of movement " +
-                                "SHOULD be as close to this rate as the device is able. If the Rate field is equal to null, then the " +
-                                "value in DefaultMoveRate attribute shall be used. However, if the Rate field is equal to null and " +
-                                "the DefaultMoveRate attribute is not supported, or if the Rate field is equal to null and the value " +
-                                "of the DefaultMoveRate attribute is equal to null, then the device SHOULD move as fast as it is " +
-                                "able. If the device is not able to move at a variable rate, this field may be disregarded.",
-
-                            xref: { document: "cluster", section: "1.6.7.2.2" }
-                        }),
-
-                        Field({
-                            name: "OptionsMask", id: 0x2, type: "Options", conformance: "M", constraint: "desc", default: 0
-                        }),
-                        Field({
-                            name: "OptionsOverride", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0
-                        })
-                    ]
-                }),
-
-                Command({
-                    name: "Step", id: 0x2, access: "O", conformance: "M", direction: "request", response: "status",
-                    xref: { document: "cluster", section: "1.6.7.3" },
-
-                    children: [
-                        Field({
-                            name: "StepMode", id: 0x0, type: "StepModeEnum", conformance: "M", constraint: "desc",
-                            details: "This field shall be one of the non-reserved values in StepModeEnum.",
-                            xref: { document: "cluster", section: "1.6.7.3.1" }
-                        }),
-                        Field({
-                            name: "StepSize", id: 0x1, type: "uint8", conformance: "M",
-                            details: "This field shall indicate the change to CurrentLevel.",
-                            xref: { document: "cluster", section: "1.6.7.3.2" }
-                        }),
-
-                        Field({
-                            name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M", quality: "X",
-
-                            details: "This field shall indicate the time that shall be taken to perform the step, in tenths of a second. " +
-                                "A step is a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close " +
-                                "to this as the device is able. If the TransitionTime field is equal to null, the device SHOULD move " +
-                                "as fast as it is able." +
-                                "\n" +
-                                "If the device is not able to move at a variable rate, the TransitionTime field may be disregarded.",
-
-                            xref: { document: "cluster", section: "1.6.7.3.3" }
-                        }),
-
-                        Field({
-                            name: "OptionsMask", id: 0x3, type: "Options", conformance: "M", constraint: "desc", default: 0
-                        }),
-                        Field({
-                            name: "OptionsOverride", id: 0x4, type: "Options", conformance: "M", constraint: "desc", default: 0
-                        })
-                    ]
-                }),
-
-                Command({
-                    name: "Stop", id: 0x3, access: "O", conformance: "M", direction: "request", response: "status",
-                    xref: { document: "cluster", section: "1.6.7.4" },
-
-                    children: [
-                        Field({
-                            name: "OptionsMask", id: 0x0, type: "Options", conformance: "M", constraint: "desc", default: 0
-                        }),
-                        Field({
-                            name: "OptionsOverride", id: 0x1, type: "Options", conformance: "M", constraint: "desc", default: 0
-                        })
-                    ]
-                }),
-
-                Command({
-                    name: "MoveToLevelWithOnOff", id: 0x4, access: "O", conformance: "M", direction: "request",
-                    response: "status",
-                    xref: { document: "cluster", section: "1.6.7" }
-                }),
-                Command({
-                    name: "MoveWithOnOff", id: 0x5, access: "O", conformance: "M", direction: "request",
-                    response: "status",
-                    xref: { document: "cluster", section: "1.6.7" }
-                }),
-                Command({
-                    name: "StepWithOnOff", id: 0x6, access: "O", conformance: "M", direction: "request",
-                    response: "status",
-                    xref: { document: "cluster", section: "1.6.7" }
-                }),
-                Command({
-                    name: "StopWithOnOff", id: 0x7, access: "O", conformance: "M", direction: "request",
-                    response: "status",
-                    xref: { document: "cluster", section: "1.6.7" }
-                }),
-
-                Command({
-                    name: "MoveToClosestFrequency", id: 0x8, access: "O", conformance: "FQ", direction: "request",
-                    response: "status",
-                    xref: { document: "cluster", section: "1.6.7.5" },
-                    children: [Field({ name: "Frequency", id: 0x0, type: "uint16", conformance: "M", default: 0 })]
-                }),
-
-                Datatype({
-                    name: "OptionsBitmap", type: "map8",
-                    xref: { document: "cluster", section: "1.6.5.1" },
-
-                    children: [
-                        Field({
-                            name: "ExecuteIfOff", constraint: "0", description: "Dependency on On/Off cluster",
-                            details: "This bit indicates if this cluster has a dependency with the On/Off cluster.",
-                            xref: { document: "cluster", section: "1.6.5.1.1" }
-                        }),
-                        Field({
-                            name: "CoupleColorTempToLevel", constraint: "1", description: "Dependency on Color Control cluster",
-                            details: "This bit indicates if this cluster has a dependency with the Color Control cluster.",
-                            xref: { document: "cluster", section: "1.6.5.1.2" }
-                        })
-                    ]
-                }),
-
-                Datatype({
-                    name: "MoveModeEnum", type: "enum8",
-                    xref: { document: "cluster", section: "1.6.5.2" },
-                    children: [
-                        Field({ name: "Up", id: 0x0, conformance: "M", description: "Increase the level" }),
-                        Field({ name: "Down", id: 0x1, conformance: "M", description: "Decrease the level" })
-                    ]
-                }),
-
-                Datatype({
-                    name: "StepModeEnum", type: "enum8",
-                    xref: { document: "cluster", section: "1.6.5.3" },
-                    children: [
-                        Field({ name: "Up", id: 0x0, conformance: "M", description: "Step upwards" }),
-                        Field({ name: "Down", id: 0x1, conformance: "M", description: "Step downwards" })
-                    ]
-                })
-            ]
-        }),
+        Cluster({ name: "PulseWidthModulation", id: 0x1c, type: "LevelControl", pics: "LVL" }),
 
         Cluster({
-            name: "BooleanState", id: 0x45, classification: "application",
+            name: "BooleanState", id: 0x45, classification: "application", pics: "BOOL",
             details: "This cluster provides an interface to a boolean state.",
             xref: { document: "cluster", section: "1.7" },
 
@@ -2196,7 +1829,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "BooleanStateConfiguration", id: 0x80, classification: "application",
+            name: "BooleanStateConfiguration", id: 0x80, classification: "application", pics: "BOOLCFG",
             details: "This cluster is used to configure a boolean sensor, including optional state change alarm features " +
                 "and configuration of the sensitivity level associated with the sensor.",
             xref: { document: "cluster", section: "1.8" },
@@ -2442,7 +2075,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ModeSelect", id: 0x50, classification: "application",
+            name: "ModeSelect", id: 0x50, classification: "application", pics: "MOD",
 
             details: "This cluster provides an interface for controlling a characteristic of a device that can be set to " +
                 "one of several predefined values. For example, the light pattern of a disco ball, the mode of a " +
@@ -2650,7 +2283,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ModeBase", classification: "application",
+            name: "ModeBase", classification: "application", pics: "MODB",
 
             details: "This cluster provides an interface for controlling a characteristic of a device that can be set to " +
                 "one of several predefined values. For example, the light pattern of a disco ball, the mode of a " +
@@ -2913,7 +2546,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "LowPower", id: 0x508, classification: "application",
+            name: "LowPower", id: 0x508, classification: "application", pics: "LOWPOWER",
 
             details: "This cluster provides an interface for managing low power mode on a device." +
                 "\n" +
@@ -2944,7 +2577,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "WakeOnLan", id: 0x503, classification: "application",
+            name: "WakeOnLan", id: 0x503, classification: "application", pics: "WAKEONLAN",
 
             details: "This cluster provides an interface for managing low power mode on a device that supports the Wake " +
                 "On LAN or Wake On Wireless LAN (WLAN) protocol (see [Wake On LAN])." +
@@ -3008,7 +2641,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "Switch", id: 0x3b, classification: "application",
+            name: "Switch", id: 0x3b, classification: "application", pics: "SWTCH",
 
             details: "This cluster exposes interactions with a switch device, for the purpose of using those interactions " +
                 "by other devices." +
@@ -3252,7 +2885,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "OperationalState", id: 0x60, classification: "application",
+            name: "OperationalState", id: 0x60, classification: "application", pics: "OPSTATE",
 
             details: "This cluster supports remotely monitoring and, where supported, changing the operational state of " +
                 "any device where a state machine is a part of the operation." +
@@ -3710,7 +3343,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "AlarmBase", classification: "application",
+            name: "AlarmBase", classification: "application", pics: "ALARM",
             details: "This cluster is a base cluster from which clusters for particular alarms for a device type can be " +
                 "derived. Each derivation shall define the values for the AlarmBitmap data type used in this " +
                 "cluster. Each derivation shall define which alarms are latched.",
@@ -3856,7 +3489,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "Messages", id: 0x97, classification: "application",
+            name: "Messages", id: 0x97, classification: "application", pics: "MESS",
             details: "This cluster provides an interface for passing messages to be presented by a device.",
             xref: { document: "cluster", section: "1.16" },
 
@@ -4504,7 +4137,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "IlluminanceMeasurement", id: 0x400, classification: "application",
+            name: "IlluminanceMeasurement", id: 0x400, classification: "application", pics: "ILL",
             details: "The Illuminance Measurement cluster provides an interface to illuminance measurement functionality, " +
                 "including configuration and provision of notifications of illuminance measurements.",
             xref: { document: "cluster", section: "2.2" },
@@ -4581,7 +4214,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "TemperatureMeasurement", id: 0x402, classification: "application",
+            name: "TemperatureMeasurement", id: 0x402, classification: "application", pics: "TMP",
             details: "This cluster provides an interface to temperature measurement functionality, including " +
                 "configuration and provision of notifications of temperature measurements.",
             xref: { document: "cluster", section: "2.3" },
@@ -4626,7 +4259,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "PressureMeasurement", id: 0x403, classification: "application",
+            name: "PressureMeasurement", id: 0x403, classification: "application", pics: "PRS",
             details: "This cluster provides an interface to pressure measurement functionality, including configuration " +
                 "and provision of notifications of pressure measurements.",
             xref: { document: "cluster", section: "2.4" },
@@ -4729,7 +4362,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "FlowMeasurement", id: 0x404, classification: "application",
+            name: "FlowMeasurement", id: 0x404, classification: "application", pics: "FLW",
             details: "This cluster provides an interface to flow measurement functionality, including configuration and " +
                 "provision of notifications of flow measurements.",
             xref: { document: "cluster", section: "2.5" },
@@ -4781,7 +4414,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "RelativeHumidityMeasurement", id: 0x405, classification: "application",
+            name: "RelativeHumidityMeasurement", id: 0x405, classification: "application", pics: "RH",
             details: "This is a base cluster. The server cluster provides an interface to water content measurement " +
                 "functionality. The measurement is reportable and may be configured for reporting. Water content " +
                 "measurements currently is, but are not limited to relative humidity.",
@@ -4837,7 +4470,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "OccupancySensing", id: 0x406, classification: "application",
+            name: "OccupancySensing", id: 0x406, classification: "application", pics: "OCC",
             details: "The server cluster provides an interface to occupancy sensing functionality, including " +
                 "configuration and provision of notifications of occupancy status.",
             xref: { document: "cluster", section: "2.7" },
@@ -4993,7 +4626,183 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "AirQuality", id: 0x5b, classification: "application",
+            name: "ResourceMonitoring", classification: "application", pics: "REPM",
+
+            details: "This generic cluster provides an interface to the current condition of a resource. A resource is a " +
+                "component of a device that is designed to be replaced, refilled, or emptied when exhausted or full. " +
+                "Examples of resources include filters, cartridges, and water tanks. While batteries fit this " +
+                "definition they are not intended to be used with this cluster. Use the power source cluster for " +
+                "batteries instead." +
+                "\n" +
+                "NOTE" +
+                "\n" +
+                "This cluster is not meant to be used for monitoring of the system resources, such as processing, " +
+                "memory utilization, networking properties, etc." +
+                "\n" +
+                "This cluster shall be used via an alias to a specific resource type (see Cluster IDs).",
+
+            xref: { document: "cluster", section: "2.8" },
+
+            children: [
+                Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+
+                Attribute({
+                    name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
+                    xref: { document: "cluster", section: "2.8.4" },
+
+                    children: [
+                        Field({
+                            name: "CON", conformance: "O", constraint: "0", description: "Condition",
+                            details: "Supports monitoring the condition of the resource in percentage"
+                        }),
+                        Field({
+                            name: "WRN", conformance: "O", constraint: "1", description: "Warning",
+                            details: "Supports warning indication"
+                        }),
+                        Field({
+                            name: "REP", conformance: "O", constraint: "2", description: "ReplacementProductList",
+                            details: "Supports specifying the list of replacement products"
+                        })
+                    ]
+                }),
+
+                Attribute({
+                    name: "Condition", id: 0x0, type: "percent", access: "R V", conformance: "CON",
+                    details: "Indicates the current condition of the resource in percent.",
+                    xref: { document: "cluster", section: "2.8.6.1" }
+                }),
+
+                Attribute({
+                    name: "DegradationDirection", id: 0x1, type: "DegradationDirectionEnum", access: "R V",
+                    conformance: "CON", constraint: "desc", quality: "F",
+                    details: "Indicates the direction of change for the condition of the resource over time, which helps to " +
+                        "determine whether a higher or lower condition value is considered optimal.",
+                    xref: { document: "cluster", section: "2.8.6.2" }
+                }),
+
+                Attribute({
+                    name: "ChangeIndication", id: 0x2, type: "ChangeIndicationEnum", access: "R V", conformance: "M",
+                    default: 0,
+                    details: "This attribute shall be populated with a value from ChangeIndicationEnum that is indicative of the " +
+                        "current requirement to change the resource.",
+                    xref: { document: "cluster", section: "2.8.6.3" }
+                }),
+
+                Attribute({
+                    name: "InPlaceIndicator", id: 0x3, type: "bool", access: "R V", conformance: "O",
+                    details: "Indicates whether a resource is currently installed. A value of true shall indicate that a resource " +
+                        "is installed. A value of false shall indicate that a resource is not installed.",
+                    xref: { document: "cluster", section: "2.8.6.4" }
+                }),
+
+                Attribute({
+                    name: "LastChangedTime", id: 0x4, type: "epoch-s", access: "RW VO", conformance: "O", default: null,
+                    quality: "X N",
+                    details: "This attribute may indicates the time at which the resource has been changed, if supported by the " +
+                        "server. The attribute shall be null if it was never set or is unknown.",
+                    xref: { document: "cluster", section: "2.8.6.5" }
+                }),
+
+                Attribute({
+                    name: "ReplacementProductList", id: 0x5, type: "list", access: "R V", conformance: "REP",
+                    constraint: "max 5", quality: "F",
+                    details: "Indicates the list of supported products that may be used as replacements for the current resource. " +
+                        "Each item in this list represents a unique ReplacementProductStruct.",
+                    xref: { document: "cluster", section: "2.8.6.6" },
+                    children: [Field({ name: "entry", type: "ReplacementProductStruct" })]
+                }),
+
+                Command({
+                    name: "ResetCondition", id: 0x0, access: "O", conformance: "O", direction: "request",
+                    response: "status",
+                    details: "Upon receipt, the device shall reset the Condition and ChangeIndicator attributes, indicating full " +
+                        "resource availability and readiness for use, as initially configured. Invocation of this command " +
+                        "may cause the LastChangedTime to be updated automatically based on the clock of the server, if the " +
+                        "server supports setting the attribute.",
+                    xref: { document: "cluster", section: "2.8.7.1" }
+                }),
+
+                Datatype({
+                    name: "DegradationDirectionEnum", type: "enum8",
+                    details: "Indicates the direction in which the condition of the resource changes over time.",
+                    xref: { document: "cluster", section: "2.8.5.1" },
+
+                    children: [
+                        Field({
+                            name: "Up", id: 0x0, conformance: "M",
+                            description: "The degradation of the resource is indicated by an upwards moving/increasing value"
+                        }),
+                        Field({
+                            name: "Down", id: 0x1, conformance: "M",
+                            description: "The degradation of the resource is indicated by a downwards moving/decreasing value"
+                        })
+                    ]
+                }),
+
+                Datatype({
+                    name: "ChangeIndicationEnum", type: "enum8",
+                    xref: { document: "cluster", section: "2.8.5.2" },
+
+                    children: [
+                        Field({
+                            name: "Ok", id: 0x0, conformance: "M",
+                            description: "Resource is in good condition, no intervention required"
+                        }),
+                        Field({
+                            name: "Warning", id: 0x1, conformance: "WRN",
+                            description: "Resource will be exhausted soon, intervention will shortly be required"
+                        }),
+                        Field({
+                            name: "Critical", id: 0x2, conformance: "M",
+                            description: "Resource is exhausted, immediate intervention is required"
+                        })
+                    ]
+                }),
+
+                Datatype({
+                    name: "ProductIdentifierTypeEnum", type: "enum8",
+                    details: "Indicate the type of identifier used to describe the product. Devices SHOULD use " +
+                        "globally-recognized IDs over OEM specific ones.",
+                    xref: { document: "cluster", section: "2.8.5.3" },
+
+                    children: [
+                        Field({ name: "Upc", id: 0x0, conformance: "M", description: "12-digit Universal Product Code" }),
+                        Field({
+                            name: "Gtin8", id: 0x1, conformance: "M", description: "8-digit Global Trade Item Number"
+                        }),
+                        Field({ name: "Ean", id: 0x2, conformance: "M", description: "13-digit European Article Number" }),
+                        Field({
+                            name: "Gtin14", id: 0x3, conformance: "M", description: "14-digit Global Trade Item Number"
+                        }),
+                        Field({
+                            name: "Oem", id: 0x4, conformance: "M", description: "Original Equipment Manufacturer part number"
+                        })
+                    ]
+                }),
+
+                Datatype({
+                    name: "ReplacementProductStruct", type: "struct",
+                    details: "Indicates the product identifier that can be used as a replacement for the resource.",
+                    xref: { document: "cluster", section: "2.8.5.4" },
+
+                    children: [
+                        Field({
+                            name: "ProductIdentifierType", id: 0x0, type: "ProductIdentifierTypeEnum", conformance: "M",
+                            constraint: "desc"
+                        }),
+                        Field({
+                            name: "ProductIdentifierValue", id: 0x1, type: "string", conformance: "M", constraint: "max 20"
+                        })
+                    ]
+                })
+            ]
+        }),
+
+        Cluster({ name: "HepaFilterMonitoring", id: 0x71, type: "ResourceMonitoring", pics: "HEPAFREMON" }),
+        Cluster({ name: "ActivatedCarbonFilterMonitoring", id: 0x72, type: "ResourceMonitoring", pics: "ACFREMON" }),
+
+        Cluster({
+            name: "AirQuality", id: 0x5b, classification: "application", pics: "AIRQUAL",
             details: "This cluster provides an interface to air quality classification using distinct levels with " +
                 "human-readable labels.",
             xref: { document: "cluster", section: "2.9" },
@@ -5060,7 +4869,213 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "SmokeCoAlarm", id: 0x5c, classification: "application",
+            name: "ConcentrationMeasurement", classification: "application", pics: "CONC",
+            details: "The server cluster provides an interface to concentration measurement functionality. This cluster " +
+                "shall to be used via an alias to a specific substance (see Cluster IDs).",
+            xref: { document: "cluster", section: "2.10" },
+
+            children: [
+                Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 3 }),
+
+                Attribute({
+                    name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
+                    xref: { document: "cluster", section: "2.10.4" },
+
+                    children: [
+                        Field({
+                            name: "MEA", conformance: "O.a+", constraint: "0", description: "NumericMeasurement",
+                            details: "Cluster supports numeric measurement of substance"
+                        }),
+                        Field({
+                            name: "LEV", conformance: "O.a+", constraint: "1", description: "LevelIndication",
+                            details: "Cluster supports basic level indication for substance using the ConcentrationLevel enum"
+                        }),
+                        Field({
+                            name: "MED", conformance: "[LEV]", constraint: "2", description: "MediumLevel",
+                            details: "Cluster supports the Medium Concentration Level"
+                        }),
+                        Field({
+                            name: "CRI", conformance: "[LEV]", constraint: "3", description: "CriticalLevel",
+                            details: "Cluster supports the Critical Concentration Level"
+                        }),
+                        Field({
+                            name: "PEA", conformance: "[MEA]", constraint: "4", description: "PeakMeasurement",
+                            details: "Cluster supports peak numeric measurement of substance"
+                        }),
+                        Field({
+                            name: "AVG", conformance: "[MEA]", constraint: "5", description: "AverageMeasurement",
+                            details: "Cluster supports average numeric measurement of substance"
+                        })
+                    ]
+                }),
+
+                Attribute({
+                    name: "MeasuredValue", id: 0x0, type: "single", access: "R V", conformance: "MEA",
+                    constraint: "minMeasuredValue to maxMeasuredValue", default: null, quality: "X P",
+                    details: "Indicates the most recent measurement as a single-precision floating-point number. MeasuredValue’s " +
+                        "unit is represented by MeasurementUnit." +
+                        "\n" +
+                        "A value of null indicates that the measurement is unknown or outside the valid range. " +
+                        "MinMeasuredValue and MaxMeasuredValue define the valid range for MeasuredValue.",
+                    xref: { document: "cluster", section: "2.10.6.1" }
+                }),
+
+                Attribute({
+                    name: "MinMeasuredValue", id: 0x1, type: "single", access: "R V", conformance: "MEA",
+                    constraint: "max maxMeasuredValue", default: null, quality: "X",
+                    details: "Indicates the minimum value of MeasuredValue that is capable of being measured. A MinMeasuredValue " +
+                        "of null indicates that the MinMeasuredValue is not defined.",
+                    xref: { document: "cluster", section: "2.10.6.2" }
+                }),
+
+                Attribute({
+                    name: "MaxMeasuredValue", id: 0x2, type: "single", access: "R V", conformance: "MEA",
+                    constraint: "min minMeasuredValue", default: null, quality: "X",
+                    details: "Indicates the maximum value of MeasuredValue that is capable of being measured. A MaxMeasuredValue " +
+                        "of null indicates that the MaxMeasuredValue is not defined.",
+                    xref: { document: "cluster", section: "2.10.6.3" }
+                }),
+
+                Attribute({
+                    name: "PeakMeasuredValue", id: 0x3, type: "single", access: "R V", conformance: "PEA",
+                    constraint: "minMeasuredValue to maxMeasuredValue", default: null, quality: "X P",
+                    details: "Indicates the maximum value of MeasuredValue that has been measured during the " +
+                        "PeakMeasuredValueWindow. If this attribute is provided, the PeakMeasuredValueWindow attribute shall " +
+                        "also be provided.",
+                    xref: { document: "cluster", section: "2.10.6.4" }
+                }),
+
+                Attribute({
+                    name: "PeakMeasuredValueWindow", id: 0x4, type: "elapsed-s", access: "R V", conformance: "PEA",
+                    constraint: "max 604800", default: 1, quality: "P",
+                    details: "Indicates the window of time used for determining the PeakMeasuredValue. The value is in seconds.",
+                    xref: { document: "cluster", section: "2.10.6.5" }
+                }),
+
+                Attribute({
+                    name: "AverageMeasuredValue", id: 0x5, type: "single", access: "R V", conformance: "AVG",
+                    constraint: "minMeasuredValue to maxMeasuredValue", default: null, quality: "X P",
+                    details: "Indicates the average value of MeasuredValue that has been measured during the " +
+                        "AverageMeasuredValueWindow. If this attribute is provided, the AverageMeasuredValueWindow attribute " +
+                        "shall also be provided.",
+                    xref: { document: "cluster", section: "2.10.6.6" }
+                }),
+
+                Attribute({
+                    name: "AverageMeasuredValueWindow", id: 0x6, type: "elapsed-s", access: "R V", conformance: "AVG",
+                    constraint: "max 604800", default: 1, quality: "P",
+                    details: "Indicates the window of time used for determining the AverageMeasuredValue. The value is in seconds.",
+                    xref: { document: "cluster", section: "2.10.6.7" }
+                }),
+
+                Attribute({
+                    name: "Uncertainty", id: 0x7, type: "single", access: "R V", conformance: "[MEA]", constraint: "ms",
+                    details: "Indicates the range of error or deviation that can be found in MeasuredValue and PeakMeasuredValue. " +
+                        "This is considered a +/- value and should be considered to be in MeasurementUnit.",
+                    xref: { document: "cluster", section: "2.10.6.8" }
+                }),
+
+                Attribute({
+                    name: "MeasurementUnit", id: 0x8, type: "MeasurementUnitEnum", access: "R V", conformance: "MEA",
+                    quality: "F",
+                    details: "Indicates the unit of MeasuredValue. See MeasurementUnitEnum.",
+                    xref: { document: "cluster", section: "2.10.6.9" }
+                }),
+
+                Attribute({
+                    name: "MeasurementMedium", id: 0x9, type: "MeasurementMediumEnum", access: "R V", conformance: "M",
+                    quality: "F",
+                    details: "Indicates the medium in which MeasuredValue is being measured. See MeasurementMediumEnum.",
+                    xref: { document: "cluster", section: "2.10.6.10" }
+                }),
+
+                Attribute({
+                    name: "LevelValue", id: 0xa, type: "LevelValueEnum", access: "R V", conformance: "LEV", default: 0,
+                    details: "Indicates the level of the substance detected. See LevelValueEnum.",
+                    xref: { document: "cluster", section: "2.10.6.11" }
+                }),
+
+                Datatype({
+                    name: "MeasurementUnitEnum", type: "enum8",
+                    details: "Where mentioned, Billion refers to 10, Trillion refers to 1012 (short scale).",
+                    xref: { document: "cluster", section: "2.10.5.1" },
+
+                    children: [
+                        Field({ name: "Ppm", id: 0x0, conformance: "MEA", description: "Parts per Million (10)" }),
+                        Field({ name: "Ppb", id: 0x1, conformance: "MEA", description: "Parts per Billion (10)" }),
+                        Field({ name: "Ppt", id: 0x2, conformance: "MEA", description: "Parts per Trillion (1012)" }),
+                        Field({ name: "Mgm3", id: 0x3, conformance: "MEA", description: "Milligram per m" }),
+                        Field({ name: "Ugm3", id: 0x4, conformance: "MEA", description: "Microgram per m" }),
+                        Field({ name: "Ngm3", id: 0x5, conformance: "MEA", description: "Nanogram per m" }),
+                        Field({ name: "Pm3", id: 0x6, conformance: "MEA", description: "Particles per m" }),
+                        Field({ name: "Bqm3", id: 0x7, conformance: "MEA", description: "Becquerel per m" })
+                    ]
+                }),
+
+                Datatype({
+                    name: "MeasurementMediumEnum", type: "enum8",
+                    xref: { document: "cluster", section: "2.10.5.2" },
+
+                    children: [
+                        Field({
+                            name: "Air", id: 0x0, conformance: "M", description: "The measurement is being made in Air"
+                        }),
+                        Field({
+                            name: "Water", id: 0x1, conformance: "M", description: "The measurement is being made in Water"
+                        }),
+                        Field({
+                            name: "Soil", id: 0x2, conformance: "M", description: "The measurement is being made in Soil"
+                        })
+                    ]
+                }),
+
+                Datatype({
+                    name: "LevelValueEnum", type: "enum8",
+                    xref: { document: "cluster", section: "2.10.5.3" },
+
+                    children: [
+                        Field({ name: "Unknown", id: 0x0, conformance: "M", description: "The level is Unknown" }),
+                        Field({ name: "Low", id: 0x1, conformance: "M", description: "The level is considered Low" }),
+                        Field({
+                            name: "Medium", id: 0x2, conformance: "MED", description: "The level is considered Medium"
+                        }),
+                        Field({ name: "High", id: 0x3, conformance: "M", description: "The level is considered High" }),
+                        Field({
+                            name: "Critical", id: 0x4, conformance: "CRI", description: "The level is considered Critical"
+                        })
+                    ]
+                })
+            ]
+        }),
+
+        Cluster({
+            name: "CarbonMonoxideConcentrationMeasurement", id: 0x40c, type: "ConcentrationMeasurement",
+            pics: "CMOCONC"
+        }),
+        Cluster({
+            name: "CarbonDioxideConcentrationMeasurement", id: 0x40d, type: "ConcentrationMeasurement",
+            pics: "CDOCONC"
+        }),
+        Cluster({
+            name: "NitrogenDioxideConcentrationMeasurement", id: 0x413, type: "ConcentrationMeasurement",
+            pics: "NDOCONC"
+        }),
+        Cluster({ name: "OzoneConcentrationMeasurement", id: 0x415, type: "ConcentrationMeasurement", pics: "OZCONC" }),
+        Cluster({ name: "Pm2", id: 0x42a, type: "ConcentrationMeasurement", pics: "PMICONC" }),
+        Cluster({
+            name: "FormaldehydeConcentrationMeasurement", id: 0x42b, type: "ConcentrationMeasurement",
+            pics: "FLDCONC"
+        }),
+        Cluster({ name: "Pm1ConcentrationMeasurement", id: 0x42c, type: "ConcentrationMeasurement", pics: "PMHCONC" }),
+        Cluster({ name: "Pm10ConcentrationMeasurement", id: 0x42d, type: "ConcentrationMeasurement", pics: "PMKCONC" }),
+        Cluster({
+            name: "TotalVolatileOrganicCompoundsConcentrationMeasurement", id: 0x42e,
+            type: "ConcentrationMeasurement", pics: "TVOCCONC"
+        }),
+        Cluster({ name: "RadonConcentrationMeasurement", id: 0x42f, type: "ConcentrationMeasurement", pics: "RNCONC" }),
+
+        Cluster({
+            name: "SmokeCoAlarm", id: 0x5c, classification: "application", pics: "SMOKECO",
             details: "This cluster provides an interface for observing and managing the state of smoke and CO alarms.",
             xref: { document: "cluster", section: "2.11" },
 
@@ -5505,7 +5520,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ElectricalEnergyMeasurement", id: 0x91, classification: "application",
+            name: "ElectricalEnergyMeasurement", id: 0x91, classification: "application", pics: "EEM",
             details: "This cluster provides a mechanism for querying data about the electrical energy imported or " +
                 "provided by the server.",
             xref: { document: "cluster", section: "2.12" },
@@ -5890,7 +5905,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ElectricalPowerMeasurement", id: 0x90, classification: "application",
+            name: "ElectricalPowerMeasurement", id: 0x90, classification: "application", pics: "EPM",
             details: "This cluster provides a mechanism for querying data about electrical power as measured by the " +
                 "server.",
             xref: { document: "cluster", section: "2.13" },
@@ -6487,7 +6502,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ColorControl", id: 0x300, classification: "application",
+            name: "ColorControl", id: 0x300, classification: "application", pics: "CC",
             xref: { document: "cluster", section: "3.2" },
 
             children: [
@@ -7814,7 +7829,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "BallastConfiguration", id: 0x301, classification: "application",
+            name: "BallastConfiguration", id: 0x301, classification: "application", pics: "BC",
             details: "This cluster is used for configuring a lighting ballast." +
                 "\n" +
                 "NOTE Support for Ballast Configuration cluster is provisional.",
@@ -8034,7 +8049,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "PumpConfigurationAndControl", id: 0x200, classification: "application",
+            name: "PumpConfigurationAndControl", id: 0x200, classification: "application", pics: "PCC",
             details: "The Pump Configuration and Control cluster provides an interface for the setup and control of pump " +
                 "devices, and the automatic reporting of pump status information. Note that control of pump speed is " +
                 "not included – speed is controlled by the On/Off and Level Control clusters.",
@@ -8636,7 +8651,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "Thermostat", id: 0x201, classification: "application",
+            name: "Thermostat", id: 0x201, classification: "application", pics: "TSTAT",
             details: "This cluster provides an interface to the functionality of a thermostat.",
             xref: { document: "cluster", section: "4.3" },
 
@@ -9981,7 +9996,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "FanControl", id: 0x202, classification: "application",
+            name: "FanControl", id: 0x202, classification: "application", pics: "FAN",
             details: "This cluster specifies an interface to control the speed of a fan.",
             xref: { document: "cluster", section: "4.4" },
 
@@ -10323,6 +10338,7 @@ export const SpecMatter = Matter({
 
         Cluster({
             name: "ThermostatUserInterfaceConfiguration", id: 0x204, classification: "application",
+            pics: "TSUIC",
             details: "This cluster provides an interface to allow configuration of the user interface for a thermostat, " +
                 "or a thermostat controller device, that supports a keypad and LCD screen.",
             xref: { document: "cluster", section: "4.5" },
@@ -10420,7 +10436,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ValveConfigurationAndControl", id: 0x81, classification: "application",
+            name: "ValveConfigurationAndControl", id: 0x81, classification: "application", pics: "VALCC",
             details: "This cluster is used to configure a valve.",
             xref: { document: "cluster", section: "4.6" },
 
@@ -10727,7 +10743,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "DoorLock", id: 0x101, classification: "application",
+            name: "DoorLock", id: 0x101, classification: "application", pics: "DRLK",
             details: "The door lock cluster provides an interface to a generic way to secure a door. The physical object " +
                 "that provides the locking functionality is abstracted from the cluster. The cluster has a small " +
                 "list of mandatory attributes and functions and a list of optional features.",
@@ -13927,7 +13943,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "WindowCovering", id: 0x102, classification: "application",
+            name: "WindowCovering", id: 0x102, classification: "application", pics: "WNCV",
             details: "The window covering cluster provides an interface for controlling and adjusting automatic window " +
                 "coverings such as drapery motors, automatic shades, curtains and blinds.",
             xref: { document: "cluster", section: "5.3" },
@@ -14671,7 +14687,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "AccountLogin", id: 0x50e, classification: "application",
+            name: "AccountLogin", id: 0x50e, classification: "application", pics: "ALOGIN",
 
             details: "This cluster provides commands that facilitate user account login on a Content App or a node. For " +
                 "example, a Content App running on a Video Player device, which is represented as an endpoint (see " +
@@ -14895,7 +14911,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ApplicationBasic", id: 0x50d, classification: "application",
+            name: "ApplicationBasic", id: 0x50d, classification: "application", pics: "APBSC",
 
             details: "This cluster provides information about a Content App running on a Video Player device which is " +
                 "represented as an endpoint (see Device Type Library document)." +
@@ -15024,7 +15040,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ApplicationLauncher", id: 0x50c, classification: "application",
+            name: "ApplicationLauncher", id: 0x50c, classification: "application", pics: "APPLAUNCHER",
 
             details: "This cluster provides an interface for launching applications on a Video Player device such as a TV." +
                 "\n" +
@@ -15247,7 +15263,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "AudioOutput", id: 0x50b, classification: "application",
+            name: "AudioOutput", id: 0x50b, classification: "application", pics: "AUDIOOUTPUT",
 
             details: "This cluster provides an interface for controlling the Output on a Video Player device such as a TV." +
                 "\n" +
@@ -15365,7 +15381,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "Channel", id: 0x504, classification: "application",
+            name: "Channel", id: 0x504, classification: "application", pics: "CHANNEL",
 
             details: "This cluster provides an interface for controlling the current Channel on a device or endpoint." +
                 "\n" +
@@ -16116,7 +16132,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ContentLauncher", id: 0x50a, classification: "application",
+            name: "ContentLauncher", id: 0x50a, classification: "application", pics: "CONTENTLAUNCHER",
 
             details: "This cluster provides an interface for launching content on a Video Player device such as a " +
                 "Streaming Media Player, Smart TV or Smart Screen." +
@@ -16718,7 +16734,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "KeypadInput", id: 0x509, classification: "application",
+            name: "KeypadInput", id: 0x509, classification: "application", pics: "KEYPADINPUT",
 
             details: "This cluster provides an interface for key code based input and control on a device like a Video " +
                 "Player or an endpoint like a Content App. This may include text or action commands such as UP, " +
@@ -16908,7 +16924,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "MediaInput", id: 0x507, classification: "application",
+            name: "MediaInput", id: 0x507, classification: "application", pics: "MEDIAINPUT",
 
             details: "This cluster provides an interface for controlling the Input Selector on a media device such as a " +
                 "Video Player." +
@@ -17049,7 +17065,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "MediaPlayback", id: 0x506, classification: "application",
+            name: "MediaPlayback", id: 0x506, classification: "application", pics: "MEDIAPLAYBACK",
             details: "This cluster provides an interface for controlling Media Playback (PLAY, PAUSE, etc) on a media " +
                 "device such as a TV, Set-top Box, or Smart Speaker." +
                 "\n" +
@@ -17779,7 +17795,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "TargetNavigator", id: 0x505, classification: "application",
+            name: "TargetNavigator", id: 0x505, classification: "application", pics: "TGTNAV",
 
             details: "This cluster provides an interface for UX navigation within a set of targets on a device or " +
                 "endpoint." +
@@ -17917,7 +17933,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ContentAppObserver", id: 0x510, classification: "application",
+            name: "ContentAppObserver", id: 0x510, classification: "application", pics: "APPOBSERVER",
 
             details: "This cluster provides an interface for sending targeted commands to an Observer of a Content App on " +
                 "a Video Player device such as a Streaming Media Player, Smart TV or Smart Screen." +
@@ -18029,7 +18045,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ContentControl", id: 0x50f, classification: "application",
+            name: "ContentControl", id: 0x50f, classification: "application", pics: "CONCON",
 
             details: "This cluster is used for managing the content control (including \"parental control\") settings on a" +
                 "\n" +
@@ -18804,7 +18820,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "RvcRunMode", id: 0x54, type: "ModeBase", classification: "application",
+            name: "RvcRunMode", id: 0x54, type: "ModeBase", classification: "application", pics: "RVCRUNM",
             details: "This cluster is derived from the Mode Base cluster to define specifics for Robotic Vacuum Cleaner " +
                 "devices. It also defines a namespace for the running modes of these devices.",
             xref: { document: "cluster", section: "7.2" },
@@ -18843,7 +18859,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "RvcCleanMode", id: 0x55, type: "ModeBase", classification: "application",
+            name: "RvcCleanMode", id: 0x55, type: "ModeBase", classification: "application", pics: "RVCCLEANM",
             details: "This cluster is derived from the Mode Base cluster to define specifics for Robotic Vacuum Cleaner " +
                 "devices. It also defines a namespace for the cleaning type for these devices.",
             xref: { document: "cluster", section: "7.3" },
@@ -18875,6 +18891,7 @@ export const SpecMatter = Matter({
 
         Cluster({
             name: "RvcOperationalState", id: 0x61, type: "OperationalState", classification: "application",
+            pics: "RVCOPSTATE",
             details: "This cluster provides an interface for monitoring the operational state of a Robotic Vacuum Cleaner.",
             xref: { document: "cluster", section: "7.4" },
 
@@ -18996,7 +19013,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "TemperatureControl", id: 0x56, classification: "application",
+            name: "TemperatureControl", id: 0x56, classification: "application", pics: "TCTL",
 
             details: "This cluster provides an interface to the setpoint temperature on devices such as washers, " +
                 "refrigerators, and water heaters. The setpoint temperature is the temperature to which a device " +
@@ -19139,7 +19156,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "DishwasherMode", id: 0x59, type: "ModeBase", classification: "application",
+            name: "DishwasherMode", id: 0x59, type: "ModeBase", classification: "application", pics: "DISHM",
             details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
                 "enumerated values for dishwasher devices.",
             xref: { document: "cluster", section: "8.3" },
@@ -19182,6 +19199,7 @@ export const SpecMatter = Matter({
 
         Cluster({
             name: "DishwasherAlarm", id: 0x5d, type: "AlarmBase", classification: "application",
+            pics: "DISHALM",
             details: "This cluster is a derived cluster of the Alarm Base cluster.",
             xref: { document: "cluster", section: "8.4" },
 
@@ -19205,7 +19223,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "LaundryWasherMode", id: 0x51, type: "ModeBase", classification: "application",
+            name: "LaundryWasherMode", id: 0x51, type: "ModeBase", classification: "application", pics: "LWM",
             details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
                 "enumerated values for laundry washer as well as laundry dryer devices.",
             xref: { document: "cluster", section: "8.5" },
@@ -19247,7 +19265,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "LaundryWasherControls", id: 0x53, classification: "application",
+            name: "LaundryWasherControls", id: 0x53, classification: "application", pics: "WASHERCTRL",
             details: "This cluster provides a way to access options associated with the operation of a laundry washer " +
                 "device type.",
             xref: { document: "cluster", section: "8.6" },
@@ -19357,7 +19375,7 @@ export const SpecMatter = Matter({
 
         Cluster({
             name: "RefrigeratorAndTemperatureControlledCabinetMode", id: 0x52, type: "ModeBase",
-            classification: "application",
+            classification: "application", pics: "TCCM",
             details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
                 "enumerated values for refrigerator and temperature controlled cabinet devices.",
             xref: { document: "cluster", section: "8.7" },
@@ -19395,6 +19413,7 @@ export const SpecMatter = Matter({
 
         Cluster({
             name: "RefrigeratorAlarm", id: 0x57, type: "AlarmBase", classification: "application",
+            pics: "REFALM",
             details: "This cluster is a derived cluster of Alarm Base cluster.",
             xref: { document: "cluster", section: "8.8" },
 
@@ -19427,7 +19446,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "LaundryDryerControls", id: 0x4a, classification: "application",
+            name: "LaundryDryerControls", id: 0x4a, classification: "application", pics: "DRYERCTRL",
             details: "This cluster provides a way to access options associated with the operation of a laundry dryer " +
                 "device type.",
             xref: { document: "cluster", section: "8.9" },
@@ -19495,14 +19514,14 @@ export const SpecMatter = Matter({
 
         Cluster({
             name: "OvenCavityOperationalState", id: 0x48, type: "OperationalState",
-            classification: "application",
+            classification: "application", pics: "OVENOPSTATE",
             details: "This cluster provides an interface for monitoring the operational state of an oven.",
             xref: { document: "cluster", section: "8.10" },
             children: [Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 })]
         }),
 
         Cluster({
-            name: "OvenMode", id: 0x49, type: "ModeBase", classification: "application",
+            name: "OvenMode", id: 0x49, type: "ModeBase", classification: "application", pics: "OTCCM",
             details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
                 "enumerated values for oven devices.",
             xref: { document: "cluster", section: "8.11" },
@@ -19510,7 +19529,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "MicrowaveOvenMode", id: 0x5e, type: "ModeBase", classification: "application",
+            name: "MicrowaveOvenMode", id: 0x5e, type: "ModeBase", classification: "application", pics: "MWOM",
             details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
                 "enumerated values for Microwave Oven devices.",
             xref: { document: "cluster", section: "8.12" },
@@ -19539,7 +19558,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "MicrowaveOvenControl", id: 0x5f, classification: "application",
+            name: "MicrowaveOvenControl", id: 0x5f, classification: "application", pics: "MWOCTRL",
             details: "This cluster defines the requirements for the Microwave Oven Control cluster." +
                 "\n" +
                 "This cluster has dependencies with the Operational State and Microwave Oven Mode clusters. The " +
@@ -19748,7 +19767,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "DeviceEnergyManagement", id: 0x98, classification: "application",
+            name: "DeviceEnergyManagement", id: 0x98, classification: "application", pics: "DEM",
 
             details: "This cluster allows a client to manage the power draw of a device. An example of such a client " +
                 "could be an Energy Management System (EMS) which controls an Energy Smart Appliance (ESA)." +
@@ -21094,7 +21113,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "EnergyEvse", id: 0x99, classification: "application",
+            name: "EnergyEvse", id: 0x99, classification: "application", pics: "EEVSE",
 
             details: "Electric Vehicle Supply Equipment (EVSE) is equipment used to charge an Electric Vehicle (EV) or " +
                 "Plug-In Hybrid Electric Vehicle. This cluster provides an interface to the functionality of " +
@@ -22127,7 +22146,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "EnergyEvseMode", id: 0x9d, type: "ModeBase", classification: "application",
+            name: "EnergyEvseMode", id: 0x9d, type: "ModeBase", classification: "application", pics: "EEVSEM",
             details: "This cluster is derived from the Mode Base cluster which also defines a namespace for the operation " +
                 "of EVSE devices.",
             xref: { document: "cluster", section: "9.4" },
@@ -22135,7 +22154,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "EnergyPreference", id: 0x9b, classification: "application",
+            name: "EnergyPreference", id: 0x9b, classification: "application", pics: "EPREF",
             details: "This cluster provides an interface to specify preferences for how devices should consume energy." +
                 "\n" +
                 "NOTE Support for Energy Preference cluster is provisional.",
@@ -22318,6 +22337,7 @@ export const SpecMatter = Matter({
 
         Cluster({
             name: "DeviceEnergyManagementMode", id: 0x9f, type: "ModeBase", classification: "application",
+            pics: "DEMM",
             details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
                 "enumerated values for Device Energy Management devices." +
                 "\n" +
@@ -23503,7 +23523,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "Descriptor", id: 0x1d, classification: "endpoint",
+            name: "Descriptor", id: 0x1d, classification: "endpoint", pics: "DESC",
 
             details: "NOTE" +
                 "\n" +
@@ -23631,7 +23651,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "Binding", id: 0x1e, classification: "endpoint",
+            name: "Binding", id: 0x1e, classification: "endpoint", pics: "BIND",
 
             details: "NOTE" +
                 "\n" +
@@ -23720,7 +23740,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "Label", classification: "endpoint",
+            name: "Label", classification: "endpoint", pics: "LABEL",
             details: "This cluster provides a feature to tag an endpoint with zero or more labels. This is a base cluster " +
                 "that requires a derived cluster to create an instance.",
             xref: { document: "core", section: "9.7" },
@@ -23761,7 +23781,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "FixedLabel", id: 0x40, type: "Label", classification: "endpoint",
+            name: "FixedLabel", id: 0x40, type: "Label", classification: "endpoint", pics: "FLABEL",
 
             details: "This cluster provides a feature for the device to tag an endpoint with zero or more read only " +
                 "labels. Examples:" +
@@ -23796,7 +23816,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "UserLabel", id: 0x41, type: "Label", classification: "endpoint",
+            name: "UserLabel", id: 0x41, type: "Label", classification: "endpoint", pics: "ULABEL",
             details: "This cluster provides a feature to tag an endpoint with zero or more labels.",
             xref: { document: "core", section: "9.9" },
 
@@ -23815,7 +23835,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "AccessControl", id: 0x1f, classification: "node",
+            name: "AccessControl", id: 0x1f, classification: "node", pics: "ACL",
 
             details: "The Access Control Cluster exposes a data model view of a Node’s Access Control List (ACL), which " +
                 "codifies the rules used to manage and enforce Access Control for the Node’s endpoints and their " +
@@ -24242,7 +24262,7 @@ export const SpecMatter = Matter({
 
         Cluster({
             name: "BridgedDeviceBasicInformation", id: 0x39, type: "BasicInformation",
-            classification: "endpoint",
+            classification: "endpoint", pics: "BRBINFO",
 
             details: "This Cluster serves two purposes towards a Node communicating with a Bridge:" +
                 "\n" +
@@ -24404,7 +24424,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "Actions", id: 0x25, classification: "application",
+            name: "Actions", id: 0x25, classification: "application", pics: "ACT",
 
             details: "This cluster provides a standardized way for a Node (typically a Bridge, but could be any Node) to " +
                 "expose" +
@@ -25115,7 +25135,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ProxyDiscovery", id: 0x43, classification: "node",
+            name: "ProxyDiscovery", id: 0x43, classification: "node", pics: "PXDSC",
             details: "This cluster contains commands needed to do proxy discovery as defined in the Section 9.15.7.3, " +
                 "“Step 2: Proxy Discovery” and Section 9.15.7.4, “Step 3: Proxy Response” steps of the overall " +
                 "Section 9.15.7, “Proxy Discovery & Assignment Flow”.",
@@ -25194,7 +25214,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ProxyConfiguration", id: 0x42, classification: "node",
+            name: "ProxyConfiguration", id: 0x42, classification: "node", pics: "PXCFG",
             details: "This cluster provides a means for a proxy-capable device to be told the set of Nodes it shall proxy.",
             xref: { document: "core", section: "9.15.13" },
 
@@ -25236,7 +25256,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ValidProxies", id: 0x44, classification: "node",
+            name: "ValidProxies", id: 0x44, classification: "node", pics: "PXVALID",
             details: "This cluster provides a means for a device to be told of the valid set of possible proxies that can " +
                 "proxy subscriptions on its behalf as per Section 9.15.7, “Proxy Discovery & Assignment Flow”.",
             xref: { document: "core", section: "9.15.14" },
@@ -25281,7 +25301,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "IcdManagement", id: 0x46, classification: "node",
+            name: "IcdManagement", id: 0x46, classification: "node", pics: "ICDM",
 
             details: "ICD Management Cluster enables configuration of the ICD’s behavior and ensuring that listed clients " +
                 "can be notified when an intermittently connected device, ICD, is available for communication." +
@@ -25698,7 +25718,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "BasicInformation", id: 0x28, classification: "node",
+            name: "BasicInformation", id: 0x28, classification: "node", pics: "BINFO",
             details: "This cluster provides attributes and events for determining basic information about Nodes, which " +
                 "supports both Commissioning and operational determination of Node characteristics, such as Vendor " +
                 "ID, Product ID and serial number, which apply to the whole Node.",
@@ -26173,7 +26193,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "GroupKeyManagement", id: 0x3f, classification: "node",
+            name: "GroupKeyManagement", id: 0x3f, classification: "node", pics: "GRPKEY",
 
             details: "The Group Key Management cluster manages group keys for the node. The cluster is scoped to the node " +
                 "and is a singleton for the node. This cluster maintains a list of groups supported by the node. " +
@@ -26601,7 +26621,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "LocalizationConfiguration", id: 0x2b, classification: "node",
+            name: "LocalizationConfiguration", id: 0x2b, classification: "node", pics: "LCFG",
 
             details: "Nodes should be expected to be deployed to any and all regions of the world. These global regions " +
                 "may have differing common languages, units of measurements, and numerical formatting standards. As " +
@@ -26645,7 +26665,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "TimeFormatLocalization", id: 0x2c, classification: "node",
+            name: "TimeFormatLocalization", id: 0x2c, classification: "node", pics: "LTIME",
 
             details: "Nodes should be expected to be deployed to any and all regions of the world. These global regions " +
                 "may have differing preferences for how dates and times are conveyed. As such, Nodes that visually " +
@@ -26792,7 +26812,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "UnitLocalization", id: 0x2d, classification: "node",
+            name: "UnitLocalization", id: 0x2d, classification: "node", pics: "LUNIT",
 
             details: "Nodes should be expected to be deployed to any and all regions of the world. These global regions " +
                 "may have differing preferences for the units in which values are conveyed in communication to a" +
@@ -26844,7 +26864,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "PowerSourceConfiguration", id: 0x2e, classification: "node",
+            name: "PowerSourceConfiguration", id: 0x2e, classification: "node", pics: "PSCFG",
             details: "This cluster is used to describe the configuration and capabilities of a Device’s power system. It " +
                 "provides an ordering overview as well as linking to the one or more endpoints each supporting a " +
                 "Power Source cluster.",
@@ -26874,7 +26894,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "PowerSource", id: 0x2f, classification: "node",
+            name: "PowerSource", id: 0x2f, classification: "node", pics: "PS",
             details: "This cluster is used to describe the configuration and capabilities of a physical power source that " +
                 "provides power to one or more endpoints on a node. In case the node has multiple power sources, " +
                 "each is described by its own cluster instance. Each instance of this cluster may be associated with " +
@@ -27692,7 +27712,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "PowerTopology", id: 0x9c, classification: "application",
+            name: "PowerTopology", id: 0x9c, classification: "application", pics: "PWRTL",
             details: "The Power Topology Cluster provides a mechanism for expressing how power is flowing between " +
                 "endpoints.",
             xref: { document: "core", section: "11.8" },
@@ -27746,7 +27766,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "NetworkCommissioning", id: 0x31, classification: "node",
+            name: "NetworkCommissioning", id: 0x31, classification: "node", pics: "CNET",
 
             details: "Network commissioning is part of the overall Node commissioning. The main goal of Network " +
                 "Commissioning Cluster is to associate a Node with or manage a Node’s one or more network " +
@@ -28788,7 +28808,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "GeneralCommissioning", id: 0x30, classification: "node",
+            name: "GeneralCommissioning", id: 0x30, classification: "node", pics: "CGEN",
             details: "This cluster is used to manage basic commissioning lifecycle." +
                 "\n" +
                 "This cluster also represents responsibilities related to commissioning that don’t well fit other " +
@@ -29251,7 +29271,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "DiagnosticLogs", id: 0x32, classification: "node",
+            name: "DiagnosticLogs", id: 0x32, classification: "node", pics: "DLOG",
 
             details: "This Cluster supports an interface to a Node. It provides commands for retrieving unstructured " +
                 "diagnostic logs from a Node that may be used to aid in diagnostics. It will often be the case that " +
@@ -29468,7 +29488,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "GeneralDiagnostics", id: 0x33, classification: "node",
+            name: "GeneralDiagnostics", id: 0x33, classification: "node", pics: "DGGEN",
             details: "The General Diagnostics Cluster, along with other diagnostics clusters, provide a means to acquire " +
                 "standardized diagnostics metrics that may be used by a Node to assist a user or Administrator in " +
                 "diagnosing potential problems. The General Diagnostics Cluster attempts to centralize all metrics " +
@@ -30129,7 +30149,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "SoftwareDiagnostics", id: 0x34, classification: "node",
+            name: "SoftwareDiagnostics", id: 0x34, classification: "node", pics: "DGSW",
             details: "The Software Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that " +
                 "may be used by a Node to assist a user or Administrator in diagnosing potential problems. The " +
                 "Software Diagnostics Cluster attempts to centralize all metrics that are relevant to the software " +
@@ -30279,7 +30299,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ThreadNetworkDiagnostics", id: 0x35, classification: "node",
+            name: "ThreadNetworkDiagnostics", id: 0x35, classification: "node", pics: "DGTHREAD",
             details: "The Thread Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics " +
                 "that may be used by a Node to assist a user or Administrator in diagnosing potential problems. The " +
                 "Thread Network Diagnostics Cluster attempts to centralize all metrics that are relevant to a " +
@@ -31263,7 +31283,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "WiFiNetworkDiagnostics", id: 0x36, classification: "node",
+            name: "WiFiNetworkDiagnostics", id: 0x36, classification: "node", pics: "DGWIFI",
             details: "The Wi-Fi Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics " +
                 "that may be used by a Node to assist a user or Administrator in diagnosing potential problems. The " +
                 "Wi-Fi Network Diagnostics Cluster attempts to centralize all metrics that are relevant to a " +
@@ -31585,7 +31605,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "EthernetNetworkDiagnostics", id: 0x37, classification: "node",
+            name: "EthernetNetworkDiagnostics", id: 0x37, classification: "node", pics: "DGETH",
             details: "The Ethernet Network Diagnostics Cluster provides a means to acquire standardized diagnostics " +
                 "metrics that may be used by a Node to assist a user or Administrator in diagnosing potential " +
                 "problems. The Ethernet Network Diagnostics Cluster attempts to centralize all metrics that are " +
@@ -31736,7 +31756,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "TimeSynchronization", id: 0x38, classification: "node",
+            name: "TimeSynchronization", id: 0x38, classification: "node", pics: "TIMESYNC",
 
             details: "Accurate time is required for a number of reasons, including scheduling, display and validating " +
                 "security materials." +
@@ -32443,7 +32463,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "OperationalCredentials", id: 0x3e, classification: "node",
+            name: "OperationalCredentials", id: 0x3e, classification: "node", pics: "OPCREDS",
             details: "This cluster is used to add or remove Node Operational credentials on a Commissionee or Node, as " +
                 "well as manage the associated Fabrics.",
             xref: { document: "core", section: "11.18" },
@@ -33263,7 +33283,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "AdministratorCommissioning", id: 0x3c, classification: "node",
+            name: "AdministratorCommissioning", id: 0x3c, classification: "node", pics: "CADMIN",
 
             details: "This cluster is used to trigger a Node to allow a new Administrator to commission it. It defines " +
                 "Attributes, Commands and Responses needed for this purpose." +
@@ -33552,7 +33572,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "OtaSoftwareUpdateProvider", id: 0x29, classification: "node",
+            name: "OtaSoftwareUpdateProvider", id: 0x29, classification: "node", pics: "OTAP",
             xref: { document: "core", section: "11.20.6" },
 
             children: [
@@ -34072,7 +34092,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "OtaSoftwareUpdateRequestor", id: 0x2a, classification: "node",
+            name: "OtaSoftwareUpdateRequestor", id: 0x2a, classification: "node", pics: "OTAR",
             xref: { document: "core", section: "11.20.7" },
 
             children: [
@@ -34689,7 +34709,7 @@ export const SpecMatter = Matter({
                     xref: { document: "device", section: "2.1.5" }
                 }),
                 Requirement({
-                    name: "TimeSync", id: 0x38, conformance: "O", element: "serverCluster", quality: "I",
+                    name: "TimeSynchronization", id: 0x38, conformance: "O", element: "serverCluster", quality: "I",
                     xref: { document: "device", section: "2.1.5" }
                 }),
                 Requirement({
@@ -36137,7 +36157,7 @@ export const SpecMatter = Matter({
                     xref: { document: "device", section: "8.2.4" }
                 }),
                 Requirement({
-                    name: "TimeSync", id: 0x38, conformance: "P, O", element: "serverCluster",
+                    name: "TimeSynchronization", id: 0x38, conformance: "P, O", element: "serverCluster",
                     xref: { document: "device", section: "8.2.4" }
                 }),
                 Requirement({
@@ -36266,11 +36286,11 @@ export const SpecMatter = Matter({
                     xref: { document: "device", section: "9.1.4" }
                 }),
                 Requirement({
-                    name: "TimeSync", id: 0x38, conformance: "P, O", element: "serverCluster",
+                    name: "TimeSynchronization", id: 0x38, conformance: "P, O", element: "serverCluster",
                     xref: { document: "device", section: "9.1.4" }
                 }),
                 Requirement({
-                    name: "TimeSync", id: 0x38, conformance: "P, O", element: "clientCluster",
+                    name: "TimeSynchronization", id: 0x38, conformance: "P, O", element: "clientCluster",
                     xref: { document: "device", section: "9.1.4" }
                 }),
                 Requirement({

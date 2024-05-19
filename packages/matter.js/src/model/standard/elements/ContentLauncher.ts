@@ -17,6 +17,7 @@ import {
 
 export const ContentLauncher = Cluster({
     name: "ContentLauncher", id: 0x50a, asOf: "1.3", classification: "application",
+    pics: "CONTENTLAUNCHER",
 
     details: "This cluster provides an interface for launching content on a Video Player device such as a " +
         "Streaming Media Player, Smart TV or Smart Screen." +

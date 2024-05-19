@@ -16,7 +16,6 @@ const logger = Logger.get("translate-devices");
 
 const ActualClusterNames = {
     Level: "LevelControl",
-    TimeSynchronization: "TimeSync",
     NodeOperationalCredentials: "OperationalCredentials",
 };
 

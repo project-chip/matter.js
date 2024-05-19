@@ -31,7 +31,7 @@ export const DoorLockControllerDt = DeviceType({
             xref: { document: "device", section: "8.2.4" }
         }),
         Requirement({
-            name: "TimeSync", id: 0x38, conformance: "P, O", element: "serverCluster",
+            name: "TimeSynchronization", id: 0x38, conformance: "P, O", element: "serverCluster",
             xref: { document: "device", section: "8.2.4" }
         }),
         Requirement({

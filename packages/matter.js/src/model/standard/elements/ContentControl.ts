@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const ContentControl = Cluster({
-    name: "ContentControl", id: 0x50f, classification: "application",
+    name: "ContentControl", id: 0x50f, classification: "application", pics: "CONCON",
 
     details: "This cluster is used for managing the content control (including \"parental control\") settings on a" +
         "\n" +

@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const PowerSource = Cluster({
-    name: "PowerSource", id: 0x2f, classification: "node",
+    name: "PowerSource", id: 0x2f, classification: "node", pics: "PS",
     details: "This cluster is used to describe the configuration and capabilities of a physical power source that " +
         "provides power to one or more endpoints on a node. In case the node has multiple power sources, " +
         "each is described by its own cluster instance. Each instance of this cluster may be associated with " +

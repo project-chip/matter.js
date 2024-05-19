@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const ScenesManagement = Cluster({
-    name: "ScenesManagement", id: 0x62, classification: "application",
+    name: "ScenesManagement", id: 0x62, classification: "application", pics: "S",
 
     details: "The Scenes Management cluster provides attributes and commands for setting up and recalling scenes. " +
         "Each scene corresponds to a set of stored values of specified attributes for one or more clusters " +

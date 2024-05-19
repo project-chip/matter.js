@@ -15,7 +15,7 @@ import {
 } from "../../elements/index.js";
 
 export const LaundryDryerControls = Cluster({
-    name: "LaundryDryerControls", id: 0x4a, classification: "application",
+    name: "LaundryDryerControls", id: 0x4a, classification: "application", pics: "DRYERCTRL",
     details: "This cluster provides a way to access options associated with the operation of a laundry dryer " +
         "device type.",
     xref: { document: "cluster", section: "8.9" },

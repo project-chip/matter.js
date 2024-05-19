@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const EthernetNetworkDiagnostics = Cluster({
-    name: "EthernetNetworkDiagnostics", id: 0x37, classification: "node",
+    name: "EthernetNetworkDiagnostics", id: 0x37, classification: "node", pics: "DGETH",
     details: "The Ethernet Network Diagnostics Cluster provides a means to acquire standardized diagnostics " +
         "metrics that may be used by a Node to assist a user or Administrator in diagnosing potential " +
         "problems. The Ethernet Network Diagnostics Cluster attempts to centralize all metrics that are " +

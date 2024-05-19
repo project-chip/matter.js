@@ -17,7 +17,7 @@ import {
 } from "../../elements/index.js";
 
 export const AlarmBase = Cluster({
-    name: "AlarmBase", classification: "application",
+    name: "AlarmBase", classification: "application", pics: "ALARM",
     details: "This cluster is a base cluster from which clusters for particular alarms for a device type can be " +
         "derived. Each derivation shall define the values for the AlarmBitmap data type used in this " +
         "cluster. Each derivation shall define which alarms are latched.",

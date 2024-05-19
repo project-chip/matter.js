@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const PowerTopology = Cluster({
-    name: "PowerTopology", id: 0x9c, classification: "application",
+    name: "PowerTopology", id: 0x9c, classification: "application", pics: "PWRTL",
     details: "The Power Topology Cluster provides a mechanism for expressing how power is flowing between " +
         "endpoints.",
     xref: { document: "core", section: "11.8" },

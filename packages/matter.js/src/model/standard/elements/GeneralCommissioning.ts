@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const GeneralCommissioning = Cluster({
-    name: "GeneralCommissioning", id: 0x30, classification: "node",
+    name: "GeneralCommissioning", id: 0x30, classification: "node", pics: "CGEN",
     details: "This cluster is used to manage basic commissioning lifecycle." +
         "\n" +
         "This cluster also represents responsibilities related to commissioning that don’t well fit other " +

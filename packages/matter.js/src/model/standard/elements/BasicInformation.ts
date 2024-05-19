@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const BasicInformation = Cluster({
-    name: "BasicInformation", id: 0x28, classification: "node",
+    name: "BasicInformation", id: 0x28, classification: "node", pics: "BINFO",
     details: "This cluster provides attributes and events for determining basic information about Nodes, which " +
         "supports both Commissioning and operational determination of Node characteristics, such as Vendor " +
         "ID, Product ID and serial number, which apply to the whole Node.",

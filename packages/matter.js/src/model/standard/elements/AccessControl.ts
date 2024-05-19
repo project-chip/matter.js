@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const AccessControl = Cluster({
-    name: "AccessControl", id: 0x1f, classification: "node",
+    name: "AccessControl", id: 0x1f, classification: "node", pics: "ACL",
 
     details: "The Access Control Cluster exposes a data model view of a Node’s Access Control List (ACL), which " +
         "codifies the rules used to manage and enforce Access Control for the Node’s endpoints and their " +

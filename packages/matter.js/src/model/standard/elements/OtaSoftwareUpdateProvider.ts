@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const OtaSoftwareUpdateProvider = Cluster({
-    name: "OtaSoftwareUpdateProvider", id: 0x29, classification: "node",
+    name: "OtaSoftwareUpdateProvider", id: 0x29, classification: "node", pics: "OTAP",
     xref: { document: "core", section: "11.20.6" },
 
     children: [

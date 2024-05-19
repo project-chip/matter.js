@@ -16,7 +16,7 @@ import {
 } from "../../elements/index.js";
 
 export const ColorControl = Cluster({
-    name: "ColorControl", id: 0x300, classification: "application",
+    name: "ColorControl", id: 0x300, classification: "application", pics: "CC",
     xref: { document: "cluster", section: "3.2" },
 
     children: [
