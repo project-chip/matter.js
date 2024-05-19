@@ -20,7 +20,7 @@ import {
 } from "@project-chip/matter.js/model";
 import { Block, Entry } from "../util/TsFile.js";
 import { asObjectKey, camelize, serialize } from "../util/string.js";
-import { NumericRanges, SpecializedNumbers, WrappedConstantKeys } from "./NumberConstants.js";
+import { NumericRanges, SpecializedNumbers, specializedNumberTypeFor } from "./NumberConstants.js";
 
 class InternalError extends Error {}
 
@@ -263,19 +263,18 @@ export class TlvGenerator {
     }
 
     #integerTlv(metabase: ValueModel, model: ValueModel) {
-        if (model.name === "FabricIndex") debugger;
-        const globalBase = model.globalBase?.name;
+        const globalBase = specializedNumberTypeFor(model)?.name;
         const globalMapping = SpecializedNumbers[globalBase as any];
 
         let tlv;
         if (globalMapping) {
-            tlv = this.importTlv(...globalMapping);
+            tlv = this.importTlv(globalMapping.category, globalMapping.type);
         } else {
             tlv = camelize(`tlv ${metabase.name}`, true).replace("Uint", "UInt");
             this.importTlv("number", tlv);
         }
 
-        if (!WrappedConstantKeys[globalBase as any]) {
+        if (globalMapping?.category !== "datatype") {
             const bounds = this.#createNumberBounds(model);
             if (bounds) {
                 tlv = `${tlv}.bound(${serialize(bounds)})`;

@@ -5,6 +5,7 @@
  */
 
 import * as Elements from "@project-chip/matter.js/elements";
+import { Model } from "@project-chip/matter.js/model";
 import {
     FLOAT32_MAX,
     FLOAT32_MIN,
@@ -23,51 +24,33 @@ import {
     UINT8_MAX,
 } from "@project-chip/matter.js/util";
 
+function special(type: string, category: "datatype" | "number" = "datatype") {
+    return { type, category };
+}
+
 /**
  * Map of matter datatype names to TlvGenerator.tlvImport arguments.
  */
-export const SpecializedNumbers: { [name: string]: [string, string] } = {
-    [Elements.attribId.name]: ["datatype", "TlvAttributeId"],
-    [Elements.clusterId.name]: ["datatype", "TlvClusterId"],
-    [Elements.commandId.name]: ["datatype", "TlvCommandId"],
-    [Elements.devtypeId.name]: ["datatype", "TlvDeviceTypeId"],
-    [Elements.endpointNo.name]: ["datatype", "TlvEndpointNumber"],
-    [Elements.eventId.name]: ["datatype", "TlvEventId"],
-    [Elements.fabricId.name]: ["datatype", "TlvFabricId"],
-    [Elements.fabricIdx.name]: ["datatype", "TlvFabricIndex"],
-    [Elements.groupId.name]: ["datatype", "TlvGroupId"],
-    [Elements.nodeId.name]: ["datatype", "TlvNodeId"],
-    [Elements.subjectId.name]: ["datatype", "TlvSubjectId"],
-    [Elements.vendorId.name]: ["datatype", "TlvVendorId"],
-    [Elements.percent.name]: ["number", "TlvPercent"],
-    [Elements.percent100ths.name]: ["number", "TlvPercent100ths"],
-    [Elements.epochUs.name]: ["number", "TlvEpochUs"],
-    [Elements.epochS.name]: ["number", "TlvEpochS"],
-    [Elements.posixMs.name]: ["number", "TlvPosixMs"],
-    [Elements.systimeUs.name]: ["number", "TlvSysTimeUs"],
-    [Elements.systimeMs.name]: ["number", "TlvSysTimeMS"],
-};
-
-/**
- * Map of matter datatype names of wrapped TLV types to the wrapping field
- * name.
- *
- * Turns out we don't actually need the key because we use the constructor but
- * leaving in place in case something changes.
- */
-export const WrappedConstantKeys = {
-    [Elements.attribId.name]: true,
-    [Elements.clusterId.name]: true,
-    [Elements.commandId.name]: true,
-    [Elements.devtypeId.name]: true,
-    [Elements.endpointNo.name]: true,
-    [Elements.eventId.name]: true,
-    [Elements.fabricId.name]: true,
-    [Elements.fabricIdx.name]: true,
-    [Elements.groupId.name]: true,
-    [Elements.nodeId.name]: true,
-    [Elements.subjectId.name]: true,
-    [Elements.vendorId.name]: true,
+export const SpecializedNumbers = {
+    [Elements.attribId.name]: special("TlvAttributeId", "datatype"),
+    [Elements.clusterId.name]: special("TlvClusterId", "datatype"),
+    [Elements.commandId.name]: special("TlvCommandId", "datatype"),
+    [Elements.devtypeId.name]: special("TlvDeviceTypeId", "datatype"),
+    [Elements.endpointNo.name]: special("TlvEndpointNumber", "datatype"),
+    [Elements.eventId.name]: special("TlvEventId", "datatype"),
+    [Elements.fabricId.name]: special("TlvFabricId", "datatype"),
+    [Elements.fabricIdx.name]: special("TlvFabricIndex", "datatype"),
+    [Elements.groupId.name]: special("TlvGroupId", "datatype"),
+    [Elements.nodeId.name]: special("TlvNodeId", "datatype"),
+    [Elements.subjectId.name]: special("TlvSubjectId", "datatype"),
+    [Elements.vendorId.name]: special("TlvVendorId", "datatype"),
+    [Elements.percent.name]: special("TlvPercent", "number"),
+    [Elements.percent100ths.name]: special("TlvPercent100ths", "number"),
+    [Elements.epochUs.name]: special("TlvEpochUs", "number"),
+    [Elements.epochS.name]: special("TlvEpochS", "number"),
+    [Elements.posixMs.name]: special("TlvPosixMs", "number"),
+    [Elements.systimeUs.name]: special("TlvSysTimeUs", "number"),
+    [Elements.systimeMs.name]: special("TlvSysTimeMS", "number"),
 };
 
 /**
@@ -87,3 +70,11 @@ export const NumericRanges = {
     percent: { min: 0, max: 100 },
     percent100ths: { min: 0, max: 10000 },
 };
+
+export function specializedNumberTypeFor(model: Model) {
+    for (let base: Model | undefined = model; base; base = base.base) {
+        if (SpecializedNumbers[base.name]) {
+            return base;
+        }
+    }
+}

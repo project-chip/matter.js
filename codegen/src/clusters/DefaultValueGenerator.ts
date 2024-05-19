@@ -7,7 +7,7 @@
 import { DefaultValue, Metatype, ValueModel } from "@project-chip/matter.js/model";
 import { Properties } from "@project-chip/matter.js/util";
 import { camelize, serialize } from "../util/string.js";
-import { SpecializedNumbers, WrappedConstantKeys } from "./NumberConstants.js";
+import { SpecializedNumbers, specializedNumberTypeFor } from "./NumberConstants.js";
 import { TlvGenerator } from "./TlvGenerator.js";
 
 /**
@@ -17,8 +17,8 @@ export class DefaultValueGenerator {
     constructor(private tlv: TlvGenerator) {}
 
     create(model: ValueModel, defaultValue = DefaultValue(model, true)) {
-        // TODO - don't currently have a way to express "this field should default to the value of another field" as
-        // indicated by model.default.reference
+        // We can't expression "this field should default to the value of another field" in clusters so that isn't
+        // contemplated here.  We do support that in the Behavior API but it runs directly off the model
 
         if (defaultValue === undefined || defaultValue === null) {
             return defaultValue;
@@ -48,14 +48,14 @@ export class DefaultValueGenerator {
      */
     private createNumeric(defaultValue: any, model: ValueModel) {
         if (typeof defaultValue !== "number" && typeof defaultValue !== "bigint") return;
-        const type = model.effectiveType;
-        if (type && (WrappedConstantKeys as any)[type]) {
-            const importConf = SpecializedNumbers[type];
-            if (!importConf) {
+        const type = specializedNumberTypeFor(model);
+        if (type && SpecializedNumbers[type.name]?.category === "datatype") {
+            const specialized = SpecializedNumbers[type.name];
+            if (!specialized) {
                 throw new Error(`Unable to ascertain constructor for wrapped ID type ${type}`);
             }
-            const constructor = importConf[1].replace("Tlv", "");
-            this.tlv.importTlv(importConf[0], constructor);
+            const constructor = specialized.type.replace("Tlv", "");
+            this.tlv.importTlv(specialized.category, constructor);
             return serialize.asIs(`${constructor}(${defaultValue})`);
         }
         return defaultValue;
