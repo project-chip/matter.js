@@ -49,6 +49,7 @@ export function* translateCluster(definition: ClusterReference) {
 
     translateInvokable(definition, children);
     translateDatatypes(definition, children);
+    translateNamespace(definition, children);
 
     const idStr = metadata.id === undefined ? "(no ID)" : `0x${metadata.id.toString(16)}`;
     logger.debug(
@@ -391,5 +392,66 @@ function translateDatatypes(definition: ClusterReference, children: Array<Cluste
                 children.push(child);
             }
         });
+    }
+}
+
+/**
+ * Load namespace extensions.
+ *
+ * The notion of a "namespace" is a bit nebulous, but current usage seems to be the equivalent of defining two types of
+ * enums -- status codes and mode tags.
+ *
+ * Not a lot of consistency going on here so this gets a bit fiddly.
+ */
+function translateNamespace(definition: ClusterReference, elements: Array<ClusterElement.Child>) {
+    if (!definition.namespace) {
+        return;
+    }
+
+    for (const section of definition.namespace) {
+        let name;
+        let type;
+        let table;
+
+        switch (camelize(section.name).toLowerCase()) {
+            case "modenamespace": // Mode Base cluster
+            case "modetags": // Derivative clusters
+                // The first table in the "mode namespace" section describes ranges.  Skip if we encounter this
+                if (section.tables && section.tables?.length > 1 && section.tables[0].fields[0].match(/range/i)) {
+                    table = section.tables[1];
+                }
+
+                name = "ModeTag";
+                type = "enum16";
+                break;
+
+            case "modebasestatuscommoncodesrange": // Mode Base cluster
+            case "changetomoderesponsecommandnamespacedefinitions": // Extension clusters
+                name = "ModeChangeStatus";
+                type = "enum8";
+                break;
+
+            default:
+                continue;
+        }
+
+        const records = translateTable(
+            "tag",
+            section,
+            {
+                id: Alias(Integer, "modetagvalue", "statuscode", "statuscodevalue"),
+                name: Identifier,
+                description: Alias(Str, "summary"),
+            },
+            table,
+        );
+
+        const children = translateRecordsToMatter("namespace", records, FieldElement);
+
+        if (!children) {
+            continue;
+        }
+
+        elements.push(DatatypeElement({ name, type, children }));
     }
 }

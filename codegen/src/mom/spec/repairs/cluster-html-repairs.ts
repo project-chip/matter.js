@@ -12,10 +12,14 @@ export enum ScanDirective {
 
     // Treat as one-level higher than actual in stream
     POP = 2,
+
+    // Collect section as a "namespace" entry
+    NAMESPACE = 3,
 }
 
 const IGNORE = () => ScanDirective.IGNORE;
 const POP = () => ScanDirective.POP;
+const NAMESPACE = () => ScanDirective.NAMESPACE;
 
 type HtmlRepairs = Record<string, (ref: HtmlReference) => ScanDirective | void>;
 
@@ -23,14 +27,14 @@ export const ClusterHtmlRepairs: Record<string, HtmlRepairs> = {
     "General Commissioning": {
         // In 1.1 spec, command table is not here...
         "11.9.6"(subref) {
-            if (subref.name === "Commands" && !subref.table) {
+            if (subref.name === "Commands" && !subref.tables) {
                 return ScanDirective.IGNORE;
             }
         },
 
         // ...but here
         "11.9.6.1"(subref) {
-            if (subref.name === "Common fields in General Commissioning cluster responses" && subref.table) {
+            if (subref.name === "Common fields in General Commissioning cluster responses" && subref.tables) {
                 subref.name = "Commands";
                 subref.detailSection = "11.9.6";
             }
@@ -68,6 +72,15 @@ export const ClusterHtmlRepairs: Record<string, HtmlRepairs> = {
             subref.name = "GeneralErrorStateEnum Type";
             return ScanDirective.POP;
         },
+    },
+
+    "Mode Base": {
+        // This is buried too deeply to fix elegantly (in a field in a datatype of the mode base cluster).  So just
+        // designate as processing as a namespace
+        "Mode Base Status CommonCodes Range": NAMESPACE,
+
+        // This at a reasonable level but is a one-off.  So easiest to handle here
+        "Mode Namespace": NAMESPACE,
     },
 };
 

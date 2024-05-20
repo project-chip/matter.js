@@ -15,8 +15,7 @@ export namespace ValidationExceptions {
         "tag",
         "namespace",
 
-        // Comes from "a mode tag namespace which is either manufacturer specific or standard".  Whatever that means
-        // we can't code as a TS enum
+        // Extensions of ModeBase may define mode tags but the base cluster does not
         "ModeBase.ModeTagStruct.value",
 
         // It's unclear where these enum values come from or if there even a standard definition for them

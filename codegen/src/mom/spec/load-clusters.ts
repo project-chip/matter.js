@@ -56,6 +56,15 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                 case ScanDirective.POP:
                     collectors.pop();
                     break;
+
+                case ScanDirective.NAMESPACE:
+                    if (definition?.type === "cluster") {
+                        if (!definition.namespace) {
+                            definition.namespace = [];
+                        }
+                        definition.namespace.push(subref);
+                    }
+                    break;
             }
         }
 
@@ -168,7 +177,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                 break;
 
             case "statuscodes":
-                if (subref.table) {
+                if (subref.tables) {
                     // Until 1.3 status codes were in a specialized table in the "status codes" sections
                     defineElement("statusCodes", subref);
                 } else {
@@ -180,8 +189,15 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                 break;
 
             case "datatypes":
-                // Datatypes are different than everybody else.  The types themselves are defined in subsections
+                // Datatypes are different than other sections.  The types themselves are defined in subsections
                 collectDatatypes(definition, subref);
+                break;
+
+            case "derivedclusternamespace":
+                // The cluster "namespaces" seem to be a collection of enum definitions and misc. prose describing
+                // behavioral definitions.  We collect all of the sections here that appear to define values and sort
+                // out semantics during translation
+                collectNamespace(definition, subref);
                 break;
 
             default:
@@ -192,7 +208,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                     }
                     logger.debug(`attribute set ${subref.name} § ${subref.xref.section}`);
                     definition.attributeSets.push(subref);
-                    if (subref.table) {
+                    if (subref.tables) {
                         collectDetails(subref);
                     }
                     break;
@@ -210,11 +226,30 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                 datatypeRef.name = datatypeRef.name.replace(/\s+type$/i, "");
                 logger.debug(`datatype ${datatypeRef.name} § ${datatypeRef.xref.section}`);
                 definition.datatypes.push(datatypeRef);
-                if (datatypeRef.table) {
+                if (datatypeRef.tables) {
                     // Probably a struct, enum or bitmap.  These are sometimes followed with sections that
                     // detail individual items
                     collectDetails(datatypeRef);
                 }
+            },
+        });
+    }
+
+    function collectNamespace(definition: ClusterReference, subref: HtmlReference) {
+        collectors.push({
+            subsection: subref.xref.section,
+            collector(ref) {
+                // Only collect namespace sections that appear to have a defining table
+                if (!ref.tables || ref.tables[0].fields.indexOf("name") === -1) {
+                    return;
+                }
+
+                if (!definition.namespace) {
+                    definition.namespace = [];
+                }
+                logger.debug(`namespace section ${ref.name} § ${ref.xref.section}`);
+                definition.namespace.push(subref);
+                collectDetails(ref);
             },
         });
     }
@@ -252,7 +287,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
             throw new InternalError(`Cannot define element ${name} because there is no active cluster definition`);
         }
 
-        if (!ref.table) {
+        if (!ref.tables) {
             // Sometimes there's a section with no table to indicate no elements
             if (ref.prose?.[0]?.textContent?.match(/(?:this cluster has no|no cluster specific)/i)) {
                 return;
@@ -262,11 +297,11 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
         }
 
         // Sometimes there's an empty table to indicate no elements
-        if (!ref.table.rows.length) {
+        if (!ref.tables[0].rows.length) {
             return;
         }
 
-        if (definition[name]?.table) {
+        if (definition[name]?.tables) {
             logger.warn("ignoring tertiary definition of", name, "for", ref.name);
             return;
         }

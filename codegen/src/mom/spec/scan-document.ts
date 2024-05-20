@@ -8,127 +8,8 @@ import { dirname, join } from "path";
 
 import { loadHtml, parseHeading } from "./doc-utils.js";
 import { Str } from "./html-translators.js";
+import { scanTables } from "./scan-tables.js";
 import { HtmlReference, Table } from "./spec-types.js";
-
-// Convert HTMLTableELement -> Table
-function convertTable(el: HTMLTableElement, previous: Table | undefined) {
-    let table: Table | undefined;
-
-    const rowspans = Array<{ remaining: number; el: HTMLElement }>();
-
-    for (const tr of el.querySelectorAll("tr")) {
-        const cells = tr.querySelectorAll("td, th");
-
-        if (table === undefined) {
-            // Use the first row to identify whether this is a table split across page boundaries.  For the spec the
-            // first row is always replicated on subsequent pages
-            const firstRowIdentity = Array.from(cells)
-                .map(cell => cell.textContent?.trim())
-                .join("␜");
-
-            if (previous?.firstRowIdentity === firstRowIdentity) {
-                table = previous;
-
-                // Skip the first row as it tells us nothing new
-                continue;
-            } else {
-                table = {
-                    firstRowIdentity,
-                    fields: [],
-                    rows: [],
-                    notes: [],
-                };
-            }
-        }
-
-        if (cells.length === 1) {
-            table.notes.push(cells[0] as HTMLElement);
-            for (const span of rowspans) {
-                if (span.remaining) {
-                    span.remaining--;
-                }
-            }
-            continue;
-        }
-
-        if (!table.fields.length) {
-            cells.forEach(cell => {
-                let key = cell.textContent || "";
-                key = key.replace(/[\W]/g, "").toLowerCase();
-                table?.fields.push(key);
-            });
-            continue;
-        }
-
-        const row = {} as Table["rows"][number];
-        let sourceIndex = 0;
-        for (let i = 0; i < table.fields.length; i++) {
-            if (rowspans[i]?.remaining) {
-                rowspans[i].remaining--;
-                row[table.fields[i]] = rowspans[i].el;
-                continue;
-            }
-
-            const cell = cells.item(sourceIndex++) as HTMLElement | null;
-            if (cell === null) {
-                continue;
-            }
-
-            row[table.fields[i]] = cell;
-
-            const rowspan = (cell as HTMLTableCellElement)?.rowSpan;
-            if (typeof rowspan === "number" && rowspan > 1) {
-                rowspans[i] = {
-                    remaining: rowspan - 1,
-                    el: cell,
-                };
-            }
-        }
-
-        table.rows.push(row);
-    }
-
-    // If a table only has a single row but cells in that row wrap to multiple lines, Acrobat can get confused and
-    // decide it is a multi-row table without line separators.
-    //
-    // Detect this case and correct by concatenating the contents of rows onto the first row
-    if (table?.fields[0] !== undefined) {
-        // Scan the table.  We treat as broken if there are multiple rows but the first column is empty except on the
-        // first row
-        const looksBorked =
-            table.rows.length > 1 &&
-            table.rows.every((row, i) => {
-                let text = row[table?.fields[0]]?.textContent?.trim();
-                if (text === "") {
-                    text = undefined;
-                }
-                return (!i && text !== undefined) || (i && text === undefined);
-            });
-
-        // If above test succeeds, concatenate all cells in column into first
-        // row and remove rows except the first
-        if (looksBorked) {
-            for (const colName of table.fields) {
-                let target;
-                for (let i = 0; i < table.rows.length; i++) {
-                    const el = table.rows[i]?.[colName];
-                    if (i) {
-                        if (target && el) {
-                            while (el.firstChild) {
-                                target.appendChild(el.firstChild);
-                            }
-                        }
-                    } else {
-                        target = el;
-                    }
-                }
-            }
-            table.rows = table.rows.slice(0, 1);
-        }
-    }
-
-    return table;
-}
 
 function findNextLink(html: Document) {
     for (const a of html.querySelectorAll(".top_nav a")) {
@@ -143,6 +24,9 @@ export function* scanDocument(docRef: HtmlReference) {
     // State for scanSection.  We maintain it across calls because some broken pages don't mention their section in the
     // heading, so we simply continue the last known section
     let currentRef: HtmlReference | undefined = undefined;
+
+    // Tables in the current reference
+    let tables: HTMLTableElement[] | undefined;
 
     // State for scanSection.  We need to fake section numbers sometimes. This contains fakery related state
     const fakeSection = {
@@ -176,11 +60,8 @@ export function* scanDocument(docRef: HtmlReference) {
 
     function* emit() {
         if (currentRef) {
-            if (currentRef.table && !currentRef.table.rows.length) {
-                delete currentRef.table;
-            }
             yield currentRef;
-            currentRef = undefined;
+            currentRef = tables = undefined;
         }
     }
 
@@ -304,14 +185,27 @@ export function* scanDocument(docRef: HtmlReference) {
                         break;
                     }
 
-                    const table = convertTable(element as HTMLTableElement, currentRef.table);
-                    if (!table) {
-                        break;
+                    if (!tables) {
+                        tables = [];
+                        let logicalTables: Table[] | undefined;
+                        let tablesLoaded = false;
+
+                        Object.defineProperty(currentRef, "table", {
+                            get() {
+                                if (!tablesLoaded) {
+                                    tablesLoaded = true;
+                                    logicalTables = [...scanTables(tables as HTMLTableElement[])];
+                                    if (!logicalTables.length) {
+                                        logicalTables = [];
+                                    }
+                                }
+
+                                return logicalTables;
+                            },
+                        });
                     }
 
-                    if (!currentRef.table) {
-                        currentRef.table = table;
-                    }
+                    tables.push(element as HTMLTableElement);
                     break;
             }
         }

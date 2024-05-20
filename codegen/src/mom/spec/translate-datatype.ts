@@ -80,7 +80,7 @@ export function translateDatatype(definition: HtmlReference): DatatypeElement | 
         } else if (type.match(/^bitmap/)) {
             type = type.slice(3);
         }
-    } else if (name.match(/struct$/i) || type === "struct" || definition.table?.rows[0].type) {
+    } else if (name.match(/struct$/i) || type === "struct" || definition.tables?.[0].rows[0].type) {
         if (!type) {
             type = "struct";
         }
@@ -117,7 +117,7 @@ export function translateDatatype(definition: HtmlReference): DatatypeElement | 
 
 function hasColumn(definition: HtmlReference, ...names: string[]) {
     for (const name of names) {
-        if (definition.table?.rows[0]?.[name] !== undefined) {
+        if (definition.tables?.[0].rows[0]?.[name] !== undefined) {
             return true;
         }
     }
@@ -274,13 +274,13 @@ function applyAccessNotes(
     fields?: HtmlReference,
     records?: { id: number; name?: string; type?: string; access?: string; conformance?: string }[],
 ) {
-    if (!fields?.table?.notes.length || !records) {
+    if (!fields?.tables?.[0].notes.length || !records) {
         return;
     }
 
     // Determine what the access flag should be
     let flag: string | undefined;
-    for (const n of fields.table.notes) {
+    for (const n of fields.tables[0].notes) {
         const match = n.textContent?.match(/access quality: fabric[\s-](\w+)/i);
         if (match) {
             const quality = match[1].toLowerCase();

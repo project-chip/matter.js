@@ -31,7 +31,7 @@ export interface HtmlReference {
     xref: Specification.CrossReference;
     name: string;
     path: string;
-    table?: Table;
+    tables?: Table[];
     prose?: HTMLElement[];
     detailSection?: string;
     details?: HtmlReference[];
@@ -60,6 +60,7 @@ export interface ClusterReference extends HtmlReference {
     events?: HtmlReference;
     statusCodes?: HtmlReference;
     datatypes?: HtmlReference[];
+    namespace?: HtmlReference[];
 }
 
 /**

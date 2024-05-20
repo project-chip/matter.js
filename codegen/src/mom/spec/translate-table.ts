@@ -9,7 +9,7 @@ import { AnyElement, FieldElement, Specification } from "@project-chip/matter.js
 import { isObject } from "@project-chip/matter.js/util";
 import { addDocumentation } from "./add-documentation.js";
 import { Str } from "./html-translators.js";
-import { HtmlReference } from "./spec-types.js";
+import { HtmlReference, Table } from "./spec-types.js";
 
 const logger = Logger.get("translate-table");
 
@@ -61,17 +61,23 @@ export type TableRecord<T extends TableSchema> = {
 
 const has = (object: object, name: string) => !!Object.getOwnPropertyDescriptor(object, name);
 
-/** Translates an array of key => HTMLElement records into a proper TS type */
+/**
+ * Translates records from an HtmlRef table to typed TS objects.
+ */
 export function translateTable<T extends TableSchema>(
     tag: string,
     definition: HtmlReference | undefined,
     schema: T,
+    table?: Table,
 ): Array<TableRecord<T>> {
     if (!definition) {
         return [];
     }
 
-    if (!definition.table) {
+    if (!table) {
+        table = definition.tables?.[0];
+    }
+    if (!table) {
         logger.warn(`no ${tag} table § ${definition.xref.section}`);
         return [];
     }
@@ -115,7 +121,7 @@ export function translateTable<T extends TableSchema>(
     }
 
     // Translate each table row
-    nextRow: for (let source of definition.table.rows) {
+    nextRow: for (let source of table.rows) {
         source = { ...source };
 
         // Map aliased columns to their normalized name
@@ -160,7 +166,7 @@ export function translateTable<T extends TableSchema>(
                 ...missing,
             ).join(", ")}`,
         );
-        logger.error(`keys present are: ${Object.keys(definition.table.rows[0]).join(", ")}`);
+        logger.error(`keys present are: ${Object.keys(table.rows[0]).join(", ")}`);
     }
 
     if (definition.details) {
@@ -266,7 +272,7 @@ enum InferredFieldType {
 
 /** Examine a field in every row to infer the type of a field */
 function inferFieldType(definition: HtmlReference, name: string): InferredFieldType {
-    if (!definition.table) {
+    if (!definition.tables) {
         return InferredFieldType.Unknown;
     }
 
@@ -274,7 +280,7 @@ function inferFieldType(definition: HtmlReference, name: string): InferredFieldT
     let inferredType = InferredFieldType.Unknown;
 
     // Examine each row
-    for (const row of definition.table.rows) {
+    for (const row of definition.tables[0].rows) {
         // Extract the value and rows without the named field
         const value = row[name];
         if (!value) {
@@ -312,7 +318,7 @@ function inferFieldType(definition: HtmlReference, name: string): InferredFieldT
 
 /** Infer the columns to use for ID and name */
 export function chooseIdentityAliases(definition: HtmlReference, preferredIds: string[], preferredNames: string[]) {
-    const fields = definition.table?.fields;
+    const fields = definition.tables?.[0]?.fields;
 
     let ids: string[] | undefined;
     let names: string[] | undefined;
