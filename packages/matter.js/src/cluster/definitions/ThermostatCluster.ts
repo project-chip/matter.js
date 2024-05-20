@@ -1627,7 +1627,7 @@ export namespace Thermostat {
      * This cluster provides an interface to the functionality of a thermostat.
      *
      * Per the Matter specification you cannot use {@link ThermostatCluster} without enabling certain feature
-     * combinations. You must use the ThermostatCluster.with() factory method to obtain a working cluster.
+     * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 4.3
      */

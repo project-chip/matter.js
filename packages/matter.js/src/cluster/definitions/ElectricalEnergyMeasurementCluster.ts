@@ -782,8 +782,7 @@ export namespace ElectricalEnergyMeasurement {
      * server.
      *
      * Per the Matter specification you cannot use {@link ElectricalEnergyMeasurementCluster} without enabling certain
-     * feature combinations. You must use the ElectricalEnergyMeasurementCluster.with() factory method to obtain a
-     * working cluster.
+     * feature combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.12
      */

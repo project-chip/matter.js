@@ -687,7 +687,7 @@ export namespace SmokeCoAlarm {
      * This cluster provides an interface for observing and managing the state of smoke and CO alarms.
      *
      * Per the Matter specification you cannot use {@link SmokeCoAlarmCluster} without enabling certain feature
-     * combinations. You must use the SmokeCoAlarmCluster.with() factory method to obtain a working cluster.
+     * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.11
      */

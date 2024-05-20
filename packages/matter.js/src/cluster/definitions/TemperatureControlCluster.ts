@@ -250,7 +250,7 @@ export namespace TemperatureControl {
      * incremental value by which the temperature setpoint can be changed on the physical device.
      *
      * Per the Matter specification you cannot use {@link TemperatureControlCluster} without enabling certain feature
-     * combinations. You must use the TemperatureControlCluster.with() factory method to obtain a working cluster.
+     * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 8.2
      */

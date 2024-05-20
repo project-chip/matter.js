@@ -16,12 +16,14 @@ import {
 } from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { StatusCode } from "../../protocol/interaction/StatusCode.js";
+import { Identity } from "../../util/Type.js";
 
 export namespace ModeBase {
     /**
@@ -215,6 +217,21 @@ export namespace ModeBase {
      * ModeBase.
      */
     export const Base = MutableCluster.Component({
+        features: {
+            /**
+             * OnOff
+             *
+             * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the
+             * same endpoint. See OnMode for more information.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+             */
+            onOff: BitFlag(0)
+        },
+
+        name: "ModeBase",
+        revision: 2,
+
         attributes: {
             /**
              * This attribute shall contain the list of supported modes that may be selected for the CurrentMode
@@ -270,6 +287,37 @@ export namespace ModeBase {
              * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.1
              */
             changeToMode: Command(0x0, TlvChangeToModeRequest, 0x1, TlvChangeToModeResponse)
-        }
+        },
+
+        /**
+         * This metadata controls which ModeBaseCluster elements matter.js activates for specific feature combinations.
+         */
+        extensions: MutableCluster.Extensions({ flags: { onOff: true }, component: OnOffComponent })
     });
+
+    const DEPONOFF = { onOff: true };
+
+    /**
+     * @see {@link Complete}
+     */
+    export const CompleteInstance = MutableCluster.Component({
+        name: Base.name,
+        revision: Base.revision,
+        features: Base.features,
+        attributes: {
+            ...Base.attributes,
+            onMode: MutableCluster.AsConditional(OnOffComponent.attributes.onMode, { mandatoryIf: [DEPONOFF] })
+        },
+        commands: Base.commands
+    });
+
+    /**
+     * This cluster supports all ModeBase features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }

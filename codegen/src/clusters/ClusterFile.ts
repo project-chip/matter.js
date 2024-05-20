@@ -32,6 +32,9 @@ export class ClusterFile extends TsFile {
     }
 
     override addImport(filename: string, symbol: string) {
-        return super.addImport(`../../${filename}`, symbol);
+        if (!filename.startsWith(".")) {
+            filename = `../../${filename}`;
+        }
+        return super.addImport(filename, symbol);
     }
 }

@@ -1908,8 +1908,7 @@ export namespace DeviceEnergyManagement {
      * NOTE Support of Device Energy Management Cluster is provisional.
      *
      * Per the Matter specification you cannot use {@link DeviceEnergyManagementCluster} without enabling certain
-     * feature combinations. You must use the DeviceEnergyManagementCluster.with() factory method to obtain a working
-     * cluster.
+     * feature combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.2
      */

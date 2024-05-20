@@ -49,6 +49,9 @@ export namespace Label {
      * Label.
      */
     export const Base = MutableCluster.Component({
+        name: "Label",
+        revision: 1,
+
         attributes: {
             /**
              * This is a list of string tuples. Each entry is a LabelStruct.
@@ -58,4 +61,6 @@ export namespace Label {
             labelList: WritableAttribute(0x0, TlvArray(TlvLabelStruct), { default: [] })
         }
     });
+
+    export const Complete = Base;
 }

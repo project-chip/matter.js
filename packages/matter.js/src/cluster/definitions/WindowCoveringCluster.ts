@@ -1180,7 +1180,7 @@ export namespace WindowCovering {
      * as drapery motors, automatic shades, curtains and blinds.
      *
      * Per the Matter specification you cannot use {@link WindowCoveringCluster} without enabling certain feature
-     * combinations. You must use the WindowCoveringCluster.with() factory method to obtain a working cluster.
+     * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.3
      */

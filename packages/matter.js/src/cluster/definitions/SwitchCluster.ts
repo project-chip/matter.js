@@ -476,7 +476,7 @@ export namespace Switch {
      * or a window shade.
      *
      * Per the Matter specification you cannot use {@link SwitchCluster} without enabling certain feature combinations.
-     * You must use the SwitchCluster.with() factory method to obtain a working cluster.
+     * You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.13
      */

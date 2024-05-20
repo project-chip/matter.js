@@ -256,7 +256,7 @@ export namespace EnergyPreference {
      * NOTE Support for Energy Preference cluster is provisional.
      *
      * Per the Matter specification you cannot use {@link EnergyPreferenceCluster} without enabling certain feature
-     * combinations. You must use the EnergyPreferenceCluster.with() factory method to obtain a working cluster.
+     * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.5
      */

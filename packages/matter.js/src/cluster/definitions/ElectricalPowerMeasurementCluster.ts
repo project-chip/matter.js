@@ -985,8 +985,7 @@ export namespace ElectricalPowerMeasurement {
      * This cluster provides a mechanism for querying data about electrical power as measured by the server.
      *
      * Per the Matter specification you cannot use {@link ElectricalPowerMeasurementCluster} without enabling certain
-     * feature combinations. You must use the ElectricalPowerMeasurementCluster.with() factory method to obtain a
-     * working cluster.
+     * feature combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.13
      */

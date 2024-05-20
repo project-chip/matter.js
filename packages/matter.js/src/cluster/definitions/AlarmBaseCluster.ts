@@ -19,6 +19,8 @@ import {
 import { TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { Identity } from "../../util/Type.js";
 
 export namespace AlarmBase {
     /**
@@ -157,6 +159,20 @@ export namespace AlarmBase {
      * AlarmBase.
      */
     export const Base = MutableCluster.Component({
+        features: {
+            /**
+             * Reset
+             *
+             * This feature indicates that alarms can be reset via the Reset command.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.15.4.1
+             */
+            reset: BitFlag(0)
+        },
+
+        name: "AlarmBase",
+        revision: 1,
+
         attributes: {
             /**
              * Indicates a bitmap where each bit set in the Mask attribute corresponds to an alarm that shall be
@@ -201,6 +217,41 @@ export namespace AlarmBase {
              * @see {@link MatterSpecification.v13.Cluster} § 1.15.8.1
              */
             notify: Event(0x0, EventPriority.Info, TlvNotifyEvent)
-        }
+        },
+
+        /**
+         * This metadata controls which AlarmBaseCluster elements matter.js activates for specific feature combinations.
+         */
+        extensions: MutableCluster.Extensions({ flags: { reset: true }, component: ResetComponent })
     });
+
+    const RESET = { reset: true };
+
+    /**
+     * @see {@link Complete}
+     */
+    export const CompleteInstance = MutableCluster.Component({
+        name: Base.name,
+        revision: Base.revision,
+        features: Base.features,
+        attributes: {
+            ...Base.attributes,
+            latch: MutableCluster.AsConditional(ResetComponent.attributes.latch, { mandatoryIf: [RESET] })
+        },
+        commands: {
+            ...Base.commands,
+            reset: MutableCluster.AsConditional(ResetComponent.commands.reset, { mandatoryIf: [RESET] })
+        },
+        events: Base.events
+    });
+
+    /**
+     * This cluster supports all AlarmBase features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }

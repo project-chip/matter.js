@@ -1347,7 +1347,7 @@ export namespace NetworkCommissioning {
      * egress IP packets.
      *
      * Per the Matter specification you cannot use {@link NetworkCommissioningCluster} without enabling certain feature
-     * combinations. You must use the NetworkCommissioningCluster.with() factory method to obtain a working cluster.
+     * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Core} § 11.9
      */

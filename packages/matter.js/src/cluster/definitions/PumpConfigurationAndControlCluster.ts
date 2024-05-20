@@ -914,8 +914,7 @@ export namespace PumpConfigurationAndControl {
      * controlled by the On/Off and Level Control clusters.
      *
      * Per the Matter specification you cannot use {@link PumpConfigurationAndControlCluster} without enabling certain
-     * feature combinations. You must use the PumpConfigurationAndControlCluster.with() factory method to obtain a
-     * working cluster.
+     * feature combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 4.2
      */

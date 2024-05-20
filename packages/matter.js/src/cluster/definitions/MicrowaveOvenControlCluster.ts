@@ -330,7 +330,7 @@ export namespace MicrowaveOvenControl {
      * as this cluster.
      *
      * Per the Matter specification you cannot use {@link MicrowaveOvenControlCluster} without enabling certain feature
-     * combinations. You must use the MicrowaveOvenControlCluster.with() factory method to obtain a working cluster.
+     * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 8.13
      */

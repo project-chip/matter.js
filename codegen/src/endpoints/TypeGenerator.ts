@@ -78,13 +78,15 @@ export class TypeGenerator {
                 const typeName = sourceName.startsWith("Tlv") ? sourceName.slice(3) : sourceName;
                 if (!this.defined.has(typeName)) {
                     this.definitions.file.addImport("tlv/TlvSchema.js", "TypeFromSchema");
+
+                    const cluster = model.owner(ClusterModel) ?? this.tlv.cluster;
                     this.definitions.file.addImport(
-                        `cluster/definitions/${this.tlv.cluster.name}Cluster.js`,
+                        `cluster/definitions/${cluster.name}Cluster.js`,
                         this.tlv.cluster.name,
                     );
 
                     this.definitions
-                        .atom(`export type ${typeName} = TypeFromSchema<typeof ${this.tlv.cluster.name}.${sourceName}>`)
+                        .atom(`export type ${typeName} = TypeFromSchema<typeof ${cluster.name}.${sourceName}>`)
                         .document(model);
 
                     this.defined.add(typeName);

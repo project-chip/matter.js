@@ -146,7 +146,7 @@ export namespace PowerTopology {
      * The Power Topology Cluster provides a mechanism for expressing how power is flowing between endpoints.
      *
      * Per the Matter specification you cannot use {@link PowerTopologyCluster} without enabling certain feature
-     * combinations. You must use the PowerTopologyCluster.with() factory method to obtain a working cluster.
+     * combinations. You must use the {@link with} factory method to obtain a working cluster.
      *
      * @see {@link MatterSpecification.v13.Core} § 11.8
      */
