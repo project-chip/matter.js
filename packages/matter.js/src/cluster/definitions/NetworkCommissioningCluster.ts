@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { FixedAttribute, Command, AccessLevel, Attribute, WritableAttribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { FixedAttribute, Command, AccessLevel, Attribute, WritableAttribute } from "../Cluster.js";
 import { TlvUInt8, TlvUInt64, TlvEnum, TlvBitmap, TlvUInt16, TlvInt8, TlvInt32 } from "../../tlv/TlvNumber.js";
 import { TlvOptionalField, TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
@@ -17,7 +17,7 @@ import { TlvArray } from "../../tlv/TlvArray.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace NetworkCommissioning {
     /**
@@ -198,7 +198,7 @@ export namespace NetworkCommissioning {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.9.5.6
      */
-    export const TlvWiFiInterfaceScanResultStruct = TlvObject({
+    export const TlvWiFiInterfaceScanResult = TlvObject({
         security: TlvOptionalField(0, TlvBitmap(TlvUInt8, WiFiSecurity)),
         ssid: TlvOptionalField(1, TlvByteString.bound({ maxLength: 32 })),
         bssid: TlvOptionalField(2, TlvByteString.bound({ length: 6 })),
@@ -225,14 +225,14 @@ export namespace NetworkCommissioning {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.9.5.6
      */
-    export interface WiFiInterfaceScanResultStruct extends TypeFromSchema<typeof TlvWiFiInterfaceScanResultStruct> {}
+    export interface WiFiInterfaceScanResult extends TypeFromSchema<typeof TlvWiFiInterfaceScanResult> {}
 
     /**
      * ThreadInterfaceScanResultStruct represents a single Thread network scan result.
      *
      * @see {@link MatterSpecification.v13.Core} § 11.9.5.7
      */
-    export const TlvThreadInterfaceScanResultStruct = TlvObject({
+    export const TlvThreadInterfaceScanResult = TlvObject({
         panId: TlvOptionalField(0, TlvUInt16.bound({ max: 65534 })),
         extendedPanId: TlvOptionalField(1, TlvUInt64),
         networkName: TlvOptionalField(2, TlvString.bound({ minLength: 1, maxLength: 16 })),
@@ -255,7 +255,7 @@ export namespace NetworkCommissioning {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.9.5.7
      */
-    export interface ThreadInterfaceScanResultStruct extends TypeFromSchema<typeof TlvThreadInterfaceScanResultStruct> {}
+    export interface ThreadInterfaceScanResult extends TypeFromSchema<typeof TlvThreadInterfaceScanResult> {}
 
     /**
      * This command shall contain the status of the last ScanNetworks command, and the associated scan results if the
@@ -312,7 +312,7 @@ export namespace NetworkCommissioning {
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.2.3
          */
-        wiFiScanResults: TlvOptionalField(2, TlvArray(TlvWiFiInterfaceScanResultStruct)),
+        wiFiScanResults: TlvOptionalField(2, TlvArray(TlvWiFiInterfaceScanResult)),
 
         /**
          * If NetworkingStatus was Success, this field shall contain the Thread network scan results. The list may be
@@ -328,7 +328,7 @@ export namespace NetworkCommissioning {
          *
          * @see {@link MatterSpecification.v13.Core} § 11.9.7.2.4
          */
-        threadScanResults: TlvOptionalField(3, TlvArray(TlvThreadInterfaceScanResultStruct))
+        threadScanResults: TlvOptionalField(3, TlvArray(TlvThreadInterfaceScanResult))
     });
 
     /**
@@ -777,7 +777,7 @@ export namespace NetworkCommissioning {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.9.5.5
      */
-    export const TlvNetworkInfoStruct = TlvObject({
+    export const TlvNetworkInfo = TlvObject({
         /**
          * Every network is uniquely identified (for purposes of commissioning) by a NetworkID mapping to the following
          * technology-specific properties:
@@ -821,7 +821,7 @@ export namespace NetworkCommissioning {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.9.5.5
      */
-    export interface NetworkInfoStruct extends TypeFromSchema<typeof TlvNetworkInfoStruct> {}
+    export interface NetworkInfo extends TypeFromSchema<typeof TlvNetworkInfo> {}
 
     /**
      * A NetworkCommissioningCluster supports these elements if it supports features WiFiNetworkInterface or
@@ -1215,7 +1215,7 @@ export namespace NetworkCommissioning {
              */
             networks: Attribute(
                 0x1,
-                TlvArray(TlvNetworkInfoStruct),
+                TlvArray(TlvNetworkInfo),
                 { default: [], readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
             ),
 

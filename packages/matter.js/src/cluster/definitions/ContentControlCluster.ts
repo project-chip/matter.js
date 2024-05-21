@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, Command, TlvNoResponse, AccessLevel, Event, EventPriority } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, Command, TlvNoResponse, AccessLevel, Event, EventPriority } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvString } from "../../tlv/TlvString.js";
@@ -18,13 +18,13 @@ import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ContentControl {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.1
      */
-    export const TlvRatingNameStruct = TlvObject({
+    export const TlvRatingName = TlvObject({
         /**
          * This field shall indicate the name of the rating level of the applied rating system. The applied rating
          * system is dependent upon the region or country where the Node has been provisioned, and may vary from one
@@ -45,7 +45,7 @@ export namespace ContentControl {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.1
      */
-    export interface RatingNameStruct extends TypeFromSchema<typeof TlvRatingNameStruct> {}
+    export interface RatingName extends TypeFromSchema<typeof TlvRatingName> {}
 
     /**
      * Input to the ContentControl setOnDemandRatingThreshold command
@@ -154,7 +154,7 @@ export namespace ContentControl {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2
      */
-    export const TlvBlockChannelStruct = TlvObject({
+    export const TlvBlockChannel = TlvObject({
         /**
          * This field shall indicate a unique index value for a blocked channel. This value may be used to indicate one
          * selected channel which will be removed from BlockChannelList attribute.
@@ -197,7 +197,7 @@ export namespace ContentControl {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.2
      */
-    export interface BlockChannelStruct extends TypeFromSchema<typeof TlvBlockChannelStruct> {}
+    export interface BlockChannel extends TypeFromSchema<typeof TlvBlockChannel> {}
 
     /**
      * Input to the ContentControl addBlockChannels command
@@ -212,7 +212,7 @@ export namespace ContentControl {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.13.8.12.1
          */
-        channels: TlvField(0, TlvArray(TlvBlockChannelStruct))
+        channels: TlvField(0, TlvArray(TlvBlockChannel))
     });
 
     /**
@@ -247,7 +247,7 @@ export namespace ContentControl {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3
      */
-    export const TlvAppInfoStruct = TlvObject({
+    export const TlvAppInfo = TlvObject({
         /**
          * This field shall indicate the CSA-issued vendor ID for the catalog. The DIAL registry shall use value 0x0000.
          *
@@ -270,7 +270,7 @@ export namespace ContentControl {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.3
      */
-    export interface AppInfoStruct extends TypeFromSchema<typeof TlvAppInfoStruct> {}
+    export interface AppInfo extends TypeFromSchema<typeof TlvAppInfo> {}
 
     /**
      * Input to the ContentControl addBlockApplications command
@@ -284,7 +284,7 @@ export namespace ContentControl {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.13.8.14.1
          */
-        applications: TlvField(0, TlvArray(TlvAppInfoStruct))
+        applications: TlvField(0, TlvArray(TlvAppInfo))
     });
 
     /**
@@ -305,7 +305,7 @@ export namespace ContentControl {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.13.8.15.1
          */
-        applications: TlvField(0, TlvArray(TlvAppInfoStruct))
+        applications: TlvField(0, TlvArray(TlvAppInfo))
     });
 
     /**
@@ -358,7 +358,7 @@ export namespace ContentControl {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.6
      */
-    export const TlvTimePeriodStruct = TlvObject({
+    export const TlvTimePeriod = TlvObject({
         /**
          * This field shall indicate the starting hour.
          *
@@ -393,12 +393,12 @@ export namespace ContentControl {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.6
      */
-    export interface TimePeriodStruct extends TypeFromSchema<typeof TlvTimePeriodStruct> {}
+    export interface TimePeriod extends TypeFromSchema<typeof TlvTimePeriod> {}
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4
      */
-    export const TlvTimeWindowStruct = TlvObject({
+    export const TlvTimeWindow = TlvObject({
         /**
          * This field shall indicate a unique index of a specific time window. This value may be used to indicate a
          * selected time window which will be removed from the BlockContentTimeWindow attribute.
@@ -419,13 +419,13 @@ export namespace ContentControl {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4.3
          */
-        timePeriod: TlvField(2, TlvArray(TlvTimePeriodStruct))
+        timePeriod: TlvField(2, TlvArray(TlvTimePeriod))
     });
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.4
      */
-    export interface TimeWindowStruct extends TypeFromSchema<typeof TlvTimeWindowStruct> {}
+    export interface TimeWindow extends TypeFromSchema<typeof TlvTimeWindow> {}
 
     /**
      * Input to the ContentControl setBlockContentTimeWindow command
@@ -438,7 +438,7 @@ export namespace ContentControl {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.13.8.16.1
          */
-        timeWindow: TlvField(0, TlvTimeWindowStruct)
+        timeWindow: TlvField(0, TlvTimeWindow)
     });
 
     /**
@@ -595,7 +595,7 @@ export namespace ContentControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.13.7.2
              */
-            onDemandRatings: Attribute(0x1, TlvArray(TlvRatingNameStruct), { default: [] }),
+            onDemandRatings: Attribute(0x1, TlvArray(TlvRatingName), { default: [] }),
 
             /**
              * Indicates a threshold rating as a content filter which is compared with the rating for on-demand
@@ -654,7 +654,7 @@ export namespace ContentControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.13.7.4
              */
-            scheduledContentRatings: Attribute(0x3, TlvArray(TlvRatingNameStruct), { default: [] }),
+            scheduledContentRatings: Attribute(0x3, TlvArray(TlvRatingName), { default: [] }),
 
             /**
              * Indicates a threshold rating as a content filter which is used to compare with the rating for scheduled
@@ -827,7 +827,7 @@ export namespace ContentControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.13.7.9
              */
-            blockChannelList: Attribute(0x8, TlvArray(TlvBlockChannelStruct), { default: [] })
+            blockChannelList: Attribute(0x8, TlvArray(TlvBlockChannel), { default: [] })
         },
 
         commands: {
@@ -886,7 +886,7 @@ export namespace ContentControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.13.7.10
              */
-            blockApplicationList: Attribute(0x9, TlvArray(TlvAppInfoStruct), { default: [] })
+            blockApplicationList: Attribute(0x9, TlvArray(TlvAppInfo), { default: [] })
         },
 
         commands: {
@@ -948,7 +948,7 @@ export namespace ContentControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.13.7.11
              */
-            blockContentTimeWindow: Attribute(0xa, TlvArray(TlvTimeWindowStruct, { maxLength: 7 }), { default: [] })
+            blockContentTimeWindow: Attribute(0xa, TlvArray(TlvTimeWindow, { maxLength: 7 }), { default: [] })
         },
 
         commands: {

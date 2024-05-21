@@ -14,7 +14,7 @@ export function* scanTables(tables: HTMLTableElement[]): Generator<Table, void> 
 
     for (const el of tables) {
         const table = convertTable(el, currentTable);
-        if (table) {
+        if (table !== currentTable) {
             if (currentTable?.rows.length) {
                 yield currentTable;
             }

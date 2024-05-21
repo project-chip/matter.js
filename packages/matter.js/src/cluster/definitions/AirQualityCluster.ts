@@ -6,12 +6,12 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { Attribute } from "../../cluster/Cluster.js";
+import { Attribute } from "../Cluster.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace AirQuality {
     /**
@@ -20,7 +20,7 @@ export namespace AirQuality {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.9.5.1
      */
-    export enum AirQuality {
+    export enum AirQualityEnum {
         /**
          * The air quality is unknown.
          */
@@ -136,7 +136,7 @@ export namespace AirQuality {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.9.6.1
              */
-            airQuality: Attribute(0x0, TlvEnum<AirQuality>(), { default: AirQuality.Unknown })
+            airQuality: Attribute(0x0, TlvEnum<AirQualityEnum>(), { default: AirQualityEnum.Unknown })
         },
 
         /**

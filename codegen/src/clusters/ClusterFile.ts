@@ -5,36 +5,24 @@
  */
 
 import { ClusterModel } from "@project-chip/matter.js/model";
-import { Block, TsFile } from "../util/TsFile.js";
-import { clean } from "../util/file.js";
+import { ScopeFile } from "../util/ScopeFile.js";
+import { Block } from "../util/TsFile.js";
 
-export class ClusterFile extends TsFile {
+export class ClusterFile extends ScopeFile {
     clusterName: string;
     typesName: string;
     types: Block;
     ns: Block;
 
-    constructor(public cluster: ClusterModel) {
-        const name = `${cluster.name}Cluster`;
-        super(ClusterFile.createFilename(name));
-        this.clusterName = name;
+    constructor(cluster: ClusterModel) {
+        super({ scope: cluster });
+        this.clusterName = `${cluster.name}Cluster`;
         this.typesName = cluster.name;
         this.ns = this.statements(`export namespace ${this.typesName} {`, "}");
         this.types = this.ns.section();
     }
 
-    static clean() {
-        clean("#clusters");
-    }
-
-    static createFilename(name: string) {
-        return `#clusters/${name}`;
-    }
-
-    override addImport(filename: string, symbol: string) {
-        if (!filename.startsWith(".")) {
-            filename = `../../${filename}`;
-        }
-        return super.addImport(filename, symbol);
+    get cluster() {
+        return this.model as ClusterModel;
     }
 }

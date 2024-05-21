@@ -6,12 +6,13 @@
 
 import { Logger } from "@project-chip/matter.js/log";
 import { ClusterModel, ClusterVariance } from "@project-chip/matter.js/model";
-import { Block, TsFile } from "../util/TsFile.js";
+import { ScopeFile } from "../util/ScopeFile.js";
+import { Block } from "../util/TsFile.js";
 import { InterfaceGenerator } from "./InterfaceGenerator.js";
 
 const logger = Logger.get("InterfaceFile");
 
-export class InterfaceFile extends TsFile {
+export class InterfaceFile extends ScopeFile {
     static readonly baseName = "Interface";
     readonly definitionName: string;
     readonly cluster: ClusterModel;
@@ -23,20 +24,13 @@ export class InterfaceFile extends TsFile {
         cluster: ClusterModel,
         private variance: ClusterVariance,
     ) {
-        super(name);
+        super({ name, scope: cluster });
         this.definitionName = `${cluster.name}Interface`;
         this.cluster = cluster;
         this.types = this.section();
         this.ns = this.statements(`export namespace ${this.definitionName} {`, "}");
 
         this.generate();
-    }
-
-    override addImport(filename: string, symbol: string) {
-        if (filename.startsWith("./")) {
-            return super.addImport(filename, symbol);
-        }
-        return super.addImport(`../../../${filename}`, symbol);
     }
 
     private generate() {

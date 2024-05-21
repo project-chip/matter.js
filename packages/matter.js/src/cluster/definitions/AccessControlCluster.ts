@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     WritableFabricScopedAttribute,
     AccessLevel,
@@ -14,7 +14,7 @@ import {
     FixedAttribute,
     Event,
     EventPriority
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt16 } from "../../tlv/TlvNumber.js";
@@ -28,7 +28,7 @@ import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace AccessControl {
     /**
@@ -100,7 +100,7 @@ export namespace AccessControl {
     /**
      * @see {@link MatterSpecification.v13.Core} § 9.10.4.4
      */
-    export const TlvAccessControlTargetStruct = TlvObject({
+    export const TlvAccessControlTarget = TlvObject({
         cluster: TlvField(0, TlvNullable(TlvClusterId)),
         endpoint: TlvField(1, TlvNullable(TlvEndpointNumber)),
         deviceType: TlvField(2, TlvNullable(TlvDeviceTypeId))
@@ -109,12 +109,12 @@ export namespace AccessControl {
     /**
      * @see {@link MatterSpecification.v13.Core} § 9.10.4.4
      */
-    export interface AccessControlTargetStruct extends TypeFromSchema<typeof TlvAccessControlTargetStruct> {}
+    export interface AccessControlTarget extends TypeFromSchema<typeof TlvAccessControlTarget> {}
 
     /**
      * @see {@link MatterSpecification.v13.Core} § 9.10.4.5
      */
-    export const TlvAccessControlEntryStruct = TlvObject({
+    export const TlvAccessControlEntry = TlvObject({
         /**
          * The privilege field shall specify the level of privilege granted by this Access Control Entry.
          *
@@ -208,7 +208,7 @@ export namespace AccessControl {
          *
          * @see {@link MatterSpecification.v13.Core} § 9.10.4.5.4
          */
-        targets: TlvField(4, TlvNullable(TlvArray(TlvAccessControlTargetStruct))),
+        targets: TlvField(4, TlvNullable(TlvArray(TlvAccessControlTarget))),
 
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
@@ -216,12 +216,12 @@ export namespace AccessControl {
     /**
      * @see {@link MatterSpecification.v13.Core} § 9.10.4.5
      */
-    export interface AccessControlEntryStruct extends TypeFromSchema<typeof TlvAccessControlEntryStruct> {}
+    export interface AccessControlEntry extends TypeFromSchema<typeof TlvAccessControlEntry> {}
 
     /**
      * @see {@link MatterSpecification.v13.Core} § 9.10.4.6
      */
-    export const TlvAccessControlExtensionStruct = TlvObject({
+    export const TlvAccessControlExtension = TlvObject({
         /**
          * This field may be used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s Access
          * Control Entries.
@@ -242,7 +242,7 @@ export namespace AccessControl {
     /**
      * @see {@link MatterSpecification.v13.Core} § 9.10.4.6
      */
-    export interface AccessControlExtensionStruct extends TypeFromSchema<typeof TlvAccessControlExtensionStruct> {}
+    export interface AccessControlExtension extends TypeFromSchema<typeof TlvAccessControlExtension> {}
 
     /**
      * @see {@link MatterSpecification.v13.Core} § 9.10.4.1
@@ -306,7 +306,7 @@ export namespace AccessControl {
          *
          * @see {@link MatterSpecification.v13.Core} § 9.10.7.1.4
          */
-        latestValue: TlvField(4, TlvNullable(TlvAccessControlEntryStruct)),
+        latestValue: TlvField(4, TlvNullable(TlvAccessControlEntry)),
 
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
@@ -360,7 +360,7 @@ export namespace AccessControl {
          *
          * @see {@link MatterSpecification.v13.Core} § 9.10.7.2.4
          */
-        latestValue: TlvField(4, TlvNullable(TlvAccessControlExtensionStruct)),
+        latestValue: TlvField(4, TlvNullable(TlvAccessControlExtension)),
 
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
@@ -397,7 +397,7 @@ export namespace AccessControl {
              */
             acl: WritableFabricScopedAttribute(
                 0x0,
-                TlvArray(TlvAccessControlEntryStruct),
+                TlvArray(TlvAccessControlEntry),
                 { default: [], readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
             ),
 
@@ -411,7 +411,7 @@ export namespace AccessControl {
              */
             extension: OptionalWritableFabricScopedAttribute(
                 0x1,
-                TlvArray(TlvAccessControlExtensionStruct),
+                TlvArray(TlvAccessControlExtension),
                 { default: [], readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
             ),
 

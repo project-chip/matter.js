@@ -6,14 +6,29 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalAttribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, OptionalAttribute } from "../Cluster.js";
 import { TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace IlluminanceMeasurement {
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 2.2.4.1
+     */
+    export enum LightSensorType {
+        /**
+         * Indicates photodiode sensor type
+         */
+        Photodiode = 0,
+
+        /**
+         * Indicates CMOS sensor type
+         */
+        Cmos = 1
+    }
+
     /**
      * @see {@link Cluster}
      */
@@ -75,7 +90,7 @@ export namespace IlluminanceMeasurement {
              */
             lightSensorType: OptionalAttribute(0x4, TlvNullable(TlvUInt8), { default: null })
         }
-    })
+    });
 
     /**
      * The Illuminance Measurement cluster provides an interface to illuminance measurement functionality, including
@@ -86,7 +101,6 @@ export namespace IlluminanceMeasurement {
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
-
     export const Complete = Cluster;
 }
 

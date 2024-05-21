@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     WritableAttribute,
     FixedAttribute,
@@ -14,86 +14,58 @@ import {
     OptionalWritableAttribute,
     Command,
     TlvNoResponse
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvUInt8, TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
-import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ModeSelect {
     /**
-     * The value of ModeSelect.semtag
+     * A Semantic Tag is meant to be interpreted by the client for the purpose the cluster serves.
      *
-     * @see {@link MatterSpecification.v13.Core} § 7.18.2.42
+     * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.1
      */
-    export const Tlvsemtag = TlvObject({
+    export const TlvSemanticTag = TlvObject({
         /**
-         * If the MfgCode field is not null, it shall be the Vendor ID of the manufacturer who has defined a certain
-         * namespace and the NamespaceID field shall be the ID of a namespace defined by the manufacturer identified in
-         * the MfgCode field.
+         * This field shall indicate a manufacturer code (Vendor ID), and the Value field shall indicate a semantic tag
+         * defined by the manufacturer. Each manufacturer code supports a single namespace of values. The same
+         * manufacturer code and semantic tag value in separate cluster instances are part of the same namespace and
+         * have the same meaning. For example: a manufacturer tag meaning "pinch", has the same meaning in a cluster
+         * whose purpose is to choose the amount of sugar, or amount of salt.
          *
-         * If a manufacturer specific Tag field is indicated in a list of SemanticTagStruct entries, the list shall
-         * include at least one standard tag which is not from any manufacturer’s namespace. A standard tag is a tag
-         * from a common namespace, a derived cluster namespace, or an applicable device-specific namespace.
-         *
-         * If MfgCode is null, the NamespaceID field shall indicate a standard namespace.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 7.18.2.42.1
+         * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.1.2
          */
-        mfgCode: TlvField(0, TlvNullable(TlvVendorId)),
+        mfgCode: TlvField(0, TlvVendorId),
 
         /**
-         * The NamespaceID field shall identify a namespace.
+         * This field shall indicate the semantic tag within a semantic tag namespace which is either manufacturer
+         * specific or standard. For semantic tags in a standard namespace, see Standard Namespace.
          *
-         * The common and device-specific semantic tag namespaces are listed in StandardNamespaces.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 7.18.2.42.2
+         * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.1.1
          */
-        namespaceId: TlvField(1, TlvUInt8),
-
-        /**
-         * The Tag field shall be the ID of a semantic tag located within the namespace indicated by NamespaceID.
-         *
-         * A device may expose tags from the common or device-specific namespaces and from manufacturer-specific
-         * namespaces in a single TagList.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 7.18.2.42.3
-         */
-        tag: TlvField(2, TlvUInt8),
-
-        /**
-         * The Label field, if present, shall contain human-readable text suitable for display on a client. The content
-         * of the Label field is defined by the manufacturer.
-         *
-         * This field shall be present when the MfgCode is not null. This field SHOULD NOT be used if the Tag is from a
-         * standard namespace, unless the Tag requires further qualification. For example: A Tag that has the meaning
-         * of "room" in a location namespace, would require the a label string to qualify the type of room, such as
-         * "1", "2b", "Bathroom", etc.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 7.18.2.42.4
-         */
-        label: TlvOptionalField(3, TlvNullable(TlvString.bound({ maxLength: 64 })))
-    })
+        value: TlvField(1, TlvUInt16)
+    });
 
     /**
-     * The value of ModeSelect.semtag
+     * A Semantic Tag is meant to be interpreted by the client for the purpose the cluster serves.
      *
-     * @see {@link MatterSpecification.v13.Core} § 7.18.2.42
+     * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.1
      */
-    export interface semtag extends TypeFromSchema<typeof Tlvsemtag> {}
+    export interface SemanticTag extends TypeFromSchema<typeof TlvSemanticTag> {}
 
     /**
      * This is a struct representing a possible mode of the server.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.2
      */
-    export const TlvModeOptionStruct = TlvObject({
+    export const TlvModeOption = TlvObject({
         /**
          * This field is readable text that describes the mode option that can be used by a client to indicate to the
          * user what this option means. This field is meant to be readable and understandable by the user.
@@ -126,7 +98,7 @@ export namespace ModeSelect {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.2.3
          */
-        semanticTags: TlvField(2, TlvArray(Tlvsemtag, { maxLength: 64 }))
+        semanticTags: TlvField(2, TlvArray(TlvSemanticTag, { maxLength: 64 }))
     });
 
     /**
@@ -134,7 +106,7 @@ export namespace ModeSelect {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.2
      */
-    export interface ModeOptionStruct extends TypeFromSchema<typeof TlvModeOptionStruct> {}
+    export interface ModeOption extends TypeFromSchema<typeof TlvModeOption> {}
 
     /**
      * Input to the ModeSelect changeToMode command
@@ -237,7 +209,7 @@ export namespace ModeSelect {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.9.6.4
              */
-            supportedModes: FixedAttribute(0x2, TlvArray(TlvModeOptionStruct, { maxLength: 255 }), { default: [] }),
+            supportedModes: FixedAttribute(0x2, TlvArray(TlvModeOption, { maxLength: 255 }), { default: [] }),
 
             /**
              * This attribute represents the current mode of the server.

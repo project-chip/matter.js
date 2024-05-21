@@ -6,17 +6,16 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalAttribute, Event, EventPriority, FixedAttribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, OptionalAttribute, Event, EventPriority, FixedAttribute } from "../Cluster.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
-import { TlvInt64, TlvEpochS, TlvSysTimeMS, TlvEnum, TlvPercent100ths, TlvUInt64 } from "../../tlv/TlvNumber.js";
+import { TlvInt64, TlvEpochS, TlvSysTimeMS } from "../../tlv/TlvNumber.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvMeasurementAccuracy } from "../globals/MeasurementAccuracy.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ElectricalEnergyMeasurement {
     /**
@@ -31,7 +30,7 @@ export namespace ElectricalEnergyMeasurement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.1
      */
-    export const TlvEnergyMeasurementStruct = TlvObject({
+    export const TlvEnergyMeasurement = TlvObject({
         /**
          * This field shall be the reported energy.
          *
@@ -122,7 +121,7 @@ export namespace ElectricalEnergyMeasurement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.1
      */
-    export interface EnergyMeasurementStruct extends TypeFromSchema<typeof TlvEnergyMeasurementStruct> {}
+    export interface EnergyMeasurement extends TypeFromSchema<typeof TlvEnergyMeasurement> {}
 
     /**
      * This struct shall represent the times at which cumulative measurements were last zero, either due to
@@ -130,7 +129,7 @@ export namespace ElectricalEnergyMeasurement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.2
      */
-    export const TlvCumulativeEnergyResetStruct = TlvObject({
+    export const TlvCumulativeEnergyReset = TlvObject({
         /**
          * This field shall indicate the timestamp in UTC when the value of the Energy field on the
          * CumulativeEnergyImported attribute was most recently zero.
@@ -207,7 +206,7 @@ export namespace ElectricalEnergyMeasurement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.12.5.2
      */
-    export interface CumulativeEnergyResetStruct extends TypeFromSchema<typeof TlvCumulativeEnergyResetStruct> {}
+    export interface CumulativeEnergyReset extends TypeFromSchema<typeof TlvCumulativeEnergyReset> {}
 
     /**
      * Body of the ElectricalEnergyMeasurement cumulativeEnergyMeasured event
@@ -221,7 +220,7 @@ export namespace ElectricalEnergyMeasurement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.7.1.1
          */
-        energyImported: TlvOptionalField(0, TlvEnergyMeasurementStruct),
+        energyImported: TlvOptionalField(0, TlvEnergyMeasurement),
 
         /**
          * This field shall be the value of CumulativeEnergyExported attribute at the timestamp indicated in its
@@ -229,7 +228,7 @@ export namespace ElectricalEnergyMeasurement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.7.1.2
          */
-        energyExported: TlvOptionalField(1, TlvEnergyMeasurementStruct)
+        energyExported: TlvOptionalField(1, TlvEnergyMeasurement)
     });
 
     /**
@@ -251,7 +250,7 @@ export namespace ElectricalEnergyMeasurement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.7.2.1
          */
-        energyImported: TlvOptionalField(0, TlvEnergyMeasurementStruct),
+        energyImported: TlvOptionalField(0, TlvEnergyMeasurement),
 
         /**
          * This field shall be the value of PeriodicEnergyExported attribute at the timestamp indicated in its
@@ -259,7 +258,7 @@ export namespace ElectricalEnergyMeasurement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.12.7.2.2
          */
-        energyExported: TlvOptionalField(1, TlvEnergyMeasurementStruct)
+        energyExported: TlvOptionalField(1, TlvEnergyMeasurement)
     });
 
     /**
@@ -268,220 +267,6 @@ export namespace ElectricalEnergyMeasurement {
      * @see {@link MatterSpecification.v13.Cluster} § 2.12.7.2
      */
     export interface PeriodicEnergyMeasuredEvent extends TypeFromSchema<typeof TlvPeriodicEnergyMeasuredEvent> {}
-
-    /**
-     * The value of ElectricalEnergyMeasurement.measurementTypeEnum
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.2
-     */
-    export enum MeasurementType {
-        Unspecified = 0,
-
-        /**
-         * Voltage in millivolts (mV)
-         */
-        Voltage = 1,
-
-        /**
-         * Active current in milliamps (mA)
-         */
-        ActiveCurrent = 2,
-
-        /**
-         * Reactive current in milliamps (mA)
-         */
-        ReactiveCurrent = 3,
-
-        /**
-         * Apparent current in milliamps (mA)
-         */
-        ApparentCurrent = 4,
-
-        /**
-         * Active power in milliwatts (mW)
-         */
-        ActivePower = 5,
-
-        /**
-         * Reactive power in millivolt-amps reactive (mVAR)
-         */
-        ReactivePower = 6,
-
-        /**
-         * Apparent power in millivolt-amps (mVA)
-         */
-        ApparentPower = 7,
-
-        /**
-         * Root mean squared voltage in millivolts (mV)
-         */
-        RmsVoltage = 8,
-
-        /**
-         * Root mean squared current in milliamps (mA)
-         */
-        RmsCurrent = 9,
-
-        /**
-         * Root mean squared power in milliwatts (mW)
-         */
-        RmsPower = 10,
-
-        /**
-         * AC frequency in millihertz (mHz)
-         */
-        Frequency = 11,
-
-        /**
-         * Power Factor ratio in+/- 1/100ths of a percent.
-         */
-        PowerFactor = 12,
-
-        /**
-         * AC neutral current in milliamps (mA)
-         */
-        NeutralCurrent = 13,
-
-        /**
-         * Electrical energy in milliwatt-hours (mWh)
-         */
-        ElectricalEnergy = 14
-    }
-
-    /**
-     * The value of ElectricalEnergyMeasurement.measurementAccuracyRangeStruct
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3
-     */
-    export const TlvMeasurementAccuracyRangeStruct = TlvObject({
-        /**
-         * This field shall indicate the minimum measurement value for the specified level of accuracy.
-         *
-         * The value of this field shall be greater than or equal to the value of the MinMeasuredValue field on the
-         * encompassing MeasurementAccuracyStruct.
-         *
-         * The value of this field shall be less than or equal to the value of the MaxMeasuredValue field on the
-         * encompassing MeasurementAccuracyStruct.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.1
-         */
-        rangeMin: TlvField(0, TlvInt64.bound({ min: -262, max: 262 })),
-
-        /**
-         * This field shall indicate the maximum measurement value for the specified level of accuracy. The value of
-         * this field shall be greater than the value of the RangeMin field.
-         *
-         * The value of this field shall be greater than or equal to the value of the MinMeasuredValue field on the
-         * encompassing MeasurementAccuracyStruct.
-         *
-         * The value of this field shall be less than or equal to the value of the MaxMeasuredValue field on the
-         * encompassing MeasurementAccuracyStruct.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.2
-         */
-        rangeMax: TlvField(1, TlvInt64.bound({ min: -262, max: 262 })),
-
-        /**
-         * This field shall indicate the maximum +/- percentage accuracy for the associated measurement.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.3
-         */
-        percentMax: TlvOptionalField(2, TlvPercent100ths),
-
-        /**
-         * This field shall indicate the minimum +/- percentage accuracy for the associated measurement.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.4
-         */
-        percentMin: TlvOptionalField(3, TlvPercent100ths),
-
-        /**
-         * This field shall indicate the typical +/- percentage accuracy for the associated measurement.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.5
-         */
-        percentTypical: TlvOptionalField(4, TlvPercent100ths),
-
-        /**
-         * This field shall indicate the maximum +/- fixed accuracy for the associated measurement, in the unit
-         * indicated by MeasurementType.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.6
-         */
-        fixedMax: TlvOptionalField(5, TlvUInt64),
-
-        /**
-         * This field shall indicate the minimum +/- fixed accuracy for the associated measurement, in the unit
-         * indicated by MeasurementType.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.7
-         */
-        fixedMin: TlvOptionalField(6, TlvUInt64),
-
-        /**
-         * This field shall indicate the typical +/- fixed accuracy for the associated measurement, in the unit
-         * indicated by MeasurementType.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.8
-         */
-        fixedTypical: TlvOptionalField(7, TlvUInt64)
-    });
-
-    /**
-     * The value of ElectricalEnergyMeasurement.measurementAccuracyRangeStruct
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3
-     */
-    export interface MeasurementAccuracyRangeStruct extends TypeFromSchema<typeof TlvMeasurementAccuracyRangeStruct> {}
-
-    /**
-     * The value of ElectricalEnergyMeasurement.measurementAccuracyStruct
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4
-     */
-    export const TlvMeasurementAccuracyStruct = TlvObject({
-        /**
-         * This field shall indicate the type of measurement for the accuracy provided.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4.1
-         */
-        measurementType: TlvField(0, TlvEnum<MeasurementType>()),
-
-        /**
-         * This field shall indicate whether the associated measurement was directly measured. If this field is not set
-         * to true, then the associated measurement was estimated.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4.2
-         */
-        measured: TlvField(1, TlvBoolean),
-
-        minMeasuredValue: TlvField(2, TlvInt64.bound({ min: -262, max: 262 })),
-        maxMeasuredValue: TlvField(3, TlvInt64.bound({ min: -262, max: 262 })),
-
-        /**
-         * This field shall indicate a list of measurement ranges and their associated accuracies.
-         *
-         * The value of the RangeMin field on the first MeasurementAccuracyRangeStruct in this list shall be equal to
-         * the value of the MinMeasuredValue field.
-         *
-         * The value of the RangeMax field on the last MeasurementAccuracyRangeStruct in this list shall be less than
-         * or equal to the value of the MaxMeasuredValue field.
-         *
-         * The value of the RangeMin field on each MeasurementAccuracyRangeStruct in this list other than the first
-         * shall be one more the value of the RangeMax field on the previous MeasurementAccuracyRangeStruct in this
-         * list (i.e. there shall be no gaps in the accuracy ranges, and the ranges shall be in increasing order).
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4.5
-         */
-        accuracyRanges: TlvField(4, TlvArray(TlvMeasurementAccuracyRangeStruct, { minLength: 1 }))
-    });
-
-    /**
-     * The value of ElectricalEnergyMeasurement.measurementAccuracyStruct
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4
-     */
-    export interface MeasurementAccuracyStruct extends TypeFromSchema<typeof TlvMeasurementAccuracyStruct> {}
 
     /**
      * A ElectricalEnergyMeasurementCluster supports these elements if it supports features ImportedEnergy and
@@ -506,7 +291,7 @@ export namespace ElectricalEnergyMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.12.6.2
              */
-            cumulativeEnergyImported: Attribute(0x1, TlvNullable(TlvEnergyMeasurementStruct), { default: null })
+            cumulativeEnergyImported: Attribute(0x1, TlvNullable(TlvEnergyMeasurement), { default: null })
         }
     });
 
@@ -533,7 +318,7 @@ export namespace ElectricalEnergyMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.12.6.3
              */
-            cumulativeEnergyExported: Attribute(0x2, TlvNullable(TlvEnergyMeasurementStruct), { default: null })
+            cumulativeEnergyExported: Attribute(0x2, TlvNullable(TlvEnergyMeasurement), { default: null })
         }
     });
 
@@ -560,7 +345,7 @@ export namespace ElectricalEnergyMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.12.6.4
              */
-            periodicEnergyImported: Attribute(0x3, TlvNullable(TlvEnergyMeasurementStruct), { default: null })
+            periodicEnergyImported: Attribute(0x3, TlvNullable(TlvEnergyMeasurement), { default: null })
         }
     });
 
@@ -587,7 +372,7 @@ export namespace ElectricalEnergyMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.12.6.5
              */
-            periodicEnergyExported: Attribute(0x4, TlvNullable(TlvEnergyMeasurementStruct), { default: null })
+            periodicEnergyExported: Attribute(0x4, TlvNullable(TlvEnergyMeasurement), { default: null })
         }
     });
 
@@ -601,11 +386,7 @@ export namespace ElectricalEnergyMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.12.6.6
              */
-            cumulativeEnergyReset: OptionalAttribute(
-                0x5,
-                TlvNullable(TlvCumulativeEnergyResetStruct),
-                { default: null }
-            )
+            cumulativeEnergyReset: OptionalAttribute(0x5, TlvNullable(TlvCumulativeEnergyReset), { default: null })
         },
 
         events: {
@@ -741,7 +522,7 @@ export namespace ElectricalEnergyMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.12.6.1
              */
-            accuracy: FixedAttribute(0x0, TlvMeasurementAccuracyStruct)
+            accuracy: FixedAttribute(0x0, TlvMeasurementAccuracy)
         },
 
         /**

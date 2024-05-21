@@ -149,7 +149,7 @@ export type FieldRecord = TableRecord<typeof FieldSchema>;
 export function translateFields<T extends AnyElement.Type<FieldRecord>>(
     type: T,
     fields?: HtmlReference,
-): ReturnType<T>[] {
+): ReturnType<T>[] | undefined {
     let records = translateTable(type.Tag, fields, FieldSchema);
 
     records = records.filter(r => {
@@ -162,7 +162,7 @@ export function translateFields<T extends AnyElement.Type<FieldRecord>>(
 
     applyAccessNotes(fields, records);
 
-    return translateRecordsToMatter(type.Tag, records, type) as ReturnType<T>[];
+    return translateRecordsToMatter(type.Tag, records, type) as ReturnType<T>[] | undefined;
 }
 
 /**
@@ -202,7 +202,7 @@ export function translateValueChildren(
             const { ids, names } = chooseIdentityAliases(
                 definition,
                 ["id", "value", "enum"],
-                ["name", "type", "statuscode", "description"],
+                ["name", "type", "statuscode", "priority", "description"],
             );
 
             let records = translateTable("value", definition, {

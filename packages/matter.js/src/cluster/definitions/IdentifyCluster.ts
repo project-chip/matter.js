@@ -6,20 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import {
-    WritableAttribute,
-    Attribute,
-    Command,
-    TlvNoResponse,
-    AccessLevel,
-    OptionalCommand
-} from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { WritableAttribute, Attribute, Command, TlvNoResponse, AccessLevel, OptionalCommand } from "../Cluster.js";
 import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Identify {
     /**

@@ -6,15 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import {
-    Attribute,
-    Command,
-    TlvNoResponse,
-    OptionalAttribute,
-    OptionalEvent,
-    EventPriority
-} from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, Command, TlvNoResponse, OptionalAttribute, OptionalEvent, EventPriority } from "../Cluster.js";
 import { TlvUInt32, TlvUInt64, TlvEnum, TlvUInt16, TlvInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
@@ -23,7 +16,7 @@ import { TlvByteString } from "../../tlv/TlvString.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace WiFiNetworkDiagnostics {
     /**

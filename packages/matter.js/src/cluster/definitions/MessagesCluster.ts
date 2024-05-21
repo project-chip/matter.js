@@ -6,16 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import {
-    FabricScopedAttribute,
-    Attribute,
-    Command,
-    TlvNoResponse,
-    Event,
-    EventPriority
-} from "../../cluster/Cluster.js";
+import { FabricScopedAttribute, Attribute, Command, TlvNoResponse, Event, EventPriority } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
@@ -24,7 +17,7 @@ import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Messages {
     /**
@@ -117,7 +110,7 @@ export namespace Messages {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.16.5.6
      */
-    export const TlvMessageResponseOptionStruct = TlvObject({
+    export const TlvMessageResponseOption = TlvObject({
         /**
          * This field shall indicate a unique unsigned 32-bit number identifier for this message response option.
          *
@@ -138,14 +131,14 @@ export namespace Messages {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.16.5.6
      */
-    export interface MessageResponseOptionStruct extends TypeFromSchema<typeof TlvMessageResponseOptionStruct> {}
+    export interface MessageResponseOption extends TypeFromSchema<typeof TlvMessageResponseOption> {}
 
     /**
      * This represents a single message.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.16.5.5
      */
-    export const TlvMessageStruct = TlvObject({
+    export const TlvMessage = TlvObject({
         /**
          * This field shall indicate a globally unique ID for this message.
          *
@@ -201,7 +194,7 @@ export namespace Messages {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.16.5.5.7
          */
-        responses: TlvOptionalField(6, TlvArray(TlvMessageResponseOptionStruct, { maxLength: 4 })),
+        responses: TlvOptionalField(6, TlvArray(TlvMessageResponseOption, { maxLength: 4 })),
 
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
@@ -211,7 +204,7 @@ export namespace Messages {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.16.5.5
      */
-    export interface MessageStruct extends TypeFromSchema<typeof TlvMessageStruct> {}
+    export interface Message extends TypeFromSchema<typeof TlvMessage> {}
 
     /**
      * Input to the Messages presentMessagesRequest command
@@ -274,7 +267,7 @@ export namespace Messages {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.16.7.1.7
          */
-        responses: TlvOptionalField(6, TlvArray(TlvMessageResponseOptionStruct, { maxLength: 4 }))
+        responses: TlvOptionalField(6, TlvArray(TlvMessageResponseOption, { maxLength: 4 }))
     });
 
     /**
@@ -535,7 +528,7 @@ export namespace Messages {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.16.6.1
              */
-            messages: FabricScopedAttribute(0x0, TlvArray(TlvMessageStruct, { maxLength: 8 }), { default: [] }),
+            messages: FabricScopedAttribute(0x0, TlvArray(TlvMessage, { maxLength: 8 }), { default: [] }),
 
             /**
              * Indicates a list of the MessageIDs of the Messages currently being presented. If this list is empty, no

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import {
     OptionalAttribute,
@@ -16,7 +16,7 @@ import {
     AccessLevel,
     TlvNoResponse,
     OptionalCommand
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import {
@@ -42,13 +42,13 @@ import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvAttributeId } from "../../datatype/AttributeId.js";
 import { StatusCode } from "../../protocol/interaction/StatusCode.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ScenesManagement {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.2
      */
-    export const TlvSceneInfoStruct = TlvObject({
+    export const TlvSceneInfo = TlvObject({
         /**
          * This field shall indicate the number of scenes currently used in the server’s Scene Table on the endpoint
          * where the Scenes Management cluster appears.
@@ -109,14 +109,14 @@ export namespace ScenesManagement {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.2
      */
-    export interface SceneInfoStruct extends TypeFromSchema<typeof TlvSceneInfoStruct> {}
+    export interface SceneInfo extends TypeFromSchema<typeof TlvSceneInfo> {}
 
     /**
      * This data type indicates a combination of an identifier and the value of an attribute.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.3
      */
-    export const TlvAttributeValuePairStruct = TlvObject({
+    export const TlvAttributeValuePair = TlvObject({
         /**
          * This field shall be present for all instances in a given ExtensionFieldSetStruct.
          *
@@ -191,14 +191,14 @@ export namespace ScenesManagement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.3
      */
-    export interface AttributeValuePairStruct extends TypeFromSchema<typeof TlvAttributeValuePairStruct> {}
+    export interface AttributeValuePair extends TypeFromSchema<typeof TlvAttributeValuePair> {}
 
     /**
      * This data type indicates for a given cluster a set of attributes and their values.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.4
      */
-    export const TlvExtensionFieldSetStruct = TlvObject({
+    export const TlvExtensionFieldSet = TlvObject({
         /**
          * This field shall indicate the cluster-id of the cluster whose attributes are in the AttributeValueList field.
          *
@@ -214,7 +214,7 @@ export namespace ScenesManagement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.4.2
          */
-        attributeValueList: TlvField(1, TlvArray(TlvAttributeValuePairStruct))
+        attributeValueList: TlvField(1, TlvArray(TlvAttributeValuePair))
     });
 
     /**
@@ -222,7 +222,7 @@ export namespace ScenesManagement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.4
      */
-    export interface ExtensionFieldSetStruct extends TypeFromSchema<typeof TlvExtensionFieldSetStruct> {}
+    export interface ExtensionFieldSet extends TypeFromSchema<typeof TlvExtensionFieldSet> {}
 
     /**
      * Input to the ScenesManagement addScene command
@@ -263,7 +263,7 @@ export namespace ScenesManagement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.4.9.2.5
          */
-        extensionFieldSetStructs: TlvField(4, TlvArray(TlvExtensionFieldSetStruct))
+        extensionFieldSetStructs: TlvField(4, TlvArray(TlvExtensionFieldSet))
     });
 
     /**
@@ -379,7 +379,7 @@ export namespace ScenesManagement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.4.9.5.6
          */
-        extensionFieldSetStructs: TlvOptionalField(5, TlvArray(TlvExtensionFieldSetStruct))
+        extensionFieldSetStructs: TlvOptionalField(5, TlvArray(TlvExtensionFieldSet))
     });
 
     /**
@@ -755,6 +755,77 @@ export namespace ScenesManagement {
     export interface CopySceneResponse extends TypeFromSchema<typeof TlvCopySceneResponse> {}
 
     /**
+     * The Scene Table is used to store information for each scene capable of being invoked on the server. Each scene
+     * is defined for a particular group. The Scene Table is defined here as a conceptual illustration to assist in
+     * understanding the underlying data to be stored when scenes are defined. Though the Scene Table is defined here
+     * using the data model architecture rules and format, the design is not normative.
+     *
+     * The Scene table is logically a list of fabric-scoped structs. The logical fields of each Scene Table entry
+     * struct are illustrated below. An ExtensionFieldSetStruct may be present for each Scenes-supporting cluster
+     * implemented on the same endpoint.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5
+     */
+    export const TlvLogicalSceneTable = TlvObject({
+        /**
+         * This field is the group identifier for which this scene applies, or 0 if the scene is not associated with a
+         * group.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5.1
+         */
+        sceneGroupId: TlvField(0, TlvGroupId),
+
+        /**
+         * This field is unique within this group, which is used to identify this scene.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5.2
+         */
+        sceneId: TlvField(1, TlvUInt8.bound({ max: 254 })),
+
+        /**
+         * The field is the name of the scene.
+         *
+         * If scene names are not supported, any commands that write a scene name shall simply discard the name, and
+         * any command that returns a scene name shall return an empty string.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5.3
+         */
+        sceneName: TlvOptionalField(2, TlvString.bound({ maxLength: 16 })),
+
+        /**
+         * This field is the amount of time, in milliseconds, it will take for a cluster to change from its current
+         * state to the requested state.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5.4
+         */
+        sceneTransitionTime: TlvField(3, TlvUInt32.bound({ max: 60000000 })),
+
+        /**
+         * See the Scene Table Extensions subsections of individual clusters. A Scene Table Extension shall only use
+         * attributes with the Scene quality. Each ExtensionFieldSetStruct holds a set of values of these attributes
+         * for a cluster implemented on the same endpoint where the Scene ("S") designation appears in the quality
+         * column. A scene is the aggregate of all such fields across all clusters on the endpoint.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5.5
+         */
+        extensionFields: TlvField(4, TlvArray(TlvExtensionFieldSet))
+    });
+
+    /**
+     * The Scene Table is used to store information for each scene capable of being invoked on the server. Each scene
+     * is defined for a particular group. The Scene Table is defined here as a conceptual illustration to assist in
+     * understanding the underlying data to be stored when scenes are defined. Though the Scene Table is defined here
+     * using the data model architecture rules and format, the design is not normative.
+     *
+     * The Scene table is logically a list of fabric-scoped structs. The logical fields of each Scene Table entry
+     * struct are illustrated below. An ExtensionFieldSetStruct may be present for each Scenes-supporting cluster
+     * implemented on the same endpoint.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5
+     */
+    export interface LogicalSceneTable extends TypeFromSchema<typeof TlvLogicalSceneTable> {}
+
+    /**
      * These are optional features supported by ScenesManagementCluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.4.4
@@ -821,7 +892,7 @@ export namespace ScenesManagement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.4.8.3
              */
-            fabricSceneInfo: FabricScopedAttribute(0x2, TlvArray(TlvSceneInfoStruct), { default: [] })
+            fabricSceneInfo: FabricScopedAttribute(0x2, TlvArray(TlvSceneInfo), { default: [] })
         },
 
         commands: {

@@ -61,7 +61,7 @@ function generateElementFile(element: Model) {
 
     const exportName = camelize(name, name[0] < "a" || name[0] > "z");
 
-    generateElement(file, "../../elements/index.js", element, `export const ${exportName} = `);
+    generateElement(file, "#/model/elements/index.js", element, `export const ${exportName} = `);
 
     file.atom(`Matter.children.push(${exportName})`);
 

@@ -415,7 +415,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      */
     protected moveToHueLogic(
         targetHue: number,
-        direction: ColorControl.ColorControlDirection,
+        direction: ColorControl.Direction,
         transitionTime: number,
         isEnhancedHue = false,
     ): MaybePromise {
@@ -785,7 +785,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         transitionTime: number,
     ): MaybePromise {
         return MaybePromise.then(
-            this.moveToHueLogic(targetHue, ColorControl.ColorControlDirection.ShortestDistance, transitionTime, false),
+            this.moveToHueLogic(targetHue, ColorControl.Direction.ShortestDistance, transitionTime, false),
             () => this.moveToSaturationLogic(targetSaturation, transitionTime),
         );
     }
@@ -1127,12 +1127,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         transitionTime: number,
     ): MaybePromise {
         return MaybePromise.then(
-            this.moveToHueLogic(
-                targetEnhancedHue,
-                ColorControl.ColorControlDirection.ShortestDistance,
-                transitionTime,
-                true,
-            ),
+            this.moveToHueLogic(targetEnhancedHue, ColorControl.Direction.ShortestDistance, transitionTime, true),
             () => this.moveToSaturationLogic(targetSaturation, transitionTime),
         );
     }
@@ -1667,12 +1662,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
     }
 
     /** Calculate the hue distance depending on the direction and the current and target hue. */
-    #getHueDistanceByDirection(
-        currentHue: number,
-        targetHue: number,
-        direction: ColorControl.ColorControlDirection,
-        max: number,
-    ) {
+    #getHueDistanceByDirection(currentHue: number, targetHue: number, direction: ColorControl.Direction, max: number) {
         const distance = (targetHue > currentHue ? targetHue : max + targetHue) - currentHue;
         logger.info(
             `Distance: ${distance}, direction: ${direction}, max/2: ${max / 2}, max-distance: ${max - distance}`,
@@ -1680,18 +1670,18 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         if (distance === 0) {
             return 0;
         }
-        if (direction === ColorControl.ColorControlDirection.Up) {
+        if (direction === ColorControl.Direction.Up) {
             return distance;
-        } else if (direction === ColorControl.ColorControlDirection.Down) {
+        } else if (direction === ColorControl.Direction.Down) {
             return -(max - distance);
         }
-        if (direction === ColorControl.ColorControlDirection.ShortestDistance) {
+        if (direction === ColorControl.Direction.ShortestDistance) {
             if (Math.abs(distance) > max / 2) {
                 return -(max - distance);
             }
             return distance;
         }
-        if (direction === ColorControl.ColorControlDirection.LongestDistance) {
+        if (direction === ColorControl.Direction.LongestDistance) {
             if (Math.abs(distance) > max / 2) {
                 return distance;
             }
@@ -1790,8 +1780,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         let remainingTime = 0xffff; // Assume a looping for now, we adjust later
         if (transitionType === "enhancedHue" || transitionType === "hue") {
             if (targetValue !== undefined) {
-                const direction =
-                    changeRate > 0 ? ColorControl.ColorControlDirection.Up : ColorControl.ColorControlDirection.Down;
+                const direction = changeRate > 0 ? ColorControl.Direction.Up : ColorControl.Direction.Down;
                 hueDistanceLeft = this.#getHueDistanceByDirection(currentValue, targetValue, direction, maxValue);
                 remainingTime = Math.floor(Math.ceil(hueDistanceLeft / changeRate) * 10);
             }
@@ -2190,7 +2179,7 @@ export namespace ColorControlServerLogic {
     export declare const ExtensionInterface: {
         moveToHueLogic(
             targetHue: number,
-            direction: ColorControl.ColorControlDirection,
+            direction: ColorControl.Direction,
             transitionTime: number,
             isEnhancedHue: boolean,
         ): MaybePromise;

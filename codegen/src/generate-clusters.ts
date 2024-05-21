@@ -5,12 +5,14 @@
  */
 
 import { Logger } from "@project-chip/matter.js/log";
-import { MatterModel } from "@project-chip/matter.js/model";
+import { ClusterModel, MatterModel } from "@project-chip/matter.js/model";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { ClusterFile } from "./clusters/ClusterFile.js";
 import { generateCluster } from "./clusters/generate-cluster.js";
+import { generateGlobal } from "./clusters/generate-global.js";
 import { TsFile } from "./util/TsFile.js";
+import { clean } from "./util/file.js";
 import "./util/setup.js";
 
 const logger = Logger.get("generate-clusters");
@@ -20,23 +22,33 @@ const args = await yargs(hideBin(process.argv))
     .option("save", { type: "boolean", default: true, describe: "writes the generated model to disk" })
     .strict().argv;
 
-const index = new TsFile(ClusterFile.createFilename("index"));
+const clusterIndex = new TsFile("#clusters/index");
+const globalIndex = new TsFile("#globals/index");
 
-const files = [index];
+const files = [clusterIndex, globalIndex];
 
 let fail = false;
 
-for (const cluster of MatterModel.standard.clusters) {
+for (const model of MatterModel.standard.children) {
     try {
-        const file = new ClusterFile(cluster);
-        generateCluster(file);
-        files.push(file);
+        let file;
+        if (model instanceof ClusterModel) {
+            file = new ClusterFile(model);
+            generateCluster(file);
 
-        if (cluster.id !== undefined) {
-            const exports = index.expressions(`export {`, `} from "./${file.clusterName}.js"`);
-            exports.atom(file.clusterName);
+            const exports = clusterIndex.expressions(`export {`, `} from "./${file.clusterName}.js"`);
+            if (model.id !== undefined) {
+                exports.atom(file.clusterName);
+            }
             exports.atom(file.typesName);
+        } else {
+            file = generateGlobal(model);
+            if (!file) {
+                continue;
+            }
+            globalIndex.atom(`export * from "./${file.basename}.js"`);
         }
+        files.push(file);
     } catch (e) {
         logger.error(e);
         fail = true;
@@ -46,7 +58,8 @@ for (const cluster of MatterModel.standard.clusters) {
 if (fail) {
     logger.error("Not modifying codebase due to errors");
 } else if (args.save) {
-    ClusterFile.clean();
+    clean("#clusters");
+    clean("#globals");
     for (const file of files) {
         file.save();
     }

@@ -6,7 +6,7 @@
 
 import { Package } from "@project-chip/matter.js-tools";
 import { mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "fs";
-import { dirname, resolve } from "path";
+import { dirname, relative as nodeRelative, resolve } from "path";
 import { fileURLToPath } from "url";
 import { describeList } from "./string.js";
 
@@ -14,8 +14,10 @@ import { describeList } from "./string.js";
 const DIR_MAPPING = {
     "#cache": Package.workspace.resolve("codegen/.cache"),
     "#intermediate": Package.workspace.resolve("models/src"),
+    "#": Package.workspace.resolve("packages/matter.js/src/"),
     "#elements": Package.workspace.resolve("packages/matter.js/src/model/standard/elements"),
     "#clusters": Package.workspace.resolve("packages/matter.js/src/cluster/definitions"),
+    "#globals": Package.workspace.resolve("packages/matter.js/src/cluster/globals"),
     "#endpoints": Package.workspace.resolve("packages/matter.js/src/endpoint/definitions"),
     "#behaviors": Package.workspace.resolve("packages/matter.js/src/behavior/definitions"),
     "#behavior-servers": Package.workspace.resolve("packages/matter.js/src/behavior/server/definitions"),
@@ -43,6 +45,10 @@ function resolveFromPackage(path: string) {
     }
 
     return resolve(dirname(fileURLToPath(import.meta.url)), path);
+}
+
+export function relative(from: string, to: string) {
+    return nodeRelative(resolveFromPackage(from), resolveFromPackage(to));
 }
 
 export function readMatterFile(path: string, encoding: BufferEncoding = "utf-8") {

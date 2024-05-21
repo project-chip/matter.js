@@ -6,15 +6,45 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { FixedAttribute, Attribute, WritableAttribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { FixedAttribute, Attribute, WritableAttribute } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
-import { ModeBase } from "../../cluster/definitions/ModeBaseCluster.js";
+import { ModeBase } from "./ModeBaseCluster.js";
 import { TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace LaundryWasherMode {
+    export enum ModeTag {
+        /**
+         * The normal regime of operation.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 8.5.6.1.1
+         */
+        Normal = 16384,
+
+        /**
+         * Mode optimized for washing delicate garments.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 8.5.6.1.2
+         */
+        Delicate = 16385,
+
+        /**
+         * Mode optimized for heavy washing.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 8.5.6.1.3
+         */
+        Heavy = 16386,
+
+        /**
+         * Mode optimized for stain removal on white fabrics.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 8.5.6.1.4
+         */
+        Whites = 16387
+    }
+
     /**
      * @see {@link Cluster}
      */
@@ -29,7 +59,7 @@ export namespace LaundryWasherMode {
              */
             supportedModes: FixedAttribute(
                 0x0,
-                TlvArray(ModeBase.TlvModeOptionStruct, { minLength: 2, maxLength: 255 }),
+                TlvArray(ModeBase.TlvModeOption, { minLength: 2, maxLength: 255 }),
                 { default: [] }
             ),
 
@@ -52,7 +82,7 @@ export namespace LaundryWasherMode {
              */
             onMode: WritableAttribute(0x3, TlvUInt8, { persistent: true })
         }
-    })
+    });
 
     /**
      * This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced enumerated
@@ -63,7 +93,6 @@ export namespace LaundryWasherMode {
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
-
     export const Complete = Cluster;
 }
 

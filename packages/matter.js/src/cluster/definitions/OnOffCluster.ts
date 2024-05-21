@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, WritableAttribute, AccessLevel, Command, TlvNoResponse } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, WritableAttribute, AccessLevel, Command, TlvNoResponse } from "../Cluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvUInt16, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -16,7 +16,7 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace OnOff {
     /**
@@ -131,6 +131,36 @@ export namespace OnOff {
      * @see {@link MatterSpecification.v13.Cluster} § 1.5.7.6
      */
     export interface OnWithTimedOffRequest extends TypeFromSchema<typeof TlvOnWithTimedOffRequest> {}
+
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 1.5.5.4
+     */
+    export enum DelayedAllOffEffectVariant {
+        /**
+         * Fade to off in 0.8 seconds
+         */
+        DelayedOffFastFade = 0,
+
+        /**
+         * No fade
+         */
+        NoFade = 1,
+
+        /**
+         * 50% dim down in 0.8 seconds then fade to off in 12 seconds
+         */
+        DelayedOffSlowFade = 2
+    }
+
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 1.5.5.5
+     */
+    export enum DyingLightEffectVariant {
+        /**
+         * 20% dim up in 0.5s then fade to off in 1 second
+         */
+        DyingLightFadeOff = 0
+    }
 
     /**
      * A OnOffCluster supports these elements if it supports feature Lighting.

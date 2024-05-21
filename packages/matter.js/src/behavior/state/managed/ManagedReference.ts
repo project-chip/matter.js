@@ -51,8 +51,7 @@ export function ManagedReference(
         owner: parent,
 
         get value() {
-            // Authorization is unnecessary here because the reference would
-            // not exist if access is unauthorized
+            // Authorization is unnecessary here because the reference would not exist if access is unauthorized
 
             // Note that we allow read from expired references
             return value;
@@ -82,8 +81,7 @@ export function ManagedReference(
             // Authorization and validation
             assertWriteOk(newValue);
 
-            // Set the value directly before change() so change() doesn't
-            // create a useless clone
+            // Set the value directly before change() so change() doesn't create a useless clone
             replaceValue(newValue);
 
             // Now use change to complete the update

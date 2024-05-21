@@ -6,15 +6,15 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalAttribute, Command, OptionalEvent, EventPriority } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, OptionalAttribute, Command, OptionalEvent, EventPriority } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace TargetNavigator {
     /**
@@ -22,7 +22,7 @@ export namespace TargetNavigator {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.11.4.2
      */
-    export const TlvTargetInfoStruct = TlvObject({
+    export const TlvTargetInfo = TlvObject({
         /**
          * This field shall contain an unique id within the TargetList.
          *
@@ -43,7 +43,7 @@ export namespace TargetNavigator {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.11.4.2
      */
-    export interface TargetInfoStruct extends TypeFromSchema<typeof TlvTargetInfoStruct> {}
+    export interface TargetInfo extends TypeFromSchema<typeof TlvTargetInfo> {}
 
     /**
      * Input to the TargetNavigator navigateTarget command
@@ -128,7 +128,7 @@ export namespace TargetNavigator {
      * @see {@link MatterSpecification.v13.Cluster} § 6.11.7.1
      */
     export const TlvTargetUpdatedEvent = TlvObject({
-        targetList: TlvOptionalField(0, TlvArray(TlvTargetInfoStruct)),
+        targetList: TlvOptionalField(0, TlvArray(TlvTargetInfo)),
         currentTarget: TlvOptionalField(1, TlvUInt8),
         data: TlvOptionalField(2, TlvByteString.bound({ maxLength: 900 }))
     });
@@ -156,7 +156,7 @@ export namespace TargetNavigator {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.11.5.1
              */
-            targetList: Attribute(0x0, TlvArray(TlvTargetInfoStruct), { default: [] }),
+            targetList: Attribute(0x0, TlvArray(TlvTargetInfo), { default: [] }),
 
             /**
              * Indicates the Identifier for the target which is currently in foreground on the corresponding Endpoint

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     Attribute,
     FixedAttribute,
@@ -14,7 +14,7 @@ import {
     OptionalWritableAttribute,
     OptionalCommand,
     TlvNoResponse
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvPercent, TlvEnum, TlvEpochS } from "../../tlv/TlvNumber.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
@@ -82,7 +82,7 @@ export namespace ResourceMonitoring {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.8.5.4
      */
-    export const TlvReplacementProductStruct = TlvObject({
+    export const TlvReplacementProduct = TlvObject({
         productIdentifierType: TlvField(0, TlvEnum<ProductIdentifierType>()),
         productIdentifierValue: TlvField(1, TlvString.bound({ maxLength: 20 }))
     });
@@ -92,7 +92,7 @@ export namespace ResourceMonitoring {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.8.5.4
      */
-    export interface ReplacementProductStruct extends TypeFromSchema<typeof TlvReplacementProductStruct> {}
+    export interface ReplacementProduct extends TypeFromSchema<typeof TlvReplacementProduct> {}
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 2.8.5.2
@@ -149,7 +149,7 @@ export namespace ResourceMonitoring {
              */
             replacementProductList: FixedAttribute(
                 0x5,
-                TlvArray(TlvReplacementProductStruct, { maxLength: 5 }),
+                TlvArray(TlvReplacementProduct, { maxLength: 5 }),
                 { default: [] }
             )
         }

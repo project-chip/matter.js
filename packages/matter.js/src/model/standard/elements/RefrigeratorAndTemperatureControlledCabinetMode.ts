@@ -10,7 +10,8 @@ import { Matter } from "../Matter.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
-    DatatypeElement as Datatype
+    DatatypeElement as Datatype,
+    FieldElement as Field
 } from "../../elements/index.js";
 
 export const RefrigeratorAndTemperatureControlledCabinetMode = Cluster({
@@ -38,6 +39,23 @@ export const RefrigeratorAndTemperatureControlledCabinetMode = Cluster({
                 "At least one entry in the SupportedModes attribute shall include the Auto mode tag in the ModeTags " +
                 "field list.",
             xref: { document: "cluster", section: "8.7.4.1" }
+        }),
+
+        Datatype({
+            name: "ModeTag", type: "enum16",
+
+            children: [
+                Field({
+                    name: "RapidCool", id: 0x4000,
+                    details: "This mode reduces the temperature rapidly, typically above freezing grade.",
+                    xref: { document: "cluster", section: "8.7.6.1.1" }
+                }),
+                Field({
+                    name: "RapidFreeze", id: 0x4001,
+                    details: "This mode reduces the temperature rapidly, below freezing grade.",
+                    xref: { document: "cluster", section: "8.7.6.1.2" }
+                })
+            ]
         })
     ]
 })

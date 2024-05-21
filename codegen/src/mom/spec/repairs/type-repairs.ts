@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Specification } from "@project-chip/matter.js/model";
+
 const TYPE_ERRORS: { [badType: string]: string } = {
     "attribute-id": "attrib-id",
     bitmap8: "map8",
@@ -19,9 +21,11 @@ const TYPE_ERRORS: { [badType: string]: string } = {
     "system-us": "systime-us",
     "system-ms": "systime-ms",
     "Time of Day": "TimeOfDay",
-    SemanticTagStruct: "semtag",
     "voltage-mW": "voltage-mV",
     utc: "epoch-s",
+
+    // Can't use this one because ModeSelect defines a different SemanticTagStruct
+    //SemanticTagStruct: "semtag",
 };
 
 export function repairTypeIdentifier<T extends string | undefined>(type: T): T {
@@ -44,7 +48,7 @@ export function repairTypeIdentifier<T extends string | undefined>(type: T): T {
     return type;
 }
 
-export function repairType(record: { type?: string; constraint?: string }) {
+export function repairType(record: { xref?: Specification.CrossReference; type?: string; constraint?: string }) {
     let type = record.type;
     if (type === undefined) {
         return type;
@@ -56,6 +60,12 @@ export function repairType(record: { type?: string; constraint?: string }) {
     if (type === "max254") {
         type = "uint8";
         record.constraint = "max 254";
+    }
+
+    // Descriptor in 1.3 core spec references "SemanticTagStruct" for semtag.  We can't patch everywhere because Mode
+    // Select has an actual type called "SemanticTagStruct".
+    if (type === "list[SemanticTagStruct]" && record.xref?.document === "core") {
+        type = "list[semtag]";
     }
 
     record.type = type;

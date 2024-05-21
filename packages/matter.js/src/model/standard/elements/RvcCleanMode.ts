@@ -10,7 +10,8 @@ import { Matter } from "../Matter.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
-    DatatypeElement as Datatype
+    DatatypeElement as Datatype,
+    FieldElement as Field
 } from "../../elements/index.js";
 
 export const RvcCleanMode = Cluster({
@@ -34,6 +35,31 @@ export const RvcCleanMode = Cluster({
                 "At least one entry in the SupportedModes attribute shall include the Vacuum and/or the Mop mode tag " +
                 "in the ModeTags field list.",
             xref: { document: "cluster", section: "7.3.5.1" }
+        }),
+
+        Datatype({
+            name: "ModeChangeStatus", type: "enum8",
+            children: [
+                Field({ name: "CleaningInProgress", id: 0x40, xref: { document: "cluster", section: "7.3.7.1" } })
+            ]
+        }),
+
+        Datatype({
+            name: "ModeTag", type: "enum16",
+
+            children: [
+                Field({ name: "DeepClean", id: 0x4000, xref: { document: "cluster", section: "7.3.7.2" } }),
+                Field({
+                    name: "Vacuum", id: 0x4001,
+                    details: "The device’s vacuuming feature is enabled in this mode.",
+                    xref: { document: "cluster", section: "7.3.7.2.2" }
+                }),
+                Field({
+                    name: "Mop", id: 0x4002,
+                    details: "The device’s mopping feature is enabled in this mode.",
+                    xref: { document: "cluster", section: "7.3.7.2.3" }
+                })
+            ]
         })
     ]
 });

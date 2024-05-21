@@ -92,9 +92,7 @@ export abstract class Model {
      * Determine if this model resides in the global namespace.
      */
     get isGlobal() {
-        return (
-            this.tag === "matter" || (this.parent?.tag === "matter" && this.isType && this.tag !== ElementTag.Cluster)
-        );
+        return this.tag === "matter" || this.parent?.tag === "matter";
     }
 
     /**
@@ -423,6 +421,10 @@ export abstract class Model {
                 this.children.push(child.clone());
             }
         }
+    }
+
+    toString() {
+        return `${this.tag}${this.type ? `<${this.type}>` : ""}#${this.path}`;
     }
 
     static {

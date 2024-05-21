@@ -186,23 +186,7 @@ export function* scanDocument(docRef: HtmlReference) {
                     }
 
                     if (!tables) {
-                        tables = [];
-                        let logicalTables: Table[] | undefined;
-                        let tablesLoaded = false;
-
-                        Object.defineProperty(currentRef, "table", {
-                            get() {
-                                if (!tablesLoaded) {
-                                    tablesLoaded = true;
-                                    logicalTables = [...scanTables(tables as HTMLTableElement[])];
-                                    if (!logicalTables.length) {
-                                        logicalTables = [];
-                                    }
-                                }
-
-                                return logicalTables;
-                            },
-                        });
+                        tables = initTables(currentRef);
                     }
 
                     tables.push(element as HTMLTableElement);
@@ -210,4 +194,34 @@ export function* scanDocument(docRef: HtmlReference) {
             }
         }
     }
+}
+
+/**
+ * Add table support to an {@link HtmlReference}.
+ *
+ * Creates storage for HTML tables and installs a getter on a ref to implement lazy loading of the table.
+ */
+function initTables(ref: HtmlReference) {
+    const tables = [] as HTMLTableElement[];
+
+    let logicalTables: Table[] | undefined;
+    let tablesLoaded = false;
+
+    Object.defineProperty(ref, "tables", {
+        get() {
+            if (!tablesLoaded) {
+                tablesLoaded = true;
+                logicalTables = [...scanTables(tables)];
+                if (!logicalTables.length) {
+                    logicalTables = undefined;
+                }
+            }
+
+            return logicalTables;
+        },
+
+        enumerable: true,
+    });
+
+    return tables;
 }

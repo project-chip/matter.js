@@ -105,7 +105,7 @@ type CollectedCommissioningData = {
         endpointId: number;
         value: TypeFromPartialBitSchema<typeof NetworkCommissioning.Complete.features>;
     }[];
-    networkStatus?: { endpointId: number; value: TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfoStruct>[] }[];
+    networkStatus?: { endpointId: number; value: TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfo>[] }[];
     rootPartsList?: EndpointNumber[];
     rootServerList?: ClusterId[];
     vendorId?: VendorId;
@@ -419,7 +419,7 @@ export class ControllerCommissioner {
         }>();
         const networkStatus = new Array<{
             endpointId: number;
-            value: TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfoStruct>[];
+            value: TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfo>[];
         }>();
         for (const {
             path: { endpointId, attributeId },

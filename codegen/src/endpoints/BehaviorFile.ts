@@ -29,19 +29,19 @@ export class BehaviorFile extends TsFile {
     private generate() {
         logger.info(`${this.cluster.name} → ${this.name}.ts`);
 
-        this.addImport(`../../../cluster/definitions/${this.cluster.name}Cluster.js`, this.cluster.name);
-        this.addImport("../../cluster/ClusterBehavior.js", "ClusterBehavior");
+        this.addImport(`#clusters/${this.cluster.name}Cluster.js`, this.cluster.name);
+        this.addImport("#/cluster/ClusterBehavior.js", "ClusterBehavior");
 
         const builder = this.builder(`export const ${this.cluster.name}Behavior = ClusterBehavior`);
 
         if (this.cluster.all(CommandModel).length) {
-            this.addImport(`./${this.cluster.name}Interface.js`, `${this.cluster.name}Interface`);
+            this.addImport(`#interfaces/${this.cluster.name}Interface.js`, `${this.cluster.name}Interface`);
             builder.atom(`withInterface<${this.cluster.name}Interface>()`);
         }
 
         let extraDocs;
         if (this.variance.requiresFeatures) {
-            this.addImport(`../../../cluster/ClusterType.js`, "ClusterType");
+            this.addImport(`#/cluster/ClusterType.js`, "ClusterType");
             builder.atom(`for(ClusterType(${this.cluster.name}.Base))`);
             extraDocs =
                 `${this.cluster.name}.Cluster requires you to enable one or more optional features.  ` +

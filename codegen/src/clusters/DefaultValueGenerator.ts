@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InternalError } from "@project-chip/matter.js/common";
 import { DefaultValue, Metatype, ValueModel } from "@project-chip/matter.js/model";
 import { Properties } from "@project-chip/matter.js/util";
 import { camelize, serialize } from "../util/string.js";
@@ -17,7 +18,7 @@ export class DefaultValueGenerator {
     constructor(private tlv: TlvGenerator) {}
 
     create(model: ValueModel, defaultValue = DefaultValue(model, true)) {
-        // We can't expression "this field should default to the value of another field" in clusters so that isn't
+        // We can't express "this field should default to the value of another field" in clusters so that isn't
         // contemplated here.  We do support that in the Behavior API but it runs directly off the model
 
         if (defaultValue === undefined || defaultValue === null) {
@@ -67,8 +68,8 @@ export class DefaultValueGenerator {
     private createEnum(defaultValue: any, model: ValueModel) {
         if (typeof defaultValue === "number" || typeof defaultValue === "string") {
             const value = model.member(defaultValue);
-            if (value) {
-                const enumName = this.tlv.nameFor(value.parent);
+            if (value?.parent) {
+                const enumName = this.tlv.file.reference(value.parent);
                 if (enumName) {
                     return serialize.asIs(`${enumName}.${value.name}`);
                 }
@@ -112,21 +113,26 @@ export class DefaultValueGenerator {
             if (typeof constraint.value === "number") {
                 properties[name] = true;
             } else {
+                let valueName: string | undefined;
                 const defining = field.definingModel;
                 const enumValue = defining?.member(bits);
-                if (enumValue) {
-                    properties[name] = serialize.asIs(`${this.tlv.nameFor(defining)}.${enumValue.name}`);
-                } else {
-                    properties[name] = bits;
+                if (defining && enumValue) {
+                    valueName = `${this.tlv.file.reference(defining)}.${enumValue.name}`;
                 }
+                properties[name] = valueName ?? bits;
             }
         }
         if (!Object.keys(properties).length) {
             return;
         }
 
-        this.tlv.file.addImport("schema/BitmapSchema.js", "BitsFromPartial");
-        return serialize.asIs(`BitsFromPartial(${this.tlv.nameFor(model)}, ${serialize(properties)})`);
+        const defining = model.definingModel;
+        if (!defining) {
+            throw new InternalError(`No defining model for ${model}`);
+        }
+
+        this.tlv.file.addImport("#/schema/BitmapSchema.js", "BitsFromPartial");
+        return serialize.asIs(`BitsFromPartial(${this.tlv.file.reference(defining)}, ${serialize(properties)})`);
     }
 
     /**

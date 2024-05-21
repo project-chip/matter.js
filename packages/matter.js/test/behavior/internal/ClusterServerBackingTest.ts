@@ -172,7 +172,7 @@ const AcesWithoutFabric = TlvObject({
     privilege: TlvField(1, TlvEnum<AccessControl.AccessControlEntryPrivilege>()),
     authMode: TlvField(2, TlvEnum<AccessControl.AccessControlEntryAuthMode>()),
     subjects: TlvField(3, TlvNullable(TlvArray(TlvSubjectId))),
-    targets: TlvField(4, TlvNullable(TlvArray(AccessControl.TlvAccessControlTargetStruct))),
+    targets: TlvField(4, TlvNullable(TlvArray(AccessControl.TlvAccessControlTarget))),
 });
 
 async function writeAcl(node: MockServerNode, fabric: Fabric, acl: TypeFromSchema<typeof AcesWithoutFabric>) {

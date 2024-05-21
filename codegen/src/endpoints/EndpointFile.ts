@@ -61,16 +61,6 @@ export class EndpointFile extends TsFile {
         clean("#endpoints/device");
     }
 
-    override addImport(filename: string, symbol: string) {
-        if (filename.startsWith("endpoint/")) {
-            filename = `../../${filename.slice(9)}`;
-        } else {
-            filename = `../../../${filename}`;
-        }
-
-        return super.addImport(filename, symbol);
-    }
-
     private generate() {
         logger.info(`${this.model.name} → ${this.name}.ts`);
 
@@ -102,14 +92,14 @@ export class EndpointFile extends TsFile {
     }
 
     private generateServer(requirements: RequirementGenerator) {
-        this.addImport("endpoint/type/MutableEndpoint.js", "MutableEndpoint");
+        this.addImport("#/endpoint/type/MutableEndpoint.js", "MutableEndpoint");
         const definition = this.expressions(`export const ${this.definitionName}Definition = MutableEndpoint({`, "})");
         definition.atom("name", serialize(this.model.name));
         definition.atom("deviceType", `0x${this.model.id.toString(16)}`);
         definition.atom("deviceRevision", this.model.revision);
         this.addDeviceClass(definition);
 
-        this.addImport("endpoint/properties/SupportedBehaviors.js", "SupportedBehaviors");
+        this.addImport("#/endpoint/properties/SupportedBehaviors.js", "SupportedBehaviors");
         definition.atom(`requirements: ${this.requirementsName}`);
         const behaviors = definition.expressions("behaviors: SupportedBehaviors(", ")");
 
@@ -119,7 +109,7 @@ export class EndpointFile extends TsFile {
             }
         }
 
-        this.addImport("util/Type.js", "Identity");
+        this.addImport("#/util/Type.js", "Identity");
         const intf = this.interfaceLocation.atom(
             `export interface ${this.definitionName} extends Identity<typeof ${this.definitionName}Definition> {}`,
         );
@@ -167,7 +157,7 @@ export class EndpointFile extends TsFile {
                 return;
         }
 
-        this.addImport("device/DeviceTypes.js", "DeviceClasses");
+        this.addImport("#/device/DeviceTypes.js", "DeviceClasses");
         definition.atom("deviceClass", `DeviceClasses.${deviceClass}`);
     }
 }

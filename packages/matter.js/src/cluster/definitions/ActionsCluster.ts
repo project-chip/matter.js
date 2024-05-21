@@ -6,15 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import {
-    Attribute,
-    OptionalAttribute,
-    OptionalCommand,
-    TlvNoResponse,
-    Event,
-    EventPriority
-} from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, OptionalAttribute, OptionalCommand, TlvNoResponse, Event, EventPriority } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvUInt16, TlvEnum, TlvBitmap, TlvUInt32 } from "../../tlv/TlvNumber.js";
@@ -23,7 +16,7 @@ import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Actions {
     /**
@@ -208,7 +201,7 @@ export namespace Actions {
      *
      * @see {@link MatterSpecification.v13.Core} § 9.14.4.6
      */
-    export const TlvActionStruct = TlvObject({
+    export const TlvAction = TlvObject({
         /**
          * This field shall provide an unique identifier used to identify an action.
          *
@@ -264,7 +257,7 @@ export namespace Actions {
      *
      * @see {@link MatterSpecification.v13.Core} § 9.14.4.6
      */
-    export interface ActionStruct extends TypeFromSchema<typeof TlvActionStruct> {}
+    export interface Action extends TypeFromSchema<typeof TlvAction> {}
 
     /**
      * The Room and Zone values are provided for the cases where a user (or the system on behalf of the user) has
@@ -317,7 +310,7 @@ export namespace Actions {
      *
      * @see {@link MatterSpecification.v13.Core} § 9.14.4.7
      */
-    export const TlvEndpointListStruct = TlvObject({
+    export const TlvEndpointList = TlvObject({
         /**
          * This field shall provide an unique identifier used to identify the endpoint list.
          *
@@ -355,7 +348,7 @@ export namespace Actions {
      *
      * @see {@link MatterSpecification.v13.Core} § 9.14.4.7
      */
-    export interface EndpointListStruct extends TypeFromSchema<typeof TlvEndpointListStruct> {}
+    export interface EndpointList extends TypeFromSchema<typeof TlvEndpointList> {}
 
     /**
      * Input to the Actions instantAction command
@@ -705,7 +698,7 @@ export namespace Actions {
              *
              * @see {@link MatterSpecification.v13.Core} § 9.14.5.1
              */
-            actionList: Attribute(0x0, TlvArray(TlvActionStruct, { maxLength: 256 }), { default: [] }),
+            actionList: Attribute(0x0, TlvArray(TlvAction, { maxLength: 256 }), { default: [] }),
 
             /**
              * The EndpointLists attribute holds the list of endpoint lists. Each entry shall have an unique
@@ -713,7 +706,7 @@ export namespace Actions {
              *
              * @see {@link MatterSpecification.v13.Core} § 9.14.5.2
              */
-            endpointLists: Attribute(0x1, TlvArray(TlvEndpointListStruct, { maxLength: 256 }), { default: [] }),
+            endpointLists: Attribute(0x1, TlvArray(TlvEndpointList, { maxLength: 256 }), { default: [] }),
 
             /**
              * The SetupURL attribute (when provided) shall indicate a URL; its syntax shall follow the syntax as

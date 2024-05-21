@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     Attribute,
     Command,
@@ -15,7 +15,7 @@ import {
     OptionalAttribute,
     OptionalEvent,
     EventPriority
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvUInt64, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
@@ -24,13 +24,13 @@ import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace SoftwareDiagnostics {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.13.5.1
      */
-    export const TlvThreadMetricsStruct = TlvObject({
+    export const TlvThreadMetrics = TlvObject({
         /**
          * The Id field shall be a server-assigned per-thread unique ID that is constant for the duration of the
          * thread. Efforts SHOULD be made to avoid reusing ID values when possible.
@@ -77,7 +77,7 @@ export namespace SoftwareDiagnostics {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.13.5.1
      */
-    export interface ThreadMetricsStruct extends TypeFromSchema<typeof TlvThreadMetricsStruct> {}
+    export interface ThreadMetrics extends TypeFromSchema<typeof TlvThreadMetrics> {}
 
     /**
      * Body of the SoftwareDiagnostics softwareFault event
@@ -194,7 +194,7 @@ export namespace SoftwareDiagnostics {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.13.6.1
              */
-            threadMetrics: OptionalAttribute(0x0, TlvArray(TlvThreadMetricsStruct, { maxLength: 64 }), { default: [] }),
+            threadMetrics: OptionalAttribute(0x0, TlvArray(TlvThreadMetrics, { maxLength: 64 }), { default: [] }),
 
             /**
              * The CurrentHeapFree attribute shall indicate the current amount of heap memory, in bytes, that are free

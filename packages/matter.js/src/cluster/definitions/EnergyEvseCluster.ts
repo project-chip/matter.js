@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     Attribute,
     Command,
@@ -17,7 +17,7 @@ import {
     EventPriority,
     OptionalCommand,
     Event
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import {
     TlvEpochS,
     TlvInt64,
@@ -36,7 +36,7 @@ import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace EnergyEvse {
     /**
@@ -129,7 +129,7 @@ export namespace EnergyEvse {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.6
      */
-    export const TlvChargingTargetStruct = TlvObject({
+    export const TlvChargingTarget = TlvObject({
         /**
          * This field shall indicate the desired charging completion time of the associated day. The time will be
          * represented by a 16 bits unsigned integer to designate the minutes since midnight. For example, 6am will be
@@ -224,16 +224,16 @@ export namespace EnergyEvse {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.6
      */
-    export interface ChargingTargetStruct extends TypeFromSchema<typeof TlvChargingTargetStruct> {}
+    export interface ChargingTarget extends TypeFromSchema<typeof TlvChargingTarget> {}
 
     /**
      * This represents a set of user specified charging targets for an EV for a set of specified days.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.7
      */
-    export const TlvChargingTargetScheduleStruct = TlvObject({
+    export const TlvChargingTargetSchedule = TlvObject({
         dayOfWeekForSequence: TlvOptionalField(0, TlvBitmap(TlvUInt8, TargetDayOfWeek)),
-        chargingTargets: TlvOptionalField(1, TlvArray(TlvChargingTargetStruct, { maxLength: 10 }))
+        chargingTargets: TlvOptionalField(1, TlvArray(TlvChargingTarget, { maxLength: 10 }))
     });
 
     /**
@@ -241,7 +241,7 @@ export namespace EnergyEvse {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.3.7.7
      */
-    export interface ChargingTargetScheduleStruct extends TypeFromSchema<typeof TlvChargingTargetScheduleStruct> {}
+    export interface ChargingTargetSchedule extends TypeFromSchema<typeof TlvChargingTargetSchedule> {}
 
     /**
      * Input to the EnergyEvse setTargets command
@@ -256,7 +256,7 @@ export namespace EnergyEvse {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.3.9.5.1
          */
-        chargingTargetSchedules: TlvField(0, TlvArray(TlvChargingTargetScheduleStruct, { maxLength: 7 }))
+        chargingTargetSchedules: TlvField(0, TlvArray(TlvChargingTargetSchedule, { maxLength: 7 }))
     });
 
     /**
@@ -278,7 +278,7 @@ export namespace EnergyEvse {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.3.9.7.1
          */
-        chargingTargetSchedules: TlvField(0, TlvArray(TlvChargingTargetScheduleStruct, { maxLength: 7 }))
+        chargingTargetSchedules: TlvField(0, TlvArray(TlvChargingTargetSchedule, { maxLength: 7 }))
     });
 
     /**

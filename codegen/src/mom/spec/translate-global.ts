@@ -173,6 +173,10 @@ function* translateElements(ref: GlobalReference): Generator<AttributeElement | 
     // above.  So we can handle as we would fields of an actual struct-like element
     const elements = translateFields(globalTranslator, ref);
 
+    if (elements === undefined) {
+        throw new InternalError(`No global elements found in ${ref.name}`);
+    }
+
     for (const element of elements) {
         element.isSeed = true;
         yield element;
@@ -190,9 +194,28 @@ function installstatusCodes(ref: GlobalReference) {
         throw new InternalError("Status codes encountered but status type was not");
     }
 
+    // Remove obselete names from the "value" column
+    const table = ref.tables?.[0];
+    if (table) {
+        for (const record of table.rows) {
+            const name = record.value;
+            if (name) {
+                const paragraph = name.querySelector("p");
+                while (paragraph?.nextSibling) {
+                    paragraph.nextSibling.remove();
+                }
+            }
+        }
+    }
+
     const records = translateTable("status codes", ref, StatusCodeSchema).filter(r => r.name !== "Reserved");
     if (!records.length) {
         throw new InternalError("Status code translation failed");
+    }
+
+    // Remove obsolete names from the "summary" column
+    for (const record of records) {
+        record.description = record.description.replace(/\s*[A-Z_]+ is an obsolete.*$/, "");
     }
 
     statusType.children = translateRecordsToMatter("status codes", records, FieldElement);

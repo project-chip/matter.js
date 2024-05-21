@@ -10,7 +10,9 @@ import { Matter } from "../Matter.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
-    CommandElement as Command
+    CommandElement as Command,
+    DatatypeElement as Datatype,
+    FieldElement as Field
 } from "../../elements/index.js";
 
 export const MicrowaveOvenMode = Cluster({
@@ -29,6 +31,21 @@ export const MicrowaveOvenMode = Cluster({
         Command({
             name: "ChangeToModeResponse", id: 0x1, conformance: "X",
             xref: { document: "cluster", section: "8.12.5" }
+        }),
+
+        Datatype({
+            name: "ModeTag", type: "enum16",
+
+            children: [
+                Field({
+                    name: "Normal", id: 0x4000, description: "The normal mode of operation",
+                    xref: { document: "cluster", section: "8.12.6.1" }
+                }),
+                Field({
+                    name: "Defrost", id: 0x4001, description: "A mode optimized for defrosting foods",
+                    xref: { document: "cluster", section: "8.12.6.1" }
+                })
+            ]
         })
     ]
 });

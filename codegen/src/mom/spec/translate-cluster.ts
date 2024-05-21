@@ -27,7 +27,7 @@ import {
     UpperIdentifier,
 } from "./html-translators.js";
 import { repairConformance } from "./repairs/aspect-repairs.js";
-import { ClusterReference } from "./spec-types.js";
+import { ClusterReference, Table } from "./spec-types.js";
 import { translateDatatype, translateFields, translateValueChildren } from "./translate-datatype.js";
 import { Alias, Children, Optional, translateRecordsToMatter, translateTable } from "./translate-table.js";
 
@@ -398,10 +398,11 @@ function translateDatatypes(definition: ClusterReference, children: Array<Cluste
 /**
  * Load namespace extensions.
  *
- * The notion of a "namespace" is a bit nebulous, but current usage seems to be the equivalent of defining two types of
- * enums -- status codes and mode tags.
+ * The notion of a "namespace" is a bit nebulous, but current usage is the equivalent of defining two types of enums --
+ * status codes and mode tags.
  *
- * Not a lot of consistency going on here so this gets a bit fiddly.
+ * There is good consistency for the derived clusters but Mode Base itself defines the values in fairly haphazard
+ * sections.
  */
 function translateNamespace(definition: ClusterReference, elements: Array<ClusterElement.Child>) {
     if (!definition.namespace) {
@@ -411,7 +412,7 @@ function translateNamespace(definition: ClusterReference, elements: Array<Cluste
     for (const section of definition.namespace) {
         let name;
         let type;
-        let table;
+        let table: Table | undefined;
 
         switch (camelize(section.name).toLowerCase()) {
             case "modenamespace": // Mode Base cluster
@@ -435,23 +436,26 @@ function translateNamespace(definition: ClusterReference, elements: Array<Cluste
                 continue;
         }
 
-        const records = translateTable(
-            "tag",
-            section,
-            {
-                id: Alias(Integer, "modetagvalue", "statuscode", "statuscodevalue"),
-                name: Identifier,
-                description: Alias(Str, "summary"),
-            },
-            table,
-        );
+        logger.debug(`namespace values`);
+        Logger.nest(() => {
+            const records = translateTable(
+                "tag",
+                section,
+                {
+                    id: Alias(Integer, "modetagvalue", "statuscode", "statuscodevalue"),
+                    name: Identifier,
+                    description: Optional(Alias(Str, "summary")),
+                },
+                table,
+            );
 
-        const children = translateRecordsToMatter("namespace", records, FieldElement);
+            const children = translateRecordsToMatter("tag", records, FieldElement);
 
-        if (!children) {
-            continue;
-        }
+            if (!children) {
+                return;
+            }
 
-        elements.push(DatatypeElement({ name, type, children }));
+            elements.push(DatatypeElement({ name, type, children }));
+        });
     }
 }

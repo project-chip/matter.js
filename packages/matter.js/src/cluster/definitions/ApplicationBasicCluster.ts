@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { OptionalFixedAttribute, FixedAttribute, Attribute, AccessLevel } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { OptionalFixedAttribute, FixedAttribute, Attribute, AccessLevel } from "../Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
@@ -15,7 +15,7 @@ import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ApplicationBasic {
     /**
@@ -23,7 +23,7 @@ export namespace ApplicationBasic {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.3.4.2
      */
-    export const TlvApplicationStruct = TlvObject({
+    export const TlvApplication = TlvObject({
         /**
          * This field shall indicate the Connectivity Standards Alliance issued vendor ID for the catalog. The DIAL
          * registry shall use value 0x0000.
@@ -52,7 +52,7 @@ export namespace ApplicationBasic {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.3.4.2
      */
-    export interface ApplicationStruct extends TypeFromSchema<typeof TlvApplicationStruct> {}
+    export interface Application extends TypeFromSchema<typeof TlvApplication> {}
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.3.4.1
@@ -126,7 +126,7 @@ export namespace ApplicationBasic {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.3.5.5
              */
-            application: FixedAttribute(0x4, TlvApplicationStruct),
+            application: FixedAttribute(0x4, TlvApplication),
 
             /**
              * This attribute shall specify the current running status of the application.

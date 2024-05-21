@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     OptionalAttribute,
     FixedAttribute,
@@ -14,7 +14,7 @@ import {
     OptionalEvent,
     EventPriority,
     Attribute
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvUInt32, TlvUInt16, TlvEnum, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
@@ -25,7 +25,7 @@ import { TlvString } from "../../tlv/TlvString.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace PowerSource {
     /**

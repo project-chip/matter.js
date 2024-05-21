@@ -5,20 +5,20 @@
  */
 
 import { int64, uint64 } from "@project-chip/matter.js/elements";
-import { ClusterModel, Metatype, ValueModel } from "@project-chip/matter.js/model";
-import { TlvGenerator } from "../clusters/TlvGenerator.js";
+import { Metatype, ValueModel } from "@project-chip/matter.js/model";
+import { ScopeFile } from "../util/ScopeFile.js";
 import { Block } from "../util/TsFile.js";
 
+/**
+ * Generates TS types from models.
+ *
+ * Unlike TlvGenerator the TypeGenerator creates native TS types.
+ */
 export class TypeGenerator {
-    private defined = new Set<string>();
-    private tlv: TlvGenerator;
-
     constructor(
-        cluster: ClusterModel,
+        private file: ScopeFile,
         private definitions: Block,
-    ) {
-        this.tlv = new TlvGenerator(cluster, definitions);
-    }
+    ) {}
 
     reference(model: ValueModel | undefined, emptyAs = "any"): string {
         model = model?.definingModel;
@@ -46,7 +46,7 @@ export class TypeGenerator {
                 return "boolean";
 
             case Metatype.bytes:
-                this.definitions.file.addImport(`util/ByteArray.js`);
+                this.definitions.file.addImport(`#/util/ByteArray.js`);
                 return "ByteArray";
 
             case Metatype.integer:
@@ -70,28 +70,7 @@ export class TypeGenerator {
                 if (TypeGenerator.isEmpty(model)) {
                     return emptyAs;
                 }
-
-                const sourceName = this.tlv.nameFor(model);
-                if (!sourceName) {
-                    return emptyAs;
-                }
-                const typeName = sourceName.startsWith("Tlv") ? sourceName.slice(3) : sourceName;
-                if (!this.defined.has(typeName)) {
-                    this.definitions.file.addImport("tlv/TlvSchema.js", "TypeFromSchema");
-
-                    const cluster = model.owner(ClusterModel) ?? this.tlv.cluster;
-                    this.definitions.file.addImport(
-                        `cluster/definitions/${cluster.name}Cluster.js`,
-                        this.tlv.cluster.name,
-                    );
-
-                    this.definitions
-                        .atom(`export type ${typeName} = TypeFromSchema<typeof ${cluster.name}.${sourceName}>`)
-                        .document(model);
-
-                    this.defined.add(typeName);
-                }
-                return typeName;
+                return this.file.reference(model);
         }
 
         return emptyAs;

@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Command, TlvNoResponse, AccessLevel, Attribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Command, TlvNoResponse, AccessLevel, Attribute } from "../Cluster.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";
@@ -15,7 +15,7 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace AudioOutput {
     /**
@@ -55,7 +55,7 @@ export namespace AudioOutput {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.5.5.2
      */
-    export const TlvOutputInfoStruct = TlvObject({
+    export const TlvOutputInfo = TlvObject({
         /**
          * This field shall indicate the unique index into the list of outputs.
          *
@@ -84,7 +84,7 @@ export namespace AudioOutput {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.5.5.2
      */
-    export interface OutputInfoStruct extends TypeFromSchema<typeof TlvOutputInfoStruct> {}
+    export interface OutputInfo extends TypeFromSchema<typeof TlvOutputInfo> {}
 
     /**
      * Input to the AudioOutput selectOutput command
@@ -162,7 +162,7 @@ export namespace AudioOutput {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.5.6.1
              */
-            outputList: Attribute(0x0, TlvArray(TlvOutputInfoStruct), { default: [] }),
+            outputList: Attribute(0x0, TlvArray(TlvOutputInfo), { default: [] }),
 
             /**
              * This attribute contains the value of the index field of the currently selected OutputInfoStruct.

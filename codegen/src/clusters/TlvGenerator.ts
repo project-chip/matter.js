@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InternalError } from "@project-chip/matter.js/common";
 import { octstr, status } from "@project-chip/matter.js/elements";
 import {
     ClusterModel,
@@ -11,52 +12,43 @@ import {
     Constraint,
     DatatypeModel,
     ElementTag,
-    EventModel,
-    FieldModel,
     FieldValue,
+    MatterModel,
     Metatype,
     Model,
     ValueModel,
 } from "@project-chip/matter.js/model";
+import { ScopeFile } from "../util/ScopeFile.js";
 import { Block, Entry } from "../util/TsFile.js";
 import { asObjectKey, camelize, serialize } from "../util/string.js";
 import { NumericRanges, SpecializedNumbers, specializedNumberTypeFor } from "./NumberConstants.js";
-
-class InternalError extends Error {}
+import { Scope } from "./Scope.js";
 
 /**
  * Adds TLV structures for ValueModels to a ClusterFile
  **/
 export class TlvGenerator {
+    #scope: Scope;
+    #file: ScopeFile;
+    #definitions: Block;
     #definedDatatypes = new Set<Model>();
-    #scopedNames = new Set<string>();
 
-    get file() {
-        return this.definitions.file;
+    constructor(file: ScopeFile, definitions?: Block) {
+        this.#scope = file.scope;
+        this.#file = file;
+        this.#definitions = definitions ?? file;
     }
 
-    constructor(
-        public cluster: ClusterModel,
-        public definitions: Block,
-    ) {
-        // Find datatype names that conflict at top-level module scope. Datatypes at cluster level get to use their own
-        // name but for nested structures we prepend the parent name
-        const names = new Set<string>();
-        this.cluster.visit(model => {
-            if ((model instanceof DatatypeModel || model instanceof FieldModel) && model.children.length) {
-                const metatype = model.effectiveMetatype;
-                switch (metatype) {
-                    case Metatype.object:
-                    case Metatype.enum:
-                    case Metatype.bitmap:
-                        if (names.has(model.name)) {
-                            this.#scopedNames.add(model.name);
-                        } else {
-                            names.add(model.name);
-                        }
-                }
-            }
-        });
+    get owner() {
+        return this.#scope.owner;
+    }
+
+    get file() {
+        return this.#file;
+    }
+
+    get definitions() {
+        return this.#definitions;
     }
 
     /**
@@ -64,13 +56,13 @@ export class TlvGenerator {
      */
     importTlv(fileOrDirectory: string, name: string, as?: string) {
         if (fileOrDirectory === "datatype") {
-            fileOrDirectory = `${fileOrDirectory}/${name.replace(/^Tlv/, "")}.js`;
+            fileOrDirectory = `#/${fileOrDirectory}/${name.replace(/^Tlv/, "")}.js`;
         } else if (fileOrDirectory === "tlv") {
-            fileOrDirectory = `${fileOrDirectory}/${name}.js`;
+            fileOrDirectory = `#/${fileOrDirectory}/${name}.js`;
         } else if (fileOrDirectory === "number") {
-            fileOrDirectory = `tlv/TlvNumber.js`;
+            fileOrDirectory = `#/tlv/TlvNumber.js`;
         } else {
-            fileOrDirectory = `${fileOrDirectory}.js`;
+            fileOrDirectory = `#/${fileOrDirectory}.js`;
         }
 
         if (as) {
@@ -85,7 +77,6 @@ export class TlvGenerator {
      * Reference a TLV type.  Adds definitions to the file as necessary.
      *
      * @param model the model to reference
-     * @param as imports the model aliased as a different name
      *
      * @return the referencing TS expression as a string
      */
@@ -147,7 +138,7 @@ export class TlvGenerator {
 
             case Metatype.bitmap:
                 {
-                    const dt = this.#defineDatatype(model);
+                    const dt = this.defineDatatype(model);
                     if (dt) {
                         tlv = this.#bitmapTlv(dt, model);
                     } else {
@@ -159,7 +150,7 @@ export class TlvGenerator {
 
             case Metatype.enum:
                 {
-                    const dt = this.#defineDatatype(model);
+                    const dt = this.defineDatatype(model);
                     if (dt) {
                         this.importTlv("number", "TlvEnum");
                         tlv = `TlvEnum<${dt}>()`;
@@ -172,12 +163,12 @@ export class TlvGenerator {
 
             case Metatype.object:
                 {
-                    const dt = this.#defineDatatype(model);
+                    const dt = this.defineDatatype(model);
                     if (dt) {
                         tlv = dt;
                     } else {
-                        // This is only legal for commands but we'll fall back to it in the (illegal) case where an
-                        // object has no fields
+                        // TlvNoArguments is only legal for commands but we'll fall back to it in the (illegal) case
+                        // where an object has no fields
                         return this.importTlv("tlv", "TlvNoArguments");
                     }
                 }
@@ -194,72 +185,11 @@ export class TlvGenerator {
     }
 
     /**
-     * Determine the TypeScript name we'll use for a model.
+     * Get the filename for global datatypes.
      */
-    nameFor(model?: Model) {
-        if (!(model instanceof ValueModel)) {
-            return;
-        }
-
-        // The model we're actually interested in is the defining model
-        const defining: ValueModel = model.definingModel ?? model;
-        let name = defining.name;
-
-        // If the model is owned by another cluster, we will need to prefix the type with the owner's namespace
-        let otherOwner = defining.owner(ClusterModel);
-        if (otherOwner === this.cluster) {
-            otherOwner = undefined;
-        }
-
-        // Specialize the name based on the model type
-        if (defining instanceof CommandModel && defining.isRequest && !name.endsWith("Request")) {
-            name += "Request";
-        }
-        if (defining instanceof EventModel && !name.endsWith("Event")) {
-            name += "Event";
-        }
-
-        // If there is a name collision, prefix the name with the parent's name
-        //
-        // This will break if:
-        //   - The model is owned by another cluster that had a name collision so changed the name
-        //   - The other cluster doesn't actually use the model so doesn't define it
-        //
-        // These are both edge cases and currently not an issue so we ignore.
-        if (!otherOwner && this.#scopedNames.has(name) && defining.parent && !(defining instanceof ClusterModel)) {
-            name = `${defining.parent.name}${name}`;
-        }
-
-        // For enums and bitmaps we create a TypeScript value object, for other types we create a TLV definition
-        if (defining.effectiveMetatype === Metatype.enum || defining.effectiveMetatype === Metatype.bitmap) {
-            // "Enum" or "Bitmap" suffix seems a bit redundant so drop it.  Unless:
-            //   - There's another datatype model using the name already
-            //   - The suffix is "Bitmap" and there's also "*Enum"; in this case the enum gets the name
-            const withoutSuffix = name.replace(/(Enum|Bitmap)$/, "");
-            if (
-                withoutSuffix !== name &&
-                model.parent?.children.get(DatatypeModel, withoutSuffix) === undefined &&
-                (!name.endsWith("Bitmap") ||
-                    model.parent?.children.get(DatatypeModel, `${withoutSuffix}Enum`) === undefined)
-            ) {
-                name = withoutSuffix;
-            }
-        } else {
-            name = `Tlv${name}`;
-        }
-
-        // We reserve the name "Type".  Plus it's kind of ambiguous
-        if (name == "Type") {
-            name = `${(otherOwner ?? this.cluster).name}Type`;
-        }
-
-        // Add owning cluster scope if necessary
-        if (otherOwner) {
-            this.file.addImport(`cluster/definitions/${otherOwner.name}Cluster.js`, otherOwner.name);
-            name = `${otherOwner.name}.${name}`;
-        }
-
-        return name;
+    static filenameFor(model: Model) {
+        const name = model.name.replace(/(Enum|Bitmap|Struct)$/, "");
+        return camelize(name, true);
     }
 
     #integerTlv(metabase: ValueModel, model: ValueModel) {
@@ -366,9 +296,9 @@ export class TlvGenerator {
         }
 
         this.importTlv("tlv", "TlvObject");
-        this.file.addImport("tlv/TlvSchema.js", "TypeFromSchema");
+        this.file.addImport("#/tlv/TlvSchema.js", "TypeFromSchema");
         const intf = this.definitions.atom(
-            `export interface ${name.substring(3)} extends TypeFromSchema<typeof ${name}> {}`,
+            `export interface ${name.slice(3)} extends TypeFromSchema<typeof ${name}> {}`,
         );
         this.#documentType(model, intf);
 
@@ -388,7 +318,7 @@ export class TlvGenerator {
                 type = `BitFlag(${constraint.value})`;
             } else if (typeof constraint.min === "number" && typeof constraint.max === "number") {
                 if (child.effectiveMetatype === Metatype.enum) {
-                    const enumName = this.#defineDatatype(child);
+                    const enumName = this.defineDatatype(child);
                     if (enumName) {
                         // Bit range with enum definition
                         this.importTlv("schema/BitmapSchema", "BitFieldEnum");
@@ -414,7 +344,7 @@ export class TlvGenerator {
         return bitmap;
     }
 
-    #defineDatatype(model: ValueModel) {
+    defineDatatype(model: ValueModel) {
         // Obtain the defining model.  This is the actual datatype definition
         const defining = model.definingModel;
         if (defining) {
@@ -427,9 +357,9 @@ export class TlvGenerator {
 
         // Special case for status codes.  "Status code" in door lock cluster seems to be the global status codes
         // instead of the local one.  So always reference the global one until we see something different
-        if (defining.isGlobal && defining.name === status.name) {
+        if (this.owner !== model && defining.isGlobal && defining.name === status.name) {
             let as;
-            if (this.cluster?.get(DatatypeModel, "StatusCodeEnum")) {
+            if (this.owner?.get(DatatypeModel, "StatusCodeEnum")) {
                 // StatusCode would conflict with local type so import as an alias
                 as = "GlobalStatusCode";
             }
@@ -438,18 +368,15 @@ export class TlvGenerator {
             return as ?? "StatusCode";
         }
 
-        // Determine what we'll call this thing.  Name should be defined
-        const name = this.nameFor(model);
-        if (name === undefined) {
-            return;
-        }
-
-        // If the name is qualified then generation is handled by the defining cluster so we do no generation here
-        if (name.indexOf(".") !== -1) {
-            return name;
+        // If the model is not local, import rather than define
+        const isObject = model.effectiveMetatype === Metatype.object;
+        const location = this.#scope.locationOf(model);
+        if (!location.isLocal) {
+            return this.#file.reference(model, isObject);
         }
 
         // If the type is already defined we reference the existing definition
+        const name = this.#file.scope.nameFor(model, isObject);
         if (this.#definedDatatypes.has(model)) {
             return name;
         }
@@ -492,7 +419,7 @@ export class TlvGenerator {
         switch (model.tag) {
             case ElementTag.Attribute:
                 definition.document({
-                    details: `The value of the ${this.cluster.name} ${camelize(model.name)} attribute`,
+                    details: `The value of the ${this.owner.name} ${camelize(model.name)} attribute`,
                     xref: model.xref,
                 });
                 break;
@@ -503,7 +430,7 @@ export class TlvGenerator {
                     definition.document(model);
                 } else {
                     definition.document({
-                        details: `Input to the ${this.cluster.name} ${camelize(model.name)} command`,
+                        details: `Input to the ${this.owner.name} ${camelize(model.name)} command`,
                         xref: model.xref,
                     });
                 }
@@ -511,18 +438,18 @@ export class TlvGenerator {
 
             case ElementTag.Event:
                 definition.document({
-                    details: `Body of the ${this.cluster.name} ${camelize(model.name)} event`,
+                    details: `Body of the ${this.owner.name} ${camelize(model.name)} event`,
                     xref: model.xref,
                 });
                 break;
 
             default:
-                if (model.parent instanceof ClusterModel) {
+                if (model.parent instanceof ClusterModel || model.parent instanceof MatterModel) {
                     // Standalone
                     definition.document(model);
                 } else {
                     definition.document({
-                        details: `The value of ${this.cluster.name}.${camelize(model.name)}`,
+                        details: `The value of ${this.owner.name}.${camelize(model.name)}`,
                         xref: model.xref,
                     });
                 }

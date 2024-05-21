@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     Attribute,
     Command,
@@ -15,7 +15,7 @@ import {
     OptionalAttribute,
     OptionalEvent,
     EventPriority
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvUInt64, TlvUInt16, TlvUInt32, TlvEnum, TlvUInt8, TlvInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
@@ -26,7 +26,7 @@ import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ThreadNetworkDiagnostics {
     /**
@@ -73,7 +73,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.14.5.4
      */
-    export const TlvNeighborTableStruct = TlvObject({
+    export const TlvNeighborTable = TlvObject({
         /**
          * This field shall specify the IEEE 802.15.4 extended address for the neighboring Node.
          *
@@ -189,12 +189,12 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.14.5.4
      */
-    export interface NeighborTableStruct extends TypeFromSchema<typeof TlvNeighborTableStruct> {}
+    export interface NeighborTable extends TypeFromSchema<typeof TlvNeighborTable> {}
 
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.14.5.5
      */
-    export const TlvRouteTableStruct = TlvObject({
+    export const TlvRouteTable = TlvObject({
         /**
          * This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table entry
          * corresponds.
@@ -276,7 +276,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.14.5.5
      */
-    export interface RouteTableStruct extends TypeFromSchema<typeof TlvRouteTableStruct> {}
+    export interface RouteTable extends TypeFromSchema<typeof TlvRouteTable> {}
 
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.14.5.6
@@ -1046,7 +1046,7 @@ export namespace ThreadNetworkDiagnostics {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.8
              */
-            neighborTable: Attribute(0x7, TlvArray(TlvNeighborTableStruct), { default: [] }),
+            neighborTable: Attribute(0x7, TlvArray(TlvNeighborTable), { default: [] }),
 
             /**
              * The RouteTable attribute shall indicate the current list of router capable Nodes for which routes have
@@ -1054,7 +1054,7 @@ export namespace ThreadNetworkDiagnostics {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.14.6.9
              */
-            routeTable: Attribute(0x8, TlvArray(TlvRouteTableStruct), { default: [] }),
+            routeTable: Attribute(0x8, TlvArray(TlvRouteTable), { default: [] }),
 
             /**
              * The PartitionId attribute shall indicate the Thread Leader Partition Id for the Thread network to which

@@ -10,8 +10,7 @@ import { repairConformanceRule } from "./repairs/aspect-repairs.js";
 
 /** String, trimmed with whitespace collapsed */
 export const Str = (el: HTMLElement) => {
-    // Remove footnote references.  We can reliably detect these by looking for spans that contain only a single
-    // digit
+    // Remove footnote references.  We can reliably detect these by looking for spans that contain only a single digit
     for (const child of el.querySelectorAll("span")) {
         if (child.textContent?.match(/^[*0-9]$/)) {
             child.remove();
@@ -98,9 +97,8 @@ export const Bit = (el: HTMLElement) => {
 };
 
 /**
- * DSL or identifier.  Note we replace "Fo o" with "Foo" because space errors
- * are very common in the PDFs, especially in narrow columns and we don't want
- * to end up with FoO
+ * DSL or identifier.  Note we replace "Fo o" with "Foo" because space errors are very common in the PDFs, especially in
+ * narrow columns and we don't want to end up with FoO
  */
 export const Code = (el: HTMLElement) => {
     let str = Str(el);
@@ -114,8 +112,7 @@ export const Code = (el: HTMLElement) => {
             continue;
         }
 
-        // If a word starts with lowercase, see if it's a word when
-        // concatenated with the previous word
+        // If a word starts with lowercase, see if it's a word when concatenated with the previous word
         if (parts[i + 1].match(/^[a-z]/)) {
             // Get beginning of word from current part
             const beginning = parts[i].replace(/^.*([A-Z])/, "$1");
@@ -142,8 +139,7 @@ export const Code = (el: HTMLElement) => {
 export const Identifier = (el: HTMLElement) => {
     let str = Code(el);
 
-    // Strip everything following a subset of characters known to be inside
-    // what is properly a "key"
+    // Strip everything following a subset of characters known to be inside what is properly a "key"
     str = str.replace(/^([a-z0-9 _:,/\-$]+).*/i, "$1");
 
     return camelize(str, true);

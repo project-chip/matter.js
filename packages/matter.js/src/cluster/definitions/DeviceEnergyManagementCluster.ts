@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, Command, TlvNoResponse, Event, EventPriority, FixedAttribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, Command, TlvNoResponse, Event, EventPriority, FixedAttribute } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import {
@@ -26,13 +26,13 @@ import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace DeviceEnergyManagement {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.9
      */
-    export const TlvPowerAdjustStruct = TlvObject({
+    export const TlvPowerAdjust = TlvObject({
         /**
          * This field shall indicate the minimum power that the ESA can have its power adjusted to.
          *
@@ -94,7 +94,7 @@ export namespace DeviceEnergyManagement {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.9
      */
-    export interface PowerAdjustStruct extends TypeFromSchema<typeof TlvPowerAdjustStruct> {}
+    export interface PowerAdjust extends TypeFromSchema<typeof TlvPowerAdjust> {}
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.6
@@ -275,7 +275,7 @@ export namespace DeviceEnergyManagement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.8
      */
-    export const TlvCostStruct = TlvObject({
+    export const TlvCost = TlvObject({
         /**
          * This field shall indicate the type of cost being represented (see CostTypeEnum).
          *
@@ -318,14 +318,14 @@ export namespace DeviceEnergyManagement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.8
      */
-    export interface CostStruct extends TypeFromSchema<typeof TlvCostStruct> {}
+    export interface Cost extends TypeFromSchema<typeof TlvCost> {}
 
     /**
      * This indicates a specific stage of an ESA’s operation.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.11
      */
-    export const TlvSlotStruct = TlvObject({
+    export const TlvSlot = TlvObject({
         /**
          * This field shall indicate the minimum time (in seconds) that the appliance expects to be in this slot for.
          *
@@ -480,7 +480,7 @@ export namespace DeviceEnergyManagement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.11.14
          */
-        costs: TlvOptionalField(13, TlvArray(TlvCostStruct, { maxLength: 5 })),
+        costs: TlvOptionalField(13, TlvArray(TlvCost, { maxLength: 5 })),
 
         /**
          * This field shall indicate the minimum power that the appliance can be requested to use.
@@ -536,7 +536,7 @@ export namespace DeviceEnergyManagement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.11
      */
-    export interface SlotStruct extends TypeFromSchema<typeof TlvSlotStruct> {}
+    export interface Slot extends TypeFromSchema<typeof TlvSlot> {}
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.7
@@ -569,7 +569,7 @@ export namespace DeviceEnergyManagement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.10
      */
-    export const TlvForecastStruct = TlvObject({
+    export const TlvForecast = TlvObject({
         /**
          * This field shall indicate the sequence number for the current forecast. If the ESA updates a forecast, it
          * shall monotonically increase this value.
@@ -641,7 +641,7 @@ export namespace DeviceEnergyManagement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.10.8
          */
-        slots: TlvField(7, TlvArray(TlvSlotStruct, { maxLength: 10 })),
+        slots: TlvField(7, TlvArray(TlvSlot, { maxLength: 10 })),
 
         /**
          * This field shall contain the reason the current Forecast was generated.
@@ -662,7 +662,7 @@ export namespace DeviceEnergyManagement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.10
      */
-    export interface ForecastStruct extends TypeFromSchema<typeof TlvForecastStruct> {}
+    export interface Forecast extends TypeFromSchema<typeof TlvForecast> {}
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.4
@@ -778,7 +778,7 @@ export namespace DeviceEnergyManagement {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.12
      */
-    export const TlvSlotAdjustmentStruct = TlvObject({
+    export const TlvSlotAdjustment = TlvObject({
         /**
          * This field shall indicate the index into the Slots list within the Forecast that is to be modified. It shall
          * be less than the actual length of the Slots list (implicitly it must be in the range 0 to 9 based on the
@@ -809,7 +809,7 @@ export namespace DeviceEnergyManagement {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.12
      */
-    export interface SlotAdjustmentStruct extends TypeFromSchema<typeof TlvSlotAdjustmentStruct> {}
+    export interface SlotAdjustment extends TypeFromSchema<typeof TlvSlotAdjustment> {}
 
     /**
      * Input to the DeviceEnergyManagement modifyForecastRequest command
@@ -830,7 +830,7 @@ export namespace DeviceEnergyManagement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.2.9.6.2
          */
-        slotAdjustments: TlvField(1, TlvArray(TlvSlotAdjustmentStruct, { maxLength: 10 })),
+        slotAdjustments: TlvField(1, TlvArray(TlvSlotAdjustment, { maxLength: 10 })),
 
         /**
          * This field shall indicate the cause of the request from the EMS.
@@ -854,7 +854,7 @@ export namespace DeviceEnergyManagement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.13
      */
-    export const TlvConstraintsStruct = TlvObject({
+    export const TlvConstraints = TlvObject({
         /**
          * This field shall indicate the start time of the constraint period that the client wishes the ESA to compute
          * a new Forecast.
@@ -917,7 +917,7 @@ export namespace DeviceEnergyManagement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.13
      */
-    export interface ConstraintsStruct extends TypeFromSchema<typeof TlvConstraintsStruct> {}
+    export interface Constraints extends TypeFromSchema<typeof TlvConstraints> {}
 
     /**
      * Input to the DeviceEnergyManagement requestConstraintBasedForecast command
@@ -941,7 +941,7 @@ export namespace DeviceEnergyManagement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 9.2.9.7.1
          */
-        constraints: TlvField(0, TlvArray(TlvConstraintsStruct, { maxLength: 10 })),
+        constraints: TlvField(0, TlvArray(TlvConstraints, { maxLength: 10 })),
 
         /**
          * This field shall indicate the cause of the request from the EMS.
@@ -961,7 +961,7 @@ export namespace DeviceEnergyManagement {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.2
      */
-    export enum ESAType {
+    export enum EsaType {
         /**
          * EV Supply Equipment
          */
@@ -1041,7 +1041,7 @@ export namespace DeviceEnergyManagement {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.3
      */
-    export enum ESAState {
+    export enum EsaState {
         /**
          * The ESA is not available to the EMS (e.g. start- up, maintenance mode)
          */
@@ -1094,7 +1094,7 @@ export namespace DeviceEnergyManagement {
              */
             powerAdjustmentCapability: Attribute(
                 0x5,
-                TlvNullable(TlvArray(TlvPowerAdjustStruct, { maxLength: 8 })),
+                TlvNullable(TlvArray(TlvPowerAdjust, { maxLength: 8 })),
                 { default: null }
             )
         },
@@ -1151,7 +1151,7 @@ export namespace DeviceEnergyManagement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.2.8.7
              */
-            forecast: Attribute(0x6, TlvNullable(TlvForecastStruct), { default: null })
+            forecast: Attribute(0x6, TlvNullable(TlvForecast), { default: null })
         }
     });
 
@@ -1702,7 +1702,7 @@ export namespace DeviceEnergyManagement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.2.8.1
              */
-            esaType: FixedAttribute(0x0, TlvEnum<ESAType>(), { default: ESAType.Other }),
+            esaType: FixedAttribute(0x0, TlvEnum<EsaType>(), { default: EsaType.Other }),
 
             /**
              * Indicates whether the ESA is classed as a generator or load. This allows an EMS to understand whether
@@ -1740,7 +1740,7 @@ export namespace DeviceEnergyManagement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.2.8.3
              */
-            esaState: Attribute(0x2, TlvEnum<ESAState>(), { default: ESAState.Offline }),
+            esaState: Attribute(0x2, TlvEnum<EsaState>(), { default: EsaState.Offline }),
 
             /**
              * Indicates the minimum electrical power that the ESA can consume when switched on. This does not include

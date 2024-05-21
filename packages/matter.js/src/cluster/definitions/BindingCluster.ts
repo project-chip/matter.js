@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { WritableFabricScopedAttribute, AccessLevel } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { WritableFabricScopedAttribute, AccessLevel } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvOptionalField, TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
@@ -17,13 +17,13 @@ import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Binding {
     /**
      * @see {@link MatterSpecification.v13.Core} § 9.6.5.1
      */
-    export const TlvTargetStruct = TlvObject({
+    export const TlvTarget = TlvObject({
         /**
          * This field is the remote target node ID. If the Endpoint field is present, this field shall be present.
          *
@@ -62,7 +62,7 @@ export namespace Binding {
     /**
      * @see {@link MatterSpecification.v13.Core} § 9.6.5.1
      */
-    export interface TargetStruct extends TypeFromSchema<typeof TlvTargetStruct> {}
+    export interface Target extends TypeFromSchema<typeof TlvTarget> {}
 
     /**
      * @see {@link Cluster}
@@ -80,7 +80,7 @@ export namespace Binding {
              */
             binding: WritableFabricScopedAttribute(
                 0x0,
-                TlvArray(TlvTargetStruct),
+                TlvArray(TlvTarget),
                 { persistent: true, default: [], writeAcl: AccessLevel.Manage }
             )
         }

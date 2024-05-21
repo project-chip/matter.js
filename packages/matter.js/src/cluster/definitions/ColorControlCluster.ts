@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     Attribute,
     Command,
@@ -17,7 +17,7 @@ import {
     WritableAttribute,
     FixedAttribute,
     OptionalFixedAttribute
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvUInt8, TlvEnum, TlvUInt16, TlvBitmap, TlvInt16 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { BitFlag, BitField } from "../../schema/BitmapSchema.js";
@@ -25,13 +25,13 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ColorControl {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 3.2.11.4.2
      */
-    export enum ColorControlDirection {
+    export enum Direction {
         ShortestDistance = 0,
         LongestDistance = 1,
         Up = 2,
@@ -65,7 +65,7 @@ export namespace ColorControl {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 3.2.11.4.2
          */
-        direction: TlvField(1, TlvEnum<ColorControlDirection>()),
+        direction: TlvField(1, TlvEnum<Direction>()),
 
         /**
          * The TransitionTime field specifies, in 1/10ths of a second, the time that shall be taken to move to the new
@@ -564,7 +564,7 @@ export namespace ColorControl {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 3.2.11.15.2
          */
-        direction: TlvField(1, TlvEnum<ColorControlDirection>()),
+        direction: TlvField(1, TlvEnum<Direction>()),
 
         /**
          * This field is identical to the TransitionTime field of the MoveToHue command of the Color Control cluster

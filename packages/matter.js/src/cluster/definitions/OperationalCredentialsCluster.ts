@@ -6,15 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import {
-    FabricScopedAttribute,
-    AccessLevel,
-    FixedAttribute,
-    Attribute,
-    Command,
-    TlvNoResponse
-} from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { FabricScopedAttribute, AccessLevel, FixedAttribute, Attribute, Command, TlvNoResponse } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
@@ -28,7 +21,7 @@ import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvSubjectId } from "../../datatype/SubjectId.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace OperationalCredentials {
     /**
@@ -39,7 +32,7 @@ export namespace OperationalCredentials {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.18.4.4
      */
-    export const TlvNOCStruct = TlvObject({
+    export const TlvNoc = TlvObject({
         /**
          * This field shall contain the NOC for the struct’s associated fabric, encoded using Matter Certificate
          * Encoding.
@@ -67,14 +60,14 @@ export namespace OperationalCredentials {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.18.4.4
      */
-    export interface NOCStruct extends TypeFromSchema<typeof TlvNOCStruct> {}
+    export interface Noc extends TypeFromSchema<typeof TlvNoc> {}
 
     /**
      * This structure encodes a Fabric Reference for a fabric within which a given Node is currently commissioned.
      *
      * @see {@link MatterSpecification.v13.Core} § 11.18.4.5
      */
-    export const TlvFabricDescriptorStruct = TlvObject({
+    export const TlvFabricDescriptor = TlvObject({
         /**
          * This field shall contain the public key for the trusted root that scopes the fabric referenced by
          * FabricIndex and its associated operational credential (see Section 6.4.5.3, “Trusted Root CA Certificates”).
@@ -130,7 +123,7 @@ export namespace OperationalCredentials {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.18.4.5
      */
-    export interface FabricDescriptorStruct extends TypeFromSchema<typeof TlvFabricDescriptorStruct> {}
+    export interface FabricDescriptor extends TypeFromSchema<typeof TlvFabricDescriptor> {}
 
     /**
      * Input to the OperationalCredentials attestationRequest command
@@ -710,7 +703,7 @@ export namespace OperationalCredentials {
              */
             nocs: FabricScopedAttribute(
                 0x0,
-                TlvArray(TlvNOCStruct),
+                TlvArray(TlvNoc),
 
                 {
                     persistent: true,
@@ -731,7 +724,7 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.18.5.2
              */
-            fabrics: FabricScopedAttribute(0x1, TlvArray(TlvFabricDescriptorStruct), { persistent: true, default: [] }),
+            fabrics: FabricScopedAttribute(0x1, TlvArray(TlvFabricDescriptor), { persistent: true, default: [] }),
 
             /**
              * This attribute contains the number of Fabrics that are supported by the device. This value is fixed for

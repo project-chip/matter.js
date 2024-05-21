@@ -248,7 +248,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                     definition.namespace = [];
                 }
                 logger.debug(`namespace section ${ref.name} § ${ref.xref.section}`);
-                definition.namespace.push(subref);
+                definition.namespace.push(ref);
                 collectDetails(ref);
             },
         });

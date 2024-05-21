@@ -6,14 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import {
-    WritableAttribute,
-    FixedAttribute,
-    Attribute,
-    OptionalWritableAttribute,
-    Command
-} from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { WritableAttribute, FixedAttribute, Attribute, OptionalWritableAttribute, Command } from "../Cluster.js";
 import { TlvUInt8, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
@@ -31,7 +25,7 @@ export namespace ModeBase {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1
      */
-    export const TlvModeTagStruct = TlvObject({
+    export const TlvModeTag = TlvObject({
         /**
          * If the MfgCode field exists, the Value field shall be in the manufacturer-specific value range (see Section
          * 1.10.8, “Mode Namespace”).
@@ -61,14 +55,14 @@ export namespace ModeBase {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1
      */
-    export interface ModeTagStruct extends TypeFromSchema<typeof TlvModeTagStruct> {}
+    export interface ModeTag extends TypeFromSchema<typeof TlvModeTag> {}
 
     /**
      * This is a struct representing a possible mode of the server.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2
      */
-    export const TlvModeOptionStruct = TlvObject({
+    export const TlvModeOption = TlvObject({
         /**
          * This field shall indicate readable text that describes the mode option, so that a client can provide it to
          * the user to indicate what this option means. This field is meant to be readable and understandable by the
@@ -121,7 +115,7 @@ export namespace ModeBase {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2.3
          */
-        modeTags: TlvField(2, TlvArray(TlvModeTagStruct, { maxLength: 8 }))
+        modeTags: TlvField(2, TlvArray(TlvModeTag, { maxLength: 8 }))
     });
 
     /**
@@ -129,7 +123,7 @@ export namespace ModeBase {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.2
      */
-    export interface ModeOptionStruct extends TypeFromSchema<typeof TlvModeOptionStruct> {}
+    export interface ModeOption extends TypeFromSchema<typeof TlvModeOption> {}
 
     /**
      * Input to the ModeBase changeToMode command
@@ -194,6 +188,110 @@ export namespace ModeBase {
      */
     export interface ChangeToModeResponse extends TypeFromSchema<typeof TlvChangeToModeResponse> {}
 
+    export enum ModeChangeStatus {
+        /**
+         * Switching to the mode indicated by the NewMode field is allowed and possible. The CurrentMode attribute is
+         * set to the value of the NewMode field.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2.1.2
+         */
+        Success = 0,
+
+        /**
+         * The value of the NewMode field doesn’t match any entries in the SupportedMode attribute.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2.1.2
+         */
+        UnsupportedMode = 1,
+
+        /**
+         * Generic failure code, indicating that switching to the mode indicated by the NewMode field is not allowed or
+         * not possible.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2.1.2
+         */
+        GenericFailure = 2,
+
+        /**
+         * The received request cannot be handled due to the current mode of the device
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.2.1.2
+         */
+        InvalidInMode = 3
+    }
+
+    export enum ModeTagEnum {
+        /**
+         * The device decides which options, features and setting values to use.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Auto = 0,
+
+        /**
+         * The mode of the device is optimizing for faster completion.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Quick = 1,
+
+        /**
+         * The device is silent or barely audible while in this mode.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Quiet = 2,
+
+        /**
+         * Either the mode is inherently low noise or the device optimizes for that.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        LowNoise = 3,
+
+        /**
+         * The device is optimizing for lower energy usage in this mode. Sometimes called "Eco mode".
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        LowEnergy = 4,
+
+        /**
+         * A mode suitable for use during vacations or other extended absences.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Vacation = 5,
+
+        /**
+         * The mode uses the lowest available setting value.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Min = 6,
+
+        /**
+         * The mode uses the highest available setting value.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Max = 7,
+
+        /**
+         * The mode is recommended or suitable for use during night time.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Night = 8,
+
+        /**
+         * The mode is recommended or suitable for use during day time.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.8
+         */
+        Day = 9
+    }
+
     /**
      * A ModeBaseCluster supports these elements if it supports feature OnOff.
      */
@@ -243,7 +341,7 @@ export namespace ModeBase {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.10.6.2
              */
-            supportedModes: FixedAttribute(0x0, TlvArray(TlvModeOptionStruct, { minLength: 2, maxLength: 255 })),
+            supportedModes: FixedAttribute(0x0, TlvArray(TlvModeOption, { minLength: 2, maxLength: 255 })),
 
             /**
              * Indicates the current mode of the server.

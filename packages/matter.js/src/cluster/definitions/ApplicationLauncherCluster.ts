@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalAttribute, Command } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, OptionalAttribute, Command } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
@@ -17,7 +17,7 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ApplicationLauncher {
     /**
@@ -25,7 +25,7 @@ export namespace ApplicationLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.4.5.2
      */
-    export const TlvApplicationStruct = TlvObject({
+    export const TlvApplication = TlvObject({
         /**
          * This field shall indicate the CSA-issued vendor ID for the catalog. The DIAL registry shall use value 0x0000.
          *
@@ -52,15 +52,15 @@ export namespace ApplicationLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.4.5.2
      */
-    export interface ApplicationStruct extends TypeFromSchema<typeof TlvApplicationStruct> {}
+    export interface Application extends TypeFromSchema<typeof TlvApplication> {}
 
     /**
      * This specifies an app along with its corresponding endpoint.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.4.5.3
      */
-    export const TlvApplicationEPStruct = TlvObject({
-        application: TlvField(0, TlvApplicationStruct),
+    export const TlvApplicationEp = TlvObject({
+        application: TlvField(0, TlvApplication),
         endpoint: TlvOptionalField(1, TlvEndpointNumber)
     });
 
@@ -69,7 +69,7 @@ export namespace ApplicationLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.4.5.3
      */
-    export interface ApplicationEPStruct extends TypeFromSchema<typeof TlvApplicationEPStruct> {}
+    export interface ApplicationEp extends TypeFromSchema<typeof TlvApplicationEp> {}
 
     /**
      * Input to the ApplicationLauncher launchApp command
@@ -82,7 +82,7 @@ export namespace ApplicationLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.4.7.1.1
          */
-        application: TlvOptionalField(0, TlvApplicationStruct),
+        application: TlvOptionalField(0, TlvApplication),
 
         /**
          * This field shall specify optional app-specific data to be sent to the app.
@@ -165,7 +165,7 @@ export namespace ApplicationLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.4.7.2.1
          */
-        application: TlvOptionalField(0, TlvApplicationStruct)
+        application: TlvOptionalField(0, TlvApplication)
     });
 
     /**
@@ -186,7 +186,7 @@ export namespace ApplicationLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.4.7.3.1
          */
-        application: TlvOptionalField(0, TlvApplicationStruct)
+        application: TlvOptionalField(0, TlvApplication)
     });
 
     /**
@@ -255,7 +255,7 @@ export namespace ApplicationLauncher {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.4.6.2
              */
-            currentApp: OptionalAttribute(0x1, TlvNullable(TlvApplicationEPStruct), { default: null })
+            currentApp: OptionalAttribute(0x1, TlvNullable(TlvApplicationEp), { default: null })
         },
 
         commands: {

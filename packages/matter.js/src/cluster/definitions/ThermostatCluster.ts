@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     Attribute,
     OptionalFixedAttribute,
@@ -17,8 +17,8 @@ import {
     FixedAttribute,
     Command,
     TlvNoResponse
-} from "../../cluster/Cluster.js";
-import { OccupancySensing } from "../../cluster/definitions/OccupancySensingCluster.js";
+} from "../Cluster.js";
+import { OccupancySensing } from "./OccupancySensingCluster.js";
 import {
     TlvUInt8,
     TlvBitmap,
@@ -29,14 +29,14 @@ import {
     TlvEpochS,
     TlvUInt32
 } from "../../tlv/TlvNumber.js";
-import { BitsFromPartial, BitFlag } from "../../schema/BitmapSchema.js";
+import { BitsFromPartial, BitFlag, BitField } from "../../schema/BitmapSchema.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Thermostat {
     /**
@@ -137,7 +137,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.24
      */
-    export const TlvWeeklyScheduleTransitionStruct = TlvObject({
+    export const TlvWeeklyScheduleTransition = TlvObject({
         /**
          * This field shall represent the start time of the schedule transition during the associated day. The time
          * will be represented by a 16 bits unsigned integer to designate the minutes since midnight. For example, 6am
@@ -168,7 +168,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.24
      */
-    export interface WeeklyScheduleTransitionStruct extends TypeFromSchema<typeof TlvWeeklyScheduleTransitionStruct> {}
+    export interface WeeklyScheduleTransition extends TypeFromSchema<typeof TlvWeeklyScheduleTransition> {}
 
     /**
      * Input to the Thermostat setWeeklySchedule command
@@ -228,7 +228,7 @@ export namespace Thermostat {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 4.3.10.4.4
          */
-        transitions: TlvField(3, TlvArray(TlvWeeklyScheduleTransitionStruct, { maxLength: 10 }))
+        transitions: TlvField(3, TlvArray(TlvWeeklyScheduleTransition, { maxLength: 10 }))
     });
 
     /**
@@ -277,7 +277,7 @@ export namespace Thermostat {
         numberOfTransitionsForSequence: TlvField(0, TlvUInt8),
         dayOfWeekForSequence: TlvField(1, TlvBitmap(TlvUInt8, ScheduleDayOfWeek)),
         modeForSequence: TlvField(2, TlvBitmap(TlvUInt8, ScheduleMode)),
-        transitions: TlvField(3, TlvArray(TlvWeeklyScheduleTransitionStruct, { maxLength: 10 }))
+        transitions: TlvField(3, TlvArray(TlvWeeklyScheduleTransition, { maxLength: 10 }))
     });
 
     /**
@@ -495,7 +495,7 @@ export namespace Thermostat {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.16
      */
-    export enum ACType {
+    export enum AcType {
         /**
          * Unknown AC Type
          */
@@ -525,7 +525,7 @@ export namespace Thermostat {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.15
      */
-    export enum ACRefrigerantType {
+    export enum AcRefrigerantType {
         /**
          * Unknown Refrigerant Type
          */
@@ -550,7 +550,7 @@ export namespace Thermostat {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.13
      */
-    export enum ACCompressorType {
+    export enum AcCompressorType {
         /**
          * Unknown compressor type
          */
@@ -575,7 +575,7 @@ export namespace Thermostat {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.4
      */
-    export const ACErrorCode = {
+    export const AcErrorCode = {
         /**
          * Compressor Failure or Refrigerant Leakage
          */
@@ -605,7 +605,7 @@ export namespace Thermostat {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.14
      */
-    export enum ACLouverPosition {
+    export enum AcLouverPosition {
         /**
          * Fully Closed
          */
@@ -635,7 +635,7 @@ export namespace Thermostat {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.12
      */
-    export enum ACCapacityFormat {
+    export enum AcCapacityFormat {
         /**
          * British Thermal Unit per Hour
          */
@@ -678,6 +678,91 @@ export namespace Thermostat {
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.10.1
      */
     export interface SetpointRaiseLowerRequest extends TypeFromSchema<typeof TlvSetpointRaiseLowerRequest> {}
+
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.5
+     */
+    export const AlarmCode = {
+        /**
+         * Initialization failure. The device failed to complete initialization at power-up.
+         */
+        initialization: BitFlag(0),
+
+        /**
+         * Hardware failure
+         */
+        hardware: BitFlag(1),
+
+        /**
+         * Self-calibration failure
+         */
+        selfCalibration: BitFlag(2)
+    };
+
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6
+     */
+    export const HvacSystemType = {
+        /**
+         * Stage of cooling the HVAC system is using.
+         *
+         * These bits shall indicate what stage of cooling the HVAC system is using.
+         *
+         *   • 00 = Cool Stage 1
+         *
+         *   • 01 = Cool Stage 2
+         *
+         *   • 10 = Cool Stage 3
+         *
+         *   • 11 = Reserved
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.1
+         */
+        coolingStage: BitField(0, 2),
+
+        /**
+         * Stage of heating the HVAC system is using.
+         *
+         * These bits shall indicate what stage of heating the HVAC system is using.
+         *
+         *   • 00 = Heat Stage 1
+         *
+         *   • 01 = Heat Stage 2
+         *
+         *   • 10 = Heat Stage 3
+         *
+         *   • 11 = Reserved
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.2
+         */
+        heatingStage: BitField(2, 2),
+
+        /**
+         * Is the heating type Heat Pump.
+         *
+         * This bit shall indicate whether the HVAC system is conventional or a heat pump.
+         *
+         *   • 0 = Conventional
+         *
+         *   • 1 = Heat Pump
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.3
+         */
+        heatingIsHeatPump: BitFlag(4),
+
+        /**
+         * Does the HVAC system use fuel.
+         *
+         * This bit shall indicate whether the HVAC system uses fuel.
+         *
+         *   • 0 = Does not use fuel
+         *
+         *   • 1 = Uses fuel
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.6.4
+         */
+        heatingUsesFuel: BitFlag(5)
+    };
 
     /**
      * A ThermostatCluster supports these elements if it supports feature Occupancy.
@@ -1507,8 +1592,8 @@ export namespace Thermostat {
              */
             acType: OptionalWritableAttribute(
                 0x40,
-                TlvEnum<ACType>(),
-                { persistent: true, default: ACType.Unknown, writeAcl: AccessLevel.Manage }
+                TlvEnum<AcType>(),
+                { persistent: true, default: AcType.Unknown, writeAcl: AccessLevel.Manage }
             ),
 
             /**
@@ -1529,8 +1614,8 @@ export namespace Thermostat {
              */
             acRefrigerantType: OptionalWritableAttribute(
                 0x42,
-                TlvEnum<ACRefrigerantType>(),
-                { persistent: true, default: ACRefrigerantType.Unknown, writeAcl: AccessLevel.Manage }
+                TlvEnum<AcRefrigerantType>(),
+                { persistent: true, default: AcRefrigerantType.Unknown, writeAcl: AccessLevel.Manage }
             ),
 
             /**
@@ -1540,8 +1625,8 @@ export namespace Thermostat {
              */
             acCompressorType: OptionalWritableAttribute(
                 0x43,
-                TlvEnum<ACCompressorType>(),
-                { persistent: true, default: ACCompressorType.Unknown, writeAcl: AccessLevel.Manage }
+                TlvEnum<AcCompressorType>(),
+                { persistent: true, default: AcCompressorType.Unknown, writeAcl: AccessLevel.Manage }
             ),
 
             /**
@@ -1551,7 +1636,7 @@ export namespace Thermostat {
              */
             acErrorCode: OptionalWritableAttribute(
                 0x44,
-                TlvBitmap(TlvUInt32, ACErrorCode),
+                TlvBitmap(TlvUInt32, AcErrorCode),
                 { writeAcl: AccessLevel.Manage }
             ),
 
@@ -1562,7 +1647,7 @@ export namespace Thermostat {
              */
             acLouverPosition: OptionalWritableAttribute(
                 0x45,
-                TlvEnum<ACLouverPosition>(),
+                TlvEnum<AcLouverPosition>(),
                 { persistent: true, writeAcl: AccessLevel.Manage }
             ),
 
@@ -1580,8 +1665,8 @@ export namespace Thermostat {
              */
             acCapacityFormat: OptionalWritableAttribute(
                 0x47,
-                TlvEnum<ACCapacityFormat>(),
-                { persistent: true, default: ACCapacityFormat.BtUh, writeAcl: AccessLevel.Manage }
+                TlvEnum<AcCapacityFormat>(),
+                { persistent: true, default: AcCapacityFormat.BtUh, writeAcl: AccessLevel.Manage }
             )
         },
 

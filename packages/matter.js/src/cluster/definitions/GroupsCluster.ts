@@ -6,9 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { FixedAttribute, Command, AccessLevel, TlvNoResponse } from "../../cluster/Cluster.js";
+import { FixedAttribute, Command, AccessLevel, TlvNoResponse } from "../Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
@@ -19,7 +19,7 @@ import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Groups {
     /**
@@ -27,7 +27,7 @@ export namespace Groups {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.3.6.1
      */
-    export const NameSupport = { nameSupport: BitFlag(7) };
+    export const NameSupportAttribute = { nameSupport: BitFlag(7) };
 
     /**
      * Input to the Groups addGroup command
@@ -274,6 +274,16 @@ export namespace Groups {
     export interface AddGroupIfIdentifyingRequest extends TypeFromSchema<typeof TlvAddGroupIfIdentifyingRequest> {}
 
     /**
+     * @see {@link MatterSpecification.v13.Cluster} § 1.3.5.1
+     */
+    export const NameSupport = {
+        /**
+         * The ability to store a name for a group.
+         */
+        groupNames: BitFlag(7)
+    };
+
+    /**
      * These are optional features supported by GroupsCluster.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.3.4
@@ -316,7 +326,7 @@ export namespace Groups {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.3.6.1
              */
-            nameSupport: FixedAttribute(0x0, TlvBitmap(TlvUInt8, NameSupport))
+            nameSupport: FixedAttribute(0x0, TlvBitmap(TlvUInt8, NameSupportAttribute))
         },
 
         commands: {

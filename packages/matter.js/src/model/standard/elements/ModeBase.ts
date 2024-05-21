@@ -274,6 +274,85 @@ export const ModeBase = Cluster({
                     children: [Field({ name: "entry", type: "ModeTagStruct" })]
                 })
             ]
+        }),
+
+        Datatype({
+            name: "ModeChangeStatus", type: "enum8",
+
+            children: [
+                Field({
+                    name: "Success", id: 0x0,
+                    description: "Switching to the mode indicated by the NewMode field is allowed and possible. The CurrentMode attribute is set to the value of the NewMode field.",
+                    xref: { document: "cluster", section: "1.10.7.2.1.2" }
+                }),
+                Field({
+                    name: "UnsupportedMode", id: 0x1,
+                    description: "The value of the NewMode field doesn’t match any entries in the SupportedMode attribute.",
+                    xref: { document: "cluster", section: "1.10.7.2.1.2" }
+                }),
+                Field({
+                    name: "GenericFailure", id: 0x2,
+                    description: "Generic failure code, indicating that switching to the mode indicated by the NewMode field is not allowed or not possible.",
+                    xref: { document: "cluster", section: "1.10.7.2.1.2" }
+                }),
+                Field({
+                    name: "InvalidInMode", id: 0x3,
+                    description: "The received request cannot be handled due to the current mode of the device",
+                    xref: { document: "cluster", section: "1.10.7.2.1.2" }
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "ModeTag", type: "enum16",
+
+            children: [
+                Field({
+                    name: "Auto", id: 0x0,
+                    description: "The device decides which options, features and setting values to use.",
+                    xref: { document: "cluster", section: "1.10.8" }
+                }),
+                Field({
+                    name: "Quick", id: 0x1, description: "The mode of the device is optimizing for faster completion.",
+                    xref: { document: "cluster", section: "1.10.8" }
+                }),
+                Field({
+                    name: "Quiet", id: 0x2, description: "The device is silent or barely audible while in this mode.",
+                    xref: { document: "cluster", section: "1.10.8" }
+                }),
+                Field({
+                    name: "LowNoise", id: 0x3,
+                    description: "Either the mode is inherently low noise or the device optimizes for that.",
+                    xref: { document: "cluster", section: "1.10.8" }
+                }),
+                Field({
+                    name: "LowEnergy", id: 0x4,
+                    description: "The device is optimizing for lower energy usage in this mode. Sometimes called \"Eco mode\".",
+                    xref: { document: "cluster", section: "1.10.8" }
+                }),
+                Field({
+                    name: "Vacation", id: 0x5,
+                    description: "A mode suitable for use during vacations or other extended absences.",
+                    xref: { document: "cluster", section: "1.10.8" }
+                }),
+                Field({
+                    name: "Min", id: 0x6, description: "The mode uses the lowest available setting value.",
+                    xref: { document: "cluster", section: "1.10.8" }
+                }),
+                Field({
+                    name: "Max", id: 0x7, description: "The mode uses the highest available setting value.",
+                    xref: { document: "cluster", section: "1.10.8" }
+                }),
+                Field({
+                    name: "Night", id: 0x8,
+                    description: "The mode is recommended or suitable for use during night time.",
+                    xref: { document: "cluster", section: "1.10.8" }
+                }),
+                Field({
+                    name: "Day", id: 0x9, description: "The mode is recommended or suitable for use during day time.",
+                    xref: { document: "cluster", section: "1.10.8" }
+                })
+            ]
         })
     ]
 });

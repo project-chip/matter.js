@@ -6,15 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import {
-    Attribute,
-    OptionalAttribute,
-    OptionalCommand,
-    Event,
-    EventPriority,
-    OptionalEvent
-} from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, OptionalAttribute, OptionalCommand, Event, EventPriority, OptionalEvent } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -23,7 +16,7 @@ import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace OperationalState {
     /**
@@ -59,7 +52,7 @@ export namespace OperationalState {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.4
      */
-    export const TlvErrorStateStruct = TlvObject({
+    export const TlvErrorState = TlvObject({
         /**
          * This shall be populated with a value from the ErrorStateEnum.
          *
@@ -90,7 +83,7 @@ export namespace OperationalState {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.4
      */
-    export interface ErrorStateStruct extends TypeFromSchema<typeof TlvErrorStateStruct> {}
+    export interface ErrorState extends TypeFromSchema<typeof TlvErrorState> {}
 
     /**
      * This command shall be supported by an implementation if any of the other commands defined by this cluster are
@@ -109,7 +102,7 @@ export namespace OperationalState {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 1.14.6.5.1
          */
-        commandResponseState: TlvField(0, TlvErrorStateStruct)
+        commandResponseState: TlvField(0, TlvErrorState)
     });
 
     /**
@@ -128,7 +121,7 @@ export namespace OperationalState {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.14.7.1
      */
-    export const TlvOperationalErrorEvent = TlvObject({ errorState: TlvField(0, TlvErrorStateStruct) });
+    export const TlvOperationalErrorEvent = TlvObject({ errorState: TlvField(0, TlvErrorState) });
 
     /**
      * Body of the OperationalState operationalError event
@@ -177,6 +170,33 @@ export namespace OperationalState {
      * @see {@link MatterSpecification.v13.Cluster} § 1.14.7.2
      */
     export interface OperationCompletionEvent extends TypeFromSchema<typeof TlvOperationCompletionEvent> {}
+
+    /**
+     * The following table defines the generally applicable ErrorState values.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.14.4.3.1
+     */
+    export enum GeneralErrorState {
+        /**
+         * The device is not in an error state
+         */
+        NoError = 0,
+
+        /**
+         * The device is unable to start or resume operation
+         */
+        UnableToStartOrResume = 1,
+
+        /**
+         * The device was unable to complete the current operation
+         */
+        UnableToCompleteOperation = 2,
+
+        /**
+         * The device cannot process the command in its current state
+         */
+        CommandInvalidInState = 3
+    }
 
     /**
      * @see {@link Cluster}
@@ -263,7 +283,7 @@ export namespace OperationalState {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.14.5.6
              */
-            operationalError: Attribute(0x5, TlvErrorStateStruct)
+            operationalError: Attribute(0x5, TlvErrorState)
         },
 
         commands: {

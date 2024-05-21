@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     OptionalFixedAttribute,
     OptionalAttribute,
@@ -17,7 +17,7 @@ import {
     FixedAttribute,
     WritableAttribute,
     AccessLevel
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvUInt16, TlvPercent, TlvPercent100ths, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvOptionalField, TlvObject, TlvField } from "../../tlv/TlvObject.js";
@@ -25,7 +25,7 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag, BitFieldEnum } from "../../schema/BitmapSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace WindowCovering {
     /**

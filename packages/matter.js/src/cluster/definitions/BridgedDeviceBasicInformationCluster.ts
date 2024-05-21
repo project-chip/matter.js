@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     OptionalFixedAttribute,
     OptionalWritableAttribute,
@@ -15,15 +15,15 @@ import {
     OptionalEvent,
     EventPriority,
     Event
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { BasicInformation } from "../../cluster/definitions/BasicInformationCluster.js";
+import { BasicInformation } from "./BasicInformationCluster.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace BridgedDeviceBasicInformation {
     /**
@@ -117,7 +117,7 @@ export namespace BridgedDeviceBasicInformation {
             /**
              * @see {@link MatterSpecification.v13.Core} § 9.13.4
              */
-            productAppearance: OptionalFixedAttribute(0x14, BasicInformation.TlvProductAppearanceStruct)
+            productAppearance: OptionalFixedAttribute(0x14, BasicInformation.TlvProductAppearance)
         },
 
         events: {

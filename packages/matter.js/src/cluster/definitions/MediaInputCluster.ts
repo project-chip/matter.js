@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Command, TlvNoResponse, AccessLevel, Attribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Command, TlvNoResponse, AccessLevel, Attribute } from "../Cluster.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";
@@ -16,7 +16,7 @@ import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace MediaInput {
     /**
@@ -60,7 +60,7 @@ export namespace MediaInput {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.9.5.2
      */
-    export const TlvInputInfoStruct = TlvObject({
+    export const TlvInputInfo = TlvObject({
         /**
          * This field shall indicate the unique index into the list of Inputs.
          *
@@ -97,7 +97,7 @@ export namespace MediaInput {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.9.5.2
      */
-    export interface InputInfoStruct extends TypeFromSchema<typeof TlvInputInfoStruct> {}
+    export interface InputInfo extends TypeFromSchema<typeof TlvInputInfo> {}
 
     /**
      * Input to the MediaInput selectInput command
@@ -173,7 +173,7 @@ export namespace MediaInput {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.9.6.1
              */
-            inputList: Attribute(0x0, TlvArray(TlvInputInfoStruct), { default: [] }),
+            inputList: Attribute(0x0, TlvArray(TlvInputInfo), { default: [] }),
 
             /**
              * This attribute shall contain the value of the index field of the currently selected InputInfoStruct.

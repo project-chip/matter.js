@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, Command } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, Command } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
@@ -15,10 +15,10 @@ import { TlvUInt32, TlvBitmap, TlvDouble, TlvEnum, TlvUInt64, TlvUInt8 } from ".
 import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { MediaPlayback } from "../../cluster/definitions/MediaPlaybackCluster.js";
+import { MediaPlayback } from "./MediaPlaybackCluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ContentLauncher {
     /**
@@ -68,7 +68,7 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.8
      */
-    export const TlvDimensionStruct = TlvObject({
+    export const TlvDimension = TlvObject({
         /**
          * This field shall indicate the width using the metric defined in Metric
          *
@@ -96,7 +96,7 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.8
      */
-    export interface DimensionStruct extends TypeFromSchema<typeof TlvDimensionStruct> {}
+    export interface Dimension extends TypeFromSchema<typeof TlvDimension> {}
 
     /**
      * This object defines style information which can be used by content providers to change the Media Player’s style
@@ -104,7 +104,7 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.9
      */
-    export const TlvStyleInformationStruct = TlvObject({
+    export const TlvStyleInformation = TlvObject({
         /**
          * This field shall indicate the URL of image used for Styling different Video Player sections like Logo,
          * Watermark etc.
@@ -132,7 +132,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.9.3
          */
-        size: TlvOptionalField(2, TlvDimensionStruct)
+        size: TlvOptionalField(2, TlvDimension)
     });
 
     /**
@@ -141,7 +141,7 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.9
      */
-    export interface StyleInformationStruct extends TypeFromSchema<typeof TlvStyleInformationStruct> {}
+    export interface StyleInformation extends TypeFromSchema<typeof TlvStyleInformation> {}
 
     /**
      * This object defines Branding Information which can be provided by the client in order to customize the skin of
@@ -149,7 +149,7 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.10
      */
-    export const TlvBrandingInformationStruct = TlvObject({
+    export const TlvBrandingInformation = TlvObject({
         /**
          * This field shall indicate name of the provider for the given content.
          *
@@ -163,7 +163,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.10.2
          */
-        background: TlvOptionalField(1, TlvStyleInformationStruct),
+        background: TlvOptionalField(1, TlvStyleInformation),
 
         /**
          * This field shall indicate the logo shown when the Video Player is launching. This is also used when the
@@ -171,14 +171,14 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.10.3
          */
-        logo: TlvOptionalField(2, TlvStyleInformationStruct),
+        logo: TlvOptionalField(2, TlvStyleInformation),
 
         /**
          * This field shall indicate the style of progress bar for media playback.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.10.4
          */
-        progressBar: TlvOptionalField(3, TlvStyleInformationStruct),
+        progressBar: TlvOptionalField(3, TlvStyleInformation),
 
         /**
          * This field shall indicate the screen shown when the Video Player is in an idle state. If this property is
@@ -186,14 +186,14 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.10.5
          */
-        splash: TlvOptionalField(4, TlvStyleInformationStruct),
+        splash: TlvOptionalField(4, TlvStyleInformation),
 
         /**
          * This field shall indicate watermark shown when the media is playing.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.10.6
          */
-        waterMark: TlvOptionalField(5, TlvStyleInformationStruct)
+        waterMark: TlvOptionalField(5, TlvStyleInformation)
     });
 
     /**
@@ -202,14 +202,14 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.10
      */
-    export interface BrandingInformationStruct extends TypeFromSchema<typeof TlvBrandingInformationStruct> {}
+    export interface BrandingInformation extends TypeFromSchema<typeof TlvBrandingInformation> {}
 
     /**
      * This structure defines Text/Audio Track preferences.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.12
      */
-    export const TlvTrackPreferenceStruct = TlvObject({
+    export const TlvTrackPreference = TlvObject({
         /**
          * This field shall contain one of the standard Tags for Identifying Languages RFC 5646, which identifies the
          * primary language used in the Track.
@@ -247,7 +247,7 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.12
      */
-    export interface TrackPreferenceStruct extends TypeFromSchema<typeof TlvTrackPreferenceStruct> {}
+    export interface TrackPreference extends TypeFromSchema<typeof TlvTrackPreference> {}
 
     /**
      * PlaybackPreferencesStruct defines the preferences sent by the client to the receiver in the ContentLauncher
@@ -255,7 +255,7 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.11
      */
-    export const TlvPlaybackPreferencesStruct = TlvObject({
+    export const TlvPlaybackPreferences = TlvObject({
         /**
          * This field shall indicate the preferred position (in milliseconds) in the media to launch playback from. In
          * case the position falls in the middle of a frame, the server shall set the position to the beginning of that
@@ -275,7 +275,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.11.2
          */
-        textTrack: TlvOptionalField(1, TlvNullable(TlvTrackPreferenceStruct)),
+        textTrack: TlvOptionalField(1, TlvNullable(TlvTrackPreference)),
 
         /**
          * This field shall indicate the list of the user’s preferred Audio Tracks. If the list contains multiple
@@ -285,7 +285,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.11.3
          */
-        audioTracks: TlvOptionalField(2, TlvNullable(TlvArray(TlvTrackPreferenceStruct)))
+        audioTracks: TlvOptionalField(2, TlvNullable(TlvArray(TlvTrackPreference)))
     });
 
     /**
@@ -294,7 +294,7 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.11
      */
-    export interface PlaybackPreferencesStruct extends TypeFromSchema<typeof TlvPlaybackPreferencesStruct> {}
+    export interface PlaybackPreferences extends TypeFromSchema<typeof TlvPlaybackPreferences> {}
 
     /**
      * Input to the ContentLauncher launchUrl command
@@ -323,7 +323,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.2.3
          */
-        brandingInformation: TlvOptionalField(2, TlvBrandingInformationStruct),
+        brandingInformation: TlvOptionalField(2, TlvBrandingInformation),
 
         /**
          * This field, if present, shall indicate the user’s preferred Text/AudioTracks and playbackPosition for the
@@ -337,7 +337,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.2.4
          */
-        playbackPreferences: TlvOptionalField(3, TlvPlaybackPreferencesStruct)
+        playbackPreferences: TlvOptionalField(3, TlvPlaybackPreferences)
     });
 
     /**
@@ -408,7 +408,7 @@ export namespace ContentLauncher {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.3
      */
-    export enum Parameter {
+    export enum ParameterEnum {
         /**
          * Actor represents an actor credited in video media content; for example, “Gaby Hoffman”
          */
@@ -509,7 +509,7 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.5
      */
-    export const TlvAdditionalInfoStruct = TlvObject({
+    export const TlvAdditionalInfo = TlvObject({
         /**
          * This field shall indicate the name of external id, ex. "musicbrainz".
          *
@@ -530,20 +530,20 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.5
      */
-    export interface AdditionalInfoStruct extends TypeFromSchema<typeof TlvAdditionalInfoStruct> {}
+    export interface AdditionalInfo extends TypeFromSchema<typeof TlvAdditionalInfo> {}
 
     /**
      * This object defines inputs to a search for content for display or playback.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.6
      */
-    export const TlvParameterStruct = TlvObject({
+    export const TlvParameter = TlvObject({
         /**
          * This field shall indicate the entity type.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.6.1
          */
-        type: TlvField(0, TlvEnum<Parameter>()),
+        type: TlvField(0, TlvEnum<ParameterEnum>()),
 
         /**
          * This field shall indicate the entity value, which is a search string, ex. “Manchester by the Sea”.
@@ -557,7 +557,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.6.3
          */
-        externalIdList: TlvOptionalField(2, TlvArray(TlvAdditionalInfoStruct))
+        externalIdList: TlvOptionalField(2, TlvArray(TlvAdditionalInfo))
     });
 
     /**
@@ -565,14 +565,14 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.6
      */
-    export interface ParameterStruct extends TypeFromSchema<typeof TlvParameterStruct> {}
+    export interface Parameter extends TypeFromSchema<typeof TlvParameter> {}
 
     /**
      * This object defines inputs to a search for content for display or playback.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.7
      */
-    export const TlvContentSearchStruct = TlvObject({
+    export const TlvContentSearch = TlvObject({
         /**
          * This field shall indicate the list of parameters comprising the search. If multiple parameters are provided,
          * the search parameters shall be joined with 'AND' logic. e.g. action movies with Tom Cruise will be
@@ -580,7 +580,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.7.1
          */
-        parameterList: TlvField(0, TlvArray(TlvParameterStruct))
+        parameterList: TlvField(0, TlvArray(TlvParameter))
     });
 
     /**
@@ -588,7 +588,7 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.7
      */
-    export interface ContentSearchStruct extends TypeFromSchema<typeof TlvContentSearchStruct> {}
+    export interface ContentSearch extends TypeFromSchema<typeof TlvContentSearch> {}
 
     /**
      * Input to the ContentLauncher launchContent command
@@ -601,7 +601,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.1.1
          */
-        search: TlvField(0, TlvContentSearchStruct),
+        search: TlvField(0, TlvContentSearch),
 
         /**
          * This field shall indicate whether to automatically start playing content, where:
@@ -633,7 +633,7 @@ export namespace ContentLauncher {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.1.4
          */
-        playbackPreferences: TlvOptionalField(3, TlvPlaybackPreferencesStruct),
+        playbackPreferences: TlvOptionalField(3, TlvPlaybackPreferences),
 
         /**
          * This field, if present, shall indicate whether to consider the context of current ongoing activity on the

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import {
     WritableFabricScopedAttribute,
@@ -15,7 +15,7 @@ import {
     FixedAttribute,
     Command,
     TlvNoResponse
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
@@ -27,13 +27,13 @@ import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace GroupKeyManagement {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.2.5.3
      */
-    export const TlvGroupKeyMapStruct = TlvObject({
+    export const TlvGroupKeyMap = TlvObject({
         /**
          * This field uniquely identifies the group within the scope of the given Fabric.
          *
@@ -57,12 +57,12 @@ export namespace GroupKeyManagement {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.2.5.3
      */
-    export interface GroupKeyMapStruct extends TypeFromSchema<typeof TlvGroupKeyMapStruct> {}
+    export interface GroupKeyMap extends TypeFromSchema<typeof TlvGroupKeyMap> {}
 
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.2.5.5
      */
-    export const TlvGroupInfoMapStruct = TlvObject({
+    export const TlvGroupInfoMap = TlvObject({
         /**
          * This field uniquely identifies the group within the scope of the given Fabric.
          *
@@ -91,7 +91,7 @@ export namespace GroupKeyManagement {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.2.5.5
      */
-    export interface GroupInfoMapStruct extends TypeFromSchema<typeof TlvGroupInfoMapStruct> {}
+    export interface GroupInfoMap extends TypeFromSchema<typeof TlvGroupInfoMap> {}
 
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.2.5.1
@@ -134,7 +134,7 @@ export namespace GroupKeyManagement {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.2.5.4
      */
-    export const TlvGroupKeySetStruct = TlvObject({
+    export const TlvGroupKeySet = TlvObject({
         /**
          * This field shall provide the fabric-unique index for the associated group key set, as specified in Section
          * 4.16.3.5.1, “Group Key Set ID”.
@@ -224,14 +224,14 @@ export namespace GroupKeyManagement {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.2.5.4
      */
-    export interface GroupKeySetStruct extends TypeFromSchema<typeof TlvGroupKeySetStruct> {}
+    export interface GroupKeySet extends TypeFromSchema<typeof TlvGroupKeySet> {}
 
     /**
      * Input to the GroupKeyManagement keySetWrite command
      *
      * @see {@link MatterSpecification.v13.Core} § 11.2.7.1
      */
-    export const TlvKeySetWriteRequest = TlvObject({ groupKeySet: TlvField(0, TlvGroupKeySetStruct) });
+    export const TlvKeySetWriteRequest = TlvObject({ groupKeySet: TlvField(0, TlvGroupKeySet) });
 
     /**
      * Input to the GroupKeyManagement keySetWrite command
@@ -261,7 +261,7 @@ export namespace GroupKeyManagement {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.2.7.3
      */
-    export const TlvKeySetReadResponse = TlvObject({ groupKeySet: TlvField(0, TlvGroupKeySetStruct) });
+    export const TlvKeySetReadResponse = TlvObject({ groupKeySet: TlvField(0, TlvGroupKeySet) });
 
     /**
      * This command shall be generated in response to the KeySetRead command, if a valid Group Key Set was found. It
@@ -352,7 +352,7 @@ export namespace GroupKeyManagement {
              */
             groupKeyMap: WritableFabricScopedAttribute(
                 0x0,
-                TlvArray(TlvGroupKeyMapStruct),
+                TlvArray(TlvGroupKeyMap),
                 { persistent: true, default: [], writeAcl: AccessLevel.Manage }
             ),
 
@@ -368,7 +368,7 @@ export namespace GroupKeyManagement {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.2.6.2
              */
-            groupTable: FabricScopedAttribute(0x1, TlvArray(TlvGroupInfoMapStruct), { default: [] }),
+            groupTable: FabricScopedAttribute(0x1, TlvArray(TlvGroupInfoMap), { default: [] }),
 
             /**
              * Indicates the maximum number of groups that this node supports per fabric. The value of this attribute

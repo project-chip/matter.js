@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     Attribute,
     Command,
@@ -16,7 +16,7 @@ import {
     EventPriority,
     FixedAttribute,
     OptionalAttribute
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
@@ -30,13 +30,13 @@ import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvInt32, TlvEpochUs, TlvEnum, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace TimeSynchronization {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.17.6.4
      */
-    export const TlvTrustedTimeSourceStruct = TlvObject({
+    export const TlvTrustedTimeSource = TlvObject({
         /**
          * The Fabric Index associated with the Fabric of the client which last set the value of the trusted time
          * source node.
@@ -63,12 +63,12 @@ export namespace TimeSynchronization {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.17.6.4
      */
-    export interface TrustedTimeSourceStruct extends TypeFromSchema<typeof TlvTrustedTimeSourceStruct> {}
+    export interface TrustedTimeSource extends TypeFromSchema<typeof TlvTrustedTimeSource> {}
 
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.17.6.5
      */
-    export const TlvFabricScopedTrustedTimeSourceStruct = TlvObject({
+    export const TlvFabricScopedTrustedTimeSource = TlvObject({
         /**
          * Node ID of the trusted time source node on the Fabric of the issuer.
          *
@@ -89,7 +89,7 @@ export namespace TimeSynchronization {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.17.6.5
      */
-    export interface FabricScopedTrustedTimeSourceStruct extends TypeFromSchema<typeof TlvFabricScopedTrustedTimeSourceStruct> {}
+    export interface FabricScopedTrustedTimeSource extends TypeFromSchema<typeof TlvFabricScopedTrustedTimeSource> {}
 
     /**
      * Input to the TimeSynchronization setTrustedTimeSource command
@@ -102,7 +102,7 @@ export namespace TimeSynchronization {
          *
          * @see {@link MatterSpecification.v13.Core} § 11.17.9.2.1
          */
-        trustedTimeSource: TlvField(0, TlvNullable(TlvFabricScopedTrustedTimeSourceStruct)),
+        trustedTimeSource: TlvField(0, TlvNullable(TlvFabricScopedTrustedTimeSource)),
 
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
@@ -139,7 +139,7 @@ export namespace TimeSynchronization {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.17.6.6
      */
-    export const TlvTimeZoneStruct = TlvObject({
+    export const TlvTimeZone = TlvObject({
         /**
          * The time zone offset from UTC in seconds.
          *
@@ -168,12 +168,12 @@ export namespace TimeSynchronization {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.17.6.6
      */
-    export interface TimeZoneStruct extends TypeFromSchema<typeof TlvTimeZoneStruct> {}
+    export interface TimeZone extends TypeFromSchema<typeof TlvTimeZone> {}
 
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.17.6.7
      */
-    export const TlvDSTOffsetStruct = TlvObject({
+    export const TlvDstOffset = TlvObject({
         /**
          * The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this field will
          * accept any values in the int32 range to accommodate potential future legislation that does not fit with
@@ -202,7 +202,7 @@ export namespace TimeSynchronization {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.17.6.7
      */
-    export interface DSTOffsetStruct extends TypeFromSchema<typeof TlvDSTOffsetStruct> {}
+    export interface DstOffset extends TypeFromSchema<typeof TlvDstOffset> {}
 
     /**
      * It indicates what the device knows about the contents of the IANA Time Zone Database. Partial support on a
@@ -234,7 +234,7 @@ export namespace TimeSynchronization {
      * @see {@link MatterSpecification.v13.Core} § 11.17.9.3
      */
     export const TlvSetTimeZoneRequest = TlvObject({
-        timeZone: TlvField(0, TlvArray(TlvTimeZoneStruct, { minLength: 1, maxLength: 2 }))
+        timeZone: TlvField(0, TlvArray(TlvTimeZone, { minLength: 1, maxLength: 2 }))
     });
 
     /**
@@ -273,7 +273,7 @@ export namespace TimeSynchronization {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.17.9.5
      */
-    export const TlvSetDstOffsetRequest = TlvObject({ dstOffset: TlvField(0, TlvArray(TlvDSTOffsetStruct)) });
+    export const TlvSetDstOffsetRequest = TlvObject({ dstOffset: TlvField(0, TlvArray(TlvDstOffset)) });
 
     /**
      * Input to the TimeSynchronization setDstOffset command
@@ -509,11 +509,7 @@ export namespace TimeSynchronization {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.8.4
              */
-            trustedTimeSource: Attribute(
-                0x3,
-                TlvNullable(TlvTrustedTimeSourceStruct),
-                { persistent: true, default: null }
-            )
+            trustedTimeSource: Attribute(0x3, TlvNullable(TlvTrustedTimeSource), { persistent: true, default: null })
         },
 
         commands: {
@@ -643,7 +639,7 @@ export namespace TimeSynchronization {
              */
             timeZone: Attribute(
                 0x5,
-                TlvArray(TlvTimeZoneStruct, { minLength: 1, maxLength: 2 }),
+                TlvArray(TlvTimeZone, { minLength: 1, maxLength: 2 }),
                 { persistent: true, default: [{ offset: 0, validAt: 0 }] }
             ),
 
@@ -665,7 +661,7 @@ export namespace TimeSynchronization {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.8.7
              */
-            dstOffset: Attribute(0x6, TlvArray(TlvDSTOffsetStruct), { persistent: true, default: [] }),
+            dstOffset: Attribute(0x6, TlvArray(TlvDstOffset), { persistent: true, default: [] }),
 
             /**
              * The computed current local time of the node as a epoch-us (Epoch Time in Microseconds). The value of

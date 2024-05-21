@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     FixedAttribute,
     Command,
@@ -15,7 +15,7 @@ import {
     OptionalCommand,
     Event,
     EventPriority
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";

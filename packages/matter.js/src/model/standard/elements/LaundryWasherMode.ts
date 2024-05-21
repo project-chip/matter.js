@@ -10,7 +10,8 @@ import { Matter } from "../Matter.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
-    DatatypeElement as Datatype
+    DatatypeElement as Datatype,
+    FieldElement as Field
 } from "../../elements/index.js";
 
 export const LaundryWasherMode = Cluster({
@@ -45,6 +46,33 @@ export const LaundryWasherMode = Cluster({
                 "At least one entry in the SupportedModes attribute shall include the Normal mode tag in the " +
                 "ModeTags field list.",
             xref: { document: "cluster", section: "8.5.4.1" }
+        }),
+
+        Datatype({
+            name: "ModeTag", type: "enum16",
+
+            children: [
+                Field({
+                    name: "Normal", id: 0x4000,
+                    details: "The normal regime of operation.",
+                    xref: { document: "cluster", section: "8.5.6.1.1" }
+                }),
+                Field({
+                    name: "Delicate", id: 0x4001,
+                    details: "Mode optimized for washing delicate garments.",
+                    xref: { document: "cluster", section: "8.5.6.1.2" }
+                }),
+                Field({
+                    name: "Heavy", id: 0x4002,
+                    details: "Mode optimized for heavy washing.",
+                    xref: { document: "cluster", section: "8.5.6.1.3" }
+                }),
+                Field({
+                    name: "Whites", id: 0x4003,
+                    details: "Mode optimized for stain removal on white fabrics.",
+                    xref: { document: "cluster", section: "8.5.6.1.4" }
+                })
+            ]
         })
     ]
 });

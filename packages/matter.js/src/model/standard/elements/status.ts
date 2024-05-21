@@ -42,8 +42,8 @@ export const status = Datatype({
             xref: { document: "core", section: "8.10.1" }
         }),
         Field({
-            name: "UnsupportedAccessnotAuthorized", id: 0x7e,
-            description: "The sender of the action or command does not have authorization or access.NOT_AUTHORIZED is an obsolete name of this error code.",
+            name: "UnsupportedAccess", id: 0x7e,
+            description: "The sender of the action or command does not have authorization or access.",
             xref: { document: "core", section: "8.10.1" }
         }),
         Field({
@@ -57,13 +57,13 @@ export const status = Datatype({
             xref: { document: "core", section: "8.10.1" }
         }),
         Field({
-            name: "UnsupportedCommandunsupCommand", id: 0x81,
-            description: "The indicated command ID is not supported on the cluster instance. Command not carried out.UNSUP_COMMAND is an obsolete name for this error code.",
+            name: "UnsupportedCommand", id: 0x81,
+            description: "The indicated command ID is not supported on the cluster instance. Command not carried out.",
             xref: { document: "core", section: "8.10.1" }
         }),
         Field({
-            name: "InvalidCommandinvalidField", id: 0x85,
-            description: "The cluster command is malformed, has missing fields, or fields with invalid values. Command not carried out.INVALID_FIELD is an obsoletename for this error code.",
+            name: "InvalidCommand", id: 0x85,
+            description: "The cluster command is malformed, has missing fields, or fields with invalid values. Command not carried out.",
             xref: { document: "core", section: "8.10.1" }
         }),
         Field({
@@ -72,17 +72,16 @@ export const status = Datatype({
             xref: { document: "core", section: "8.10.1" }
         }),
         Field({
-            name: "ConstraintErrorinvalidValue", id: 0x87,
-            description: "Out of range error or set to a reserved value. Attribute keeps its old value. Note that an attribute value may be out of range if an attribute is related to another, e.g. with minimum and maximum attributes. See the individual attribute descriptions for specific details.INVALID_VALUE is an obsoletename for this error code.",
+            name: "ConstraintError", id: 0x87,
+            description: "Out of range error or set to a reserved value. Attribute keeps its old value. Note that an attribute value may be out of range if an attribute is related to another, e.g. with minimum and maximum attributes. See the individual attribute descriptions for specific details.",
             xref: { document: "core", section: "8.10.1" }
         }),
         Field({
-            name: "UnsupportedWritereadOnly", id: 0x88,
-            description: "Attempt to write a read-only attribute.READ_ONLY is an obsoletename for this error code.",
+            name: "UnsupportedWrite", id: 0x88, description: "Attempt to write a read-only attribute.",
             xref: { document: "core", section: "8.10.1" }
         }),
         Field({
-            name: "ResourceExhaustedinsufficientSpace", id: 0x89,
+            name: "ResourceExhausted", id: 0x89,
             description: "An action or operation failed due to insufficient available resources.INSUFFICIENT_SPACE is anobsolete name for this error code.",
             xref: { document: "core", section: "8.10.1" }
         }),

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     FabricScopedAttribute,
     AccessLevel,
@@ -16,7 +16,7 @@ import {
     TlvNoResponse,
     OptionalFixedAttribute,
     OptionalCommand
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
@@ -27,13 +27,13 @@ import { TlvUInt32, TlvUInt16, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace IcdManagement {
     /**
      * @see {@link MatterSpecification.v13.Core} § 9.17.5.2
      */
-    export const TlvMonitoringRegistrationStruct = TlvObject({
+    export const TlvMonitoringRegistration = TlvObject({
         /**
          * This field shall indicate the NodeID of the Node to which Check-In messages will be sent when the
          * MonitoredSubject is not subscribed.
@@ -72,7 +72,7 @@ export namespace IcdManagement {
     /**
      * @see {@link MatterSpecification.v13.Core} § 9.17.5.2
      */
-    export interface MonitoringRegistrationStruct extends TypeFromSchema<typeof TlvMonitoringRegistrationStruct> {}
+    export interface MonitoringRegistration extends TypeFromSchema<typeof TlvMonitoringRegistration> {}
 
     /**
      * Input to the IcdManagement registerClient command
@@ -337,7 +337,7 @@ export namespace IcdManagement {
              */
             registeredClients: FabricScopedAttribute(
                 0x3,
-                TlvArray(TlvMonitoringRegistrationStruct),
+                TlvArray(TlvMonitoringRegistration),
                 { persistent: true, default: [], readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
             ),
 

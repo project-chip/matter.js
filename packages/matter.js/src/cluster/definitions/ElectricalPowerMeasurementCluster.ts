@@ -6,31 +6,24 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { OptionalAttribute, Attribute, FixedAttribute, OptionalEvent, EventPriority } from "../../cluster/Cluster.js";
-import {
-    TlvInt64,
-    TlvUInt8,
-    TlvEnum,
-    TlvPercent100ths,
-    TlvUInt64,
-    TlvEpochS,
-    TlvSysTimeMS
-} from "../../tlv/TlvNumber.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { OptionalAttribute, Attribute, FixedAttribute, OptionalEvent, EventPriority } from "../Cluster.js";
+import { TlvInt64, TlvUInt8, TlvEnum, TlvEpochS, TlvSysTimeMS } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TlvMeasurementAccuracy } from "../globals/MeasurementAccuracy.js";
+import { MeasurementType } from "../globals/MeasurementType.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ElectricalPowerMeasurement {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 2.13.5.3
      */
-    export const TlvHarmonicMeasurementStruct = TlvObject({
+    export const TlvHarmonicMeasurement = TlvObject({
         /**
          * This field shall be the order of the harmonic being measured. Typically this is an odd number, but servers
          * may choose to report even harmonics.
@@ -61,7 +54,7 @@ export namespace ElectricalPowerMeasurement {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 2.13.5.3
      */
-    export interface HarmonicMeasurementStruct extends TypeFromSchema<typeof TlvHarmonicMeasurementStruct> {}
+    export interface HarmonicMeasurement extends TypeFromSchema<typeof TlvHarmonicMeasurement> {}
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 2.13.5.1
@@ -81,220 +74,6 @@ export namespace ElectricalPowerMeasurement {
     }
 
     /**
-     * The value of ElectricalPowerMeasurement.measurementTypeEnum
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.2
-     */
-    export enum MeasurementType {
-        Unspecified = 0,
-
-        /**
-         * Voltage in millivolts (mV)
-         */
-        Voltage = 1,
-
-        /**
-         * Active current in milliamps (mA)
-         */
-        ActiveCurrent = 2,
-
-        /**
-         * Reactive current in milliamps (mA)
-         */
-        ReactiveCurrent = 3,
-
-        /**
-         * Apparent current in milliamps (mA)
-         */
-        ApparentCurrent = 4,
-
-        /**
-         * Active power in milliwatts (mW)
-         */
-        ActivePower = 5,
-
-        /**
-         * Reactive power in millivolt-amps reactive (mVAR)
-         */
-        ReactivePower = 6,
-
-        /**
-         * Apparent power in millivolt-amps (mVA)
-         */
-        ApparentPower = 7,
-
-        /**
-         * Root mean squared voltage in millivolts (mV)
-         */
-        RmsVoltage = 8,
-
-        /**
-         * Root mean squared current in milliamps (mA)
-         */
-        RmsCurrent = 9,
-
-        /**
-         * Root mean squared power in milliwatts (mW)
-         */
-        RmsPower = 10,
-
-        /**
-         * AC frequency in millihertz (mHz)
-         */
-        Frequency = 11,
-
-        /**
-         * Power Factor ratio in+/- 1/100ths of a percent.
-         */
-        PowerFactor = 12,
-
-        /**
-         * AC neutral current in milliamps (mA)
-         */
-        NeutralCurrent = 13,
-
-        /**
-         * Electrical energy in milliwatt-hours (mWh)
-         */
-        ElectricalEnergy = 14
-    }
-
-    /**
-     * The value of ElectricalPowerMeasurement.measurementAccuracyRangeStruct
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3
-     */
-    export const TlvMeasurementAccuracyRangeStruct = TlvObject({
-        /**
-         * This field shall indicate the minimum measurement value for the specified level of accuracy.
-         *
-         * The value of this field shall be greater than or equal to the value of the MinMeasuredValue field on the
-         * encompassing MeasurementAccuracyStruct.
-         *
-         * The value of this field shall be less than or equal to the value of the MaxMeasuredValue field on the
-         * encompassing MeasurementAccuracyStruct.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.1
-         */
-        rangeMin: TlvField(0, TlvInt64.bound({ min: -262, max: 262 })),
-
-        /**
-         * This field shall indicate the maximum measurement value for the specified level of accuracy. The value of
-         * this field shall be greater than the value of the RangeMin field.
-         *
-         * The value of this field shall be greater than or equal to the value of the MinMeasuredValue field on the
-         * encompassing MeasurementAccuracyStruct.
-         *
-         * The value of this field shall be less than or equal to the value of the MaxMeasuredValue field on the
-         * encompassing MeasurementAccuracyStruct.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.2
-         */
-        rangeMax: TlvField(1, TlvInt64.bound({ min: -262, max: 262 })),
-
-        /**
-         * This field shall indicate the maximum +/- percentage accuracy for the associated measurement.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.3
-         */
-        percentMax: TlvOptionalField(2, TlvPercent100ths),
-
-        /**
-         * This field shall indicate the minimum +/- percentage accuracy for the associated measurement.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.4
-         */
-        percentMin: TlvOptionalField(3, TlvPercent100ths),
-
-        /**
-         * This field shall indicate the typical +/- percentage accuracy for the associated measurement.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.5
-         */
-        percentTypical: TlvOptionalField(4, TlvPercent100ths),
-
-        /**
-         * This field shall indicate the maximum +/- fixed accuracy for the associated measurement, in the unit
-         * indicated by MeasurementType.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.6
-         */
-        fixedMax: TlvOptionalField(5, TlvUInt64),
-
-        /**
-         * This field shall indicate the minimum +/- fixed accuracy for the associated measurement, in the unit
-         * indicated by MeasurementType.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.7
-         */
-        fixedMin: TlvOptionalField(6, TlvUInt64),
-
-        /**
-         * This field shall indicate the typical +/- fixed accuracy for the associated measurement, in the unit
-         * indicated by MeasurementType.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.8
-         */
-        fixedTypical: TlvOptionalField(7, TlvUInt64)
-    });
-
-    /**
-     * The value of ElectricalPowerMeasurement.measurementAccuracyRangeStruct
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3
-     */
-    export interface MeasurementAccuracyRangeStruct extends TypeFromSchema<typeof TlvMeasurementAccuracyRangeStruct> {}
-
-    /**
-     * The value of ElectricalPowerMeasurement.measurementAccuracyStruct
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4
-     */
-    export const TlvMeasurementAccuracyStruct = TlvObject({
-        /**
-         * This field shall indicate the type of measurement for the accuracy provided.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4.1
-         */
-        measurementType: TlvField(0, TlvEnum<MeasurementType>()),
-
-        /**
-         * This field shall indicate whether the associated measurement was directly measured. If this field is not set
-         * to true, then the associated measurement was estimated.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4.2
-         */
-        measured: TlvField(1, TlvBoolean),
-
-        minMeasuredValue: TlvField(2, TlvInt64.bound({ min: -262, max: 262 })),
-        maxMeasuredValue: TlvField(3, TlvInt64.bound({ min: -262, max: 262 })),
-
-        /**
-         * This field shall indicate a list of measurement ranges and their associated accuracies.
-         *
-         * The value of the RangeMin field on the first MeasurementAccuracyRangeStruct in this list shall be equal to
-         * the value of the MinMeasuredValue field.
-         *
-         * The value of the RangeMax field on the last MeasurementAccuracyRangeStruct in this list shall be less than
-         * or equal to the value of the MaxMeasuredValue field.
-         *
-         * The value of the RangeMin field on each MeasurementAccuracyRangeStruct in this list other than the first
-         * shall be one more the value of the RangeMax field on the previous MeasurementAccuracyRangeStruct in this
-         * list (i.e. there shall be no gaps in the accuracy ranges, and the ranges shall be in increasing order).
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4.5
-         */
-        accuracyRanges: TlvField(4, TlvArray(TlvMeasurementAccuracyRangeStruct, { minLength: 1 }))
-    });
-
-    /**
-     * The value of ElectricalPowerMeasurement.measurementAccuracyStruct
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4
-     */
-    export interface MeasurementAccuracyStruct extends TypeFromSchema<typeof TlvMeasurementAccuracyStruct> {}
-
-    /**
      * This struct shall indicate the maximum and minimum values of a given measurement type during a measurement
      * period, along with the observation times of these values.
      *
@@ -308,7 +87,7 @@ export namespace ElectricalPowerMeasurement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.13.5.2
      */
-    export const TlvMeasurementRangeStruct = TlvObject({
+    export const TlvMeasurementRange = TlvObject({
         /**
          * This field shall be the type of measurement for the range provided.
          *
@@ -426,7 +205,7 @@ export namespace ElectricalPowerMeasurement {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.13.5.2
      */
-    export interface MeasurementRangeStruct extends TypeFromSchema<typeof TlvMeasurementRangeStruct> {}
+    export interface MeasurementRange extends TypeFromSchema<typeof TlvMeasurementRange> {}
 
     /**
      * Body of the ElectricalPowerMeasurement measurementPeriodRanges event
@@ -439,7 +218,7 @@ export namespace ElectricalPowerMeasurement {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 2.13.7.1.1
          */
-        ranges: TlvField(0, TlvArray(TlvMeasurementRangeStruct))
+        ranges: TlvField(0, TlvArray(TlvMeasurementRange))
     });
 
     /**
@@ -671,7 +450,7 @@ export namespace ElectricalPowerMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.13.6.16
              */
-            harmonicCurrents: Attribute(0xf, TlvNullable(TlvArray(TlvHarmonicMeasurementStruct)), { default: null })
+            harmonicCurrents: Attribute(0xf, TlvNullable(TlvArray(TlvHarmonicMeasurement)), { default: null })
         }
     });
 
@@ -697,7 +476,7 @@ export namespace ElectricalPowerMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.13.6.17
              */
-            harmonicPhases: Attribute(0x10, TlvNullable(TlvArray(TlvHarmonicMeasurementStruct)), { default: null })
+            harmonicPhases: Attribute(0x10, TlvNullable(TlvArray(TlvHarmonicMeasurement)), { default: null })
         }
     });
 
@@ -864,7 +643,7 @@ export namespace ElectricalPowerMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.13.6.3
              */
-            accuracy: FixedAttribute(0x2, TlvArray(TlvMeasurementAccuracyStruct, { minLength: 1 })),
+            accuracy: FixedAttribute(0x2, TlvArray(TlvMeasurementAccuracy, { minLength: 1 })),
 
             /**
              * This shall indicate a list of measured ranges for different measurement types. Each measurement type
@@ -882,7 +661,7 @@ export namespace ElectricalPowerMeasurement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 2.13.6.4
              */
-            ranges: OptionalAttribute(0x3, TlvArray(TlvMeasurementRangeStruct, { minLength: 0 }), { default: [] }),
+            ranges: OptionalAttribute(0x3, TlvArray(TlvMeasurementRange, { minLength: 0 }), { default: [] }),
 
             /**
              * This shall indicate the most recent Voltage reading in millivolts (mV).

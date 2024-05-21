@@ -7,7 +7,7 @@
 import { InternalError } from "@project-chip/matter.js/common";
 import { Specification } from "@project-chip/matter.js/model";
 import { serialize } from "@project-chip/matter.js/util";
-import { readMatterFile, writeMatterFile } from "./file.js";
+import { readMatterFile, relative, writeMatterFile } from "./file.js";
 import { asObjectKey, wordWrap } from "./string.js";
 
 const HEADER = `/**
@@ -592,8 +592,7 @@ class ExpressionBlock extends NestedBlock {
 }
 
 /**
- * Quick & dirty support for code gen.  Less cumberson than e.g. TS compiler
- * AST
+ * Quick & dirty support for code gen.  Less cumberson than e.g. TS compiler AST
  */
 export class TsFile extends Block {
     private imports = new Map<string, Array<string>>();
@@ -603,6 +602,10 @@ export class TsFile extends Block {
         public name: string,
         private editable = false,
     ) {
+        if (name.match(/\.[a-z]+$/)) {
+            throw new InternalError(`Filename ${name} should not have an extension`);
+        }
+
         super(undefined);
 
         this.header = this.section();
@@ -616,15 +619,32 @@ export class TsFile extends Block {
         this.header.raw(header);
     }
 
+    get basename() {
+        return this.name.replace(/^.*[/\\]/, "");
+    }
+
     addImport(file: string, name?: string) {
-        if (file.startsWith(".")) {
+        // The set of imports we allow is intentionally restrictive so we can catch errors more easily.  Extend as
+        // necessary
+        if (file.startsWith(".") || file.startsWith("#")) {
             if (!file.endsWith(".js")) {
                 throw new InternalError(`Local import of ${file} has no .js suffix`);
             }
+        } else if (file.endsWith(".js")) {
+            throw new InternalError(`Local import of ${file} must start with "#" or "."`);
+        } else if (!file.startsWith("@project-chip")) {
+            throw new InternalError(`Absolute import of ${file} must start with "@project-chip"`);
         }
 
         if (file.match(/\.[a-z]+\.[a-z]+$/)) {
             throw new InternalError(`Import of ${file} has multiple suffices`);
+        }
+
+        if (file.startsWith("#")) {
+            file = relative(this.name.replace(/\/[^/]+/g, ""), file);
+            if (!file.startsWith(".")) {
+                file = `./${file}`;
+            }
         }
 
         let list = this.imports.get(file);

@@ -6,12 +6,22 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace RefrigeratorAlarm {
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 8.8.5.1
+     */
+    export const Alarm = {
+        /**
+         * The cabinet’s door has been open for a vendor defined amount of time.
+         */
+        doorOpen: BitFlag(0)
+    };
+
     /**
      * These are optional features supported by RefrigeratorAlarmCluster.
      *
@@ -66,7 +76,6 @@ export namespace RefrigeratorAlarm {
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
-
     export const Complete = Cluster;
 }
 

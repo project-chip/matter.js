@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     Attribute,
     FixedAttribute,
@@ -14,7 +14,7 @@ import {
     Command,
     TlvNoResponse,
     OptionalCommand
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvUInt8, TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
@@ -22,7 +22,7 @@ import { TlvOptionalField, TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace MicrowaveOvenControl {
     /**

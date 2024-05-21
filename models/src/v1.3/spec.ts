@@ -2211,7 +2211,7 @@ export const SpecMatter = Matter({
                 }),
 
                 Datatype({
-                    name: "semtag", type: "struct",
+                    name: "SemanticTagStruct", type: "struct",
                     details: "A Semantic Tag is meant to be interpreted by the client for the purpose the cluster serves.",
                     xref: { document: "cluster", section: "1.9.5.1" },
 
@@ -2275,7 +2275,7 @@ export const SpecMatter = Matter({
                                 "Clients seeking the option for either HIGH or MAX will find the same option in this case.",
 
                             xref: { document: "cluster", section: "1.9.5.2.3" },
-                            children: [Field({ name: "entry", type: "semtag" })]
+                            children: [Field({ name: "entry", type: "SemanticTagStruct" })]
                         })
                     ]
                 })
@@ -2539,6 +2539,85 @@ export const SpecMatter = Matter({
 
                             xref: { document: "cluster", section: "1.10.5.2.3" },
                             children: [Field({ name: "entry", type: "ModeTagStruct" })]
+                        })
+                    ]
+                }),
+
+                Datatype({
+                    name: "ModeChangeStatus", type: "enum8",
+
+                    children: [
+                        Field({
+                            name: "Success", id: 0x0,
+                            description: "Switching to the mode indicated by the NewMode field is allowed and possible. The CurrentMode attribute is set to the value of the NewMode field.",
+                            xref: { document: "cluster", section: "1.10.7.2.1.2" }
+                        }),
+                        Field({
+                            name: "UnsupportedMode", id: 0x1,
+                            description: "The value of the NewMode field doesn’t match any entries in the SupportedMode attribute.",
+                            xref: { document: "cluster", section: "1.10.7.2.1.2" }
+                        }),
+                        Field({
+                            name: "GenericFailure", id: 0x2,
+                            description: "Generic failure code, indicating that switching to the mode indicated by the NewMode field is not allowed or not possible.",
+                            xref: { document: "cluster", section: "1.10.7.2.1.2" }
+                        }),
+                        Field({
+                            name: "InvalidInMode", id: 0x3,
+                            description: "The received request cannot be handled due to the current mode of the device",
+                            xref: { document: "cluster", section: "1.10.7.2.1.2" }
+                        })
+                    ]
+                }),
+
+                Datatype({
+                    name: "ModeTag", type: "enum16",
+
+                    children: [
+                        Field({
+                            name: "Auto", id: 0x0,
+                            description: "The device decides which options, features and setting values to use.",
+                            xref: { document: "cluster", section: "1.10.8" }
+                        }),
+                        Field({
+                            name: "Quick", id: 0x1, description: "The mode of the device is optimizing for faster completion.",
+                            xref: { document: "cluster", section: "1.10.8" }
+                        }),
+                        Field({
+                            name: "Quiet", id: 0x2, description: "The device is silent or barely audible while in this mode.",
+                            xref: { document: "cluster", section: "1.10.8" }
+                        }),
+                        Field({
+                            name: "LowNoise", id: 0x3,
+                            description: "Either the mode is inherently low noise or the device optimizes for that.",
+                            xref: { document: "cluster", section: "1.10.8" }
+                        }),
+                        Field({
+                            name: "LowEnergy", id: 0x4,
+                            description: "The device is optimizing for lower energy usage in this mode. Sometimes called \"Eco mode\".",
+                            xref: { document: "cluster", section: "1.10.8" }
+                        }),
+                        Field({
+                            name: "Vacation", id: 0x5,
+                            description: "A mode suitable for use during vacations or other extended absences.",
+                            xref: { document: "cluster", section: "1.10.8" }
+                        }),
+                        Field({
+                            name: "Min", id: 0x6, description: "The mode uses the lowest available setting value.",
+                            xref: { document: "cluster", section: "1.10.8" }
+                        }),
+                        Field({
+                            name: "Max", id: 0x7, description: "The mode uses the highest available setting value.",
+                            xref: { document: "cluster", section: "1.10.8" }
+                        }),
+                        Field({
+                            name: "Night", id: 0x8,
+                            description: "The mode is recommended or suitable for use during night time.",
+                            xref: { document: "cluster", section: "1.10.8" }
+                        }),
+                        Field({
+                            name: "Day", id: 0x9, description: "The mode is recommended or suitable for use during day time.",
+                            xref: { document: "cluster", section: "1.10.8" }
                         })
                     ]
                 })
@@ -18854,6 +18933,70 @@ export const SpecMatter = Matter({
                         "a mode’s ModeTags.",
 
                     xref: { document: "cluster", section: "7.2.5.1" }
+                }),
+
+                Datatype({
+                    name: "ModeChangeStatus", type: "enum8",
+
+                    children: [
+                        Field({ name: "Stuck", id: 0x41, xref: { document: "cluster", section: "7.2.7.1" } }),
+                        Field({ name: "DustBinMissing", id: 0x42, xref: { document: "cluster", section: "7.2.7.1" } }),
+                        Field({ name: "DustBinFull", id: 0x43, xref: { document: "cluster", section: "7.2.7.1" } }),
+                        Field({ name: "WaterTankEmpty", id: 0x44, xref: { document: "cluster", section: "7.2.7.1" } }),
+                        Field({
+                            name: "WaterTankMissing", id: 0x45,
+                            xref: { document: "cluster", section: "7.2.7.1" }
+                        }),
+                        Field({
+                            name: "WaterTankLidOpen", id: 0x46,
+                            xref: { document: "cluster", section: "7.2.7.1" }
+                        }),
+                        Field({
+                            name: "MopCleaningPadMissing", id: 0x47,
+                            xref: { document: "cluster", section: "7.2.7.1" }
+                        }),
+                        Field({ name: "BatteryLow", id: 0x48, xref: { document: "cluster", section: "7.2.7.1" } })
+                    ]
+                }),
+
+                Datatype({
+                    name: "ModeTag", type: "enum16",
+
+                    children: [
+                        Field({
+                            name: "Idle", id: 0x4000,
+                            details: "The device is not performing any of the main operations of the other modes. However, auxiliary " +
+                                "actions, such as seeking the charger or charging, may occur." +
+                                "\n" +
+                                "For example, the device has completed cleaning, successfully or not, on its own or due to a " +
+                                "command, or has not been asked to clean after a restart.",
+                            xref: { document: "cluster", section: "7.2.7.2.1" }
+                        }),
+
+                        Field({
+                            name: "Cleaning", id: 0x4001,
+                            details: "The device was asked to clean so it may be actively running, or paused due to an error, due to a " +
+                                "pause command, or for recharging etc. If currently paused and the device can resume it will " +
+                                "continue to clean.",
+                            xref: { document: "cluster", section: "7.2.7.2.2" }
+                        }),
+
+                        Field({
+                            name: "Mapping", id: 0x4002,
+
+                            details: "The device was asked to create a map of the space it is located in, so it may be actively running, " +
+                                "or paused due to an error, due to a pause command, or for recharging etc. If currently paused and " +
+                                "the device can resume, it will continue to map." +
+                                "\n" +
+                                "NOTE" +
+                                "\n" +
+                                "this mode is intended to be used so the current space can be mapped by the device if the robot has " +
+                                "not previously done that, or if the layout has substantially changed, for an optimal subsequent " +
+                                "cleaning experience.",
+
+                            xref: { document: "cluster", section: "7.2.7.2.3" }
+                        })
+                    ]
                 })
             ]
         }),
@@ -18885,6 +19028,29 @@ export const SpecMatter = Matter({
                         "At least one entry in the SupportedModes attribute shall include the Vacuum and/or the Mop mode tag " +
                         "in the ModeTags field list.",
                     xref: { document: "cluster", section: "7.3.5.1" }
+                }),
+
+                Datatype({
+                    name: "ModeChangeStatus", type: "enum8",
+                    children: [Field({ name: "CleaningInProgress", id: 0x40, xref: { document: "cluster", section: "7.3.7.1" } })]
+                }),
+
+                Datatype({
+                    name: "ModeTag", type: "enum16",
+
+                    children: [
+                        Field({ name: "DeepClean", id: 0x4000, xref: { document: "cluster", section: "7.3.7.2" } }),
+                        Field({
+                            name: "Vacuum", id: 0x4001,
+                            details: "The device’s vacuuming feature is enabled in this mode.",
+                            xref: { document: "cluster", section: "7.3.7.2.2" }
+                        }),
+                        Field({
+                            name: "Mop", id: 0x4002,
+                            details: "The device’s mopping feature is enabled in this mode.",
+                            xref: { document: "cluster", section: "7.3.7.2.3" }
+                        })
+                    ]
                 })
             ]
         }),
@@ -19193,6 +19359,28 @@ export const SpecMatter = Matter({
                         "At least one entry in the SupportedModes attribute shall include the Normal mode tag in the " +
                         "ModeTags field list.",
                     xref: { document: "cluster", section: "8.3.4.1" }
+                }),
+
+                Datatype({
+                    name: "ModeTag", type: "enum16",
+
+                    children: [
+                        Field({
+                            name: "Normal", id: 0x4000,
+                            details: "The normal regime of operation.",
+                            xref: { document: "cluster", section: "8.3.6.1.1" }
+                        }),
+                        Field({
+                            name: "Heavy", id: 0x4001,
+                            details: "Mode optimized for washing heavily-soiled dishes.",
+                            xref: { document: "cluster", section: "8.3.6.1.2" }
+                        }),
+                        Field({
+                            name: "Light", id: 0x4002,
+                            details: "Mode optimized for light washing.",
+                            xref: { document: "cluster", section: "8.3.6.1.3" }
+                        })
+                    ]
                 })
             ]
         }),
@@ -19260,6 +19448,33 @@ export const SpecMatter = Matter({
                         "At least one entry in the SupportedModes attribute shall include the Normal mode tag in the " +
                         "ModeTags field list.",
                     xref: { document: "cluster", section: "8.5.4.1" }
+                }),
+
+                Datatype({
+                    name: "ModeTag", type: "enum16",
+
+                    children: [
+                        Field({
+                            name: "Normal", id: 0x4000,
+                            details: "The normal regime of operation.",
+                            xref: { document: "cluster", section: "8.5.6.1.1" }
+                        }),
+                        Field({
+                            name: "Delicate", id: 0x4001,
+                            details: "Mode optimized for washing delicate garments.",
+                            xref: { document: "cluster", section: "8.5.6.1.2" }
+                        }),
+                        Field({
+                            name: "Heavy", id: 0x4002,
+                            details: "Mode optimized for heavy washing.",
+                            xref: { document: "cluster", section: "8.5.6.1.3" }
+                        }),
+                        Field({
+                            name: "Whites", id: 0x4003,
+                            details: "Mode optimized for stain removal on white fabrics.",
+                            xref: { document: "cluster", section: "8.5.6.1.4" }
+                        })
+                    ]
                 })
             ]
         }),
@@ -19407,6 +19622,23 @@ export const SpecMatter = Matter({
                         "At least one entry in the SupportedModes attribute shall include the Auto mode tag in the ModeTags " +
                         "field list.",
                     xref: { document: "cluster", section: "8.7.4.1" }
+                }),
+
+                Datatype({
+                    name: "ModeTag", type: "enum16",
+
+                    children: [
+                        Field({
+                            name: "RapidCool", id: 0x4000,
+                            details: "This mode reduces the temperature rapidly, typically above freezing grade.",
+                            xref: { document: "cluster", section: "8.7.6.1.1" }
+                        }),
+                        Field({
+                            name: "RapidFreeze", id: 0x4001,
+                            details: "This mode reduces the temperature rapidly, below freezing grade.",
+                            xref: { document: "cluster", section: "8.7.6.1.2" }
+                        })
+                    ]
                 })
             ]
         }),
@@ -19525,7 +19757,66 @@ export const SpecMatter = Matter({
             details: "This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced " +
                 "enumerated values for oven devices.",
             xref: { document: "cluster", section: "8.11" },
-            children: [Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 })]
+
+            children: [
+                Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+
+                Datatype({
+                    name: "ModeTag", type: "enum16",
+
+                    children: [
+                        Field({
+                            name: "Bake", id: 0x4000,
+                            details: "This mode sets the device into baking mode for baking food items.",
+                            xref: { document: "cluster", section: "8.11.4.1.1" }
+                        }),
+
+                        Field({
+                            name: "Convection", id: 0x4001,
+                            details: "This mode sets the device into convection mode which creates an airflow within the device during " +
+                                "the cooking duration.",
+                            xref: { document: "cluster", section: "8.11.4.1.2" }
+                        }),
+
+                        Field({
+                            name: "Grill", id: 0x4002,
+                            details: "This mode sets the device into grill mode for grilling food items. This is the same as Broil for " +
+                                "many regions.",
+                            xref: { document: "cluster", section: "8.11.4.1.3" }
+                        }),
+
+                        Field({
+                            name: "Roast", id: 0x4003,
+                            details: "This mode sets the device into roast mode for roasting food items.",
+                            xref: { document: "cluster", section: "8.11.4.1.4" }
+                        }),
+                        Field({
+                            name: "Clean", id: 0x4004,
+                            details: "This mode sets the device into cleaning mode to clean the internal components of the appliance.",
+                            xref: { document: "cluster", section: "8.11.4.1.5" }
+                        }),
+                        Field({
+                            name: "ConvectionBake", id: 0x4005,
+                            xref: { document: "cluster", section: "8.11.4.1" }
+                        }),
+                        Field({
+                            name: "ConvectionRoast", id: 0x4006,
+                            xref: { document: "cluster", section: "8.11.4.1" }
+                        }),
+                        Field({
+                            name: "Warming", id: 0x4007,
+                            details: "This mode sets the device into a warming mode which begins warming the cavity.",
+                            xref: { document: "cluster", section: "8.11.4.1.8" }
+                        }),
+                        Field({
+                            name: "Proofing", id: 0x4008,
+                            details: "This mode sets the device into proofing mode which creates an environment ready for proofing.",
+                            xref: { document: "cluster", section: "8.11.4.1.9" }
+                        }),
+                        Field({ name: "Steam", id: 0x4009, xref: { document: "cluster", section: "8.11.4.1" } })
+                    ]
+                })
+            ]
         }),
 
         Cluster({
@@ -19553,6 +19844,21 @@ export const SpecMatter = Matter({
                 Command({
                     name: "ChangeToModeResponse", id: 0x1, conformance: "X",
                     xref: { document: "cluster", section: "8.12.5" }
+                }),
+
+                Datatype({
+                    name: "ModeTag", type: "enum16",
+
+                    children: [
+                        Field({
+                            name: "Normal", id: 0x4000, description: "The normal mode of operation",
+                            xref: { document: "cluster", section: "8.12.6.1" }
+                        }),
+                        Field({
+                            name: "Defrost", id: 0x4001, description: "A mode optimized for defrosting foods",
+                            xref: { document: "cluster", section: "8.12.6.1" }
+                        })
+                    ]
                 })
             ]
         }),
@@ -22150,7 +22456,37 @@ export const SpecMatter = Matter({
             details: "This cluster is derived from the Mode Base cluster which also defines a namespace for the operation " +
                 "of EVSE devices.",
             xref: { document: "cluster", section: "9.4" },
-            children: [Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 })]
+
+            children: [
+                Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
+
+                Datatype({
+                    name: "ModeTag", type: "enum16",
+
+                    children: [
+                        Field({
+                            name: "Manual", id: 0x4000,
+                            details: "While in this mode, the EVSE needs to be sent an EnableEvseCharging or EnableEvseDischarging " +
+                                "command to make the EVSE start charging or discharging.",
+                            xref: { document: "cluster", section: "9.4.4.1.1" }
+                        }),
+
+                        Field({
+                            name: "TimeOfUse", id: 0x4001,
+                            details: "While in this mode, the EVSE will attempt to automatically start charging based on the user’s " +
+                                "charging targets and a Time of Use tariff to charge at the cheapest times of the day.",
+                            xref: { document: "cluster", section: "9.4.4.1.2" }
+                        }),
+
+                        Field({
+                            name: "SolarCharging", id: 0x4002,
+                            details: "While in this mode, the EVSE will attempt to automatically start charging based on available excess " +
+                                "solar PV generation, limiting the charging power to avoid imported energy from the grid.",
+                            xref: { document: "cluster", section: "9.4.4.1.3" }
+                        })
+                    ]
+                })
+            ]
         }),
 
         Cluster({
@@ -22352,6 +22688,41 @@ export const SpecMatter = Matter({
                     details: "The table below lists the changes relative to the Mode Base cluster for the fields of the " +
                         "ModeOptionStruct type. A blank field indicates no change.",
                     xref: { document: "cluster", section: "9.6.4.1" }
+                }),
+
+                Datatype({
+                    name: "ModeTag", type: "enum16",
+
+                    children: [
+                        Field({
+                            name: "NoOptimization", id: 0x4000,
+                            details: "The device prohibits optimization of energy usage management: its energy usage is determined only " +
+                                "by the user configuration and internal device needs. This tag cannot be included with any of the " +
+                                "other tags defined below in a mode.",
+                            xref: { document: "cluster", section: "9.6.5.1.1" }
+                        }),
+
+                        Field({
+                            name: "DeviceOptimization", id: 0x4001,
+                            details: "The device is permitted to manage its own energy usage. For example, using tariff information it " +
+                                "may obtain.",
+                            xref: { document: "cluster", section: "9.6.5.1.2" }
+                        }),
+
+                        Field({
+                            name: "LocalOptimization", id: 0x4002,
+                            details: "The device permits management of energy usage by an energy manager to optimize the local energy " +
+                                "usage.",
+                            xref: { document: "cluster", section: "9.6.5.1.3" }
+                        }),
+
+                        Field({
+                            name: "GridOptimization", id: 0x4003,
+                            details: "The device permits management of energy usage by an energy manager to optimize the grid energy " +
+                                "usage.",
+                            xref: { document: "cluster", section: "9.6.5.1.4" }
+                        })
+                    ]
                 })
             ]
         }),
@@ -23010,14 +23381,14 @@ export const SpecMatter = Matter({
             xref: { document: "core", section: "7.18.2.17" },
 
             children: [
-                Field({ name: "InformationForEngineeringDebuggingTroubleshooting", id: 0x0 }),
+                Field({ name: "Debug", id: 0x0, description: "Information for engineering debugging/troubleshooting" }),
                 Field({
-                    name: "InformationThatEitherDrivesCustomerFacingFeaturesOrProvidesInsightsIntoDeviceFunctionsThatAreUsedToDriveAnalyticsUseCases",
-                    id: 0x1
+                    name: "Info", id: 0x1,
+                    description: "Information that either drives customer facing features or provides insights into device functions that are used to drive analytics use cases"
                 }),
                 Field({
-                    name: "InformationOrNotificationThatImpactsSafetyAcriticalFunctionOrOngoingReliableOperationOfTheNodeOrApplicationSupportedOnAnEndpoint",
-                    id: 0x2
+                    name: "Critical", id: 0x2,
+                    description: "Information or notification that impacts safety, a critical function, or ongoing reliable operation of the node or application supported on an endpoint."
                 })
             ]
         }),
@@ -23055,8 +23426,8 @@ export const SpecMatter = Matter({
                     xref: { document: "core", section: "8.10.1" }
                 }),
                 Field({
-                    name: "UnsupportedAccessnotAuthorized", id: 0x7e,
-                    description: "The sender of the action or command does not have authorization or access.NOT_AUTHORIZED is an obsolete name of this error code.",
+                    name: "UnsupportedAccess", id: 0x7e,
+                    description: "The sender of the action or command does not have authorization or access.",
                     xref: { document: "core", section: "8.10.1" }
                 }),
                 Field({
@@ -23070,13 +23441,13 @@ export const SpecMatter = Matter({
                     xref: { document: "core", section: "8.10.1" }
                 }),
                 Field({
-                    name: "UnsupportedCommandunsupCommand", id: 0x81,
-                    description: "The indicated command ID is not supported on the cluster instance. Command not carried out.UNSUP_COMMAND is an obsolete name for this error code.",
+                    name: "UnsupportedCommand", id: 0x81,
+                    description: "The indicated command ID is not supported on the cluster instance. Command not carried out.",
                     xref: { document: "core", section: "8.10.1" }
                 }),
                 Field({
-                    name: "InvalidCommandinvalidField", id: 0x85,
-                    description: "The cluster command is malformed, has missing fields, or fields with invalid values. Command not carried out.INVALID_FIELD is an obsoletename for this error code.",
+                    name: "InvalidCommand", id: 0x85,
+                    description: "The cluster command is malformed, has missing fields, or fields with invalid values. Command not carried out.",
                     xref: { document: "core", section: "8.10.1" }
                 }),
                 Field({
@@ -23085,17 +23456,16 @@ export const SpecMatter = Matter({
                     xref: { document: "core", section: "8.10.1" }
                 }),
                 Field({
-                    name: "ConstraintErrorinvalidValue", id: 0x87,
-                    description: "Out of range error or set to a reserved value. Attribute keeps its old value. Note that an attribute value may be out of range if an attribute is related to another, e.g. with minimum and maximum attributes. See the individual attribute descriptions for specific details.INVALID_VALUE is an obsoletename for this error code.",
+                    name: "ConstraintError", id: 0x87,
+                    description: "Out of range error or set to a reserved value. Attribute keeps its old value. Note that an attribute value may be out of range if an attribute is related to another, e.g. with minimum and maximum attributes. See the individual attribute descriptions for specific details.",
                     xref: { document: "core", section: "8.10.1" }
                 }),
                 Field({
-                    name: "UnsupportedWritereadOnly", id: 0x88,
-                    description: "Attempt to write a read-only attribute.READ_ONLY is an obsoletename for this error code.",
+                    name: "UnsupportedWrite", id: 0x88, description: "Attempt to write a read-only attribute.",
                     xref: { document: "core", section: "8.10.1" }
                 }),
                 Field({
-                    name: "ResourceExhaustedinsufficientSpace", id: 0x89,
+                    name: "ResourceExhausted", id: 0x89,
                     description: "An action or operation failed due to insufficient available resources.INSUFFICIENT_SPACE is anobsolete name for this error code.",
                     xref: { document: "core", section: "8.10.1" }
                 }),

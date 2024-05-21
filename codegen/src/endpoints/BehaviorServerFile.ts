@@ -29,7 +29,7 @@ export class BehaviorServerFile extends TsFile {
     private generate() {
         logger.info(`${this.cluster.name} → ${this.name}.ts`);
 
-        this.addImport(`./${this.cluster.name}Behavior.js`, `${this.cluster.name}Behavior`);
+        this.addImport(`#behaviors/${this.cluster.name}Behavior.js`, `${this.cluster.name}Behavior`);
 
         let extraDoc;
 

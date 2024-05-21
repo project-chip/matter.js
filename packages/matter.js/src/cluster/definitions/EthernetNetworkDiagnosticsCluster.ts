@@ -6,21 +6,21 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, Command, TlvNoResponse, AccessLevel, OptionalAttribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, Command, TlvNoResponse, AccessLevel, OptionalAttribute } from "../Cluster.js";
 import { TlvUInt64, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace EthernetNetworkDiagnostics {
     /**
      * @see {@link MatterSpecification.v13.Core} § 11.16.5.1
      */
-    export enum PHYRate {
+    export enum PhyRate {
         /**
          * PHY rate is 10Mbps
          */
@@ -213,7 +213,7 @@ export namespace EthernetNetworkDiagnostics {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.16.6.1
              */
-            phyRate: OptionalAttribute(0x0, TlvNullable(TlvEnum<PHYRate>()), { default: null }),
+            phyRate: OptionalAttribute(0x0, TlvNullable(TlvEnum<PhyRate>()), { default: null }),
 
             /**
              * The FullDuplex attribute shall indicate if the Node is currently utilizing the full-duplex operating

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     Attribute,
     OptionalWritableAttribute,
@@ -19,7 +19,7 @@ import {
     TlvNoResponse,
     OptionalCommand,
     OptionalAttribute
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvEnum, TlvUInt32, TlvUInt16, TlvEpochS, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
@@ -33,7 +33,7 @@ import { StatusCode as GlobalStatusCode } from "../../protocol/interaction/Statu
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace DoorLock {
     /**
@@ -596,7 +596,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.26
      */
-    export const TlvCredentialStruct = TlvObject({
+    export const TlvCredential = TlvObject({
         /**
          * This field shall indicate the credential field used to authorize the lock operation.
          *
@@ -620,7 +620,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.26
      */
-    export interface CredentialStruct extends TypeFromSchema<typeof TlvCredentialStruct> {}
+    export interface Credential extends TypeFromSchema<typeof TlvCredential> {}
 
     /**
      * Returns the user for the specified UserIndex.
@@ -679,7 +679,7 @@ export namespace DoorLock {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.36.7
          */
-        credentials: TlvField(6, TlvNullable(TlvArray(TlvCredentialStruct, { minLength: 0 }))),
+        credentials: TlvField(6, TlvNullable(TlvArray(TlvCredential, { minLength: 0 }))),
 
         /**
          * This field shall indicate the user’s creator fabric index. CreatorFabricIndex shall be null if UserStatus is
@@ -763,7 +763,7 @@ export namespace DoorLock {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.40.2
          */
-        credential: TlvField(1, TlvCredentialStruct),
+        credential: TlvField(1, TlvCredential),
 
         /**
          * This field shall indicate the credential data to set for the credential being added or modified. The length
@@ -884,7 +884,7 @@ export namespace DoorLock {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.42.1
          */
-        credential: TlvField(0, TlvCredentialStruct)
+        credential: TlvField(0, TlvCredential)
     });
 
     /**
@@ -969,7 +969,7 @@ export namespace DoorLock {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.44.1
          */
-        credential: TlvField(0, TlvNullable(TlvCredentialStruct))
+        credential: TlvField(0, TlvNullable(TlvCredential))
     });
 
     /**
@@ -2297,7 +2297,7 @@ export namespace DoorLock {
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.22
      */
-    export enum LEDSetting {
+    export enum LedSetting {
         /**
          * Never use LED for signalization
          */
@@ -2754,7 +2754,7 @@ export namespace DoorLock {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.11.3.6
          */
-        credentials: TlvOptionalField(5, TlvNullable(TlvArray(TlvCredentialStruct, { minLength: 1 })))
+        credentials: TlvOptionalField(5, TlvNullable(TlvArray(TlvCredential, { minLength: 1 })))
     });
 
     /**
@@ -2855,7 +2855,7 @@ export namespace DoorLock {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 5.2.11.4.7
          */
-        credentials: TlvOptionalField(6, TlvNullable(TlvArray(TlvCredentialStruct, { minLength: 1 })))
+        credentials: TlvOptionalField(6, TlvNullable(TlvArray(TlvCredential, { minLength: 1 })))
     });
 
     /**
@@ -2864,6 +2864,131 @@ export namespace DoorLock {
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.11.4
      */
     export interface LockOperationErrorEvent extends TypeFromSchema<typeof TlvLockOperationErrorEvent> {}
+
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.25.1
+     */
+    export enum OperationEventCode {
+        /**
+         * Event code is unknown
+         */
+        UnknownOrMfgSpecific = 0,
+
+        /**
+         * Event code is lock
+         */
+        Lock = 1,
+
+        /**
+         * Event code is unlock
+         */
+        Unlock = 2,
+
+        /**
+         * Event code is lock failure due to invalid PIN or RFID
+         */
+        LockFailureInvalidPiNorRfid = 3,
+
+        /**
+         * Event code is lock failure due to invalid schedule
+         */
+        LockFailureInvalidSchedule = 4,
+
+        /**
+         * Event code is unlock failure due to invalid PIN or RFID
+         */
+        UnlockFailureInvalidPiNorRfid = 5,
+
+        /**
+         * Event code is unlock failure due to invalid schedule
+         */
+        UnlockFailureInvalidSchedule = 6,
+
+        /**
+         * Event code is one touch lock
+         */
+        OneTouchLock = 7,
+
+        /**
+         * Event code is key lock
+         */
+        KeyLock = 8,
+
+        /**
+         * Event code is key unlock
+         */
+        KeyUnlock = 9,
+
+        /**
+         * Event code is auto lock
+         */
+        AutoLock = 10,
+
+        /**
+         * Event code is schedule lock
+         */
+        ScheduleLock = 11,
+
+        /**
+         * Event code is schedule unlock
+         */
+        ScheduleUnlock = 12,
+
+        /**
+         * Event code is manual lock (Key or Thumbturn)
+         */
+        ManualLock = 13,
+
+        /**
+         * Event code is manual unlock (Key or Thumbturn)
+         */
+        ManualUnlock = 14,
+
+        /**
+         * Event code is non access user operation
+         */
+        NonAccessUserOperationEvent = 15
+    }
+
+    /**
+     * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.25.2
+     */
+    export enum ProgrammingEventCode {
+        /**
+         * Event code is unknown
+         */
+        UnknownOrMfgSpecific = 0,
+
+        /**
+         * Event code is code changed
+         */
+        ProgrammingCodeChanged = 1,
+
+        /**
+         * Event code is PIN added
+         */
+        PinCodeAdded = 2,
+
+        /**
+         * Event code is PIN cleared
+         */
+        PinCodeCleared = 3,
+
+        /**
+         * Event code is PIN changed
+         */
+        PinCodeChanged = 4,
+
+        /**
+         * Event code is RFID added
+         */
+        RfidCodeAdded = 5,
+
+        /**
+         * Event code is RFID cleared
+         */
+        RfidCodeCleared = 6
+    }
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.7.1
@@ -4265,8 +4390,8 @@ export namespace DoorLock {
              */
             ledSettings: OptionalWritableAttribute(
                 0x22,
-                TlvEnum<LEDSetting>(),
-                { default: LEDSetting.NoLedSignal, writeAcl: AccessLevel.Manage }
+                TlvEnum<LedSetting>(),
+                { default: LedSetting.NoLedSignal, writeAcl: AccessLevel.Manage }
             ),
 
             /**

@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, Command, TlvNoResponse, OptionalAttribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, Command, TlvNoResponse, OptionalAttribute } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvUInt16, TlvEnum, TlvEpochS, TlvUInt8, TlvBitmap, TlvInt16 } from "../../tlv/TlvNumber.js";
@@ -15,10 +15,10 @@ import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { ContentLauncher } from "../../cluster/definitions/ContentLauncherCluster.js";
+import { ContentLauncher } from "./ContentLauncherCluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Channel {
     /**
@@ -54,7 +54,7 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.5
      */
-    export const TlvChannelInfoStruct = TlvObject({
+    export const TlvChannelInfo = TlvObject({
         /**
          * This field shall indicate the channel major number value (for example, using ATSC format). When the channel
          * number is expressed as a string, such as "13.1" or "256", the major number would be 13 or 256, respectively.
@@ -125,7 +125,7 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.5
      */
-    export interface ChannelInfoStruct extends TypeFromSchema<typeof TlvChannelInfoStruct> {}
+    export interface ChannelInfo extends TypeFromSchema<typeof TlvChannelInfo> {}
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.2
@@ -143,7 +143,7 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.6
      */
-    export const TlvLineupInfoStruct = TlvObject({
+    export const TlvLineupInfo = TlvObject({
         /**
          * This field shall indicate the name of the operator, for example “Comcast”.
          *
@@ -181,7 +181,7 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.6
      */
-    export interface LineupInfoStruct extends TypeFromSchema<typeof TlvLineupInfoStruct> {}
+    export interface LineupInfo extends TypeFromSchema<typeof TlvLineupInfo> {}
 
     /**
      * Input to the Channel changeChannel command
@@ -257,7 +257,7 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.11
      */
-    export const TlvPageTokenStruct = TlvObject({
+    export const TlvPageToken = TlvObject({
         /**
          * This field shall indicate the maximum number of entries that should be retrieved from the program guide in a
          * single response. It allows clients to specify the size of the paginated result set based on their needs.
@@ -292,7 +292,7 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.11
      */
-    export interface PageTokenStruct extends TypeFromSchema<typeof TlvPageTokenStruct> {}
+    export interface PageToken extends TypeFromSchema<typeof TlvPageToken> {}
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.1
@@ -344,14 +344,14 @@ export namespace Channel {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.5.3
          */
-        channelList: TlvOptionalField(2, TlvArray(TlvChannelInfoStruct, { maxLength: 255 })),
+        channelList: TlvOptionalField(2, TlvArray(TlvChannelInfo, { maxLength: 255 })),
 
         /**
          * This field shall indicate the pagination token used for managing pagination progression.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.5.4
          */
-        pageToken: TlvOptionalField(3, TlvNullable(TlvPageTokenStruct)),
+        pageToken: TlvOptionalField(3, TlvNullable(TlvPageToken)),
 
         /**
          * This field shall indicate the flags of the programs for which entries should be fetched.
@@ -365,7 +365,7 @@ export namespace Channel {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.5.6
          */
-        externalIdList: TlvOptionalField(6, TlvArray(ContentLauncher.TlvAdditionalInfoStruct, { maxLength: 255 })),
+        externalIdList: TlvOptionalField(6, TlvArray(ContentLauncher.TlvAdditionalInfo, { maxLength: 255 })),
 
         /**
          * This field shall indicate Optional app-specific data.
@@ -387,14 +387,14 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.12
      */
-    export const TlvChannelPagingStruct = TlvObject({
+    export const TlvChannelPaging = TlvObject({
         /**
          * This field shall indicate the token to retrieve the preceding page. Absence of this field denotes the
          * response as the initial page.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.12.1
          */
-        previousToken: TlvOptionalField(0, TlvNullable(TlvPageTokenStruct)),
+        previousToken: TlvOptionalField(0, TlvNullable(TlvPageToken)),
 
         /**
          * This field shall indicate the token to retrieve the next page. Absence of this field denotes the response as
@@ -402,7 +402,7 @@ export namespace Channel {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.12.2
          */
-        nextToken: TlvOptionalField(1, TlvNullable(TlvPageTokenStruct))
+        nextToken: TlvOptionalField(1, TlvNullable(TlvPageToken))
     });
 
     /**
@@ -410,14 +410,14 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.12
      */
-    export interface ChannelPagingStruct extends TypeFromSchema<typeof TlvChannelPagingStruct> {}
+    export interface ChannelPaging extends TypeFromSchema<typeof TlvChannelPaging> {}
 
     /**
      * This object provides the episode information related to a program.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.9
      */
-    export const TlvSeriesInfoStruct = TlvObject({
+    export const TlvSeriesInfo = TlvObject({
         /**
          * This field shall represent the season of the series associated to the program.
          *
@@ -438,14 +438,14 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.9
      */
-    export interface SeriesInfoStruct extends TypeFromSchema<typeof TlvSeriesInfoStruct> {}
+    export interface SeriesInfo extends TypeFromSchema<typeof TlvSeriesInfo> {}
 
     /**
      * This object defines the category associated to a program.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.8
      */
-    export const TlvProgramCategoryStruct = TlvObject({
+    export const TlvProgramCategory = TlvObject({
         /**
          * This field shall represent the category or genre of the program. Ex. News.
          *
@@ -466,14 +466,14 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.8
      */
-    export interface ProgramCategoryStruct extends TypeFromSchema<typeof TlvProgramCategoryStruct> {}
+    export interface ProgramCategory extends TypeFromSchema<typeof TlvProgramCategory> {}
 
     /**
      * This object provides the cast information related to a program.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.10
      */
-    export const TlvProgramCastStruct = TlvObject({
+    export const TlvProgramCast = TlvObject({
         /**
          * This field shall represent the name of the cast member.
          *
@@ -494,14 +494,14 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.10
      */
-    export interface ProgramCastStruct extends TypeFromSchema<typeof TlvProgramCastStruct> {}
+    export interface ProgramCast extends TypeFromSchema<typeof TlvProgramCast> {}
 
     /**
      * This indicates a program within an electronic program guide (EPG).
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7
      */
-    export const TlvProgramStruct = TlvObject({
+    export const TlvProgram = TlvObject({
         /**
          * This field shall indicate a unique identifier for a program within an electronic program guide list. The
          * identifier shall be unique across multiple channels.
@@ -515,7 +515,7 @@ export namespace Channel {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7.2
          */
-        channel: TlvField(1, TlvChannelInfoStruct),
+        channel: TlvField(1, TlvChannelInfo),
 
         /**
          * This field shall indicate an epoch time in seconds indicating the start time of a program, as a UTC time.
@@ -629,7 +629,7 @@ export namespace Channel {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7.16
          */
-        seriesInfo: TlvOptionalField(15, TlvNullable(TlvSeriesInfoStruct)),
+        seriesInfo: TlvOptionalField(15, TlvNullable(TlvSeriesInfo)),
 
         /**
          * This field shall represent the category of a particular program. This field is optional but shall be
@@ -637,7 +637,7 @@ export namespace Channel {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7.17
          */
-        categoryList: TlvOptionalField(16, TlvArray(TlvProgramCategoryStruct, { maxLength: 255 })),
+        categoryList: TlvOptionalField(16, TlvArray(TlvProgramCategory, { maxLength: 255 })),
 
         /**
          * This field shall represent a list of the cast or the crew on the program. A single cast member may have more
@@ -645,14 +645,14 @@ export namespace Channel {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7.18
          */
-        castList: TlvOptionalField(17, TlvArray(TlvProgramCastStruct, { maxLength: 255 })),
+        castList: TlvOptionalField(17, TlvArray(TlvProgramCast, { maxLength: 255 })),
 
         /**
          * This field shall indicate the list of additional external content identifiers.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7.19
          */
-        externalIdList: TlvOptionalField(18, TlvArray(ContentLauncher.TlvAdditionalInfoStruct, { maxLength: 255 }))
+        externalIdList: TlvOptionalField(18, TlvArray(ContentLauncher.TlvAdditionalInfo, { maxLength: 255 }))
     });
 
     /**
@@ -660,7 +660,7 @@ export namespace Channel {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.7
      */
-    export interface ProgramStruct extends TypeFromSchema<typeof TlvProgramStruct> {}
+    export interface Program extends TypeFromSchema<typeof TlvProgram> {}
 
     /**
      * This command is a response to the GetProgramGuide command.
@@ -674,14 +674,14 @@ export namespace Channel {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.6.1
          */
-        paging: TlvField(0, TlvChannelPagingStruct),
+        paging: TlvField(0, TlvChannelPaging),
 
         /**
          * This field shall indicate the list of programs.
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.6.2
          */
-        programList: TlvField(1, TlvArray(TlvProgramStruct))
+        programList: TlvField(1, TlvArray(TlvProgram))
     });
 
     /**
@@ -719,7 +719,7 @@ export namespace Channel {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.7.3
          */
-        externalIdList: TlvOptionalField(2, TlvArray(ContentLauncher.TlvAdditionalInfoStruct, { maxLength: 255 })),
+        externalIdList: TlvOptionalField(2, TlvArray(ContentLauncher.TlvAdditionalInfo, { maxLength: 255 })),
 
         /**
          * This field, if present, shall indicate app-specific data.
@@ -764,7 +764,7 @@ export namespace Channel {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.6.7.8.3
          */
-        externalIdList: TlvOptionalField(2, TlvArray(ContentLauncher.TlvAdditionalInfoStruct, { maxLength: 255 })),
+        externalIdList: TlvOptionalField(2, TlvArray(ContentLauncher.TlvAdditionalInfo, { maxLength: 255 })),
 
         /**
          * This field, if present, shall indicate app-specific data.
@@ -841,7 +841,7 @@ export namespace Channel {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.6.6.1
              */
-            channelList: Attribute(0x0, TlvArray(TlvChannelInfoStruct), { default: [] })
+            channelList: Attribute(0x0, TlvArray(TlvChannelInfo), { default: [] })
         }
     });
 
@@ -855,7 +855,7 @@ export namespace Channel {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.6.6.2
              */
-            lineup: Attribute(0x1, TlvNullable(TlvLineupInfoStruct), { default: null })
+            lineup: Attribute(0x1, TlvNullable(TlvLineupInfo), { default: null })
         }
     });
 
@@ -1000,7 +1000,7 @@ export namespace Channel {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.6.6.3
              */
-            currentChannel: OptionalAttribute(0x2, TlvNullable(TlvChannelInfoStruct), { default: null })
+            currentChannel: OptionalAttribute(0x2, TlvNullable(TlvChannelInfo), { default: null })
         },
 
         commands: {

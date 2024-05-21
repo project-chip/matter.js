@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { FixedAttribute, WritableAttribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { FixedAttribute, WritableAttribute } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvPercent, TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
@@ -15,7 +15,7 @@ import { TlvString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace EnergyPreference {
     /**
@@ -23,7 +23,7 @@ export namespace EnergyPreference {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.5.5.2
      */
-    export const TlvBalanceStruct = TlvObject({
+    export const TlvBalance = TlvObject({
         /**
          * This field shall indicate the relative value of this step.
          *
@@ -45,7 +45,7 @@ export namespace EnergyPreference {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.5.5.2
      */
-    export interface BalanceStruct extends TypeFromSchema<typeof TlvBalanceStruct> {}
+    export interface Balance extends TypeFromSchema<typeof TlvBalance> {}
 
     /**
      * @see {@link MatterSpecification.v13.Cluster} § 9.5.5.1
@@ -99,7 +99,7 @@ export namespace EnergyPreference {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.5.6.1
              */
-            energyBalances: FixedAttribute(0x0, TlvArray(TlvBalanceStruct, { minLength: 2, maxLength: 10 })),
+            energyBalances: FixedAttribute(0x0, TlvArray(TlvBalance, { minLength: 2, maxLength: 10 })),
 
             /**
              * Indicates the current preference of the user for balancing different priorities during device use. The
@@ -155,7 +155,7 @@ export namespace EnergyPreference {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.5.6.4
              */
-            lowPowerModeSensitivities: FixedAttribute(0x3, TlvArray(TlvBalanceStruct, { minLength: 2, maxLength: 10 })),
+            lowPowerModeSensitivities: FixedAttribute(0x3, TlvArray(TlvBalance, { minLength: 2, maxLength: 10 })),
 
             /**
              * Indicates the current preference of the user for determining when the device should enter a low power

@@ -6,15 +6,31 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { FixedAttribute, Attribute, WritableAttribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { FixedAttribute, Attribute, WritableAttribute } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
-import { ModeBase } from "../../cluster/definitions/ModeBaseCluster.js";
+import { ModeBase } from "./ModeBaseCluster.js";
 import { TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace RefrigeratorAndTemperatureControlledCabinetMode {
+    export enum ModeTag {
+        /**
+         * This mode reduces the temperature rapidly, typically above freezing grade.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 8.7.6.1.1
+         */
+        RapidCool = 16384,
+
+        /**
+         * This mode reduces the temperature rapidly, below freezing grade.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 8.7.6.1.2
+         */
+        RapidFreeze = 16385
+    }
+
     /**
      * @see {@link Cluster}
      */
@@ -29,7 +45,7 @@ export namespace RefrigeratorAndTemperatureControlledCabinetMode {
              */
             supportedModes: FixedAttribute(
                 0x0,
-                TlvArray(ModeBase.TlvModeOptionStruct, { minLength: 2, maxLength: 255 }),
+                TlvArray(ModeBase.TlvModeOption, { minLength: 2, maxLength: 255 }),
                 { default: [] }
             ),
 
@@ -48,7 +64,7 @@ export namespace RefrigeratorAndTemperatureControlledCabinetMode {
              */
             onMode: WritableAttribute(0x3, TlvUInt8, { persistent: true })
         }
-    })
+    });
 
     /**
      * This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced enumerated
@@ -59,7 +75,6 @@ export namespace RefrigeratorAndTemperatureControlledCabinetMode {
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
-
     export const Complete = Cluster;
 }
 

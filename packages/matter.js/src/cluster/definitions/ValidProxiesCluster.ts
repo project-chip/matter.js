@@ -6,15 +6,15 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { FixedAttribute, Command } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { FixedAttribute, Command } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ValidProxies {
     /**
@@ -22,14 +22,14 @@ export namespace ValidProxies {
      *
      * @see {@link MatterSpecification.v13.Core} § 9.15.14.4.1
      */
-    export const TlvValidProxyStruct = TlvObject({ nodeId: TlvField(1, TlvNodeId) });
+    export const TlvValidProxy = TlvObject({ nodeId: TlvField(1, TlvNodeId) });
 
     /**
      * Encapsulates the Node ID of a Valid Proxy.
      *
      * @see {@link MatterSpecification.v13.Core} § 9.15.14.4.1
      */
-    export interface ValidProxyStruct extends TypeFromSchema<typeof TlvValidProxyStruct> {}
+    export interface ValidProxy extends TypeFromSchema<typeof TlvValidProxy> {}
 
     /**
      * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery & Assignment Flow”.
@@ -59,7 +59,7 @@ export namespace ValidProxies {
              *
              * @see {@link MatterSpecification.v13.Core} § 9.15.14.5.1
              */
-            validProxyList: FixedAttribute(0x0, TlvArray(TlvValidProxyStruct), { persistent: true, default: [] })
+            validProxyList: FixedAttribute(0x0, TlvArray(TlvValidProxy), { persistent: true, default: [] })
         },
 
         commands: {

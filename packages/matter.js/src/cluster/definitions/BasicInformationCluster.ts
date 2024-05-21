@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     FixedAttribute,
     WritableAttribute,
@@ -17,7 +17,7 @@ import {
     Event,
     EventPriority,
     OptionalEvent
-} from "../../cluster/Cluster.js";
+} from "../Cluster.js";
 import { TlvUInt16, TlvUInt32, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
@@ -28,7 +28,7 @@ import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace BasicInformation {
     /**
@@ -37,7 +37,7 @@ export namespace BasicInformation {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.1.4.4
      */
-    export const TlvCapabilityMinimaStruct = TlvObject({
+    export const TlvCapabilityMinima = TlvObject({
         /**
          * This field shall indicate the actual minimum number of concurrent CASE sessions that are supported per
          * fabric.
@@ -66,7 +66,7 @@ export namespace BasicInformation {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.1.4.4
      */
-    export interface CapabilityMinimaStruct extends TypeFromSchema<typeof TlvCapabilityMinimaStruct> {}
+    export interface CapabilityMinima extends TypeFromSchema<typeof TlvCapabilityMinima> {}
 
     /**
      * The data type of ProductFinishEnum is derived from enum8.
@@ -222,7 +222,7 @@ export namespace BasicInformation {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.1.4.3
      */
-    export const TlvProductAppearanceStruct = TlvObject({
+    export const TlvProductAppearance = TlvObject({
         /**
          * This field shall indicate the visible finish of the product.
          *
@@ -244,7 +244,7 @@ export namespace BasicInformation {
      *
      * @see {@link MatterSpecification.v13.Core} § 11.1.4.3
      */
-    export interface ProductAppearanceStruct extends TypeFromSchema<typeof TlvProductAppearanceStruct> {}
+    export interface ProductAppearance extends TypeFromSchema<typeof TlvProductAppearance> {}
 
     /**
      * Body of the BasicInformation startUp event
@@ -542,7 +542,7 @@ export namespace BasicInformation {
              */
             capabilityMinima: FixedAttribute(
                 0x13,
-                TlvCapabilityMinimaStruct,
+                TlvCapabilityMinima,
                 { default: { caseSessionsPerFabric: 3, subscriptionsPerFabric: 3 } }
             ),
 
@@ -552,7 +552,7 @@ export namespace BasicInformation {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.5.21
              */
-            productAppearance: OptionalFixedAttribute(0x14, TlvProductAppearanceStruct),
+            productAppearance: OptionalFixedAttribute(0x14, TlvProductAppearance),
 
             /**
              * This attribute shall contain the current version number for the specification version this Node was

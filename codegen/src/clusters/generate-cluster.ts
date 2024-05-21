@@ -12,7 +12,6 @@ import {
     ClusterVariance,
     CommandModel,
     Conformance,
-    DatatypeModel,
     FeatureBitmap,
     ValueModel,
     conditionToBitmaps,
@@ -30,7 +29,7 @@ export function generateCluster(file: ClusterFile) {
     const cluster = file.cluster;
     logger.info(`${cluster.name} → ${file.name}.ts`);
 
-    file.addImport("cluster/mutation/MutableCluster.js", "MutableCluster");
+    file.addImport("#/cluster/mutation/MutableCluster.js", "MutableCluster");
 
     if (cluster.type === undefined || cluster.children.length) {
         generateDefinition(file);
@@ -76,10 +75,12 @@ function generateDefinition(file: ClusterFile) {
     }
     gen.populateComponent(variance.base, base);
 
-    // Generate status codes even if they aren't referenced directly
-    const status = cluster.get(DatatypeModel, "StatusCodeEnum");
-    if (status) {
-        gen.tlv.reference(status);
+    // First generate all local compound datatypes
+    for (const datatype of cluster.datatypes) {
+        if (!datatype.definesFields || !datatype.children.length) {
+            continue;
+        }
+        gen.tlv.defineDatatype(datatype);
     }
 
     // Generate composition metadata
@@ -172,7 +173,7 @@ function generateClusterExport(file: ClusterFile) {
     file.atom(`export type ${file.clusterName} = ${file.cluster.name}.Cluster`);
     file.atom(`export const ${file.clusterName} = ${file.cluster.name}.Cluster`);
 
-    file.addImport("cluster/ClusterRegistry.js", "ClusterRegistry");
+    file.addImport("#/cluster/ClusterRegistry.js", "ClusterRegistry");
     file.atom(`ClusterRegistry.register(${file.cluster.name}.Complete)`);
 }
 
@@ -206,7 +207,7 @@ function generateFeatures(file: ClusterFile, target: Block) {
     const features = file.cluster.features;
     if (features.length) {
         const featureBlock = target.expressions("features: {", "}");
-        target.file.addImport("schema/BitmapSchema.js", "BitFlag");
+        target.file.addImport("#/schema/BitmapSchema.js", "BitFlag");
         features.forEach(feature => {
             const name = camelize(feature.description ?? feature.name);
             featureBlock.atom(name, `BitFlag(${feature.constraint.value})`).document(feature);
@@ -394,7 +395,7 @@ function generateComplete(file: ClusterFile, variance: ClusterVariance) {
     ["attribute", "command", "event"].forEach(addElements);
 
     // Generate an interface for Complete
-    file.addImport("util/Type.js", "Identity");
+    file.addImport("#/util/Type.js", "Identity");
     const definition = generateExportableTypeAndObject(file.ns, "Complete");
     documentComplete(file.cluster.name, definition);
 }
@@ -415,7 +416,7 @@ function generateAlias(file: ClusterFile) {
         throw new InternalError(`Cluster ${name} has no children or base type`);
     }
 
-    file.addImport(`./${base.name}Cluster.js`, base.name);
+    file.addImport(`#clusters/${base.name}Cluster.js`, base.name);
 
     const variance = ClusterVariance(base);
 
@@ -439,8 +440,8 @@ function generateAlias(file: ClusterFile) {
  *
  * If TS were to fix this at some point then we can stop doing this.
  */
-function generateExportableTypeAndObject(target: Block, name: string) {
-    target.file.addImport("util/Type.js", "Identity");
+export function generateExportableTypeAndObject(target: Block, name: string): Entry {
+    target.file.addImport("#/util/Type.js", "Identity");
     const definition = target.atom(`export interface ${name} extends Identity<typeof ${name}Instance> {}`);
     target.undefine(name);
     target.atom(`export const ${name}: ${name} = ${name}Instance`);

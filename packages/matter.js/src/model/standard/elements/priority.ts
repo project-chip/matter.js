@@ -17,14 +17,14 @@ export const priority = Datatype({
     xref: { document: "core", section: "7.18.2.17" },
 
     children: [
-        Field({ name: "InformationForEngineeringDebuggingTroubleshooting", id: 0x0 }),
+        Field({ name: "Debug", id: 0x0, description: "Information for engineering debugging/troubleshooting" }),
         Field({
-            name: "InformationThatEitherDrivesCustomerFacingFeaturesOrProvidesInsightsIntoDeviceFunctionsThatAreUsedToDriveAnalyticsUseCases",
-            id: 0x1
+            name: "Info", id: 0x1,
+            description: "Information that either drives customer facing features or provides insights into device functions that are used to drive analytics use cases"
         }),
         Field({
-            name: "InformationOrNotificationThatImpactsSafetyAcriticalFunctionOrOngoingReliableOperationOfTheNodeOrApplicationSupportedOnAnEndpoint",
-            id: 0x2
+            name: "Critical", id: 0x2,
+            description: "Information or notification that impacts safety, a critical function, or ongoing reliable operation of the node or application supported on an endpoint."
         })
     ]
 });

@@ -6,15 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import {
-    Attribute,
-    Command,
-    TlvNoResponse,
-    OptionalCommand,
-    OptionalEvent,
-    EventPriority
-} from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, Command, TlvNoResponse, OptionalCommand, OptionalEvent, EventPriority } from "../Cluster.js";
 import { TlvEpochUs, TlvUInt64, TlvFloat, TlvEnum, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
@@ -25,7 +18,7 @@ import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace MediaPlayback {
     /**
@@ -33,7 +26,7 @@ export namespace MediaPlayback {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.10.5.4
      */
-    export const TlvPlaybackPositionStruct = TlvObject({
+    export const TlvPlaybackPosition = TlvObject({
         /**
          * This field shall indicate the time when the position was last updated.
          *
@@ -60,7 +53,7 @@ export namespace MediaPlayback {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.10.5.4
      */
-    export interface PlaybackPositionStruct extends TypeFromSchema<typeof TlvPlaybackPositionStruct> {}
+    export interface PlaybackPosition extends TypeFromSchema<typeof TlvPlaybackPosition> {}
 
     /**
      * Input to the MediaPlayback seek command
@@ -265,7 +258,7 @@ export namespace MediaPlayback {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.10.5.6
      */
-    export const TlvTrackAttributesStruct = TlvObject({
+    export const TlvTrackAttributes = TlvObject({
         /**
          * The value is a String containing one of the standard Tags for Identifying Languages RFC 5646, which
          * identifies the primary language used in the Track.
@@ -296,14 +289,14 @@ export namespace MediaPlayback {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.10.5.6
      */
-    export interface TrackAttributesStruct extends TypeFromSchema<typeof TlvTrackAttributesStruct> {}
+    export interface TrackAttributes extends TypeFromSchema<typeof TlvTrackAttributes> {}
 
     /**
      * This structure defines a uniquely identifiable Text Track or Audio Track.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.10.5.5
      */
-    export const TlvTrackStruct = TlvObject({
+    export const TlvTrack = TlvObject({
         /**
          * This field shall indicate the Identifier for the Track which is unique within the Track catalog. The Track
          * catalog contains all the Text/Audio tracks corresponding to the main media content.
@@ -317,7 +310,7 @@ export namespace MediaPlayback {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.10.5.5.2
          */
-        trackAttributes: TlvField(1, TlvTrackAttributesStruct)
+        trackAttributes: TlvField(1, TlvTrackAttributes)
     });
 
     /**
@@ -325,7 +318,7 @@ export namespace MediaPlayback {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.10.5.5
      */
-    export interface TrackStruct extends TypeFromSchema<typeof TlvTrackStruct> {}
+    export interface Track extends TypeFromSchema<typeof TlvTrack> {}
 
     /**
      * Input to the MediaPlayback activateAudioTrack command
@@ -540,7 +533,7 @@ export namespace MediaPlayback {
          *
          * @see {@link MatterSpecification.v13.Cluster} § 6.10.8.1.4
          */
-        sampledPosition: TlvOptionalField(3, TlvPlaybackPositionStruct),
+        sampledPosition: TlvOptionalField(3, TlvPlaybackPosition),
 
         /**
          * This field shall indicate the updated speed at which the current media is being played as defined by the
@@ -639,7 +632,7 @@ export namespace MediaPlayback {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.10.6.4
              */
-            sampledPosition: Attribute(0x3, TlvNullable(TlvPlaybackPositionStruct), { default: null }),
+            sampledPosition: Attribute(0x3, TlvNullable(TlvPlaybackPosition), { default: null }),
 
             /**
              * Indicates the speed at which the current media is being played. The new PlaybackSpeed shall be reflected
@@ -718,7 +711,7 @@ export namespace MediaPlayback {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.10.6.8
              */
-            activeAudioTrack: Attribute(0x7, TlvNullable(TlvTrackStruct), { default: null }),
+            activeAudioTrack: Attribute(0x7, TlvNullable(TlvTrack), { default: null }),
 
             /**
              * AvailableAudioTracks refers to the list of Audio tracks available for the current title being played. A
@@ -727,7 +720,7 @@ export namespace MediaPlayback {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.10.6.9
              */
-            availableAudioTracks: Attribute(0x8, TlvNullable(TlvArray(TlvTrackStruct)), { default: null })
+            availableAudioTracks: Attribute(0x8, TlvNullable(TlvArray(TlvTrack)), { default: null })
         },
 
         commands: {
@@ -755,7 +748,7 @@ export namespace MediaPlayback {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.10.6.10
              */
-            activeTextTrack: Attribute(0x9, TlvNullable(TlvTrackStruct), { default: null }),
+            activeTextTrack: Attribute(0x9, TlvNullable(TlvTrack), { default: null }),
 
             /**
              * AvailableTextTracks refers to the list of Text tracks available for the current title being played. This
@@ -764,7 +757,7 @@ export namespace MediaPlayback {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.10.6.11
              */
-            availableTextTracks: Attribute(0xa, TlvNullable(TlvArray(TlvTrackStruct)), { default: null })
+            availableTextTracks: Attribute(0xa, TlvNullable(TlvArray(TlvTrack)), { default: null })
         },
 
         commands: {
