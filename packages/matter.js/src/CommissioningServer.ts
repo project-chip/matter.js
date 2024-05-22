@@ -28,6 +28,10 @@ import { GroupKeyManagementCluster } from "./cluster/definitions/GroupKeyManagem
 import { OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
 import { createDefaultAccessControlClusterServer } from "./cluster/server/AccessControlServer.js";
 import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
+import {
+    genericFabricScopedAttributeGetterFromFabric,
+    genericFabricScopedAttributeSetterForFabric,
+} from "./cluster/server/AttributeServer.js";
 import { ClusterServer } from "./cluster/server/ClusterServer.js";
 import {
     AttributeInitialValues,
