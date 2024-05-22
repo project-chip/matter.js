@@ -21,7 +21,7 @@ import { Session } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
 import { MaybePromise } from "../../util/Promises.js";
-import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
+import { AccessLevel, Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
 import { ClusterDatasource } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("AttributeServer");
@@ -59,12 +59,25 @@ export function createAttributeServer<
     setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface, message?: Message) => boolean,
     validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
 ) {
-    const { id, schema, writable, fabricScoped, fixed, omitChanges, timed, default: defaultValue } = attributeDef;
+    const {
+        id,
+        schema,
+        writable,
+        fabricScoped,
+        fixed,
+        omitChanges,
+        timed,
+        default: defaultValue,
+        readAcl,
+        writeAcl,
+    } = attributeDef;
 
     if (fixed) {
         return new FixedAttributeServer(
             id,
             attributeName,
+            readAcl,
+            writeAcl,
             schema,
             writable,
             false,
@@ -80,6 +93,8 @@ export function createAttributeServer<
         return new FabricScopedAttributeServer(
             id,
             attributeName,
+            readAcl,
+            writeAcl,
             schema,
             writable,
             !omitChanges,
@@ -97,6 +112,8 @@ export function createAttributeServer<
     return new AttributeServer(
         id,
         attributeName,
+        readAcl,
+        writeAcl,
         schema,
         writable,
         !omitChanges,
@@ -120,10 +137,14 @@ export abstract class BaseAttributeServer<T> {
     protected value: T | undefined = undefined;
     protected endpoint?: EndpointInterface;
     readonly defaultValue: T;
+    #readAcl: AccessLevel | undefined;
+    #writeAcl: AccessLevel | undefined;
 
     constructor(
         readonly id: AttributeId,
         readonly name: string,
+        readAcl: AccessLevel | undefined,
+        writeAcl: AccessLevel | undefined,
         readonly schema: TlvSchema<T>,
         readonly isWritable: boolean,
         readonly isSubscribable: boolean,
@@ -131,6 +152,8 @@ export abstract class BaseAttributeServer<T> {
         initValue: T,
         defaultValue: T | undefined,
     ) {
+        this.#readAcl = readAcl;
+        this.#writeAcl = writeAcl;
         try {
             this.validateWithSchema(initValue);
             this.value = initValue;
@@ -169,6 +192,14 @@ export abstract class BaseAttributeServer<T> {
      * adjusted before the Device gets announced. Do not use this method to change values when the device is in use!
      */
     abstract init(value: T | undefined): void;
+
+    get writeAcl() {
+        return this.#writeAcl ?? AccessLevel.Operate; // ???
+    }
+
+    get readAcl() {
+        return this.#readAcl ?? AccessLevel.View; // ???
+    }
 }
 
 /**
@@ -187,6 +218,8 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
     constructor(
         id: AttributeId,
         name: string,
+        readAcl: AccessLevel | undefined,
+        writeAcl: AccessLevel | undefined,
         schema: TlvSchema<T>,
         isWritable: boolean,
         isSubscribable: boolean,
@@ -210,7 +243,18 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
             message?: Message,
         ) => T,
     ) {
-        super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, initValue, defaultValue); // Fixed attributes do not change, so are not subscribable
+        super(
+            id,
+            name,
+            readAcl,
+            writeAcl,
+            schema,
+            isWritable,
+            isSubscribable,
+            requiresTimedInteraction,
+            initValue,
+            defaultValue,
+        ); // Fixed attributes do not change, so are not subscribable
 
         if (getter === undefined) {
             this.getter = () => {
@@ -327,6 +371,8 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     constructor(
         id: AttributeId,
         name: string,
+        readAcl: AccessLevel | undefined,
+        writeAcl: AccessLevel | undefined,
         schema: TlvSchema<T>,
         isWritable: boolean,
         isSubscribable: boolean,
@@ -384,6 +430,8 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         super(
             id,
             name,
+            readAcl,
+            writeAcl,
             schema,
             isWritable,
             isSubscribable,
@@ -659,6 +707,8 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     constructor(
         id: AttributeId,
         name: string,
+        readAcl: AccessLevel | undefined,
+        writeAcl: AccessLevel | undefined,
         schema: TlvSchema<T>,
         isWritable: boolean,
         isSubscribable: boolean,
@@ -725,6 +775,8 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         super(
             id,
             name,
+            readAcl,
+            writeAcl,
             schema,
             isWritable,
             isSubscribable,

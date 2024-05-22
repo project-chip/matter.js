@@ -14,10 +14,13 @@ import { StatusCode } from "../../protocol/interaction/StatusCode.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { TlvSchema, TlvStream } from "../../tlv/TlvSchema.js";
+import { AccessLevel } from "../Cluster.js";
 
 const logger = Logger.get("CommandServer");
 
 export class CommandServer<RequestT, ResponseT> {
+    readonly #invokeAcl: AccessLevel;
+
     constructor(
         readonly invokeId: CommandId,
         readonly responseId: CommandId,
@@ -25,13 +28,16 @@ export class CommandServer<RequestT, ResponseT> {
         readonly requestSchema: TlvSchema<RequestT>,
         readonly responseSchema: TlvSchema<ResponseT>,
         readonly requiresTimedInteraction: boolean,
+        invokeAcl: AccessLevel,
         protected readonly handler: (
             request: RequestT,
             session: Session<MatterDevice>,
             message: Message,
             endpoint: EndpointInterface,
         ) => Promise<ResponseT> | ResponseT,
-    ) {}
+    ) {
+        this.#invokeAcl = invokeAcl;
+    }
 
     async invoke(
         session: Session<MatterDevice>,
@@ -79,5 +85,9 @@ export class CommandServer<RequestT, ResponseT> {
 
     debug(message: string) {
         logger.debug(message);
+    }
+
+    get invokeAcl() {
+        return this.#invokeAcl ?? AccessLevel.Operate; // or View?? Re "Read/Invoke" in Access table
     }
 }

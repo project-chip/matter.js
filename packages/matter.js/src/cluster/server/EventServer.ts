@@ -13,15 +13,14 @@ import { Storage, StorageOperationResult } from "../../storage/Storage.js";
 import { Time } from "../../time/Time.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { MaybePromise } from "../../util/Promises.js";
-import { EventPriority } from "../Cluster.js";
-
-// TODO Add Fabric Scoped EventServer when needed
+import { AccessLevel, EventPriority } from "../Cluster.js";
 
 export class EventServer<T, S extends Storage> {
     private eventList = new Array<EventData<T>>();
     private readonly listeners = new Array<(event: EventStorageData<T>) => void>();
     protected endpoint?: Endpoint;
     protected eventHandler?: EventHandler;
+    #readAcl: AccessLevel | undefined;
 
     constructor(
         readonly id: EventId,
@@ -29,7 +28,14 @@ export class EventServer<T, S extends Storage> {
         readonly name: string,
         readonly schema: TlvSchema<T>,
         readonly priority: EventPriority,
-    ) {}
+        readAcl: AccessLevel | undefined,
+    ) {
+        this.#readAcl = readAcl;
+    }
+
+    get readAcl() {
+        return this.#readAcl ?? AccessLevel.View; // ???
+    }
 
     assignToEndpoint(endpoint: Endpoint) {
         this.endpoint = endpoint;
