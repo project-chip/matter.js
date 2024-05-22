@@ -34,6 +34,12 @@ export class FabricScopeError extends MatterError {}
 
 export type AnyAttributeServer<T> = AttributeServer<T> | FabricScopedAttributeServer<T> | FixedAttributeServer<T>;
 
+type DelayedChangeData = {
+    oldValue: any;
+    newValue: any;
+    changed: boolean;
+};
+
 /**
  * Factory function to create an attribute server.
  */
@@ -367,6 +373,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         message?: Message,
     ) => boolean;
     protected readonly validator: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void;
+    protected delayedChangeData?: DelayedChangeData = undefined;
 
     constructor(
         id: AttributeId,
@@ -483,20 +490,19 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      *
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
-    set(value: T, session: Session<MatterDevice>, message?: Message) {
+    set(value: T, session: Session<MatterDevice>, message?: Message, delayChangeEvents = false) {
         if (!this.isWritable) {
             throw new StatusResponseError(`Attribute "${this.name}" is not writable.`, StatusCode.UnsupportedWrite);
         }
-        // TODO: check ACL
 
-        this.setRemote(value, session, message);
+        this.setRemote(value, session, message, delayChangeEvents);
     }
 
     /**
      * Method that contains the logic to set a value "from remote" (e.g. from a client).
      */
-    protected setRemote(value: T, session: Session<MatterDevice>, message?: Message) {
-        this.processSet(value, session, message);
+    protected setRemote(value: T, session: Session<MatterDevice>, message?: Message, delayChangeEvents = false) {
+        this.processSet(value, session, message, delayChangeEvents);
         this.value = value;
     }
 
@@ -518,11 +524,29 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     /**
      * Helper Method to process the set of a value in a generic way. This method is used internally.
      */
-    protected processSet(value: T, session?: Session<MatterDevice>, message?: Message) {
+    protected processSet(value: T, session?: Session<MatterDevice>, message?: Message, delayChangeEvents = false) {
         this.validator(value, session, this.endpoint);
         const oldValue = this.getter(session, this.endpoint, undefined, message);
         const valueChanged = this.setter(value, session, this.endpoint, message);
-        this.handleVersionAndTriggerListeners(value, oldValue, valueChanged);
+        if (delayChangeEvents) {
+            this.delayedChangeData = {
+                oldValue: this.delayedChangeData?.oldValue ?? oldValue, // We keep the oldest value
+                newValue: value,
+                changed: !!this.delayedChangeData?.changed || valueChanged, // We combine the changed flag
+            };
+            logger.info(`Delay change for attribute "${this.name}" with value ${Logger.toJSON(value)}`);
+        } else {
+            this.handleVersionAndTriggerListeners(value, oldValue, valueChanged);
+        }
+    }
+
+    triggerDelayedChangeEvents() {
+        if (this.delayedChangeData !== undefined) {
+            const { oldValue, newValue, changed } = this.delayedChangeData;
+            this.delayedChangeData = undefined;
+            logger.info(`Trigger delayed change for attribute "${this.name}" with value ${Logger.toJSON(newValue)}`);
+            this.handleVersionAndTriggerListeners(newValue, oldValue, changed);
+        }
     }
 
     /**
@@ -806,7 +830,12 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      * Method that contains the logic to set a value "from remote" (e.g. from a client). For Fabric scoped attributes
      * we need to inject the fabric index into the value.
      */
-    protected override setRemote(value: T, session: Session<MatterDevice>, message: Message) {
+    protected override setRemote(
+        value: T,
+        session: Session<MatterDevice>,
+        message: Message,
+        delayChangeEvents = false,
+    ) {
         // Inject fabric index into structures in general if undefined, if set it will be used
         value = this.schema.injectField(
             value,
@@ -814,8 +843,9 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             session.associatedFabric.fabricIndex,
             existingFieldIndex => existingFieldIndex === undefined,
         );
+        logger.info(`Set remote value for fabric scoped attribute "${this.name}" to ${Logger.toJSON(value)}`);
 
-        super.setRemote(value, session, message);
+        super.setRemote(value, session, message, delayChangeEvents);
     }
 
     /**
