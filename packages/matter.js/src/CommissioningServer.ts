@@ -26,6 +26,7 @@ import {
 import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "./cluster/definitions/GeneralDiagnosticsCluster.js";
 import { GroupKeyManagementCluster } from "./cluster/definitions/GroupKeyManagementCluster.js";
 import { OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
+import { createDefaultAccessControlClusterServer } from "./cluster/server/AccessControlServer.js";
 import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
 import { ClusterServer } from "./cluster/server/ClusterServer.js";
 import {
@@ -46,6 +47,7 @@ import { VendorId } from "./datatype/VendorId.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { Device, RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
+import { LegacyInteractionServer } from "./device/LegacyInteractionServer.js";
 import { EndpointInterface } from "./endpoint/EndpointInterface.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { Logger } from "./log/Logger.js";
@@ -56,7 +58,6 @@ import { Network } from "./net/Network.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { EventHandler } from "./protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
-import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
 import { BitSchema, TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import {
     CommissioningFlowType,
@@ -228,7 +229,7 @@ export class CommissioningServer extends MatterNode {
     private deviceInstance?: MatterDevice;
     private eventHandler?: EventHandler;
     private endpointStructure: InteractionEndpointStructure;
-    private interactionServer?: InteractionServer;
+    private interactionServer?: LegacyInteractionServer;
 
     protected readonly rootEndpoint = new RootEndpoint();
 
@@ -373,23 +374,7 @@ export class CommissioningServer extends MatterNode {
         );
 
         // TODO Get the defaults from the cluster meta details
-        this.rootEndpoint.addClusterServer(
-            ClusterServer(
-                AccessControlCluster,
-                {
-                    acl: [],
-                    extension: [],
-                    subjectsPerAccessControlEntry: 4,
-                    targetsPerAccessControlEntry: 4,
-                    accessControlEntriesPerFabric: 4,
-                },
-                {},
-                {
-                    accessControlEntryChanged: true, // TODO
-                    accessControlExtensionChanged: true, // TODO
-                },
-            ),
-        );
+        this.rootEndpoint.addClusterServer(createDefaultAccessControlClusterServer());
 
         // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
@@ -558,7 +543,7 @@ export class CommissioningServer extends MatterNode {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
 
-        this.interactionServer = new InteractionServer({
+        this.interactionServer = new LegacyInteractionServer({
             endpointStructure: this.endpointStructure,
             eventHandler: this.eventHandler,
             subscriptionOptions: {
@@ -573,6 +558,7 @@ export class CommissioningServer extends MatterNode {
         this.assignEndpointIds(); // Make sure to have unique endpoint ids
         this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
         this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
+
         this.endpointStructure.initializeFromEndpoint(this.rootEndpoint);
 
         // TODO adjust later and refactor MatterDevice
