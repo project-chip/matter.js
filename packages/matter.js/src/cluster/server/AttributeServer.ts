@@ -841,7 +841,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             value,
             <number>Globals.FabricIndex.id,
             session.associatedFabric.fabricIndex,
-            existingFieldIndex => existingFieldIndex === undefined,
+            () => true, // Noone should send any index and if we simply SHALL ignore it
         );
         logger.info(`Set remote value for fabric scoped attribute "${this.name}" to ${Logger.toJSON(value)}`);
 

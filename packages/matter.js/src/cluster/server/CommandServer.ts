@@ -67,7 +67,7 @@ export class CommandServer<RequestT, ResponseT> {
                     request,
                     <number>Globals.FabricIndex.id,
                     session.associatedFabric.fabricIndex,
-                    existingFieldIndex => existingFieldIndex === undefined,
+                    () => true, // Noone should send any index and if we simply SHALL ignore it
                 );
             }
         }
