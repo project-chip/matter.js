@@ -412,7 +412,7 @@ class Tx implements Transaction {
         let cycles = 1;
 
         const errorRollback = () => {
-            const result = this.#executeRollback();
+            const result = this.#finalize(Status.RollingBack, "rolled back", () => this.#executeRollback());
 
             if (MaybePromise.is(result)) {
                 return result.then(() => {
