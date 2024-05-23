@@ -93,6 +93,8 @@ export class AccessControlServer extends AccessControlBehavior {
     }
 
     #validateAccessControlListChanges(value: AccessControlTypes.AccessControlEntryStruct[]) {
+        // TODO: This might be not really correct for local ACL changes because there the session fabric could be
+        //  different which would lead to missing validation of the relevant entries
         const relevantFabricIndex = this.context.session?.associatedFabric.fabricIndex;
 
         if (relevantFabricIndex === undefined) {
@@ -194,6 +196,9 @@ export class AccessControlServer extends AccessControlBehavior {
             return; // Too early to send events
         }
         const { session } = this.context;
+
+        // TODO: This might be not really correct for local ACL changes because there the session fabric could be
+        //  different which would lead to missing events
         const relevantFabricIndex = session?.associatedFabric.fabricIndex;
 
         if (relevantFabricIndex === undefined || this.events.accessControlEntryChanged === undefined) {
@@ -248,6 +253,8 @@ export class AccessControlServer extends AccessControlBehavior {
     }
 
     #validateAccessControlExtensionChanges(value: AccessControlTypes.AccessControlExtensionStruct[]) {
+        // TODO: This might be not really correct for local ACL changes because there the session fabric could be
+        //  different which would lead to missing validation of the relevant entries
         const relevantFabricIndex = this.context.session?.associatedFabric.fabricIndex;
 
         if (relevantFabricIndex === undefined) {
@@ -275,6 +282,9 @@ export class AccessControlServer extends AccessControlBehavior {
             return; // Too early to send events
         }
         const { session } = this.context;
+
+        // TODO: This might be not really correct for local ACL changes because there the session fabric could be
+        //  different which would lead to missing events of the relevant entries
         const relevantFabricIndex = session?.associatedFabric.fabricIndex;
 
         if (relevantFabricIndex === undefined || this.events.accessControlExtensionChanged === undefined) {
