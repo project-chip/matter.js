@@ -621,6 +621,36 @@ export class CommissioningServer extends MatterNode {
         }
 
         if (this.isCommissioned()) {
+            // Handle Backward compatibility to Matter.js before 0.9.1 and add the missing ACL entry if no entry was set
+            // so far by the controller
+            const fabrics = deviceInstance.getFabrics();
+            for (const fabric of fabrics) {
+                if (
+                    genericFabricScopedAttributeGetterFromFabric<AccessControl.AccessControlEntryStruct[] | undefined>(
+                        fabric,
+                        AccessControl.Cluster,
+                        "acl",
+                        undefined,
+                    ) === undefined
+                ) {
+                    genericFabricScopedAttributeSetterForFabric(fabric, AccessControl.Cluster, "acl", [
+                        {
+                            fabricIndex: fabric.fabricIndex,
+                            privilege: AccessControl.AccessControlEntryPrivilege.Administer,
+                            authMode: AccessControl.AccessControlEntryAuthMode.Case,
+                            subjects: [fabric.rootNodeId],
+                            targets: null, // entire node
+                        },
+                    ]);
+                    logger.info(
+                        "Added missing ACL entry for fabric",
+                        fabric.fabricIndex,
+                        "for Node id",
+                        fabric.rootNodeId,
+                    );
+                }
+            }
+
             limitTo = { onIpNetwork: true }; // If already commissioned the device is on network already
         } else {
             // BLE or SoftAP only relevant when not commissioned yet
