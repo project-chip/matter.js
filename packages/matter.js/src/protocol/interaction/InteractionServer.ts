@@ -185,7 +185,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
         return INTERACTION_PROTOCOL_ID;
     }
 
-    get isClosing() {
+    protected get isClosing() {
         return this.#isClosing;
     }
 

@@ -468,6 +468,11 @@ export class SubscriptionHandler {
             await this.sendUpdateMessage(attributeUpdatesToSend, eventUpdatesToSend);
             this.sendUpdateErrorCounter = 0;
         } catch (error) {
+            if (this.server.isClosing) {
+                // No need to care about resubmissions when the server is closing
+                return;
+            }
+
             this.sendUpdateErrorCounter++;
             logger.error(
                 `Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`,
