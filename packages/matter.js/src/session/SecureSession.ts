@@ -25,7 +25,11 @@ const logger = Logger.get("SecureSession");
 const SESSION_KEYS_INFO = ByteArray.fromString("SessionKeys");
 const SESSION_RESUMPTION_KEYS_INFO = ByteArray.fromString("SessionResumptionKeys");
 
-export class NoAssociatedFabricError extends Error {}
+export class NoAssociatedFabricError extends StatusResponseError {
+    constructor(message: string) {
+        super(message, StatusCode.UnsupportedAccess);
+    }
+}
 
 export class SecureSession<T> extends Session<T> {
     readonly #subscriptions = new Array<SubscriptionHandler>();
@@ -263,14 +267,16 @@ export class SecureSession<T> extends Session<T> {
 
     get associatedFabric(): Fabric {
         if (this.#fabric === undefined) {
-            throw new NoAssociatedFabricError("Session needs to have an associated Fabric.");
+            throw new NoAssociatedFabricError(
+                `${this.isPase ? "PASE " : ""}Session needs to have an associated Fabric for fabric sensitive data handling.`,
+            );
         }
         return this.#fabric;
     }
 
     addSubscription(subscription: SubscriptionHandler) {
         this.#subscriptions.push(subscription);
-        logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}/${this.#id}`);
+        logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}`);
         this.#subscriptionChangedCallback();
     }
 
@@ -278,7 +284,7 @@ export class SecureSession<T> extends Session<T> {
         const index = this.#subscriptions.findIndex(subscription => subscription.subscriptionId === subscriptionId);
         if (index !== -1) {
             this.#subscriptions.splice(index, 1);
-            logger.debug(`Removed subscription ${subscriptionId} from ${this.name}/${this.#id}`);
+            logger.debug(`Removed subscription ${subscriptionId} from ${this.name}`);
             this.#subscriptionChangedCallback();
         }
     }
