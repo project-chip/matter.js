@@ -427,7 +427,7 @@ export namespace BooleanStateConfiguration {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster is used to configure a boolean sensor, including optional state change alarm features and

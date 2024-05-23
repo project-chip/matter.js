@@ -528,7 +528,7 @@ export namespace FanControl {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster specifies an interface to control the speed of a fan.

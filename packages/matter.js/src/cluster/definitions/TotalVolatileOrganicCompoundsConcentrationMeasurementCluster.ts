@@ -12,10 +12,16 @@ import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace TotalVolatileOrganicCompoundsConcentrationMeasurement {
+    export const Base = {
+        ...ConcentrationMeasurement.Base,
+        id: 0x42e,
+        name: "TotalVolatileOrganicCompoundsConcentrationMeasurement"
+    }
+
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster.ExtensibleOnly({ ...ConcentrationMeasurement.Base, id: 0x42e })
+    export const ClusterInstance = MutableCluster.ExtensibleOnly(Base);
 
     /**
      * This alias specializes the semantics of {@link ConcentrationMeasurement.Cluster}.
@@ -38,7 +44,6 @@ export namespace TotalVolatileOrganicCompoundsConcentrationMeasurement {
     export const CompleteInstance = MutableCluster({ ...ConcentrationMeasurement.Complete, id: 0x42e });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}
-
     export const Complete: Complete = CompleteInstance;
 }
 

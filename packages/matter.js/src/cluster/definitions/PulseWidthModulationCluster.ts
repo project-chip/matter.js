@@ -12,14 +12,12 @@ import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace PulseWidthModulation {
+    export const Base = { ...LevelControl.Base, id: 0x1c, name: "PulseWidthModulation" }
+
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({
-        ...LevelControl.Cluster,
-        id: 0x1c,
-        supportedFeatures: { onOff: true }
-    })
+    export const ClusterInstance = MutableCluster({ ...Base, supportedFeatures: { onOff: true } });
 
     /**
      * This alias specializes the semantics of {@link LevelControl.Cluster}.
@@ -40,7 +38,6 @@ export namespace PulseWidthModulation {
     export const CompleteInstance = MutableCluster({ ...LevelControl.Complete, id: 0x1c });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}
-
     export const Complete: Complete = CompleteInstance;
 }
 

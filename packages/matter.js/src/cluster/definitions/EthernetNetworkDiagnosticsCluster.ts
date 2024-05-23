@@ -256,7 +256,7 @@ export namespace EthernetNetworkDiagnostics {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * The Ethernet Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may

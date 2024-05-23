@@ -458,7 +458,7 @@ export namespace ValveConfigurationAndControl {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster is used to configure a valve.

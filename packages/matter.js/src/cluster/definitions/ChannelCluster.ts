@@ -1044,7 +1044,7 @@ export namespace Channel {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides an interface for controlling the current Channel on a device or endpoint.

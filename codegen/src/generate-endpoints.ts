@@ -28,21 +28,24 @@ if (!args.interfaces && !args.behaviors && !args.server && !args.endpoints) {
     args.interfaces = args.behaviors = args.servers = args.endpoints = true;
 }
 
-const clusters = MatterModel.standard.clusters.filter(cluster => cluster.id !== undefined);
+for (const cluster of MatterModel.standard.clusters) {
+    const base = cluster.base;
 
-for (const cluster of clusters) {
-    const variance = ClusterVariance(cluster);
+    const isAlias = base && !cluster.children.length;
+    const isAbstract = cluster.id === undefined;
+
+    const variance = ClusterVariance(isAlias ? (base as ClusterModel) : cluster);
     const dir = `#behaviors/${decamelize(cluster.name)}`;
 
     const exports = new TsFile(`${dir}/export`);
-
-    if (cluster.all(CommandModel).length) {
+    if (!isAlias && cluster.all(CommandModel).length) {
         generateClusterFile(dir, InterfaceFile, cluster, exports, variance);
     }
 
-    generateClusterFile(dir, BehaviorFile, cluster, exports, variance);
-
-    generateClusterFile(dir, ServerFile, cluster, exports, variance);
+    if (!isAbstract) {
+        generateClusterFile(dir, BehaviorFile, cluster, exports, variance);
+        generateClusterFile(dir, ServerFile, cluster, exports, variance);
+    }
 
     if (args.save) {
         exports.save();

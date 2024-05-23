@@ -1237,7 +1237,7 @@ export namespace ContentControl {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster is used for managing the content control (including "parental control") settings on a

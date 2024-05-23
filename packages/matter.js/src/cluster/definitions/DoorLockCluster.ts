@@ -4686,7 +4686,7 @@ export namespace DoorLock {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * The door lock cluster provides an interface to a generic way to secure a door. The physical object that provides

@@ -146,7 +146,7 @@ export namespace PressureMeasurement {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides an interface to pressure measurement functionality, including configuration and provision
@@ -160,7 +160,6 @@ export namespace PressureMeasurement {
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
-
     const EXT = { extended: true };
 
     /**

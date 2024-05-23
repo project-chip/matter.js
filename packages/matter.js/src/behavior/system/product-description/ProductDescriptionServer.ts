@@ -8,7 +8,7 @@ import { DeviceTypeId } from "../../../datatype/DeviceTypeId.js";
 import { VendorId } from "../../../datatype/VendorId.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { Agent } from "../../../endpoint/Agent.js";
-import { AggregatorEndpoint } from "../../../endpoint/definitions/system/AggregatorEndpoint.js";
+import { AggregatorDevice } from "../../../endpoint/definitions/device/AggregatorDevice.js";
 import { BridgedNodeEndpoint } from "../../../endpoint/definitions/system/BridgedNodeEndpoint.js";
 import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
 import { Behavior } from "../../Behavior.js";
@@ -103,7 +103,7 @@ function inferDeviceType(agent: Agent): DeviceTypeId | undefined {
         switch (dt.deviceType) {
             case RootEndpoint.deviceType:
             case BridgedNodeEndpoint.deviceType:
-            case AggregatorEndpoint.deviceType:
+            case AggregatorDevice.deviceType:
                 recurse = true;
                 break;
 

@@ -824,7 +824,7 @@ export namespace ContentLauncher {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides an interface for launching content on a Video Player device such as a Streaming Media

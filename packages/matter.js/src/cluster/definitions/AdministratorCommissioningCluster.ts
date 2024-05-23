@@ -357,7 +357,7 @@ export namespace AdministratorCommissioning {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster is used to trigger a Node to allow a new Administrator to commission it. It defines Attributes,

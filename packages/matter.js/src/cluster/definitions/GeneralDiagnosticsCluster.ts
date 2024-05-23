@@ -862,7 +862,7 @@ export namespace GeneralDiagnostics {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * The General Diagnostics Cluster, along with other diagnostics clusters, provide a means to acquire standardized

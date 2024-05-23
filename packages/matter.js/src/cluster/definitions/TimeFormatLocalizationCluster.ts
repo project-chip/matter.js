@@ -199,7 +199,7 @@ export namespace TimeFormatLocalization {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * Nodes should be expected to be deployed to any and all regions of the world. These global regions may have

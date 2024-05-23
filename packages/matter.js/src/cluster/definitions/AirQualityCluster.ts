@@ -149,7 +149,7 @@ export namespace AirQuality {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides an interface to air quality classification using distinct levels with human-readable

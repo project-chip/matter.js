@@ -616,7 +616,7 @@ export namespace Messages {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides an interface for passing messages to be presented by a device.

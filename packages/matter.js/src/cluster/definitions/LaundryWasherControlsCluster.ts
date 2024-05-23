@@ -174,7 +174,7 @@ export namespace LaundryWasherControls {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides a way to access options associated with the operation of a laundry washer device type.

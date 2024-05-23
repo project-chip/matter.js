@@ -454,7 +454,7 @@ export namespace OnOff {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * Attributes and commands for turning devices on and off.

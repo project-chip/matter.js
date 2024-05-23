@@ -14,6 +14,11 @@ import { NamedComponents } from "./cluster-variance/NamedComponents.js";
  */
 export type ClusterVariance = {
     /**
+     * The cluster.
+     */
+    cluster: ClusterModel;
+
+    /**
      * The base component.
      */
     base: InferredComponent;
@@ -43,6 +48,7 @@ export function ClusterVariance(cluster: ClusterModel): ClusterVariance {
     const { illegal, requiresFeatures } = IllegalFeatureCombinations(cluster);
 
     return {
+        cluster,
         base,
         components,
         illegal,

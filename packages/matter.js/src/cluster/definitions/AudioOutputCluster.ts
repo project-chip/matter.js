@@ -195,7 +195,7 @@ export namespace AudioOutput {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides an interface for controlling the Output on a Video Player device such as a TV.

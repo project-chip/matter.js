@@ -1187,7 +1187,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * The Thread Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may be

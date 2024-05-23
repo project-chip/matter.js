@@ -232,7 +232,7 @@ export namespace SoftwareDiagnostics {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * The Software Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may be used

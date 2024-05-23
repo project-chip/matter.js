@@ -153,7 +153,6 @@ export namespace PowerTopology {
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
-
     const SET = { setTopology: true };
     const DYPF = { dynamicPowerFlow: true };
 

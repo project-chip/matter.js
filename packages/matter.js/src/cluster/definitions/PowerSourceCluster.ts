@@ -1382,7 +1382,7 @@ export namespace PowerSource {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster is used to describe the configuration and capabilities of a physical power source that provides

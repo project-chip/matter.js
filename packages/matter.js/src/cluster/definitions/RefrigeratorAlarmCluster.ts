@@ -63,7 +63,7 @@ export namespace RefrigeratorAlarm {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster is a derived cluster of Alarm Base cluster.

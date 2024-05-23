@@ -12,10 +12,12 @@ import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace HepaFilterMonitoring {
+    export const Base = { ...ResourceMonitoring.Base, id: 0x71, name: "HepaFilterMonitoring" }
+
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...ResourceMonitoring.Base, id: 0x71 })
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This alias specializes the semantics of {@link ResourceMonitoring.Cluster}.
@@ -36,7 +38,6 @@ export namespace HepaFilterMonitoring {
     export const CompleteInstance = MutableCluster({ ...ResourceMonitoring.Complete, id: 0x71 });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}
-
     export const Complete: Complete = CompleteInstance;
 }
 

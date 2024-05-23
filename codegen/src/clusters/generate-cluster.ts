@@ -102,13 +102,7 @@ function generateDefinition(file: ClusterFile) {
     }
 
     // Create the default cluster instance
-    generateMutableCluster(variance, file, cluster.featureMap, instance => {
-        if (variance.requiresFeatures) {
-            instance.atom("Base");
-        } else {
-            instance.atom(`...Base`);
-        }
-    });
+    generateMutableCluster(variance, file, cluster.featureMap);
 
     // Generate the complete cluster
     generateComplete(file, variance);
@@ -121,25 +115,22 @@ function generateMutableCluster(
     variance: ClusterVariance,
     file: ClusterFile,
     featureMap: AttributeModel,
-    populator: (instance: Block, extraDocumentation: string[]) => string | void,
+    docs?: string,
 ) {
     const extraDocumentation = [] as string[];
+    if (docs) {
+        extraDocumentation.push(docs);
+    }
     let instance;
     if (variance.requiresFeatures) {
         // The cluster requires some features to be present
-        instance = file.ns.expressions(`export const ClusterInstance = MutableCluster.ExtensibleOnly(`, ")");
-        const populatorDocs = populator(instance, extraDocumentation);
-        if (populatorDocs) {
-            extraDocumentation;
-        }
+        instance = file.ns.atom(`export const ClusterInstance = MutableCluster.ExtensibleOnly(Base)`);
         extraDocumentation.push(
             `Per the Matter specification you cannot use {@link ${file.clusterName}} without enabling certain feature combinations.  ` +
                 `You must use the {@link with} factory method to obtain a working cluster.`,
         );
     } else {
         // The cluster has optional features but none are mandatory
-        instance = file.ns.expressions(`export const ClusterInstance = MutableCluster({`, "})");
-        populator(instance, extraDocumentation);
         extraDocumentation.push(
             `${file.clusterName} supports optional features that you can enable with the ${file.clusterName}.with() factory method.`,
         );
@@ -147,6 +138,8 @@ function generateMutableCluster(
         const supportedFeatures = featureMap.effectiveDefault;
         if (typeof supportedFeatures === "number" && supportedFeatures) {
             // Override supportedFeatures as there are default supported features
+            instance = file.ns.expressions(`export const ClusterInstance = MutableCluster({`, "})");
+            instance.atom("...Base");
             const supportedFeatureBlock = instance.expressions(`supportedFeatures: {`, "}");
             featureMap.children.forEach(feature => {
                 if (typeof feature.constraint.value === "number") {
@@ -156,6 +149,8 @@ function generateMutableCluster(
                     }
                 }
             });
+        } else {
+            instance = file.ns.atom(`export const ClusterInstance = MutableCluster(Base)`);
         }
     }
 
@@ -420,12 +415,17 @@ function generateAlias(file: ClusterFile) {
 
     const variance = ClusterVariance(base);
 
-    generateMutableCluster(variance, file, base.featureMap, (instance, documentation) => {
-        const fields = variance.requiresFeatures ? instance.expressions("{", "}") : instance;
-        fields.atom(`...${base.name}.${variance.requiresFeatures || base.id === undefined ? "Base" : "Cluster"}`);
-        generateIdentity(fields, file.cluster);
-        documentation.push(`This alias specializes the semantics of {@link ${base.name}.Cluster}.`);
-    });
+    const baseBlock = file.ns.expressions(`export const Base = {`, "}");
+    baseBlock.atom(`...${base.name}.Base`);
+    generateIdentity(baseBlock, file.cluster);
+    baseBlock.atom("name", serialize(file.cluster.name));
+
+    generateMutableCluster(
+        variance,
+        file,
+        base.featureMap,
+        `This alias specializes the semantics of {@link ${base.name}.Cluster}.`,
+    );
 
     const complete = file.ns.expressions("export const CompleteInstance = MutableCluster({", "})");
     complete.atom(`...${base.name}.Complete`);

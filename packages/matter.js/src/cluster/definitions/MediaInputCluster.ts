@@ -217,7 +217,7 @@ export namespace MediaInput {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides an interface for controlling the Input Selector on a media device such as a Video Player.

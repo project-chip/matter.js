@@ -187,16 +187,18 @@ export class Block extends Entry {
     override serialize(linePrefix = "") {
         const childLinePrefix = `${linePrefix}${this.indent}`;
         const serializedEntries = Array<string>();
+        const rawEntries = Array<Entry>();
         for (const entry of this.entries) {
             const text = entry.toString(childLinePrefix);
             if (!(entry instanceof Block) || text !== "") {
                 serializedEntries.push(text);
+                rawEntries.push(entry);
             }
         }
-        return this.layOutEntries(linePrefix, serializedEntries);
+        return this.layOutEntries(linePrefix, serializedEntries, rawEntries);
     }
 
-    layOutEntries(linePrefix: string, serializedEntries: string[]) {
+    layOutEntries(linePrefix: string, serializedEntries: string[], rawEntries: Entry[]) {
         const parts = Array<string>();
         if (this.prefix) {
             parts.push(`${linePrefix}${this.prefix}`);
@@ -208,7 +210,7 @@ export class Block extends Entry {
             const entry = `${serializedEntries[i]}${this.delimiterAfter(i, serializedEntries[i])}`;
 
             // Separate documented and large elements from their siblings
-            if (this.entries[i].isDocumented || (entry.split("\n").length > 5 && !this.entries[i].shouldGroup)) {
+            if (rawEntries[i].isDocumented || (entry.split("\n").length > 5 && !rawEntries[i].shouldGroup)) {
                 if (i) {
                     parts.push("");
                 }
@@ -218,7 +220,7 @@ export class Block extends Entry {
                 needSpace = false;
             }
 
-            if (this.entries[i].isDocumented) {
+            if (rawEntries[i].isDocumented) {
                 needSpace = true;
             }
 
@@ -542,7 +544,7 @@ class ExpressionBlock extends NestedBlock {
         super(parent, prefix, suffix);
     }
 
-    override layOutEntries(linePrefix: string, serializedEntries: string[]) {
+    override layOutEntries(linePrefix: string, serializedEntries: string[], rawEntries: Entry[]) {
         let adornmentLength = linePrefix.length + this.prefix.length + this.suffix.length;
         const isArrayOrObject = this.prefix.match(/[[{]$/);
         if (isArrayOrObject) {
@@ -576,7 +578,7 @@ class ExpressionBlock extends NestedBlock {
         }
 
         // "Verbose" layout is the standard provided by super
-        return super.layOutEntries(linePrefix, serializedEntries);
+        return super.layOutEntries(linePrefix, serializedEntries, rawEntries);
     }
 
     override delimiterAfter(index: number) {
@@ -623,34 +625,29 @@ export class TsFile extends Block {
         return this.name.replace(/^.*[/\\]/, "");
     }
 
-    addImport(file: string, name?: string) {
+    addImport(filename: string, name?: string) {
         // The set of imports we allow is intentionally restrictive so we can catch errors more easily.  Extend as
         // necessary
-        if (file.startsWith(".") || file.startsWith("#")) {
-            if (!file.endsWith(".js")) {
-                throw new InternalError(`Local import of ${file} has no .js suffix`);
+        if (filename.startsWith(".") || filename.startsWith("#")) {
+            if (!filename.endsWith(".js")) {
+                throw new InternalError(`Local import of ${filename} has no .js suffix`);
             }
-        } else if (file.endsWith(".js")) {
-            throw new InternalError(`Local import of ${file} must start with "#" or "."`);
-        } else if (!file.startsWith("@project-chip")) {
-            throw new InternalError(`Absolute import of ${file} must start with "@project-chip"`);
+        } else if (filename.endsWith(".js")) {
+            throw new InternalError(`Local import of ${filename} must start with "#" or "."`);
+        } else if (!filename.startsWith("@project-chip")) {
+            throw new InternalError(`Absolute import of ${filename} must start with "@project-chip"`);
         }
 
-        if (file.match(/\.[a-z]+\.[a-z]+$/)) {
-            throw new InternalError(`Import of ${file} has multiple suffices`);
+        if (filename.match(/\.[a-z]+\.[a-z]+$/)) {
+            throw new InternalError(`Import of ${filename} has multiple suffices`);
         }
 
-        if (file.startsWith("#")) {
-            file = relative(this.name.replace(/\/[^/]+$/, ""), file);
-            if (!file.startsWith(".")) {
-                file = `./${file}`;
-            }
-        }
+        filename = this.#resolveImportPath(filename);
 
-        let list = this.imports.get(file);
+        let list = this.imports.get(filename);
         if (!list) {
             list = new Array<string>();
-            this.imports.set(file, list);
+            this.imports.set(filename, list);
         }
         if (name && list.indexOf(name) === -1) {
             list.push(name);
@@ -662,7 +659,7 @@ export class TsFile extends Block {
     }
 
     addReexport(filename: string) {
-        filename = relative(this.name.replace(/\/[^/]+$/, ""), filename);
+        filename = this.#resolveImportPath(filename);
         this.atom(`export * from "${filename}.js"`);
     }
 
@@ -701,5 +698,15 @@ export class TsFile extends Block {
 
         writeMatterFile(filename, body);
         return this;
+    }
+
+    #resolveImportPath(filename: string) {
+        if (filename.startsWith("#")) {
+            filename = relative(this.name.replace(/\/[^/]+$/, ""), filename);
+            if (!filename.startsWith(".")) {
+                filename = `./${filename}`;
+            }
+        }
+        return filename;
     }
 }

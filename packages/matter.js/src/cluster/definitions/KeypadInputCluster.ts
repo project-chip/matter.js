@@ -256,7 +256,7 @@ export namespace KeypadInput {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides an interface for key code based input and control on a device like a Video Player or an

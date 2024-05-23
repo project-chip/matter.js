@@ -981,7 +981,7 @@ export namespace ScenesManagement {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * The Scenes Management cluster provides attributes and commands for setting up and recalling scenes. Each scene

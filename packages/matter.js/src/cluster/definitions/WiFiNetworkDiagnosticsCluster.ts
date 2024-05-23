@@ -444,7 +444,7 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * The Wi-Fi Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may be

@@ -265,7 +265,7 @@ export namespace ModeSelect {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides an interface for controlling a characteristic of a device that can be set to one of

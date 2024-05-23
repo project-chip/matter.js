@@ -545,7 +545,7 @@ export namespace GroupKeyManagement {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * The Group Key Management cluster manages group keys for the node. The cluster is scoped to the node and is a

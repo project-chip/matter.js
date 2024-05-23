@@ -1040,7 +1040,7 @@ export namespace MediaPlayback {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides an interface for controlling Media Playback (PLAY, PAUSE, etc) on a media device such as a

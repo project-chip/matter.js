@@ -68,7 +68,6 @@ export namespace TemperatureMeasurement {
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
-
     export const Complete = Cluster;
 }
 

@@ -630,7 +630,7 @@ export namespace IcdManagement {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * ICD Management Cluster enables configuration of the ICD’s behavior and ensuring that listed clients can be

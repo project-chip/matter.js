@@ -330,7 +330,7 @@ export namespace ApplicationLauncher {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster provides an interface for launching applications on a Video Player device such as a TV.

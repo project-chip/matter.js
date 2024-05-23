@@ -1726,7 +1726,7 @@ export namespace ColorControl {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * ColorControlCluster supports optional features that you can enable with the ColorControlCluster.with() factory

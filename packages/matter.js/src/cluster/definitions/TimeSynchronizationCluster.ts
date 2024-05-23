@@ -987,7 +987,7 @@ export namespace TimeSynchronization {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * Accurate time is required for a number of reasons, including scheduling, display and validating security
