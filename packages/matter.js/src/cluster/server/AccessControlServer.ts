@@ -15,6 +15,7 @@ import { AclExtensionEntry } from "../../protocol/interaction/AccessControlManag
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { TypeFromBitmapSchema } from "../../schema/BitmapSchema.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
+import { SyncStorage } from "../../storage/Storage.js";
 import { TlvType } from "../../tlv/TlvCodec.js";
 import { TlvTaggedList } from "../../tlv/TlvObject.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
@@ -27,10 +28,11 @@ import { EventServer } from "./EventServer.js";
 const logger = Logger.get("AccessControlClusterServer");
 
 export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof AccessControlCluster> = () => {
-    let accessControlEntryChangedEvent: EventServer<AccessControl.AccessControlEntryChangedEvent, any> | undefined =
-        undefined;
+    let accessControlEntryChangedEvent:
+        | EventServer<AccessControl.AccessControlEntryChangedEvent, SyncStorage>
+        | undefined = undefined;
     let accessControlExtensionChangedEvent:
-        | EventServer<AccessControl.AccessControlExtensionChangedEvent, any>
+        | EventServer<AccessControl.AccessControlExtensionChangedEvent, SyncStorage>
         | undefined = undefined;
 
     return {

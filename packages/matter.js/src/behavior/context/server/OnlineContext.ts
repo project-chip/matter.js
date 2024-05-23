@@ -136,7 +136,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                     Contextual.setContextOf(message, context);
                 }
 
-                return actor(context as ActionContext);
+                return actor(context);
             };
 
             const traceError = (e: unknown) => {
