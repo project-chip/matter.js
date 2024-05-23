@@ -7,12 +7,14 @@
 import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
 import { MatterFlowError } from "../common/MatterError.js";
 import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "../crypto/Crypto.js";
+import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateEncryptedWithoutRollover } from "../protocol/MessageReceptionState.js";
+import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
@@ -38,6 +40,7 @@ export class SecureSession<T> extends Session<T> {
     readonly #encryptKey: ByteArray;
     readonly #attestationKey: ByteArray;
     readonly #subscriptionChangedCallback: () => void;
+    #caseAuthenticatedTags: CaseAuthenticatedTag[];
 
     static async create<T>(args: {
         context: T;
@@ -52,6 +55,7 @@ export class SecureSession<T> extends Session<T> {
         closeCallback: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
         sessionParameters?: SessionParameterOptions;
+        caseAuthenticatedTags?: CaseAuthenticatedTag[];
     }) {
         const {
             context,
@@ -65,6 +69,7 @@ export class SecureSession<T> extends Session<T> {
             isResumption,
             closeCallback,
             sessionParameters,
+            caseAuthenticatedTags,
             subscriptionChangedCallback,
         } = args;
         const keys = await Crypto.hkdf(
@@ -89,6 +94,7 @@ export class SecureSession<T> extends Session<T> {
             subscriptionChangedCallback,
             sessionParameters,
             isInitiator,
+            caseAuthenticatedTags,
         });
     }
 
@@ -104,6 +110,7 @@ export class SecureSession<T> extends Session<T> {
         closeCallback: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
         sessionParameters?: SessionParameterOptions;
+        caseAuthenticatedTags?: CaseAuthenticatedTag[];
         isInitiator: boolean;
     }) {
         super({
@@ -127,6 +134,7 @@ export class SecureSession<T> extends Session<T> {
             encryptKey,
             attestationKey,
             subscriptionChangedCallback = () => {},
+            caseAuthenticatedTags,
         } = args;
 
         this.#context = context;
@@ -138,6 +146,7 @@ export class SecureSession<T> extends Session<T> {
         this.#encryptKey = encryptKey;
         this.#attestationKey = attestationKey;
         this.#subscriptionChangedCallback = subscriptionChangedCallback;
+        this.#caseAuthenticatedTags = caseAuthenticatedTags ?? fabric?.caseAuthenticatedTags ?? [];
 
         fabric?.addSession(this);
 
@@ -153,7 +162,7 @@ export class SecureSession<T> extends Session<T> {
     }
 
     get caseAuthenticatedTags() {
-        return this.#fabric?.caseAuthenticatedTags ?? [];
+        return this.#caseAuthenticatedTags;
     }
 
     get closingAfterExchangeFinished() {
@@ -221,6 +230,7 @@ export class SecureSession<T> extends Session<T> {
             throw new MatterFlowError("Session already has an associated Fabric. Cannot change this.");
         }
         this.#fabric = fabric;
+        this.#caseAuthenticatedTags = fabric.caseAuthenticatedTags;
     }
 
     get id() {
