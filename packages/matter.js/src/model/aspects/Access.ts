@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AccessLevel } from "../../cluster/Cluster.js";
 import { isObject } from "../../util/Type.js";
 import { Aspect } from "./Aspect.js";
 
@@ -27,6 +28,14 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
 
     get writable() {
         return !!this.rw && this.rw !== Access.Rw.Read;
+    }
+
+    get fabricScoped() {
+        return this.fabric === Access.Fabric.Scoped;
+    }
+
+    get fabricSensitive() {
+        return this.fabric === Access.Fabric.Sensitive;
     }
 
     override get empty() {

@@ -110,7 +110,11 @@ export class RootSupervisor implements ValueSupervisor {
         if (!persistent) {
             persistent = new Set();
             for (const member of this.#members) {
-                if (member.effectiveQuality.nonvolatile) {
+                if (
+                    member.effectiveQuality.nonvolatile ||
+                    member.effectiveAccess.writable ||
+                    member.effectiveAccess.fabricScoped
+                ) {
                     persistent.add(camelize(member.name));
                 }
             }
