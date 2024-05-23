@@ -24,12 +24,12 @@ export function deepCopy<T>(value: T): T {
             }
 
             if (Array.isArray(value)) {
-                clone = [...value];
+                clone = value.map(copy);
             } else if (ArrayBuffer.isView(value)) {
                 const ViewType = value.constructor as new (buffer: ArrayBuffer) => unknown;
                 clone = new ViewType(value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength));
             } else {
-                clone = { ...value };
+                clone = Object.fromEntries(Object.entries(value).map(([k, v]) => [k, copy(v)]));
             }
 
             if (!clones) {
