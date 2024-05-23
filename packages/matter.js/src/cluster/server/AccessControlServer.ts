@@ -298,7 +298,6 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
             );
 
             if (changed && accessControlExtensionChangedEvent !== undefined) {
-                assertSecureSession(session!);
                 const changeType =
                     value.length > oldValue.length
                         ? AccessControl.ChangeType.Added

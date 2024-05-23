@@ -13,6 +13,7 @@ import {
     FixedAttributeServer,
 } from "../../src/cluster/server/AttributeServer.js";
 import { ClusterDatasource } from "../../src/cluster/server/ClusterServerTypes.js";
+import { Message } from "../../src/codec/MessageCodec.js";
 import { AttributeId } from "../../src/datatype/AttributeId.js";
 import { FabricId } from "../../src/datatype/FabricId.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
@@ -587,7 +588,7 @@ describe("AttributeServerTest", () => {
                 oldValueTriggered2 = oldValue;
             });
 
-            server.set(9, testSession);
+            server.set(9, testSession, {} as Message);
             expect(server.get(testSession, false)).equal(7);
             expect(valueTriggered).equal(9);
             expect(versionTriggered).equal(1);
