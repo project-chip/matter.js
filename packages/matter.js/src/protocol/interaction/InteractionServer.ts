@@ -280,50 +280,77 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             for (const { path, attribute } of attributes) {
                 const { nodeId, endpointId, clusterId } = path;
 
-                const { value, version } = await tryCatchAsync(
-                    async () => this.readAttribute(attribute, exchange, isFabricFiltered, message),
-                    NoAssociatedFabricError,
-                    async () => {
-                        // TODO: Remove when we remove legacy API
-                        //  This is not fully correct but should be sufficient for now
-                        //  This is fixed in the new API already, so this error should never throw
-                        //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
-                        //  Assume for now that in this place we only need to handle fabric sensitive case
-                        if (endpointId === undefined || clusterId === undefined) {
-                            throw new MatterFlowError("Should never happen");
-                        }
-                        const cluster = this.#endpointStructure.getClusterServer(endpointId, clusterId);
-                        if (cluster === undefined || cluster.datasource == undefined) {
-                            throw new MatterFlowError("Should never happen");
-                        }
-                        return {
-                            version: cluster.datasource.version,
-                            value: [],
-                        };
-                    },
-                );
+                try {
+                    const { value, version } = await tryCatchAsync(
+                        async () =>
+                            this.readAttribute(
+                                path,
+                                attribute,
+                                exchange,
+                                isFabricFiltered,
+                                message,
+                                this.#endpointStructure.getEndpoint(endpointId)!,
+                            ),
+                        NoAssociatedFabricError,
+                        async () => {
+                            // TODO: Remove when we remove legacy API
+                            //  This is not fully correct but should be sufficient for now
+                            //  This is fixed in the new API already, so this error should never throw
+                            //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
+                            //  Assume for now that in this place we only need to handle fabric sensitive case
+                            if (endpointId === undefined || clusterId === undefined) {
+                                throw new MatterFlowError("Should never happen");
+                            }
+                            const cluster = this.#endpointStructure.getClusterServer(endpointId, clusterId);
+                            if (cluster === undefined || cluster.datasource == undefined) {
+                                throw new MatterFlowError("Should never happen");
+                            }
+                            return {
+                                version: cluster.datasource.version,
+                                value: [],
+                            };
+                        },
+                    );
 
-                const versionFilterValue =
-                    endpointId !== undefined && clusterId !== undefined
-                        ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
-                        : undefined;
-                if (versionFilterValue !== undefined && versionFilterValue === version) {
+                    const versionFilterValue =
+                        endpointId !== undefined && clusterId !== undefined
+                            ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                            : undefined;
+                    if (versionFilterValue !== undefined && versionFilterValue === version) {
+                        logger.debug(
+                            `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                                path,
+                            )}=${Logger.toJSON(value)} (version=${version}) ignored because of dataVersionFilter`,
+                        );
+                        continue;
+                    }
+
                     logger.debug(
                         `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
                             path,
-                        )}=${Logger.toJSON(value)} (version=${version}) ignored because of dataVersionFilter`,
+                        )}=${Logger.toJSON(value)} (version=${version})`,
                     );
-                    continue;
+
+                    const { schema } = attribute;
+                    attributeReportsPayload.push({
+                        attributeData: { path, dataVersion: version, payload: value, schema },
+                    });
+                } catch (error) {
+                    logger.error(
+                        `Error while reading attribute from ${
+                            exchange.channel.name
+                        } to ${this.#endpointStructure.resolveAttributeName(path)}:`,
+                        error,
+                    );
+                    if (error instanceof StatusResponseError) {
+                        // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
+                        if (isConcreteAttributePath(requestPath)) {
+                            attributeReportsPayload.push({ attributeStatus: { path, status: { status: error.code } } });
+                        }
+                    } else {
+                        throw error;
+                    }
                 }
-
-                logger.debug(
-                    `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                        path,
-                    )}=${Logger.toJSON(value)} (version=${version})`,
-                );
-
-                const { schema } = attribute;
-                attributeReportsPayload.push({ attributeData: { path, dataVersion: version, payload: value, schema } });
             }
         }
 
@@ -372,25 +399,51 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
                 const reportsForPath = new Array<{ eventData: EventDataPayload }>();
                 for (const { path, event } of events) {
-                    const matchingEvents = this.#eventHandler.getEvents(path, eventFilters);
-                    logger.debug(
-                        `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
+                    try {
+                        const { endpointId } = path;
+                        const matchingEvents = await this.readEvent(
                             path,
-                        )}=${Logger.toJSON(matchingEvents)}`,
-                    );
-                    const { schema } = event;
-                    reportsForPath.push(
-                        ...matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
-                            eventData: {
+                            eventFilters,
+                            event,
+                            exchange,
+                            isFabricFiltered,
+                            message,
+                            this.#endpointStructure.getEndpoint(endpointId)!,
+                        );
+                        logger.debug(
+                            `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
                                 path,
-                                eventNumber,
-                                priority,
-                                epochTimestamp,
-                                payload: data,
-                                schema,
-                            },
-                        })),
-                    );
+                            )}=${Logger.toJSON(matchingEvents)}`,
+                        );
+                        const { schema } = event;
+                        reportsForPath.push(
+                            ...matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
+                                eventData: {
+                                    path,
+                                    eventNumber,
+                                    priority,
+                                    epochTimestamp,
+                                    payload: data,
+                                    schema,
+                                },
+                            })),
+                        );
+                    } catch (error) {
+                        logger.error(
+                            `Error while reading event from ${
+                                exchange.channel.name
+                            } to ${this.#endpointStructure.resolveEventName(path)}:`,
+                            error,
+                        );
+                        if (error instanceof StatusResponseError) {
+                            // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
+                            if (isConcreteEventPath(requestPath)) {
+                                eventReportsPayload?.push({ eventStatus: { path, status: { status: error.code } } });
+                            }
+                        } else {
+                            throw error;
+                        }
+                    }
                 }
                 eventReportsPayload.push(
                     ...reportsForPath.sort((a, b) => {
