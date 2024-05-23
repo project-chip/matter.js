@@ -9,9 +9,9 @@ import { decamelize } from "@project-chip/matter.js/util";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { BehaviorFile } from "./endpoints/BehaviorFile.js";
-import { BehaviorServerFile } from "./endpoints/BehaviorServerFile.js";
 import { EndpointFile } from "./endpoints/EndpointFile.js";
 import { InterfaceFile } from "./endpoints/InterfaceFile.js";
+import { ServerFile } from "./endpoints/ServerFile.js";
 import { TsFile } from "./util/TsFile.js";
 import "./util/setup.js";
 
@@ -25,7 +25,7 @@ const args = await yargs(hideBin(process.argv))
     .strict().argv;
 
 if (!args.interfaces && !args.behaviors && !args.server && !args.endpoints) {
-    args.interfaces = args.behaviors = args.server = args.endpoints = true;
+    args.interfaces = args.behaviors = args.servers = args.endpoints = true;
 }
 
 const clusters = MatterModel.standard.clusters.filter(cluster => cluster.id !== undefined);
@@ -36,17 +36,13 @@ for (const cluster of clusters) {
 
     const exports = new TsFile(`${dir}/export`);
 
-    if (args.interfaces && cluster.all(CommandModel).length) {
+    if (cluster.all(CommandModel).length) {
         generateClusterFile(dir, InterfaceFile, cluster, exports, variance);
     }
 
-    if (args.behaviors) {
-        generateClusterFile(dir, BehaviorFile, cluster, exports, variance);
-    }
+    generateClusterFile(dir, BehaviorFile, cluster, exports, variance);
 
-    if (args.servers) {
-        generateClusterFile(dir, BehaviorServerFile, cluster, exports, variance);
-    }
+    generateClusterFile(dir, ServerFile, cluster, exports, variance);
 
     if (args.save) {
         exports.save();
@@ -65,7 +61,7 @@ if (args.endpoints) {
             file.save();
         }
 
-        endpointExports.addReexport(file.definitionPath);
+        endpointExports.addReexport(file.name);
     }
     if (args.save) {
         endpointExports.save();
@@ -82,10 +78,12 @@ function generateClusterFile(
     exports: TsFile,
     variance: ClusterVariance,
 ) {
-    const name = `${cluster.name}${type.baseName}`;
-    const file = new type(`${dir}/${name}`, cluster, variance);
-    if (args.save) {
-        file.save();
+    const filename = `${dir}/${cluster.name}${type.baseName}`;
+    if (args[`${type.baseName.toLowerCase()}s`]) {
+        const file = new type(filename, cluster, variance);
+        if (args.save) {
+            file.save();
+        }
     }
-    exports.addReexport(name);
+    exports.addReexport(filename);
 }

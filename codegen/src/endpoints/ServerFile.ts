@@ -10,7 +10,7 @@ import { TsFile } from "../util/TsFile.js";
 
 const logger = Logger.get("BehaviorServerFile");
 
-export class BehaviorServerFile extends TsFile {
+export class ServerFile extends TsFile {
     static readonly baseName = "Server";
     readonly definitionName: string;
 
@@ -29,7 +29,7 @@ export class BehaviorServerFile extends TsFile {
     private generate() {
         logger.info(`${this.cluster.name} → ${this.name}.ts`);
 
-        this.addImport(`#behaviors/${this.cluster.name}Behavior.js`, `${this.cluster.name}Behavior`);
+        this.addImport(`./${this.cluster.name}Behavior.js`, `${this.cluster.name}Behavior`);
 
         let extraDoc;
 

@@ -16,7 +16,6 @@ const logger = Logger.get("EndpointFile");
 
 export class EndpointFile extends TsFile {
     definitionName: string;
-    definitionPath: string;
     requirementsName: string;
     requirements: Block;
     definitions: Block;
@@ -44,7 +43,6 @@ export class EndpointFile extends TsFile {
         super(`#endpoints/${path}`);
 
         this.definitionName = name;
-        this.definitionPath = path;
         this.requirementsName = `${specName}Requirements`;
 
         this.interfaceLocation = this.section();

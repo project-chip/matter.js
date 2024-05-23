@@ -19,26 +19,6 @@ import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagno
 import { OnOffServer } from "../on-off/OnOffServer.js";
 import { ColorControlBehavior } from "./ColorControlBehavior.js";
 import {
-    ColorLoopSetRequest,
-    EnhancedMoveHueRequest,
-    EnhancedMoveToHueAndSaturationRequest,
-    EnhancedMoveToHueRequest,
-    EnhancedStepHueRequest,
-    MoveColorRequest,
-    MoveColorTemperatureRequest,
-    MoveHueRequest,
-    MoveSaturationRequest,
-    MoveToColorTemperatureRequest,
-    MoveToHueAndSaturationRequest,
-    MoveToHueRequest,
-    MoveToSaturationRequest,
-    StepColorRequest,
-    StepColorTemperatureRequest,
-    StepHueRequest,
-    StepSaturationRequest,
-    StopMoveStepRequest,
-} from "./ColorControlInterface.js";
-import {
     hsvToMireds,
     hsvToXy,
     kelvinToMireds,
@@ -394,7 +374,13 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * {@link moveToHueLogic} with is also used for {@link enhancedMoveToHue}, {@link moveToHueAndSaturation} and
      * {@link enhancedMoveToHueAndSaturation}.
      */
-    override moveToHue({ optionsMask, optionsOverride, hue, direction, transitionTime }: MoveToHueRequest) {
+    override moveToHue({
+        optionsMask,
+        optionsOverride,
+        hue,
+        direction,
+        transitionTime,
+    }: ColorControl.MoveToHueRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -455,7 +441,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * increase only one rate directly if the managed transition is not used. Else the step logic is applied and the
      * level is increased or decreased by the step size every second.
      */
-    override moveHue({ optionsMask, optionsOverride, moveMode, rate }: MoveHueRequest) {
+    override moveHue({ optionsMask, optionsOverride, moveMode, rate }: ColorControl.MoveHueRequest) {
         this.#assertRate(moveMode, rate);
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
@@ -527,7 +513,13 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * possible, so we set to min/max directly. Else the step logic is applied and the hue is increased or decreased
      * by the step size every transition time interval.
      */
-    override stepHue({ optionsMask, optionsOverride, stepMode, stepSize, transitionTime }: StepHueRequest) {
+    override stepHue({
+        optionsMask,
+        optionsOverride,
+        stepMode,
+        stepSize,
+        transitionTime,
+    }: ColorControl.StepHueRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -595,7 +587,12 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * possible, so we set the target value directly. Else the step logic is applied and the saturation is increased or
      * decreased by the step size every transition time interval.
      */
-    override moveToSaturation({ optionsMask, optionsOverride, saturation, transitionTime }: MoveToSaturationRequest) {
+    override moveToSaturation({
+        optionsMask,
+        optionsOverride,
+        saturation,
+        transitionTime,
+    }: ColorControl.MoveToSaturationRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -640,7 +637,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * possible, so we set to min/max directly. Else the step logic is applied and the saturation is increased or
      * decreased by the step size every transition time interval.
      */
-    override moveSaturation({ optionsMask, optionsOverride, moveMode, rate }: MoveSaturationRequest) {
+    override moveSaturation({ optionsMask, optionsOverride, moveMode, rate }: ColorControl.MoveSaturationRequest) {
         this.#assertRate(moveMode, rate);
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
@@ -695,7 +692,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepMode,
         stepSize,
         transitionTime,
-    }: StepSaturationRequest) {
+    }: ColorControl.StepSaturationRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -758,7 +755,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         saturation,
         hue,
         transitionTime,
-    }: MoveToHueAndSaturationRequest) {
+    }: ColorControl.MoveToHueAndSaturationRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -851,7 +848,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * possible, so we set the target values directly. Else the step logic is applied and the x and y is
      * increased or decreased by the step size every transition time interval.
      */
-    override moveColor({ optionsOverride, optionsMask, rateX, rateY }: MoveColorRequest): MaybePromise {
+    override moveColor({ optionsOverride, optionsMask, rateX, rateY }: ColorControl.MoveColorRequest): MaybePromise {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -919,7 +916,13 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * possible, so we set the target values directly. Else the step logic is applied and the x and y is
      * increased or decreased by the step size every transition time interval.
      */
-    override stepColor({ optionsOverride, optionsMask, stepX, stepY, transitionTime }: StepColorRequest): MaybePromise {
+    override stepColor({
+        optionsOverride,
+        optionsMask,
+        stepX,
+        stepY,
+        transitionTime,
+    }: ColorControl.StepColorRequest): MaybePromise {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -974,7 +977,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         optionsMask,
         colorTemperatureMireds,
         transitionTime,
-    }: MoveToColorTemperatureRequest): MaybePromise {
+    }: ColorControl.MoveToColorTemperatureRequest): MaybePromise {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1026,7 +1029,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         enhancedHue,
         direction,
         transitionTime,
-    }: EnhancedMoveToHueRequest) {
+    }: ColorControl.EnhancedMoveToHueRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1045,7 +1048,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * increase only one rate directly if the managed transition is not used. Else the step logic is applied and the
      * level is increased or decreased by the step size every second.
      */
-    override enhancedMoveHue({ optionsMask, optionsOverride, moveMode, rate }: EnhancedMoveHueRequest) {
+    override enhancedMoveHue({ optionsMask, optionsOverride, moveMode, rate }: ColorControl.EnhancedMoveHueRequest) {
         this.#assertRate(moveMode, rate);
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
@@ -1077,7 +1080,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepMode,
         stepSize,
         transitionTime,
-    }: EnhancedStepHueRequest) {
+    }: ColorControl.EnhancedStepHueRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1102,7 +1105,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         enhancedHue,
         saturation,
         transitionTime,
-    }: EnhancedMoveToHueAndSaturationRequest): MaybePromise {
+    }: ColorControl.EnhancedMoveToHueAndSaturationRequest): MaybePromise {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1149,7 +1152,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         direction,
         time,
         startHue,
-    }: ColorLoopSetRequest) {
+    }: ColorControl.ColorLoopSetRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1236,7 +1239,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * After the options checks it uses the {@link stopMoveStepLogic} method to stop any ongoing color movement.
      * If you want to implement own logic just override {@link stopMoveStepLogic}.
      */
-    override stopMoveStep({ optionsOverride, optionsMask }: StopMoveStepRequest) {
+    override stopMoveStep({ optionsOverride, optionsMask }: ColorControl.StopMoveStepRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1277,7 +1280,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         colorTemperatureMinimumMireds,
         colorTemperatureMaximumMireds,
         rate,
-    }: MoveColorTemperatureRequest): MaybePromise {
+    }: ColorControl.MoveColorTemperatureRequest): MaybePromise {
         this.#assertRate(moveMode, rate);
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
@@ -1365,7 +1368,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         transitionTime,
         colorTemperatureMinimumMireds,
         colorTemperatureMaximumMireds,
-    }: StepColorTemperatureRequest) {
+    }: ColorControl.StepColorTemperatureRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }

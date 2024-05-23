@@ -18,7 +18,6 @@ import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { NetworkServer } from "../../system/network/NetworkServer.js";
 import { NetworkCommissioningServer } from "../network-commissioning/NetworkCommissioningServer.js";
 import { GeneralDiagnosticsBehavior } from "./GeneralDiagnosticsBehavior.js";
-import { TestEventTriggerRequest } from "./GeneralDiagnosticsInterface.js";
 
 /**
  * This is the default server implementation of GeneralDiagnosticsBehavior.
@@ -65,7 +64,7 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
         }
     }
 
-    override testEventTrigger({ eventTrigger, enableKey }: TestEventTriggerRequest) {
+    override testEventTrigger({ eventTrigger, enableKey }: GeneralDiagnostics.TestEventTriggerRequest) {
         throw new StatusResponseError(
             `Unsupported test event trigger ${enableKey.toHex()}/${eventTrigger}`,
             StatusCode.InvalidCommand,

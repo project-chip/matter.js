@@ -20,8 +20,6 @@ const DIR_MAPPING = {
     "#globals": Package.workspace.resolve("packages/matter.js/src/cluster/globals"),
     "#endpoints": Package.workspace.resolve("packages/matter.js/src/endpoint/definitions"),
     "#behaviors": Package.workspace.resolve("packages/matter.js/src/behavior/definitions"),
-    "#behavior-servers": Package.workspace.resolve("packages/matter.js/src/behavior/server/definitions"),
-    "#interfaces": Package.workspace.resolve("packages/matter.js/src/behavior/cluster/definitions"),
 } as { [dirname: string]: string | undefined };
 
 function resolveFromPackage(path: string) {

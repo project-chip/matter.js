@@ -11,7 +11,6 @@ import { Time, Timer } from "../../../time/Time.js";
 import { MaybePromise } from "../../../util/Promises.js";
 import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagnosticsBehavior.js";
 import { OnOffBehavior } from "./OnOffBehavior.js";
-import { OnWithTimedOffRequest } from "./OnOffInterface.js";
 
 const Base = OnOffBehavior.with(OnOff.Feature.Lighting);
 
@@ -120,7 +119,7 @@ export class OnOffServer extends Base {
      * * This method uses the on/off methods when timed actions should occur. This means that it is enough to override
      * on() and off() with custom control logic.
      */
-    override onWithTimedOff({ onOffControl, offWaitTime, onTime }: OnWithTimedOffRequest): MaybePromise<void> {
+    override onWithTimedOff({ onOffControl, offWaitTime, onTime }: OnOff.OnWithTimedOffRequest): MaybePromise<void> {
         if (onOffControl.acceptOnlyWhenOn && !this.state.onOff) {
             return;
         }

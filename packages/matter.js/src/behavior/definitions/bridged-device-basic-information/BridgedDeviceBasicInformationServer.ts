@@ -6,7 +6,7 @@
 
 import { ImplementationError } from "../../../common/MatterError.js";
 import { DeviceTypeId } from "../../../datatype/DeviceTypeId.js";
-import { AggregatorEndpoint } from "../../../endpoint/definitions/system/AggregatorEndpoint.js";
+import { AggregatorDevice } from "../../../endpoint/definitions/device/AggregatorDevice.js";
 import { DescriptorServer } from "../descriptor/DescriptorServer.js";
 import { BridgedDeviceBasicInformationBehavior } from "./BridgedDeviceBasicInformationBehavior.js";
 
@@ -41,7 +41,7 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
      * appear under aggregator nodes.
      *
      * Therefore this default implementation of BridgedDeviceBasicInformation injects the BridgedNode device type on the
-     * associated {@link Endpoint} and asserts that its parent is a {@link AggregatorEndpoint}.
+     * associated {@link Endpoint} and asserts that its parent is a {@link AggregatorDevice}.
      */
     async #configurePart() {
         // Obtain endpoint's owner.  This method should only be invoked after owner is known
@@ -51,7 +51,7 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
         }
 
         // Assert owner is an aggregator
-        if (!owner.get(DescriptorServer).hasDeviceType(AggregatorEndpoint.deviceType)) {
+        if (!owner.get(DescriptorServer).hasDeviceType(AggregatorDevice.deviceType)) {
             throw new ImplementationError(`Bridged node ${this.endpoint} owner ${owner} is not an aggregator`);
         }
 

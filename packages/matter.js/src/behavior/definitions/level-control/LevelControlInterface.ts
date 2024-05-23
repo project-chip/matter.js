@@ -7,119 +7,56 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { LevelControl } from "../../../cluster/definitions/LevelControlCluster.js";
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.1
- */
-export type MoveToLevelRequest = TypeFromSchema<typeof LevelControl.TlvMoveToLevelRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.2
- */
-export type MoveRequest = TypeFromSchema<typeof LevelControl.TlvMoveRequest>;
-
-/**
- * The StepMode field shall be one of the non-reserved values in Values of the StepMode Field.
- *
- * The TransitionTime field specifies the time that shall be taken to perform the step, in tenths of a second. A step
- * is a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close to this as the device is
- * able. If the TransitionTime field is equal to null, the device SHOULD move as fast as it is able.
- *
- * If the device is not able to move at a variable rate, the TransitionTime field may be disregarded.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.3
- */
-export type StepRequest = TypeFromSchema<typeof LevelControl.TlvStepRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.4
- */
-export type StopRequest = TypeFromSchema<typeof LevelControl.TlvStopRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
- */
-export type MoveToLevelWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvMoveToLevelRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
- */
-export type MoveWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvMoveRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
- */
-export type StepWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvStepRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
- */
-export type StopWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvStopRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.5
- */
-export type MoveToClosestFrequencyRequest = TypeFromSchema<typeof LevelControl.TlvMoveToClosestFrequencyRequest>;
 
 export namespace LevelControlInterface {
     export interface Base {
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.1
+         * @see {@link MatterSpecification.v13.Cluster} § 1.6.7.1
          */
-        moveToLevel(request: MoveToLevelRequest): MaybePromise;
+        moveToLevel(request: LevelControl.MoveToLevelRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.2
+         * @see {@link MatterSpecification.v13.Cluster} § 1.6.7.2
          */
-        move(request: MoveRequest): MaybePromise;
+        move(request: LevelControl.MoveRequest): MaybePromise;
 
         /**
-         * The StepMode field shall be one of the non-reserved values in Values of the StepMode Field.
-         *
-         * The TransitionTime field specifies the time that shall be taken to perform the step, in tenths of a second.
-         * A step is a change in the CurrentLevel of StepSize units. The actual time taken SHOULD be as close to this
-         * as the device is able. If the TransitionTime field is equal to null, the device SHOULD move as fast as it is
-         * able.
-         *
-         * If the device is not able to move at a variable rate, the TransitionTime field may be disregarded.
-         *
-         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.3
+         * @see {@link MatterSpecification.v13.Cluster} § 1.6.7.3
          */
-        step(request: StepRequest): MaybePromise;
+        step(request: LevelControl.StepRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.4
+         * @see {@link MatterSpecification.v13.Cluster} § 1.6.7.4
          */
-        stop(request: StopRequest): MaybePromise;
+        stop(request: LevelControl.StopRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
+         * @see {@link MatterSpecification.v13.Cluster} § 1.6.7
          */
-        moveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest): MaybePromise;
+        moveToLevelWithOnOff(request: LevelControl.MoveToLevelRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
+         * @see {@link MatterSpecification.v13.Cluster} § 1.6.7
          */
-        moveWithOnOff(request: MoveWithOnOffRequest): MaybePromise;
+        moveWithOnOff(request: LevelControl.MoveRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
+         * @see {@link MatterSpecification.v13.Cluster} § 1.6.7
          */
-        stepWithOnOff(request: StepWithOnOffRequest): MaybePromise;
+        stepWithOnOff(request: LevelControl.StepRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
+         * @see {@link MatterSpecification.v13.Cluster} § 1.6.7
          */
-        stopWithOnOff(request: StopWithOnOffRequest): MaybePromise;
+        stopWithOnOff(request: LevelControl.StopRequest): MaybePromise;
     }
 
     export interface Frequency {
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.5
+         * @see {@link MatterSpecification.v13.Cluster} § 1.6.7.5
          */
-        moveToClosestFrequency(request: MoveToClosestFrequencyRequest): MaybePromise;
+        moveToClosestFrequency(request: LevelControl.MoveToClosestFrequencyRequest): MaybePromise;
     }
 }
 

@@ -641,7 +641,7 @@ export class TsFile extends Block {
         }
 
         if (file.startsWith("#")) {
-            file = relative(this.name.replace(/\/[^/]+/g, ""), file);
+            file = relative(this.name.replace(/\/[^/]+$/, ""), file);
             if (!file.startsWith(".")) {
                 file = `./${file}`;
             }
@@ -661,11 +661,9 @@ export class TsFile extends Block {
         return this;
     }
 
-    addReexport(file: string) {
-        if (file.indexOf("/") === -1) {
-            file = `./${file}`;
-        }
-        this.atom(`export * from "${file}.js"`);
+    addReexport(filename: string) {
+        filename = relative(this.name.replace(/\/[^/]+$/, ""), filename);
+        this.atom(`export * from "${filename}.js"`);
     }
 
     save() {
