@@ -18,6 +18,9 @@ import {
     LevelControlBehavior as BaseLevelControlBehavior
 } from "../../../behavior/definitions/level-control/LevelControlBehavior.js";
 import {
+    ScenesManagementBehavior as BaseScenesManagementBehavior
+} from "../../../behavior/definitions/scenes-management/ScenesManagementBehavior.js";
+import {
     TemperatureMeasurementBehavior as BaseTemperatureMeasurementBehavior
 } from "../../../behavior/definitions/temperature-measurement/TemperatureMeasurementBehavior.js";
 import {
@@ -33,7 +36,7 @@ import { Identity } from "../../../util/Type.js";
 /**
  * A Pump Controller device is capable of configuring and controlling a Pump device.
  *
- * @see {@link MatterSpecification.v11.Device} § 6.5
+ * @see {@link MatterSpecification.v13.Device} § 6.5
  */
 export interface PumpControllerDevice extends Identity<typeof PumpControllerDeviceDefinition> {}
 
@@ -88,6 +91,13 @@ export namespace PumpControllerRequirements {
     export const LevelControlBehavior = BaseLevelControlBehavior;
 
     /**
+     * The ScenesManagement cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
+     */
+    export const ScenesManagementBehavior = BaseScenesManagementBehavior;
+
+    /**
      * The TemperatureMeasurement cluster is optional per the Matter specification
      *
      * We provide this alias to the default implementation {@link TemperatureMeasurementBehavior} for convenience.
@@ -127,6 +137,7 @@ export namespace PumpControllerRequirements {
             Identify: IdentifyBehavior,
             Groups: GroupsBehavior,
             LevelControl: LevelControlBehavior,
+            ScenesManagement: ScenesManagementBehavior,
             TemperatureMeasurement: TemperatureMeasurementBehavior,
             PressureMeasurement: PressureMeasurementBehavior,
             FlowMeasurement: FlowMeasurementBehavior
@@ -137,7 +148,7 @@ export namespace PumpControllerRequirements {
 export const PumpControllerDeviceDefinition = MutableEndpoint({
     name: "PumpController",
     deviceType: 0x304,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: PumpControllerRequirements,
     behaviors: SupportedBehaviors(PumpControllerRequirements.server.mandatory.Identify)
 });

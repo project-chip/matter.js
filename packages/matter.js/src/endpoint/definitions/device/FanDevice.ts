@@ -14,11 +14,9 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 
 /**
- * This defines conformance to the Fan device type.
+ * A Fan device is typically standalone or mounted on a ceiling or wall and is used to circulate air in a room.
  *
- * NOTE Support for Fan device type is provisional.
- *
- * @see {@link MatterSpecification.v11.Device} § 9.3
+ * @see {@link MatterSpecification.v13.Device} § 9.2
  */
 export interface FanDevice extends Identity<typeof FanDeviceDefinition> {}
 
@@ -53,7 +51,7 @@ export namespace FanRequirements {
 export const FanDeviceDefinition = MutableEndpoint({
     name: "Fan",
     deviceType: 0x2b,
-    deviceRevision: 1,
+    deviceRevision: 2,
     requirements: FanRequirements,
     behaviors: SupportedBehaviors(
         FanRequirements.server.mandatory.Identify,

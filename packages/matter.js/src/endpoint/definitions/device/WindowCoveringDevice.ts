@@ -11,6 +11,9 @@ import {
     WindowCoveringServer as BaseWindowCoveringServer
 } from "../../../behavior/definitions/window-covering/WindowCoveringServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
+import {
+    ScenesManagementServer as BaseScenesManagementServer
+} from "../../../behavior/definitions/scenes-management/ScenesManagementServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -21,7 +24,7 @@ import { Identity } from "../../../util/Type.js";
  * WindowCoveringDevice requires WindowCovering cluster but WindowCovering is not added by default because you must
  * select the features your device supports. You can add manually using WindowCoveringDevice.with().
  *
- * @see {@link MatterSpecification.v11.Device} § 8.3
+ * @see {@link MatterSpecification.v13.Device} § 8.3
  */
 export interface WindowCoveringDevice extends Identity<typeof WindowCoveringDeviceDefinition> {}
 
@@ -48,18 +51,25 @@ export namespace WindowCoveringRequirements {
     export const GroupsServer = BaseGroupsServer;
 
     /**
+     * The ScenesManagement cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ScenesManagementServer} for convenience.
+     */
+    export const ScenesManagementServer = BaseScenesManagementServer;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
         mandatory: { Identify: IdentifyServer, WindowCovering: WindowCoveringServer },
-        optional: { Groups: GroupsServer }
+        optional: { Groups: GroupsServer, ScenesManagement: ScenesManagementServer }
     };
 }
 
 export const WindowCoveringDeviceDefinition = MutableEndpoint({
     name: "WindowCovering",
     deviceType: 0x202,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: WindowCoveringRequirements,
     behaviors: SupportedBehaviors(WindowCoveringRequirements.server.mandatory.Identify)
 });

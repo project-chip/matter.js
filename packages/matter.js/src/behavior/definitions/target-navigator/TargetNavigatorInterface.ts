@@ -7,31 +7,16 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { TargetNavigator } from "../../../cluster/definitions/TargetNavigatorCluster.js";
-
-/**
- * Upon receipt, this shall navigation the UX to the target identified.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.11.4.1
- */
-export type NavigateTargetRequest = TypeFromSchema<typeof TargetNavigator.TlvNavigateTargetRequest>;
-
-/**
- * This command shall be generated in response to NavigateTarget command.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.11.4.2
- */
-export type NavigateTargetResponse = TypeFromSchema<typeof TargetNavigator.TlvNavigateTargetResponse>;
 
 export namespace TargetNavigatorInterface {
     export interface Base {
         /**
          * Upon receipt, this shall navigation the UX to the target identified.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.11.4.1
+         * @see {@link MatterSpecification.v13.Cluster} § 6.11.6.1
          */
-        navigateTarget(request: NavigateTargetRequest): MaybePromise<NavigateTargetResponse>;
+        navigateTarget(request: TargetNavigator.NavigateTargetRequest): MaybePromise<TargetNavigator.NavigateTargetResponse>;
     }
 }
 

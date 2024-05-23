@@ -28,7 +28,7 @@ import { Identity } from "../../../util/Type.js";
  * in order to treat volume in a fashion consistent with lighting which also uses these clusters and has matching
  * functional requirements.
  *
- * @see {@link MatterSpecification.v11.Device} § 10.4
+ * @see {@link MatterSpecification.v13.Device} § 10.4
  */
 export interface SpeakerDevice extends Identity<typeof SpeakerDeviceDefinition> {}
 

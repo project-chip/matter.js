@@ -17,7 +17,7 @@ import { Identity } from "../../../util/Type.js";
 /**
  * A humidity sensor (in most cases a Relative humidity sensor) reports humidity measurements.
  *
- * @see {@link MatterSpecification.v11.Device} § 7.7
+ * @see {@link MatterSpecification.v13.Device} § 7.7
  */
 export interface HumiditySensorDevice extends Identity<typeof HumiditySensorDeviceDefinition> {}
 

@@ -32,7 +32,9 @@ import {
 import {
     PowerSourceConfigurationServer as BasePowerSourceConfigurationServer
 } from "../../../behavior/definitions/power-source-configuration/PowerSourceConfigurationServer.js";
-import { TimeSyncServer as BaseTimeSyncServer } from "../../../behavior/definitions/time-sync/TimeSyncServer.js";
+import {
+    TimeSynchronizationServer as BaseTimeSynchronizationServer
+} from "../../../behavior/definitions/time-synchronization/TimeSynchronizationServer.js";
 import {
     NetworkCommissioningServer as BaseNetworkCommissioningServer
 } from "../../../behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
@@ -60,6 +62,9 @@ import {
 import {
     ThreadNetworkDiagnosticsServer as BaseThreadNetworkDiagnosticsServer
 } from "../../../behavior/definitions/thread-network-diagnostics/ThreadNetworkDiagnosticsServer.js";
+import {
+    IcdManagementServer as BaseIcdManagementServer
+} from "../../../behavior/definitions/icd-management/IcdManagementServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
@@ -75,7 +80,7 @@ import { Identity } from "../../../util/Type.js";
  *
  *   • Other device types with Node scope may be supported on the same endpoint as this device type.
  *
- * @see {@link MatterSpecification.v11.Device} § 2.1
+ * @see {@link MatterSpecification.v13.Device} § 2.1
  */
 export interface RootEndpoint extends Identity<typeof RootEndpointDefinition> {}
 
@@ -137,11 +142,11 @@ export namespace RootRequirements {
     export const PowerSourceConfigurationServer = BasePowerSourceConfigurationServer;
 
     /**
-     * The TimeSync cluster is optional per the Matter specification
+     * The TimeSynchronization cluster is optional per the Matter specification
      *
-     * We provide this alias to the default implementation {@link TimeSyncServer} for convenience.
+     * We provide this alias to the default implementation {@link TimeSynchronizationServer} for convenience.
      */
-    export const TimeSyncServer = BaseTimeSyncServer;
+    export const TimeSynchronizationServer = BaseTimeSynchronizationServer;
 
     /**
      * The NetworkCommissioning cluster is optional per the Matter specification
@@ -207,6 +212,13 @@ export namespace RootRequirements {
     export const ThreadNetworkDiagnosticsServer = BaseThreadNetworkDiagnosticsServer;
 
     /**
+     * The IcdManagement cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link IcdManagementServer} for convenience.
+     */
+    export const IcdManagementServer = BaseIcdManagementServer;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
@@ -224,7 +236,7 @@ export namespace RootRequirements {
 
         optional: {
             PowerSourceConfiguration: PowerSourceConfigurationServer,
-            TimeSync: TimeSyncServer,
+            TimeSynchronization: TimeSynchronizationServer,
             NetworkCommissioning: NetworkCommissioningServer,
             LocalizationConfiguration: LocalizationConfigurationServer,
             TimeFormatLocalization: TimeFormatLocalizationServer,
@@ -233,7 +245,8 @@ export namespace RootRequirements {
             SoftwareDiagnostics: SoftwareDiagnosticsServer,
             EthernetNetworkDiagnostics: EthernetNetworkDiagnosticsServer,
             WiFiNetworkDiagnostics: WiFiNetworkDiagnosticsServer,
-            ThreadNetworkDiagnostics: ThreadNetworkDiagnosticsServer
+            ThreadNetworkDiagnostics: ThreadNetworkDiagnosticsServer,
+            IcdManagement: IcdManagementServer
         }
     };
 }
@@ -241,7 +254,7 @@ export namespace RootRequirements {
 export const RootEndpointDefinition = MutableEndpoint({
     name: "RootNode",
     deviceType: 0x16,
-    deviceRevision: 1,
+    deviceRevision: 2,
     deviceClass: DeviceClasses.Node,
     requirements: RootRequirements,
 

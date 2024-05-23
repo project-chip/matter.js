@@ -12,9 +12,9 @@ import { ClusterId } from "../../../../src/datatype/ClusterId.js";
 import { DeviceTypeId } from "../../../../src/datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../../../../src/datatype/EndpointNumber.js";
 import { Endpoint } from "../../../../src/endpoint/Endpoint.js";
+import { AggregatorDevice } from "../../../../src/endpoint/definitions/device/AggregatorDevice.js";
 import { OnOffLightDevice } from "../../../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { OnOffLightSwitchDevice } from "../../../../src/endpoint/definitions/device/OnOffLightSwitchDevice.js";
-import { AggregatorEndpoint } from "../../../../src/endpoint/definitions/system/AggregatorEndpoint.js";
 import { MutableEndpoint } from "../../../../src/endpoint/type/MutableEndpoint.js";
 import { Node } from "../../../../src/node/Node.js";
 import { MockEndpoint } from "../../../endpoint/mock-endpoint.js";
@@ -144,7 +144,7 @@ describe("DescriptorServer", () => {
             const node = await MockServerNode.create({
                 parts: [
                     {
-                        type: AggregatorEndpoint,
+                        type: AggregatorDevice,
                         parts: [
                             {
                                 type: OnOffLightDevice,
@@ -163,7 +163,7 @@ describe("DescriptorServer", () => {
                 number: 0,
                 parts: [
                     {
-                        type: AggregatorEndpoint,
+                        type: AggregatorDevice,
                         id: "parent",
                         number: 1,
                         parts: [
@@ -182,7 +182,7 @@ describe("DescriptorServer", () => {
 
         it("when child is added before parent (auto ID)", async () => {
             const parent = new Endpoint({
-                type: AggregatorEndpoint,
+                type: AggregatorDevice,
                 parts: [OnOffLightDevice],
             });
 
@@ -196,7 +196,7 @@ describe("DescriptorServer", () => {
             const parent = new Endpoint({
                 id: "parent",
                 number: 1,
-                type: AggregatorEndpoint,
+                type: AggregatorDevice,
                 parts: [
                     {
                         id: "child",
@@ -218,7 +218,7 @@ describe("DescriptorServer", () => {
         it("when parent is added before child (auto ID)", async () => {
             const child = new Endpoint(OnOffLightDevice);
 
-            const node = await MockServerNode.create({ parts: [AggregatorEndpoint] });
+            const node = await MockServerNode.create({ parts: [AggregatorDevice] });
 
             const parent = [...node.parts][0];
 
@@ -238,7 +238,7 @@ describe("DescriptorServer", () => {
                     {
                         id: "parent",
                         number: 1,
-                        type: AggregatorEndpoint,
+                        type: AggregatorDevice,
                     },
                 ],
             });
@@ -254,7 +254,7 @@ describe("DescriptorServer", () => {
             const node = await MockServerNode.create({
                 parts: [
                     {
-                        type: AggregatorEndpoint,
+                        type: AggregatorDevice,
                         parts: [
                             {
                                 type: OnOffLightDevice,
@@ -275,7 +275,7 @@ describe("DescriptorServer", () => {
             const node = await MockServerNode.create({
                 parts: [
                     {
-                        type: AggregatorEndpoint,
+                        type: AggregatorDevice,
                         parts: [
                             {
                                 type: OnOffLightDevice,

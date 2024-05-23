@@ -32,6 +32,10 @@ import {
 import {
     AccountLoginServer as BaseAccountLoginServer
 } from "../../../behavior/definitions/account-login/AccountLoginServer.js";
+import {
+    ContentControlServer as BaseContentControlServer
+} from "../../../behavior/definitions/content-control/ContentControlServer.js";
+import { MessagesServer as BaseMessagesServer } from "../../../behavior/definitions/messages/MessagesServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -51,7 +55,7 @@ import { Identity } from "../../../util/Type.js";
  * Please see Video Player Architecture for additional Casting Video Player requirements relating to Video Player
  * device endpoint composition, commissioning, feature representation in clusters, and UI context.
  *
- * @see {@link MatterSpecification.v11.Device} § 10.3
+ * @see {@link MatterSpecification.v13.Device} § 10.3
  */
 export interface CastingVideoPlayerDevice extends Identity<typeof CastingVideoPlayerDeviceDefinition> {}
 
@@ -141,6 +145,20 @@ export namespace CastingVideoPlayerRequirements {
     export const AccountLoginServer = BaseAccountLoginServer;
 
     /**
+     * The ContentControl cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ContentControlServer} for convenience.
+     */
+    export const ContentControlServer = BaseContentControlServer;
+
+    /**
+     * The Messages cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link MessagesServer} for convenience.
+     */
+    export const MessagesServer = BaseMessagesServer;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
@@ -159,7 +177,9 @@ export namespace CastingVideoPlayerRequirements {
             LowPower: LowPowerServer,
             AudioOutput: AudioOutputServer,
             ApplicationLauncher: ApplicationLauncherServer,
-            AccountLogin: AccountLoginServer
+            AccountLogin: AccountLoginServer,
+            ContentControl: ContentControlServer,
+            Messages: MessagesServer
         }
     };
 }
@@ -167,7 +187,7 @@ export namespace CastingVideoPlayerRequirements {
 export const CastingVideoPlayerDeviceDefinition = MutableEndpoint({
     name: "CastingVideoPlayer",
     deviceType: 0x23,
-    deviceRevision: 1,
+    deviceRevision: 2,
     requirements: CastingVideoPlayerRequirements,
 
     behaviors: SupportedBehaviors(

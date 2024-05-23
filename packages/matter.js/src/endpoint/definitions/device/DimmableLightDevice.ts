@@ -8,6 +8,9 @@
 
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
+import {
+    ScenesManagementServer as BaseScenesManagementServer
+} from "../../../behavior/definitions/scenes-management/ScenesManagementServer.js";
 import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
 import {
     LevelControlServer as BaseLevelControlServer
@@ -24,7 +27,7 @@ import { Identity } from "../../../util/Type.js";
  * adjusted by means of a bound controller device such as a Dimmer Switch or a Color Dimmer Switch. In addition, a
  * Dimmable Light device is also capable of being switched by means of a bound occupancy sensor or other device(s).
  *
- * @see {@link MatterSpecification.v11.Device} § 4.2
+ * @see {@link MatterSpecification.v13.Device} § 4.2
  */
 export interface DimmableLightDevice extends Identity<typeof DimmableLightDeviceDefinition> {}
 
@@ -44,6 +47,14 @@ export namespace DimmableLightRequirements {
     export const GroupsServer = BaseGroupsServer;
 
     /**
+     * The ScenesManagement cluster is required by the Matter specification
+     *
+     * This version of {@link ScenesManagementServer} is specialized per the specification.
+     */
+    export const ScenesManagementServer = BaseScenesManagementServer
+        .alter({ commands: { copyScene: { optional: false } } });
+
+    /**
      * The OnOff cluster is required by the Matter specification
      *
      * This version of {@link OnOffServer} is specialized per the specification.
@@ -56,7 +67,7 @@ export namespace DimmableLightRequirements {
      * This version of {@link LevelControlServer} is specialized per the specification.
      */
     export const LevelControlServer = BaseLevelControlServer
-        .with("OnOff", "Lighting")
+        .with("Lighting", "OnOff")
         .alter({
             attributes: {
                 currentLevel: { min: 1, max: 254 },
@@ -79,6 +90,7 @@ export namespace DimmableLightRequirements {
         mandatory: {
             Identify: IdentifyServer,
             Groups: GroupsServer,
+            ScenesManagement: ScenesManagementServer,
             OnOff: OnOffServer,
             LevelControl: LevelControlServer
         }
@@ -93,12 +105,13 @@ export namespace DimmableLightRequirements {
 export const DimmableLightDeviceDefinition = MutableEndpoint({
     name: "DimmableLight",
     deviceType: 0x101,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: DimmableLightRequirements,
 
     behaviors: SupportedBehaviors(
         DimmableLightRequirements.server.mandatory.Identify,
         DimmableLightRequirements.server.mandatory.Groups,
+        DimmableLightRequirements.server.mandatory.ScenesManagement,
         DimmableLightRequirements.server.mandatory.OnOff,
         DimmableLightRequirements.server.mandatory.LevelControl
     )

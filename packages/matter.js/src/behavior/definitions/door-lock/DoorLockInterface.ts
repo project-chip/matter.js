@@ -7,301 +7,380 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { DoorLock } from "../../../cluster/definitions/DoorLockCluster.js";
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type LockDoorRequest = TypeFromSchema<typeof DoorLock.TlvLockDoorRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type UnlockDoorRequest = TypeFromSchema<typeof DoorLock.TlvUnlockDoorRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type UnlockWithTimeoutRequest = TypeFromSchema<typeof DoorLock.TlvUnlockWithTimeoutRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type SetUserRequest = TypeFromSchema<typeof DoorLock.TlvSetUserRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type GetUserRequest = TypeFromSchema<typeof DoorLock.TlvGetUserRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type GetUserResponse = TypeFromSchema<typeof DoorLock.TlvGetUserResponse>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type ClearUserRequest = TypeFromSchema<typeof DoorLock.TlvClearUserRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type SetCredentialRequest = TypeFromSchema<typeof DoorLock.TlvSetCredentialRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type SetCredentialResponse = TypeFromSchema<typeof DoorLock.TlvSetCredentialResponse>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type GetCredentialStatusRequest = TypeFromSchema<typeof DoorLock.TlvGetCredentialStatusRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type GetCredentialStatusResponse = TypeFromSchema<typeof DoorLock.TlvGetCredentialStatusResponse>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type ClearCredentialRequest = TypeFromSchema<typeof DoorLock.TlvClearCredentialRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type SetWeekDayScheduleRequest = TypeFromSchema<typeof DoorLock.TlvSetWeekDayScheduleRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type GetWeekDayScheduleRequest = TypeFromSchema<typeof DoorLock.TlvGetWeekDayScheduleRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type GetWeekDayScheduleResponse = TypeFromSchema<typeof DoorLock.TlvGetWeekDayScheduleResponse>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type ClearWeekDayScheduleRequest = TypeFromSchema<typeof DoorLock.TlvClearWeekDayScheduleRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type SetYearDayScheduleRequest = TypeFromSchema<typeof DoorLock.TlvSetYearDayScheduleRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type GetYearDayScheduleRequest = TypeFromSchema<typeof DoorLock.TlvGetYearDayScheduleRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type GetYearDayScheduleResponse = TypeFromSchema<typeof DoorLock.TlvGetYearDayScheduleResponse>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type ClearYearDayScheduleRequest = TypeFromSchema<typeof DoorLock.TlvClearYearDayScheduleRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type SetHolidayScheduleRequest = TypeFromSchema<typeof DoorLock.TlvSetHolidayScheduleRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type GetHolidayScheduleRequest = TypeFromSchema<typeof DoorLock.TlvGetHolidayScheduleRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type GetHolidayScheduleResponse = TypeFromSchema<typeof DoorLock.TlvGetHolidayScheduleResponse>;
-
-/**
- * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
- */
-export type ClearHolidayScheduleRequest = TypeFromSchema<typeof DoorLock.TlvClearHolidayScheduleRequest>;
 
 export namespace DoorLockInterface {
     export interface Base {
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * This command causes the lock device to lock the door. This command includes an optional code for the lock.
+         * The door lock may require a PIN depending on the value of the RequirePINForRemoteOperation attribute.
+         *
+         * † The PIN/RFID Code is an obsolete field name, use PINCode instead.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.1
          */
-        lockDoor(request: LockDoorRequest): MaybePromise;
+        lockDoor(request: DoorLock.LockDoorRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * This command causes the lock device to unlock the door. This command includes an optional code for the lock.
+         * The door lock may require a code depending on the value of the RequirePINForRemoteOperation attribute.
+         *
+         * NOTE
+         *
+         * If the attribute AutoRelockTime is supported the lock will transition to the locked state when the auto
+         * relock time has expired.
+         *
+         * † The PIN/RFID Code is an obsolete field name, use PINCode instead.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.2
          */
-        unlockDoor(request: UnlockDoorRequest): MaybePromise;
+        unlockDoor(request: DoorLock.UnlockDoorRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * This command causes the lock device to unlock the door with a timeout parameter. After the time in seconds
+         * specified in the timeout field, the lock device will relock itself automatically. This timeout parameter is
+         * only temporary for this message transition and overrides the default relock time
+         *
+         * as specified in the AutoRelockTime attribute. If the door lock device is not capable of or does not want to
+         * support temporary Relock Timeout, it SHOULD NOT support this optional command.
+         *
+         * † The PIN/RFID Code is an obsolete field name, use PINCode instead.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.3
          */
-        unlockWithTimeout(request: UnlockWithTimeoutRequest): MaybePromise;
+        unlockWithTimeout(request: DoorLock.UnlockWithTimeoutRequest): MaybePromise;
     }
 
     export interface Logging {
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Request a log record. Log number is between 1 – [Number of Log Records Supported attribute]. If log number 0
+         * is requested then the most recent log entry is returned.
+         *
+         * Log record format: The log record format is defined in the description of the GetLogRecordResponse command.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.4
          */
-        getLogRecord(): MaybePromise;
+        getLogRecord(request: DoorLock.GetLogRecordRequest): MaybePromise<DoorLock.GetLogRecordResponse>;
     }
 
     export interface User {
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Set user into the lock.
+         *
+         * Fields used for different use cases:
+         *
+         * Return status is a global status code or a cluster-specific status code from the Status Codes table and
+         *
+         * shall be one of the following values:
+         *
+         *   • SUCCESS, if setting User was successful.
+         *
+         *   • FAILURE, if some unexpected internal error occurred setting User.
+         *
+         *   • OCCUPIED, if OperationType is Add and UserIndex points to an occupied slot.
+         *
+         *   • INVALID_COMMAND, if one or more fields violate constraints or are invalid or if OperationType is Modify
+         *     and UserIndex points to an available slot.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.34
          */
-        setUser(request: SetUserRequest): MaybePromise;
+        setUser(request: DoorLock.SetUserRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Retrieve user.
+         *
+         * An InvokeResponse command shall be sent with an appropriate error
+         *
+         * COMMAND, etc.) as needed otherwise the GetUserResponse Command shall be sent implying a status of SUCCESS.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.35
          */
-        getUser(request: GetUserRequest): MaybePromise<GetUserResponse>;
+        getUser(request: DoorLock.GetUserRequest): MaybePromise<DoorLock.GetUserResponse>;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Clears a user or all Users.
+         *
+         * For each user to clear, all associated credentials (e.g. PIN, RFID, fingerprint, etc.) shall be cleared and
+         * the user entry values shall be reset to their default values (e.g. UserStatus shall be Available, UserType
+         * shall be UnrestrictedUser) and all associated schedules shall be cleared.
+         *
+         * A LockUserChange event with the provided UserIndex shall be generated after successfully clearing users.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.37
          */
-        clearUser(request: ClearUserRequest): MaybePromise;
+        clearUser(request: DoorLock.ClearUserRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Set a credential (e.g. PIN, RFID, Fingerprint, etc.) into the lock for a new user, existing user, or
+         * ProgrammingUser.
+         *
+         * Fields used for different use cases:
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.40
          */
-        setCredential(request: SetCredentialRequest): MaybePromise<SetCredentialResponse>;
+        setCredential(request: DoorLock.SetCredentialRequest): MaybePromise<DoorLock.SetCredentialResponse>;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Retrieve the status of a particular credential (e.g. PIN, RFID, Fingerprint, etc.) by index.
+         *
+         * An InvokeResponse command shall be sent with an appropriate error (e.g. FAILURE, INVALID_COMMAND, etc.) as
+         * needed otherwise the GetCredentialStatusResponse command shall be sent implying a status of SUCCESS.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.42
          */
-        getCredentialStatus(request: GetCredentialStatusRequest): MaybePromise<GetCredentialStatusResponse>;
+        getCredentialStatus(request: DoorLock.GetCredentialStatusRequest): MaybePromise<DoorLock.GetCredentialStatusResponse>;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Clear one, one type, or all credentials except ProgrammingPIN credential.
+         *
+         * Fields used for different use cases:
+         *
+         * For each credential cleared whose user doesn’t have another valid credential, the corresponding user record
+         * shall be reset back to default values and its UserStatus value shall be set to Available and UserType value
+         * shall be set to UnrestrictedUser and all schedules shall be cleared. In
+         *
+         * this case a LockUserChange event shall be generated for the user being cleared. Return status shall be one
+         * of the following values:
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.44
          */
-        clearCredential(request: ClearCredentialRequest): MaybePromise;
+        clearCredential(request: DoorLock.ClearCredentialRequest): MaybePromise;
     }
 
     export interface WeekDayAccessSchedules {
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Set a weekly repeating schedule for a specified user.
+         *
+         * † The Schedule ID and User ID are obsolete field names, use WeekDayIndex and UserIndex instead, respectively.
+         *
+         * The associated UserType may be changed to ScheduleRestrictedUser by the lock when a Week Day schedule is set.
+         *
+         * Return status shall be one of the following values:
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.14
          */
-        setWeekDaySchedule(request: SetWeekDayScheduleRequest): MaybePromise;
+        setWeekDaySchedule(request: DoorLock.SetWeekDayScheduleRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Retrieve the specific weekly schedule for the specific user.
+         *
+         * † The Schedule ID and User ID are obsolete field names, use WeekDayIndex and UserIndex instead, respectively.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.15
          */
-        getWeekDaySchedule(request: GetWeekDayScheduleRequest): MaybePromise<GetWeekDayScheduleResponse>;
+        getWeekDaySchedule(request: DoorLock.GetWeekDayScheduleRequest): MaybePromise<DoorLock.GetWeekDayScheduleResponse>;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Clear the specific weekly schedule or all weekly schedules for the specific user.
+         *
+         * † The Schedule ID and User ID are obsolete field names, use WeekDayIndex and UserIndex instead, respectively.
+         *
+         * Return status shall be one of the following values:
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.17
          */
-        clearWeekDaySchedule(request: ClearWeekDayScheduleRequest): MaybePromise;
+        clearWeekDaySchedule(request: DoorLock.ClearWeekDayScheduleRequest): MaybePromise;
     }
 
     export interface YearDayAccessSchedules {
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Set a time-specific schedule ID for a specified user.
+         *
+         * † The Schedule ID and User ID are obsolete field names, use YearDayIndex and UserIndex instead, respectively.
+         *
+         * The associated UserType may be changed to ScheduleRestrictedUser by the lock when a Year Day schedule is set.
+         *
+         * Return status shall be one of the following values:
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.18
          */
-        setYearDaySchedule(request: SetYearDayScheduleRequest): MaybePromise;
+        setYearDaySchedule(request: DoorLock.SetYearDayScheduleRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Retrieve the specific year day schedule for the specific schedule and user indexes.
+         *
+         * † The Schedule ID and User ID are obsolete field names, use YearDayIndex and UserIndex instead, respectively.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.19
          */
-        getYearDaySchedule(request: GetYearDayScheduleRequest): MaybePromise<GetYearDayScheduleResponse>;
+        getYearDaySchedule(request: DoorLock.GetYearDayScheduleRequest): MaybePromise<DoorLock.GetYearDayScheduleResponse>;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Clears the specific year day schedule or all year day schedules for the specific user.
+         *
+         * † The Schedule ID and User ID are obsolete field names, use YearDayIndex and UserIndex instead, respectively.
+         *
+         * Return status shall be one of the following values:
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.21
          */
-        clearYearDaySchedule(request: ClearYearDayScheduleRequest): MaybePromise;
+        clearYearDaySchedule(request: DoorLock.ClearYearDayScheduleRequest): MaybePromise;
     }
 
     export interface HolidaySchedules {
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Set the holiday Schedule by specifying local start time and local end time with respect to any Lock
+         * Operating Mode.
+         *
+         * † The Holiday Schedule ID is an obsolete field name, use HolidayIndex instead. Return status shall be one of
+         * the following values:
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.22
          */
-        setHolidaySchedule(request: SetHolidayScheduleRequest): MaybePromise;
+        setHolidaySchedule(request: DoorLock.SetHolidayScheduleRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Get the holiday schedule for the specified index.
+         *
+         * † The Holiday Schedule ID is an obsolete field name, use HolidayIndex instead.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.23
          */
-        getHolidaySchedule(request: GetHolidayScheduleRequest): MaybePromise<GetHolidayScheduleResponse>;
+        getHolidaySchedule(request: DoorLock.GetHolidayScheduleRequest): MaybePromise<DoorLock.GetHolidayScheduleResponse>;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Clears the holiday schedule or all holiday schedules.
+         *
+         * † The Holiday Schedule ID is an obsolete field name, use HolidayIndex instead.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.25
          */
-        clearHolidaySchedule(request: ClearHolidayScheduleRequest): MaybePromise;
+        clearHolidaySchedule(request: DoorLock.ClearHolidayScheduleRequest): MaybePromise;
     }
 
     export interface PinCredentialNotUser {
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Set a PIN Code into the lock.
+         *
+         * Return status is a global status code or a cluster-specific status code from the Status Codes table and
+         * shall be one of the following values:
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.6
          */
-        setPinCode(): MaybePromise;
+        setPinCode(request: DoorLock.SetPinCodeRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Retrieve a PIN Code.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.7
          */
-        getPinCode(): MaybePromise;
+        getPinCode(request: DoorLock.GetPinCodeRequest): MaybePromise<DoorLock.GetPinCodeResponse>;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Clear a PIN code or all PIN codes.
+         *
+         * † The User ID is an obsolete field name, use PINSlotIndex instead.
+         *
+         * For each PIN Code cleared whose user doesn’t have a RFID Code or other credential type, then corresponding
+         * user record’s UserStatus value shall be set to Available, and UserType value shall be set to
+         * UnrestrictedUser and all schedules shall be cleared.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.9
          */
-        clearPinCode(): MaybePromise;
+        clearPinCode(request: DoorLock.ClearPinCodeRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Clear out all PINs on the lock.
+         *
+         * NOTE
+         *
+         * On the server, the clear all PIN codes command SHOULD have the same effect as the ClearPINCode command with
+         * respect to the setting of user status, user type and schedules.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.10
          */
         clearAllPinCodes(): MaybePromise;
     }
 
     export interface PinCredentialAndRfidCredentialAndFingerCredentialsNotUser {
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Set the status of a user ID.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.11
          */
-        setUserStatus(): MaybePromise;
+        setUserStatus(request: DoorLock.SetUserStatusRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Get the status of a user.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.12
          */
-        getUserStatus(): MaybePromise;
+        getUserStatus(request: DoorLock.GetUserStatusRequest): MaybePromise<DoorLock.GetUserStatusResponse>;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Set the user type for a specified user.
+         *
+         * For user type value please refer to User Type Value.
+         *
+         * Return status shall be one of the following values:
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.26
          */
-        setUserType(): MaybePromise;
+        setUserType(request: DoorLock.SetUserTypeRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Retrieve the user type for a specific user.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.27
          */
-        getUserType(): MaybePromise;
+        getUserType(request: DoorLock.GetUserTypeRequest): MaybePromise<DoorLock.GetUserTypeResponse>;
     }
 
     export interface RfidCredentialNotUser {
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Set an ID for RFID access into the lock.
+         *
+         * Return status is a global status code or a cluster-specific status code from the Status Codes table and
+         * shall be one of the following values:
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.29
          */
-        setRfidCode(): MaybePromise;
+        setRfidCode(request: DoorLock.SetRfidCodeRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Retrieve an RFID code.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.30
          */
-        getRfidCode(): MaybePromise;
+        getRfidCode(request: DoorLock.GetRfidCodeRequest): MaybePromise<DoorLock.GetRfidCodeResponse>;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Clear an RFID code or all RFID codes.
+         *
+         * † The User ID is an obsolete field name, use RFIDSlotIndex instead.
+         *
+         * For each RFID Code cleared whose user doesn’t have a PIN Code or other credential type, then the
+         * corresponding user record’s UserStatus value shall be set to Available, and UserType value shall be set to
+         * UnrestrictedUser and all schedules shall be cleared.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.32
          */
-        clearRfidCode(): MaybePromise;
+        clearRfidCode(request: DoorLock.ClearRfidCodeRequest): MaybePromise;
 
         /**
-         * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
+         * Clear out all RFIDs on the lock. If you clear all RFID codes and this user didn’t have a PIN code, the user
+         * status has to be set to "0 Available", the user type has to be set to the default value, and all schedules
+         * which are supported have to be set to the default values.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.33
          */
         clearAllRfidCodes(): MaybePromise;
+    }
+
+    export interface Unbolting {
+        /**
+         * This command causes the lock device to unlock the door without pulling the latch. This command includes an
+         * optional code for the lock. The door lock may require a code depending on the value of the
+         * RequirePINForRemoteOperation attribute.
+         *
+         * NOTE
+         *
+         * If the attribute AutoRelockTime is supported, the lock will transition to the locked state when the auto
+         * relock time has expired.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.45
+         */
+        unboltDoor(request: DoorLock.UnboltDoorRequest): MaybePromise;
     }
 }
 
@@ -318,6 +397,7 @@ export type DoorLockInterface = {
             flags: { pinCredential: true, rfidCredential: true, fingerCredentials: true, user: false },
             methods: DoorLockInterface.PinCredentialAndRfidCredentialAndFingerCredentialsNotUser
         },
-        { flags: { rfidCredential: true, user: false }, methods: DoorLockInterface.RfidCredentialNotUser }
+        { flags: { rfidCredential: true, user: false }, methods: DoorLockInterface.RfidCredentialNotUser },
+        { flags: { unbolting: true }, methods: DoorLockInterface.Unbolting }
     ]
 };

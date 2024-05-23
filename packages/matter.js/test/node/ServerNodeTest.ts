@@ -16,9 +16,9 @@ import { Key, PrivateKey } from "../../src/crypto/Key.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
+import { AggregatorDevice } from "../../src/endpoint/definitions/device/AggregatorDevice.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { PumpDevice } from "../../src/endpoint/definitions/device/PumpDevice.js";
-import { AggregatorEndpoint } from "../../src/endpoint/definitions/system/AggregatorEndpoint.js";
 import { FabricManager } from "../../src/fabric/FabricManager.js";
 import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
 import { ServerNode } from "../../src/node/ServerNode.js";
@@ -313,7 +313,7 @@ describe("ServerNode", () => {
     });
 
     it("properly deploys aggregator", async () => {
-        const aggregator = new Endpoint(AggregatorEndpoint);
+        const aggregator = new Endpoint(AggregatorDevice);
 
         const light = new Endpoint(OnOffLightDevice, { owner: aggregator });
 

@@ -16,6 +16,9 @@ import {
 } from "../../../behavior/definitions/level-control/LevelControlServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
 import {
+    ScenesManagementServer as BaseScenesManagementServer
+} from "../../../behavior/definitions/scenes-management/ScenesManagementServer.js";
+import {
     TemperatureMeasurementServer as BaseTemperatureMeasurementServer
 } from "../../../behavior/definitions/temperature-measurement/TemperatureMeasurementServer.js";
 import {
@@ -47,7 +50,7 @@ import { Identity } from "../../../util/Type.js";
  * PumpDevice requires PumpConfigurationAndControl cluster but PumpConfigurationAndControl is not added by default
  * because you must select the features your device supports. You can add manually using PumpDevice.with().
  *
- * @see {@link MatterSpecification.v11.Device} § 5.3
+ * @see {@link MatterSpecification.v13.Device} § 5.3
  */
 export interface PumpDevice extends Identity<typeof PumpDeviceDefinition> {}
 
@@ -86,6 +89,13 @@ export namespace PumpRequirements {
      * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
+
+    /**
+     * The ScenesManagement cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ScenesManagementServer} for convenience.
+     */
+    export const ScenesManagementServer = BaseScenesManagementServer;
 
     /**
      * The TemperatureMeasurement cluster is optional per the Matter specification
@@ -149,6 +159,7 @@ export namespace PumpRequirements {
         optional: {
             LevelControl: LevelControlServer,
             Groups: GroupsServer,
+            ScenesManagement: ScenesManagementServer,
             TemperatureMeasurement: TemperatureMeasurementServer,
             PressureMeasurement: PressureMeasurementServer,
             FlowMeasurement: FlowMeasurementServer
@@ -173,7 +184,7 @@ export namespace PumpRequirements {
 export const PumpDeviceDefinition = MutableEndpoint({
     name: "Pump",
     deviceType: 0x303,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: PumpRequirements,
     behaviors: SupportedBehaviors(PumpRequirements.server.mandatory.OnOff, PumpRequirements.server.mandatory.Identify)
 });

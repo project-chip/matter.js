@@ -11,6 +11,9 @@ import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/defi
 import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
 import {
+    ScenesManagementBehavior as BaseScenesManagementBehavior
+} from "../../../behavior/definitions/scenes-management/ScenesManagementBehavior.js";
+import {
     LevelControlBehavior as BaseLevelControlBehavior
 } from "../../../behavior/definitions/level-control/LevelControlBehavior.js";
 import {
@@ -24,7 +27,7 @@ import { Identity } from "../../../util/Type.js";
  * An On/Off Sensor is a measurement and sensing device that, when bound to a lighting device such as a Dimmable Light,
  * is capable of being used to switch the device on or off.
  *
- * @see {@link MatterSpecification.v11.Device} § 7.8
+ * @see {@link MatterSpecification.v13.Device} § 7.8
  */
 export interface OnOffSensorDevice extends Identity<typeof OnOffSensorDeviceDefinition> {}
 
@@ -58,6 +61,13 @@ export namespace OnOffSensorRequirements {
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
+     * The ScenesManagement cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
+     */
+    export const ScenesManagementBehavior = BaseScenesManagementBehavior;
+
+    /**
      * The LevelControl cluster is optional per the Matter specification
      *
      * We provide this alias to the default implementation {@link LevelControlBehavior} for convenience.
@@ -84,6 +94,7 @@ export namespace OnOffSensorRequirements {
 
         optional: {
             Groups: GroupsBehavior,
+            ScenesManagement: ScenesManagementBehavior,
             LevelControl: LevelControlBehavior,
             ColorControl: ColorControlBehavior
         }
@@ -93,7 +104,7 @@ export namespace OnOffSensorRequirements {
 export const OnOffSensorDeviceDefinition = MutableEndpoint({
     name: "OnOffSensor",
     deviceType: 0x850,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: OnOffSensorRequirements,
     behaviors: SupportedBehaviors(OnOffSensorRequirements.server.mandatory.Identify)
 });

@@ -9,6 +9,9 @@
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
+import {
+    ScenesManagementBehavior as BaseScenesManagementBehavior
+} from "../../../behavior/definitions/scenes-management/ScenesManagementBehavior.js";
 import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
 import {
     LevelControlBehavior as BaseLevelControlBehavior
@@ -31,7 +34,7 @@ import { Identity } from "../../../util/Type.js";
  * capable of being used to switch the device on or off, adjust the intensity of the light being emitted and adjust the
  * color of the light being emitted. In addition, a Control Bridge device is capable of being used for setting scenes.
  *
- * @see {@link MatterSpecification.v11.Device} § 6.4
+ * @see {@link MatterSpecification.v13.Device} § 6.4
  */
 export interface ControlBridgeDevice extends Identity<typeof ControlBridgeDeviceDefinition> {}
 
@@ -56,6 +59,13 @@ export namespace ControlBridgeRequirements {
      * We provide this alias to the default implementation {@link GroupsBehavior} for convenience.
      */
     export const GroupsBehavior = BaseGroupsBehavior;
+
+    /**
+     * The ScenesManagement cluster is required by the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
+     */
+    export const ScenesManagementBehavior = BaseScenesManagementBehavior;
 
     /**
      * The OnOff cluster is required by the Matter specification
@@ -104,6 +114,7 @@ export namespace ControlBridgeRequirements {
         mandatory: {
             Identify: IdentifyBehavior,
             Groups: GroupsBehavior,
+            ScenesManagement: ScenesManagementBehavior,
             OnOff: OnOffBehavior,
             LevelControl: LevelControlBehavior,
             ColorControl: ColorControlBehavior
@@ -119,7 +130,7 @@ export namespace ControlBridgeRequirements {
 export const ControlBridgeDeviceDefinition = MutableEndpoint({
     name: "ControlBridge",
     deviceType: 0x840,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: ControlBridgeRequirements,
     behaviors: SupportedBehaviors(ControlBridgeRequirements.server.mandatory.Identify)
 });

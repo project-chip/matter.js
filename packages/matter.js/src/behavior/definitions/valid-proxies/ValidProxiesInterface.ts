@@ -7,13 +7,17 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
+import { ValidProxies } from "../../../cluster/definitions/ValidProxiesCluster.js";
 
 export namespace ValidProxiesInterface {
     export interface Base {
         /**
-         * @see {@link MatterSpecification.v11.Core} § 9.15.15.6
+         * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery & Assignment
+         * Flow”.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 9.15.14.6.1
          */
-        getValidProxiesRequest(): MaybePromise;
+        getValidProxiesRequest(): MaybePromise<ValidProxies.GetValidProxiesResponse>;
     }
 }
 

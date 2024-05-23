@@ -7,50 +7,31 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { ContentLauncher } from "../../../cluster/definitions/ContentLauncherCluster.js";
-
-/**
- * Upon receipt, this shall launch content from the specified URL.
- *
- * The content types supported include those identified in the AcceptHeader and SupportedStreamingProtocols attributes.
- *
- * A check shall be made to ensure the URL is secure (uses HTTPS). This command returns a Launch Response.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.7.4.2
- */
-export type LaunchUrlRequest = TypeFromSchema<typeof ContentLauncher.TlvLaunchUrlRequest>;
-
-/**
- * This command shall be generated in response to LaunchContent and LaunchURL commands.
- *
- * WARNING TODO: Data in table above needs a max size
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.7.4.3
- */
-export type LauncherResponse = TypeFromSchema<typeof ContentLauncher.TlvLauncherResponse>;
-
-/**
- * Upon receipt, this shall launch the specified content with optional search criteria. This command returns a Launch
- * Response.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.7.4.1
- */
-export type LaunchContentRequest = TypeFromSchema<typeof ContentLauncher.TlvLaunchContentRequest>;
 
 export namespace ContentLauncherInterface {
     export interface UrlPlayback {
         /**
          * Upon receipt, this shall launch content from the specified URL.
          *
-         * The content types supported include those identified in the AcceptHeader and SupportedStreamingProtocols
-         * attributes.
+         * The content types supported include those identified in the AcceptHeader and SupportedStreaming
          *
-         * A check shall be made to ensure the URL is secure (uses HTTPS). This command returns a Launch Response.
+         * Protocols attributes.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.7.4.2
+         * A check shall be made to ensure the URL is secure (uses HTTPS).
+         *
+         * When playing a video stream in response to this command, an indication (ex. visual) of the identity of the
+         * origin node of the video stream shall be provided. This could be in the form of a friendly name label which
+         * uniquely identifies the node to the user. This friendly name label is typically assigned by the Matter Admin
+         * (ex. TV) at the time of commissioning and, when it’s a device, is often editable by the user. It might be a
+         * combination of a company name and friendly name, for example, ”Acme” or “Acme Streaming Service on Alice’s
+         * Phone”.
+         *
+         * This command returns a Launch Response.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.2
          */
-        launchUrl(request: LaunchUrlRequest): MaybePromise<LauncherResponse>;
+        launchUrl(request: ContentLauncher.LaunchUrlRequest): MaybePromise<ContentLauncher.LauncherResponse>;
     }
 
     export interface ContentSearch {
@@ -58,9 +39,9 @@ export namespace ContentLauncherInterface {
          * Upon receipt, this shall launch the specified content with optional search criteria. This command returns a
          * Launch Response.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.7.4.1
+         * @see {@link MatterSpecification.v13.Cluster} § 6.7.7.1
          */
-        launchContent(request: LaunchContentRequest): MaybePromise<LauncherResponse>;
+        launchContent(request: ContentLauncher.LaunchContentRequest): MaybePromise<ContentLauncher.LauncherResponse>;
     }
 }
 

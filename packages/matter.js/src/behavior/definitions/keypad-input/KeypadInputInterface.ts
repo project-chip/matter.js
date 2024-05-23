@@ -7,39 +7,25 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { KeypadInput } from "../../../cluster/definitions/KeypadInputCluster.js";
-
-/**
- * Upon receipt, this shall process a keycode as input to the media device.
- *
- * If a second SendKey request with the same KeyCode value is received within 200ms, then the endpoint will consider
- * the first key press to be a press and hold. When such a repeat KeyCode value is not received within 200ms, then the
- * endpoint will consider the last key press to be a release.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.1
- */
-export type SendKeyRequest = TypeFromSchema<typeof KeypadInput.TlvSendKeyRequest>;
-
-/**
- * This command shall be generated in response to a SendKey command.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.2
- */
-export type SendKeyResponse = TypeFromSchema<typeof KeypadInput.TlvSendKeyResponse>;
 
 export namespace KeypadInputInterface {
     export interface Base {
         /**
-         * Upon receipt, this shall process a keycode as input to the media device.
+         * Upon receipt, this shall process a keycode as input to the media endpoint.
          *
-         * If a second SendKey request with the same KeyCode value is received within 200ms, then the endpoint will
+         * If a device has multiple media endpoints implementing this cluster, such as a casting video player endpoint
+         * with one or more content app endpoints, then only the endpoint receiving the command shall process the
+         * keycode as input. In other words, a specific content app endpoint shall NOT process a keycode received by a
+         * different content app endpoint.
+         *
+         * If a second SendKey request with the same KeyCode value is received within 200 ms, then the endpoint will
          * consider the first key press to be a press and hold. When such a repeat KeyCode value is not received within
-         * 200ms, then the endpoint will consider the last key press to be a release.
+         * 200 ms, then the endpoint will consider the last key press to be a release.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.1
+         * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.1
          */
-        sendKey(request: SendKeyRequest): MaybePromise<SendKeyResponse>;
+        sendKey(request: KeypadInput.SendKeyRequest): MaybePromise<KeypadInput.SendKeyResponse>;
     }
 }
 

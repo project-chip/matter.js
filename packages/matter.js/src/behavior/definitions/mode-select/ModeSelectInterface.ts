@@ -7,30 +7,18 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { ModeSelect } from "../../../cluster/definitions/ModeSelectCluster.js";
-
-/**
- * On receipt of this command, if the NewMode field indicates a valid mode transition within the supported list, the
- * server shall set the CurrentMode attribute to the NewMode value, otherwise, the
- *
- * server shall respond with an INVALID_COMMAND status response.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 1.8.6.1
- */
-export type ChangeToModeRequest = TypeFromSchema<typeof ModeSelect.TlvChangeToModeRequest>;
 
 export namespace ModeSelectInterface {
     export interface Base {
         /**
          * On receipt of this command, if the NewMode field indicates a valid mode transition within the supported
-         * list, the server shall set the CurrentMode attribute to the NewMode value, otherwise, the
+         * list, the server shall set the CurrentMode attribute to the NewMode value, otherwise, the server shall
+         * respond with an INVALID_COMMAND status response.
          *
-         * server shall respond with an INVALID_COMMAND status response.
-         *
-         * @see {@link MatterSpecification.v11.Cluster} § 1.8.6.1
+         * @see {@link MatterSpecification.v13.Cluster} § 1.9.7.1
          */
-        changeToMode(request: ChangeToModeRequest): MaybePromise;
+        changeToMode(request: ModeSelect.ChangeToModeRequest): MaybePromise;
     }
 }
 
