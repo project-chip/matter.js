@@ -34,7 +34,11 @@ import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
+import {
+    decodeAttributeValueWithSchema,
+    decodeListAttributeValueWithSchema,
+    expandPathsInAttributeData,
+} from "./AttributeDataDecoder.js";
 import {
     AttributeReportPayload,
     DataReportPayload,
@@ -542,47 +546,52 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             ); // ???
         }
 
-        const writeData = normalizeAttributeData(writeRequests, true);
+        const writeData = expandPathsInAttributeData(writeRequests, true);
 
         const writeResults = new Array<{
             path: TypeFromSchema<typeof TlvAttributePath>;
             statusCode: StatusCode;
             clusterStatusCode?: number;
         }>();
+        const attributeListWrites = new Set<AttributeServer<any>>();
+        const clusterDataVersionInfo = new Map<string, number>();
+        const inaccessiblePaths = new Set<string>();
 
-        for (const values of writeData) {
-            const { path, dataVersion } = values[0];
+        // TODO Add handling for moreChunkedMessages here when adopting for Matter 1.3
 
-            if (path.clusterId === undefined) {
+        for (const writeRequest of writeData) {
+            const { path: writePath, dataVersion } = writeRequest;
+            const { clusterId, attributeId, listIndex } = writePath;
+
+            if (clusterId === undefined) {
                 throw new StatusResponseError(
                     "Illegal write request with wildcard cluster ID",
                     StatusCode.InvalidAction,
                 );
             }
 
-            if (path.attributeId === undefined) {
+            if (attributeId === undefined) {
                 throw new StatusResponseError(
                     "Illegal write request with wildcard attribute ID",
                     StatusCode.InvalidAction,
                 );
             }
 
-            const attributes = this.#endpointStructure.getAttributes([path], true);
-            const { endpointId, clusterId, attributeId } = path;
+            const attributes = this.#endpointStructure.getAttributes([writePath], true);
 
+            // No existing attribute matches the given path and is writable
             if (attributes.length === 0) {
-                // No existing attribute matches the given path and is writable
-                // No attribute found
                 // TODO: Also check nodeId
-                if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
+                if (!isConcreteAttributePath(writePath)) {
                     // Wildcard path: Just ignore
                     logger.debug(
                         `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                            path,
+                            writePath,
                         )}: ignore non-existing (wildcard) attribute`,
                     );
-                    continue;
                 } else {
+                    const { endpointId } = writePath;
+
                     // was a concrete path
                     tryCatch(
                         () => {
@@ -606,28 +615,26 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         error => {
                             logger.debug(
                                 `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                                    path,
+                                    writePath,
                                 )} not allowed: Status=${error.code}`,
                             );
-                            writeResults.push({ path, statusCode: error.code });
+                            writeResults.push({ path: writePath, statusCode: error.code });
                         },
                     );
-                    continue;
                 }
-            } else if (
-                attributes.length === 1 &&
-                endpointId !== undefined &&
-                clusterId !== undefined &&
-                attributeId !== undefined
-            ) {
+                continue;
+            }
+
+            // Concrete path and found and writable
+            if (attributes.length === 1 && isConcreteAttributePath(writePath)) {
+                const { endpointId } = writePath;
                 const { attribute } = attributes[0];
-                // Concrete path
 
                 // TODO Check ACL here
 
                 if (attribute.requiresTimedInteraction && !receivedWithinTimedInteraction) {
                     logger.debug(`This write requires a timed interaction which is not initialized.`);
-                    writeResults.push({ path, statusCode: StatusCode.NeedsTimedInteraction });
+                    writeResults.push({ path: writePath, statusCode: StatusCode.NeedsTimedInteraction });
                     continue;
                 }
 
@@ -636,36 +643,37 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                     (!exchange.session.isSecure || !(exchange.session as SecureSession<MatterDevice>).fabric)
                 ) {
                     logger.debug(`This write requires a secure session with a fabric assigned which is missing.`);
-                    writeResults.push({ path, statusCode: StatusCode.UnsupportedAccess });
+                    writeResults.push({ path: writePath, statusCode: StatusCode.UnsupportedAccess });
                     continue;
                 }
 
+                // Check the provided dataVersion with the dataVersion of the cluster
+                // And remember this initial dataVersion for all checks inside this write transaction to allow proper
+                // processing of chunked lists
                 if (dataVersion !== undefined) {
                     const datasource = this.#endpointStructure.getClusterServer(endpointId, clusterId)?.datasource;
+                    const { nodeId } = writePath;
+                    const clusterKey = clusterPathToId({ nodeId, endpointId, clusterId });
+                    const currentDataVersion = clusterDataVersionInfo.get(clusterKey) ?? datasource?.version;
 
-                    if (datasource !== undefined && dataVersion !== datasource.version) {
-                        logger.debug(
-                            `This write requires a specific data version (${dataVersion}) which do not match the current cluster data version (${datasource.version}).`,
-                        );
-                        writeResults.push({ path, statusCode: StatusCode.DataVersionMismatch });
-                        continue;
+                    if (currentDataVersion !== undefined) {
+                        if (dataVersion !== currentDataVersion) {
+                            logger.debug(
+                                `This write requires a specific data version (${dataVersion}) which do not match the current cluster data version (${currentDataVersion}).`,
+                            );
+                            writeResults.push({ path: writePath, statusCode: StatusCode.DataVersionMismatch });
+                            continue;
+                        }
+                        clusterDataVersionInfo.set(clusterKey, currentDataVersion);
                     }
                 }
             }
 
             for (const { path, attribute } of attributes) {
                 const { schema, defaultValue } = attribute;
+                const pathId = attributePathToId(path);
 
                 try {
-                    const value = decodeAttributeValueWithSchema(schema, values, defaultValue);
-                    logger.debug(
-                        `Handle write request from ${
-                            exchange.channel.name
-                        } resolved to: ${this.#endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
-                            value,
-                        )} (Version=${dataVersion})`,
-                    );
-
                     if (
                         !(attribute instanceof AttributeServer) &&
                         !(attribute instanceof FabricScopedAttributeServer)
@@ -676,7 +684,36 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         );
                     }
 
-                    // TODO: ACL check here
+                    if (inaccessiblePaths.has(pathId)) {
+                        logger.debug(`This write is not allowed due to previous access denied.`);
+                        continue;
+                    }
+
+                    const { endpointId } = path;
+                    const value =
+                        listIndex === undefined
+                            ? decodeAttributeValueWithSchema(schema, [writeRequest], defaultValue)
+                            : decodeListAttributeValueWithSchema(
+                                  schema,
+                                  [writeRequest],
+                                  (
+                                      await this.readAttribute(
+                                          path,
+                                          attribute,
+                                          exchange,
+                                          true,
+                                          message,
+                                          this.#endpointStructure.getEndpoint(endpointId)!,
+                                      )
+                                  ).value ?? defaultValue,
+                              );
+                    logger.debug(
+                        `Handle write request from ${
+                            exchange.channel.name
+                        } resolved to: ${this.#endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
+                            value,
+                        )} (listIndex=${listIndex}, for-version=${dataVersion})`,
+                    );
 
                     if (attribute.requiresTimedInteraction && !receivedWithinTimedInteraction) {
                         logger.debug(`This write requires a timed interaction which is not initialized.`);
@@ -686,9 +723,24 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         );
                     }
 
-                    await this.writeAttribute(attribute, value, exchange, message, receivedWithinTimedInteraction);
+                    await this.writeAttribute(
+                        path,
+                        attribute,
+                        value,
+                        exchange,
+                        message,
+                        this.#endpointStructure.getEndpoint(endpointId)!,
+                        receivedWithinTimedInteraction,
+                        schema instanceof ArraySchema,
+                    );
+                    if (schema instanceof ArraySchema && !attributeListWrites.has(attribute)) {
+                        attributeListWrites.add(attribute);
+                    }
                 } catch (error: any) {
-                    if (attributes.length === 1) {
+                    if (error instanceof StatusResponseError && error.code === StatusCode.UnsupportedAccess) {
+                        inaccessiblePaths.add(pathId);
+                    }
+                    if (attributes.length === 1 && isConcreteAttributePath(writePath)) {
                         // For Multi-Attribute-Writes we ignore errors
                         logger.error(
                             `Error while handling write request from ${
@@ -747,13 +799,27 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             }`,
         );
 
-        return {
+        const response = {
             interactionModelRevision: INTERACTION_MODEL_REVISION,
             writeResponses: writeResults.map(({ path, statusCode, clusterStatusCode }) => ({
                 path,
                 status: { status: statusCode, clusterStatus: clusterStatusCode },
             })),
         };
+
+        // Trigger attribute events for delayed list writes
+        for (const attribute of attributeListWrites.values()) {
+            try {
+                attribute.triggerDelayedChangeEvents();
+            } catch (error) {
+                logger.error(
+                    `Ignored Error while writing attribute from ${exchange.channel.name} to ${attribute.name}:`,
+                    error,
+                );
+            }
+        }
+
+        return response;
     }
 
     protected async writeAttribute(
