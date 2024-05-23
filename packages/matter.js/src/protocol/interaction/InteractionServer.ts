@@ -32,6 +32,7 @@ import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
+import { ArraySchema } from "../../tlv/TlvArray.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {
@@ -499,15 +500,22 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
     async handleWriteRequest(
         exchange: MessageExchange<MatterDevice>,
-        { suppressResponse, timedRequest, writeRequests, interactionModelRevision }: WriteRequest,
+        { suppressResponse, timedRequest, writeRequests, interactionModelRevision, moreChunkedMessages }: WriteRequest,
         message: Message,
     ): Promise<WriteResponse> {
         const sessionType = message.packetHeader.sessionType;
         logger.debug(
             `Received write request from ${exchange.channel.name}: ${writeRequests
                 .map(req => this.#endpointStructure.resolveAttributeName(req.path))
-                .join(", ")}, suppressResponse=${suppressResponse}`,
+                .join(", ")}, suppressResponse=${suppressResponse}, moreChunkedMessages=${moreChunkedMessages}`,
         );
+
+        if (moreChunkedMessages && suppressResponse) {
+            throw new StatusResponseError(
+                "MoreChunkedMessages and SuppressResponse cannot be used together in write messages",
+                StatusCode.InvalidAction,
+            );
+        }
 
         if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
             logger.debug(
@@ -516,6 +524,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
         }
 
         const receivedWithinTimedInteraction = exchange.hasActiveTimedInteraction();
+
+        if (receivedWithinTimedInteraction && moreChunkedMessages) {
+            throw new StatusResponseError(
+                "Write Request action that is part of a Timed Write Interaction SHALL NOT be chunked.",
+                StatusCode.InvalidAction,
+            );
+        }
+
         if (exchange.hasExpiredTimedInteraction()) {
             exchange.clearTimedInteraction(); // ??
             throw new StatusResponseError(`Timed request window expired. Decline write request.`, StatusCode.Timeout);
