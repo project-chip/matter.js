@@ -13,7 +13,7 @@ import { AttestationCertificateManager } from "./certificate/AttestationCertific
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 import { ClusterClientObj } from "./cluster/client/ClusterClientTypes.js";
-import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
+import { AccessControl } from "./cluster/definitions/AccessControlCluster.js";
 import {
     AdministratorCommissioning,
     AdministratorCommissioningCluster,
@@ -285,8 +285,8 @@ export class CommissioningServer extends MatterNode {
                 softwareVersion: 1,
                 softwareVersionString: "v1",
                 capabilityMinima: {
-                    caseSessionsPerFabric: 3, // TODO get that limit from Sessionmanager or such or sync with it, add limit?
-                    subscriptionsPerFabric: 3, // TODO get that limit from Interactionserver? Respect it?
+                    caseSessionsPerFabric: 3, // TODO get that limit from Sessionmanager or such or sync with it, add limit? Just a minima?
+                    subscriptionsPerFabric: 3, // TODO get that limit from Interactionserver? Respect it? It is just a minima?
                 },
                 serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`,
             },
@@ -387,7 +387,7 @@ export class CommissioningServer extends MatterNode {
                 {
                     groupKeyMap: [],
                     groupTable: [],
-                    maxGroupsPerFabric: 1, // TODO: Increase once we add group support, for now only IPK is supported
+                    maxGroupsPerFabric: 0, // TODO: Increase once we add group support, for now only IPK is supported
                     maxGroupKeysPerFabric: 1,
                 },
                 GroupKeyManagementClusterHandler(),
