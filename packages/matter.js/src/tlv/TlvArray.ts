@@ -7,6 +7,7 @@
 import { UnexpectedDataError } from "../common/MatterError.js";
 import { tryCatch } from "../common/TryCatchHandler.js";
 import { ValidationError } from "../common/ValidationError.js";
+import { deepCopy } from "../util/DeepCopy.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 
@@ -103,7 +104,7 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
                 `When no current value is supplied the first chunked element needs to have a list index of undefined, but received ${chunks[0].listIndex}.`,
             );
         }
-        currentValue = currentValue ?? []; // For the sake of typing; the above check makes sure it is an array
+        currentValue = currentValue !== undefined ? deepCopy(currentValue) : []; // For the sake of typing; the above check makes sure it is an array
         for (const { listIndex, element } of chunks) {
             if (listIndex === undefined) {
                 // not set listIndex means "Override the whole array"
