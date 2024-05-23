@@ -75,38 +75,39 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
             }
 
             for (const entry of value) {
-                if (entry.privilege < 1 || entry.privilege > 5) {
+                const { subjects, targets, privilege, authMode } = entry;
+                if (privilege < 1 || privilege > 5) {
                     throw new StatusResponseError(
                         "Privilege must be a valid enum value between 1 and 5",
                         StatusCode.ConstraintError,
                     );
                 }
-                if (entry.authMode < 1 || entry.authMode > 3) {
+                if (authMode < 1 || authMode > 3) {
                     throw new StatusResponseError(
                         "AuthMode must be a valid enum value between 1 and 3",
                         StatusCode.ConstraintError,
                     );
                 }
 
-                if (entry.subjects !== null && entry.subjects.length > subjectsPerAccessControlEntry.getLocal()) {
+                if (subjects !== null && subjects.length > subjectsPerAccessControlEntry.getLocal()) {
                     throw new StatusResponseError(
                         "SubjectsPerAccessControlEntry exceeded",
                         StatusCode.ResourceExhausted,
                     );
                 }
 
-                if (entry.targets !== null && entry.targets.length > targetsPerAccessControlEntry.getLocal()) {
+                if (targets !== null && targets.length > targetsPerAccessControlEntry.getLocal()) {
                     throw new StatusResponseError(
                         "TargetsPerAccessControlEntry exceeded",
                         StatusCode.ResourceExhausted,
                     );
                 }
 
-                if (entry.authMode === AccessControl.AccessControlEntryAuthMode.Pase) {
+                if (authMode === AccessControl.AccessControlEntryAuthMode.Pase) {
                     throw new StatusResponseError("AuthMode for ACL must not be PASE", StatusCode.ConstraintError);
-                } else if (entry.authMode === AccessControl.AccessControlEntryAuthMode.Case) {
-                    if (entry.subjects !== null) {
-                        for (const subject of entry.subjects) {
+                } else if (authMode === AccessControl.AccessControlEntryAuthMode.Case) {
+                    if (subjects !== null) {
+                        for (const subject of subjects) {
                             if (NodeId.isCaseAuthenticatedTag(subject)) {
                                 const cat = NodeId.extractAsCaseAuthenticatedTag(subject);
                                 if (CaseAuthenticatedTag.getVersion(cat) === 0) {
@@ -123,16 +124,16 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
                             }
                         }
                     }
-                } else if (entry.authMode === AccessControl.AccessControlEntryAuthMode.Group) {
-                    if (entry.privilege === AccessControl.AccessControlEntryPrivilege.Administer) {
+                } else if (authMode === AccessControl.AccessControlEntryAuthMode.Group) {
+                    if (privilege === AccessControl.AccessControlEntryPrivilege.Administer) {
                         throw new StatusResponseError(
                             "Group ACLs must not have Administer privilege",
                             StatusCode.ConstraintError,
                         );
                     }
 
-                    if (entry.subjects !== null) {
-                        for (const subject of entry.subjects) {
+                    if (subjects !== null) {
+                        for (const subject of subjects) {
                             if (GroupId(subject) === GroupId.UNSPECIFIED_GROUP_ID) {
                                 throw new StatusResponseError(
                                     "Subject must be a valid GroupId for Group ACLs",
@@ -144,8 +145,8 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
                     // TODO For Group authentication, the Group ID identifies the required group, as defined in the Group Key Management Cluster.
                 }
 
-                if (entry.targets !== null) {
-                    for (const target of entry.targets) {
+                if (targets !== null) {
+                    for (const target of targets) {
                         const { deviceType, endpoint, cluster } = target;
                         if (deviceType !== null && endpoint !== null) {
                             throw new StatusResponseError(

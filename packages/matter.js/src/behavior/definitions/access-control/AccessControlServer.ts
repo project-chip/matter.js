@@ -106,19 +106,20 @@ export class AccessControlServer extends AccessControlBehavior {
         }
 
         for (const entry of fabricAcls) {
-            if (entry.subjects !== null && entry.subjects.length > this.state.subjectsPerAccessControlEntry) {
+            const { privilege, subjects, targets, authMode } = entry;
+            if (subjects !== null && subjects.length > this.state.subjectsPerAccessControlEntry) {
                 throw new StatusResponseError("SubjectsPerAccessControlEntry exceeded", StatusCode.ResourceExhausted);
             }
 
-            if (entry.targets !== null && entry.targets.length > this.state.targetsPerAccessControlEntry) {
+            if (targets !== null && targets.length > this.state.targetsPerAccessControlEntry) {
                 throw new StatusResponseError("TargetsPerAccessControlEntry exceeded", StatusCode.ResourceExhausted);
             }
 
-            if (entry.authMode === AccessControlTypes.AccessControlEntryAuthMode.Pase) {
+            if (authMode === AccessControlTypes.AccessControlEntryAuthMode.Pase) {
                 throw new StatusResponseError("AuthMode for ACL must not be PASE", StatusCode.ConstraintError);
-            } else if (entry.authMode === AccessControlTypes.AccessControlEntryAuthMode.Case) {
-                if (entry.subjects !== null) {
-                    for (const subject of entry.subjects) {
+            } else if (authMode === AccessControlTypes.AccessControlEntryAuthMode.Case) {
+                if (subjects !== null) {
+                    for (const subject of subjects) {
                         if (NodeId.isCaseAuthenticatedTag(subject)) {
                             const cat = NodeId.extractAsCaseAuthenticatedTag(subject);
                             if (CaseAuthenticatedTag.getVersion(cat) === 0) {
@@ -135,16 +136,16 @@ export class AccessControlServer extends AccessControlBehavior {
                         }
                     }
                 }
-            } else if (entry.authMode === AccessControlTypes.AccessControlEntryAuthMode.Group) {
-                if (entry.privilege === AccessControlTypes.AccessControlEntryPrivilege.Administer) {
+            } else if (authMode === AccessControlTypes.AccessControlEntryAuthMode.Group) {
+                if (privilege === AccessControlTypes.AccessControlEntryPrivilege.Administer) {
                     throw new StatusResponseError(
                         "Group ACLs must not have Administer privilege",
                         StatusCode.ConstraintError,
                     );
                 }
 
-                if (entry.subjects !== null) {
-                    for (const subject of entry.subjects) {
+                if (subjects !== null) {
+                    for (const subject of subjects) {
                         if (GroupId(subject) === GroupId.UNSPECIFIED_GROUP_ID) {
                             throw new StatusResponseError(
                                 "Subject must be a valid GroupId for Group ACLs",
@@ -156,8 +157,8 @@ export class AccessControlServer extends AccessControlBehavior {
                 // TODO For Group authentication, the Group ID identifies the required group, as defined in the Group Key Management Cluster.
             }
 
-            if (entry.targets !== null) {
-                for (const target of entry.targets) {
+            if (targets !== null) {
+                for (const target of targets) {
                     const { cluster, endpoint, deviceType } = target;
                     if (deviceType !== null && endpoint !== null) {
                         throw new StatusResponseError(
