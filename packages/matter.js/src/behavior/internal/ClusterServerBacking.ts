@@ -347,7 +347,7 @@ function createEventHandler(backing: ClusterServerBehaviorBacking, name: string)
         return;
     }
 
-    // Also requires an attribute server
+    // Also requires an event server
     const eventServer = asClusterServerInternal(backing.clusterServer)._events[name];
     if (!eventServer) {
         return;

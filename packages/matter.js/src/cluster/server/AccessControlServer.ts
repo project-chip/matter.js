@@ -5,6 +5,9 @@
  */
 
 import { CaseAuthenticatedTag } from "../../datatype/CaseAuthenticatedTag.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
+import { DeviceTypeId } from "../../datatype/DeviceTypeId.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
@@ -136,15 +139,34 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
 
                 if (entry.targets !== null) {
                     for (const target of entry.targets) {
-                        if (target.deviceType !== null && target.endpoint !== null) {
+                        const { deviceType, endpoint, cluster } = target;
+                        if (deviceType !== null && endpoint !== null) {
                             throw new StatusResponseError(
                                 "DeviceType and Endpoint are mutually exclusive",
                                 StatusCode.ConstraintError,
                             );
                         }
-                        if (target.cluster === null && target.endpoint === null && target.deviceType === null) {
+                        if (cluster === null && endpoint === null && deviceType === null) {
                             throw new StatusResponseError(
                                 "At least one field must be present",
+                                StatusCode.ConstraintError,
+                            );
+                        }
+                        if (cluster !== null && !ClusterId.isValid(cluster)) {
+                            throw new StatusResponseError(
+                                "Cluster must be a valid ClusterId",
+                                StatusCode.ConstraintError,
+                            );
+                        }
+                        if (endpoint !== null && !EndpointNumber.isValid(endpoint)) {
+                            throw new StatusResponseError(
+                                "Endpoint must be a valid OperationalNodeId",
+                                StatusCode.ConstraintError,
+                            );
+                        }
+                        if (deviceType !== null && !DeviceTypeId.isValid(deviceType)) {
+                            throw new StatusResponseError(
+                                "DeviceType must be a valid DeviceType",
                                 StatusCode.ConstraintError,
                             );
                         }

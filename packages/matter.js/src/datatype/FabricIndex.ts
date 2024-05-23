@@ -49,6 +49,7 @@ class FabricIndexTlvWrapper extends TlvWrapper<FabricIndex, number | undefined> 
 
     override validate(value: FabricIndex): void {
         const wrappedValue = this.wrap(value);
+        // Because the FabricIndex is omitted sometimes we do not validate id it is absent
         if (wrappedValue !== undefined) {
             this.underlyingSchema.validate(wrappedValue);
         }

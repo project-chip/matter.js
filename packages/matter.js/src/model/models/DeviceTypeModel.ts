@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Mei } from "../definitions/index.js";
+import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
 import { DeviceTypeElement, FieldElement, RequirementElement } from "../elements/index.js";
 import { Children } from "./Children.js";
 import { FieldModel } from "./FieldModel.js";

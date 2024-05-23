@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { tryCatch } from "../common/TryCatchHandler.js";
+import { ValidationError } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
+import { asMEI, fromMEI } from "./ManufacturerExtensibleIdentifier.js";
 import { VendorId } from "./VendorId.js";
 
 /**
@@ -15,19 +18,47 @@ import { VendorId } from "./VendorId.js";
  *
  * @see {@link MatterSpecification.v10.Core} § 7.10
  */
-export type ClusterId<ID extends number = number> = Branded<ID, "ClusterId">;
+export type ClusterId = Branded<number, "ClusterId">;
 
-export function ClusterId<const ID extends number>(id: ID) {
-    return id as ClusterId<ID>;
+export function ClusterId(clusterId: number, validate = true): ClusterId {
+    if (!validate) {
+        return clusterId as ClusterId;
+    }
+    const { vendorPrefix, typeSuffix } = fromMEI(clusterId);
+    if (
+        (typeSuffix >= 0 && typeSuffix <= 0x7fff && vendorPrefix === 0) || // Standard cluster
+        (typeSuffix >= 0xfc00 && typeSuffix <= 0xfffe && vendorPrefix !== 0) // Manufacturer specific cluster
+    ) {
+        return clusterId as ClusterId;
+    }
+    throw new ValidationError(`Invalid cluster ID: ${clusterId}`);
 }
 
 export namespace ClusterId {
     export const isVendorSpecific = (clusterId: ClusterId): boolean => {
-        return clusterId > 0xffff;
+        return tryCatch(
+            () => {
+                const { vendorPrefix } = fromMEI(clusterId);
+                return vendorPrefix !== 0;
+            },
+            ValidationError,
+            false,
+        );
+    };
+
+    export const isValid = (clusterId: number): clusterId is ClusterId => {
+        return tryCatch(
+            () => {
+                ClusterId(clusterId);
+                return true;
+            },
+            ValidationError,
+            false,
+        );
     };
 
     export const buildVendorSpecific = (vendorPrefix: VendorId, clusterSuffix: number) => {
-        return ClusterId(((vendorPrefix << 16) + clusterSuffix) >>> 0);
+        return ClusterId(asMEI(vendorPrefix, clusterSuffix));
     };
 }
 
@@ -35,5 +66,5 @@ export namespace ClusterId {
 export const TlvClusterId = new TlvWrapper<ClusterId, number>(
     TlvUInt32,
     clusterId => clusterId,
-    value => ClusterId(value),
+    value => ClusterId(value, false), // No automatic validation on decode
 );

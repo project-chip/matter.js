@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { tryCatch } from "../common/TryCatchHandler.js";
+import { ValidationError } from "../common/ValidationError.js";
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -15,13 +17,29 @@ import { Branded } from "../util/Type.js";
  */
 export type EndpointNumber = Branded<number, "EndpointNumber">;
 
-export function EndpointNumber(n: number): EndpointNumber {
-    return n as EndpointNumber;
+export function EndpointNumber(endpointId: number, validate = true): EndpointNumber {
+    if (!validate || (endpointId >= 0 && endpointId <= 0xfffe)) {
+        return endpointId as EndpointNumber;
+    }
+    throw new ValidationError("EndpointNumber must be between 0 and 0xFFFe");
+}
+
+export namespace EndpointNumber {
+    export const isValid = (endpointId: number): boolean => {
+        return tryCatch(
+            () => {
+                EndpointNumber(endpointId);
+                return true;
+            },
+            ValidationError,
+            false,
+        );
+    };
 }
 
 /** Tlv schema for an Endpoint number. */
 export const TlvEndpointNumber = new TlvWrapper<EndpointNumber, number>(
     TlvUInt16,
     endpointNumber => endpointNumber,
-    value => EndpointNumber(value),
+    value => EndpointNumber(value, false), // No automatic validation on decode
 );
