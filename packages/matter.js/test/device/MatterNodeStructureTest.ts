@@ -166,8 +166,8 @@ function addRequiredRootClusters(
             {
                 groupKeyMap: [],
                 groupTable: [],
-                maxGroupsPerFabric: 254,
-                maxGroupKeysPerFabric: 254,
+                maxGroupsPerFabric: 0,
+                maxGroupKeysPerFabric: 1,
             },
             GroupKeyManagementClusterHandler(),
         ),

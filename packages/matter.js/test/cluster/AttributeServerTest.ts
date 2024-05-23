@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "../../src/MatterDevice.js";
+import { AccessLevel } from "../../src/cluster/Cluster.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
 import {
     AttributeServer,
@@ -18,7 +20,6 @@ import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { EndpointInterface } from "../../src/endpoint/EndpointInterface.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
-import { MatterDevice } from "../../src/MatterDevice.js";
 import { SecureSession } from "../../src/session/SecureSession.js";
 import { Session } from "../../src/session/Session.js";
 import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
@@ -45,6 +46,8 @@ class MockClusterDatasource implements ClusterDatasource {
 interface CreateOptions<T> {
     id: AttributeId;
     name: string;
+    readAcl?: AccessLevel;
+    writeAcl?: AccessLevel;
     schema: TlvSchema<T>;
     isWritable: boolean;
     isSubscribable: boolean;
@@ -83,6 +86,8 @@ describe("AttributeServerTest", () => {
             return new FixedAttributeServer(
                 config.id,
                 config.name,
+                config.readAcl,
+                config.writeAcl,
                 config.schema,
                 config.isWritable,
                 config.isSubscribable,
@@ -122,6 +127,8 @@ describe("AttributeServerTest", () => {
             return new AttributeServer(
                 config.id,
                 config.name,
+                config.readAcl,
+                config.writeAcl,
                 config.schema,
                 config.isWritable,
                 config.isSubscribable,
@@ -452,6 +459,8 @@ describe("AttributeServerTest", () => {
             return new FabricScopedAttributeServer(
                 config.id,
                 config.name,
+                config.readAcl,
+                config.writeAcl,
                 config.schema,
                 config.isWritable,
                 config.isSubscribable,

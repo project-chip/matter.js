@@ -65,7 +65,7 @@ async function withReference<R, const T extends StateType>(
     datasource: Datasource<T>,
     actor: (params: { context: ActionContext; state: InstanceType<T> }) => MaybePromise<R>,
 ) {
-    return await OfflineContext.act("test-datasource", new NodeActivity(), context =>
+    return OfflineContext.act("test-datasource", new NodeActivity(), context =>
         actor({
             context,
             state: datasource.reference(context),
