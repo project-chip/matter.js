@@ -7,6 +7,7 @@
 import { ImplementationError, ReadOnlyError } from "../../../common/MatterError.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
+import { StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { Observable } from "../../../util/Observable.js";
 import { MaybePromise } from "../../../util/Promises.js";
 import { describeList } from "../../../util/String.js";
@@ -411,15 +412,21 @@ class Tx implements Transaction {
         let iterator = this.participants[Symbol.iterator]();
         let cycles = 1;
 
-        const errorRollback = () => {
+        const errorRollback = (error?: any) => {
             const result = this.#finalize(Status.RollingBack, "rolled back", () => this.#executeRollback());
 
             if (MaybePromise.is(result)) {
                 return result.then(() => {
+                    if (error instanceof StatusResponseError) {
+                        throw error;
+                    }
                     throw new FinalizationError("Rolled back due to pre-commit error");
                 });
             }
 
+            if (error instanceof StatusResponseError) {
+                throw error;
+            }
             throw new FinalizationError("Rolled back due to pre-commit error");
         };
 
@@ -476,7 +483,7 @@ class Tx implements Transaction {
                 const handleError = (error: any) => {
                     abortedDueToError = true;
                     logger.error(`Error pre-commit of ${participant}:`, error);
-                    return errorRollback();
+                    return errorRollback(error);
                 };
 
                 // Execute the pre-commit for this participant
