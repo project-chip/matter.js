@@ -958,8 +958,27 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
         try {
             // Send initial data report to prime the subscription with initial data
-            await subscriptionHandler.sendInitialReport(messenger, attribute =>
-                this.readAttribute(attribute, exchange, false, message),
+            await subscriptionHandler.sendInitialReport(
+                messenger,
+                (path, attribute) =>
+                    this.readAttribute(
+                        path,
+                        attribute,
+                        exchange,
+                        isFabricFiltered,
+                        message,
+                        this.#endpointStructure.getEndpoint(path.endpointId)!,
+                    ),
+                (path, event, eventFilters) =>
+                    this.readEvent(
+                        path,
+                        eventFilters,
+                        event,
+                        exchange,
+                        isFabricFiltered,
+                        message,
+                        this.#endpointStructure.getEndpoint(path.endpointId)!,
+                    ),
             );
         } catch (error: any) {
             logger.error(
