@@ -107,9 +107,9 @@ function createOfflineContext(
         transaction,
         activity,
 
-        accessLevelFor() {
+        hasAccessFor(desiredAccessLevel: AccessLevel) {
             // Be as restrictive as possible.  The offline flag should make this irrelevant
-            return AccessLevel.View;
+            return desiredAccessLevel === AccessLevel.View;
         },
 
         agentFor<const T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T> {

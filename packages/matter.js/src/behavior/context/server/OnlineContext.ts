@@ -7,11 +7,13 @@
 import { MatterDevice } from "../../../MatterDevice.js";
 import { AccessLevel } from "../../../cluster/Cluster.js";
 import type { Message } from "../../../codec/MessageCodec.js";
-import { ImplementationError } from "../../../common/MatterError.js";
+import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { SubjectId } from "../../../datatype/SubjectId.js";
 import { Agent } from "../../../endpoint/Agent.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
+import { EndpointInterface } from "../../../endpoint/EndpointInterface.js";
+import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
 import { EndpointType } from "../../../endpoint/type/EndpointType.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
@@ -19,6 +21,7 @@ import { assertSecureSession } from "../../../session/SecureSession.js";
 import { Session } from "../../../session/Session.js";
 import { MaybePromise } from "../../../util/Promises.js";
 import { AccessControl } from "../../AccessControl.js";
+import { AccessControlServer } from "../../definitions/access-control/AccessControlServer.js";
 import { Transaction } from "../../state/transaction/Transaction.js";
 import { ActionContext } from "../ActionContext.js";
 import { ActionTracer } from "../ActionTracer.js";
@@ -37,7 +40,7 @@ export function OnlineContext(options: OnlineContext.Options) {
             let fabric: FabricIndex | undefined;
             let subject: SubjectId;
 
-            const session = options.session;
+            const { session } = options;
 
             if (session) {
                 assertSecureSession(session);
@@ -54,7 +57,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                 throw new ImplementationError("OnlineContext requires an authorized subject");
             }
 
-            const message = options.message;
+            const { message } = options;
             const via = Diagnostic.via(
                 `online#${message?.packetHeader?.messageId?.toString(16) ?? "?"}@${subject.toString(16)}`,
             );
@@ -90,11 +93,31 @@ export function OnlineContext(options: OnlineContext.Options) {
                     transaction,
                     trace,
 
-                    accessLevelFor(_location?: AccessControl.Location) {
-                        // TODO - use AccessControlServer on the RootNodeEndpoint
-                        //const accessControl = accessContext.behavior.node.get(AccessControlServer);
-                        //return accessControl.accessLevelFor((context as ActionContext), accessContext);
-                        return AccessLevel.Administer;
+                    hasAccessFor(desiredAccessLevel: AccessLevel, location?: AccessControl.Location) {
+                        if (location === undefined) {
+                            throw new InternalError("AccessControl.Location is required");
+                        }
+
+                        // We already checked access levels in this transaction, so reuse it
+                        if (location.accessLevels !== undefined) {
+                            return location.accessLevels.includes(desiredAccessLevel);
+                        }
+
+                        if (options.root === undefined) {
+                            throw new InternalError("Root endpoint is required");
+                        }
+
+                        const accessControl = options.root.act(agent => agent.get(AccessControlServer));
+                        if (MaybePromise.is(accessControl)) {
+                            throw new InternalError("AccessControlServer should already be initialized.");
+                        }
+                        const accessLevels = accessControl.accessLevelsFor(
+                            context as ActionContext,
+                            location,
+                            options.endpoint,
+                        );
+                        location.accessLevels = accessLevels;
+                        return accessLevels.includes(desiredAccessLevel);
                     },
 
                     agentFor<T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T> {
@@ -113,7 +136,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                     Contextual.setContextOf(message, context);
                 }
 
-                return actor(context);
+                return actor(context as ActionContext);
             };
 
             const traceError = (e: unknown) => {
@@ -160,6 +183,8 @@ export namespace OnlineContext {
         message?: Message;
         tracer?: ActionTracer;
         actionType?: ActionTracer.ActionType;
+        endpoint?: EndpointInterface;
+        root?: Endpoint<RootEndpoint>;
     } & (
         | { session: Session<MatterDevice>; fabric?: undefined; subject?: undefined }
         | { session?: undefined; fabric: FabricIndex; subject: SubjectId }
