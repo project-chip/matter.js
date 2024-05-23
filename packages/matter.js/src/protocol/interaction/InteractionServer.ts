@@ -24,6 +24,7 @@ import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { EventNumber } from "../../datatype/EventNumber.js";
+import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
@@ -71,35 +72,38 @@ export const INTERACTION_MODEL_REVISION = 11;
 const logger = Logger.get("InteractionServer");
 
 export interface CommandPath {
+    nodeId?: NodeId;
     endpointId: EndpointNumber;
     clusterId: ClusterId;
     commandId: CommandId;
 }
 
 export interface AttributePath {
+    nodeId?: NodeId;
     endpointId: EndpointNumber;
     clusterId: ClusterId;
     attributeId: AttributeId;
 }
 
 export interface EventPath {
+    nodeId?: NodeId;
     endpointId: EndpointNumber;
     clusterId: ClusterId;
     eventId: EventId;
 }
 
 export interface AttributeWithPath {
-    path: TypeFromSchema<typeof TlvAttributePath>;
+    path: AttributePath;
     attribute: AnyAttributeServer<any>;
 }
 
 export interface EventWithPath {
-    path: TypeFromSchema<typeof TlvEventPath>;
+    path: EventPath;
     event: EventServer<any, any>;
 }
 
 export interface CommandWithPath {
-    path: TypeFromSchema<typeof TlvCommandPath>;
+    path: CommandPath;
     command: CommandServer<any, any>;
 }
 
@@ -125,6 +129,27 @@ export function eventPathToId({ endpointId, clusterId, eventId }: TypeFromSchema
 
 export function clusterPathToId({ nodeId, endpointId, clusterId }: TypeFromSchema<typeof TlvClusterPath>) {
     return `${nodeId}/${endpointId}/${clusterId}`;
+}
+
+function isConcreteAttributePath(
+    path: TypeFromSchema<typeof TlvAttributePath>,
+): path is TypeFromSchema<typeof TlvAttributePath> & AttributePath {
+    const { endpointId, clusterId, attributeId } = path;
+    return endpointId !== undefined && clusterId !== undefined && attributeId !== undefined;
+}
+
+function isConcreteEventPath(
+    path: TypeFromSchema<typeof TlvEventPath>,
+): path is TypeFromSchema<typeof TlvEventPath> & EventPath {
+    const { endpointId, clusterId, eventId } = path;
+    return endpointId !== undefined && clusterId !== undefined && eventId !== undefined;
+}
+
+function isConcreteCommandPath(
+    path: TypeFromSchema<typeof TlvCommandPath>,
+): path is TypeFromSchema<typeof TlvCommandPath> & CommandPath {
+    const { endpointId, clusterId, commandId } = path;
+    return endpointId !== undefined && clusterId !== undefined && commandId !== undefined;
 }
 
 /**
@@ -209,20 +234,22 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
         }
 
         const attributeReportsPayload = new Array<AttributeReportPayload>();
-        for (const path of attributeRequests ?? []) {
-            const attributes = this.#endpointStructure.getAttributes([path]);
+        for (const requestPath of attributeRequests ?? []) {
+            const attributes = this.#endpointStructure.getAttributes([requestPath]);
+
+            // Requested attribute path not found in any cluster server on any endpoint
             if (attributes.length === 0) {
                 // TODO Add checks for nodeId -> UnknownNode
-                const { endpointId, clusterId, attributeId } = path;
-                if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
-                    // Wildcard path: Just leave out values
+                if (!isConcreteAttributePath(requestPath)) {
+                    // Wildcard path and we do not know any of the attributes: Ignore the error
                     logger.debug(
                         `Read from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                            path,
-                        )}: ${this.#endpointStructure.resolveAttributeName(path)}: ignore non-existing attribute`,
+                            requestPath,
+                        )}: ${this.#endpointStructure.resolveAttributeName(requestPath)}: ignore non-existing attribute`,
                     );
                 } else {
-                    // was a concrete path
+                    const { endpointId, clusterId, attributeId } = requestPath;
+                    // Concrete path, but still unknown for us, so generate the right error status
                     tryCatch(
                         () => {
                             this.#endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
@@ -233,20 +260,22 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         StatusResponseError,
                         error => {
                             logger.debug(
-                                `Read attribute from ${
+                                `Error reading attribute from ${
                                     exchange.channel.name
-                                }: ${this.#endpointStructure.resolveAttributeName(path)}: unsupported path: Status=${
+                                }: ${this.#endpointStructure.resolveAttributeName(requestPath)}: unsupported path: Status=${
                                     error.code
                                 }`,
                             );
-                            attributeReportsPayload.push({ attributeStatus: { path, status: { status: error.code } } });
+                            attributeReportsPayload.push({
+                                attributeStatus: { path: requestPath, status: { status: error.code } },
+                            });
                         },
                     );
                 }
                 continue;
             }
 
-            // TODO - bring across fixes from synchronous version of this code
+            // Process all known attributes for the given path
             for (const { path, attribute } of attributes) {
                 const { nodeId, endpointId, clusterId } = path;
 
@@ -300,21 +329,21 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
         let eventReportsPayload: undefined | EventReportPayload[];
         if (eventRequests) {
             eventReportsPayload = [];
-            for (const path of eventRequests) {
-                const events = this.#endpointStructure.getEvents([path]);
+            for (const requestPath of eventRequests) {
+                const events = this.#endpointStructure.getEvents([requestPath]);
 
                 // Requested event path not found in any cluster server on any endpoint
                 if (events.length === 0) {
                     // TODO Add checks for nodeId
-                    const { endpointId, clusterId, eventId } = path;
-                    if (endpointId === undefined || clusterId === undefined || eventId === undefined) {
+                    if (!isConcreteEventPath(requestPath)) {
                         // Wildcard path: Just leave out values
                         logger.debug(
                             `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
-                                path,
+                                requestPath,
                             )}: ignore non-existing event`,
                         );
                     } else {
+                        const { endpointId, clusterId, eventId } = requestPath;
                         tryCatch(
                             () => {
                                 this.#endpointStructure.validateConcreteEventPath(endpointId, clusterId, eventId);
@@ -327,11 +356,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                                 logger.debug(
                                     `Read event from ${
                                         exchange.channel.name
-                                    }: ${this.#endpointStructure.resolveEventName(path)}: unsupported path: Status=${
+                                    }: ${this.#endpointStructure.resolveEventName(requestPath)}: unsupported path: Status=${
                                         error.code
                                     }`,
                                 );
-                                eventReportsPayload?.push({ eventStatus: { path, status: { status: error.code } } });
+                                eventReportsPayload?.push({
+                                    eventStatus: { path: requestPath, status: { status: error.code } },
+                                });
                             },
                         );
                     }
@@ -693,8 +724,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             );
         }
 
-        // TODO dataversionFilters
-
         assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
         const session = exchange.session;
         const fabric = session.fabric;
@@ -875,8 +904,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
                 if (commands.length === 0) {
                     // TODO Also check nodeId
-                    const { endpointId, clusterId, commandId } = commandPath;
-                    if (endpointId === undefined || clusterId === undefined || commandId === undefined) {
+                    if (!isConcreteCommandPath(commandPath)) {
                         // Wildcard path: Just ignore
                         logger.debug(
                             `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
@@ -884,6 +912,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                             )} ignore non-existing attribute`,
                         );
                     } else {
+                        const { endpointId, clusterId, commandId } = commandPath;
                         invokeResponses.push(
                             tryCatch(
                                 () => {
