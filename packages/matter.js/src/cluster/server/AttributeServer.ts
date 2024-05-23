@@ -827,6 +827,23 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     }
 
     /**
+     * Fabric scoped enhancement of set to allow setting special fabricindex locally.
+     */
+    override set(
+        value: T,
+        session: Session<MatterDevice>,
+        message: Message,
+        delayChangeEvents = false,
+        preserveFabricIndex = false,
+    ) {
+        if (!this.isWritable) {
+            throw new StatusResponseError(`Attribute "${this.name}" is not writable.`, StatusCode.UnsupportedWrite);
+        }
+
+        this.setRemote(value, session, message, delayChangeEvents, preserveFabricIndex);
+    }
+
+    /**
      * Method that contains the logic to set a value "from remote" (e.g. from a client). For Fabric scoped attributes
      * we need to inject the fabric index into the value.
      */
@@ -835,13 +852,14 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         session: Session<MatterDevice>,
         message: Message,
         delayChangeEvents = false,
+        preserveFabricIndex = false,
     ) {
         // Inject fabric index into structures in general if undefined, if set it will be used
         value = this.schema.injectField(
             value,
             <number>Globals.FabricIndex.id,
             session.associatedFabric.fabricIndex,
-            () => true, // Noone should send any index and if we simply SHALL ignore it
+            () => !preserveFabricIndex, // Noone should send any index and if we simply SHALL ignore it,  biuut internally we might need it
         );
         logger.info(`Set remote value for fabric scoped attribute "${this.name}" to ${Logger.toJSON(value)}`);
 

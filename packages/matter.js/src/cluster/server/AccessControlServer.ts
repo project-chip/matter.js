@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InternalError } from "../../common/MatterError.js";
 import { CaseAuthenticatedTag } from "../../datatype/CaseAuthenticatedTag.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { DeviceTypeId } from "../../datatype/DeviceTypeId.js";
@@ -20,7 +21,11 @@ import { TlvType } from "../../tlv/TlvCodec.js";
 import { TlvTaggedList } from "../../tlv/TlvObject.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
 import { AccessControl, AccessControlCluster } from "../definitions/AccessControlCluster.js";
-import { genericFabricScopedAttributeGetter, genericFabricScopedAttributeSetter } from "./AttributeServer.js";
+import {
+    genericFabricScopedAttributeGetter,
+    genericFabricScopedAttributeGetterFromFabric,
+    genericFabricScopedAttributeSetterForFabric,
+} from "./AttributeServer.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { EventServer } from "./EventServer.js";
@@ -178,20 +183,25 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
         },
 
         aclAttributeSetter: (value, { session }) => {
+            assertSecureSession(session!);
+            // it can happen internally that we set a value for another fabricIndex, so handle this here
+            const fabric = session.context.getFabricByIndex(
+                value[0]?.fabricIndex ?? session.associatedFabric.fabricIndex,
+            );
+            if (fabric === undefined) {
+                throw new InternalError("Fabric not found. SHould never happen");
+            }
             const oldValue =
-                genericFabricScopedAttributeGetter(
-                    session,
-                    true,
+                genericFabricScopedAttributeGetterFromFabric(
+                    fabric,
                     AccessControlCluster,
                     "acl",
                     new Array<TypeFromBitmapSchema<typeof AccessControl.TlvAccessControlEntryStruct>>(),
                 ) ?? [];
 
-            const changed = genericFabricScopedAttributeSetter(value, session, AccessControlCluster, "acl", []);
+            const changed = genericFabricScopedAttributeSetterForFabric(fabric, AccessControlCluster, "acl", value, []);
 
             if (changed && accessControlEntryChangedEvent !== undefined) {
-                assertSecureSession(session!);
-
                 const adminPasscodeId = session.isPase ? 0 : null;
                 const adminNodeId = adminPasscodeId === null ? session.associatedFabric.rootNodeId : null;
 
@@ -263,16 +273,29 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
         },
 
         extensionAttributeSetter: (value, { session }) => {
+            assertSecureSession(session!);
+            // it can happen internally that we set a value for another fabricIndex, so handle this here
+            const fabric = session.context.getFabricByIndex(
+                value[0]?.fabricIndex ?? session.associatedFabric.fabricIndex,
+            );
+            if (fabric === undefined) {
+                throw new InternalError("Fabric not found. SHould never happen");
+            }
             const oldValue =
-                genericFabricScopedAttributeGetter(
-                    session,
-                    true,
+                genericFabricScopedAttributeGetterFromFabric(
+                    fabric,
                     AccessControlCluster,
                     "extension",
                     new Array<AclExtensionEntry>(),
                 ) ?? [];
 
-            const changed = genericFabricScopedAttributeSetter(value, session, AccessControlCluster, "extension", []);
+            const changed = genericFabricScopedAttributeSetterForFabric(
+                fabric,
+                AccessControlCluster,
+                "extension",
+                value,
+                [],
+            );
 
             if (changed && accessControlExtensionChangedEvent !== undefined) {
                 assertSecureSession(session!);

@@ -1069,7 +1069,7 @@ describe("InteractionProtocol", () => {
                     authMode: 2,
                     subjects: null,
                     targets: null,
-                    fabricIndex: FabricIndex(2), // existing value 2
+                    fabricIndex: FabricIndex(1), // existing value 2, we override hard
                 },
             ]);
         });

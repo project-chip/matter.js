@@ -261,6 +261,8 @@ export const OperationalCredentialsClusterHandler: (
                     ],
                     session,
                     message,
+                    false,
+                    true,
                 );
             }
 

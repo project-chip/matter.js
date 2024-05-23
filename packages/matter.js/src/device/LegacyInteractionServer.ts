@@ -55,9 +55,10 @@ export class LegacyInteractionServer extends InteractionServer {
             throw new InternalError("Access control cluster must exist on root endpoint.");
         }
         const aclManager = (this.#aclManager = new AccessControlManager(aclCluster.attributes.acl.get(session, false)));
-        aclCluster.subscribeAclAttribute(val => {
-            logger.info("ACL updated", val);
-            aclManager.updateAccessControlList(aclCluster.attributes.acl.get(session, false));
+        aclCluster.subscribeAclAttribute(() => {
+            const completeVal = aclCluster.attributes.acl.get(session, false);
+            logger.info("ACL updated", completeVal);
+            aclManager.updateAccessControlList(completeVal);
         });
         return aclManager;
     }
