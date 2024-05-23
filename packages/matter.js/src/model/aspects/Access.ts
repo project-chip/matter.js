@@ -335,10 +335,11 @@ export namespace Access {
      * Relative ordering of privilege.
      */
     export const PrivilegeLevel = {
-        V: 1,
-        O: 2,
-        M: 3,
-        A: 4,
+        V: AccessLevel.View,
+        // 2 is ProxyView, seems not in use/model right now
+        O: AccessLevel.Operate,
+        M: AccessLevel.Manage,
+        A: AccessLevel.Administer,
     };
 
     /**
