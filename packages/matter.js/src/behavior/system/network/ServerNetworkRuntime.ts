@@ -278,6 +278,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
                 productDescription: this.owner.state.productDescription,
                 ble: !!this.owner.state.network.ble,
             }),
+            this.owner.state.basicInformation.capabilityMinima.caseSessionsPerFabric, // Internally it is "Session and Node", so we support even more
             (_fabricIndex: FabricIndex, _fabricAction: FabricAction) => {
                 // We use events directly
             },

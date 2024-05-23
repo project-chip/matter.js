@@ -6,6 +6,7 @@
 
 import { Channel } from "../common/Channel.js";
 import { MatterError } from "../common/MatterError.js";
+import { tryCatchAsync } from "../common/TryCatchHandler.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
@@ -19,58 +20,98 @@ const logger = Logger.get("ChannelManager");
 export class NoChannelError extends MatterError {}
 
 export class ChannelManager {
-    private readonly channels = new Map<string, MessageChannel<any>>();
-    private readonly paseChannels = new Map<Session<any>, MessageChannel<any>>();
+    readonly #channels = new Map<string, MessageChannel<any>[]>();
+    readonly #paseChannels = new Map<Session<any>, MessageChannel<any>>();
+    readonly #caseSessionsPerFabricAndNode: number;
 
-    private getChannelKey(fabric: Fabric, nodeId: NodeId) {
-        return `${fabric.fabricId}/${nodeId}`;
+    // TODO evaluate with controller the effects of limiting the entries just for FabricIndex and not also NodeId
+    constructor(caseSessionsPerFabricAndNode = 3) {
+        this.#caseSessionsPerFabricAndNode = caseSessionsPerFabricAndNode;
+    }
+
+    #getChannelKey(fabric: Fabric, nodeId: NodeId) {
+        return `${fabric.fabricIndex}/${nodeId}`;
+    }
+
+    #findLeastActiveChannel(channels: MessageChannel<any>[]) {
+        let oldest = channels[0];
+        for (const channel of channels) {
+            if (channel.session.activeTimestamp < oldest.session.activeTimestamp) {
+                oldest = channel;
+            }
+        }
+        return oldest;
     }
 
     async setChannel(fabric: Fabric, nodeId: NodeId, channel: MessageChannel<any>) {
-        const channelKey = this.getChannelKey(fabric, nodeId);
-        const currentChannel = this.channels.get(channelKey);
-        if (currentChannel !== undefined) {
-            const { session } = currentChannel;
-            if (session.id !== channel.session.id) {
+        const channelsKey = this.#getChannelKey(fabric, nodeId);
+        const currentChannels = this.#channels.get(channelsKey) ?? [];
+        if (currentChannels.length >= this.#caseSessionsPerFabricAndNode) {
+            const oldestChannel = this.#findLeastActiveChannel(currentChannels);
+            currentChannels.splice(currentChannels.indexOf(oldestChannel), 1);
+            currentChannels.push(channel);
+            this.#channels.set(channelsKey, currentChannels);
+
+            // Should always be the case
+            const { session } = oldestChannel;
+            if (session.id !== oldestChannel.session.id) {
                 logger.debug(
                     `Existing channel for fabricIndex ${fabric.fabricIndex} and node ${nodeId} with session ${session.name} gets replaced. Consider former session already inactive and so close it.`,
                 );
                 await session.destroy(false, false);
             }
-            await currentChannel.close();
+            logger.info(`Close oldest channel for fabric ${fabric.fabricIndex} node ${nodeId}`);
+            await oldestChannel.close();
+        } else {
+            currentChannels.push(channel);
+            this.#channels.set(channelsKey, currentChannels);
         }
-        this.channels.set(channelKey, channel);
     }
 
-    getChannel(fabric: Fabric, nodeId: NodeId) {
-        const result = this.channels.get(this.getChannelKey(fabric, nodeId));
-        if (result === undefined) throw new NoChannelError(`Can't find a channel to node ${nodeId}`);
-        return result;
+    getChannel(fabric: Fabric, nodeId: NodeId, session?: Session<any>) {
+        let results = this.#channels.get(this.#getChannelKey(fabric, nodeId)) ?? [];
+        if (session !== undefined) {
+            results = results.filter(channel => channel.session.id === session.id);
+        }
+        if (results.length === 0) throw new NoChannelError(`Can't find a channel to node ${nodeId}`);
+        return results[results.length - 1]; // Return the latest added channel
     }
 
+    /**
+     * Returns the last established session for a Fabric and Node
+     */
     getChannelForSession(session: Session<any>) {
         if (session.isSecure && !session.isPase) {
             const secureSession = session as SecureSession<any>;
             const fabric = secureSession.fabric;
             const nodeId = secureSession.peerNodeId;
             if (fabric === undefined) {
-                return this.paseChannels.get(session);
+                return this.#paseChannels.get(session);
             }
-            const channel = this.getChannel(fabric, nodeId);
-            if (channel.session.id !== session.id) {
-                return undefined;
-            }
-            return channel;
+            return this.getChannel(fabric, nodeId, session);
         }
-        return this.paseChannels.get(session);
+        return this.#paseChannels.get(session);
     }
 
-    async removeChannel(fabric: Fabric, nodeId: NodeId) {
-        const channelKey = this.getChannelKey(fabric, nodeId);
-        const channel = this.channels.get(channelKey);
-        if (channel !== undefined) {
+    async removeAllNodeChannels(fabric: Fabric, nodeId: NodeId) {
+        const channelsKey = this.#getChannelKey(fabric, nodeId);
+        const channelsToRemove = this.#channels.get(channelsKey) ?? [];
+        this.#channels.delete(channelsKey);
+        for (const { channel } of channelsToRemove) {
             await channel.close();
-            this.channels.delete(channelKey);
+        }
+    }
+
+    async removeChannel(fabric: Fabric, nodeId: NodeId, session: Session<any>) {
+        const channelsKey = this.#getChannelKey(fabric, nodeId);
+        const fabricChannels = this.#channels.get(channelsKey) ?? [];
+        const channelEntryIndex = fabricChannels.findIndex(
+            ({ session: entrySession }) => entrySession.id === session.id,
+        );
+        if (channelEntryIndex !== -1) {
+            const channel = fabricChannels.splice(channelEntryIndex, 1)[0];
+            this.#channels.set(channelsKey, fabricChannels);
+            await channel.close();
         }
     }
 
@@ -78,9 +119,9 @@ export class ChannelManager {
         const msgChannel = new MessageChannel(
             byteArrayChannel,
             session,
-            async () => void this.paseChannels.delete(session),
+            async () => void this.#paseChannels.delete(session),
         );
-        this.paseChannels.set(session, msgChannel);
+        this.#paseChannels.set(session, msgChannel);
         return msgChannel;
     }
 
@@ -95,26 +136,31 @@ export class ChannelManager {
             return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }
 
-        let result = this.channels.get(this.getChannelKey(fabric, nodeId));
-        if (result === undefined || result.session.id !== session.id) {
-            result = new MessageChannel(
-                byteArrayChannel,
-                session,
-                async () => await this.removeChannel(fabric, nodeId),
-            );
-            await this.setChannel(fabric, nodeId, result);
-        }
-        return result;
+        return tryCatchAsync(
+            async () => this.getChannel(fabric, nodeId, session),
+            NoChannelError,
+            async () => {
+                const result = new MessageChannel(
+                    byteArrayChannel,
+                    session,
+                    async () => await this.removeChannel(fabric, nodeId, session),
+                );
+                await this.setChannel(fabric, nodeId, result);
+                return result;
+            },
+        );
     }
 
     async close() {
-        for (const channel of this.paseChannels.values()) {
+        for (const channel of this.#paseChannels.values()) {
             await channel.close();
         }
-        this.paseChannels.clear();
-        for (const channel of this.channels.values()) {
-            await channel.close();
+        this.#paseChannels.clear();
+        for (const channels of this.#channels.values()) {
+            for (const channel of channels) {
+                await channel.close();
+            }
         }
-        this.channels.clear();
+        this.#channels.clear();
     }
 }

@@ -53,7 +53,7 @@ export class MatterDevice {
     private readonly scanners = new Array<Scanner>();
     private readonly broadcasters = new Array<InstanceBroadcaster>();
     private readonly transportInterfaces = new Array<TransportInterface | NetInterface>();
-    private readonly channelManager = new ChannelManager();
+    private readonly channelManager: ChannelManager;
     private readonly secureChannelProtocol = new SecureChannelProtocol(() => this.endCommissioning());
     private activeCommissioningMode = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
     private activeCommissioningEndCallback?: () => void;
@@ -79,6 +79,7 @@ export class MatterDevice {
         sessionStorage: StorageContext,
         fabricStorage: StorageContext,
         getCommissioningConfig: () => CommissioningOptions.Configuration,
+        minimumCaseSessionsPerFabricAndNode = 3,
         commissioningChangedCallback: (fabricIndex: FabricIndex, fabricAction: FabricAction) => void,
         sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
@@ -87,6 +88,7 @@ export class MatterDevice {
             sessionStorage,
             fabricStorage,
             getCommissioningConfig,
+            minimumCaseSessionsPerFabricAndNode,
             commissioningChangedCallback,
             sessionChangedCallback,
         );
@@ -96,9 +98,12 @@ export class MatterDevice {
         readonly sessionStorage: StorageContext,
         readonly fabricStorage: StorageContext,
         private readonly getCommissioningConfig: () => CommissioningOptions.Configuration,
+        minimumCaseSessionsPerFabricAndNode: number,
         private readonly commissioningChangedCallback: (fabricIndex: FabricIndex, fabricAction: FabricAction) => void,
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
+        this.channelManager = new ChannelManager(minimumCaseSessionsPerFabricAndNode);
+
         this.#fabricManager = new FabricManager(fabricStorage);
 
         this.#fabricManager.events.deleted.on(async fabric => {

@@ -577,12 +577,6 @@ export class CommissioningServer extends MatterNode {
 
         // TODO adjust later and refactor MatterDevice
         const deviceInstance = await MatterDevice.create(
-            // this.options.deviceName,
-            // DeviceTypeId(this.options.deviceType),
-            // vendorId,
-            // productId,
-            // this.discriminator,
-            // this.passcode,
             this.storage.createContext("SessionManager"),
             this.storage.createContext("FabricManager"),
             () => ({
@@ -595,6 +589,7 @@ export class CommissioningServer extends MatterNode {
                 // We don't use this
                 ble: false,
             }),
+            basicInformation.getCapabilityMinimaAttribute().caseSessionsPerFabric, // Internally it is "Session and Node", so we support even more
             (fabricIndex: FabricIndex) => {
                 const fabricsCount = this.deviceInstance?.getFabrics().length ?? 0;
                 if (fabricsCount === 1) {
