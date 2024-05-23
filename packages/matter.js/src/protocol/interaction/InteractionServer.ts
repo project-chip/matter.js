@@ -1066,6 +1066,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             }
         }
 
+        if (invokeRequests.length > 1) {
+            throw new StatusResponseError("Multi-command invoke requests are not supported", StatusCode.InvalidAction);
+        }
+
         const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];
 
         await Promise.all(
@@ -1111,6 +1115,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                             ),
                         );
                     }
+                    return;
                 }
 
                 for (const { command, path } of commands) {
