@@ -32,22 +32,25 @@ let fail = false;
 for (const model of MatterModel.standard.children) {
     try {
         let file;
+        const symbols = Array<string>();
+        let index;
         if (model instanceof ClusterModel) {
             file = new ClusterFile(model);
             generateCluster(file);
 
-            const exports = clusterIndex.expressions(`export {`, `} from "./${file.clusterName}.js"`);
             if (model.id !== undefined) {
-                exports.atom(file.clusterName);
+                symbols.push(file.clusterName);
             }
-            exports.atom(file.typesName);
+            symbols.push(file.typesName);
+            index = clusterIndex;
         } else {
             file = generateGlobal(model);
             if (!file) {
                 continue;
             }
-            globalIndex.atom(`export * from "./${file.basename}.js"`);
+            index = globalIndex;
         }
+        index.addReexport(`./${file.basename}.js`, ...symbols);
         files.push(file);
     } catch (e) {
         logger.error(e);

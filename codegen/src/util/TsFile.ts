@@ -626,22 +626,6 @@ export class TsFile extends Block {
     }
 
     addImport(filename: string, name?: string) {
-        // The set of imports we allow is intentionally restrictive so we can catch errors more easily.  Extend as
-        // necessary
-        if (filename.startsWith(".") || filename.startsWith("#")) {
-            if (!filename.endsWith(".js")) {
-                throw new InternalError(`Local import of ${filename} has no .js suffix`);
-            }
-        } else if (filename.endsWith(".js")) {
-            throw new InternalError(`Local import of ${filename} must start with "#" or "."`);
-        } else if (!filename.startsWith("@project-chip")) {
-            throw new InternalError(`Absolute import of ${filename} must start with "@project-chip"`);
-        }
-
-        if (filename.match(/\.[a-z]+\.[a-z]+$/)) {
-            throw new InternalError(`Import of ${filename} has multiple suffices`);
-        }
-
         filename = this.#resolveImportPath(filename);
 
         let list = this.imports.get(filename);
@@ -658,9 +642,15 @@ export class TsFile extends Block {
         return this;
     }
 
-    addReexport(filename: string) {
-        filename = this.#resolveImportPath(filename);
-        this.atom(`export * from "${filename}.js"`);
+    addReexport(filename: string, ...symbols: string[]) {
+        if (symbols.length) {
+            const reexport = this.expressions("export {", `} from ${serialize(filename)}`);
+            for (const symbol of symbols) {
+                reexport.atom(symbol);
+            }
+        } else {
+            this.atom(`export * from ${serialize(filename)}`);
+        }
     }
 
     save() {
@@ -701,12 +691,29 @@ export class TsFile extends Block {
     }
 
     #resolveImportPath(filename: string) {
+        // The set of imports we allow is intentionally restrictive so we can catch errors more easily.  Extend as
+        // necessary
+        if (filename.startsWith(".") || filename.startsWith("#")) {
+            if (!filename.endsWith(".js")) {
+                throw new InternalError(`Local import of ${filename} has no .js suffix`);
+            }
+        } else if (filename.endsWith(".js")) {
+            throw new InternalError(`Local import of ${filename} must start with "#" or "."`);
+        } else if (!filename.startsWith("@project-chip")) {
+            throw new InternalError(`Absolute import of ${filename} must start with "@project-chip"`);
+        }
+
+        if (filename.match(/\.[a-z]+\.[a-z]+$/)) {
+            throw new InternalError(`Import of ${filename} has multiple suffices`);
+        }
+
         if (filename.startsWith("#")) {
             filename = relative(this.name.replace(/\/[^/]+$/, ""), filename);
             if (!filename.startsWith(".")) {
                 filename = `./${filename}`;
             }
         }
+
         return filename;
     }
 }

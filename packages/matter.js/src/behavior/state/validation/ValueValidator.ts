@@ -39,7 +39,6 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
     }
 
     let validator: ValueSupervisor.Validate | undefined;
-
     const metatype = schema.effectiveMetatype;
     switch (metatype) {
         case Metatype.enum:

@@ -35,6 +35,12 @@ export interface Children<M extends Model = Model, E extends AnyElement = AnyEle
     get<T extends Model>(type: Model.Type<T>, idOrName: number | string): T | undefined;
 
     /**
+     * Access all models of a specific type, optionally filtered to a specific ID or number.  Even if filtered there
+     * may be multiple return values if there are different variants of the element defined.
+     */
+    all<T extends Model>(type: Model.Type<T>, idOrName?: number | string): T[];
+
+    /**
      * Access a model using a {@link Children.Selector}.  This is an optimized primitive used by various tree traversal
      * algorithms.
      */
@@ -253,11 +259,35 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
     }
 
     function get(type: typeof Model, idOrName: number | string) {
-        const slot = indices?.get(type) ?? buildIndex(type);
-        if (typeof idOrName === "number") {
-            return slot.byId[idOrName];
+        const value = all(type, idOrName);
+        if (Array.isArray(value)) {
+            return value[0];
         }
-        return slot.byName[idOrName];
+        return value;
+    }
+
+    function all(type: typeof Model, idOrName?: number | string) {
+        const slot = indices?.get(type) ?? buildIndex(type);
+        if (idOrName === undefined) {
+            return Object.values(slot.byName).flatMap(entry => entry);
+        }
+
+        let result;
+        if (typeof idOrName === "number") {
+            result = slot.byId[idOrName];
+        } else {
+            result = slot.byName[idOrName];
+        }
+
+        if (result === undefined) {
+            return [];
+        }
+
+        if (Array.isArray(result)) {
+            return result;
+        }
+
+        return [result];
     }
 
     function selectTypes(tags: Children.TagSelector): Model.Type[] {
@@ -464,6 +494,9 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
             switch (p) {
                 case "get":
                     return get;
+
+                case "all":
+                    return all;
 
                 case "select":
                     return select;

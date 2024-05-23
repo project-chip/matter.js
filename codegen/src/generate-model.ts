@@ -73,7 +73,7 @@ function generateElementFile(element: Model) {
 function generateIndex(elements: Model[]) {
     const file = new TsFile(`#elements/index`);
     for (const element of elements) {
-        file.addReexport(`./${elementIdentifierName(element)}`);
+        file.addReexport(`./${elementIdentifierName(element)}.js`);
     }
 
     if (args.save) {
@@ -84,7 +84,7 @@ function generateIndex(elements: Model[]) {
 function generateExport(elements: Model[]) {
     const file = new TsFile(`#elements/export`);
     for (const element of elements) {
-        file.addReexport(elementIdentifierName(element));
+        file.addReexport(`./${elementIdentifierName(element)}.js`);
     }
 
     if (args.save) {

@@ -197,6 +197,7 @@ export * from "./tag.js";
 export * from "./WildcardPathFlagsBitmap.js";
 export * from "./SoftwareVersionCertificationStatusEnum.js";
 export * from "./subject-id.js";
+export * from "./any.js";
 export * from "./ClusterRevision.js";
 export * from "./FeatureMap.js";
 export * from "./AttributeList.js";

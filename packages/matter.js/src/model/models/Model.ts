@@ -292,9 +292,10 @@ export abstract class Model {
      * Retrieve all models of a specific element type from local scope.
      *
      * @param constructor model class or a predicate object
+     * @param key filters to models matching a specific type
      */
-    all<T extends Model>(constructor: Model.Type<T>) {
-        return this.children.filter(c => c instanceof constructor) as unknown[] as T[];
+    all<T extends Model>(constructor: Model.Type<T>, key?: number | string) {
+        return this.children.all(constructor, key);
     }
 
     /**

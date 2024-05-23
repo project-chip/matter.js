@@ -53,7 +53,7 @@ describe("MergedModels", () => {
         expect(merged.datatypes[0].name).equal("CapabilityMinimaStruct");
     });
 
-    it.only("merges referenced bitmap into direct bitmap", () => {
+    it("merges referenced bitmap into direct bitmap", () => {
         const merged = merge(Fixtures.WindowCovering);
         expect(merged.children.length).equal(1);
         expect(merged.children[0].type).equal("map8");
