@@ -95,7 +95,7 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
         const commissioningServer = new CommissioningServer({
             port: 5540,
             deviceName: this.appName,
-            deviceType: DeviceTypeId(0xffff),
+            deviceType: DeviceTypeId(0xbfff),
             passcode: this.options.passcode ?? 20202021,
             discriminator: this.options.discriminator ?? 3840,
             basicInformation: {
