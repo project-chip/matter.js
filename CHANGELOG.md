@@ -6,8 +6,32 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 <!--
 	Placeholder for the next version (at the beginning of the line):
-	## __WORK IN PROGRESS__
+	### __WORK IN PROGRESS__
 -->
+
+### __WORK IN PROGRESS__
+* Matter-Core functionality:
+  * Feature: Implemented Access Control List (ACL) as required by Matter specification
+  * Enhancement: Enhanced several internal structures needed to support ACL properly
+  * Enhancement: Enhanced all datatypes that are MEIs to allow validation of the MEI and the allowed scopes and value ranges
+  * Enhancement: Remembers CATs from Sessions and uses them for CASE session resumptions
+  * Enhancement: Allows decoding of TlvLists with protocol specific tags
+  * Fix: Fixes deepCopy to really doing a deep copy and not just copying the first level 
+  
+* matter.js Legacy API:
+  * Feature: Added Access Control cluster implementation
+  * Feature: Added minimal Group key management cluster implementation which supports no additional groups (so only IPK allowed)
+  * Enhancement: Enhanced Operational Credentials cluster to add needed ACLs on commissioning including backward compatibility
+
+* matter.js New API:
+  * Feature: Added Access Control cluster implementation
+  * Feature: Added minimal Group key management cluster implementation which supports no additional groups (so only IPK allowed)
+  * Enhancement: Enhanced Operational Credentials cluster to add needed ACLs on commissioning including backward compatibility
+  * Fix: Persist also writable and fabric scoped data in new API
+  * Fix: Releases locks also in Precommit errors
+* Chip testing:
+  * Added automatic testing of chip tests suites for ACE, ACL and partly IDM
+
 
 ### 0.9.0 (2024-05-14)
 * Matter-Core functionality:
