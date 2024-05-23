@@ -58,6 +58,7 @@ import {
     TlvAttributePath,
     TlvClusterPath,
     TlvCommandPath,
+    TlvEventFilter,
     TlvEventPath,
     TlvInvokeResponseData,
     TlvSubscribeResponse,
@@ -417,12 +418,26 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
     }
 
     protected async readAttribute(
+        _path: AttributePath,
         attribute: AnyAttributeServer<any>,
         exchange: MessageExchange<MatterDevice>,
         isFabricFiltered: boolean,
         message: Message,
+        _endpoint: EndpointInterface,
     ) {
         return attribute.getWithVersion(exchange.session, isFabricFiltered, message);
+    }
+
+    protected async readEvent(
+        _path: EventPath,
+        eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
+        event: EventServer<any, any>,
+        exchange: MessageExchange<MatterDevice>,
+        isFabricFiltered: boolean,
+        message: Message,
+        _endpoint: EndpointInterface,
+    ) {
+        return event.get(exchange.session, isFabricFiltered, message, eventFilters);
     }
 
     async handleWriteRequest(
@@ -689,13 +704,16 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
     }
 
     protected async writeAttribute(
+        _path: AttributePath,
         attribute: AttributeServer<any>,
         value: any,
         exchange: MessageExchange<MatterDevice>,
         message: Message,
+        _endpoint: EndpointInterface,
         _receivedWithinTimedInteraction?: boolean,
+        isListWrite = false,
     ) {
-        attribute.set(value, exchange.session, message);
+        attribute.set(value, exchange.session, message, isListWrite);
     }
 
     async handleSubscribeRequest(
@@ -976,15 +994,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         continue;
                     }
 
-                    // await command.invoke(
-                    //     exchange.session,
-                    //     commandFields ?? TlvNoArguments.encodeTlv(commandFields),
-                    //     message,
-                    //     endpoint,
-                    // ),
                     const result = await tryCatchAsync(
                         async () =>
                             await this.invokeCommand(
+                                path,
                                 command,
                                 exchange,
                                 commandFields ?? TlvNoArguments.encodeTlv(commandFields),
@@ -1038,6 +1051,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
     }
 
     protected async invokeCommand(
+        _path: CommandPath,
         command: CommandServer<any, any>,
         exchange: MessageExchange<MatterDevice>,
         commandFields: any,
