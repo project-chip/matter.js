@@ -96,8 +96,7 @@ export class ChannelManager {
     async removeAllNodeChannels(fabric: Fabric, nodeId: NodeId) {
         const channelsKey = this.#getChannelKey(fabric, nodeId);
         const channelsToRemove = this.#channels.get(channelsKey) ?? [];
-        this.#channels.delete(channelsKey);
-        for (const { channel } of channelsToRemove) {
+        for (const channel of channelsToRemove) {
             await channel.close();
         }
     }
@@ -105,14 +104,8 @@ export class ChannelManager {
     async removeChannel(fabric: Fabric, nodeId: NodeId, session: Session<any>) {
         const channelsKey = this.#getChannelKey(fabric, nodeId);
         const fabricChannels = this.#channels.get(channelsKey) ?? [];
-        const channelEntryIndex = fabricChannels.findIndex(
-            ({ session: entrySession }) => entrySession.id === session.id,
-        );
-        if (channelEntryIndex !== -1) {
-            const channel = fabricChannels.splice(channelEntryIndex, 1)[0];
-            this.#channels.set(channelsKey, fabricChannels);
-            await channel.close();
-        }
+        const channelEntry = fabricChannels.find(({ session: entrySession }) => entrySession.id === session.id);
+        await channelEntry?.close();
     }
 
     private getOrCreateAsPaseChannel(byteArrayChannel: Channel<ByteArray>, session: Session<any>) {
@@ -140,10 +133,8 @@ export class ChannelManager {
             async () => this.getChannel(fabric, nodeId, session),
             NoChannelError,
             async () => {
-                const result = new MessageChannel(
-                    byteArrayChannel,
-                    session,
-                    async () => await this.removeChannel(fabric, nodeId, session),
+                const result = new MessageChannel(byteArrayChannel, session, async () =>
+                    this.removeChannel(fabric, nodeId, session),
                 );
                 await this.setChannel(fabric, nodeId, result);
                 return result;
