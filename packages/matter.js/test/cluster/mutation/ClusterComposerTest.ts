@@ -115,7 +115,7 @@ describe("ClusterComposer", () => {
             ({}) as IsNever<typeof selected> satisfies true;
 
             // Type test: WithSelected
-            const withSelected = {} as ClusterComposer.WithSelected<typeof TestComposite, never>;
+            const withSelected = {} as ClusterComposer.ExtendedElements<typeof TestComposite, never>;
             withSelected satisfies never;
 
             // Type test: WithFeatures

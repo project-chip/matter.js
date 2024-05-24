@@ -135,22 +135,77 @@ function generateMutableCluster(
             `${file.clusterName} supports optional features that you can enable with the ${file.clusterName}.with() factory method.`,
         );
 
+        // Identify features enabled by default.  This is controlled by the default value of supportedFeatures
+        const defaultFeatures = new Set<string>();
         const supportedFeatures = featureMap.effectiveDefault;
         if (typeof supportedFeatures === "number" && supportedFeatures) {
-            // Override supportedFeatures as there are default supported features
-            instance = file.ns.expressions(`export const ClusterInstance = MutableCluster({`, "})");
-            instance.atom("...Base");
-            const supportedFeatureBlock = instance.expressions(`supportedFeatures: {`, "}");
+            // There are default supported features
             featureMap.children.forEach(feature => {
                 if (typeof feature.constraint.value === "number") {
                     if (supportedFeatures & (1 << feature.constraint.value)) {
-                        const name = camelize(feature.description ?? feature.name);
-                        supportedFeatureBlock.atom(name, "true");
+                        defaultFeatures.add(camelize(feature.description ?? feature.name));
                     }
                 }
             });
+        }
+
+        // Identify components that are enabled by default.  There could be components enabled even if no features are
+        // enabled (such as with On/Off cluster in 1.3)
+        const defaultComponents = new Set<string>();
+        nextComponent: for (const component of variance.components) {
+            // Not sure we ever generate components without a condition but if we do it's unconditional
+            if (!component.condition) {
+                defaultComponents.add(component.name);
+                continue;
+            }
+
+            // Determine whether this component applies given the default enabled features
+            const bitmaps = conditionToBitmaps(component.condition, variance.cluster);
+            nextBitmap: for (const bitmap of bitmaps) {
+                for (const k in bitmap) {
+                    if (!!bitmap[k] !== defaultFeatures.has(k)) {
+                        continue nextBitmap;
+                    }
+                }
+
+                // Component applies to default feature set
+                defaultComponents.add(component.name);
+                continue nextComponent;
+            }
+        }
+
+        // Add the instance
+        instance = file.ns.expressions("export const ClusterInstance = MutableCluster(", ")");
+        if (!defaultFeatures.size && !defaultComponents.size) {
+            // No default features or components means Base fully defines the default cluster instance
+            instance.atom("Base");
         } else {
-            instance = file.ns.atom(`export const ClusterInstance = MutableCluster(Base)`);
+            // Must extend base to include features and default components
+            const base = instance.expressions("{", "}");
+            base.atom("...Base");
+            if (defaultFeatures.size) {
+                // The default cluster has features enabled
+                const supportedFeatureBlock = base.expressions(`supportedFeatures: {`, "}");
+                for (const name of defaultFeatures) {
+                    supportedFeatureBlock.atom(name, true);
+                }
+            }
+
+            // Add any default components
+            if (defaultComponents.size) {
+                // Inform cluster composer that composed clusters should build off of base
+                file.addImport("#/cluster/ClusterType.js", "ClusterType");
+                base.atom("base: ClusterType(Base)");
+
+                // Add the components
+                for (let name of defaultComponents) {
+                    name += "Component";
+                    if (variance.cluster !== file.cluster) {
+                        name = `${file.scope.nameFor(variance.cluster)}.${name}`;
+                    }
+                    instance.atom(name);
+                }
+            }
         }
     }
 

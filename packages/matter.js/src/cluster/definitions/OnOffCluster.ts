@@ -15,6 +15,7 @@ import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
+import { ClusterType } from "../ClusterType.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
@@ -454,7 +455,7 @@ export namespace OnOff {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster(Base);
+    export const ClusterInstance = MutableCluster({ ...Base, base: ClusterType(Base) }, NotOffOnlyComponent);
 
     /**
      * Attributes and commands for turning devices on and off.

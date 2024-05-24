@@ -13,8 +13,7 @@ import { ClusterType } from "../ClusterType.js";
 export class IllegalClusterError extends MatterError {}
 
 /**
- * A "cluster composer" manages cluster configuration based on feature
- * selection.
+ * A "cluster composer" manages cluster configuration based on feature selection.
  */
 export class ClusterComposer<const T extends ClusterType> {
     constructor(public cluster: T) {}
@@ -76,8 +75,7 @@ export class ClusterComposer<const T extends ClusterType> {
     }
 
     /**
-     * Validates a set of feature flags against the features supported by a
-     * cluster.
+     * Validates a set of feature flags against the features supported by a cluster.
      */
     private validateFeatureSelection(features: ClusterComposer.FeatureSelection<any>) {
         for (const f of features) {
@@ -88,10 +86,9 @@ export class ClusterComposer<const T extends ClusterType> {
     }
 
     /**
-     * Injects a component into a cluster if the cluster supports the specified
-     * features.  Uses matching element from "original" if present.  This
-     * allows for component insertion without overwrite of other changes to the
-     * named element.
+     * Injects a component into a cluster if the cluster supports the specified features.  Uses matching element from
+     * "original" if present.  This allows for component insertion without overwrite of other changes to the named
+     * element.
      */
     private accept(
         definition: ClusterComposer.WritableDefinition,
@@ -105,19 +102,27 @@ export class ClusterComposer<const T extends ClusterType> {
             }
         }
 
+        ClusterComposer.injectElements(definition, component, original);
+    }
+
+    static injectElements(
+        definition: Partial<ClusterType.Options>,
+        component: Partial<ClusterType.Options>,
+        original?: Partial<ClusterType>,
+    ) {
         function installElements(name: "attributes" | "commands" | "events") {
             const src = component[name];
             if (!src) {
                 return;
             }
 
-            let dest = definition[name];
+            let dest = definition[name] as Record<string, unknown> | undefined;
             if (dest) {
-                dest = { ...dest } as any;
+                dest = { ...dest } as Record<string, unknown>;
             } else {
                 dest = {};
             }
-            (definition as any)[name] = dest;
+            (definition as Record<string, unknown>)[name] = dest;
 
             for (const key in src) {
                 const orig = original?.[name]?.[key];
@@ -135,8 +140,7 @@ export class ClusterComposer<const T extends ClusterType> {
     }
 
     /**
-     * Throws an error if a feature combination is illegal per the Matter
-     * specification.
+     * Throws an error if a feature combination is illegal per the Matter specification.
      */
     private reject(definition: ClusterType, flags: ClusterComposer.FeatureFlags) {
         for (const k in flags) {
@@ -186,7 +190,7 @@ export namespace ClusterComposer {
     > & {
         supportedFeatures: FeaturesAsFlags<BaseOf<ClusterT>, FeaturesT>;
         base: BaseOf<ClusterT>;
-    } & WithSelected<
+    } & ExtendedElements<
             ClusterT,
             SelectedElements<
                 FeaturesAsFlags<ClusterT, FeaturesT>,
@@ -195,8 +199,7 @@ export namespace ClusterComposer {
         >;
 
     /**
-     * Convert a {@link FeatureSelection} array into a {@link FeatureFlags}
-     * object.
+     * Convert a {@link FeatureSelection} array into a {@link FeatureFlags} object.
      */
     export type FeaturesAsFlags<ClusterT extends ClusterType, FlagsT extends FeatureSelection<ClusterT>> = {
         [K in keyof ClusterT["features"]]: K extends Uncapitalize<FlagsT[number]> ? true : false;
@@ -216,8 +219,7 @@ export namespace ClusterComposer {
         : {};
 
     /**
-     * Determine the type contributed to feature selection by a specific
-     * selector.
+     * Determine the type contributed to feature selection by a specific selector.
      */
     export type SelectorContribution<
         FlagsT extends FeatureFlags,
@@ -229,27 +231,36 @@ export namespace ClusterComposer {
         : { attributes: {}; commands: {}; events: {} };
 
     /**
-     * Merge elements from the base, selected features and an original cluster
-     * definition.
+     * Cluster elements extended with .
      *
-     * Note that we have to track the base separate from the originating
-     * cluster.  If we are removing features, we want to maintain only
-     * those features present in the base or selected components.
+     * Note that we have to track the base separate from the originating cluster.  If we are removing features, we want
+     * to maintain only those features present in the base or selected components.
      */
-    export type WithSelected<ClusterT extends ClusterType, SelectedT extends Component> = [SelectedT] extends [never]
+    export type ExtendedElements<ClusterT extends ClusterType, ComponentT extends Component> = [ComponentT] extends [
+        never,
+    ]
         ? never
         : {
               [TypeT in ElementType]: Pick<
-                  // and extensions // Include elements in current cluster if valid according to base
+                  // Include elements in current cluster if valid according to base and extensions
                   ClusterT[TypeT],
-                  keyof ClusterT[TypeT] & (keyof BaseOf<ClusterT>[TypeT] | keyof SelectedT[TypeT])
+                  keyof ClusterT[TypeT] & (keyof BaseOf<ClusterT>[TypeT] | keyof ComponentT[TypeT])
               > &
                   // Include extension elements if not present in current cluster
-                  Omit<SelectedT[TypeT], keyof ClusterT[TypeT]> &
-                  // Include base elements if not present in current cluster or
-                  // extensions
-                  Omit<BaseOf<ClusterT>[TypeT], keyof ClusterT[TypeT] | keyof SelectedT[TypeT]>;
+                  Omit<ComponentT[TypeT], keyof ClusterT[TypeT]> &
+                  // Include base elements if not present in current cluster or extensions
+                  Omit<BaseOf<ClusterT>[TypeT], keyof ClusterT[TypeT] | keyof ComponentT[TypeT]>;
           };
+
+    /**
+     * A cluster extended by multiple components.
+     */
+    export type WithComponents<ClusterT extends ClusterType, RestT extends Component[]> = RestT extends [
+        infer ComponentT extends Component,
+        ...infer RestT extends Component[],
+    ]
+        ? WithComponents<Omit<ClusterT, ElementType> & ExtendedElements<ClusterT, ComponentT>, RestT>
+        : ClusterT;
 
     /**
      * A "WritableDefinition" is a Cluster with fields that may be modified.

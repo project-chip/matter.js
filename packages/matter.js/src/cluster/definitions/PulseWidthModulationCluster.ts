@@ -8,6 +8,7 @@
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
 import { LevelControl } from "./LevelControlCluster.js";
+import { ClusterType } from "../ClusterType.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
@@ -17,7 +18,10 @@ export namespace PulseWidthModulation {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base, supportedFeatures: { onOff: true } });
+    export const ClusterInstance = MutableCluster(
+        { ...Base, supportedFeatures: { onOff: true }, base: ClusterType(Base) },
+        LevelControl.NotLightingComponent
+    );
 
     /**
      * This alias specializes the semantics of {@link LevelControl.Cluster}.

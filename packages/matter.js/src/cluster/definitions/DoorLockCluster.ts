@@ -32,6 +32,7 @@ import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { StatusCode as GlobalStatusCode } from "../../protocol/interaction/StatusCode.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { ClusterType } from "../ClusterType.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
@@ -4686,7 +4687,7 @@ export namespace DoorLock {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster(Base);
+    export const ClusterInstance = MutableCluster({ ...Base, base: ClusterType(Base) }, NotUserComponent);
 
     /**
      * The door lock cluster provides an interface to a generic way to secure a door. The physical object that provides

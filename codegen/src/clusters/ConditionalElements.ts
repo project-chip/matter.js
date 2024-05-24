@@ -25,8 +25,7 @@ export type ElementConditions = {
 };
 
 /**
- * This class tracks conditions for conditional elements in the exhaustive
- * cluster.
+ * This class tracks conditions for conditional elements in the exhaustive cluster.
  */
 export class ConditionalElements {
     public definitions = {} as { [name: string]: FeatureBitmap };

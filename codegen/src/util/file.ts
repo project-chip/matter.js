@@ -5,6 +5,7 @@
  */
 
 import { Package } from "@project-chip/matter.js-tools";
+import { createHash } from "crypto";
 import { mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "fs";
 import { dirname, relative as nodeRelative, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -56,9 +57,28 @@ export function readMatterFile(path: string, encoding: BufferEncoding = "utf-8")
 export function writeMatterFile(path: string, body: any) {
     path = resolveFromPackage(path);
     mkdirSync(dirname(path), { recursive: true });
+
+    let currentHash: string | undefined;
+
+    try {
+        currentHash = createHash("md5").update(readFileSync(path)).digest("hex");
+    } catch (e) {
+        if ((e as { code?: string }).code !== "ENOENT") {
+            throw e;
+        }
+    }
+
     if (!(body instanceof Buffer && !ArrayBuffer.isView(body))) {
         body = body.toString();
     }
+
+    // Compilation is slowest part of our toolchain so it's worth the expense to compare and old and new files so we can
+    // avoid updating timestamps
+    const newHash = createHash("md5").update(body).digest("hex");
+    if (currentHash === newHash) {
+        return;
+    }
+
     writeFileSync(path, body);
 }
 

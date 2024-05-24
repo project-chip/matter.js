@@ -14,15 +14,23 @@ import { ElementModifier } from "./ElementModifier.js";
  * A "mutable cluster" is a {@link ClusterType} with builder methods that support a limited number of modifications as
  * defined by the Matter specification.
  */
-export interface MutableCluster<T extends ClusterType.Options>
-    extends ClusterType.Of<T>,
-        MutableCluster.Methods<ClusterType.Of<T>> {}
+export type MutableCluster<
+    T extends ClusterType.Options,
+    C extends ClusterComposer.Component[] = [],
+> = ClusterComposer.WithComponents<ClusterType.Of<T>, C> & MutableCluster.Methods<ClusterType.Of<T>>;
 
 /**
  * Define a new {@link MutableCluster}.
  */
-export function MutableCluster<const T extends ClusterType.Options>(options: T) {
+export function MutableCluster<const T extends ClusterType.Options, const C extends ClusterComposer.Component[]>(
+    options: T,
+    ...components: C
+) {
     const cluster = ClusterType(options);
+
+    for (const component of components) {
+        ClusterComposer.injectElements(cluster, component);
+    }
 
     Object.assign(cluster, {
         with(...features: ClusterComposer.FeatureSelection<typeof cluster>) {
@@ -42,12 +50,12 @@ export function MutableCluster<const T extends ClusterType.Options>(options: T) 
         },
     });
 
-    return cluster as MutableCluster<T>;
+    return cluster as MutableCluster<T, C>;
 }
 
 export namespace MutableCluster {
     /**
-     * Define a "component" -- a set of elements that may be added to a cluster.
+     * Define a component.
      */
     export function Component<const T extends Partial<ClusterType.Options>>(elements: T) {
         return elements;

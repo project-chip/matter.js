@@ -173,6 +173,16 @@ function identifyNamedModels(rootScope: Model): Locations {
         isGlobal: true,
     });
 
+    const base = rootScope.base;
+    if (base instanceof ClusterModel || (base instanceof ValueModel && !base.metatype)) {
+        locations.set(base, {
+            definition: base,
+            scope: base,
+            isLocal: false,
+            isGlobal: true,
+        });
+    }
+
     function define(model: Model) {
         if (!(model instanceof ValueModel)) {
             return;

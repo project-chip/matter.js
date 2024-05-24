@@ -21,6 +21,7 @@ import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
+import { ClusterType } from "../ClusterType.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
@@ -529,7 +530,10 @@ export namespace LevelControl {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base, supportedFeatures: { onOff: true } });
+    export const ClusterInstance = MutableCluster(
+        { ...Base, supportedFeatures: { onOff: true }, base: ClusterType(Base) },
+        NotLightingComponent
+    );
 
     /**
      * This cluster provides an interface for controlling a characteristic of a device that can be set to a level, for
