@@ -366,7 +366,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             };
         }
 
-        await fabric.remove(this.session.id);
+        this.endpoint.env.runtime.add(fabric.remove(this.session.id));
         // The state is updated on removal via commissionedFabricChanged event, see constructor
 
         return {
