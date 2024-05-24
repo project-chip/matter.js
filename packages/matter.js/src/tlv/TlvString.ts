@@ -50,9 +50,9 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
         if (this.type === TlvType.ByteString && !(value instanceof ByteArray))
             throw new ValidationError(`Expected ByteArray, got ${typeof value}.`);
         if (value.length > this.maxLength)
-            throw new ValidationError(`String is too long: ${value.length}, max ${this.maxLength}.`);
+            throw new ValidationError(`String "${value}" is too long: ${value.length}, max ${this.maxLength}.`);
         if (value.length < this.minLength)
-            throw new ValidationError(`String is too short: ${value.length}, min ${this.minLength}.`);
+            throw new ValidationError(`String "${value}" is too short: ${value.length}, min ${this.minLength}.`);
     }
 
     bound({ minLength, maxLength, length }: LengthConstraints) {

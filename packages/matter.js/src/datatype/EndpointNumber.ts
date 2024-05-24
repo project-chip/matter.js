@@ -21,7 +21,7 @@ export function EndpointNumber(endpointId: number, validate = true): EndpointNum
     if (!validate || (endpointId >= 0 && endpointId <= 0xfffe)) {
         return endpointId as EndpointNumber;
     }
-    throw new ValidationError("EndpointNumber must be between 0 and 0xFFFe");
+    throw new ValidationError(`EndpointNumber must be between 0 and 0xFFFE, got ${endpointId}`);
 }
 
 export namespace EndpointNumber {

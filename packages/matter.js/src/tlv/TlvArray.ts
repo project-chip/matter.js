@@ -8,6 +8,7 @@ import { UnexpectedDataError } from "../common/MatterError.js";
 import { tryCatch } from "../common/TryCatchHandler.js";
 import { ValidationError } from "../common/ValidationError.js";
 import { deepCopy } from "../util/DeepCopy.js";
+import { serialize } from "../util/String.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 
@@ -83,9 +84,9 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
     override validate(data: T[]): void {
         if (!Array.isArray(data)) throw new ValidationError(`Expected array, got ${typeof data}.`);
         if (data.length > this.maxLength)
-            throw new ValidationError(`Array is too long: ${data.length}, max ${this.maxLength}.`);
+            throw new ValidationError(`Array ${serialize(data)} is too long: ${data.length}, max ${this.maxLength}.`);
         if (data.length < this.minLength)
-            throw new ValidationError(`Array is too short: ${data.length}, min ${this.minLength}.`);
+            throw new ValidationError(`Array ${serialize(data)} is too short: ${data.length}, min ${this.minLength}.`);
         data.forEach((element, index) => {
             tryCatch(
                 () => this.elementSchema.validate(element),
