@@ -366,7 +366,13 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             };
         }
 
-        this.endpoint.env.runtime.add(fabric.remove(this.session.id));
+        // That's a workaround to make sure that factory reset works correctly in case of removal of the last fabric
+        // TODO find better solution
+        if (device.getFabrics().length === 1) {
+            this.endpoint.env.runtime.add(fabric.remove(this.session.id));
+        } else {
+            await fabric.remove(this.session.id);
+        }
         // The state is updated on removal via commissionedFabricChanged event, see constructor
 
         return {
