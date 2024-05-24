@@ -9,6 +9,9 @@ import { AttributeElement } from "../elements/index.js";
 import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
 
+// Full set of global IDs per core spec 1.3
+const GLOBAL_IDS = new Set([0xfffd, 0xfffc, 0xfffb, 0xfffa, 0xfff9, 0xfff8]);
+
 export class AttributeModel extends PropertyModel implements AttributeElement {
     override tag: AttributeElement.Tag = AttributeElement.Tag;
     override id!: Mei;
@@ -31,6 +34,10 @@ export class AttributeModel extends PropertyModel implements AttributeElement {
 
     static {
         Model.types[AttributeElement.Tag] = this;
+    }
+
+    static isGlobal(model: Model) {
+        return model instanceof AttributeModel && GLOBAL_IDS.has(model.id);
     }
 
     static Tag = AttributeElement.Tag;

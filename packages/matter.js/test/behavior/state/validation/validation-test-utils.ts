@@ -37,10 +37,11 @@ export function Features(definition: { [code: string]: string }): AttributeModel
         ...FeatureMap,
 
         children: Object.entries(definition).map(
-            ([name, description]) =>
+            ([name, description], index) =>
                 new FieldModel({
                     name,
                     description,
+                    constraint: index,
                 }),
         ),
     });

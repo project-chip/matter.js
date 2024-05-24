@@ -34,7 +34,7 @@ export function StructManager(owner: RootSupervisor, schema: Schema): ValueSuper
 
     // Scan the schema and configure each member (field or attribute) as a property
     for (const member of schema.members) {
-        if ((member instanceof AttributeModel && member.isGlobal) || member.isDeprecated) {
+        if (AttributeModel.isGlobal(member) || member.isDeprecated) {
             continue;
         }
 

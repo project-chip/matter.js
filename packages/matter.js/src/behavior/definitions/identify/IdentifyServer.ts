@@ -29,6 +29,10 @@ export class IdentifyServer extends IdentifyBehavior {
     declare events: IdentifyServer.Events;
 
     override initialize() {
+        if (this.state.identifyType === undefined) {
+            this.state.identifyType = Identify.IdentifyType.None;
+        }
+
         this.internal.identifyTimer = Time.getPeriodicTimer(
             "Identify time update",
             1000,

@@ -143,7 +143,7 @@ describe("Model", () => {
     describe("all", () => {
         it("finds all models by type", () => {
             expect(Fixtures.matter.all(ClusterModel).length).equal(3);
-            expect(Fixtures.matter.all(DatatypeModel).length).equal(83);
+            expect(Fixtures.matter.all(DatatypeModel).length).equal(74);
         });
     });
 
@@ -189,8 +189,8 @@ describe("Model", () => {
             expect(Fixtures.cluster1StructAttr.base).equal(Fixtures.cluster1StructType);
         });
 
-        it("is inferred from struct attribute override", () => {
-            expect(Fixtures.cluster2Attr2.base).equal(Fixtures.cluster1StructType);
+        it("is inferred as shadow", () => {
+            expect(Fixtures.cluster2Attr2.base).equal(Fixtures.cluster1StructAttr);
         });
     });
 
@@ -256,15 +256,15 @@ describe("Model", () => {
 
     describe("effectiveType", () => {
         it("is inherited on datatype override", () => {
-            expect(Fixtures.cluster1StructFieldOverride.effectiveType).equal(Elements.string.name);
+            expect(Fixtures.cluster1StructFieldOverride.effectiveType).equal("strField");
         });
 
         it("is inherited on secondary datatype override", () => {
-            expect(Fixtures.cluster2StructFieldOverride.effectiveType).equal(Elements.string.name);
+            expect(Fixtures.cluster2StructFieldOverride.effectiveType).equal("strField");
         });
 
         it("is inherited on attribute override", () => {
-            expect(Fixtures.cluster2Attr1.effectiveType).equal(Elements.uint8.name);
+            expect(Fixtures.cluster2Attr1.effectiveType).equal("byteAttr");
         });
     });
 });
@@ -288,6 +288,7 @@ namespace Fixtures {
 
     export const cluster1StructField1 = new FieldModel({ name: "structField", type: "ClusterDatatype" });
     export const cluster1StructAttr = new AttributeModel({ id: 3, name: "structAttr2", type: "ClusterDatatype" });
+    export const cluster1ByteAttr = new AttributeModel({ id: 1, name: "byteAttr", type: "uint8" });
 
     export const globalAttr = new AttributeModel({ id: 1, name: "Attr1" });
 
@@ -334,7 +335,7 @@ namespace Fixtures {
     export const cluster2Attr4 = new AttributeModel({
         id: 5,
         name: "qualifiedAttr2",
-        type: "Matter.Cluster1.ClusterDatatype.numField2",
+        type: "Matter.Cluster1.ClusterDatatype",
     });
     export const cluster2Attr5 = new AttributeModel({
         id: 6,

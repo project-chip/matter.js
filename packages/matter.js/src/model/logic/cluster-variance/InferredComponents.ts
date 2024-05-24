@@ -248,11 +248,8 @@ const VarianceMatchers: VarianceMatcher[] = [
 ];
 
 function addElement(components: InferredComponents, element: ValueModel) {
-    if (element.base instanceof AttributeModel) {
-        const globalBase = element.globalBase;
-        if (globalBase instanceof AttributeModel && globalBase.id === element.id) {
-            return;
-        }
+    if (AttributeModel.isGlobal(element)) {
+        return;
     }
 
     let text = element.conformance.toString();

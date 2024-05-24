@@ -331,7 +331,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
 
-            expect(attributePaths.length).equal(110);
+            expect(attributePaths.length).equal(112);
             expect(commandPaths.length).equal(18);
             expect(eventPaths.length).equal(6);
 
@@ -396,7 +396,7 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(1)]);
 
-            expect(attributePaths.length).equal(149);
+            expect(attributePaths.length).equal(151);
             expect(commandPaths.length).equal(28);
             expect(eventPaths.length).equal(6);
         });
@@ -447,7 +447,7 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(1)]);
 
-            expect(attributePaths.length).equal(149);
+            expect(attributePaths.length).equal(151);
             expect(commandPaths.length).equal(28);
             expect(eventPaths.length).equal(6);
         });
@@ -500,7 +500,7 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(10)]);
 
-            expect(attributePaths.length).equal(149);
+            expect(attributePaths.length).equal(151);
             expect(commandPaths.length).equal(28);
             expect(eventPaths.length).equal(6);
         });
@@ -553,7 +553,7 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(10)]);
 
-            expect(attributePaths.length).equal(149);
+            expect(attributePaths.length).equal(151);
             expect(commandPaths.length).equal(28);
             expect(eventPaths.length).equal(6);
         });
@@ -821,7 +821,7 @@ describe("Endpoint Structures", () => {
                 },
             ]);
 
-            expect(attributePaths.length).equal(214);
+            expect(attributePaths.length).equal(216);
             expect(commandPaths.length).equal(38);
             expect(eventPaths.length).equal(8);
         });
@@ -969,7 +969,7 @@ describe("Endpoint Structures", () => {
                 EndpointNumber(22),
             ]);
 
-            expect(attributePaths.length).equal(332);
+            expect(attributePaths.length).equal(334);
             expect(commandPaths.length).equal(58);
             expect(eventPaths.length).equal(10);
         });
@@ -1325,7 +1325,7 @@ describe("Endpoint Structures", () => {
             );
             expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1")).equal(43);
 
-            expect(attributePaths.length).equal(430);
+            expect(attributePaths.length).equal(432);
             expect(commandPaths.length).equal(78);
             expect(eventPaths.length).equal(11);
         });
@@ -1532,7 +1532,7 @@ describe("Endpoint Structures", () => {
             );
             expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1")).equal(43);
 
-            expect(attributePaths.length).equal(430);
+            expect(attributePaths.length).equal(432);
             expect(commandPaths.length).equal(78);
             expect(eventPaths.length).equal(11);
 

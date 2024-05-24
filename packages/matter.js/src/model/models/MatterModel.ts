@@ -33,10 +33,13 @@ export class MatterModel extends Model implements MatterElement {
     /**
      * All sub-cluster global elements from the standard model.
      *
-     * This is the set of utility datatypes required by cluster definitions.  Clones the return values as we most
-     * commonly use this to initialize empty models for testing or diagnostic purposes
+     * This is the set of utility datatypes required by cluster definitions.
+     *
+     * The returned elements are clones as we use this to initialize empty models for testing or diagnostic purposes.
      */
-    static seedGlobals = MatterModel.standard.children.filter(child => child.isSeed).map(child => child.clone());
+    static get seedGlobals() {
+        return MatterModel.standard.children.filter(child => child.isSeed).map(child => child.clone());
+    }
 
     /**
      * Clusters.
