@@ -46,7 +46,7 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
                 throw error;
             }
         }
-        this._initialized = true;
+        this.isInitialized = true;
     }
 
     private triggerCommit() {
@@ -96,7 +96,7 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
         await this.commit();
         super.close();
         this.closed = true;
-        this._initialized = false;
+        this.isInitialized = false;
     }
 
     private toJson(object: any): string {
