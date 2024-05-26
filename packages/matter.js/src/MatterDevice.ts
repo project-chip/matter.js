@@ -111,6 +111,10 @@ export class MatterDevice {
             // When fabric is removed, also remove the resumption record
             await this.#sessionManager.removeResumptionRecord(rootNodeId);
             this.commissioningChangedCallback(fabricIndex, FabricAction.Removed);
+            if (this.#fabricManager.getFabrics().length === 0) {
+                // Last fabric got removed, so expire all announcements
+                await this.expireAllFabricAnnouncements();
+            }
         });
         this.#fabricManager.events.updated.on(({ fabricIndex }) =>
             this.commissioningChangedCallback(fabricIndex, FabricAction.Updated),
@@ -278,6 +282,12 @@ export class MatterDevice {
         await this.announce();
     }
 
+    async expireAllFabricAnnouncements() {
+        for (const broadcaster of this.broadcasters) {
+            await broadcaster.expireAllAnnouncements();
+        }
+    }
+
     async announce(announceOnce = false) {
         if (!announceOnce) {
             // Stop announcement if duration is reached
@@ -316,9 +326,7 @@ export class MatterDevice {
         } else {
             // No fabric paired yet, so announce as "ready for commissioning"
             // And expire operational Fabric announcements (if fabric got just deleted)
-            for (const broadcaster of this.broadcasters) {
-                await broadcaster.expireFabricAnnouncement(); // make sure no Fabric is announced anymore
-            }
+            await this.expireAllFabricAnnouncements();
             await this.allowBasicCommissioning();
         }
     }
