@@ -9,6 +9,16 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* Matter-Core functionality:
+  * Enhancement: Refactored channel management to match specification and allow several channels per fabric and node
+  * Enhancement: Closing message exchanges already when last message got acknowledged and prevent up to 9s waiting time for closures
+  * Enhancement: Prevents to announce a new commissionable device just before doing a factory reset
+  * Enhancement: Expires announcements for last removed fabric directly
+
+* matter.js New API:
+  * Enhancement: Optimized Factory reset logic when last Fabric is removed
+
 ### 0.9.0 (2024-05-14)
 * Matter-Core functionality:
   * Feature: cluster default implementations for the following clusters were added/updated:
