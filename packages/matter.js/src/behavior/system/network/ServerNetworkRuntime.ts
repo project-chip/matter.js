@@ -203,7 +203,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     }
 
     /**
-     * When the first Faric gets added we need to enable MDNS broadcasting.
+     * When the first Fabric gets added we need to enable MDNS broadcasting.
      */
     enableMdnsBroadcasting() {
         const mdnsBroadcaster = this.mdnsBroadcaster;
