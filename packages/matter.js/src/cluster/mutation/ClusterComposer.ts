@@ -170,11 +170,10 @@ export namespace ClusterComposer {
     /**
      * Describes the output of {@link ClusterComposer.compose}.
      */
-    export type Of<ClusterT extends ClusterType, FeaturesT extends FeatureSelection<ClusterT>> = ClusterT extends {
-        extensions: {};
-    }
-        ? WithFeatures<ClusterT, FeaturesT>
-        : ClusterT;
+    export type Of<ClusterT extends ClusterType, FeaturesT extends FeatureSelection<ClusterT>> = WithFeatures<
+        ClusterT,
+        FeaturesT
+    >;
 
     /**
      * The base of a cluster.
@@ -202,7 +201,15 @@ export namespace ClusterComposer {
      * Convert a {@link FeatureSelection} array into a {@link FeatureFlags} object.
      */
     export type FeaturesAsFlags<ClusterT extends ClusterType, FlagsT extends FeatureSelection<ClusterT>> = {
-        [K in keyof ClusterT["features"]]: K extends Uncapitalize<FlagsT[number]> ? true : false;
+        [K in keyof ClusterT["features"]]: K extends string
+            ? Capitalize<K> extends `${FlagsT[number]}`
+                ? true
+                : false
+            : never;
+
+        // Formerly we used this.  TS bugs (as of 5.4) caused this to fail to match in specific circumstances.  See
+        // ClusterComposerTest "extends with default components"
+        //[K in keyof ClusterT["features"]]: K extends Uncapitalize<FlagsT[number]> ? true : false;
     };
 
     /**
