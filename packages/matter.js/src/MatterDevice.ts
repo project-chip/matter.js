@@ -150,7 +150,12 @@ export class MatterDevice {
             if (this.isClosing) {
                 return;
             }
-            await this.startAnnouncement();
+            // When a session closes, announce existing fabrics again so that controller can detect the device again.
+            // When session was closed and no fabric exist anymore then this is triggering a factory reset in upper layer
+            // and it would be not good to announce a commissionable device and then reset that again with the factory reset
+            if (this.#fabricManager.getFabrics().length > 0 || !currentFabric) {
+                await this.startAnnouncement();
+            }
         });
 
         this.#sessionManager.subscriptionsChanged.on(session => {
