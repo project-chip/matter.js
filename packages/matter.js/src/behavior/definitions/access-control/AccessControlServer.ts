@@ -354,8 +354,10 @@ export class AccessControlServer extends AccessControlBehavior {
 
     /**
      * This method allows to implement the validation of manufacturer specific ACL extensions when an extension entry is
-     * added or changed. The default implementation checks weather the extension is a valid TLV and possible to decode.
-     * In case of an Error a StatusResponseError is thrown.
+     * added or changed. The default implementation checks whether the extension is a valid TLV and possible to decode.
+     *
+     * In case of an Error throws StatusResponseError.
+     *
      * Override this method in your own behavior to implement custom validation.
      */
     protected extensionEntryValidator(extension: AccessControlTypes.AccessControlExtensionStruct) {
