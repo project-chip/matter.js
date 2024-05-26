@@ -10,7 +10,6 @@ import {
     AdministratorCommissioning,
     BasicAdminCommissioningHandler,
     BasicInformation,
-    BridgedDeviceBasicInformation,
     ClusterServer,
     NetworkCommissioning,
 } from "@project-chip/matter.js/cluster";
@@ -98,8 +97,8 @@ export class BridgeTestInstanceLegacy extends AllClustersTestInstanceLegacy {
             reachable: true,
             uniqueId: `node-matter-unique`,
             productAppearance: {
-                finish: BridgedDeviceBasicInformation.ProductFinish.Satin,
-                primaryColor: BridgedDeviceBasicInformation.Color.Purple,
+                finish: BasicInformation.ProductFinish.Satin,
+                primaryColor: BasicInformation.Color.Purple,
             },
         });
         commissioningServer.addDevice(this.aggregator);

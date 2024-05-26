@@ -7,15 +7,10 @@
 import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
 import { BridgedDeviceBasicInformationServer } from "@project-chip/matter.js/behavior/definitions/bridged-device-basic-information";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
-import {
-    AdministratorCommissioning,
-    BasicInformation,
-    BridgedDeviceBasicInformation,
-    NetworkCommissioning,
-} from "@project-chip/matter.js/cluster";
+import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
-import { AggregatorEndpoint, DimmableLightDevice } from "@project-chip/matter.js/endpoint/definitions";
+import { AggregatorDevice, DimmableLightDevice } from "@project-chip/matter.js/endpoint/definitions";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
@@ -169,13 +164,13 @@ export class BridgeTestInstance implements TestInstance {
                 reachable: true,
                 uniqueId: `node-matter-unique`,
                 productAppearance: {
-                    finish: BridgedDeviceBasicInformation.ProductFinish.Satin,
-                    primaryColor: BridgedDeviceBasicInformation.Color.Purple,
+                    finish: BasicInformation.ProductFinish.Satin,
+                    primaryColor: BasicInformation.Color.Purple,
                 },
             },
         });
 
-        const aggregator = new Endpoint(AggregatorEndpoint, { id: "aggregator", number: 1 });
+        const aggregator = new Endpoint(AggregatorDevice, { id: "aggregator", number: 1 });
 
         await serverNode.add(aggregator);
 

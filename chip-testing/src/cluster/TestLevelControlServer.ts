@@ -3,7 +3,8 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { LevelControlServer, MoveToLevelRequest } from "@project-chip/matter.js/behavior/definitions/level-control";
+import { LevelControlServer } from "@project-chip/matter.js/behavior/definitions/level-control";
+import { LevelControl } from "@project-chip/matter.js/cluster";
 import { Logger } from "@project-chip/matter.js/log";
 
 const logger = Logger.get("TestLevelControlServer");
@@ -14,7 +15,7 @@ export class TestLevelControlServer extends LevelControlServer {
         return super.initialize();
     }
 
-    override moveToLevel(request: MoveToLevelRequest) {
+    override moveToLevel(request: LevelControl.MoveToLevelRequest) {
         logger.info(`TestLevelControlServer move level to ${Logger.toJSON(request)}`);
         return super.moveToLevel(request);
     }

@@ -151,7 +151,7 @@ export class TvTestInstance implements TestInstance {
                     applicationVersion: "1",
                 },
                 wakeOnLan: {
-                    macAddress: ByteArray.fromHex("0000000000000000"),
+                    macAddress: "0000000000000000",
                     linkLocalAddress: ByteArray.fromHex("00000000000000000000000000000000"),
                 },
             },

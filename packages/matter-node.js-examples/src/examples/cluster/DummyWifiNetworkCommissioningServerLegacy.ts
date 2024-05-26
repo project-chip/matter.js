@@ -33,6 +33,7 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
         networks: [{ networkId: firstNetworkId, connected: false }],
         scanMaxTimeSeconds: 3,
         connectMaxTimeSeconds: 3,
+        supportedWiFiBands: [NetworkCommissioning.WiFiBand["2G4"]],
     },
     {
         scanNetworks: async ({ request: { ssid, breadcrumb }, attributes: { lastNetworkingStatus }, endpoint }) => {

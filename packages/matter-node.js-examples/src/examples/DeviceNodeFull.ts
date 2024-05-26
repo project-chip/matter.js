@@ -26,9 +26,9 @@
 import "@project-chip/matter-node.js";
 
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
+import { GeneralDiagnostics } from "@project-chip/matter-node.js/cluster";
 import { createFileLogger } from "@project-chip/matter-node.js/log";
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
-import { TestEventTriggerRequest } from "@project-chip/matter.js/behavior/definitions/general-diagnostics";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OnOffServer } from "@project-chip/matter.js/behavior/definitions/on-off";
 import { Ble } from "@project-chip/matter.js/ble";
@@ -173,7 +173,7 @@ class TestGeneralDiagnosticsServer extends RootRequirements.GeneralDiagnosticsSe
         super.initialize();
     }
 
-    override testEventTrigger({ enableKey, eventTrigger }: TestEventTriggerRequest) {
+    override testEventTrigger({ enableKey, eventTrigger }: GeneralDiagnostics.TestEventTriggerRequest) {
         console.log(`testEventTrigger called on GeneralDiagnostic cluster: ${enableKey} ${eventTrigger}`);
     }
 }
