@@ -260,6 +260,9 @@ describe("ServerNode", () => {
             await node.lifecycle.decommissioned;
         }
 
+        // Simulate receiving the response to the removeFabric request which normally closes the underlying session delayed
+        await context.session.destroy(false, false);
+
         // ...then go offline...
         if (node.lifecycle.isOnline) {
             await MockTime.resolve(node.lifecycle.offline);
