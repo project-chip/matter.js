@@ -125,8 +125,9 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                 : CalibrationMode.Disabled;
         this.reactTo(this.events.mode$Changing, this.#handleModeChanging);
 
-        // Make sure that ConfigStatus is in sync with features (a bit of convenience)
+        // Sync ConfigStatus with features ans set mode to operational if not in maintenance or calibration
         const configStatus = this.state.configStatus;
+        configStatus.operational = !this.internal.inMaintenanceMode && !this.state.mode.calibrationMode;
         if (this.features.lift) {
             if (this.features.positionAwareLift) {
                 configStatus.liftPositionAware = true;

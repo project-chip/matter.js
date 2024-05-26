@@ -38,13 +38,14 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
         this.#children.added.on(child => this.#adoptPart(child));
 
         // Inform children they're installed once my endpoint is fully initialized
-        this.#endpoint.lifecycle.ready.on(() => {
+        const initializeParts = () => {
             for (const endpoint of this.#children) {
                 if (!endpoint.lifecycle.isInstalled) {
                     endpoint.lifecycle.change(EndpointLifecycle.Change.Installed);
                 }
             }
-        });
+        };
+        this.#endpoint.lifecycle.ready.on(initializeParts);
     }
 
     add(child: Endpoint.Definition | Agent) {

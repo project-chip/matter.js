@@ -89,6 +89,7 @@ class WifiCommissioningServer extends NetworkCommissioningServer.with("WiFiNetwo
         this.state.maxNetworks = 4;
         this.state.scanMaxTimeSeconds = 20;
         this.state.connectMaxTimeSeconds = 40;
+        this.state.supportedWiFiBands = [NetworkCommissioning.WiFiBand["2G4"]];
     }
 }
 

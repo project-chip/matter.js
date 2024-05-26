@@ -210,7 +210,7 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
         }
     }
 
-    return (struct, session, location) => {
+    const validateStruct: ValueSupervisor.Validate = (struct, session, location) => {
         assertObject(struct, location);
         const sublocation = {
             path: location.path.at(""),
@@ -259,6 +259,8 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
             }
         }
     };
+
+    return validateStruct;
 }
 
 function createListValidator(schema: ValueModel, factory: RootSupervisor): ValueSupervisor.Validate | undefined {

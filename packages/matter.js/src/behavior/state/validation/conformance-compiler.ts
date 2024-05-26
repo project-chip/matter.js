@@ -503,17 +503,13 @@ export function astToFunction(
 
     function requireValue(value: Val, _session: AccessControl.Session, location: ValidationLocation) {
         if (value === undefined) {
-            throw new ConformanceError(
-                schema,
-                location,
-                "Value is undefined but is mandatory per Matter specification",
-            );
+            throw new ConformanceError(schema, location, "Matter requires you to set this attribute");
         }
     }
 
     function disallowValue(value: Val, _session: AccessControl.Session, location: ValidationLocation) {
         if (value !== undefined) {
-            throw new ConformanceError(schema, location, "Value is present but disallowed per Matter specification");
+            throw new ConformanceError(schema, location, "Matter does not allow you to set this attribute");
         }
     }
 
@@ -522,7 +518,7 @@ export function astToFunction(
             throw new ConformanceError(
                 schema,
                 location,
-                `Enum value ${schema.name} (ID ${schema.effectiveId}) is disallowed per Matter specification`,
+                `Matter does not allow enum value ${schema.name} (ID ${schema.effectiveId}) here`,
             );
         };
     }
