@@ -910,6 +910,8 @@ describe("InteractionProtocol", () => {
                         caseSessionsPerFabric: 100,
                         subscriptionsPerFabric: 100,
                     },
+                    specificationVersion: 0x01030000,
+                    maxPathsPerInvoke: 100,
                 },
                 {},
                 {
@@ -1167,6 +1169,8 @@ describe("InteractionProtocol", () => {
                         caseSessionsPerFabric: 100,
                         subscriptionsPerFabric: 100,
                     },
+                    specificationVersion: 0x01030000,
+                    maxPathsPerInvoke: 100,
                 },
                 {},
                 {
@@ -1208,6 +1212,8 @@ describe("InteractionProtocol", () => {
                         caseSessionsPerFabric: 100,
                         subscriptionsPerFabric: 100,
                     },
+                    specificationVersion: 0x01030000,
+                    maxPathsPerInvoke: 100,
                 },
                 {},
                 {

@@ -191,6 +191,7 @@ describe("Integration Test", () => {
                     ],
                     scanMaxTimeSeconds: 30,
                     connectMaxTimeSeconds: 60,
+                    supportedWiFiBands: [NetworkCommissioning.WiFiBand["2G4"]],
                 },
                 {
                     scanNetworks: async function () {
