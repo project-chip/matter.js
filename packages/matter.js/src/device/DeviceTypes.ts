@@ -10,6 +10,7 @@ import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 
 /**
  * This represents a Root Node for devices.
+ *
  * @see {@link MatterSpecification.v10.Device} § 1.1.5
  */
 export enum DeviceClasses {
@@ -115,6 +116,9 @@ export const DeviceTypeDefinition = ({
     unknown,
 });
 
+/**
+ * @deprecated These definitions will not be updated beyond Matter 1.1, please instead use definitions in ../endpoint.
+ */
 export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     // Utility Device Types
     // A Utility device type supports configuration and settings.
