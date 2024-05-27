@@ -399,9 +399,12 @@ export const WindowCovering = Cluster({
             xref: { document: "cluster", section: "5.3.7.5" },
 
             children: [
-                Field({ name: "LiftPercentValue", id: 0x0, type: "percent", conformance: "O.a+", constraint: "desc" }),
                 Field({
-                    name: "LiftPercent100thsValue", id: 0x1, type: "percent100ths", conformance: "O.a+",
+                    name: "LiftPercent100thsValue", id: 0x0, type: "percent100ths", conformance: "M",
+                    constraint: "desc"
+                }),
+                Field({
+                    name: "LiftPercent100thsValue", id: 0x1, type: "percent100ths", conformance: "O.a",
                     constraint: "desc"
                 })
             ]
@@ -443,9 +446,12 @@ export const WindowCovering = Cluster({
             xref: { document: "cluster", section: "5.3.7.7" },
 
             children: [
-                Field({ name: "TiltPercentValue", id: 0x0, type: "percent", conformance: "O.a+", constraint: "desc" }),
                 Field({
-                    name: "TiltPercent100thsValue", id: 0x1, type: "percent100ths", conformance: "O.a+",
+                    name: "TiltPercent100thsValue", id: 0x0, type: "percent100ths", conformance: "M",
+                    constraint: "desc"
+                }),
+                Field({
+                    name: "TiltPercent100thsValue", id: 0x1, type: "percent100ths", conformance: "O.a",
                     constraint: "desc"
                 })
             ]

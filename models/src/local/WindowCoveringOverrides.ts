@@ -250,8 +250,8 @@ LocalMatter.children.push(
                 ],
             },
 
-            // The spec designates conformance for fields incorrectly as O.a (in prose it says if the percent100ths
-            // value is set then the other one should be too)
+            // The spec defines two fields but CHIP only uses the first one with a different datatype.  So necessary to
+            // follow defacto standard rather than specification here
             {
                 tag: "command",
                 name: "GoToLiftPercentage",
@@ -259,16 +259,11 @@ LocalMatter.children.push(
 
                 children: [
                     {
-                        tag: "field",
-                        name: "LiftPercentValue",
-                        type: "percent",
-                        conformance: "O.a+",
-                    },
-                    {
+                        id: 0,
                         tag: "field",
                         name: "LiftPercent100thsValue",
                         type: "percent100ths",
-                        conformance: "O.a+",
+                        conformance: "M",
                     },
                 ],
             },
@@ -280,16 +275,11 @@ LocalMatter.children.push(
                 id: 0x8,
                 children: [
                     {
-                        tag: "field",
-                        name: "TiltPercentValue",
-                        type: "percent",
-                        conformance: "O.a+",
-                    },
-                    {
+                        id: 0,
                         tag: "field",
                         name: "TiltPercent100thsValue",
                         type: "percent100ths",
-                        conformance: "O.a+",
+                        conformance: "M",
                     },
                 ],
             },

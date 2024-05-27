@@ -24,6 +24,7 @@ import { logEndpoint } from "@project-chip/matter.js/device";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlugInUnitDevice";
 import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
+import { AggregatorEndpoint } from "@project-chip/matter.js/endpoints/AggregatorEndpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { Time } from "@project-chip/matter.js/time";

@@ -569,7 +569,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
         this.#assertMotionLockStatus();
 
         if (this.features.positionAwareLift) {
-            this.state.targetPositionLiftPercent100ths = liftPercent100thsValue ?? null;
+            this.state.targetPositionLiftPercent100ths = liftPercent100thsValue;
             this.#triggerLiftMotion(
                 MovementDirection.DefinedByPosition,
                 this.state.targetPositionLiftPercent100ths ?? undefined,
