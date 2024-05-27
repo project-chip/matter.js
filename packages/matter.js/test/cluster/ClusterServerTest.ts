@@ -24,6 +24,7 @@ import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
 import { Level } from "../../src/log/Level.js";
+import { Specification } from "../../src/model/index.js";
 import { SyncStorage } from "../../src/storage/Storage.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
@@ -50,7 +51,7 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                    specificationVersion: 0x01030000,
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     maxPathsPerInvoke: 1,
                 },
                 {},
@@ -114,7 +115,7 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                    specificationVersion: 0x01030000,
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     maxPathsPerInvoke: 1,
                 },
                 {},
@@ -167,7 +168,7 @@ describe("ClusterServer structure", () => {
                         subscriptionsPerFabric: 3,
                     },
                     manufacturingDate: "12345678",
-                    specificationVersion: 0x01030000,
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     maxPathsPerInvoke: 1,
                 },
                 {},
@@ -242,7 +243,7 @@ describe("ClusterServer structure", () => {
                         subscriptionsPerFabric: 3,
                     },
                     reachable: true,
-                    specificationVersion: 0x01030000,
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     maxPathsPerInvoke: 1,
                 },
                 {},
@@ -296,7 +297,7 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                    specificationVersion: 0x01030000,
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     maxPathsPerInvoke: 1,
                 },
                 {},
@@ -354,7 +355,7 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                    specificationVersion: 0x01030000,
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     maxPathsPerInvoke: 1,
                 },
                 {},
@@ -792,7 +793,7 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                    specificationVersion: 0x01030000,
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     maxPathsPerInvoke: 1,
                 },
                 {},

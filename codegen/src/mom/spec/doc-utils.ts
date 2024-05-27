@@ -13,7 +13,7 @@ import { HtmlReference } from "./spec-types.js";
 
 const logger = Logger.get("scan-index");
 
-export const DEFAULT_MATTER_VERSION = "1.3";
+export const DEFAULT_MATTER_VERSION = Specification.REVISION;
 
 // Parse the section ID and name from a heading element
 export function parseHeading(e: HTMLElement | null) {

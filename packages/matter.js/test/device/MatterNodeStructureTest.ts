@@ -37,7 +37,7 @@ import { RootEndpoint } from "../../src/device/Device.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
 import { EndpointInterface } from "../../src/endpoint/EndpointInterface.js";
-import { ClusterModel, MatterModel } from "../../src/model/index.js";
+import { ClusterModel, MatterModel, Specification } from "../../src/model/index.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
 import { attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
@@ -74,7 +74,7 @@ function addRequiredRootClusters(
                         subscriptionsPerFabric: 3,
                     },
                     serialNumber: `node-matter-0000`,
-                    specificationVersion: 0x01030000,
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     maxPathsPerInvoke: 1,
                 },
                 {},

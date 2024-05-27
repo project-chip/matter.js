@@ -30,7 +30,7 @@ export class InterfaceGenerator {
         this.interfaces[name] = component.condition ?? {};
 
         const intf = this.file.ns.statements(`export interface ${name} {`, "}");
-        ``;
+
         for (const command of commands) {
             this.file.addImport("#/util/Promises.js", "MaybePromise");
 

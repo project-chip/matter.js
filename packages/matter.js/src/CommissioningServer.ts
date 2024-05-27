@@ -58,6 +58,7 @@ import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
+import { Specification } from "./model/definitions/Specification.js";
 import { Network } from "./net/Network.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { EventHandler } from "./protocol/interaction/EventHandler.js";
@@ -82,14 +83,6 @@ const logger = Logger.get("CommissioningServer");
 export const FORBIDDEN_PASSCODES = [
     0, 11111111, 22222222, 33333333, 44444444, 55555555, 66666666, 77777777, 88888888, 99999999, 12345678, 87654321,
 ];
-
-/**
- * Data model revision used by this implementation
- * Value of 16 means "Matter 1.0/1.1"
- *
- * @see {@link MatterSpecification.v11.Core} § 7.1.1
- */
-export const MATTER_DATAMODEL_VERSION = 16;
 
 /**
  * Represents device pairing information.
@@ -274,24 +267,27 @@ export class CommissioningServer extends MatterNode {
 
         // Set the required basicInformation and respect the provided values
         // TODO Get the defaults from the cluster meta details
-        const basicInformationAttributes = Object.assign(
-            {
-                dataModelRevision: MATTER_DATAMODEL_VERSION,
-                nodeLabel: "",
-                hardwareVersion: 0,
-                hardwareVersionString: "0",
-                location: "XX",
-                localConfigDisabled: false,
-                softwareVersion: 1,
-                softwareVersionString: "v1",
-                capabilityMinima: {
-                    caseSessionsPerFabric: 3, // TODO get that limit from Sessionmanager or such or sync with it, add limit? Just a minima?
-                    subscriptionsPerFabric: 3, // TODO get that limit from Interactionserver? Respect it? It is just a minima?
-                },
-                serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`,
+        const basicInformationAttributes: AttributeInitialValues<typeof BasicInformationCluster.attributes> = {
+            dataModelRevision: Specification.DATA_MODEL_REVISION,
+            nodeLabel: "",
+            hardwareVersion: 0,
+            hardwareVersionString: "0",
+            location: "XX",
+            localConfigDisabled: false,
+            softwareVersion: 1,
+            softwareVersionString: "v1",
+            capabilityMinima: {
+                caseSessionsPerFabric: 3, // TODO get that limit from Sessionmanager or such or sync with it, add limit? Just a minima?
+                subscriptionsPerFabric: 3, // TODO get that limit from Interactionserver? Respect it? It is just a minima?
             },
-            options.basicInformation,
-        ) as AttributeInitialValues<typeof BasicInformationCluster.attributes>;
+            serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`,
+            specificationVersion: Specification.SPECIFICATION_VERSION,
+            maxPathsPerInvoke: 1,
+
+            ...options.basicInformation,
+
+            vendorId, // Just for TS
+        };
 
         const reachabilitySupported = basicInformationAttributes.reachable !== undefined;
         // Add basic Information cluster to root directly because it is not allowed to be changed afterward
@@ -621,7 +617,7 @@ export class CommissioningServer extends MatterNode {
             const fabrics = deviceInstance.getFabrics();
             for (const fabric of fabrics) {
                 if (
-                    genericFabricScopedAttributeGetterFromFabric<AccessControl.AccessControlEntryStruct[] | undefined>(
+                    genericFabricScopedAttributeGetterFromFabric<AccessControl.AccessControlEntry[] | undefined>(
                         fabric,
                         AccessControl.Cluster,
                         "acl",

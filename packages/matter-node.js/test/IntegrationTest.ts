@@ -42,6 +42,7 @@ import {
     InteractionClientMessenger,
 } from "@project-chip/matter.js/interaction";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
+import { Specification } from "@project-chip/matter.js/model";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
 import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
 import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
@@ -532,7 +533,7 @@ describe("Integration Test", () => {
                 ],
             });
 
-            assert.equal(response.length, 43);
+            assert.equal(response.length, 45);
             assert.equal(
                 response.filter(
                     ({ path: { endpointId, clusterId } }) => endpointId === 0 && clusterId === Descriptor.Cluster.id,
@@ -575,7 +576,7 @@ describe("Integration Test", () => {
                     ({ path: { endpointId, clusterId } }) =>
                         endpointId === 0 && clusterId === BasicInformation.Cluster.id,
                 ).length,
-                22,
+                24,
             );
             const softwareVersionStringData = response.find(
                 ({ path: { endpointId, clusterId, attributeId } }) =>
@@ -1226,11 +1227,12 @@ describe("Integration Test", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                    dataModelRevision: 16,
+                    dataModelRevision: Specification.DATA_MODEL_REVISION,
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     localConfigDisabled: false,
                     location: "DE",
+                    maxPathsPerInvoke: 1,
                     nodeLabel: "345678",
                     partNumber: "123456",
                     productId: 32769,
@@ -1238,6 +1240,7 @@ describe("Integration Test", () => {
                     reachable: true,
                     softwareVersion: 1,
                     softwareVersionString: "v1",
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     vendorId: 65521,
                     vendorName: "matter-node.js",
                 },
@@ -1413,11 +1416,12 @@ describe("Integration Test", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                    dataModelRevision: 16,
+                    dataModelRevision: Specification.DATA_MODEL_REVISION,
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     localConfigDisabled: false,
                     location: "DE",
+                    maxPathsPerInvoke: 1,
                     nodeLabel: "345678",
                     partNumber: "123456",
                     productId: 32769,
@@ -1425,6 +1429,7 @@ describe("Integration Test", () => {
                     reachable: true,
                     softwareVersion: 1,
                     softwareVersionString: "v1",
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     vendorId: 65521,
                     vendorName: "matter-node.js",
                 },
@@ -1463,11 +1468,12 @@ describe("Integration Test", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                    dataModelRevision: 16,
+                    dataModelRevision: Specification.DATA_MODEL_REVISION,
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     localConfigDisabled: false,
                     location: "US",
+                    maxPathsPerInvoke: 1,
                     nodeLabel: "",
                     partNumber: "123456",
                     productId: 32769,
@@ -1475,6 +1481,7 @@ describe("Integration Test", () => {
                     reachable: true,
                     softwareVersion: 1,
                     softwareVersionString: "v1",
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     vendorId: 65521,
                     vendorName: "matter-node.js",
                 },
@@ -1694,11 +1701,12 @@ describe("Integration Test", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                    dataModelRevision: 16,
+                    dataModelRevision: Specification.DATA_MODEL_REVISION,
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     localConfigDisabled: false,
                     location: "DE",
+                    maxPathsPerInvoke: 1,
                     nodeLabel: "345678",
                     partNumber: "123456",
                     productId: 32769,
@@ -1706,6 +1714,7 @@ describe("Integration Test", () => {
                     reachable: true,
                     softwareVersion: 1,
                     softwareVersionString: "v1",
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     vendorId: 65521,
                     vendorName: "matter-node.js",
                 },
@@ -1735,11 +1744,12 @@ describe("Integration Test", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                    dataModelRevision: 16,
+                    dataModelRevision: Specification.DATA_MODEL_REVISION,
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     localConfigDisabled: false,
                     location: "US",
+                    maxPathsPerInvoke: 1,
                     nodeLabel: "",
                     partNumber: "123456",
                     productId: 32769,
@@ -1747,6 +1757,7 @@ describe("Integration Test", () => {
                     reachable: true,
                     softwareVersion: 1,
                     softwareVersionString: "v1",
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     vendorId: 65521,
                     vendorName: "matter-node.js",
                 },
@@ -1792,11 +1803,12 @@ describe("Integration Test", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                    dataModelRevision: 16,
+                    dataModelRevision: Specification.DATA_MODEL_REVISION,
                     hardwareVersion: 0,
                     hardwareVersionString: "0",
                     localConfigDisabled: false,
                     location: "DE",
+                    maxPathsPerInvoke: 1,
                     nodeLabel: "testLabel4",
                     partNumber: "123456",
                     productId: 32769,
@@ -1804,6 +1816,7 @@ describe("Integration Test", () => {
                     reachable: false,
                     softwareVersion: 1,
                     softwareVersionString: "v1",
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
                     vendorId: 65521,
                     vendorName: "matter-node.js",
                 },
