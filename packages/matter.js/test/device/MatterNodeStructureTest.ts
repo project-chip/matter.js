@@ -786,14 +786,14 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(aggregatorPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(11)]);
 
-            const aggregatorDeviceTypeListAttribute = attributes.get(
+            const AggregatorEndpointTypeListAttribute = attributes.get(
                 attributePathToId({
                     endpointId: EndpointNumber(1),
                     clusterId: DescriptorCluster.id,
                     attributeId: DescriptorCluster.attributes.deviceTypeList.id,
                 }),
             ) as AttributeServer<EndpointNumber[]>;
-            expect(aggregatorDeviceTypeListAttribute?.getLocal()).deep.equal([
+            expect(AggregatorEndpointTypeListAttribute?.getLocal()).deep.equal([
                 {
                     deviceType: DeviceTypeId(DeviceTypes.AGGREGATOR.code),
                     revision: 1,
@@ -929,14 +929,14 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(aggregatorPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(11), EndpointNumber(12)]);
 
-            const aggregatorDeviceTypeListAttribute = attributes.get(
+            const AggregatorEndpointTypeListAttribute = attributes.get(
                 attributePathToId({
                     endpointId: EndpointNumber(1),
                     clusterId: DescriptorCluster.id,
                     attributeId: DescriptorCluster.attributes.deviceTypeList.id,
                 }),
             ) as AttributeServer<EndpointNumber[]>;
-            expect(aggregatorDeviceTypeListAttribute?.getLocal()).deep.equal([
+            expect(AggregatorEndpointTypeListAttribute?.getLocal()).deep.equal([
                 {
                     deviceType: DeviceTypeId(DeviceTypes.AGGREGATOR.code),
                     revision: 1,

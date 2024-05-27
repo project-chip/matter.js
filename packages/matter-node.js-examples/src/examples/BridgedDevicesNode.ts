@@ -24,7 +24,6 @@ import { logEndpoint } from "@project-chip/matter.js/device";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlugInUnitDevice";
 import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
-import { AggregatorDevice } from "@project-chip/matter.js/endpoint/definitions";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { Time } from "@project-chip/matter.js/time";
@@ -60,7 +59,7 @@ const server = await ServerNode.create({
     // Optional: If Ommitted some development defaults are used
     productDescription: {
         name: deviceName,
-        deviceType: AggregatorDevice.deviceType,
+        deviceType: AggregatorEndpoint.deviceType,
     },
 
     // Provide defaults for the BasicInformation cluster on the Root endpoint
@@ -87,7 +86,7 @@ const server = await ServerNode.create({
  * to see how to customize the command handlers.
  */
 
-const aggregator = new Endpoint(AggregatorDevice, { id: "aggregator" });
+const aggregator = new Endpoint(AggregatorEndpoint, { id: "aggregator" });
 await server.add(aggregator);
 
 for (let idx = 0; idx < isSocket.length; idx++) {

@@ -64,7 +64,7 @@ if (args.endpoints) {
             file.save();
         }
 
-        endpointExports.addReexport(`./${file.basename}.js`);
+        endpointExports.addReexport(`${file.name}.js`);
     }
     if (args.save) {
         endpointExports.save();
@@ -88,5 +88,5 @@ function generateClusterFile(
             file.save();
         }
     }
-    exports.addReexport(`./${filename}.js`);
+    exports.addReexport(`${filename}.js`);
 }

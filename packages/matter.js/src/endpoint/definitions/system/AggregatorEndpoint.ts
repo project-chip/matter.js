@@ -6,6 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { PartsBehavior } from "../../../behavior/system/parts/PartsBehavior.js";
+import { IndexBehavior } from "../../../behavior/system/index/IndexBehavior.js";
 import { ActionsServer as BaseActionsServer } from "../../../behavior/definitions/actions/ActionsServer.js";
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
@@ -25,7 +27,7 @@ import { Identity } from "../../../util/Type.js";
  *
  * @see {@link MatterSpecification.v13.Device} § 11.2
  */
-export interface AggregatorDevice extends Identity<typeof AggregatorDeviceDefinition> {}
+export interface AggregatorEndpoint extends Identity<typeof AggregatorEndpointDefinition> {}
 
 export namespace AggregatorRequirements {
     /**
@@ -45,15 +47,21 @@ export namespace AggregatorRequirements {
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    export const server = { optional: { Actions: ActionsServer, Identify: IdentifyServer }, mandatory: {} };
+    export const server = {
+        mandatory: { Parts: PartsBehavior, Index: IndexBehavior },
+        optional: { Actions: ActionsServer, Identify: IdentifyServer }
+    };
 }
 
-export const AggregatorDeviceDefinition = MutableEndpoint({
+export const AggregatorEndpointDefinition = MutableEndpoint({
     name: "Aggregator",
     deviceType: 0xe,
     deviceRevision: 1,
     requirements: AggregatorRequirements,
-    behaviors: SupportedBehaviors()
+    behaviors: SupportedBehaviors(
+        AggregatorRequirements.server.mandatory.Parts,
+        AggregatorRequirements.server.mandatory.Index
+    )
 });
 
-export const AggregatorDevice: AggregatorDevice = AggregatorDeviceDefinition;
+export const AggregatorEndpoint: AggregatorEndpoint = AggregatorEndpointDefinition;

@@ -14,6 +14,8 @@ import { RequirementGenerator } from "./RequirementGenerator.js";
 
 const logger = Logger.get("EndpointFile");
 
+const SYSTEM_ENDPOINT_TYPES = new Set(["BridgedNode", "Aggregator"]);
+
 export class EndpointFile extends TsFile {
     definitionName: string;
     requirementsName: string;
@@ -26,7 +28,10 @@ export class EndpointFile extends TsFile {
         let name;
         let specName;
 
-        if (model.classification === DeviceTypeElement.Classification.Simple && model.name !== "BridgedNode") {
+        if (
+            model.classification === DeviceTypeElement.Classification.Simple &&
+            !SYSTEM_ENDPOINT_TYPES.has(model.name)
+        ) {
             specName = model.name;
             name = `${model.name}Device`;
             path = `device/${name}`;

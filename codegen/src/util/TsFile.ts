@@ -643,6 +643,8 @@ export class TsFile extends Block {
     }
 
     addReexport(filename: string, ...symbols: string[]) {
+        filename = this.#resolveImportPath(filename);
+
         if (symbols.length) {
             const reexport = this.expressions("export {", `} from ${serialize(filename)}`);
             for (const symbol of symbols) {

@@ -10,7 +10,7 @@ import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/def
 import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
-import { AggregatorDevice, DimmableLightDevice } from "@project-chip/matter.js/endpoint/definitions";
+import { AggregatorEndpoint, DimmableLightDevice } from "@project-chip/matter.js/endpoint/definitions";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
@@ -170,7 +170,7 @@ export class BridgeTestInstance implements TestInstance {
             },
         });
 
-        const aggregator = new Endpoint(AggregatorDevice, { id: "aggregator", number: 1 });
+        const aggregator = new Endpoint(AggregatorEndpoint, { id: "aggregator", number: 1 });
 
         await serverNode.add(aggregator);
 

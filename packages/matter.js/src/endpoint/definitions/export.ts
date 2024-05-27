@@ -55,7 +55,7 @@ export * from "./device/ContentAppDevice.js";
 export * from "./device/CastingVideoClientDevice.js";
 export * from "./device/VideoRemoteControlDevice.js";
 export * from "./device/ModeSelectDevice.js";
-export * from "./device/AggregatorDevice.js";
+export * from "./system/AggregatorEndpoint.js";
 export * from "./device/RoboticVacuumCleanerDevice.js";
 export * from "./device/LaundryWasherDevice.js";
 export * from "./device/RefrigeratorDevice.js";

@@ -7,15 +7,15 @@
 import { BridgedDeviceBasicInformationServer } from "../../../../src/behavior/definitions/bridged-device-basic-information/BridgedDeviceBasicInformationServer.js";
 import { DescriptorBehavior } from "../../../../src/behavior/definitions/descriptor/DescriptorBehavior.js";
 import { Endpoint } from "../../../../src/endpoint/Endpoint.js";
-import { AggregatorDevice } from "../../../../src/endpoint/definitions/device/AggregatorDevice.js";
 import { OnOffLightDevice } from "../../../../src/endpoint/definitions/device/OnOffLightDevice.js";
+import { AggregatorEndpoint } from "../../../../src/endpoint/definitions/system/AggregatorEndpoint.js";
 import { BridgedNodeEndpoint } from "../../../../src/endpoint/definitions/system/BridgedNodeEndpoint.js";
 import { MockServerNode } from "../../../node/mock-server-node.js";
 import { MockEndpoint } from "../../mock-endpoint.js";
 
 const BridgedLightDevice = OnOffLightDevice.with(BridgedDeviceBasicInformationServer);
 
-async function createBridge<T extends AggregatorDevice>(
+async function createBridge<T extends AggregatorEndpoint>(
     definition: T | Endpoint.Configuration<T>,
 ): Promise<MockEndpoint<T>> {
     const bridge = await MockEndpoint.create(definition);
@@ -47,7 +47,7 @@ describe("BridgedNodeEndpointTest", () => {
     describe("makes children bridged", () => {
         it("at startup", async () => {
             const bridge = await createBridge({
-                type: AggregatorDevice,
+                type: AggregatorEndpoint,
                 parts: [{ type: BridgedLightDevice, id: "light" }],
             });
 
@@ -57,7 +57,7 @@ describe("BridgedNodeEndpointTest", () => {
         });
 
         it("dynamically", async () => {
-            const bridge = await createBridge(AggregatorDevice);
+            const bridge = await createBridge(AggregatorEndpoint);
 
             await bridge.add({
                 type: BridgedLightDevice,
