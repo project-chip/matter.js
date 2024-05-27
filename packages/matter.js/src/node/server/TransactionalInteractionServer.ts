@@ -168,8 +168,7 @@ export class TransactionalInteractionServer extends InteractionServer {
         endpoint: EndpointInterface,
     ): Promise<EventStorageData<any>[]> {
         const readEvent = (context: ActionContext) => {
-            // TODO Change this to behavior style, right now it does minimalistic whats needed
-            if (!context.hasAccessFor(event.readAcl, { cluster: path.clusterId } as AccessControl.Location)) {
+            if (!context.authorizedFor(event.readAcl, { cluster: path.clusterId } as AccessControl.Location)) {
                 throw new AccessDeniedError(
                     `Access to ${endpoint.number}/${Diagnostic.hex(path.clusterId)} denied on ${exchange.session.name}.`,
                 );
@@ -241,8 +240,7 @@ export class TransactionalInteractionServer extends InteractionServer {
         timed = false,
     ) {
         const invokeCommand = (context: ActionContext) => {
-            // TODO Change this to behavior style, right now it does minimalistic whats needed
-            if (!context.hasAccessFor(command.invokeAcl, { cluster: path.clusterId } as AccessControl.Location)) {
+            if (!context.authorizedFor(command.invokeAcl, { cluster: path.clusterId } as AccessControl.Location)) {
                 throw new AccessDeniedError(
                     `Access to ${endpoint.number}/${Diagnostic.hex(path.clusterId)} denied on ${exchange.session.name}.`,
                 );

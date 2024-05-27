@@ -110,6 +110,7 @@ export class RootSupervisor implements ValueSupervisor {
         if (!persistent) {
             persistent = new Set();
             for (const member of this.#members) {
+                // TODO: We should handle writable/fabric scoped being non-volatile already in the conformance interpreter
                 if (
                     member.effectiveQuality.nonvolatile ||
                     member.effectiveAccess.writable ||

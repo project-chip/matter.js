@@ -63,6 +63,35 @@ type OperationalGroupKeySet = TypeFromSchema<typeof GroupKeyManagement.TlvGroupK
     groupSessionId2: number | null;
 };
 
+namespace OperationalGroupKeySet {
+    export const asTlvGroupSet = (
+        operationalGroupSet: OperationalGroupKeySet,
+    ): TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySetStruct> => {
+        const {
+            groupKeySetId,
+            epochKey0,
+            epochStartTime0,
+            epochKey1,
+            epochStartTime1,
+            epochKey2,
+            epochStartTime2,
+            groupKeySecurityPolicy,
+            groupKeyMulticastPolicy,
+        } = operationalGroupSet;
+        return {
+            groupKeySetId,
+            epochKey0,
+            epochStartTime0,
+            epochKey1,
+            epochStartTime1,
+            epochKey2,
+            epochStartTime2,
+            groupKeySecurityPolicy,
+            groupKeyMulticastPolicy,
+        };
+    };
+}
+
 export type ExposedFabricInformation = {
     fabricIndex: FabricIndex;
     fabricId: FabricId;
@@ -278,36 +307,9 @@ export class Fabric {
         return Array.from(this.#scopedClusterData.get(cluster.id).keys());
     }
 
-    private getAsGroupSet(
-        operationalGroupSet: OperationalGroupKeySet,
-    ): TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySetStruct> {
-        const {
-            groupKeySetId,
-            epochKey0,
-            epochStartTime0,
-            epochKey1,
-            epochStartTime1,
-            epochKey2,
-            epochStartTime2,
-            groupKeySecurityPolicy,
-            groupKeyMulticastPolicy,
-        } = operationalGroupSet;
-        return {
-            groupKeySetId,
-            epochKey0,
-            epochStartTime0,
-            epochKey1,
-            epochStartTime1,
-            epochKey2,
-            epochStartTime2,
-            groupKeySecurityPolicy,
-            groupKeyMulticastPolicy,
-        };
-    }
-
     getGroupKeySet(groupKeySetId: number) {
         if (groupKeySetId === 0) {
-            return this.getAsGroupSet(this.getGroupSetForIpk());
+            return OperationalGroupKeySet.asTlvGroupSet(this.getGroupSetForIpk());
         }
         // TODO add correct group handling later, right now only IPK exists
         return undefined;
@@ -335,7 +337,7 @@ export class Fabric {
 
     getAllGroupKeySets() {
         // TODO add correct group handling later, right now only IPK exists
-        return [this.getAsGroupSet(this.getGroupSetForIpk())];
+        return [OperationalGroupKeySet.asTlvGroupSet(this.getGroupSetForIpk())];
     }
 
     get externalInformation(): ExposedFabricInformation {

@@ -93,7 +93,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                     transaction,
                     trace,
 
-                    hasAccessFor(desiredAccessLevel: AccessLevel, location?: AccessControl.Location) {
+                    authorizedFor(desiredAccessLevel: AccessLevel, location?: AccessControl.Location) {
                         if (location === undefined) {
                             throw new InternalError("AccessControl.Location is required");
                         }

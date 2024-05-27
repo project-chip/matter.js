@@ -135,7 +135,7 @@ export namespace AccessControl {
         /**
          * Checks if the authorized client has a certain Access Privilege granted.
          */
-        hasAccessFor(desiredAccessLevel: AccessLevel, location?: Location): boolean;
+        authorizedFor(desiredAccessLevel: AccessLevel, location?: Location): boolean;
 
         /**
          * The fabric of the authorized client.
@@ -191,7 +191,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
             return true;
         }
 
-        return session.hasAccessFor(limits.readLevel, location);
+        return session.authorizedFor(limits.readLevel, location);
     };
 
     let mayWrite: AccessControl.Verification = (session, location) => {
@@ -199,7 +199,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
             return true;
         }
 
-        return session.hasAccessFor(limits.writeLevel, location);
+        return session.authorizedFor(limits.writeLevel, location);
     };
 
     let authorizeRead: AccessControl.Assertion = (session, location) => {
@@ -207,7 +207,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
             return;
         }
 
-        if (session.hasAccessFor(limits.readLevel, location)) {
+        if (session.authorizedFor(limits.readLevel, location)) {
             return;
         }
 
@@ -219,7 +219,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
             return;
         }
 
-        if (session.hasAccessFor(limits.writeLevel, location)) {
+        if (session.authorizedFor(limits.writeLevel, location)) {
             return;
         }
 
@@ -420,7 +420,7 @@ function commandEnforcerFor(schema: Schema): AccessControl {
                 throw new WriteError(location, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
             }
 
-            if (session.hasAccessFor(limits.writeLevel, location)) {
+            if (session.authorizedFor(limits.writeLevel, location)) {
                 return;
             }
 
@@ -444,7 +444,7 @@ function commandEnforcerFor(schema: Schema): AccessControl {
                 return false;
             }
 
-            return session.hasAccessFor(limits.writeLevel, location);
+            return session.authorizedFor(limits.writeLevel, location);
         },
     };
 }

@@ -92,7 +92,7 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
             if (!readOnlyView) {
                 const session: ValueSupervisor.Session = {
                     offline: true,
-                    hasAccessFor(desiredAccessLevel: AccessLevel) {
+                    authorizedFor(desiredAccessLevel: AccessLevel) {
                         return desiredAccessLevel === AccessLevel.View;
                     },
                     transaction: ReadOnlyTransaction,

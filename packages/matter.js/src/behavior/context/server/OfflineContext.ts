@@ -107,7 +107,7 @@ function createOfflineContext(
         transaction,
         activity,
 
-        hasAccessFor(desiredAccessLevel: AccessLevel) {
+        authorizedFor(desiredAccessLevel: AccessLevel) {
             // Be as restrictive as possible.  The offline flag should make this irrelevant
             return desiredAccessLevel === AccessLevel.View;
         },
