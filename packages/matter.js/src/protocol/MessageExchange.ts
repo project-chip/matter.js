@@ -225,6 +225,10 @@ export class MessageExchange<ContextT> {
                 this.sentMessageAckSuccess = undefined;
                 this.sentMessageAckFailure = undefined;
                 this.sentMessageToAck = undefined;
+                if (SecureChannelProtocol.isStandaloneAck(protocolId, messageType) && this.closeTimer !== undefined) {
+                    // All resubmissions done and in closing, no need to wait further
+                    return this.closeInternal();
+                }
             }
         }
         if (SecureChannelProtocol.isStandaloneAck(protocolId, messageType)) {
@@ -461,14 +465,6 @@ export class MessageExchange<ContextT> {
     async close() {
         if (this.closeTimer !== undefined) return; // close was already called
 
-        // Wait until all potential Resubmissions are done, also for Standalone-Acks
-        // TODO: Make this dynamic based on the values?
-        this.closeTimer = Time.getTimer(
-            "Message exchange cleanup",
-            MAXIMUM_TRANSMISSION_TIME_MS,
-            async () => await this.closeInternal(),
-        ).start();
-
         if (this.receivedMessageToAck !== undefined) {
             this.receivedMessageAckTimer.stop();
             const messageToAck = this.receivedMessageToAck;
@@ -478,7 +474,18 @@ export class MessageExchange<ContextT> {
             } catch (error) {
                 logger.error("An error happened when closing the exchange", error);
             }
+        } else if (this.sentMessageToAck === undefined) {
+            // No message left that we need to ack and no sent message left that waits for an ack, close directly
+            return this.closeInternal();
         }
+
+        // Wait until all potential Resubmissions are done, also for Standalone-Acks
+        // TODO: Make this dynamic based on the values?
+        this.closeTimer = Time.getTimer(
+            "Message exchange cleanup",
+            MAXIMUM_TRANSMISSION_TIME_MS,
+            async () => await this.closeInternal(),
+        ).start();
     }
 
     private async closeInternal() {
