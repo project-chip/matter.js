@@ -6,7 +6,9 @@
 
 import { CertificateError } from "../../../certificate/CertificateManager.js";
 import { AccessLevel, Command } from "../../../cluster/Cluster.js";
+import { AccessControl } from "../../../cluster/definitions/AccessControlCluster.js";
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
+import { MatterFabricInvalidAdminSubjectError } from "../../../common/FailsafeContext.js";
 import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
 import { MatterFlowError, UnexpectedDataError } from "../../../common/MatterError.js";
 import { ValidationError } from "../../../common/ValidationError.js";
@@ -25,6 +27,7 @@ import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { CommissioningBehavior } from "../../system/commissioning/CommissioningBehavior.js";
 import { ProductDescriptionServer } from "../../system/product-description/ProductDescriptionServer.js";
+import { AccessControlServer } from "../access-control/AccessControlServer.js";
 import { DeviceCertification } from "./DeviceCertification.js";
 import { OperationalCredentialsBehavior } from "./OperationalCredentialsBehavior.js";
 import {
@@ -179,6 +182,11 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidPublicKey,
                 debugText: error.message,
             };
+        } else if (error instanceof MatterFabricInvalidAdminSubjectError) {
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidAdminSubject,
+                debugText: error.message,
+            };
         }
         throw error;
     }
@@ -236,6 +244,17 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             return this.#mapNocErrors(error);
         }
 
+        // The receiver SHALL create and add a new Access Control Entry using the CaseAdminSubject field to grant
+        // subsequent Administer access to an Administrator member of the new Fabric.
+        const aclCluster = this.agent.get(AccessControlServer);
+        aclCluster.state.acl.push({
+            fabricIndex: fabric.fabricIndex,
+            privilege: AccessControl.AccessControlEntryPrivilege.Administer,
+            authMode: AccessControl.AccessControlEntryAuthMode.Case,
+            subjects: [caseAdminSubject],
+            targets: null, // entire node
+        });
+
         await failsafeContext.addFabric(fabric);
 
         try {
@@ -257,11 +276,6 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             await fabric.remove(this.session.id);
             throw e;
         }
-
-        // TODO: The receiver SHALL create and add a new Access Control Entry using the CaseAdminSubject field to grant
-        //  subsequent Administer access to an Administrator member of the new Fabric. It is RECOMMENDED that the
-        //  Administrator presented in CaseAdminSubject exist within the same entity that is currently invoking the
-        //  AddNOC command, within another of the Fabrics of which it is a member.
 
         // TODO The incoming IPKValue SHALL be stored in the Fabric-scoped slot within the Group Key Management cluster
         //  (see KeySetWrite), for subsequent use during CASE.

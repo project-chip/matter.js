@@ -97,7 +97,7 @@ export namespace AccessControl {
     export type Assertion = (session: Session, location: Location) => void;
 
     /**
-     * A function that returns true iff access control requirements are met.
+     * A function that returns true if access control requirements are met.
      */
     export type Verification = (session: Session, location: Location) => boolean;
 
@@ -120,6 +120,12 @@ export namespace AccessControl {
          * enforcement.
          */
         owningFabric?: FabricIndex;
+
+        /**
+         * The access levels already retrieved for this location. With this subtree elements can access the same
+         * access levels without re-evaluating.
+         */
+        accessLevels?: AccessLevel[];
     }
 
     /**
@@ -127,9 +133,9 @@ export namespace AccessControl {
      */
     export interface Session {
         /**
-         * The access level of the authorized client.
+         * Checks if the authorized client has a certain Access Privilege granted.
          */
-        accessLevelFor(location?: Location): AccessLevel;
+        authorizedFor(desiredAccessLevel: AccessLevel, location?: Location): boolean;
 
         /**
          * The fabric of the authorized client.
@@ -185,11 +191,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
             return true;
         }
 
-        if (session.accessLevelFor(location) >= limits.readLevel) {
-            return true;
-        }
-
-        return false;
+        return session.authorizedFor(limits.readLevel, location);
     };
 
     let mayWrite: AccessControl.Verification = (session, location) => {
@@ -197,11 +199,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
             return true;
         }
 
-        if (session.accessLevelFor(location) >= limits.writeLevel) {
-            return true;
-        }
-
-        return false;
+        return session.authorizedFor(limits.writeLevel, location);
     };
 
     let authorizeRead: AccessControl.Assertion = (session, location) => {
@@ -209,7 +207,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
             return;
         }
 
-        if (session.accessLevelFor(location) >= limits.readLevel) {
+        if (session.authorizedFor(limits.readLevel, location)) {
             return;
         }
 
@@ -221,7 +219,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
             return;
         }
 
-        if (session.accessLevelFor(location) >= limits.readLevel) {
+        if (session.authorizedFor(limits.writeLevel, location)) {
             return;
         }
 
@@ -422,7 +420,7 @@ function commandEnforcerFor(schema: Schema): AccessControl {
                 throw new WriteError(location, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
             }
 
-            if (session.accessLevelFor(location) >= limits.writeLevel) {
+            if (session.authorizedFor(limits.writeLevel, location)) {
                 return;
             }
 
@@ -446,11 +444,7 @@ function commandEnforcerFor(schema: Schema): AccessControl {
                 return false;
             }
 
-            if (session.accessLevelFor(location) >= limits.writeLevel) {
-                return true;
-            }
-
-            return false;
+            return session.authorizedFor(limits.writeLevel, location);
         },
     };
 }
@@ -475,9 +469,9 @@ function limitsFor(schema: Schema) {
         timed: access.timed === true,
 
         // Official Matter defaults are View for read and Operate for write. However, the schema's effective access
-        // should already have these defaults.  Here we just adopt administer as a safe fallback access level.
-        readLevel: access.readPriv === undefined ? AccessLevel.Administer : Access.PrivilegeLevel[access.readPriv],
-        writeLevel: access.writePriv === undefined ? AccessLevel.Administer : Access.PrivilegeLevel[access.writePriv],
+        // should already have these defaults.  Here we just adopt minimum needed rights as a safe fallback access level.
+        readLevel: access.readPriv === undefined ? AccessLevel.View : Access.PrivilegeLevel[access.readPriv],
+        writeLevel: access.writePriv === undefined ? AccessLevel.Operate : Access.PrivilegeLevel[access.writePriv],
     });
 
     return limits;

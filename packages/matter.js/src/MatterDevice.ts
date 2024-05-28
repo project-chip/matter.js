@@ -59,7 +59,7 @@ export class MatterDevice {
     private activeCommissioningEndCallback?: () => void;
     private announceInterval: Timer;
     private announcementStartedTime: number | null = null;
-    private isClosing = false;
+    #isClosing = false;
     readonly #exchangeManager;
     readonly #fabricManager: FabricManager;
     readonly #sessionManager: SessionManager<MatterDevice>;
@@ -192,6 +192,10 @@ export class MatterDevice {
     get failsafeContext() {
         this.assertFailSafeArmed();
         return this.#failsafeContext as FailsafeContext;
+    }
+
+    get isClosing() {
+        return this.#isClosing;
     }
 
     async beginTimed(failsafeContext: FailsafeContext) {
@@ -501,7 +505,7 @@ export class MatterDevice {
     }
 
     async close() {
-        this.isClosing = true;
+        this.#isClosing = true;
         await this.endCommissioning();
         await this.#announcementMutex;
         for (const broadcaster of this.broadcasters) {

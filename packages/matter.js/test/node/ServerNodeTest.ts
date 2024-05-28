@@ -391,7 +391,7 @@ async function almostCommission(node?: MockServerNode, number = 0) {
             nocValue: params.nocValue,
             icacValue: params.icacValue,
             ipkValue: params.ipkValue,
-            caseAdminSubject: NodeId(number * 100),
+            caseAdminSubject: NodeId((number + 1) * 100),
             adminVendorId: VendorId(65521),
         });
         expect(result.statusCode).deep.equals(0);

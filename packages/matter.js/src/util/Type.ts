@@ -80,9 +80,25 @@ export type Immutable<T> = T extends (...args: any[]) => any
     ? T
     : T extends number // Necessary for our "branded" IDs
       ? T
-      : T extends object
-        ? { readonly [K in keyof T]: Immutable<T[K]> }
-        : T;
+      : T extends bigint
+        ? T
+        : T extends object
+          ? { readonly [K in keyof T]: Immutable<T[K]> }
+          : T;
+
+export type Mutable<T> = T extends (...args: any[]) => any
+    ? T
+    : T extends number // Necessary for our "branded" IDs
+      ? T
+      : T extends bigint
+        ? T
+        : T extends object
+          ? { -readonly [K in keyof T]: Mutable<T[K]> }
+          : T;
+
+export function Mutable<T>(value: Immutable<T>): Mutable<T> {
+    return value as Mutable<T>;
+}
 
 /**
  * Convert a union to an interface.

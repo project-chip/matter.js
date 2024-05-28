@@ -119,7 +119,7 @@ export class MatterController {
                 sessionClosedCallback,
             );
         } else {
-            const rootNodeId = NodeId.getRandomOperationalNodeId();
+            const rootNodeId = NodeId.randomOperationalNodeId();
             const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
             const fabricBuilder = new FabricBuilder()
                 .setRootCert(certificateManager.getRootCert())
@@ -456,7 +456,7 @@ export class MatterController {
             Commissionee SHALL exit Commissioning Mode after 20 failed attempts.
          */
 
-        const peerNodeId = commissioningOptions.nodeId ?? NodeId.getRandomOperationalNodeId();
+        const peerNodeId = commissioningOptions.nodeId ?? NodeId.randomOperationalNodeId();
         const commissioningManager = new ControllerCommissioner(
             // Use the created secure session to do the commissioning
             new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel), peerNodeId),

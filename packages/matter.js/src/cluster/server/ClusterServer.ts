@@ -15,7 +15,15 @@ import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.j
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { capitalize } from "../../util/String.js";
-import { Attributes, Cluster, Commands, ConditionalFeatureList, Events, TlvNoResponse } from "../Cluster.js";
+import {
+    AccessLevel,
+    Attributes,
+    Cluster,
+    Commands,
+    ConditionalFeatureList,
+    Events,
+    TlvNoResponse,
+} from "../Cluster.js";
 import { Scenes } from "../definitions/ScenesCluster.js";
 import { createAttributeServer } from "./AttributeServer.js";
 import {
@@ -423,7 +431,7 @@ export function ClusterServer<
         }
 
         if (handler === undefined) continue;
-        const { requestId, requestSchema, responseId, responseSchema, timed } = commandDef[name];
+        const { requestId, requestSchema, responseId, responseSchema, timed, invokeAcl } = commandDef[name];
         (commands as any)[name] = new CommandServer(
             requestId,
             responseId,
@@ -431,6 +439,7 @@ export function ClusterServer<
             requestSchema,
             responseSchema,
             timed,
+            invokeAcl ?? AccessLevel.Operate, //????
             (request, session, message, endpoint) =>
                 handler({
                     request,
@@ -455,7 +464,7 @@ export function ClusterServer<
 
     const eventList = new Array<EventId>();
     for (const eventName in eventDef) {
-        const { id, schema, priority, optional } = eventDef[eventName];
+        const { id, schema, priority, optional, readAcl } = eventDef[eventName];
         if (!optional && (supportedEvents as any)[eventName] !== true) {
             throw new ImplementationError(`Event ${eventName} needs to be supported by cluster ${name} (${clusterId})`);
         }
@@ -499,7 +508,7 @@ export function ClusterServer<
         }
 
         if ((supportedEvents as any)[eventName] === true) {
-            (events as any)[eventName] = new EventServer(id, clusterId, eventName, schema, priority);
+            (events as any)[eventName] = new EventServer(id, clusterId, eventName, schema, priority, readAcl);
             const capitalizedEventName = capitalize(eventName);
             result[`trigger${capitalizedEventName}Event`] = <T>(event: T) =>
                 (events as any)[eventName].triggerEvent(event);

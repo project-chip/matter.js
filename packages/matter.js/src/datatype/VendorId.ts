@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ValidationError } from "../common/ValidationError.js";
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -17,13 +18,27 @@ import { Branded } from "../util/Type.js";
  */
 export type VendorId = Branded<number, "VendorId">;
 
-export function VendorId(v: number): VendorId {
-    return v as VendorId;
+export function VendorId(vendorId: number, validate = true): VendorId {
+    if (!validate || (vendorId >= 0 && vendorId <= 0xfff4)) {
+        return vendorId as VendorId;
+    }
+    throw new ValidationError(`Invalid vendor ID: ${vendorId}`);
+}
+
+export namespace VendorId {
+    export const isValid = (v: number): v is VendorId => {
+        try {
+            VendorId(v);
+            return true;
+        } catch {
+            return false;
+        }
+    };
 }
 
 /** Data model for a Vendor Identifier. */
 export const TlvVendorId = new TlvWrapper<VendorId, number>(
     TlvUInt16,
     vendorId => vendorId,
-    value => VendorId(value),
+    value => VendorId(value, false), // No automatic validation on decode
 );

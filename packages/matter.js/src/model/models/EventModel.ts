@@ -3,8 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { Mei } from "../definitions/index.js";
+import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
 import { EventElement } from "../elements/index.js";
 import { Model } from "./Model.js";
 import { ValueModel } from "./ValueModel.js";

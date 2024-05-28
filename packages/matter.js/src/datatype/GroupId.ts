@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { tryCatch } from "../common/TryCatchHandler.js";
+import { ValidationError } from "../common/ValidationError.js";
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -22,13 +24,31 @@ import { Branded } from "../util/Type.js";
  */
 export type GroupId = Branded<number, "GroupId">;
 
-export function GroupId(v: number): GroupId {
-    return v as GroupId;
+export function GroupId(groupId: number | bigint, validate = true): GroupId {
+    if (!validate || (groupId >= 0x0000 && groupId <= 0xffff)) {
+        return Number(groupId) as GroupId;
+    }
+    throw new ValidationError(`Invalid group ID: ${groupId}`);
+}
+
+export namespace GroupId {
+    export const UNSPECIFIED_GROUP_ID = GroupId(0);
+
+    export const isValid = (v: number | bigint): v is GroupId => {
+        return tryCatch(
+            () => {
+                GroupId(v);
+                return true;
+            },
+            ValidationError,
+            false,
+        );
+    };
 }
 
 /** Tlv Schema for a Group Id. */
 export const TlvGroupId = new TlvWrapper<GroupId, number>(
     TlvUInt16,
     groupId => groupId,
-    value => GroupId(value),
+    value => GroupId(value, false), // No automatic validation on decode
 );

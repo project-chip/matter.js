@@ -752,7 +752,7 @@ describe("Scenes Server test", () => {
                         testSession,
                         { packetHeader: { sessionType: SessionType.Unicast } } as Message,
                     ),
-                new ValidationError("String is too long: 17, max 16.", "sceneName"),
+                new ValidationError('String "12345678901234567" is too long: 17, max 16.', "sceneName"),
             );
         });
 

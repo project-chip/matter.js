@@ -9,6 +9,7 @@ import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
 import { ClusterId } from "../datatype/ClusterId.js";
+import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 
@@ -20,6 +21,7 @@ import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 export interface EndpointInterface {
     name: string;
     number: EndpointNumber | undefined;
+    deviceType: DeviceTypeId;
     getNumber(): EndpointNumber;
     removeFromStructure(): void;
     updatePartsList(): EndpointNumber[];

@@ -5,6 +5,7 @@
  */
 
 import type { MatterDevice } from "../MatterDevice.js";
+import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
@@ -19,6 +20,8 @@ import { FailsafeTimer, MatterFabricConflictError } from "./FailsafeTimer.js";
 import { MatterFlowError } from "./MatterError.js";
 
 const logger = Logger.get("FailsafeContext");
+
+export class MatterFabricInvalidAdminSubjectError extends MatterFlowError {}
 
 /**
  * A "timed operation" is a command or sequence of commands that operate with a failsafe timer that will abort the
@@ -207,13 +210,19 @@ export abstract class FailsafeContext {
         ipkValue: ByteArray;
         caseAdminSubject: NodeId;
     }) {
-        // TODO If the CaseAdminSubject field is not a valid ACL subject in the context of AuthMode set to CASE, such as
-        //  not being in either the Operational or CASE Authenticated Tag range, then the device SHALL process the error
-        //  by responding with a StatusCode of InvalidAdminSubject as described in Section 11.17.6.7.2, “Handling Errors”.
-
         const builder = this.#fabricBuilder;
 
         const { nocValue, icacValue, adminVendorId, ipkValue, caseAdminSubject } = nocData;
+
+        // Handle error if the CaseAdminSubject field is not a valid ACL subject in the context of AuthMode set to CASE
+        if (
+            !NodeId.isOperationalNodeId(caseAdminSubject) &&
+            !NodeId.isCaseAuthenticatedTag(caseAdminSubject) &&
+            CaseAuthenticatedTag.getVersion(NodeId.extractAsCaseAuthenticatedTag(caseAdminSubject)) === 0
+        ) {
+            throw new MatterFabricInvalidAdminSubjectError();
+        }
+
         builder.setOperationalCert(nocValue, icacValue);
         const fabricAlreadyExisting = this.#fabrics.getFabrics().find(fabric => builder.matchesToFabric(fabric));
 

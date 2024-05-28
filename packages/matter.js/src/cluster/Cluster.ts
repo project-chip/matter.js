@@ -21,11 +21,13 @@ export class AttributeError extends MatterError {}
 
 export class EventError extends MatterError {}
 
+// This Enum needs to be in sync with the AccessControl.AccessControlEntryPrivilege enum!
 export enum AccessLevel {
     View = 1,
-    Operate = 2,
-    Manage = 3,
-    Administer = 4,
+    ProxyView = 2,
+    Operate = 3,
+    Manage = 4,
+    Administer = 5,
 }
 
 export type ConditionalFeatureList<F extends BitSchema> = TypeFromPartialBitSchema<F>[];

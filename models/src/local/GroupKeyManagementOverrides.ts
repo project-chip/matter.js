@@ -11,6 +11,15 @@ LocalMatter.children.push({
     name: "GroupKeyManagement",
 
     children: [
+        // Conformance of this field in the struct is "provisional, mandatory" which in fact means "optional"
+        // TODO: We should do this already in the conformance interpreter
+        // Default: GroupKeyMulticastPolicyEnum.PerGroupID
+        {
+            tag: "datatype",
+            name: "GroupKeySetStruct",
+            type: "struct",
+            children: [{ tag: "field", id: 0x8, name: "GroupKeyMulticastPolicy", conformance: "O", default: 0 }],
+        },
         {
             tag: "command",
             id: 0x4,

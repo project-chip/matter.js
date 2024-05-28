@@ -21,7 +21,7 @@ import { Session } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
 import { MaybePromise } from "../../util/Promises.js";
-import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
+import { AccessLevel, Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
 import { ClusterDatasource } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("AttributeServer");
@@ -33,6 +33,12 @@ const logger = Logger.get("AttributeServer");
 export class FabricScopeError extends MatterError {}
 
 export type AnyAttributeServer<T> = AttributeServer<T> | FabricScopedAttributeServer<T> | FixedAttributeServer<T>;
+
+type DelayedChangeData = {
+    oldValue: any;
+    newValue: any;
+    changed: boolean;
+};
 
 /**
  * Factory function to create an attribute server.
@@ -59,12 +65,25 @@ export function createAttributeServer<
     setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface, message?: Message) => boolean,
     validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
 ) {
-    const { id, schema, writable, fabricScoped, fixed, omitChanges, timed, default: defaultValue } = attributeDef;
+    const {
+        id,
+        schema,
+        writable,
+        fabricScoped,
+        fixed,
+        omitChanges,
+        timed,
+        default: defaultValue,
+        readAcl,
+        writeAcl,
+    } = attributeDef;
 
     if (fixed) {
         return new FixedAttributeServer(
             id,
             attributeName,
+            readAcl,
+            writeAcl,
             schema,
             writable,
             false,
@@ -80,6 +99,8 @@ export function createAttributeServer<
         return new FabricScopedAttributeServer(
             id,
             attributeName,
+            readAcl,
+            writeAcl,
             schema,
             writable,
             !omitChanges,
@@ -97,6 +118,8 @@ export function createAttributeServer<
     return new AttributeServer(
         id,
         attributeName,
+        readAcl,
+        writeAcl,
         schema,
         writable,
         !omitChanges,
@@ -120,10 +143,14 @@ export abstract class BaseAttributeServer<T> {
     protected value: T | undefined = undefined;
     protected endpoint?: EndpointInterface;
     readonly defaultValue: T;
+    #readAcl: AccessLevel | undefined;
+    #writeAcl: AccessLevel | undefined;
 
     constructor(
         readonly id: AttributeId,
         readonly name: string,
+        readAcl: AccessLevel | undefined,
+        writeAcl: AccessLevel | undefined,
         readonly schema: TlvSchema<T>,
         readonly isWritable: boolean,
         readonly isSubscribable: boolean,
@@ -131,6 +158,8 @@ export abstract class BaseAttributeServer<T> {
         initValue: T,
         defaultValue: T | undefined,
     ) {
+        this.#readAcl = readAcl;
+        this.#writeAcl = writeAcl;
         try {
             this.validateWithSchema(initValue);
             this.value = initValue;
@@ -154,7 +183,7 @@ export abstract class BaseAttributeServer<T> {
             this.schema.validate(value);
         } catch (error) {
             if (error instanceof ValidationError) {
-                error.message = `Validation error for attribute "${this.name}"${error.fieldName !== undefined ? `in field ${error.fieldName}` : ""}: ${error.message}`;
+                error.message = `Validation error for attribute "${this.name}"${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}: ${error.message}`;
             }
             throw error;
         }
@@ -169,6 +198,14 @@ export abstract class BaseAttributeServer<T> {
      * adjusted before the Device gets announced. Do not use this method to change values when the device is in use!
      */
     abstract init(value: T | undefined): void;
+
+    get writeAcl() {
+        return this.#writeAcl ?? AccessLevel.Operate; // ???
+    }
+
+    get readAcl() {
+        return this.#readAcl ?? AccessLevel.View; // ???
+    }
 }
 
 /**
@@ -187,6 +224,8 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
     constructor(
         id: AttributeId,
         name: string,
+        readAcl: AccessLevel | undefined,
+        writeAcl: AccessLevel | undefined,
         schema: TlvSchema<T>,
         isWritable: boolean,
         isSubscribable: boolean,
@@ -210,7 +249,18 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
             message?: Message,
         ) => T,
     ) {
-        super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, initValue, defaultValue); // Fixed attributes do not change, so are not subscribable
+        super(
+            id,
+            name,
+            readAcl,
+            writeAcl,
+            schema,
+            isWritable,
+            isSubscribable,
+            requiresTimedInteraction,
+            initValue,
+            defaultValue,
+        ); // Fixed attributes do not change, so are not subscribable
 
         if (getter === undefined) {
             this.getter = () => {
@@ -323,10 +373,13 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         message?: Message,
     ) => boolean;
     protected readonly validator: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void;
+    protected delayedChangeData?: DelayedChangeData = undefined;
 
     constructor(
         id: AttributeId,
         name: string,
+        readAcl: AccessLevel | undefined,
+        writeAcl: AccessLevel | undefined,
         schema: TlvSchema<T>,
         isWritable: boolean,
         isSubscribable: boolean,
@@ -384,6 +437,8 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         super(
             id,
             name,
+            readAcl,
+            writeAcl,
             schema,
             isWritable,
             isSubscribable,
@@ -435,20 +490,19 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      *
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
-    set(value: T, session: Session<MatterDevice>, message?: Message) {
+    set(value: T, session: Session<MatterDevice>, message?: Message, delayChangeEvents = false) {
         if (!this.isWritable) {
             throw new StatusResponseError(`Attribute "${this.name}" is not writable.`, StatusCode.UnsupportedWrite);
         }
-        // TODO: check ACL
 
-        this.setRemote(value, session, message);
+        this.setRemote(value, session, message, delayChangeEvents);
     }
 
     /**
      * Method that contains the logic to set a value "from remote" (e.g. from a client).
      */
-    protected setRemote(value: T, session: Session<MatterDevice>, message?: Message) {
-        this.processSet(value, session, message);
+    protected setRemote(value: T, session: Session<MatterDevice>, message?: Message, delayChangeEvents = false) {
+        this.processSet(value, session, message, delayChangeEvents);
         this.value = value;
     }
 
@@ -470,11 +524,29 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     /**
      * Helper Method to process the set of a value in a generic way. This method is used internally.
      */
-    protected processSet(value: T, session?: Session<MatterDevice>, message?: Message) {
+    protected processSet(value: T, session?: Session<MatterDevice>, message?: Message, delayChangeEvents = false) {
         this.validator(value, session, this.endpoint);
         const oldValue = this.getter(session, this.endpoint, undefined, message);
         const valueChanged = this.setter(value, session, this.endpoint, message);
-        this.handleVersionAndTriggerListeners(value, oldValue, valueChanged);
+        if (delayChangeEvents) {
+            this.delayedChangeData = {
+                oldValue: this.delayedChangeData?.oldValue ?? oldValue, // We keep the oldest value
+                newValue: value,
+                changed: !!this.delayedChangeData?.changed || valueChanged, // We combine the changed flag
+            };
+            logger.info(`Delay change for attribute "${this.name}" with value ${Logger.toJSON(value)}`);
+        } else {
+            this.handleVersionAndTriggerListeners(value, oldValue, valueChanged);
+        }
+    }
+
+    triggerDelayedChangeEvents() {
+        if (this.delayedChangeData !== undefined) {
+            const { oldValue, newValue, changed } = this.delayedChangeData;
+            this.delayedChangeData = undefined;
+            logger.info(`Trigger delayed change for attribute "${this.name}" with value ${Logger.toJSON(newValue)}`);
+            this.handleVersionAndTriggerListeners(newValue, oldValue, changed);
+        }
     }
 
     /**
@@ -566,6 +638,88 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     }
 }
 
+export function genericFabricScopedAttributeGetterFromFabric<T>(
+    fabric: Fabric,
+    cluster: Cluster<any, any, any, any, any>,
+    attributeName: string,
+    defaultValue: T,
+) {
+    const data = fabric.getScopedClusterDataValue<{ value: T }>(cluster, attributeName);
+    return data?.value ?? defaultValue;
+}
+
+export function genericFabricScopedAttributeGetter<T>(
+    session: Session<MatterDevice> | undefined,
+    isFabricFiltered: boolean,
+    cluster: Cluster<any, any, any, any, any>,
+    attributeName: string,
+    defaultValue: T,
+) {
+    if (session === undefined) {
+        throw new FabricScopeError(`Session is required for fabric scoped attribute ${attributeName}`);
+    }
+
+    if (isFabricFiltered) {
+        assertSecureSession(session);
+        return genericFabricScopedAttributeGetterFromFabric(
+            session.associatedFabric,
+            cluster,
+            attributeName,
+            defaultValue,
+        );
+    } else {
+        const fabrics = session.context.getFabrics();
+        const values = new Array<any>();
+        for (const fabric of fabrics) {
+            const value = genericFabricScopedAttributeGetterFromFabric(fabric, cluster, attributeName, defaultValue);
+            if (!Array.isArray(value)) {
+                throw new FabricScopeError(
+                    `Fabric scoped attribute "${attributeName}" can only be read for all fabrics if they are arrays.`,
+                );
+            }
+            values.push(...value);
+        }
+        return values as T;
+    }
+}
+
+export function genericFabricScopedAttributeSetterForFabric<T>(
+    fabric: Fabric,
+    cluster: Cluster<any, any, any, any, any>,
+    attributeName: string,
+    value: T,
+    defaultValue?: T,
+) {
+    const oldValue = genericFabricScopedAttributeGetterFromFabric(fabric, cluster, attributeName, defaultValue);
+    if (!isDeepEqual(value, oldValue)) {
+        const setResult = fabric.setScopedClusterDataValue(cluster, attributeName, { value });
+        if (MaybePromise.is(setResult)) {
+            throw new ImplementationError(
+                "Seems like an Asynchronous Storage is used with Legacy code paths which is forbidden!",
+            );
+        }
+        return true;
+    }
+    return false;
+}
+
+export function genericFabricScopedAttributeSetter<T>(
+    value: T,
+    session: Session<MatterDevice> | undefined,
+    cluster: Cluster<any, any, any, any, any>,
+    attributeName: string,
+    defaultValue?: T,
+) {
+    if (session === undefined) {
+        throw new FabricScopeError(`Session is required for fabric scoped attribute "${attributeName}".`);
+    }
+
+    assertSecureSession(session);
+    const fabric = session.associatedFabric;
+
+    return genericFabricScopedAttributeSetterForFabric(fabric, cluster, attributeName, value, defaultValue);
+}
+
 /**
  * Attribute server which is getting and setting the value for a defined fabric. The values are automatically persisted
  * on fabric level if no custom getter or setter is defined.
@@ -577,6 +731,8 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     constructor(
         id: AttributeId,
         name: string,
+        readAcl: AccessLevel | undefined,
+        writeAcl: AccessLevel | undefined,
         schema: TlvSchema<T>,
         isWritable: boolean,
         isSubscribable: boolean,
@@ -634,26 +790,8 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
 
         let isCustomSetter = false;
         if (setter === undefined) {
-            setter = (value, session) => {
-                if (session === undefined)
-                    throw new FabricScopeError(`Session is required for fabric scoped attribute "${name}".`);
-
-                assertSecureSession(session);
-                const fabric = session.associatedFabric;
-
-                const oldData = fabric.getScopedClusterDataValue<{ value: T }>(this.cluster, this.name);
-                const oldValue = oldData?.value ?? this.defaultValue;
-                if (!isDeepEqual(value, oldValue)) {
-                    const setResult = fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
-                    if (MaybePromise.is(setResult)) {
-                        throw new ImplementationError(
-                            "Seems like an Asynchronous Storage is used with Legacy code paths which is forbidden!",
-                        );
-                    }
-                    return true;
-                }
-                return false;
-            };
+            setter = (value, session) =>
+                genericFabricScopedAttributeSetter(value, session, this.cluster, this.name, this.defaultValue);
         } else {
             isCustomSetter = true;
         }
@@ -661,6 +799,8 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         super(
             id,
             name,
+            readAcl,
+            writeAcl,
             schema,
             isWritable,
             isSubscribable,
@@ -687,19 +827,43 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     }
 
     /**
+     * Fabric scoped enhancement of set to allow setting special fabricindex locally.
+     */
+    override set(
+        value: T,
+        session: Session<MatterDevice>,
+        message: Message,
+        delayChangeEvents = false,
+        preserveFabricIndex = false,
+    ) {
+        if (!this.isWritable) {
+            throw new StatusResponseError(`Attribute "${this.name}" is not writable.`, StatusCode.UnsupportedWrite);
+        }
+
+        this.setRemote(value, session, message, delayChangeEvents, preserveFabricIndex);
+    }
+
+    /**
      * Method that contains the logic to set a value "from remote" (e.g. from a client). For Fabric scoped attributes
      * we need to inject the fabric index into the value.
      */
-    protected override setRemote(value: T, session: Session<MatterDevice>, message: Message) {
+    protected override setRemote(
+        value: T,
+        session: Session<MatterDevice>,
+        message: Message,
+        delayChangeEvents = false,
+        preserveFabricIndex = false,
+    ) {
         // Inject fabric index into structures in general if undefined, if set it will be used
         value = this.schema.injectField(
             value,
             <number>Globals.FabricIndex.id,
             session.associatedFabric.fabricIndex,
-            existingFieldIndex => existingFieldIndex === undefined,
+            () => !preserveFabricIndex, // Noone should send any index and if we simply SHALL ignore it,  biuut internally we might need it
         );
+        logger.info(`Set remote value for fabric scoped attribute "${this.name}" to ${Logger.toJSON(value)}`);
 
-        super.setRemote(value, session, message);
+        super.setRemote(value, session, message, delayChangeEvents);
     }
 
     /**
@@ -766,7 +930,6 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
                 `Fabric scoped attribute "${this.name}" can not be read locally when a custom getter is defined.`,
             );
         }
-        const data = fabric.getScopedClusterDataValue<{ value: T }>(this.cluster, this.name);
-        return data?.value ?? this.defaultValue;
+        return genericFabricScopedAttributeGetterFromFabric(fabric, this.cluster, this.name, this.defaultValue);
     }
 }
