@@ -831,6 +831,16 @@ describe("Integration Test", () => {
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel4");
             assert.equal(await basicInfoCluster.attributes.location.get(true), "GB");
+
+            // Wait for subscription updates to arrive
+            const { promise, resolver } = createPromise<string>();
+            const callback = (value: string) => resolver(value);
+
+            basicInfoCluster.attributes.nodeLabel.addListener(callback);
+
+            await MockTime.advance(60);
+            await MockTime.advance(60);
+            await promise;
         });
     });
 

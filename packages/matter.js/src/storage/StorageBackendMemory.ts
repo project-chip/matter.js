@@ -8,10 +8,14 @@ import { StorageError, SyncStorage } from "./Storage.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
 
 export class StorageBackendMemory extends SyncStorage {
-    protected initialized = false;
+    protected isInitialized = false;
 
     constructor(protected store: any = {}) {
         super();
+    }
+
+    get initialized() {
+        return this.isInitialized;
     }
 
     static async create(store: any = {}) {
@@ -29,12 +33,12 @@ export class StorageBackendMemory extends SyncStorage {
 
     initialize() {
         if (this.initialized) throw new StorageError("Storage already initialized!");
-        this.initialized = true;
+        this.isInitialized = true;
         // nothing else to do
     }
 
     close() {
-        this.initialized = false;
+        this.isInitialized = false;
         // nothing to do
     }
 
