@@ -992,7 +992,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 3.2.7.5
              */
-            currentX: Attribute(0x3, TlvUInt16.bound({ max: 65279 }), { scene: true, persistent: true, default: 1558 }),
+            currentX: Attribute(
+                0x3,
+                TlvUInt16.bound({ max: 65279 }),
+                { scene: true, persistent: true, default: 24939 }
+            ),
 
             /**
              * The CurrentY attribute contains the current value of the normalized chromaticity value y, as defined in
@@ -1003,7 +1007,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 3.2.7.6
              */
-            currentY: Attribute(0x4, TlvUInt16.bound({ max: 65279 }), { scene: true, persistent: true, default: 1543 })
+            currentY: Attribute(
+                0x4,
+                TlvUInt16.bound({ max: 65279 }),
+                { scene: true, persistent: true, default: 24701 }
+            )
         },
 
         commands: {
@@ -1045,7 +1053,7 @@ export namespace ColorControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 3.2.7.9
              */
-            colorTemperatureMireds: Attribute(0x7, TlvUInt16, { scene: true, persistent: true, default: 0 }),
+            colorTemperatureMireds: Attribute(0x7, TlvUInt16, { scene: true, persistent: true, default: 250 }),
 
             /**
              * The ColorTempPhysicalMinMireds attribute indicates the minimum mired value supported by the hardware.
@@ -1063,7 +1071,7 @@ export namespace ColorControl {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 3.2.7.21
              */
-            colorTempPhysicalMaxMireds: Attribute(0x400c, TlvUInt16.bound({ max: 65279 }), { default: 0 }),
+            colorTempPhysicalMaxMireds: Attribute(0x400c, TlvUInt16.bound({ max: 65279 }), { default: 65279 }),
 
             /**
              * The CoupleColorTempToLevelMinMireds attribute specifies a lower bound on the value of the

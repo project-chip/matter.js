@@ -506,7 +506,7 @@ export const ScenesManagement = Cluster({
 
                 Field({
                     name: "CurrentScene", id: 0x1, type: "uint8", access: "S", conformance: "M", constraint: "desc",
-                    default: 0,
+                    default: 255,
                     details: "This field shall indicate the scene identifier of the scene last invoked on the associated fabric. " +
                         "If no scene has been invoked, the value of this field shall be 0xFF, the undefined scene identifier.",
                     xref: { document: "cluster", section: "1.4.7.2.2" }

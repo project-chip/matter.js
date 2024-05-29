@@ -315,7 +315,7 @@ export namespace BasicInformation {
     export const ClusterInstance = MutableCluster({
         id: 0x28,
         name: "BasicInformation",
-        revision: 2,
+        revision: 3,
 
         attributes: {
             /**

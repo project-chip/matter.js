@@ -170,7 +170,6 @@ export class AllClustersTestInstance implements TestInstance {
                     productUrl: "https://test.com",
                     uniqueId: `node-matter-unique`,
                     localConfigDisabled: false,
-                    reachable: true,
                     productAppearance: {
                         finish: BasicInformation.ProductFinish.Satin,
                         primaryColor: BasicInformation.Color.Purple,

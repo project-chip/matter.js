@@ -114,7 +114,6 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
                     finish: BasicInformation.ProductFinish.Satin,
                     primaryColor: BasicInformation.Color.Purple,
                 },
-                reachable: true,
             },
             delayedAnnouncement: false,
         });

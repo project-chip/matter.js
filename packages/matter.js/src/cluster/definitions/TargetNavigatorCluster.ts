@@ -167,7 +167,7 @@ export namespace TargetNavigator {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 6.11.5.2
              */
-            currentTarget: OptionalAttribute(0x1, TlvUInt8, { default: 0 })
+            currentTarget: OptionalAttribute(0x1, TlvUInt8, { default: 255 })
         },
 
         commands: {

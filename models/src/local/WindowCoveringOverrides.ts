@@ -265,6 +265,12 @@ LocalMatter.children.push(
                         type: "percent100ths",
                         conformance: "M",
                     },
+                    {
+                        id: 1,
+                        tag: "field",
+                        name: "Ignored",
+                        conformance: "D",
+                    },
                 ],
             },
 
@@ -280,6 +286,12 @@ LocalMatter.children.push(
                         name: "TiltPercent100thsValue",
                         type: "percent100ths",
                         conformance: "M",
+                    },
+                    {
+                        id: 1,
+                        tag: "field",
+                        name: "Ignored",
+                        conformance: "D",
                     },
                 ],
             },

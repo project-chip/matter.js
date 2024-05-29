@@ -33,7 +33,7 @@ export namespace WindowCovering {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.5
      */
-    export const TlvGoToLiftPercentageRequest = TlvObject({ liftPercent100thsValue: TlvField(1, TlvPercent100ths) });
+    export const TlvGoToLiftPercentageRequest = TlvObject({ liftPercent100thsValue: TlvField(0, TlvPercent100ths) });
 
     /**
      * Input to the WindowCovering goToLiftPercentage command
@@ -47,7 +47,7 @@ export namespace WindowCovering {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.7
      */
-    export const TlvGoToTiltPercentageRequest = TlvObject({ tiltPercent100thsValue: TlvField(1, TlvPercent100ths) });
+    export const TlvGoToTiltPercentageRequest = TlvObject({ tiltPercent100thsValue: TlvField(0, TlvPercent100ths) });
 
     /**
      * Input to the WindowCovering goToTiltPercentage command

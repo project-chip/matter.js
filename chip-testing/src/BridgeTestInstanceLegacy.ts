@@ -10,6 +10,7 @@ import {
     AdministratorCommissioning,
     BasicAdminCommissioningHandler,
     BasicInformation,
+    BridgedDeviceBasicInformation,
     ClusterServer,
     NetworkCommissioning,
 } from "@project-chip/matter.js/cluster";
@@ -17,6 +18,13 @@ import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/
 import { Aggregator, DimmableLightDevice } from "@project-chip/matter.js/device";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { AllClustersTestInstanceLegacy } from "./AllClustersTestInstanceLegacy.js";
+
+// Note - inevitable future confusion
+//
+// See https://github.com/project-chip/connectedhomeip/issues/30467
+//
+// Bug in CHIP tests, should be fixed for 1.4 but not available here for reasons.  Meanwhile give them what they expect
+Object.assign(BridgedDeviceBasicInformation.Cluster, { revision: 2 });
 
 export class BridgeTestInstanceLegacy extends AllClustersTestInstanceLegacy {
     aggregator = new Aggregator(undefined, { endpointId: EndpointNumber(2) });

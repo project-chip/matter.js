@@ -54,7 +54,7 @@ export namespace Specification {
     /**
      * Binary version of specification revision defined by Basic Information Cluster.
      */
-    export const SPECIFICATION_VERSION = 0x010300000;
+    export const SPECIFICATION_VERSION = 0x01030000;
 
     /**
      * Data model revision associated with the default revision of Matter.

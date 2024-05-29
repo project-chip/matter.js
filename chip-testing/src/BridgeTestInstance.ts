@@ -7,7 +7,12 @@
 import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
 import { BridgedDeviceBasicInformationServer } from "@project-chip/matter.js/behavior/definitions/bridged-device-basic-information";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
-import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@project-chip/matter.js/cluster";
+import {
+    AdministratorCommissioning,
+    BasicInformation,
+    BridgedDeviceBasicInformation,
+    NetworkCommissioning,
+} from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { AggregatorEndpoint, DimmableLightDevice } from "@project-chip/matter.js/endpoint/definitions";
@@ -16,6 +21,13 @@ import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
+
+// Note - inevitable future confusion
+//
+// See https://github.com/project-chip/connectedhomeip/issues/30467
+//
+// Bug in CHIP tests, should be fixed for 1.4 but not available here for reasons.  Meanwhile give them what they expect
+Object.assign(BridgedDeviceBasicInformation.Cluster, { revision: 2 });
 
 export class BridgeTestInstance implements TestInstance {
     serverNode: ServerNode | undefined;

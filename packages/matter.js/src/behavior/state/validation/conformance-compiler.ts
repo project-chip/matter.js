@@ -101,6 +101,14 @@ export function astToFunction(
                     case Code.Optional:
                         break;
 
+                    case Code.Value:
+                        if (staticNode.value === undefined) {
+                            disallowValue(value, session, location);
+                        } else {
+                            requireValue(value, session, location);
+                        }
+                        break;
+
                     default:
                         throw new UnsupportedConformanceNodeError(schema, compiledNode);
                 }
@@ -297,17 +305,16 @@ export function astToFunction(
      */
     function createName(param: string): DynamicNode {
         if (featuresAvailable.has(param)) {
-            // Name references a feature.  We know whether features are
-            // supported by a cluster at compile time so this results in a
-            // static node that is conformant iff the feature is supported
+            // Name references a feature.  We know whether features are supported by a cluster at compile time so this
+            // results in a static node that is conformant iff the feature is supported
             if (featuresSupported.has(param)) {
                 return ConformantNode;
             } else {
                 return NonconformantNode;
             }
         } else {
-            // Name references a sibling property.  This results in a value
-            // node but must be evaluated at runtime against a specific struct
+            // Name references a sibling property.  This results in a value node but must be evaluated at runtime
+            // against a specific struct
             param = camelize(param);
             return {
                 code: Code.Evaluate,

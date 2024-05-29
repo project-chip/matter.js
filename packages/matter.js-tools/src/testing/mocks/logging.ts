@@ -17,6 +17,18 @@ export const TheMockLogger: MockLogger = {
     emitAll: false,
 };
 
+/**
+ * These functions are invoked by beforeEach/afterEach handlers in generalSetup for Mocha.
+ *
+ * We place them in an array here rather than calling the global hook functions so that load order doesn't matter.  We
+ * use an array so that if multiple Logger classes are created (e.g. one for CJS and one for ESM) we don't have to worry
+ * about which logger is doing the logging.
+ */
+export const LoggerHooks = {
+    beforeEach: Array<(mocha: Mocha) => void>(),
+    afterEach: Array<(mocha: Mocha) => void>(),
+};
+
 export function loggerSetup(Logger: LoggerLike) {
     // Currently everywhere we run tests supports ANSI escape codes for
     // colorization.  This includes:
@@ -57,16 +69,16 @@ export function loggerSetup(Logger: LoggerLike) {
     Logger.log = interceptingLogger;
 
     // Divert log messages for test duration
-    beforeEach(function () {
+    LoggerHooks.beforeEach.push(function () {
         if (!TheMockLogger.emitAll) {
             messageBuffer = [];
         }
     });
 
     // Emit log messages only if the test fails
-    afterEach(function () {
+    LoggerHooks.afterEach.push(mocha => {
         if (messageBuffer?.length) {
-            if (this.currentTest?.isFailed()) {
+            if (mocha.suite.ctx.currentTest?.isFailed()) {
                 for (const args of messageBuffer) {
                     passMessage(args);
                 }

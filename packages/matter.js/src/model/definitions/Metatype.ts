@@ -137,9 +137,8 @@ export namespace Metatype {
                         return { type, value };
                     }
 
-                    // Strip off extra garbage like Number.parseInt would but
-                    // BigInt doesn't
-                    const match = value.match(/^(0x[0-9a-f]+|\d+)/);
+                    // Strip off extra garbage like Number.parseInt would but BigInt doesn't
+                    const match = value.match(/^(0x[0-9a-f]+|0b[01]+|\d+)/i);
                     if (match) {
                         value = match[1];
                     }

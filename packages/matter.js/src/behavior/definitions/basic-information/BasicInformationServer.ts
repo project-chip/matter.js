@@ -30,7 +30,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         const defaultsSet = {} as Record<string, any>;
 
         function setDefault<T extends keyof typeof state>(name: T, value: (typeof state)[T]) {
-            if (state[name] === undefined) {
+            if (state[name] === undefined || state[name] === 0) {
                 state[name] = value;
                 defaultsSet[name] = value;
             }

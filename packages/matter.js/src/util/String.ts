@@ -246,3 +246,12 @@ export function describeList(setType: "and" | "or", ...entries: string[]) {
 
     return text.join(" ");
 }
+
+/**
+ * Strip ANSI escape codes from a string.
+ */
+export function deansify(text: string) {
+    // Credit to https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings
+    // eslint-disable-next-line no-control-regex
+    return text.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, "");
+}

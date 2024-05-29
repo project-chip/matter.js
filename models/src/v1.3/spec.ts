@@ -932,7 +932,7 @@ export const SpecMatter = Matter({
 
                         Field({
                             name: "CurrentScene", id: 0x1, type: "uint8", access: "S", conformance: "M", constraint: "desc",
-                            default: 0,
+                            default: 255,
                             details: "This field shall indicate the scene identifier of the scene last invoked on the associated fabric. " +
                                 "If no scene has been invoked, the value of this field shall be 0xFF, the undefined scene identifier.",
                             xref: { document: "cluster", section: "1.4.7.2.2" }
@@ -6657,7 +6657,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "CurrentX", id: 0x3, type: "uint16", access: "R V", conformance: "XY",
-                    constraint: "0 to 65279", default: 1558, quality: "N S P",
+                    constraint: "0 to 65279", default: 24939, quality: "N S P",
 
                     details: "The CurrentX attribute contains the current value of the normalized chromaticity value x, as " +
                         "defined in the CIE xyY Color Space. It is updated as fast as practical during commands that change " +
@@ -6671,7 +6671,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "CurrentY", id: 0x4, type: "uint16", access: "R V", conformance: "XY",
-                    constraint: "0 to 65279", default: 1543, quality: "N S P",
+                    constraint: "0 to 65279", default: 24701, quality: "N S P",
 
                     details: "The CurrentY attribute contains the current value of the normalized chromaticity value y, as " +
                         "defined in the CIE xyY Color Space. It is updated as fast as practical during commands that change " +
@@ -6712,7 +6712,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "ColorTemperatureMireds", id: 0x7, type: "uint16", access: "R V", conformance: "CT",
-                    constraint: "0 to 65279", default: 0, quality: "N S P",
+                    constraint: "0 to 65279", default: 250, quality: "N S P",
 
                     details: "The ColorTemperatureMireds attribute contains a scaled inverse of the current value of the color " +
                         "temperature. The unit of ColorTemperatureMireds is the mired (micro reciprocal degree), a.k.a. " +
@@ -6883,7 +6883,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "ColorTempPhysicalMaxMireds", id: 0x400c, type: "uint16", access: "R V", conformance: "CT",
-                    constraint: "0 to 65279", default: 0,
+                    constraint: "0 to 65279", default: 65279,
                     details: "The ColorTempPhysicalMaxMireds attribute indicates the maximum mired value supported by the " +
                         "hardware. ColorTempPhysicalMaxMireds corresponds to the minimum color temperature in kelvins " +
                         "supported by the hardware. ColorTemperatureMireds <= ColorTempPhysicalMaxMireds.",
@@ -12623,7 +12623,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "UserUniqueId", id: 0x3, type: "uint32", conformance: "M", default: 0, quality: "X",
+                            name: "UserUniqueId", id: 0x3, type: "uint32", conformance: "M", default: 4294967295, quality: "X",
 
                             details: "This field shall indicate the fabric assigned number to use for connecting this user to other users " +
                                 "on other devices from the fabric’s perspective." +
@@ -17905,7 +17905,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "CurrentTarget", id: 0x1, type: "uint8", access: "R V", conformance: "O", constraint: "desc",
-                    default: 0,
+                    default: 255,
                     details: "Indicates the Identifier for the target which is currently in foreground on the corresponding " +
                         "Endpoint (Video Player or Content App), or 0xFF to indicate that no target is in the foreground." +
                         "\n" +
@@ -17926,7 +17926,7 @@ export const SpecMatter = Matter({
                             children: [Field({ name: "entry", type: "TargetInfoStruct" })]
                         }),
                         Field({
-                            name: "CurrentTarget", id: 0x1, type: "uint8", conformance: "O", constraint: "desc", default: 0
+                            name: "CurrentTarget", id: 0x1, type: "uint8", conformance: "O", constraint: "desc", default: 255
                         }),
                         Field({ name: "Data", id: 0x2, type: "octstr", conformance: "O", constraint: "max 900" })
                     ]

@@ -4,11 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
 import { LocalizationConfigurationBehavior } from "./LocalizationConfigurationBehavior.js";
 
 /**
  * This is the default server implementation of {@link LocalizationConfigurationBehavior}.
  */
-export class LocalizationConfigurationServer extends LocalizationConfigurationBehavior {}
+export class LocalizationConfigurationServer extends LocalizationConfigurationBehavior {
+    override initialize() {
+        if (this.state.activeLocale === undefined) {
+            this.state.activeLocale = this.detectedLocale;
+        }
+        if (this.state.supportedLocales === undefined) {
+            this.state.supportedLocales = [this.state.activeLocale];
+        }
+    }
+
+    protected get detectedLocale() {
+        return Intl.DateTimeFormat().resolvedOptions().locale;
+    }
+}

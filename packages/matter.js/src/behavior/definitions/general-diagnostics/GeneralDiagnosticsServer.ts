@@ -71,6 +71,14 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
         );
     }
 
+    override timeSnapshot() {
+        const time = Time.now().getTime();
+        return {
+            systemTimeMs: time,
+            posixTimeMs: time,
+        };
+    }
+
     /**
      * Register a hardware fault. This convenience method updates the activeHardwareFaults attribute and sends out the
      * HardwareFaultChanged event. Make sure to clear the fault when it is resolved.

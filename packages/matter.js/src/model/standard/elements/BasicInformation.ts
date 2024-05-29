@@ -23,7 +23,7 @@ export const BasicInformation = Cluster({
     xref: { document: "core", section: "11.1" },
 
     children: [
-        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 }),
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 3 }),
 
         Attribute({
             name: "DataModelRevision", id: 0x0, type: "uint16", access: "R V", conformance: "M",

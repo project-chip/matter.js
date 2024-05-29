@@ -1832,7 +1832,7 @@ export const DoorLock = Cluster({
                 }),
 
                 Field({
-                    name: "UserUniqueId", id: 0x3, type: "uint32", conformance: "M", default: 0, quality: "X",
+                    name: "UserUniqueId", id: 0x3, type: "uint32", conformance: "M", default: 4294967295, quality: "X",
 
                     details: "This field shall indicate the fabric assigned number to use for connecting this user to other users " +
                         "on other devices from the fabric’s perspective." +

@@ -89,7 +89,7 @@ export const ColorControl = Cluster({
 
         Attribute({
             name: "CurrentX", id: 0x3, type: "uint16", access: "R V", conformance: "XY",
-            constraint: "0 to 65279", default: 1558, quality: "N S P",
+            constraint: "0 to 65279", default: 24939, quality: "N S P",
 
             details: "The CurrentX attribute contains the current value of the normalized chromaticity value x, as " +
                 "defined in the CIE xyY Color Space. It is updated as fast as practical during commands that change " +
@@ -103,7 +103,7 @@ export const ColorControl = Cluster({
 
         Attribute({
             name: "CurrentY", id: 0x4, type: "uint16", access: "R V", conformance: "XY",
-            constraint: "0 to 65279", default: 1543, quality: "N S P",
+            constraint: "0 to 65279", default: 24701, quality: "N S P",
 
             details: "The CurrentY attribute contains the current value of the normalized chromaticity value y, as " +
                 "defined in the CIE xyY Color Space. It is updated as fast as practical during commands that change " +
@@ -144,7 +144,7 @@ export const ColorControl = Cluster({
 
         Attribute({
             name: "ColorTemperatureMireds", id: 0x7, type: "uint16", access: "R V", conformance: "CT",
-            constraint: "colorTempPhysicalMinMireds to colorTempPhysicalMaxMireds", default: 0,
+            constraint: "colorTempPhysicalMinMireds to colorTempPhysicalMaxMireds", default: 250,
             quality: "N S P",
 
             details: "The ColorTemperatureMireds attribute contains a scaled inverse of the current value of the color " +
@@ -326,7 +326,7 @@ export const ColorControl = Cluster({
 
         Attribute({
             name: "ColorTempPhysicalMaxMireds", id: 0x400c, type: "uint16", access: "R V", conformance: "CT",
-            constraint: "0 to 65279", default: 0,
+            constraint: "0 to 65279", default: 65279,
             details: "The ColorTempPhysicalMaxMireds attribute indicates the maximum mired value supported by the " +
                 "hardware. ColorTempPhysicalMaxMireds corresponds to the minimum color temperature in kelvins " +
                 "supported by the hardware. ColorTemperatureMireds <= ColorTempPhysicalMaxMireds.",

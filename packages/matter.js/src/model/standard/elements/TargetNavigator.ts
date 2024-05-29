@@ -48,7 +48,7 @@ export const TargetNavigator = Cluster({
 
         Attribute({
             name: "CurrentTarget", id: 0x1, type: "uint8", access: "R V", conformance: "O", constraint: "desc",
-            default: 0,
+            default: 255,
             details: "Indicates the Identifier for the target which is currently in foreground on the corresponding " +
                 "Endpoint (Video Player or Content App), or 0xFF to indicate that no target is in the foreground." +
                 "\n" +
@@ -68,7 +68,9 @@ export const TargetNavigator = Cluster({
                     name: "TargetList", id: 0x0, type: "list", conformance: "O",
                     children: [Field({ name: "entry", type: "TargetInfoStruct" })]
                 }),
-                Field({ name: "CurrentTarget", id: 0x1, type: "uint8", conformance: "O", constraint: "desc", default: 0 }),
+                Field({
+                    name: "CurrentTarget", id: 0x1, type: "uint8", conformance: "O", constraint: "desc", default: 255
+                }),
                 Field({ name: "Data", id: 0x2, type: "octstr", conformance: "O", constraint: "max 900" })
             ]
         }),
