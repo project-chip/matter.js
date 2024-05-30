@@ -51,6 +51,11 @@ describe("NodeId", () => {
         expect(nodeId).to.be.a("bigint");
     });
 
+    it("should successfully extract CASE authenticated tag", () => {
+        const cat = NodeId.extractAsCaseAuthenticatedTag(NodeId(BigInt("0xFFFFFFFD0011002A")));
+        expect(cat).equals(0x11002a);
+    });
+
     it("should throw an error when creating a NodeId from a CASE authenticated tag with negative value", () => {
         expect(() => NodeId.fromCaseAuthenticatedTag(CaseAuthenticatedTag(-1))).to.throw(UnexpectedDataError);
     });
