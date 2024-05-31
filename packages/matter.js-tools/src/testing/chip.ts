@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { deansify } from "@project-chip/matter.js/util";
 import Docker from "dockerode";
 import { readdir } from "fs/promises";
 import { Writable } from "stream";
@@ -17,6 +16,15 @@ import {
     TestEnvironmentVariables,
 } from "./chip/chip-config.js";
 import { type TestRunner } from "./runner.js";
+
+/**
+ * Strip ANSI escape codes from a string.
+ */
+function deansify(text: string) {
+    // Credit to https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings
+    // eslint-disable-next-line no-control-regex
+    return text.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, "");
+}
 
 export async function testChip(runner: TestRunner, environment: TestEnvironment) {
     // This may be customized via environment variables

@@ -126,6 +126,7 @@ export class TvTestInstance implements TestInstance {
                         finish: BasicInformation.ProductFinish.Satin,
                         primaryColor: BasicInformation.Color.Purple,
                     },
+                    reachable: true,
                 },
                 administratorCommissioning: {
                     windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,
@@ -151,7 +152,7 @@ export class TvTestInstance implements TestInstance {
                     applicationVersion: "1",
                 },
                 wakeOnLan: {
-                    macAddress: "0000000000000000",
+                    macAddress: "000000000000",
                     linkLocalAddress: ByteArray.fromHex("00000000000000000000000000000000"),
                 },
             },

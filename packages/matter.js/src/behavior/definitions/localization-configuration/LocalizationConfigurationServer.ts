@@ -19,6 +19,7 @@ export class LocalizationConfigurationServer extends LocalizationConfigurationBe
         }
     }
 
+    /** Override this getter with own implementation to detect the locale of the system. */
     protected get detectedLocale() {
         return Intl.DateTimeFormat().resolvedOptions().locale;
     }

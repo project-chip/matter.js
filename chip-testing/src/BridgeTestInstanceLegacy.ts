@@ -55,6 +55,7 @@ export class BridgeTestInstanceLegacy extends AllClustersTestInstanceLegacy {
                     finish: BasicInformation.ProductFinish.Satin,
                     primaryColor: BasicInformation.Color.Purple,
                 },
+                reachable: true,
             },
             delayedAnnouncement: false,
         });

@@ -174,6 +174,7 @@ export class AllClustersTestInstance implements TestInstance {
                         finish: BasicInformation.ProductFinish.Satin,
                         primaryColor: BasicInformation.Color.Purple,
                     },
+                    reachable: true,
                 },
                 localizationConfiguration: {
                     activeLocale: "en-US",

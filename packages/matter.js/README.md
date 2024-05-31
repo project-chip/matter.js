@@ -5,17 +5,19 @@ Implementation of Matter protocol in typescript with no native dependencies (and
 This is the JavaScript only Core of the Matter protocol. It is used by other projects to implement Matter Nodes and Clients and add the relevant specific implementations for Network and other elements.
 
 The following features are abstracted away to allow to be implemented environment specific:
-* Network (UDP/MDNS)
-* Crypto (to be split out)
-* Storage
-* Date/Timer
-* Logger (Default uses "console")
+
+-   Network (UDP/MDNS)
+-   Crypto (to be split out)
+-   Storage
+-   Date/Timer
+-   Logger (Default uses "console")
 
 ## Exported functionality
+
 This library exports the Matter protocol functionality as well as some helper functions as named exports:
 
 | Export                                  | Description                                                                                                                                                                                         |
-|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@project-chip/matter.js`               | Exports the API to implement a Device or a Controller.                                                                                                                                              |
 | `@project-chip/matter.js/behavior`      | Exports Behavior classes (New API) as framework to implement all relevant Logic for clusters and internal logic. Contains auto-generated class structures and also Cluster default implementations. |
 | `@project-chip/matter.js/certificate`   | Exports Certificate (Root-/PAA/PAI/IAC/DA-Certificates) related functionality                                                                                                                       |
@@ -51,15 +53,16 @@ Both exports and the typings are exported as CommonJS and ES6 modules.
 For more details please refer to the [API Documentation](../../docs/matter.js).
 
 ### Included Cluster default implementations
+
 Each cluster that has commands also needs to have them implemented based on the chosen feature set.
 
 Matter.js provides a specification-compliant implementation of all Matter 1.1 clusters. For many clusters our implementations perform high-level business logic. For other clusters you provide the needed business logic by extending the Matter.js implementation. In all cases Matter.js takes care of details like the Matter protocol, input and output validation and persistence. The developer can then decide if own functionality needs to be developed and can overwrite and extend these implementations or just use them.
 
-Matter.js allows the following clusters to be used directly with a default implementation for all relevant commands - or the clusters do not need any commands and so the standard feature set of Matter.js for attributes is sufficient. 
+Matter.js allows the following clusters to be used directly with a default implementation for all relevant commands - or the clusters do not need any commands and so the standard feature set of Matter.js for attributes is sufficient.
 All clusters contained in this list are also verified using the CI YAML project-chip certification tests (if the PICS code is in brackets then no tests are available).
 
 | PICS      | Cluster name                     | Features                        | Matter-Version | Additional Information                                                                                                                                                                                                                                                                                                                                                                                                            |
-|:----------|----------------------------------|---------------------------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :-------- | -------------------------------- | ------------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | (ACL)     | Access Control                   | None                            | 1.1            | No command implementations needed, but ACL checks still pending in matter.js                                                                                                                                                                                                                                                                                                                                                      |
 | CADMIN    | Administrator Commissioning      | None, Basic                     | 1.1            | Internal Root cluster implemented, no need to customize                                                                                                                                                                                                                                                                                                                                                                           |
 | APBSC     | Application Basic                | None                            | 1.1            | No command implementations needed                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -73,7 +76,7 @@ All clusters contained in this list are also verified using the CI YAML project-
 | FLABEL    | Fixed Label                      | None                            | 1.1            | No command implementations needed                                                                                                                                                                                                                                                                                                                                                                                                 |
 | FLW       | Flow Measurement                 | None                            | 1.1            | No command implementations needed                                                                                                                                                                                                                                                                                                                                                                                                 |
 | CGEN      | General Commissioning            | None                            | 1.1            | Internal Root cluster implemented, no need to customize                                                                                                                                                                                                                                                                                                                                                                           |
-| DGGEN     | General Diagnostics              | None                            | 1.1            | Implements all needed functionality like upTime and totalOperationalHours counters. Additionally, provides convenience methods to register or clear faults including sending the relevant events if the optional events got enabled. Network interface types reported can be defined by Environment variables (see Environment.ts).                                                                                               |
+| DGGEN     | General Diagnostics              | None                            | 1.1            | No command implementations needed when used without test event triggers. All mandatory attributes and events supported. Optional attributes, events and Test event triggers needs to be implemented by developer if needed.                                                                                                                                                                                                       |
 | I         | Identify                         | None, IdentifyQuery             | 1.1            | All mandatory commands implemented. Additionally, state `isIdentifying` and events `start/stopIdentifying` are available to easiely extend the server.                                                                                                                                                                                                                                                                            |
 | ILL       | Illuminance Measurement          | None                            | 1.1            | No command implementations needed                                                                                                                                                                                                                                                                                                                                                                                                 |
 | (RH)      | Leaf Wetness Measurement         | None                            | 1.1            | No command implementations needed                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -105,14 +108,15 @@ All clusters contained in this list are also verified using the CI YAML project-
 More will come over time and can also be contributed by the community!
 
 ### Typescript note
+
 To have Typescript and your IDE know all the relevant exported functionality you need to use the following in your tsconfig.json:
 
 ```json5
 {
-    "compilerOptions": {
-        "moduleResolution": "node16", // Required to support package.json exports
-        "module": "node16" // Required to make sure all imports are js
-    }
+    compilerOptions: {
+        moduleResolution: "node16", // Required to support package.json exports
+        module: "node16", // Required to make sure all imports are js
+    },
 }
 ```
 
@@ -121,18 +125,19 @@ Additionally, we recommend using `"strictNullChecks": true` or better for code q
 ## matter.js usage
 
 matter.js is used at the core of those two projects:
-* [matternode](https://github.com/project-chip/matternode): a light-weight node.js implementation of a Matter Node
-* [matter-node.js](../matter-node.js/README.md): a Matter client / server running on node.js compatible with HA (Android / iOs support in progress)
+
+-   [matternode](https://github.com/project-chip/matternode): a light-weight node.js implementation of a Matter Node
+-   [matter-node.js](../matter-node.js/README.md): a Matter client / server running on node.js compatible with HA (Android / iOs support in progress)
 
 ## Building
 
-* `npm run build`: Build all code and create CommonJS and ES6 variants in dist directory. This will built incrementally and only build the changed files.
-* `npm run build-clean`: Clean the dist directory and build all code from scratch
+-   `npm run build`: Build all code and create CommonJS and ES6 variants in dist directory. This will built incrementally and only build the changed files.
+-   `npm run build-clean`: Clean the dist directory and build all code from scratch
 
 ## Tests
 
-* `npm run test-node`: Run tests in node.js
-* `npm run test-web`: Run tests in the browser
-* `npm run test`: Run all tests
+-   `npm run test-node`: Run tests in node.js
+-   `npm run test-web`: Run tests in the browser
+-   `npm run test`: Run all tests
 
 test-web will create a /coverage directory containing the test code coverage
