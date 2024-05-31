@@ -637,11 +637,12 @@ export class CommissioningServer extends MatterNode {
                             targets: null, // entire node
                         },
                     ]);
-                    logger.info(
+                    logger.warn(
                         "Added missing ACL entry for fabric",
                         fabric.fabricIndex,
-                        "for Node id",
+                        "for Node ID",
                         fabric.rootNodeId,
+                        ". This should only happen once after upgrading to matter.js 0.9.1",
                     );
                 }
             }

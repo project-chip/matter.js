@@ -10,6 +10,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -->
 
 ### __WORK IN PROGRESS__
+* IMPORTANT: This version adds Access Control functionality and also tries to set missing ACL entries on startup on a best effort basis. If you encounter issues and have Access/Permission denied errors ain the logs then please delete and recommission the device to make sure all ACLs are set correctly. If this is not possible open GitHub issue or contact us in Discord to get help.
 * Matter-Core functionality:
   * Feature: Implemented Access Control List (ACL) as required by Matter specification
   * Enhancement: Enhanced several internal structures needed to support ACL properly

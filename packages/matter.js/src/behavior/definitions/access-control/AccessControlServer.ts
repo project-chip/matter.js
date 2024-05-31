@@ -69,7 +69,13 @@ export class AccessControlServer extends AccessControlBehavior {
                     subjects: [fabric.rootNodeId],
                     targets: null, // entire node
                 });
-                logger.info("Added missing ACL entry for fabric", fabric.fabricIndex, "for Node id", fabric.rootNodeId);
+                logger.warn(
+                    "Added missing ACL entry for fabric",
+                    fabric.fabricIndex,
+                    "for Node ID",
+                    fabric.rootNodeId,
+                    ". This should only happen once after upgrading to matter.js 0.9.1",
+                );
             }
         }
         if (acl.length > originalAclLength) {
