@@ -222,7 +222,7 @@ ___
 
 ### PatchType
 
-Ƭ **PatchType**\<`V`\>: `V` extends infer E[] ? `Record`\<\`$\{number}\`, [`PatchType`](exports_cluster.ClusterType.md#patchtype)\<`E`\>\> \| [`PatchType`](exports_cluster.ClusterType.md#patchtype)\<`E`\>[] : `V` extends `number` ? `number` : `V` extends `object` ? `V` extends (...`args`: `any`[]) => `any` ? `never` : \{ [K in keyof V]?: PatchType\<V[K]\> } : `V`
+Ƭ **PatchType**\<`V`\>: `V` extends infer E[] ? `Record`\<\`$\{number}\`, [`PatchType`](exports_cluster.ClusterType.md#patchtype)\<`E`\>\> \| [`PatchType`](exports_cluster.ClusterType.md#patchtype)\<`E`\>[] : `V` extends `number` ? `number` : `V` extends `bigint` ? `bigint` : `V` extends `object` ? `V` extends (...`args`: `any`[]) => `any` ? `never` : \{ [K in keyof V]?: PatchType\<V[K]\> } : `V`
 
 #### Type parameters
 
@@ -238,7 +238,7 @@ ___
 
 ### RelaxTypes
 
-Ƭ **RelaxTypes**\<`V`\>: `V` extends `number` ? `number` : `V` extends `object` ? `V` extends (...`args`: `any`[]) => `any` ? `V` : \{ [K in keyof V]: RelaxTypes\<V[K]\> } : `V`
+Ƭ **RelaxTypes**\<`V`\>: `V` extends `number` ? `number` : `V` extends `bigint` ? `bigint` : `V` extends `object` ? `V` extends (...`args`: `any`[]) => `any` ? `V` : \{ [K in keyof V]: RelaxTypes\<V[K]\> } : `V`
 
 #### Type parameters
 

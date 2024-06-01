@@ -73,7 +73,7 @@ User specific options for the Commissioning process
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:39](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/ControllerCommissioner.ts#L39)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:39](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L39)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/MessageExchange.ts#L41)
+[packages/matter.js/src/protocol/MessageExchange.ts:41](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L41)
 
 ## Variables
 
@@ -104,4 +104,4 @@ Maximum 32 bit counter value.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:13](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/MessageCounter.ts#L13)
+[packages/matter.js/src/protocol/MessageCounter.ts:13](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageCounter.ts#L13)

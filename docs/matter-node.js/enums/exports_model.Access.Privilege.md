@@ -25,7 +25,7 @@ Administer privilege.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:110
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:113
 
 ___
 
@@ -37,7 +37,7 @@ Manage privilege.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:106
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:109
 
 ___
 
@@ -49,7 +49,7 @@ Operate privilege.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:102
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:105
 
 ___
 
@@ -61,4 +61,4 @@ View privilege.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:98
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:101

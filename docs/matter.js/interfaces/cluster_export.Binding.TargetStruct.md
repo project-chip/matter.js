@@ -28,7 +28,7 @@ MatterSpecification.v11.Core § 9.6.5.1
 
 ### cluster
 
-• `Optional` **cluster**: [`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>
+• `Optional` **cluster**: [`ClusterId`](../modules/datatype_export.md#clusterid)
 
 This field is the cluster ID (client & server) on the local and target endpoint(s). If this field is
 present, the client cluster shall also exist on this endpoint (with this Binding cluster). If this field is
@@ -44,7 +44,7 @@ TypeFromSchema.cluster
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:57](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L57)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:57](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L57)
 
 ___
 
@@ -65,7 +65,7 @@ TypeFromSchema.endpoint
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L48)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L48)
 
 ___
 
@@ -79,7 +79,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:59](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L59)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:59](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L59)
 
 ___
 
@@ -100,7 +100,7 @@ TypeFromSchema.group
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L40)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:40](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L40)
 
 ___
 
@@ -120,4 +120,4 @@ TypeFromSchema.node
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:32](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L32)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L32)

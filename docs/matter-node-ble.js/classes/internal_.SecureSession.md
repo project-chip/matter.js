@@ -89,6 +89,7 @@
 | :------ | :------ |
 | `args` | `Object` |
 | `args.attestationKey` | `Uint8Array` |
+| `args.caseAuthenticatedTags?` | [`CaseAuthenticatedTag`](../modules/internal_.md#caseauthenticatedtag)[] |
 | `args.closeCallback` | () => `Promise`\<`void`\> |
 | `args.context` | `T` |
 | `args.decryptKey` | `Uint8Array` |
@@ -111,7 +112,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:30
+matter.js/dist/esm/session/SecureSession.d.ts:34
 
 ## Properties
 
@@ -121,7 +122,7 @@ matter.js/dist/esm/session/SecureSession.d.ts:30
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:15
+matter.js/dist/esm/session/SecureSession.d.ts:18
 
 ___
 
@@ -195,7 +196,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:70
+matter.js/dist/esm/session/SecureSession.d.ts:75
 
 ___
 
@@ -269,7 +270,7 @@ Session.associatedFabric
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:62
+matter.js/dist/esm/session/SecureSession.d.ts:67
 
 ___
 
@@ -283,7 +284,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:44
+matter.js/dist/esm/session/SecureSession.d.ts:49
 
 ___
 
@@ -301,7 +302,7 @@ Session.closingAfterExchangeFinished
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:45
+matter.js/dist/esm/session/SecureSession.d.ts:50
 
 ___
 
@@ -319,7 +320,7 @@ Session.context
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:57
+matter.js/dist/esm/session/SecureSession.d.ts:62
 
 ___
 
@@ -333,7 +334,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:53
+matter.js/dist/esm/session/SecureSession.d.ts:58
 
 ___
 
@@ -351,7 +352,7 @@ Session.id
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:55
+matter.js/dist/esm/session/SecureSession.d.ts:60
 
 ___
 
@@ -369,7 +370,7 @@ Session.isPase
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:48
+matter.js/dist/esm/session/SecureSession.d.ts:53
 
 ___
 
@@ -387,7 +388,7 @@ Session.isSecure
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:47
+matter.js/dist/esm/session/SecureSession.d.ts:52
 
 ___
 
@@ -405,7 +406,7 @@ Session.name
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:56
+matter.js/dist/esm/session/SecureSession.d.ts:61
 
 ___
 
@@ -423,7 +424,7 @@ Session.nodeId
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:59
+matter.js/dist/esm/session/SecureSession.d.ts:64
 
 ___
 
@@ -437,7 +438,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:61
+matter.js/dist/esm/session/SecureSession.d.ts:66
 
 ___
 
@@ -455,7 +456,7 @@ Session.peerNodeId
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:60
+matter.js/dist/esm/session/SecureSession.d.ts:65
 
 ___
 
@@ -473,7 +474,7 @@ Session.peerSessionId
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:58
+matter.js/dist/esm/session/SecureSession.d.ts:63
 
 ___
 
@@ -487,7 +488,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:46
+matter.js/dist/esm/session/SecureSession.d.ts:51
 
 ## Methods
 
@@ -507,7 +508,7 @@ matter.js/dist/esm/session/SecureSession.d.ts:46
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:54
+matter.js/dist/esm/session/SecureSession.d.ts:59
 
 ___
 
@@ -527,7 +528,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:63
+matter.js/dist/esm/session/SecureSession.d.ts:68
 
 ___
 
@@ -547,7 +548,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:65
+matter.js/dist/esm/session/SecureSession.d.ts:70
 
 ___
 
@@ -567,7 +568,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:49
+matter.js/dist/esm/session/SecureSession.d.ts:54
 
 ___
 
@@ -592,7 +593,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:50
+matter.js/dist/esm/session/SecureSession.d.ts:55
 
 ___
 
@@ -619,7 +620,7 @@ Destroys a session. Outstanding subscription data will be discarded.
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:69
+matter.js/dist/esm/session/SecureSession.d.ts:74
 
 ___
 
@@ -643,7 +644,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:51
+matter.js/dist/esm/session/SecureSession.d.ts:56
 
 ___
 
@@ -670,7 +671,7 @@ Ends a session. Outstanding subscription data will be flushed before the session
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:67
+matter.js/dist/esm/session/SecureSession.d.ts:72
 
 ___
 
@@ -684,7 +685,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:52
+matter.js/dist/esm/session/SecureSession.d.ts:57
 
 ___
 
@@ -782,7 +783,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:64
+matter.js/dist/esm/session/SecureSession.d.ts:69
 
 ___
 
@@ -826,6 +827,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `args` | `Object` |
+| `args.caseAuthenticatedTags?` | [`CaseAuthenticatedTag`](../modules/internal_.md#caseauthenticatedtag)[] |
 | `args.closeCallback` | () => `Promise`\<`void`\> |
 | `args.context` | `T` |
 | `args.fabric` | `undefined` \| [`Fabric`](internal_.Fabric.md) |
@@ -845,4 +847,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:16
+matter.js/dist/esm/session/SecureSession.d.ts:19

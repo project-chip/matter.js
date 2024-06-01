@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:51](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L51)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L51)
 
 ## Properties
 
@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:49](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L49)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:49](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L49)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:37](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L37)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:37](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L37)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:44](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L44)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:44](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L44)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L41)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:41](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L41)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L48)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L48)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:45](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L45)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:45](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L45)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:47](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L47)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:47](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L47)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L46)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:46](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L46)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:51](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L51)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L51)
 
 ## Methods
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:138](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L138)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:138](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L138)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:70](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L70)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:70](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L70)
 
 ___
 
@@ -201,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:104](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L104)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:104](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L104)
 
 ___
 
@@ -226,7 +226,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:59](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L59)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:59](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L59)
 
 ___
 
@@ -240,4 +240,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:55](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L55)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:55](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L55)

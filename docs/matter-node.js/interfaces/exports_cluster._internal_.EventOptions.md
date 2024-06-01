@@ -24,4 +24,4 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:178
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:179

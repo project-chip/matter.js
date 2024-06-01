@@ -149,7 +149,7 @@ MatterSpecification.v11.Core § 11.9.6.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:298](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L298)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:298](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L298)
 
 ___
 
@@ -219,7 +219,7 @@ MatterSpecification.v11.Core § 11.9.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:390](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L390)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:390](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L390)
 
 ___
 
@@ -273,4 +273,4 @@ MatterSpecification.v11.Core § 11.9.6.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:333](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L333)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:333](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L333)

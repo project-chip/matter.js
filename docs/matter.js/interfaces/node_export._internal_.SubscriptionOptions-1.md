@@ -25,7 +25,7 @@ low and inside the range requested by the connected controller.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:26](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L26)
+[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L26)
 
 ___
 
@@ -39,7 +39,7 @@ set limits.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L33)
+[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:33](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L33)
 
 ___
 
@@ -53,4 +53,4 @@ that get powered on in parallel not all send at the same timepoint.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L40)
+[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:40](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L40)

@@ -51,7 +51,7 @@ BridgedDeviceBasicInformationBehavior.State.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
 
 ## Properties
 
@@ -69,7 +69,7 @@ BridgedDeviceBasicInformationBehavior.State.hardwareVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:134](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L134)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:134](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L134)
 
 ___
 
@@ -87,7 +87,7 @@ BridgedDeviceBasicInformationBehavior.State.hardwareVersionString
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:139](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L139)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:139](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L139)
 
 ___
 
@@ -105,7 +105,7 @@ BridgedDeviceBasicInformationBehavior.State.manufacturingDate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:154](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L154)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:154](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L154)
 
 ___
 
@@ -123,7 +123,7 @@ BridgedDeviceBasicInformationBehavior.State.nodeLabel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:125](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L125)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:125](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L125)
 
 ___
 
@@ -141,7 +141,7 @@ BridgedDeviceBasicInformationBehavior.State.partNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:159](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L159)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:159](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L159)
 
 ___
 
@@ -155,7 +155,7 @@ BridgedDeviceBasicInformationBehavior.State.productAppearance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:186](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L186)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:186](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L186)
 
 ___
 
@@ -173,7 +173,7 @@ BridgedDeviceBasicInformationBehavior.State.productLabel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:169](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L169)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:169](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L169)
 
 ___
 
@@ -191,7 +191,7 @@ BridgedDeviceBasicInformationBehavior.State.productName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:120](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L120)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:120](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L120)
 
 ___
 
@@ -209,7 +209,7 @@ BridgedDeviceBasicInformationBehavior.State.productUrl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:164](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L164)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:164](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L164)
 
 ___
 
@@ -223,7 +223,7 @@ BridgedDeviceBasicInformationBehavior.State.reachable
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/bridged-device-basic-information/BridgedDeviceBasicInformationServer.ts:69](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/bridged-device-basic-information/BridgedDeviceBasicInformationServer.ts#L69)
+[packages/matter.js/src/behavior/definitions/bridged-device-basic-information/BridgedDeviceBasicInformationServer.ts:69](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/bridged-device-basic-information/BridgedDeviceBasicInformationServer.ts#L69)
 
 ___
 
@@ -241,7 +241,7 @@ BridgedDeviceBasicInformationBehavior.State.serialNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:174](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L174)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:174](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L174)
 
 ___
 
@@ -259,7 +259,7 @@ BridgedDeviceBasicInformationBehavior.State.softwareVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:144](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L144)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:144](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L144)
 
 ___
 
@@ -277,7 +277,7 @@ BridgedDeviceBasicInformationBehavior.State.softwareVersionString
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:149](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L149)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:149](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L149)
 
 ___
 
@@ -295,7 +295,7 @@ BridgedDeviceBasicInformationBehavior.State.uniqueId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:184](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L184)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:184](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L184)
 
 ___
 
@@ -313,7 +313,7 @@ BridgedDeviceBasicInformationBehavior.State.vendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:115](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L115)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:115](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L115)
 
 ___
 
@@ -331,4 +331,4 @@ BridgedDeviceBasicInformationBehavior.State.vendorName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:110](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:110](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L110)

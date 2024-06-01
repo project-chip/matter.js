@@ -26,7 +26,7 @@ MatterSpecification.v11.Core § 7.18.2.25
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:161
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:162
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:159
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:160
 
 ___
 
@@ -46,4 +46,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:160
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:161

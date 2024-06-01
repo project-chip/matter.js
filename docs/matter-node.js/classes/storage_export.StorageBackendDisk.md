@@ -20,7 +20,12 @@ Matter.js uses this key/value API to manage persistent state.
 
 ### Properties
 
+- [isInitialized](storage_export.StorageBackendDisk.md#isinitialized)
 - [localStorage](storage_export.StorageBackendDisk.md#localstorage)
+
+### Accessors
+
+- [initialized](storage_export.StorageBackendDisk.md#initialized)
 
 ### Methods
 
@@ -60,9 +65,19 @@ Matter.js uses this key/value API to manage persistent state.
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:13](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L13)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:14](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L14)
 
 ## Properties
+
+### isInitialized
+
+• `Protected` **isInitialized**: `boolean` = `false`
+
+#### Defined in
+
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:12](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L12)
+
+___
 
 ### localStorage
 
@@ -70,7 +85,25 @@ Matter.js uses this key/value API to manage persistent state.
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:11](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L11)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:11](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L11)
+
+## Accessors
+
+### initialized
+
+• `get` **initialized**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Overrides
+
+SyncStorage.initialized
+
+#### Defined in
+
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L20)
 
 ## Methods
 
@@ -91,7 +124,7 @@ Matter.js uses this key/value API to manage persistent state.
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:43](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L43)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L48)
 
 ___
 
@@ -105,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:27](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L27)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L32)
 
 ___
 
@@ -129,7 +162,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:116](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L116)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:121](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L121)
 
 ___
 
@@ -147,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L23)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:28](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L28)
 
 ___
 
@@ -171,7 +204,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:99](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L99)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:104](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L104)
 
 ___
 
@@ -196,7 +229,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:73](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L73)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:78](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L78)
 
 ___
 
@@ -227,7 +260,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:51](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L51)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:56](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L56)
 
 ___
 
@@ -248,7 +281,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L31)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:36](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L36)
 
 ___
 
@@ -266,7 +299,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:19](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L19)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L24)
 
 ___
 
@@ -292,7 +325,7 @@ Returns all keys of a storage context without keys of sub-contexts
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:78](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L78)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:83](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L83)
 
 ___
 
@@ -318,7 +351,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:57](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L57)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:62](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L62)
 
 ▸ **set**(`contexts`, `values`): `void`
 
@@ -339,7 +372,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:58](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L58)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:63](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L63)
 
 ___
 
@@ -363,4 +396,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendDisk.ts:90](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L90)
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:95](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L95)

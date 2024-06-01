@@ -4,9 +4,20 @@
 
 ## Table of contents
 
+### Enumerations
+
+- [AuthModeNone](../enums/behavior_definitions_access_control_export._internal_.AuthModeNone.md)
+
+### Classes
+
+- [AccessControlManager](../classes/behavior_definitions_access_control_export._internal_.AccessControlManager.md)
+
 ### Type Aliases
 
 - [AccessControlBehaviorType](behavior_definitions_access_control_export._internal_.md#accesscontrolbehaviortype)
+- [AclEntry](behavior_definitions_access_control_export._internal_.md#aclentry)
+- [AclList](behavior_definitions_access_control_export._internal_.md#acllist)
+- [IncomingSubjectDescriptor](behavior_definitions_access_control_export._internal_.md#incomingsubjectdescriptor)
 - [StateType](behavior_definitions_access_control_export._internal_.md#statetype)
 
 ## Type Aliases
@@ -17,7 +28,46 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:17](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L17)
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L17)
+
+___
+
+### AclEntry
+
+Ƭ **AclEntry**: `Omit`\<[`TypeFromBitmapSchema`](schema_export.md#typefrombitmapschema)\<typeof [`TlvAccessControlEntryStruct`](cluster_export.AccessControl.md#tlvaccesscontrolentrystruct)\>, ``"privilege"``\> & \{ `privilege`: [`AccessLevel`](../enums/cluster_export.AccessLevel.md)  }
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L23)
+
+___
+
+### AclList
+
+Ƭ **AclList**: [`AclEntry`](behavior_definitions_access_control_export._internal_.md#aclentry)[]
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L26)
+
+___
+
+### IncomingSubjectDescriptor
+
+Ƭ **IncomingSubjectDescriptor**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `authMode` | [`AccessControlEntryAuthMode`](../enums/cluster_export.AccessControl.AccessControlEntryAuthMode.md) \| [`AuthModeNone`](../enums/behavior_definitions_access_control_export._internal_.AuthModeNone.md) |
+| `fabricIndex` | [`FabricIndex`](datatype_export.md#fabricindex) |
+| `isCommissioning` | `boolean` |
+| `subjects` | [`NodeId`](datatype_export.md#nodeid)[] |
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L43)
 
 ___
 
@@ -27,4 +77,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:19](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L19)

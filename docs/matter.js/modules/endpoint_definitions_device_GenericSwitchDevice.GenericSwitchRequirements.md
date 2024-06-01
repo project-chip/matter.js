@@ -25,7 +25,7 @@ We provide this alias to the default implementation [FixedLabelServer](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L46)
+[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:46](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L46)
 
 ___
 
@@ -39,7 +39,7 @@ We provide this alias to the default implementation [IdentifyServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:32](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L32)
+[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L32)
 
 ___
 
@@ -53,7 +53,7 @@ We provide this alias to the default implementation [SwitchServer](endpoint_defi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:39](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L39)
+[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:39](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L39)
 
 ___
 
@@ -75,4 +75,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:51](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L51)
+[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L51)

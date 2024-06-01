@@ -36,7 +36,7 @@ Remember the bootUp time for the device.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts:286](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts#L286)
+[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts:286](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts#L286)
 
 ___
 
@@ -48,7 +48,7 @@ Last time the total operational hours counter was updated.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts:289](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts#L289)
+[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts:289](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts#L289)
 
 ___
 
@@ -60,4 +60,4 @@ Timer to update the total operational hours counter every 5 minutes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts:292](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts#L292)
+[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts:292](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts#L292)

@@ -36,8 +36,8 @@ PumpConfigurationAndControl.Cluster requires you to enable one or more optional 
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts:20](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts#L20)
+[packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts#L20)
 
-[packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts#L23)
 
-[packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts#L25)
+[packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlBehavior.ts#L25)

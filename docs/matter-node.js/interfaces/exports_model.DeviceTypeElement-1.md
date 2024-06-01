@@ -56,7 +56,7 @@ TODO - extract/merge DeviceTypes.ts?
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:19
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:20
 
 ___
 
@@ -72,7 +72,7 @@ Child elements.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:20
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:21
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:18
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:19
 
 ___
 
@@ -148,7 +148,7 @@ context-specific.  A "machine appropriate" semantic differentiator.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:16
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:17
 
 ___
 
@@ -175,7 +175,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:18
 
 ___
 

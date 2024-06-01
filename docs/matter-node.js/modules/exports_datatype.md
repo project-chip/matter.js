@@ -10,10 +10,18 @@
 
 ### Namespaces
 
+- [AttributeId](exports_datatype.AttributeId.md)
 - [CaseAuthenticatedTag](exports_datatype.CaseAuthenticatedTag.md)
 - [ClusterId](exports_datatype.ClusterId.md)
+- [CommandId](exports_datatype.CommandId.md)
+- [DeviceTypeId](exports_datatype.DeviceTypeId.md)
+- [EndpointNumber](exports_datatype.EndpointNumber.md)
+- [EventId](exports_datatype.EventId.md)
 - [FabricIndex](exports_datatype.FabricIndex.md)
+- [FieldId](exports_datatype.FieldId.md)
+- [GroupId](exports_datatype.GroupId.md)
 - [NodeId](exports_datatype.NodeId.md)
+- [VendorId](exports_datatype.VendorId.md)
 
 ### Type Aliases
 
@@ -92,6 +100,8 @@ packages/matter.js/dist/esm/datatype/AttributeId.d.ts:14
 
 packages/matter.js/dist/esm/datatype/AttributeId.d.ts:13
 
+packages/matter.js/dist/esm/datatype/AttributeId.d.ts:15
+
 ___
 
 ### CaseAuthenticatedTag
@@ -116,7 +126,7 @@ ___
 
 ### ClusterId
 
-Ƭ **ClusterId**\<`ID`\>: [`Branded`](util_export.md#branded)\<`ID`, ``"ClusterId"``\>
+Ƭ **ClusterId**: [`Branded`](util_export.md#branded)\<`number`, ``"ClusterId"``\>
 
 A Cluster Identifier is a 32 bit number and SHALL reference a single cluster specification and
 SHALL define conformance to that specification.
@@ -124,12 +134,6 @@ SHALL define conformance to that specification.
 **`See`**
 
 MatterSpecification.v10.Core § 7.10
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ID` | extends `number` = `number` |
 
 #### Defined in
 
@@ -157,6 +161,8 @@ packages/matter.js/dist/esm/datatype/CommandId.d.ts:14
 
 packages/matter.js/dist/esm/datatype/CommandId.d.ts:13
 
+packages/matter.js/dist/esm/datatype/CommandId.d.ts:15
+
 ___
 
 ### DataVersion
@@ -180,7 +186,7 @@ ___
 
 ### DeviceTypeId
 
-Ƭ **DeviceTypeId**\<`ID`\>: [`Branded`](util_export.md#branded)\<`ID`, ``"DeviceTypeId"``\>
+Ƭ **DeviceTypeId**: [`Branded`](util_export.md#branded)\<`number`, ``"DeviceTypeId"``\>
 
 A Device type ID is a 32-bit number that defines the type of the device.
 
@@ -188,17 +194,13 @@ A Device type ID is a 32-bit number that defines the type of the device.
 
 MatterSpecification.v10.Core § 7.15
 
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ID` | extends `number` = `number` |
-
 #### Defined in
 
 packages/matter.js/dist/esm/datatype/DeviceTypeId.d.ts:14
 
 packages/matter.js/dist/esm/datatype/DeviceTypeId.d.ts:13
+
+packages/matter.js/dist/esm/datatype/DeviceTypeId.d.ts:15
 
 ___
 
@@ -217,6 +219,8 @@ MatterSpecification.v10.Core § 7.18.2.11
 packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:14
 
 packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:13
+
+packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:15
 
 ___
 
@@ -254,6 +258,8 @@ MatterSpecification.v10.Core § 7.18.2.17
 packages/matter.js/dist/esm/datatype/EventId.d.ts:14
 
 packages/matter.js/dist/esm/datatype/EventId.d.ts:13
+
+packages/matter.js/dist/esm/datatype/EventId.d.ts:15
 
 ___
 
@@ -337,6 +343,8 @@ packages/matter.js/dist/esm/datatype/FieldId.d.ts:15
 
 packages/matter.js/dist/esm/datatype/FieldId.d.ts:14
 
+packages/matter.js/dist/esm/datatype/FieldId.d.ts:16
+
 ___
 
 ### GroupId
@@ -361,6 +369,8 @@ MatterSpecification.v10.Core § 2.5.4
 packages/matter.js/dist/esm/datatype/GroupId.d.ts:21
 
 packages/matter.js/dist/esm/datatype/GroupId.d.ts:20
+
+packages/matter.js/dist/esm/datatype/GroupId.d.ts:22
 
 ___
 
@@ -420,6 +430,8 @@ packages/matter.js/dist/esm/datatype/VendorId.d.ts:16
 
 packages/matter.js/dist/esm/datatype/VendorId.d.ts:15
 
+packages/matter.js/dist/esm/datatype/VendorId.d.ts:17
+
 ## Variables
 
 ### TlvAttributeId
@@ -430,7 +442,7 @@ Tlv schema for an Attribute Id.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/AttributeId.d.ts:16
+packages/matter.js/dist/esm/datatype/AttributeId.d.ts:20
 
 ___
 
@@ -446,13 +458,13 @@ ___
 
 ### TlvClusterId
 
-• `Const` **TlvClusterId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<`number`\>, `number`\>
+• `Const` **TlvClusterId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`ClusterId`](exports_datatype.md#clusterid), `number`\>
 
 Tlv schema for a cluster Id.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/ClusterId.d.ts:22
+packages/matter.js/dist/esm/datatype/ClusterId.d.ts:23
 
 ___
 
@@ -464,7 +476,7 @@ Tlv schema for an Command Id.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/CommandId.d.ts:16
+packages/matter.js/dist/esm/datatype/CommandId.d.ts:19
 
 ___
 
@@ -482,13 +494,13 @@ ___
 
 ### TlvDeviceTypeId
 
-• `Const` **TlvDeviceTypeId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`DeviceTypeId`](exports_datatype.md#devicetypeid)\<`number`\>, `number`\>
+• `Const` **TlvDeviceTypeId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`DeviceTypeId`](exports_datatype.md#devicetypeid), `number`\>
 
 Tlv schema for a Device type ID.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/DeviceTypeId.d.ts:16
+packages/matter.js/dist/esm/datatype/DeviceTypeId.d.ts:19
 
 ___
 
@@ -500,7 +512,7 @@ Tlv schema for an Endpoint number.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:16
+packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:19
 
 ___
 
@@ -524,7 +536,7 @@ Tlv schema for an Event Id.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/EventId.d.ts:16
+packages/matter.js/dist/esm/datatype/EventId.d.ts:19
 
 ___
 
@@ -572,7 +584,7 @@ TLV schema for a field ID.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/FieldId.d.ts:17
+packages/matter.js/dist/esm/datatype/FieldId.d.ts:21
 
 ___
 
@@ -584,7 +596,7 @@ Tlv Schema for a Group Id.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/GroupId.d.ts:23
+packages/matter.js/dist/esm/datatype/GroupId.d.ts:27
 
 ___
 
@@ -596,7 +608,7 @@ Tlv schema for a Node Identifier.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/NodeId.d.ts:56
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:57
 
 ___
 
@@ -620,19 +632,20 @@ Data model for a Vendor Identifier.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/VendorId.d.ts:18
+packages/matter.js/dist/esm/datatype/VendorId.d.ts:21
 
 ## Functions
 
 ### AttributeId
 
-▸ **AttributeId**(`id`): [`AttributeId`](exports_datatype.md#attributeid)
+▸ **AttributeId**(`attributeId`, `validate?`): [`AttributeId`](exports_datatype.md#attributeid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` |
+| `attributeId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -666,23 +679,18 @@ ___
 
 ### ClusterId
 
-▸ **ClusterId**\<`ID`\>(`id`): [`ClusterId`](exports_datatype.md#clusterid)\<`ID`\>
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ID` | extends `number` |
+▸ **ClusterId**(`clusterId`, `validate?`): [`ClusterId`](exports_datatype.md#clusterid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `ID` |
+| `clusterId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
-[`ClusterId`](exports_datatype.md#clusterid)\<`ID`\>
+[`ClusterId`](exports_datatype.md#clusterid)
 
 #### Defined in
 
@@ -692,13 +700,14 @@ ___
 
 ### CommandId
 
-▸ **CommandId**(`v`): [`CommandId`](exports_datatype.md#commandid)
+▸ **CommandId**(`commandId`, `validate?`): [`CommandId`](exports_datatype.md#commandid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `commandId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -732,23 +741,18 @@ ___
 
 ### DeviceTypeId
 
-▸ **DeviceTypeId**\<`ID`\>(`v`): [`DeviceTypeId`](exports_datatype.md#devicetypeid)\<`ID`\>
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ID` | extends `number` |
+▸ **DeviceTypeId**(`deviceTypeId`, `validate?`): [`DeviceTypeId`](exports_datatype.md#devicetypeid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `ID` |
+| `deviceTypeId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
-[`DeviceTypeId`](exports_datatype.md#devicetypeid)\<`ID`\>
+[`DeviceTypeId`](exports_datatype.md#devicetypeid)
 
 #### Defined in
 
@@ -758,13 +762,14 @@ ___
 
 ### EndpointNumber
 
-▸ **EndpointNumber**(`n`): [`EndpointNumber`](exports_datatype.md#endpointnumber)
+▸ **EndpointNumber**(`endpointId`, `validate?`): [`EndpointNumber`](exports_datatype.md#endpointnumber)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `n` | `number` |
+| `endpointId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -798,13 +803,14 @@ ___
 
 ### EventId
 
-▸ **EventId**(`v`): [`EventId`](exports_datatype.md#eventid)
+▸ **EventId**(`eventId`, `validate?`): [`EventId`](exports_datatype.md#eventid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `eventId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -878,13 +884,14 @@ ___
 
 ### FieldId
 
-▸ **FieldId**(`id`): [`FieldId`](exports_datatype.md#fieldid)
+▸ **FieldId**(`fieldId`, `validate?`): [`FieldId`](exports_datatype.md#fieldid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` |
+| `fieldId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -898,13 +905,14 @@ ___
 
 ### GroupId
 
-▸ **GroupId**(`v`): [`GroupId`](exports_datatype.md#groupid)
+▸ **GroupId**(`groupId`, `validate?`): [`GroupId`](exports_datatype.md#groupid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `groupId` | `number` \| `bigint` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -938,13 +946,14 @@ ___
 
 ### VendorId
 
-▸ **VendorId**(`v`): [`VendorId`](exports_datatype.md#vendorid)
+▸ **VendorId**(`vendorId`, `validate?`): [`VendorId`](exports_datatype.md#vendorid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `vendorId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 

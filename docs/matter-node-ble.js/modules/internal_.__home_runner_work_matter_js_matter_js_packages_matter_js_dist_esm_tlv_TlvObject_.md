@@ -85,7 +85,7 @@ to the value being empty.
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:80
+matter.js/dist/esm/tlv/TlvObject.d.ts:81
 
 ___
 
@@ -113,7 +113,7 @@ Object TLV schema.
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:64
+matter.js/dist/esm/tlv/TlvObject.d.ts:65
 
 ___
 
@@ -142,7 +142,7 @@ Object TLV optional field.
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:82
+matter.js/dist/esm/tlv/TlvObject.d.ts:83
 
 ___
 
@@ -174,7 +174,7 @@ decoding.
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:92
+matter.js/dist/esm/tlv/TlvObject.d.ts:93
 
 ___
 
@@ -205,13 +205,13 @@ decoding.
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:87
+matter.js/dist/esm/tlv/TlvObject.d.ts:88
 
 ___
 
 ### TlvTaggedList
 
-▸ **TlvTaggedList**\<`F`\>(`fields`): [`ObjectSchema`](../classes/internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.ObjectSchema.md)\<`F`\>
+▸ **TlvTaggedList**\<`F`\>(`fields`, `allowProtocolSpecificTags?`): [`ObjectSchema`](../classes/internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.ObjectSchema.md)\<`F`\>
 
 List TLV schema with all tagged entries.
 List entries that can appear multiple times can be defined using TlvRepeatedField/TlvOptionalRepeatedField and are
@@ -232,6 +232,7 @@ TODO: We represent Tlv Lists right now as named object properties. This formally
 | Name | Type |
 | :------ | :------ |
 | `fields` | `F` |
+| `allowProtocolSpecificTags?` | `boolean` |
 
 #### Returns
 
@@ -239,4 +240,4 @@ TODO: We represent Tlv Lists right now as named object properties. This formally
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:74
+matter.js/dist/esm/tlv/TlvObject.d.ts:75

@@ -27,9 +27,11 @@ on fabric level if no custom getter or setter is defined.
 
 ### Properties
 
+- [#private](internal_.FabricScopedAttributeServer.md##private)
 - [cluster](internal_.FabricScopedAttributeServer.md#cluster)
 - [datasource](internal_.FabricScopedAttributeServer.md#datasource)
 - [defaultValue](internal_.FabricScopedAttributeServer.md#defaultvalue)
+- [delayedChangeData](internal_.FabricScopedAttributeServer.md#delayedchangedata)
 - [endpoint](internal_.FabricScopedAttributeServer.md#endpoint)
 - [getter](internal_.FabricScopedAttributeServer.md#getter)
 - [id](internal_.FabricScopedAttributeServer.md#id)
@@ -46,6 +48,11 @@ on fabric level if no custom getter or setter is defined.
 - [value](internal_.FabricScopedAttributeServer.md#value)
 - [valueChangeListeners](internal_.FabricScopedAttributeServer.md#valuechangelisteners)
 - [valueSetListeners](internal_.FabricScopedAttributeServer.md#valuesetlisteners)
+
+### Accessors
+
+- [readAcl](internal_.FabricScopedAttributeServer.md#readacl)
+- [writeAcl](internal_.FabricScopedAttributeServer.md#writeacl)
 
 ### Methods
 
@@ -66,6 +73,7 @@ on fabric level if no custom getter or setter is defined.
 - [setLocalForFabric](internal_.FabricScopedAttributeServer.md#setlocalforfabric)
 - [setRemote](internal_.FabricScopedAttributeServer.md#setremote)
 - [subscribe](internal_.FabricScopedAttributeServer.md#subscribe)
+- [triggerDelayedChangeEvents](internal_.FabricScopedAttributeServer.md#triggerdelayedchangeevents)
 - [updated](internal_.FabricScopedAttributeServer.md#updated)
 - [updatedLocal](internal_.FabricScopedAttributeServer.md#updatedlocal)
 - [updatedLocalForFabric](internal_.FabricScopedAttributeServer.md#updatedlocalforfabric)
@@ -75,7 +83,7 @@ on fabric level if no custom getter or setter is defined.
 
 ### constructor
 
-• **new FabricScopedAttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `initValue`, `defaultValue`, `cluster`, `datasource`, `getter?`, `setter?`, `validator?`): [`FabricScopedAttributeServer`](internal_.FabricScopedAttributeServer.md)\<`T`\>
+• **new FabricScopedAttributeServer**\<`T`\>(`id`, `name`, `readAcl`, `writeAcl`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `initValue`, `defaultValue`, `cluster`, `datasource`, `getter?`, `setter?`, `validator?`): [`FabricScopedAttributeServer`](internal_.FabricScopedAttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -89,6 +97,8 @@ on fabric level if no custom getter or setter is defined.
 | :------ | :------ |
 | `id` | [`AttributeId`](../modules/internal_.md#attributeid) |
 | `name` | `string` |
+| `readAcl` | `undefined` \| [`AccessLevel`](../enums/internal_.AccessLevel.md) |
+| `writeAcl` | `undefined` \| [`AccessLevel`](../enums/internal_.AccessLevel.md) |
 | `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
 | `isWritable` | `boolean` |
 | `isSubscribable` | `boolean` |
@@ -111,9 +121,23 @@ on fabric level if no custom getter or setter is defined.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:245
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:259
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Inherited from
+
+[AttributeServer](internal_.AttributeServer.md).[#private](internal_.AttributeServer.md##private)
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:38
+
+___
 
 ### cluster
 
@@ -121,7 +145,7 @@ matter.js/dist/esm/cluster/server/AttributeServer.d.ts:245
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:242
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:256
 
 ___
 
@@ -135,7 +159,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:67
 
 ___
 
@@ -149,7 +173,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:50
+
+___
+
+### delayedChangeData
+
+• `Protected` `Optional` **delayedChangeData**: [`DelayedChangeData`](../modules/internal_.md#delayedchangedata)
+
+#### Inherited from
+
+[AttributeServer](internal_.AttributeServer.md).[delayedChangeData](internal_.AttributeServer.md#delayedchangedata)
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:143
 
 ___
 
@@ -163,7 +201,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:49
 
 ___
 
@@ -194,7 +232,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:61
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:69
 
 ___
 
@@ -208,7 +246,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:33
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:39
 
 ___
 
@@ -218,7 +256,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:243
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:257
 
 ___
 
@@ -228,7 +266,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:244
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:258
 
 ___
 
@@ -242,7 +280,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:130
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:138
 
 ___
 
@@ -256,7 +294,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:37
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
 
 ___
 
@@ -270,7 +308,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:36
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
 
 ___
 
@@ -284,7 +322,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:34
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:40
 
 ___
 
@@ -298,7 +336,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:38
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
 
 ___
 
@@ -312,7 +350,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:35
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:41
 
 ___
 
@@ -343,7 +381,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:133
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:141
 
 ___
 
@@ -373,7 +411,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:134
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:142
 
 ___
 
@@ -389,7 +427,7 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:48
 
 ___
 
@@ -403,7 +441,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:131
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:139
 
 ___
 
@@ -417,7 +455,43 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:132
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:140
+
+## Accessors
+
+### readAcl
+
+• `get` **readAcl**(): [`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Inherited from
+
+AttributeServer.readAcl
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
+
+___
+
+### writeAcl
+
+• `get` **writeAcl**(): [`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Inherited from
+
+AttributeServer.writeAcl
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
 
 ## Methods
 
@@ -444,7 +518,7 @@ new value and the version number.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:217
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:227
 
 ___
 
@@ -471,7 +545,7 @@ new value and the old value.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:226
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:236
 
 ___
 
@@ -495,7 +569,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:47
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53
 
 ___
 
@@ -526,7 +600,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:78
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:86
 
 ___
 
@@ -548,7 +622,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:95
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:103
 
 ___
 
@@ -572,7 +646,7 @@ If a getter is defined this method returns an error and the value should be retr
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:280
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:298
 
 ___
 
@@ -609,7 +683,7 @@ attributes.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:86
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:94
 
 ___
 
@@ -638,7 +712,7 @@ internally.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:196
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:206
 
 ___
 
@@ -665,13 +739,13 @@ the version number.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:250
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:264
 
 ___
 
 ### processSet
 
-▸ **processSet**(`value`, `session?`, `message?`): `void`
+▸ **processSet**(`value`, `session?`, `message?`, `delayChangeEvents?`): `void`
 
 Helper Method to process the set of a value in a generic way. This method is used internally.
 
@@ -682,6 +756,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 | `value` | `T` |
 | `session?` | [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `message?` | [`Message`](../interfaces/internal_.Message.md) |
+| `delayChangeEvents?` | `boolean` |
 
 #### Returns
 
@@ -693,7 +768,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:191
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:200
 
 ___
 
@@ -719,7 +794,7 @@ Remove an internal listener.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:221
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:231
 
 ___
 
@@ -745,20 +820,15 @@ Remove an external listener.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:235
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:245
 
 ___
 
 ### set
 
-▸ **set**(`value`, `session`, `message?`): `void`
+▸ **set**(`value`, `session`, `message`, `delayChangeEvents?`, `preserveFabricIndex?`): `void`
 
-Set the value of the attribute. This method is used by the Interaction model to write the value of the attribute
-and includes the ACL check. It should not be used locally in the code!
-
-If a setter is defined this setter method is called to store the value.
-
-Listeners are called when the value changes (internal listeners) or in any case (external listeners).
+Fabric scoped enhancement of set to allow setting special fabricindex locally.
 
 #### Parameters
 
@@ -766,19 +836,21 @@ Listeners are called when the value changes (internal listeners) or in any case 
 | :------ | :------ |
 | `value` | `T` |
 | `session` | [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
-| `message?` | [`Message`](../interfaces/internal_.Message.md) |
+| `message` | [`Message`](../interfaces/internal_.Message.md) |
+| `delayChangeEvents?` | `boolean` |
+| `preserveFabricIndex?` | `boolean` |
 
 #### Returns
 
 `void`
 
-#### Inherited from
+#### Overrides
 
 [AttributeServer](internal_.AttributeServer.md).[set](internal_.AttributeServer.md#set)
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:172
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:268
 
 ___
 
@@ -804,7 +876,7 @@ Set Local is not allowed for fabric scoped attributes. Use setLocalForFabric ins
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:259
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:277
 
 ___
 
@@ -831,13 +903,13 @@ Listeners are called when the value changes (internal listeners) or in any case 
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:267
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:285
 
 ___
 
 ### setRemote
 
-▸ **setRemote**(`value`, `session`, `message`): `void`
+▸ **setRemote**(`value`, `session`, `message`, `delayChangeEvents?`, `preserveFabricIndex?`): `void`
 
 Method that contains the logic to set a value "from remote" (e.g. from a client). For Fabric scoped attributes
 we need to inject the fabric index into the value.
@@ -849,6 +921,8 @@ we need to inject the fabric index into the value.
 | `value` | `T` |
 | `session` | [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `message` | [`Message`](../interfaces/internal_.Message.md) |
+| `delayChangeEvents?` | `boolean` |
+| `preserveFabricIndex?` | `boolean` |
 
 #### Returns
 
@@ -860,7 +934,7 @@ we need to inject the fabric index into the value.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:255
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:273
 
 ___
 
@@ -887,7 +961,25 @@ new value and the old value. This method is a convenient alias for addValueSetLi
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:231
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:241
+
+___
+
+### triggerDelayedChangeEvents
+
+▸ **triggerDelayedChangeEvents**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[AttributeServer](internal_.AttributeServer.md).[triggerDelayedChangeEvents](internal_.AttributeServer.md#triggerdelayedchangeevents)
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:201
 
 ___
 
@@ -917,7 +1009,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:204
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:214
 
 ___
 
@@ -941,7 +1033,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:212
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:222
 
 ___
 
@@ -966,7 +1058,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:274
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:292
 
 ___
 
@@ -990,4 +1082,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:46
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52

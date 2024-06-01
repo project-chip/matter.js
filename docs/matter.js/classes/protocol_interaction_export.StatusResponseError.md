@@ -14,6 +14,8 @@ Error base Class for all errors related to the status response messages.
 
   ↳↳ [`ValidationError`](common_export.ValidationError.md)
 
+  ↳↳ [`NoAssociatedFabricError`](session_export.NoAssociatedFabricError.md)
+
 ## Table of contents
 
 ### Constructors
@@ -49,7 +51,7 @@ Error base Class for all errors related to the status response messages.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/StatusCode.ts:42](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/StatusCode.ts#L42)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:42](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/StatusCode.ts#L42)
 
 ## Properties
 
@@ -59,7 +61,7 @@ Error base Class for all errors related to the status response messages.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/StatusCode.ts:45](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/StatusCode.ts#L45)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:45](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/StatusCode.ts#L45)
 
 ___
 
@@ -69,4 +71,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/StatusCode.ts:44](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/StatusCode.ts#L44)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:44](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/StatusCode.ts#L44)

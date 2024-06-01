@@ -19,6 +19,7 @@
 
 ### Properties
 
+- [#private](exports_cluster.CommandServer.md##private)
 - [handler](exports_cluster.CommandServer.md#handler)
 - [invokeId](exports_cluster.CommandServer.md#invokeid)
 - [name](exports_cluster.CommandServer.md#name)
@@ -26,6 +27,10 @@
 - [requiresTimedInteraction](exports_cluster.CommandServer.md#requirestimedinteraction)
 - [responseId](exports_cluster.CommandServer.md#responseid)
 - [responseSchema](exports_cluster.CommandServer.md#responseschema)
+
+### Accessors
+
+- [invokeAcl](exports_cluster.CommandServer.md#invokeacl)
 
 ### Methods
 
@@ -36,7 +41,7 @@
 
 ### constructor
 
-• **new CommandServer**\<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`): [`CommandServer`](exports_cluster.CommandServer.md)\<`RequestT`, `ResponseT`\>
+• **new CommandServer**\<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `invokeAcl`, `handler`): [`CommandServer`](exports_cluster.CommandServer.md)\<`RequestT`, `ResponseT`\>
 
 #### Type parameters
 
@@ -55,6 +60,7 @@
 | `requestSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`RequestT`\> |
 | `responseSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`ResponseT`\> |
 | `requiresTimedInteraction` | `boolean` |
+| `invokeAcl` | [`AccessLevel`](../enums/exports_cluster.AccessLevel.md) |
 | `handler` | (`request`: `RequestT`, `session`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
 
 #### Returns
@@ -63,9 +69,19 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:23
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:15
+
+___
 
 ### handler
 
@@ -90,7 +106,7 @@ packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:20
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:22
 
 ___
 
@@ -100,7 +116,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:14
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:16
 
 ___
 
@@ -110,7 +126,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:16
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 
 ___
 
@@ -120,7 +136,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:17
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:19
 
 ___
 
@@ -130,7 +146,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:19
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 
 ___
 
@@ -140,7 +156,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:15
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:17
 
 ___
 
@@ -150,7 +166,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:20
+
+## Accessors
+
+### invokeAcl
+
+• `get` **invokeAcl**(): [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:35
 
 ## Methods
 
@@ -170,7 +200,7 @@ packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:32
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:34
 
 ___
 
@@ -193,4 +223,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:22
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:24

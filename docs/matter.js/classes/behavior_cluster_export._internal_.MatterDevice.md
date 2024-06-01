@@ -17,6 +17,7 @@
 - [#exchangeManager](behavior_cluster_export._internal_.MatterDevice.md##exchangemanager)
 - [#fabricManager](behavior_cluster_export._internal_.MatterDevice.md##fabricmanager)
 - [#failsafeContext](behavior_cluster_export._internal_.MatterDevice.md##failsafecontext)
+- [#isClosing](behavior_cluster_export._internal_.MatterDevice.md##isclosing)
 - [#sessionManager](behavior_cluster_export._internal_.MatterDevice.md##sessionmanager)
 - [activeCommissioningEndCallback](behavior_cluster_export._internal_.MatterDevice.md#activecommissioningendcallback)
 - [activeCommissioningMode](behavior_cluster_export._internal_.MatterDevice.md#activecommissioningmode)
@@ -27,7 +28,6 @@
 - [commissioningChangedCallback](behavior_cluster_export._internal_.MatterDevice.md#commissioningchangedcallback)
 - [fabricStorage](behavior_cluster_export._internal_.MatterDevice.md#fabricstorage)
 - [getCommissioningConfig](behavior_cluster_export._internal_.MatterDevice.md#getcommissioningconfig)
-- [isClosing](behavior_cluster_export._internal_.MatterDevice.md#isclosing)
 - [scanners](behavior_cluster_export._internal_.MatterDevice.md#scanners)
 - [secureChannelProtocol](behavior_cluster_export._internal_.MatterDevice.md#securechannelprotocol)
 - [sessionChangedCallback](behavior_cluster_export._internal_.MatterDevice.md#sessionchangedcallback)
@@ -40,6 +40,7 @@
 - [exchangeManager](behavior_cluster_export._internal_.MatterDevice.md#exchangemanager)
 - [fabricManager](behavior_cluster_export._internal_.MatterDevice.md#fabricmanager)
 - [failsafeContext](behavior_cluster_export._internal_.MatterDevice.md#failsafecontext)
+- [isClosing](behavior_cluster_export._internal_.MatterDevice.md#isclosing)
 - [sessionManager](behavior_cluster_export._internal_.MatterDevice.md#sessionmanager)
 
 ### Methods
@@ -59,6 +60,7 @@
 - [deleteTransportInterface](behavior_cluster_export._internal_.MatterDevice.md#deletetransportinterface)
 - [endCommissioning](behavior_cluster_export._internal_.MatterDevice.md#endcommissioning)
 - [existsOpenPaseSession](behavior_cluster_export._internal_.MatterDevice.md#existsopenpasesession)
+- [expireAllFabricAnnouncements](behavior_cluster_export._internal_.MatterDevice.md#expireallfabricannouncements)
 - [findDevice](behavior_cluster_export._internal_.MatterDevice.md#finddevice)
 - [findFabricFromDestinationId](behavior_cluster_export._internal_.MatterDevice.md#findfabricfromdestinationid)
 - [findResumptionRecordById](behavior_cluster_export._internal_.MatterDevice.md#findresumptionrecordbyid)
@@ -82,7 +84,7 @@
 
 ### constructor
 
-• **new MatterDevice**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `commissioningChangedCallback`, `sessionChangedCallback`): [`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)
+• **new MatterDevice**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `minimumCaseSessionsPerFabricAndNode`, `commissioningChangedCallback`, `sessionChangedCallback`): [`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)
 
 #### Parameters
 
@@ -91,6 +93,7 @@
 | `sessionStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
 | `fabricStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
 | `getCommissioningConfig` | () => [`Configuration`](../interfaces/behavior_cluster_export._internal_.Configuration.md) |
+| `minimumCaseSessionsPerFabricAndNode` | `number` |
 | `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex), `fabricAction`: [`FabricAction`](../enums/fabric_export.FabricAction.md)) => `void` |
 | `sessionChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex)) => `void` |
 
@@ -100,7 +103,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:95](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L95)
+[packages/matter.js/src/MatterDevice.ts:97](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L97)
 
 ## Properties
 
@@ -110,7 +113,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:71](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L71)
+[packages/matter.js/src/MatterDevice.ts:71](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L71)
 
 ___
 
@@ -120,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:72](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L72)
+[packages/matter.js/src/MatterDevice.ts:72](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L72)
 
 ___
 
@@ -130,7 +133,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:63](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L63)
+[packages/matter.js/src/MatterDevice.ts:63](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L63)
 
 ___
 
@@ -140,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:64](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L64)
+[packages/matter.js/src/MatterDevice.ts:64](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L64)
 
 ___
 
@@ -150,7 +153,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:66](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L66)
+[packages/matter.js/src/MatterDevice.ts:66](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L66)
+
+___
+
+### #isClosing
+
+• `Private` **#isClosing**: `boolean` = `false`
+
+#### Defined in
+
+[packages/matter.js/src/MatterDevice.ts:62](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L62)
 
 ___
 
@@ -160,7 +173,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:65](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L65)
+[packages/matter.js/src/MatterDevice.ts:65](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L65)
 
 ___
 
@@ -178,7 +191,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:59](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L59)
+[packages/matter.js/src/MatterDevice.ts:59](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L59)
 
 ___
 
@@ -188,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:58](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L58)
+[packages/matter.js/src/MatterDevice.ts:58](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L58)
 
 ___
 
@@ -198,7 +211,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:60](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L60)
+[packages/matter.js/src/MatterDevice.ts:60](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L60)
 
 ___
 
@@ -208,7 +221,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:61](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L61)
+[packages/matter.js/src/MatterDevice.ts:61](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L61)
 
 ___
 
@@ -218,7 +231,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L54)
+[packages/matter.js/src/MatterDevice.ts:54](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L54)
 
 ___
 
@@ -228,7 +241,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:56](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L56)
+[packages/matter.js/src/MatterDevice.ts:56](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L56)
 
 ___
 
@@ -253,7 +266,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:99](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L99)
+[packages/matter.js/src/MatterDevice.ts:102](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L102)
 
 ___
 
@@ -263,7 +276,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:97](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L97)
+[packages/matter.js/src/MatterDevice.ts:99](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L99)
 
 ___
 
@@ -281,17 +294,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:98](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L98)
-
-___
-
-### isClosing
-
-• `Private` **isClosing**: `boolean` = `false`
-
-#### Defined in
-
-[packages/matter.js/src/MatterDevice.ts:62](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L62)
+[packages/matter.js/src/MatterDevice.ts:100](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L100)
 
 ___
 
@@ -301,7 +304,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:53](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L53)
+[packages/matter.js/src/MatterDevice.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L53)
 
 ___
 
@@ -311,7 +314,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:57](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L57)
+[packages/matter.js/src/MatterDevice.ts:57](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L57)
 
 ___
 
@@ -335,7 +338,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:100](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L100)
+[packages/matter.js/src/MatterDevice.ts:103](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L103)
 
 ___
 
@@ -345,7 +348,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:96](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L96)
+[packages/matter.js/src/MatterDevice.ts:98](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L98)
 
 ___
 
@@ -355,7 +358,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:55](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L55)
+[packages/matter.js/src/MatterDevice.ts:55](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L55)
 
 ## Accessors
 
@@ -369,7 +372,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:74](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L74)
+[packages/matter.js/src/MatterDevice.ts:74](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L74)
 
 ___
 
@@ -383,7 +386,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:174](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L174)
+[packages/matter.js/src/MatterDevice.ts:188](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L188)
 
 ___
 
@@ -397,7 +400,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:166](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L166)
+[packages/matter.js/src/MatterDevice.ts:180](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L180)
 
 ___
 
@@ -411,7 +414,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:178](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L178)
+[packages/matter.js/src/MatterDevice.ts:192](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L192)
+
+___
+
+### isClosing
+
+• `get` **isClosing**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/matter.js/src/MatterDevice.ts:197](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L197)
 
 ___
 
@@ -425,7 +442,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:170](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L170)
+[packages/matter.js/src/MatterDevice.ts:184](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L184)
 
 ## Methods
 
@@ -445,7 +462,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:226](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L226)
+[packages/matter.js/src/MatterDevice.ts:244](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L244)
 
 ___
 
@@ -465,7 +482,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:257](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L257)
+[packages/matter.js/src/MatterDevice.ts:275](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L275)
 
 ___
 
@@ -485,7 +502,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:217](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L217)
+[packages/matter.js/src/MatterDevice.ts:235](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L235)
 
 ___
 
@@ -505,7 +522,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:239](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L239)
+[packages/matter.js/src/MatterDevice.ts:257](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L257)
 
 ___
 
@@ -525,7 +542,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:420](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L420)
+[packages/matter.js/src/MatterDevice.ts:442](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L442)
 
 ___
 
@@ -547,7 +564,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:401](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L401)
+[packages/matter.js/src/MatterDevice.ts:423](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L423)
 
 ___
 
@@ -567,7 +584,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:276](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L276)
+[packages/matter.js/src/MatterDevice.ts:300](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L300)
 
 ___
 
@@ -589,7 +606,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L321)
+[packages/matter.js/src/MatterDevice.ts:343](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L343)
 
 ___
 
@@ -609,7 +626,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:205](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L205)
+[packages/matter.js/src/MatterDevice.ts:223](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L223)
 
 ___
 
@@ -629,7 +646,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:183](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L183)
+[packages/matter.js/src/MatterDevice.ts:201](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L201)
 
 ___
 
@@ -643,7 +660,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:485](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L485)
+[packages/matter.js/src/MatterDevice.ts:507](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L507)
 
 ___
 
@@ -663,7 +680,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:231](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L231)
+[packages/matter.js/src/MatterDevice.ts:249](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L249)
 
 ___
 
@@ -683,7 +700,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:245](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L245)
+[packages/matter.js/src/MatterDevice.ts:263](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L263)
 
 ___
 
@@ -697,7 +714,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:440](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L440)
+[packages/matter.js/src/MatterDevice.ts:462](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L462)
 
 ___
 
@@ -711,7 +728,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:463](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L463)
+[packages/matter.js/src/MatterDevice.ts:485](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L485)
+
+___
+
+### expireAllFabricAnnouncements
+
+▸ **expireAllFabricAnnouncements**(): `Promise`\<`void`\>
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/matter.js/src/MatterDevice.ts:294](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L294)
 
 ___
 
@@ -733,7 +764,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:467](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L467)
+[packages/matter.js/src/MatterDevice.ts:489](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L489)
 
 ___
 
@@ -754,7 +785,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:366](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L366)
+[packages/matter.js/src/MatterDevice.ts:388](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L388)
 
 ___
 
@@ -774,7 +805,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:385](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L385)
+[packages/matter.js/src/MatterDevice.ts:407](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L407)
 
 ___
 
@@ -788,7 +819,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:504](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L504)
+[packages/matter.js/src/MatterDevice.ts:526](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L526)
 
 ___
 
@@ -808,7 +839,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:377](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L377)
+[packages/matter.js/src/MatterDevice.ts:399](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L399)
 
 ___
 
@@ -822,7 +853,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:393](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L393)
+[packages/matter.js/src/MatterDevice.ts:415](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L415)
 
 ___
 
@@ -836,7 +867,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:362](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L362)
+[packages/matter.js/src/MatterDevice.ts:384](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L384)
 
 ___
 
@@ -856,7 +887,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:222](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L222)
+[packages/matter.js/src/MatterDevice.ts:240](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L240)
 
 ___
 
@@ -876,7 +907,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:253](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L253)
+[packages/matter.js/src/MatterDevice.ts:271](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L271)
 
 ___
 
@@ -898,7 +929,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:381](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L381)
+[packages/matter.js/src/MatterDevice.ts:403](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L403)
 
 ___
 
@@ -912,7 +943,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:397](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L397)
+[packages/matter.js/src/MatterDevice.ts:419](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L419)
 
 ___
 
@@ -926,7 +957,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:213](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L213)
+[packages/matter.js/src/MatterDevice.ts:231](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L231)
 
 ___
 
@@ -946,7 +977,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:389](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L389)
+[packages/matter.js/src/MatterDevice.ts:411](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L411)
 
 ___
 
@@ -967,7 +998,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:345](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L345)
+[packages/matter.js/src/MatterDevice.ts:367](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L367)
 
 ___
 
@@ -988,7 +1019,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:370](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L370)
+[packages/matter.js/src/MatterDevice.ts:392](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L392)
 
 ___
 
@@ -1002,7 +1033,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:262](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L262)
+[packages/matter.js/src/MatterDevice.ts:280](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L280)
 
 ___
 
@@ -1016,23 +1047,24 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:266](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L266)
+[packages/matter.js/src/MatterDevice.ts:284](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L284)
 
 ___
 
 ### create
 
-▸ **create**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `commissioningChangedCallback`, `sessionChangedCallback`): `Promise`\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\>
+▸ **create**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `minimumCaseSessionsPerFabricAndNode?`, `commissioningChangedCallback`, `sessionChangedCallback`): `Promise`\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `sessionStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
-| `fabricStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
-| `getCommissioningConfig` | () => [`Configuration`](../interfaces/behavior_cluster_export._internal_.Configuration.md) |
-| `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex), `fabricAction`: [`FabricAction`](../enums/fabric_export.FabricAction.md)) => `void` |
-| `sessionChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex)) => `void` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `sessionStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> | `undefined` |
+| `fabricStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> | `undefined` |
+| `getCommissioningConfig` | () => [`Configuration`](../interfaces/behavior_cluster_export._internal_.Configuration.md) | `undefined` |
+| `minimumCaseSessionsPerFabricAndNode` | `number` | `3` |
+| `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex), `fabricAction`: [`FabricAction`](../enums/fabric_export.FabricAction.md)) => `void` | `undefined` |
+| `sessionChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex)) => `void` | `undefined` |
 
 #### Returns
 
@@ -1040,4 +1072,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:78](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterDevice.ts#L78)
+[packages/matter.js/src/MatterDevice.ts:78](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterDevice.ts#L78)

@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/CommandElement.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/CommandElement.ts#L31)
+[packages/matter.js/src/model/elements/CommandElement.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/CommandElement.ts#L32)
 
 ___
 
@@ -37,9 +37,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/CommandElement.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/CommandElement.ts#L29)
+[packages/matter.js/src/model/elements/CommandElement.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/CommandElement.ts#L30)
 
-[packages/matter.js/src/model/elements/CommandElement.ts:30](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/CommandElement.ts#L30)
+[packages/matter.js/src/model/elements/CommandElement.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/CommandElement.ts#L31)
 
 ## Variables
 
@@ -49,6 +49,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/CommandElement.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/CommandElement.ts#L29)
+[packages/matter.js/src/model/elements/CommandElement.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/CommandElement.ts#L30)
 
-[packages/matter.js/src/model/elements/CommandElement.ts:30](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/elements/CommandElement.ts#L30)
+[packages/matter.js/src/model/elements/CommandElement.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/CommandElement.ts#L31)

@@ -19,6 +19,7 @@
 
 ### Properties
 
+- [#invokeAcl](cluster_export.CommandServer.md##invokeacl)
 - [handler](cluster_export.CommandServer.md#handler)
 - [invokeId](cluster_export.CommandServer.md#invokeid)
 - [name](cluster_export.CommandServer.md#name)
@@ -26,6 +27,10 @@
 - [requiresTimedInteraction](cluster_export.CommandServer.md#requirestimedinteraction)
 - [responseId](cluster_export.CommandServer.md#responseid)
 - [responseSchema](cluster_export.CommandServer.md#responseschema)
+
+### Accessors
+
+- [invokeAcl](cluster_export.CommandServer.md#invokeacl)
 
 ### Methods
 
@@ -36,7 +41,7 @@
 
 ### constructor
 
-• **new CommandServer**\<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`): [`CommandServer`](cluster_export.CommandServer.md)\<`RequestT`, `ResponseT`\>
+• **new CommandServer**\<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `invokeAcl`, `handler`): [`CommandServer`](cluster_export.CommandServer.md)\<`RequestT`, `ResponseT`\>
 
 #### Type parameters
 
@@ -55,6 +60,7 @@
 | `requestSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`RequestT`\> |
 | `responseSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`ResponseT`\> |
 | `requiresTimedInteraction` | `boolean` |
+| `invokeAcl` | [`AccessLevel`](../enums/cluster_export.AccessLevel.md) |
 | `handler` | (`request`: `RequestT`, `session`: [`Session`](session_export.Session.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/codec_export.Message.md), `endpoint`: [`EndpointInterface`](../interfaces/endpoint_export.EndpointInterface.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
 
 #### Returns
@@ -63,9 +69,19 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/server/CommandServer.ts#L21)
+[packages/matter.js/src/cluster/server/CommandServer.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L24)
 
 ## Properties
+
+### #invokeAcl
+
+• `Private` `Readonly` **#invokeAcl**: [`AccessLevel`](../enums/cluster_export.AccessLevel.md)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/server/CommandServer.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L22)
+
+___
 
 ### handler
 
@@ -90,7 +106,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:28](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/server/CommandServer.ts#L28)
+[packages/matter.js/src/cluster/server/CommandServer.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L32)
 
 ___
 
@@ -100,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:22](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/server/CommandServer.ts#L22)
+[packages/matter.js/src/cluster/server/CommandServer.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L25)
 
 ___
 
@@ -110,7 +126,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/server/CommandServer.ts#L24)
+[packages/matter.js/src/cluster/server/CommandServer.ts:27](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L27)
 
 ___
 
@@ -120,7 +136,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/server/CommandServer.ts#L25)
+[packages/matter.js/src/cluster/server/CommandServer.ts:28](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L28)
 
 ___
 
@@ -130,7 +146,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:27](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/server/CommandServer.ts#L27)
+[packages/matter.js/src/cluster/server/CommandServer.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L30)
 
 ___
 
@@ -140,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/server/CommandServer.ts#L23)
+[packages/matter.js/src/cluster/server/CommandServer.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L26)
 
 ___
 
@@ -150,7 +166,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:26](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/server/CommandServer.ts#L26)
+[packages/matter.js/src/cluster/server/CommandServer.ts:29](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L29)
+
+## Accessors
+
+### invokeAcl
+
+• `get` **invokeAcl**(): [`AccessLevel`](../enums/cluster_export.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/cluster_export.AccessLevel.md)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/server/CommandServer.ts:90](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L90)
 
 ## Methods
 
@@ -170,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/server/CommandServer.ts#L80)
+[packages/matter.js/src/cluster/server/CommandServer.ts:86](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L86)
 
 ___
 
@@ -193,4 +223,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:36](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/server/CommandServer.ts#L36)
+[packages/matter.js/src/cluster/server/CommandServer.ts:42](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/server/CommandServer.ts#L42)

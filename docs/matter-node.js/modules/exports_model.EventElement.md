@@ -28,7 +28,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:21
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:22
 
 ___
 
@@ -38,9 +38,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:19
-
 packages/matter.js/dist/esm/model/elements/EventElement.d.ts:20
+
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:21
 
 ## Variables
 
@@ -50,6 +50,6 @@ packages/matter.js/dist/esm/model/elements/EventElement.d.ts:20
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:19
-
 packages/matter.js/dist/esm/model/elements/EventElement.d.ts:20
+
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:21

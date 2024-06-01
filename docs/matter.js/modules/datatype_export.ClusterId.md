@@ -9,13 +9,14 @@
 ### Functions
 
 - [buildVendorSpecific](datatype_export.ClusterId.md#buildvendorspecific)
+- [isValid](datatype_export.ClusterId.md#isvalid)
 - [isVendorSpecific](datatype_export.ClusterId.md#isvendorspecific)
 
 ## Functions
 
 ### buildVendorSpecific
 
-▸ **buildVendorSpecific**(`vendorPrefix`, `clusterSuffix`): [`ClusterId`](datatype_export.md#clusterid)\<`number`\>
+▸ **buildVendorSpecific**(`vendorPrefix`, `clusterSuffix`): [`ClusterId`](datatype_export.md#clusterid)
 
 #### Parameters
 
@@ -26,11 +27,31 @@
 
 #### Returns
 
-[`ClusterId`](datatype_export.md#clusterid)\<`number`\>
+[`ClusterId`](datatype_export.md#clusterid)
 
 #### Defined in
 
-[packages/matter.js/src/datatype/ClusterId.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/ClusterId.ts#L29)
+[packages/matter.js/src/datatype/ClusterId.ts:60](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/ClusterId.ts#L60)
+
+___
+
+### isValid
+
+▸ **isValid**(`clusterId`): clusterId is ClusterId
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `clusterId` | `number` |
+
+#### Returns
+
+clusterId is ClusterId
+
+#### Defined in
+
+[packages/matter.js/src/datatype/ClusterId.ts:49](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/ClusterId.ts#L49)
 
 ___
 
@@ -42,7 +63,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `clusterId` | [`ClusterId`](datatype_export.md#clusterid)\<`number`\> |
+| `clusterId` | [`ClusterId`](datatype_export.md#clusterid) |
 
 #### Returns
 
@@ -50,4 +71,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/ClusterId.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/ClusterId.ts#L25)
+[packages/matter.js/src/datatype/ClusterId.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/ClusterId.ts#L38)

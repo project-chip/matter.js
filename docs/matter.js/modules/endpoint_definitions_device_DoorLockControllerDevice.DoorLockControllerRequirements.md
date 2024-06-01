@@ -29,7 +29,7 @@ We provide this alias to the default implementation [DoorLockBehavior](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L46)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:46](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L46)
 
 ___
 
@@ -43,7 +43,7 @@ We provide this alias to the default implementation [GroupsBehavior](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:60](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L60)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:60](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L60)
 
 ___
 
@@ -57,7 +57,7 @@ We provide this alias to the default implementation [IdentifyBehavior](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:53](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L53)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L53)
 
 ___
 
@@ -71,7 +71,7 @@ We provide this alias to the default implementation [IdentifyServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:32](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L32)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L32)
 
 ___
 
@@ -85,7 +85,7 @@ We provide this alias to the default implementation [ScenesBehavior](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:67](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L67)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:67](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L67)
 
 ___
 
@@ -99,7 +99,7 @@ We provide this alias to the default implementation [TimeSyncServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:39](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L39)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:39](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L39)
 
 ___
 
@@ -122,7 +122,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:77](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L77)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:77](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L77)
 
 ___
 
@@ -143,4 +143,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:72](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L72)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:72](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L72)

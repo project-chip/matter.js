@@ -19,6 +19,7 @@
 
 ### Properties
 
+- [#private](internal_.EventServer.md##private)
 - [clusterId](internal_.EventServer.md#clusterid)
 - [endpoint](internal_.EventServer.md#endpoint)
 - [eventHandler](internal_.EventServer.md#eventhandler)
@@ -29,11 +30,16 @@
 - [priority](internal_.EventServer.md#priority)
 - [schema](internal_.EventServer.md#schema)
 
+### Accessors
+
+- [readAcl](internal_.EventServer.md#readacl)
+
 ### Methods
 
 - [addListener](internal_.EventServer.md#addlistener)
 - [assignToEndpoint](internal_.EventServer.md#assigntoendpoint)
 - [bindToEventHandler](internal_.EventServer.md#bindtoeventhandler)
+- [get](internal_.EventServer.md#get)
 - [removeListener](internal_.EventServer.md#removelistener)
 - [triggerEvent](internal_.EventServer.md#triggerevent)
 
@@ -41,7 +47,7 @@
 
 ### constructor
 
-• **new EventServer**\<`T`, `S`\>(`id`, `clusterId`, `name`, `schema`, `priority`): [`EventServer`](internal_.EventServer.md)\<`T`, `S`\>
+• **new EventServer**\<`T`, `S`\>(`id`, `clusterId`, `name`, `schema`, `priority`, `readAcl`): [`EventServer`](internal_.EventServer.md)\<`T`, `S`\>
 
 #### Type parameters
 
@@ -59,6 +65,7 @@
 | `name` | `string` |
 | `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
 | `priority` | [`EventPriority`](../enums/internal_.EventPriority.md) |
+| `readAcl` | `undefined` \| [`AccessLevel`](../enums/internal_.AccessLevel.md) |
 
 #### Returns
 
@@ -66,9 +73,19 @@
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:23
+matter.js/dist/esm/cluster/server/EventServer.d.ts:28
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/EventServer.d.ts:18
+
+___
 
 ### clusterId
 
@@ -76,7 +93,7 @@ matter.js/dist/esm/cluster/server/EventServer.d.ts:23
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:15
+matter.js/dist/esm/cluster/server/EventServer.d.ts:20
 
 ___
 
@@ -86,7 +103,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:21
+matter.js/dist/esm/cluster/server/EventServer.d.ts:26
 
 ___
 
@@ -96,7 +113,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:22
+matter.js/dist/esm/cluster/server/EventServer.d.ts:27
 
 ___
 
@@ -106,7 +123,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:19
+matter.js/dist/esm/cluster/server/EventServer.d.ts:24
 
 ___
 
@@ -116,7 +133,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:14
+matter.js/dist/esm/cluster/server/EventServer.d.ts:19
 
 ___
 
@@ -126,7 +143,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:20
+matter.js/dist/esm/cluster/server/EventServer.d.ts:25
 
 ___
 
@@ -136,7 +153,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:16
+matter.js/dist/esm/cluster/server/EventServer.d.ts:21
 
 ___
 
@@ -146,7 +163,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:18
+matter.js/dist/esm/cluster/server/EventServer.d.ts:23
 
 ___
 
@@ -156,7 +173,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:17
+matter.js/dist/esm/cluster/server/EventServer.d.ts:22
+
+## Accessors
+
+### readAcl
+
+• `get` **readAcl**(): [`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/EventServer.d.ts:29
 
 ## Methods
 
@@ -176,7 +207,7 @@ matter.js/dist/esm/cluster/server/EventServer.d.ts:17
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:27
+matter.js/dist/esm/cluster/server/EventServer.d.ts:33
 
 ___
 
@@ -196,7 +227,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:24
+matter.js/dist/esm/cluster/server/EventServer.d.ts:30
 
 ___
 
@@ -216,7 +247,30 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:25
+matter.js/dist/esm/cluster/server/EventServer.d.ts:31
+
+___
+
+### get
+
+▸ **get**(`session`, `isFabricFiltered`, `_message?`, `filters?`): [`EventStorageData`](../interfaces/internal_.EventStorageData.md)\<`any`\>[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `session` | [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `isFabricFiltered` | `boolean` |
+| `_message?` | [`Message`](../interfaces/internal_.Message.md) |
+| `filters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+
+#### Returns
+
+[`EventStorageData`](../interfaces/internal_.EventStorageData.md)\<`any`\>[]
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/EventServer.d.ts:35
 
 ___
 
@@ -236,7 +290,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:28
+matter.js/dist/esm/cluster/server/EventServer.d.ts:34
 
 ___
 
@@ -256,4 +310,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:26
+matter.js/dist/esm/cluster/server/EventServer.d.ts:32

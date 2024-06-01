@@ -22,7 +22,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:77
+matter.js/dist/esm/common/FailsafeContext.d.ts:80
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:75
+matter.js/dist/esm/common/FailsafeContext.d.ts:78
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:74
+matter.js/dist/esm/common/FailsafeContext.d.ts:77
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:76
+matter.js/dist/esm/common/FailsafeContext.d.ts:79
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:73
+matter.js/dist/esm/common/FailsafeContext.d.ts:76

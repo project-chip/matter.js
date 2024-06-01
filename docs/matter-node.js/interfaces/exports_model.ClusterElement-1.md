@@ -57,7 +57,7 @@ Child elements.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:32
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:33
 
 ___
 
@@ -69,7 +69,7 @@ Encodes both classification and scope from the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:26
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:27
 
 ___
 
@@ -135,7 +135,7 @@ context-specific.  A "machine appropriate" semantic differentiator.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:18
 
 ___
 
@@ -164,7 +164,7 @@ Marks a cluster as a singleton per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:22
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:23
 
 ___
 
@@ -177,7 +177,7 @@ and is not present in the static data model.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:31
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:32
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:18
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:19
 
 ___
 

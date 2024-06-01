@@ -30,7 +30,7 @@ MatterSpecification.v11.Cluster § 1.4.9.2
 
 ### extensionFieldSets
 
-• **extensionFieldSets**: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](exports_tlv.FieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `attributeValue`: [`FieldType`](exports_tlv.FieldType.md)\<[`TlvStream`](../modules/exports_tlv.md#tlvstream)\>  }\>[]\> ; `clusterId`: [`FieldType`](exports_tlv.FieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>\>  }\>[]
+• **extensionFieldSets**: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](exports_tlv.FieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `attributeValue`: [`FieldType`](exports_tlv.FieldType.md)\<[`TlvStream`](../modules/exports_tlv.md#tlvstream)\>  }\>[]\> ; `clusterId`: [`FieldType`](exports_tlv.FieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\>  }\>[]
 
 #### Inherited from
 

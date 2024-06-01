@@ -158,7 +158,7 @@ ___
 
 ### groupKeyMulticastPolicy
 
-• **groupKeyMulticastPolicy**: [`GroupKeyMulticastPolicy`](../enums/exports_cluster.GroupKeyManagement.GroupKeyMulticastPolicy.md)
+• `Optional` **groupKeyMulticastPolicy**: [`GroupKeyMulticastPolicy`](../enums/exports_cluster.GroupKeyManagement.GroupKeyMulticastPolicy.md)
 
 This field specifies how the IPv6 Multicast Address shall be formed for groups using this operational group
 key set.

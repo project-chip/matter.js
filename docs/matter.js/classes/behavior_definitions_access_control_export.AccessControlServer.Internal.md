@@ -12,7 +12,9 @@
 
 ### Properties
 
-- [deviceTypes](behavior_definitions_access_control_export.AccessControlServer.Internal.md#devicetypes)
+- [aclManager](behavior_definitions_access_control_export.AccessControlServer.Internal.md#aclmanager)
+- [aclUpdateDelayed](behavior_definitions_access_control_export.AccessControlServer.Internal.md#aclupdatedelayed)
+- [delayedAclData](behavior_definitions_access_control_export.AccessControlServer.Internal.md#delayedacldata)
 
 ## Constructors
 
@@ -26,10 +28,36 @@
 
 ## Properties
 
-### deviceTypes
+### aclManager
 
-• `Optional` **deviceTypes**: `Set`\<[`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)\>
+• `Optional` **aclManager**: [`AccessControlManager`](behavior_definitions_access_control_export._internal_.AccessControlManager.md)
+
+AccessControlManager instance that is used to manage the ACL checks for this device.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts#L54)
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts:457](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts#L457)
+
+___
+
+### aclUpdateDelayed
+
+• **aclUpdateDelayed**: `boolean` = `false`
+
+If set to true ACL updates are delayed while in a write transaction. More details see getter/setter above.
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts:460](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts#L460)
+
+___
+
+### delayedAclData
+
+• `Optional` **delayedAclData**: [`AccessControlEntryStruct`](../interfaces/cluster_export.AccessControl.AccessControlEntryStruct.md)[]
+
+Latest delayed data of acl
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts:463](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts#L463)

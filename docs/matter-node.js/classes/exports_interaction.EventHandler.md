@@ -62,7 +62,7 @@ to handle subscriptions (TBD)
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:45
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:46
 
 ## Properties
 
@@ -72,7 +72,7 @@ packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:45
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:38
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:39
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:40
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:41
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:39
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:40
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:42
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:43
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:41
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:42
 
 ## Accessors
 
@@ -126,7 +126,7 @@ packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:41
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:43
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:44
 
 ## Methods
 
@@ -140,20 +140,21 @@ packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:43
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:48
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:49
 
 ___
 
 ### getEvents
 
-▸ **getEvents**(`eventPath`, `filters?`): [`EventStorageData`](../interfaces/exports_interaction.EventStorageData.md)\<`any`\>[]
+▸ **getEvents**(`eventPath`, `filters?`, `filterForFabricIndex?`): [`EventStorageData`](../interfaces/exports_interaction.EventStorageData.md)\<`any`\>[]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `eventPath` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](../modules/exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\> |
+| `eventPath` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](../modules/exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\> |
 | `filters?` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
+| `filterForFabricIndex?` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) |
 
 #### Returns
 
@@ -161,7 +162,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:46
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:47
 
 ___
 
@@ -181,7 +182,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:47
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:48
 
 ___
 
@@ -201,4 +202,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:44
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:45
