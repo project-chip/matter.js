@@ -91,13 +91,15 @@ export class UdpMulticastServer {
                 logger.info(`${netInterface} ${uniCastTarget}: ${(error as Error).message}`);
             }
         } else {
-            const netInterfaces = netInterface !== undefined ? [netInterface] : this.network.getNetInterfaces();
+            const netInterfaces =
+                netInterface !== undefined ? [{ name: netInterface }] : this.network.getNetInterfaces();
             await Promise.all(
-                netInterfaces.map(async netInterface => {
-                    const { ips } = this.network.getIpMac(netInterface) ?? { ips: [] };
+                netInterfaces.map(async ({ name: netInterface }) => {
+                    const { ipV4, ipV6 } = this.network.getIpMac(netInterface) ?? { mac: "", ipV4: [], ipV6: [] };
+                    const ips = [...ipV4, ...ipV6];
                     await Promise.all(
                         ips.map(async ip => {
-                            const iPv4 = isIPv4(ip);
+                            const iPv4 = ipV4.includes(ip);
                             const broadcastTarget = iPv4 ? this.broadcastAddressIpv4 : this.broadcastAddressIpv6;
                             if (broadcastTarget == undefined) {
                                 // IPv4 but disabled, so just resolve

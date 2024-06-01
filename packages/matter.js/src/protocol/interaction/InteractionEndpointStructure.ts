@@ -253,7 +253,6 @@ export class InteractionEndpointStructure {
     }
 
     validateConcreteCommandPath(endpointId: EndpointNumber, clusterId: ClusterId, commandId: CommandId) {
-        // TODO: Also hande the InvalidAction cases
         if (!this.hasEndpoint(endpointId)) {
             throw new StatusResponseError(`Endpoint ${endpointId} does not exist.`, StatusCode.UnsupportedEndpoint);
         }
@@ -268,6 +267,7 @@ export class InteractionEndpointStructure {
         const result = new Array<AttributeWithPath>();
 
         filters.forEach(({ endpointId, clusterId, attributeId }) => {
+            this.validateAnyPathDataTypes({ endpointId, clusterId, attributeId });
             if (endpointId !== undefined && clusterId !== undefined && attributeId !== undefined) {
                 const path = { endpointId, clusterId, attributeId };
                 const attribute = this.attributes.get(attributePathToId(path));
@@ -298,6 +298,7 @@ export class InteractionEndpointStructure {
         const result = new Array<EventWithPath>();
 
         filters.forEach(({ endpointId, clusterId, eventId, isUrgent }) => {
+            this.validateAnyPathDataTypes({ endpointId, clusterId, eventId });
             if (endpointId !== undefined && clusterId !== undefined && eventId !== undefined) {
                 const path = { endpointId, clusterId, eventId, isUrgent };
                 const event = this.events.get(eventPathToId(path));
@@ -327,6 +328,7 @@ export class InteractionEndpointStructure {
         const result = new Array<CommandWithPath>();
 
         filters.forEach(({ endpointId, clusterId, commandId }) => {
+            this.validateAnyPathDataTypes({ endpointId, clusterId, commandId });
             if (endpointId !== undefined && clusterId !== undefined && commandId !== undefined) {
                 const path = { endpointId, clusterId, commandId };
                 const command = this.commands.get(commandPathToId(path));
@@ -349,5 +351,32 @@ export class InteractionEndpointStructure {
         });
 
         return result;
+    }
+
+    // ValidationError will return ConstraintError ... we need to see if this is correct always
+    validateAnyPathDataTypes(data: {
+        endpointId?: EndpointNumber;
+        clusterId?: ClusterId;
+        attributeId?: AttributeId;
+        eventId?: EventId;
+        commandId?: CommandId;
+    }) {
+        const { endpointId, clusterId, attributeId, eventId, commandId } = data;
+
+        if (endpointId !== undefined) {
+            EndpointNumber(endpointId);
+        }
+        if (clusterId !== undefined) {
+            ClusterId(clusterId);
+        }
+        if (attributeId !== undefined) {
+            AttributeId(attributeId);
+        }
+        if (eventId !== undefined) {
+            EventId(eventId);
+        }
+        if (commandId !== undefined) {
+            CommandId(commandId);
+        }
     }
 }

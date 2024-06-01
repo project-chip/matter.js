@@ -24,11 +24,16 @@ cluster events and/or DOM events.
 
   ↳↳ [`AsyncObservable`](util_export.AsyncObservable.md)
 
+## Implemented by
+
+- [`BasicObservable`](../classes/util_export.BasicObservable.md)
+
 ## Table of contents
 
 ### Properties
 
 - [isAsync](util_export.Observable.md#isasync)
+- [isObserved](util_export.Observable.md#isobserved)
 
 ### Methods
 
@@ -51,7 +56,19 @@ be asynchronous but this information is not available at runtime unless you spec
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:50
+packages/matter.js/dist/esm/util/Observable.d.ts:58
+
+___
+
+### isObserved
+
+• **isObserved**: `boolean`
+
+True if there is at least one observer registered.
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Observable.d.ts:52
 
 ## Methods
 
@@ -74,7 +91,7 @@ AsyncIterable.[asyncIterator]
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:57
+packages/matter.js/dist/esm/util/Observable.d.ts:65
 
 ___
 
@@ -90,7 +107,7 @@ Release resources associated with the observable.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:61
+packages/matter.js/dist/esm/util/Observable.d.ts:69
 
 ___
 
@@ -112,7 +129,7 @@ Notify observers.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:32
+packages/matter.js/dist/esm/util/Observable.d.ts:36
 
 ___
 
@@ -126,7 +143,7 @@ Remove an observer.
 
 | Name | Type |
 | :------ | :------ |
-| `observer` | [`Observer`](../modules/util_export.md#observer)\<`T`, `R`\> |
+| `observer` | [`Observer`](util_export.Observer.md)\<`T`, `R`\> |
 
 #### Returns
 
@@ -134,7 +151,7 @@ Remove an observer.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:40
+packages/matter.js/dist/esm/util/Observable.d.ts:44
 
 ___
 
@@ -148,7 +165,7 @@ Add an observer.
 
 | Name | Type |
 | :------ | :------ |
-| `observer` | [`Observer`](../modules/util_export.md#observer)\<`T`, `R`\> |
+| `observer` | [`Observer`](util_export.Observer.md)\<`T`, `R`\> |
 
 #### Returns
 
@@ -156,7 +173,7 @@ Add an observer.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:36
+packages/matter.js/dist/esm/util/Observable.d.ts:40
 
 ___
 
@@ -170,7 +187,7 @@ Add an observer that emits once then is unregistered.
 
 | Name | Type |
 | :------ | :------ |
-| `observer` | [`Observer`](../modules/util_export.md#observer)\<`T`, `R`\> |
+| `observer` | [`Observer`](util_export.Observer.md)\<`T`, `R`\> |
 
 #### Returns
 
@@ -178,4 +195,4 @@ Add an observer that emits once then is unregistered.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Observable.d.ts:44
+packages/matter.js/dist/esm/util/Observable.d.ts:48

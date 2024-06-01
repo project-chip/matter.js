@@ -25,7 +25,7 @@ Message counter synchronization using cache-and-sync
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:80
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:81
 
 ___
 
@@ -37,4 +37,4 @@ Message counter synchronization using trust-first
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:76
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:77

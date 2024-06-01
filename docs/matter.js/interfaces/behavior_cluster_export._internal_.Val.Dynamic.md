@@ -55,4 +55,4 @@ present.  Otherwise they're read from static state as normal.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/Val.ts#L100)
+[packages/matter.js/src/behavior/state/Val.ts:100](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/Val.ts#L100)

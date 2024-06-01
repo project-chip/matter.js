@@ -25,7 +25,7 @@ Authorization metadata that varies with session.
 
 ### Methods
 
-- [accessLevelFor](behavior_export.AccessControl.Session.md#accesslevelfor)
+- [authorizedFor](behavior_export.AccessControl.Session.md#authorizedfor)
 
 ## Properties
 
@@ -38,7 +38,7 @@ active.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:159](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L159)
+[packages/matter.js/src/behavior/AccessControl.ts:165](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L165)
 
 ___
 
@@ -50,7 +50,7 @@ The fabric of the authorized client.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L137)
+[packages/matter.js/src/behavior/AccessControl.ts:143](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L143)
 
 ___
 
@@ -63,7 +63,7 @@ fabric.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:148](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L148)
+[packages/matter.js/src/behavior/AccessControl.ts:154](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L154)
 
 ___
 
@@ -78,7 +78,7 @@ Tracks "offline" rather than "online" because this makes the safer mode (full en
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L167)
+[packages/matter.js/src/behavior/AccessControl.ts:173](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L173)
 
 ___
 
@@ -90,7 +90,7 @@ The authenticated [SubjectId](../modules/datatype_export.md#subjectid) for onlin
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:142](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L142)
+[packages/matter.js/src/behavior/AccessControl.ts:148](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L148)
 
 ___
 
@@ -102,26 +102,27 @@ If this is true a timed transaction is in effect.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:153](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L153)
+[packages/matter.js/src/behavior/AccessControl.ts:159](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L159)
 
 ## Methods
 
-### accessLevelFor
+### authorizedFor
 
-▸ **accessLevelFor**(`location?`): [`AccessLevel`](../enums/cluster_export.AccessLevel.md)
+▸ **authorizedFor**(`desiredAccessLevel`, `location?`): `boolean`
 
-The access level of the authorized client.
+Checks if the authorized client has a certain Access Privilege granted.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `desiredAccessLevel` | [`AccessLevel`](../enums/cluster_export.AccessLevel.md) |
 | `location?` | [`Location`](behavior_export.AccessControl.Location.md) |
 
 #### Returns
 
-[`AccessLevel`](../enums/cluster_export.AccessLevel.md)
+`boolean`
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L132)
+[packages/matter.js/src/behavior/AccessControl.ts:138](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L138)

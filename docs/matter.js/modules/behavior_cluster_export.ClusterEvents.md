@@ -19,7 +19,7 @@
 
 ### AttributeObservable
 
-Ƭ **AttributeObservable**\<`A`\>: [`Observable`](../interfaces/util_export.Observable.md)\<[value: TypeFromSchema\<A["schema"]\>, oldValue: TypeFromSchema\<A["schema"]\>, context: ActionContext]\>
+Ƭ **AttributeObservable**\<`A`\>: [`AsyncObservable`](../interfaces/util_export.AsyncObservable.md)\<[value: TypeFromSchema\<A["schema"]\>, oldValue: TypeFromSchema\<A["schema"]\>, context: ActionContext]\>
 
 #### Type parameters
 
@@ -29,23 +29,24 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L52)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L53)
 
 ___
 
 ### AttributeObservables
 
-Ƭ **AttributeObservables**\<`A`\>: \{ [K in keyof A as string extends K ? never : K extends string ? A[K] extends Object ? never : \`$\{K}$Change\` : never]: AttributeObservable\<A[K]\> } & \{ [K in keyof A as string extends K ? never : K extends string ? A[K] extends Object ? \`$\{K}$Change\` : never : never]?: AttributeObservable\<A[K]\> }
+Ƭ **AttributeObservables**\<`A`, `N`\>: \{ [K in keyof A as string extends K ? never : K extends string ? A[K] extends Object ? never : \`$\{K}$$\{N}\` : never]: AttributeObservable\<A[K]\> } & \{ [K in keyof A as string extends K ? never : K extends string ? A[K] extends Object ? \`$\{K}$$\{N}\` : never : never]?: AttributeObservable\<A[K]\> }
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `A` | extends `Record`\<`string`, [`Attribute`](cluster_export.ClusterType.md#attribute)\> |
+| `N` | extends `string` |
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L34)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L35)
 
 ___
 
@@ -61,7 +62,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L74)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:75](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L75)
 
 ___
 
@@ -77,13 +78,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L56)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:57](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L57)
 
 ___
 
 ### Properties
 
-Ƭ **Properties**\<`C`\>: [`AttributeObservables`](behavior_cluster_export.ClusterEvents.md#attributeobservables)\<[`AttributesOf`](cluster_export.ClusterType.md#attributesof)\<`C`\>\> & [`EventObservables`](behavior_cluster_export.ClusterEvents.md#eventobservables)\<[`EventsOf`](cluster_export.ClusterType.md#eventsof)\<`C`\>\>
+Ƭ **Properties**\<`C`\>: [`AttributeObservables`](behavior_cluster_export.ClusterEvents.md#attributeobservables)\<[`AttributesOf`](cluster_export.ClusterType.md#attributesof)\<`C`\>, ``"Changing"``\> & [`AttributeObservables`](behavior_cluster_export.ClusterEvents.md#attributeobservables)\<[`AttributesOf`](cluster_export.ClusterType.md#attributesof)\<`C`\>, ``"Changed"``\> & [`EventObservables`](behavior_cluster_export.ClusterEvents.md#eventobservables)\<[`EventsOf`](cluster_export.ClusterType.md#eventsof)\<`C`\>\>
 
 Properties the cluster contributes to Events.
 
@@ -95,7 +96,7 @@ Properties the cluster contributes to Events.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L31)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L31)
 
 ___
 
@@ -120,4 +121,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L24)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L24)

@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
 import { Access } from "../aspects/Access.js";
-import { FeatureSet, Mei, Metatype } from "../definitions/index.js";
+import { FeatureSet, Metatype } from "../definitions/index.js";
 import { ClusterElement, Globals } from "../elements/index.js";
 import { AttributeModel } from "./AttributeModel.js";
 import { Children } from "./Children.js";

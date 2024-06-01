@@ -47,7 +47,7 @@ MatterSpecification.v11.Cluster § 6.6.4.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L18)
+[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:18](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L18)
 
 ___
 
@@ -70,7 +70,7 @@ MatterSpecification.v11.Cluster § 6.6.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L44)
+[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:44](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L44)
 
 ___
 
@@ -86,7 +86,7 @@ MatterSpecification.v11.Cluster § 6.6.4.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L51)
+[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L51)
 
 ___
 
@@ -102,9 +102,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L53)
+[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L53)
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:93](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L93)
+[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:93](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L93)
 
 ___
 
@@ -125,7 +125,7 @@ MatterSpecification.v11.Cluster § 6.6.4.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L30)
+[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L30)
 
 ## Variables
 
@@ -140,8 +140,8 @@ ChannelBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts#L24)
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts#L26)
+[packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/channel/ChannelBehavior.ts#L26)

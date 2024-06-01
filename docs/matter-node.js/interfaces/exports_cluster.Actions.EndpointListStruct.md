@@ -7,14 +7,6 @@
 This data type holds the details of a single endpoint list, which relates to a set of endpoints that have some
 logical relation, and contains the data fields below.
 
-This field shall provide an unique identifier used to identify the endpoint list.
-
-This field shall indicate the name (as assigned by the user or automatically by the server) associated with the
-set of endpoints in this list. This can be used for identifying the action to the user by the client. Example:
-"living room".
-
-This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
-
 **`See`**
 
 MatterSpecification.v11.Core § 9.14.4.7
@@ -40,13 +32,19 @@ MatterSpecification.v11.Core § 9.14.4.7
 
 • **endpointListId**: `number`
 
+This field shall provide an unique identifier used to identify the endpoint list.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.4.7.1
+
 #### Inherited from
 
 TypeFromSchema.endpointListId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:333
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:330
 
 ___
 
@@ -58,7 +56,7 @@ This field shall provide a list of endpoint numbers.
 
 **`See`**
 
-MatterSpecification.v11.Core § 9.14.4.7.1
+MatterSpecification.v11.Core § 9.14.4.7.4
 
 #### Inherited from
 
@@ -66,7 +64,7 @@ TypeFromSchema.endpoints
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:341
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:350
 
 ___
 
@@ -74,13 +72,21 @@ ___
 
 • **name**: `string`
 
+This field shall indicate the name (as assigned by the user or automatically by the server) associated with
+the set of endpoints in this list. This can be used for identifying the action to the user by the client.
+Example: "living room".
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.4.7.2
+
 #### Inherited from
 
 TypeFromSchema.name
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:334
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:338
 
 ___
 
@@ -88,10 +94,16 @@ ___
 
 • **type**: [`EndpointListType`](../enums/exports_cluster.Actions.EndpointListType.md)
 
+This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.4.7.3
+
 #### Inherited from
 
 TypeFromSchema.type
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:335
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:344

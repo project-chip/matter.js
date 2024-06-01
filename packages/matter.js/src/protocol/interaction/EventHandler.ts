@@ -10,6 +10,7 @@ import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { EventNumber } from "../../datatype/EventNumber.js";
+import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { Logger } from "../../log/Logger.js";
 import { Storage, StorageOperationResult } from "../../storage/Storage.js";
 import { StorageContext } from "../../storage/StorageContext.js";
@@ -72,7 +73,11 @@ export class EventHandler<S extends Storage = any> {
         });
     }
 
-    getEvents(eventPath: TypeFromSchema<typeof TlvEventPath>, filters?: TypeFromSchema<typeof TlvEventFilter>[]) {
+    getEvents(
+        eventPath: TypeFromSchema<typeof TlvEventPath>,
+        filters?: TypeFromSchema<typeof TlvEventFilter>[],
+        filterForFabricIndex?: FabricIndex,
+    ) {
         const eventFilter =
             filters !== undefined && filters.length > 0
                 ? (event: EventStorageData<any>) =>
@@ -85,19 +90,23 @@ export class EventHandler<S extends Storage = any> {
         for (const priority of [EventPriority.Critical, EventPriority.Info, EventPriority.Debug]) {
             const eventsToCheck = this.events[priority];
             for (const event of eventsToCheck) {
-                if (
-                    eventFilter(event) &&
-                    endpointId === event.endpointId &&
-                    clusterId === event.clusterId &&
-                    eventId === event.eventId
-                ) {
-                    events.push(event);
+                if (endpointId === event.endpointId && clusterId === event.clusterId && eventId === event.eventId) {
+                    if (eventFilter(event)) {
+                        events.push(event);
+                    }
                 }
             }
         }
         logger.debug(
             `Got ${events.length} events for ${resolveEventName(eventPath)} with filters: ${Logger.toJSON(filters)}`,
         );
+
+        if (filterForFabricIndex !== undefined) {
+            return events.filter(
+                event => !("fabricIndex" in event.data) || event.data.fabricIndex === filterForFabricIndex,
+            );
+        }
+
         return events;
     }
 

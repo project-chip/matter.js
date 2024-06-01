@@ -62,7 +62,7 @@ to handle subscriptions (TBD)
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:45
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:46
 
 ## Properties
 
@@ -72,7 +72,7 @@ matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:45
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:38
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:39
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:40
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:41
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:39
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:40
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:42
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:43
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:41
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:42
 
 ## Accessors
 
@@ -126,7 +126,7 @@ matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:41
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:43
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:44
 
 ## Methods
 
@@ -140,20 +140,21 @@ matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:43
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:48
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:49
 
 ___
 
 ### getEvents
 
-▸ **getEvents**(`eventPath`, `filters?`): [`EventStorageData`](../interfaces/internal_.EventStorageData.md)\<`any`\>[]
+▸ **getEvents**(`eventPath`, `filters?`, `filterForFabricIndex?`): [`EventStorageData`](../interfaces/internal_.EventStorageData.md)\<`any`\>[]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `eventPath` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
+| `eventPath` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
 | `filters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `filterForFabricIndex?` | [`FabricIndex`](../modules/internal_.md#fabricindex) |
 
 #### Returns
 
@@ -161,7 +162,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:46
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:47
 
 ___
 
@@ -181,7 +182,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:47
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:48
 
 ___
 
@@ -201,4 +202,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:44
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:45

@@ -215,35 +215,35 @@ describe("ClusterServerBacking", () => {
 
         await writeAcl(node, fabric1, {
             privilege: AccessControl.AccessControlEntryPrivilege.Administer,
-            authMode: 1,
+            authMode: AccessControl.AccessControlEntryAuthMode.Case,
             subjects: null,
             targets: null,
         });
 
         await writeAcl(node, fabric2, {
             privilege: AccessControl.AccessControlEntryPrivilege.Administer,
-            authMode: 1,
+            authMode: AccessControl.AccessControlEntryAuthMode.Case,
             subjects: null,
             targets: null,
         });
 
         expect(node.state.accessControl.acl).deep.equals([
-            { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 1 },
-            { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 2 },
+            { privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 1 },
+            { privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 2 },
         ]);
 
         const fabric1Acls = await readAcls(node, fabric1, true);
 
-        expect(fabric1Acls).deep.equals([{ privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 1 }]);
+        expect(fabric1Acls).deep.equals([{ privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 1 }]);
 
         const fabric2Acls = await readAcls(node, fabric2, true);
-        expect(fabric2Acls).deep.equals([{ privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 2 }]);
+        expect(fabric2Acls).deep.equals([{ privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 2 }]);
 
         const allAcls = await readAcls(node, fabric1, false);
 
         expect(allAcls).deep.equals([
-            { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 1 },
-            { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 2 },
+            { privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 1 },
+            { privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 2 },
         ]);
 
         await node.close();

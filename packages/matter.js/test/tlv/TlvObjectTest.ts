@@ -451,4 +451,23 @@ describe("TlvObject tests", () => {
             expect(schemaListRepeatedLimited.decode(encoded)).deep.equal(data);
         });
     });
+
+    describe("Tlv Lists with protocol specific tags", () => {
+        it("decodes list with protocol specific tags", () => {
+            const data = ByteArray.fromHex(
+                "17D00000F1FF01003D48656C6C6F20576F726C642E205468697320697320612073696E676C6520656C656D656E74206C6976696E6720617320612063686172737472696E670018",
+            );
+            const result = TlvTaggedList({} /* No fields, sufficient for validation */, true).decode(data);
+            expect(result).deep.equal({});
+        });
+
+        it("fails when protocol specific tags are not allowed", () => {
+            const data = ByteArray.fromHex(
+                "17D00000F1FF01003D48656C6C6F20576F726C642E205468697320697320612073696E676C6520656C656D656E74206C6976696E6720617320612063686172737472696E670018",
+            );
+            expect(() => TlvTaggedList({} /* No fields, sufficient for validation */, false).decode(data)).to.throw(
+                "Structure element tags should be context-specific.",
+            );
+        });
+    });
 });

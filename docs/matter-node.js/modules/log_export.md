@@ -171,7 +171,7 @@ Errors are logged to the console.
 
 #### Defined in
 
-[packages/matter-node.js/src/log/FileLogger.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/log/FileLogger.ts#L15)
+[packages/matter-node.js/src/log/FileLogger.ts:15](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/log/FileLogger.ts#L15)
 
 ___
 

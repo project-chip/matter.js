@@ -27,9 +27,6 @@ appear in the Networks attribute list, for security reasons.
 See Section 11.8.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” for
 behavior of addition/update.
 
-This field shall contain the SSID to which to attempt connection. Specific BSSID selection is not supported
-by this cluster.
-
 #### Parameters
 
 | Name | Type |
@@ -46,4 +43,4 @@ MatterSpecification.v11.Core § 11.8.7.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:526](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L526)
+[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:351](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L351)

@@ -13,6 +13,7 @@ Long names for Matter specification documents.
 - [cluster](model.Specification.Names.md#cluster)
 - [core](model.Specification.Names.md#core)
 - [device](model.Specification.Names.md#device)
+- [namespace](model.Specification.Names.md#namespace)
 
 ## Enumeration Members
 
@@ -22,7 +23,7 @@ Long names for Matter specification documents.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Specification.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Specification.ts#L22)
+[packages/matter.js/src/model/definitions/Specification.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/definitions/Specification.ts#L23)
 
 ___
 
@@ -32,7 +33,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Specification.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Specification.ts#L21)
+[packages/matter.js/src/model/definitions/Specification.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/definitions/Specification.ts#L22)
 
 ___
 
@@ -42,4 +43,14 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Specification.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Specification.ts#L23)
+[packages/matter.js/src/model/definitions/Specification.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/definitions/Specification.ts#L24)
+
+___
+
+### namespace
+
+• **namespace** = ``"Matter Standard Namespace Specification"``
+
+#### Defined in
+
+[packages/matter.js/src/model/definitions/Specification.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/definitions/Specification.ts#L25)

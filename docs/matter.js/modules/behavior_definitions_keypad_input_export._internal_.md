@@ -17,7 +17,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L20)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L20)
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L22)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L22)

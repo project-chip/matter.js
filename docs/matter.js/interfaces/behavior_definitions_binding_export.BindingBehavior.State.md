@@ -20,7 +20,7 @@
 
 ### binding
 
-• **binding**: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `cluster`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `endpoint`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](tlv_export.FieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]
+• **binding**: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `cluster`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpoint`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](tlv_export.FieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]
 
 Each entry shall represent a binding.
 
@@ -34,4 +34,4 @@ StateType.binding
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L81)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:81](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L81)

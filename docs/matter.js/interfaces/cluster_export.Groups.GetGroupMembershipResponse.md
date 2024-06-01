@@ -59,7 +59,7 @@ TypeFromSchema.capacity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:147](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L147)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:147](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L147)
 
 ___
 
@@ -73,4 +73,4 @@ TypeFromSchema.groupList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:148](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L148)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:148](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L148)

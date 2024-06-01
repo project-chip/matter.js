@@ -118,12 +118,13 @@ ___
 
 ### nextMessage
 
-▸ **nextMessage**(`expectedMessageType?`): `Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
+▸ **nextMessage**(`expectedMessageInfo`, `expectedMessageType?`): `Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `expectedMessageInfo` | `string` |
 | `expectedMessageType?` | `number` |
 
 #### Returns
@@ -138,7 +139,7 @@ ___
 
 ### nextMessageDecoded
 
-▸ **nextMessageDecoded**\<`T`\>(`expectedMessageType`, `schema`): `Promise`\<`T`\>
+▸ **nextMessageDecoded**\<`T`\>(`expectedMessageType`, `schema`, `expectedMessageInfo`): `Promise`\<`T`\>
 
 #### Type parameters
 
@@ -152,6 +153,7 @@ ___
 | :------ | :------ |
 | `expectedMessageType` | `number` |
 | `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
+| `expectedMessageInfo` | `string` |
 
 #### Returns
 
@@ -241,13 +243,14 @@ ___
 
 ### throwIfErrorStatusReport
 
-▸ **throwIfErrorStatusReport**(`message`): `void`
+▸ **throwIfErrorStatusReport**(`message`, `logHint?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `message` | [`Message`](../interfaces/internal_.Message.md) |
+| `logHint?` | `string` |
 
 #### Returns
 
@@ -261,7 +264,13 @@ ___
 
 ### waitForSuccess
 
-▸ **waitForSuccess**(): `Promise`\<`void`\>
+▸ **waitForSuccess**(`expectedMessageInfo`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `expectedMessageInfo` | `string` |
 
 #### Returns
 

@@ -10,8 +10,8 @@ An [Observable](../modules/util_export.md#observable) that explicitly supports a
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends `any`[] |
-| `R` | `R` |
+| `T` | extends `any`[] = `any`[] |
+| `R` | `void` |
 
 ## Hierarchy
 
@@ -24,6 +24,7 @@ An [Observable](../modules/util_export.md#observable) that explicitly supports a
 ### Properties
 
 - [isAsync](util_export.AsyncObservable.md#isasync)
+- [isObserved](util_export.AsyncObservable.md#isobserved)
 
 ### Methods
 
@@ -50,7 +51,23 @@ be asynchronous but this information is not available at runtime unless you spec
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L81)
+[packages/matter.js/src/util/Observable.ts:96](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L96)
+
+___
+
+### isObserved
+
+• **isObserved**: `boolean`
+
+True if there is at least one observer registered.
+
+#### Inherited from
+
+[Observable](util_export.Observable.md).[isObserved](util_export.Observable.md#isobserved)
+
+#### Defined in
+
+[packages/matter.js/src/util/Observable.ts:63](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L63)
 
 ## Methods
 
@@ -73,7 +90,7 @@ cannot return a value.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:69](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L69)
+[packages/matter.js/src/util/Observable.ts:78](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L78)
 
 ___
 
@@ -93,7 +110,7 @@ Release resources associated with the observable.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L74)
+[packages/matter.js/src/util/Observable.ts:83](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L83)
 
 ___
 
@@ -119,7 +136,7 @@ Notify observers.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L39)
+[packages/matter.js/src/util/Observable.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L43)
 
 ___
 
@@ -133,7 +150,7 @@ Remove an observer.
 
 | Name | Type |
 | :------ | :------ |
-| `observer` | [`Observer`](../modules/util_export.md#observer)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
+| `observer` | [`Observer`](util_export.Observer.md)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
 
 #### Returns
 
@@ -145,7 +162,7 @@ Remove an observer.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:49](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L49)
+[packages/matter.js/src/util/Observable.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L53)
 
 ___
 
@@ -159,7 +176,7 @@ Add an observer.
 
 | Name | Type |
 | :------ | :------ |
-| `observer` | [`Observer`](../modules/util_export.md#observer)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
+| `observer` | [`Observer`](util_export.Observer.md)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
 
 #### Returns
 
@@ -171,7 +188,7 @@ Add an observer.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L44)
+[packages/matter.js/src/util/Observable.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L48)
 
 ___
 
@@ -185,7 +202,7 @@ Add an observer that emits once then is unregistered.
 
 | Name | Type |
 | :------ | :------ |
-| `observer` | [`Observer`](../modules/util_export.md#observer)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
+| `observer` | [`Observer`](util_export.Observer.md)\<`T`, [`MaybePromise`](../modules/util_export.md#maybepromise)\<`R`\>\> |
 
 #### Returns
 
@@ -197,4 +214,4 @@ Add an observer that emits once then is unregistered.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L54)
+[packages/matter.js/src/util/Observable.ts:58](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L58)

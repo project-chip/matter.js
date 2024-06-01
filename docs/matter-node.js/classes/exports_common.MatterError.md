@@ -38,6 +38,8 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`ImplementationError`](exports_common.ImplementationError.md)
 
+  ↳↳ [`PublicKeyError`](exports_fabric.PublicKeyError.md)
+
   ↳↳ [`FabricNotFoundError`](exports_fabric.FabricNotFoundError.md)
 
   ↳↳ [`FabricTableFullError`](exports_fabric.FabricTableFullError.md)

@@ -30,6 +30,8 @@ MatterSpecification.v10.Core § A.5.1 and § A.11.4
 
 ### Properties
 
+- [#private](exports_tlv.ObjectSchema.md##private)
+- [allowProtocolSpecificTags](exports_tlv.ObjectSchema.md#allowprotocolspecifictags)
 - [fieldById](exports_tlv.ObjectSchema.md#fieldbyid)
 - [fieldDefinitions](exports_tlv.ObjectSchema.md#fielddefinitions)
 - [type](exports_tlv.ObjectSchema.md#type)
@@ -53,7 +55,7 @@ MatterSpecification.v10.Core § A.5.1 and § A.11.4
 
 ### constructor
 
-• **new ObjectSchema**\<`F`\>(`fieldDefinitions`, `type?`): [`ObjectSchema`](exports_tlv.ObjectSchema.md)\<`F`\>
+• **new ObjectSchema**\<`F`\>(`fieldDefinitions`, `type?`, `allowProtocolSpecificTags?`): [`ObjectSchema`](exports_tlv.ObjectSchema.md)\<`F`\>
 
 #### Type parameters
 
@@ -67,6 +69,7 @@ MatterSpecification.v10.Core § A.5.1 and § A.11.4
 | :------ | :------ |
 | `fieldDefinitions` | `F` |
 | `type?` | [`Structure`](../enums/exports_tlv.TlvType.md#structure) \| [`List`](../enums/exports_tlv.TlvType.md#list) |
+| `allowProtocolSpecificTags?` | `boolean` |
 
 #### Returns
 
@@ -78,9 +81,29 @@ TlvSchema\&lt;TypeFromFields\&lt;F\&gt;\&gt;.constructor
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:55
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:57
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:52
+
+___
+
+### allowProtocolSpecificTags
+
+• `Private` `Readonly` **allowProtocolSpecificTags**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:55
+
+___
 
 ### fieldById
 
@@ -88,7 +111,7 @@ packages/matter.js/dist/esm/tlv/TlvObject.d.ts:55
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:54
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:56
 
 ___
 
@@ -98,7 +121,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:52
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:53
 
 ___
 
@@ -108,7 +131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:53
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:54
 
 ## Methods
 
@@ -237,7 +260,7 @@ TlvSchema.decodeTlvInternalValue
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:57
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:59
 
 ___
 
@@ -339,7 +362,7 @@ TlvSchema.encodeTlvInternal
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:56
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:58
 
 ___
 
@@ -366,7 +389,7 @@ TlvSchema.injectField
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:59
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:61
 
 ___
 
@@ -392,7 +415,7 @@ TlvSchema.removeField
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:60
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:62
 
 ___
 
@@ -416,4 +439,4 @@ TlvSchema.validate
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:58
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:60

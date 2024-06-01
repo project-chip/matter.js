@@ -44,8 +44,10 @@ Crypto.get().hkdf = async () => {
 };
 
 export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends ServerNode<T> {
-    constructor(type: T = ServerNode.RootEndpoint as T, options?: Node.Options<T>) {
-        const config = Node.nodeConfigFor(ServerNode.RootEndpoint, type, options);
+    constructor(type?: T, options?: Node.Options<T>);
+    constructor(config: Partial<Node.Configuration<T>>);
+    constructor(definition: T | Node.Configuration<T>, options?: Node.Options<T>) {
+        const config = Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options);
 
         const environment = config.environment ?? new Environment("test");
 

@@ -30,7 +30,7 @@ Ethernet related features
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1280
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1505
 
 ___
 
@@ -44,7 +44,7 @@ Thread related features
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1274
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1499
 
 ___
 
@@ -58,4 +58,4 @@ Wi-Fi related features
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1268
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1493

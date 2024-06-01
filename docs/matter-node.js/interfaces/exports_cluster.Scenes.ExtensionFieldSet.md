@@ -43,7 +43,7 @@ ___
 
 ### clusterId
 
-• **clusterId**: [`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>
+• **clusterId**: [`ClusterId`](../modules/exports_datatype.md#clusterid)
 
 #### Inherited from
 

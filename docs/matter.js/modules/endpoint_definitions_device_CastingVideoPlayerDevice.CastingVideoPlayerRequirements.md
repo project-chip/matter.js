@@ -34,7 +34,7 @@ We provide this alias to the default implementation [AccountLoginServer](endpoin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:141](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L141)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:141](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L141)
 
 ___
 
@@ -48,7 +48,7 @@ This version of [ApplicationLauncherServer](endpoint_definitions_device_CastingV
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:134](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L134)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:134](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L134)
 
 ___
 
@@ -62,7 +62,7 @@ We provide this alias to the default implementation [AudioOutputServer](endpoint
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:127](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L127)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:127](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L127)
 
 ___
 
@@ -76,7 +76,7 @@ We provide this alias to the default implementation [ChannelServer](endpoint_def
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:99](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L99)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:99](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L99)
 
 ___
 
@@ -90,7 +90,7 @@ We provide this alias to the default implementation [ContentLauncherServer](endp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:85](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L85)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:85](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L85)
 
 ___
 
@@ -104,13 +104,13 @@ We provide this alias to the default implementation [KeypadInputServer](endpoint
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:78](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L78)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:78](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L78)
 
 ___
 
 ### LowPowerServer
 
-• `Const` **LowPowerServer**: typeof [`LowPowerServer`](../classes/behavior_definitions_low_power_export.LowPowerServer.md) = `BaseLowPowerServer`
+• `Const` **LowPowerServer**: typeof [`LowPowerServer`](behavior_definitions_low_power_export.LowPowerServer.md) = `BaseLowPowerServer`
 
 The LowPower cluster is optional per the Matter specification
 
@@ -118,7 +118,7 @@ We provide this alias to the default implementation [LowPowerServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:120](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L120)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:120](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L120)
 
 ___
 
@@ -132,7 +132,7 @@ We provide this alias to the default implementation [MediaInputServer](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:113](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L113)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:113](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L113)
 
 ___
 
@@ -146,7 +146,7 @@ We provide this alias to the default implementation [MediaPlaybackServer](endpoi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L71)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:71](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L71)
 
 ___
 
@@ -160,7 +160,7 @@ We provide this alias to the default implementation [OnOffServer](endpoint_defin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L64)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:64](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L64)
 
 ___
 
@@ -174,7 +174,7 @@ We provide this alias to the default implementation [TargetNavigatorServer](endp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L106)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:106](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L106)
 
 ___
 
@@ -188,7 +188,7 @@ We provide this alias to the default implementation [WakeOnLanServer](endpoint_d
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:92](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L92)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:92](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L92)
 
 ___
 
@@ -207,16 +207,16 @@ An implementation for each server cluster supported by the endpoint per the Matt
 | `mandatory.KeypadInput` | typeof [`KeypadInputServer`](../classes/behavior_definitions_keypad_input_export.KeypadInputServer.md) |
 | `mandatory.MediaPlayback` | typeof [`MediaPlaybackServer`](../classes/behavior_definitions_media_playback_export.MediaPlaybackServer.md) |
 | `mandatory.OnOff` | typeof [`OnOffServer`](behavior_definitions_on_off_export.OnOffServer.md) |
-| `optional` | \{ `AccountLogin`: typeof [`AccountLoginServer`](../classes/behavior_definitions_account_login_export.AccountLoginServer.md) = AccountLoginServer; `ApplicationLauncher`: [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`WithFeatures`](cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.ApplicationLauncher.Cluster.md), readonly [``"ApplicationPlatform"``]\>, typeof [`ApplicationLauncherServer`](../classes/behavior_definitions_application_launcher_export.ApplicationLauncherServer.md), [`ApplicationLauncherInterface`](behavior_definitions_application_launcher_export.md#applicationlauncherinterface)\> = ApplicationLauncherServer; `AudioOutput`: typeof [`AudioOutputServer`](../classes/behavior_definitions_audio_output_export.AudioOutputServer.md) = AudioOutputServer; `Channel`: typeof [`ChannelServer`](../classes/behavior_definitions_channel_export.ChannelServer.md) = ChannelServer; `LowPower`: typeof [`LowPowerServer`](../classes/behavior_definitions_low_power_export.LowPowerServer.md) = LowPowerServer; `MediaInput`: typeof [`MediaInputServer`](../classes/behavior_definitions_media_input_export.MediaInputServer.md) = MediaInputServer; `TargetNavigator`: typeof [`TargetNavigatorServer`](../classes/behavior_definitions_target_navigator_export.TargetNavigatorServer.md) = TargetNavigatorServer; `WakeOnLan`: typeof [`WakeOnLanServer`](../classes/behavior_definitions_wake_on_lan_export.WakeOnLanServer.md) = WakeOnLanServer } |
+| `optional` | \{ `AccountLogin`: typeof [`AccountLoginServer`](../classes/behavior_definitions_account_login_export.AccountLoginServer.md) = AccountLoginServer; `ApplicationLauncher`: [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`WithFeatures`](cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.ApplicationLauncher.Cluster.md), readonly [``"ApplicationPlatform"``]\>, typeof [`ApplicationLauncherServer`](../classes/behavior_definitions_application_launcher_export.ApplicationLauncherServer.md), [`ApplicationLauncherInterface`](behavior_definitions_application_launcher_export.md#applicationlauncherinterface)\> = ApplicationLauncherServer; `AudioOutput`: typeof [`AudioOutputServer`](../classes/behavior_definitions_audio_output_export.AudioOutputServer.md) = AudioOutputServer; `Channel`: typeof [`ChannelServer`](../classes/behavior_definitions_channel_export.ChannelServer.md) = ChannelServer; `LowPower`: typeof [`LowPowerServer`](behavior_definitions_low_power_export.LowPowerServer.md) = LowPowerServer; `MediaInput`: typeof [`MediaInputServer`](../classes/behavior_definitions_media_input_export.MediaInputServer.md) = MediaInputServer; `TargetNavigator`: typeof [`TargetNavigatorServer`](../classes/behavior_definitions_target_navigator_export.TargetNavigatorServer.md) = TargetNavigatorServer; `WakeOnLan`: typeof [`WakeOnLanServer`](../classes/behavior_definitions_wake_on_lan_export.WakeOnLanServer.md) = WakeOnLanServer } |
 | `optional.AccountLogin` | typeof [`AccountLoginServer`](../classes/behavior_definitions_account_login_export.AccountLoginServer.md) |
 | `optional.ApplicationLauncher` | [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`WithFeatures`](cluster_export.ClusterComposer.md#withfeatures)\<[`Cluster`](../interfaces/cluster_export.ApplicationLauncher.Cluster.md), readonly [``"ApplicationPlatform"``]\>, typeof [`ApplicationLauncherServer`](../classes/behavior_definitions_application_launcher_export.ApplicationLauncherServer.md), [`ApplicationLauncherInterface`](behavior_definitions_application_launcher_export.md#applicationlauncherinterface)\> |
 | `optional.AudioOutput` | typeof [`AudioOutputServer`](../classes/behavior_definitions_audio_output_export.AudioOutputServer.md) |
 | `optional.Channel` | typeof [`ChannelServer`](../classes/behavior_definitions_channel_export.ChannelServer.md) |
-| `optional.LowPower` | typeof [`LowPowerServer`](../classes/behavior_definitions_low_power_export.LowPowerServer.md) |
+| `optional.LowPower` | typeof [`LowPowerServer`](behavior_definitions_low_power_export.LowPowerServer.md) |
 | `optional.MediaInput` | typeof [`MediaInputServer`](../classes/behavior_definitions_media_input_export.MediaInputServer.md) |
 | `optional.TargetNavigator` | typeof [`TargetNavigatorServer`](../classes/behavior_definitions_target_navigator_export.TargetNavigatorServer.md) |
 | `optional.WakeOnLan` | typeof [`WakeOnLanServer`](../classes/behavior_definitions_wake_on_lan_export.WakeOnLanServer.md) |
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:146](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L146)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:146](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L146)

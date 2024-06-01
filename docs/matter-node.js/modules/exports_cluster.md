@@ -110,6 +110,7 @@
 - [EventServer](../classes/exports_cluster.EventServer.md)
 - [FabricScopeError](../classes/exports_cluster.FabricScopeError.md)
 - [FabricScopedAttributeServer](../classes/exports_cluster.FabricScopedAttributeServer.md)
+- [FabricScopedEventServer](../classes/exports_cluster.FabricScopedEventServer.md)
 - [FixedAttributeServer](../classes/exports_cluster.FixedAttributeServer.md)
 - [GroupsManager](../classes/exports_cluster.GroupsManager.md)
 - [IllegalClusterError](../classes/exports_cluster.IllegalClusterError.md)
@@ -387,6 +388,10 @@
 - [createDefaultOnOffClusterServer](exports_cluster.md#createdefaultonoffclusterserver)
 - [createDefaultScenesClusterServer](exports_cluster.md#createdefaultscenesclusterserver)
 - [createEventClient](exports_cluster.md#createeventclient)
+- [genericFabricScopedAttributeGetter](exports_cluster.md#genericfabricscopedattributegetter)
+- [genericFabricScopedAttributeGetterFromFabric](exports_cluster.md#genericfabricscopedattributegetterfromfabric)
+- [genericFabricScopedAttributeSetter](exports_cluster.md#genericfabricscopedattributesetter)
+- [genericFabricScopedAttributeSetterForFabric](exports_cluster.md#genericfabricscopedattributesetterforfabric)
 - [getClusterAttributeById](exports_cluster.md#getclusterattributebyid)
 - [getClusterById](exports_cluster.md#getclusterbyid)
 - [getClusterCommandById](exports_cluster.md#getclustercommandbyid)
@@ -408,9 +413,9 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:813
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:855
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:814
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:856
 
 ___
 
@@ -432,9 +437,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:1101
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:1173
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:1102
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:1174
 
 ___
 
@@ -444,9 +449,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:810
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:847
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:811
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:848
 
 ___
 
@@ -537,7 +542,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:83
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:84
 
 ___
 
@@ -824,9 +829,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:5078
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:4996
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:5079
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:4997
 
 ___
 
@@ -876,7 +881,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:24
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:25
 
 ___
 
@@ -996,7 +1001,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:194
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:195
 
 ___
 
@@ -1070,9 +1075,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:547
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:571
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:548
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:572
 
 ___
 
@@ -1082,9 +1087,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:695
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:729
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:696
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:730
 
 ___
 
@@ -1100,7 +1105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:121
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:122
 
 ___
 
@@ -1131,9 +1136,9 @@ MatterSpecification.v11.Core § 7.13
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:211
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:212
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:225
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:226
 
 ___
 
@@ -1143,9 +1148,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:1113
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:1160
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:1114
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:1161
 
 ___
 
@@ -1257,7 +1262,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:115
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:116
 
 ___
 
@@ -1273,7 +1278,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:195
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:196
 
 ___
 
@@ -1319,9 +1324,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:4074
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:5009
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:4075
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:5010
 
 ___
 
@@ -1383,9 +1388,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:1233
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:1303
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:1234
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:1304
 
 ___
 
@@ -1401,7 +1406,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:118
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:119
 
 ___
 
@@ -1417,7 +1422,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:198
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:199
 
 ___
 
@@ -1427,9 +1432,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:264
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:228
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:265
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:229
 
 ___
 
@@ -1439,9 +1444,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:321
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:313
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:322
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:314
 
 ___
 
@@ -1451,9 +1456,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:2198
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:2437
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:2199
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:2438
 
 ___
 
@@ -1553,7 +1558,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:142
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:143
 
 ___
 
@@ -1569,7 +1574,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:141
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:142
 
 ___
 
@@ -1625,9 +1630,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:565
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:594
 
-packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:566
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:595
 
 ___
 
@@ -1725,9 +1730,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:3282
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:3328
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:3283
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:3329
 
 ___
 
@@ -1749,9 +1754,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1289
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1356
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1290
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1357
 
 ___
 
@@ -1833,9 +1838,9 @@ packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:2406
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:813
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:855
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:814
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:856
 
 ___
 
@@ -1857,9 +1862,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:1101
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:1173
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:1102
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:1174
 
 ___
 
@@ -1869,9 +1874,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:810
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:847
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:811
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:848
 
 ___
 
@@ -2025,9 +2030,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:5078
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:4996
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:5079
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:4997
 
 ___
 
@@ -2157,9 +2162,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:547
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:571
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:548
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:572
 
 ___
 
@@ -2169,9 +2174,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:695
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:729
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:696
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:730
 
 ___
 
@@ -2181,9 +2186,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:1113
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:1160
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:1114
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:1161
 
 ___
 
@@ -2325,9 +2330,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:4074
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:5009
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:4075
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:5010
 
 ___
 
@@ -2373,9 +2378,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:1233
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:1303
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:1234
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:1304
 
 ___
 
@@ -2385,9 +2390,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:264
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:228
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:265
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:229
 
 ___
 
@@ -2397,9 +2402,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:321
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:313
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:322
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:314
 
 ___
 
@@ -2409,9 +2414,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:2198
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:2437
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:2199
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:2438
 
 ___
 
@@ -2517,9 +2522,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:565
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:594
 
-packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:566
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:595
 
 ___
 
@@ -2601,9 +2606,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:3282
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:3328
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:3283
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:3329
 
 ___
 
@@ -2625,9 +2630,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1289
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1356
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1290
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1357
 
 ___
 
@@ -2637,7 +2642,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:122
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:123
 
 ___
 
@@ -2753,7 +2758,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:97
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:98
 
 ___
 
@@ -2806,7 +2811,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:237
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:238
 
 ___
 
@@ -2873,7 +2878,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:254
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:255
 
 ___
 
@@ -2967,7 +2972,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:151
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:152
 
 ___
 
@@ -2997,7 +3002,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:99
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:100
 
 ___
 
@@ -3029,7 +3034,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:153
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:154
 
 ___
 
@@ -3059,7 +3064,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:192
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:193
 
 ___
 
@@ -3089,7 +3094,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:110
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:111
 
 ___
 
@@ -3119,7 +3124,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:102
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:103
 
 ___
 
@@ -3149,7 +3154,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:106
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:107
 
 ___
 
@@ -3179,7 +3184,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:190
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:191
 
 ___
 
@@ -3209,7 +3214,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:103
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:104
 
 ___
 
@@ -3239,7 +3244,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:107
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:108
 
 ___
 
@@ -3287,7 +3292,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:225
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:226
 
 ___
 
@@ -3377,13 +3382,14 @@ ___
 
 ### OperationalCredentialsClusterHandler
 
-▸ **OperationalCredentialsClusterHandler**(`cert`): [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<[`Cluster`](../interfaces/exports_cluster.OperationalCredentials.Cluster.md)\>
+▸ **OperationalCredentialsClusterHandler**(`certificates`, `productDescription?`): [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<[`Cluster`](../interfaces/exports_cluster.OperationalCredentials.Cluster.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `cert` | [`DeviceCertification`](../classes/exports_cluster._internal_.DeviceCertification-1.md) |
+| `certificates` | [`Definition`](export._internal_.md#definition) |
+| `productDescription?` | [`ProductDescription`](../interfaces/exports_cluster._internal_.ProductDescription.md) |
 
 #### Returns
 
@@ -3391,7 +3397,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/OperationalCredentialsServer.d.ts:9
+packages/matter.js/dist/esm/cluster/server/OperationalCredentialsServer.d.ts:10
 
 ___
 
@@ -3421,7 +3427,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:98
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:99
 
 ___
 
@@ -3453,7 +3459,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:152
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:153
 
 ___
 
@@ -3483,7 +3489,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:191
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:192
 
 ___
 
@@ -3513,7 +3519,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:109
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:110
 
 ___
 
@@ -3543,7 +3549,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:101
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:102
 
 ___
 
@@ -3573,7 +3579,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:105
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:106
 
 ___
 
@@ -3613,7 +3619,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:114
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:115
 
 ___
 
@@ -3659,7 +3665,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:193
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:194
 
 ___
 
@@ -3719,7 +3725,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:100
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:101
 
 ___
 
@@ -3749,7 +3755,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:104
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:105
 
 ___
 
@@ -3779,7 +3785,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:108
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:109
 
 ___
 
@@ -3908,7 +3914,7 @@ Factory function to create an attribute server.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:28
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:33
 
 ___
 
@@ -4033,6 +4039,125 @@ Factory function to create an EVentClient for a given event.
 #### Defined in
 
 packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:16
+
+___
+
+### genericFabricScopedAttributeGetter
+
+▸ **genericFabricScopedAttributeGetter**\<`T`\>(`session`, `isFabricFiltered`, `cluster`, `attributeName`, `defaultValue`): `T`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `session` | `undefined` \| [`Session`](../classes/exports_session.Session.md)\<[`MatterDevice`](../classes/exports_cluster._internal_.MatterDevice.md)\> |
+| `isFabricFiltered` | `boolean` |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
+| `attributeName` | `string` |
+| `defaultValue` | `T` |
+
+#### Returns
+
+`T`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:248
+
+___
+
+### genericFabricScopedAttributeGetterFromFabric
+
+▸ **genericFabricScopedAttributeGetterFromFabric**\<`T`\>(`fabric`, `cluster`, `attributeName`, `defaultValue`): `T`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](../classes/exports_fabric.Fabric.md) |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
+| `attributeName` | `string` |
+| `defaultValue` | `T` |
+
+#### Returns
+
+`T`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:247
+
+___
+
+### genericFabricScopedAttributeSetter
+
+▸ **genericFabricScopedAttributeSetter**\<`T`\>(`value`, `session`, `cluster`, `attributeName`, `defaultValue?`): `boolean`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `T` |
+| `session` | `undefined` \| [`Session`](../classes/exports_session.Session.md)\<[`MatterDevice`](../classes/exports_cluster._internal_.MatterDevice.md)\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
+| `attributeName` | `string` |
+| `defaultValue?` | `T` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:250
+
+___
+
+### genericFabricScopedAttributeSetterForFabric
+
+▸ **genericFabricScopedAttributeSetterForFabric**\<`T`\>(`fabric`, `cluster`, `attributeName`, `value`, `defaultValue?`): `boolean`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](../classes/exports_fabric.Fabric.md) |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
+| `attributeName` | `string` |
+| `value` | `T` |
+| `defaultValue?` | `T` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:249
 
 ___
 
@@ -4263,7 +4388,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<`number`\>\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
 
 #### Returns
 
@@ -4283,7 +4408,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<`number`\>\> ; `commandId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`CommandId`](exports_datatype.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `commandId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`CommandId`](exports_datatype.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\>  }\> |
 
 #### Returns
 
@@ -4303,7 +4428,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
 
 #### Returns
 

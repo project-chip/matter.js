@@ -73,7 +73,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L36)
+[packages/matter.js/src/session/Session.ts:36](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/Session.ts#L36)
 
 ## Variables
 
@@ -83,7 +83,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessenger.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/pase/PaseMessenger.ts#L21)
+[packages/matter.js/src/session/pase/PaseMessenger.ts:21](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseMessenger.ts#L21)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L20)
+[packages/matter.js/src/session/case/CaseMessages.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L20)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L24)
+[packages/matter.js/src/session/case/CaseMessages.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L24)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L21)
+[packages/matter.js/src/session/case/CaseMessages.ts:21](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L21)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L25)
+[packages/matter.js/src/session/case/CaseMessages.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L25)
 
 ___
 
@@ -136,7 +136,7 @@ sees fit.
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L19)
+[packages/matter.js/src/session/Session.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/Session.ts#L19)
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L22)
+[packages/matter.js/src/session/case/CaseMessages.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L22)
 
 ___
 
@@ -156,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L23)
+[packages/matter.js/src/session/case/CaseMessages.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L23)
 
 ___
 
@@ -168,7 +168,7 @@ Maximum sleep interval of node when in active mode.
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L22)
+[packages/matter.js/src/session/Session.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/Session.ts#L22)
 
 ___
 
@@ -180,7 +180,7 @@ Minimum amount the node SHOULD stay awake after network activity.
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L28)
+[packages/matter.js/src/session/Session.ts:28](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/Session.ts#L28)
 
 ___
 
@@ -192,7 +192,7 @@ Maximum sleep interval of node when in idle mode.
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/Session.ts#L25)
+[packages/matter.js/src/session/Session.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/Session.ts#L25)
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessenger.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/pase/PaseMessenger.ts#L22)
+[packages/matter.js/src/session/pase/PaseMessenger.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseMessenger.ts#L22)
 
 ___
 
@@ -212,7 +212,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L26)
+[packages/matter.js/src/session/case/CaseMessages.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L26)
 
 ___
 
@@ -222,7 +222,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L27)
+[packages/matter.js/src/session/case/CaseMessages.ts:27](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L27)
 
 ___
 
@@ -236,7 +236,7 @@ MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L30)
+[packages/matter.js/src/session/case/CaseMessages.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L30)
 
 ___
 
@@ -250,7 +250,7 @@ MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L41)
+[packages/matter.js/src/session/case/CaseMessages.ts:41](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L41)
 
 ___
 
@@ -264,7 +264,7 @@ MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L50)
+[packages/matter.js/src/session/case/CaseMessages.ts:50](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L50)
 
 ___
 
@@ -278,7 +278,7 @@ MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:57](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L57)
+[packages/matter.js/src/session/case/CaseMessages.ts:57](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L57)
 
 ___
 
@@ -292,7 +292,7 @@ MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L70)
+[packages/matter.js/src/session/case/CaseMessages.ts:70](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L70)
 
 ___
 
@@ -306,7 +306,7 @@ MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:78](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L78)
+[packages/matter.js/src/session/case/CaseMessages.ts:78](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L78)
 
 ___
 
@@ -320,7 +320,7 @@ MatterSpecification.v10.Core § 4.13.1.2
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessages.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/pase/PaseMessages.ts#L50)
+[packages/matter.js/src/session/pase/PaseMessages.ts:50](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseMessages.ts#L50)
 
 ___
 
@@ -334,7 +334,7 @@ MatterSpecification.v10.Core § 4.13.1.2
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessages.ts:55](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/pase/PaseMessages.ts#L55)
+[packages/matter.js/src/session/pase/PaseMessages.ts:55](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseMessages.ts#L55)
 
 ___
 
@@ -348,7 +348,7 @@ MatterSpecification.v10.Core § 4.13.1.2
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessages.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/pase/PaseMessages.ts#L61)
+[packages/matter.js/src/session/pase/PaseMessages.ts:61](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseMessages.ts#L61)
 
 ___
 
@@ -362,7 +362,7 @@ MatterSpecification.v10.Core § 4.13.1.2
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessages.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/pase/PaseMessages.ts#L26)
+[packages/matter.js/src/session/pase/PaseMessages.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseMessages.ts#L26)
 
 ___
 
@@ -376,7 +376,7 @@ MatterSpecification.v10.Core § 4.13.1.2
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessages.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/pase/PaseMessages.ts#L35)
+[packages/matter.js/src/session/pase/PaseMessages.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseMessages.ts#L35)
 
 ___
 
@@ -390,7 +390,7 @@ MatterSpecification.v12.Core § 4.11.8
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessages.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/pase/PaseMessages.ts#L14)
+[packages/matter.js/src/session/pase/PaseMessages.ts:14](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseMessages.ts#L14)
 
 ___
 
@@ -404,7 +404,7 @@ MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/case/CaseMessages.ts#L62)
+[packages/matter.js/src/session/case/CaseMessages.ts:62](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/case/CaseMessages.ts#L62)
 
 ___
 
@@ -414,7 +414,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SessionManager.ts#L24)
+[packages/matter.js/src/session/SessionManager.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/SessionManager.ts#L25)
 
 ## Functions
 
@@ -441,4 +441,4 @@ asserts session is SecureSession\<T\>
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:314](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/session/SecureSession.ts#L314)
+[packages/matter.js/src/session/SecureSession.ts:330](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/SecureSession.ts#L330)

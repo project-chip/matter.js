@@ -30,13 +30,19 @@ MatterSpecification.v11.Core § 9.14.7.1
 
 • **actionId**: `number`
 
+This field shall be set to the ActionID of the action which has changed state.
+
+**`See`**
+
+MatterSpecification.v11.Core § 9.14.7.1.1
+
 #### Inherited from
 
 TypeFromSchema.actionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:587](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L587)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:613](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L613)
 
 ___
 
@@ -49,7 +55,7 @@ ActionID.
 
 **`See`**
 
-MatterSpecification.v11.Core § 9.14.7.1.1
+MatterSpecification.v11.Core § 9.14.7.1.2
 
 #### Inherited from
 
@@ -57,7 +63,7 @@ TypeFromSchema.invokeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:595](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L595)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:621](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L621)
 
 ___
 
@@ -69,7 +75,7 @@ This field shall be set to state that the action has changed to.
 
 **`See`**
 
-MatterSpecification.v11.Core § 9.14.7.1.2
+MatterSpecification.v11.Core § 9.14.7.1.3
 
 #### Inherited from
 
@@ -77,4 +83,4 @@ TypeFromSchema.newState
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:602](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L602)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:628](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L628)

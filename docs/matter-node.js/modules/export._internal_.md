@@ -8,24 +8,20 @@
 
 - [MatterController](../classes/export._internal_.MatterController.md)
 
+### Interfaces
+
+- [Configuration](../interfaces/export._internal_.Configuration.md)
+
 ### Type Aliases
 
-- [CommissioningServerCommands](export._internal_.md#commissioningservercommands)
+- [Definition](export._internal_.md#definition)
 
 ## Type Aliases
 
-### CommissioningServerCommands
+### Definition
 
-Ƭ **CommissioningServerCommands**: `Object`
-
-Commands exposed by the CommissioningServer
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `testEventTrigger` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`GeneralDiagnosticsCluster`](exports_cluster.md#generaldiagnosticscluster-1)\>[``"testEventTrigger"``] | Provide a means for certification tests to trigger some test-plan-specific events. |
+Ƭ **Definition**: [`Configuration`](../interfaces/export._internal_.Configuration.md) \| () => `Promise`\<[`Configuration`](../interfaces/export._internal_.Configuration.md)\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:129
+packages/matter.js/dist/esm/behavior/definitions/operational-credentials/DeviceCertification.d.ts:31

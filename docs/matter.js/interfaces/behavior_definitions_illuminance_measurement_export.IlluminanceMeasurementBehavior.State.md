@@ -39,7 +39,7 @@ StateType.lightSensorType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L75)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:75](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L75)
 
 ___
 
@@ -60,7 +60,7 @@ StateType.maxMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:60](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L60)
 
 ___
 
@@ -93,7 +93,7 @@ StateType.measuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L44)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:44](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L44)
 
 ___
 
@@ -114,7 +114,7 @@ StateType.minMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L52)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:52](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L52)
 
 ___
 
@@ -134,4 +134,4 @@ StateType.tolerance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L67)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:67](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L67)

@@ -43,7 +43,7 @@ StateType.adminFabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:260](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L260)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:265](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L265)
 
 ___
 
@@ -69,7 +69,7 @@ StateType.adminVendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:273](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L273)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:278](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L278)
 
 ___
 
@@ -95,4 +95,4 @@ StateType.windowStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:246](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L246)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:251](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L251)

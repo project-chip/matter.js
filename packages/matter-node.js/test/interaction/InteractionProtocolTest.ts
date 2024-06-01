@@ -94,7 +94,7 @@ const READ_REQUEST: ReadRequest = {
     ],
     eventRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) }, // existing event
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(400) }, // unsupported event
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(254) }, // unsupported event
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) }, // unsupported cluster
         { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) }, // unsupported endpoint
     ],
@@ -116,7 +116,7 @@ const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
     dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 1 }],
     eventRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) }, // existing event
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(400) }, // unsupported event
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(254) }, // unsupported event
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) }, // unsupported cluster
         { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) }, // unsupported endpoint
     ],
@@ -139,7 +139,7 @@ const READ_REQUEST_WITH_FILTER: ReadRequest = {
     dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 0 }],
     eventRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) }, // existing event
-        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(400) }, // unsupported event
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(254) }, // unsupported event
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) }, // unsupported cluster
         { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) }, // unsupported endpoint
     ],
@@ -242,7 +242,7 @@ const READ_RESPONSE: DataReportPayload = {
         },
         {
             eventStatus: {
-                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(400) },
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(254) },
                 status: { status: 199 },
             },
         },
@@ -316,7 +316,7 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
         },
         {
             eventStatus: {
-                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(400) },
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(254) },
                 status: { status: 199 },
             },
         },
@@ -576,6 +576,18 @@ const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
             path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
             status: { clusterStatus: undefined, status: 0 },
         },
+        {
+            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
+            status: { clusterStatus: undefined, status: 0 },
+        },
+        {
+            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
+            status: { clusterStatus: undefined, status: 0 },
+        },
+        {
+            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
+            status: { clusterStatus: undefined, status: 0 },
+        },
     ],
 };
 
@@ -724,6 +736,7 @@ const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
     ],
 };
 
+/*
 const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
     suppressResponse: false,
@@ -760,6 +773,7 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
         },
     ],
 };
+ */
 
 const BasicInformationClusterWithTimedInteraction = {
     ...BasicInformationCluster,
@@ -1048,14 +1062,14 @@ describe("InteractionProtocol", () => {
                     authMode: 0,
                     subjects: null,
                     targets: null,
-                    fabricIndex: FabricIndex(0), // existing value 0
+                    fabricIndex: FabricIndex(1), // existing value 0
                 },
                 {
                     privilege: 1,
                     authMode: 2,
                     subjects: null,
                     targets: null,
-                    fabricIndex: FabricIndex(2), // existing value 2
+                    fabricIndex: FabricIndex(1), // existing value 2, we override hard
                 },
             ]);
         });
@@ -1386,15 +1400,23 @@ describe("InteractionProtocol", () => {
 
             withClusters(onOffCluster);
 
-            const result = await interactionProtocol.handleInvokeRequest(
-                await getDummyMessageExchange(),
-                INVOKE_COMMAND_REQUEST_MULTI,
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleInvokeRequest(
+                        await getDummyMessageExchange(),
+                        INVOKE_COMMAND_REQUEST_MULTI,
+                        {
+                            packetHeader: { sessionType: SessionType.Unicast },
+                        } as Message,
+                    ),
+                {
+                    message: "(128) Multi-command invoke requests are not supported",
+                },
             );
 
-            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI);
-            assert.equal(triggeredOn, true);
-            assert.equal(triggeredOff, true);
+            //assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI); // TODO Add again later when we support it officially
+            assert.equal(triggeredOn, false);
+            assert.equal(triggeredOff, false);
             assert.equal(onOffState, false);
         });
 

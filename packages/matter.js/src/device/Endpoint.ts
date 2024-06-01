@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { getClusterNameById } from "../cluster/ClusterHelper.js";
+import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { BasicInformationCluster } from "../cluster/definitions/BasicInformationCluster.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
@@ -14,12 +14,13 @@ import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
 import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import {
-    asClusterServerInternal,
     ClusterServerObj,
     ClusterServerObjForCluster,
+    asClusterServerInternal,
 } from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
+import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
@@ -76,6 +77,10 @@ export class Endpoint implements EndpointInterface {
         if (options.uniqueStorageKey !== undefined) {
             this.uniqueStorageKey = options.uniqueStorageKey;
         }
+    }
+
+    get deviceType(): DeviceTypeId {
+        return this.deviceTypes[0].code;
     }
 
     setStructureChangedCallback(callback: () => void) {

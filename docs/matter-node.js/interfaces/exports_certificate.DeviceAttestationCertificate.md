@@ -4,6 +4,12 @@
 
 [exports/certificate](../modules/exports_certificate.md).DeviceAttestationCertificate
 
+## Hierarchy
+
+- [`AttestationCertificateBase`](exports_certificate._internal_.AttestationCertificateBase.md)
+
+  ↳ **`DeviceAttestationCertificate`**
+
 ## Table of contents
 
 ### Properties
@@ -26,9 +32,13 @@
 
 • **ellipticCurveIdentifier**: `number`
 
+#### Inherited from
+
+[AttestationCertificateBase](exports_certificate._internal_.AttestationCertificateBase.md).[ellipticCurveIdentifier](exports_certificate._internal_.AttestationCertificateBase.md#ellipticcurveidentifier)
+
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:133
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:481
 
 ___
 
@@ -36,9 +46,13 @@ ___
 
 • **ellipticCurvePublicKey**: `Uint8Array`
 
+#### Inherited from
+
+[AttestationCertificateBase](exports_certificate._internal_.AttestationCertificateBase.md).[ellipticCurvePublicKey](exports_certificate._internal_.AttestationCertificateBase.md#ellipticcurvepublickey)
+
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:134
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:482
 
 ___
 
@@ -55,13 +69,17 @@ ___
 | `basicConstraints.isCa` | `boolean` |
 | `basicConstraints.pathLen?` | `number` |
 | `extendedKeyUsage?` | `number`[] |
-| `futureExtension?` | `Uint8Array` |
-| `keyUsage` | `number` |
+| `futureExtension?` | `Uint8Array`[] |
+| `keyUsage` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<\{ `cRLSign`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `dataEncipherment`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `decipherOnly`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `digitalSignature`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `encipherOnly`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `keyAgreement`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `keyCertSign`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `keyEncipherment`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `nonRepudiation`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\> |
 | `subjectKeyIdentifier` | `Uint8Array` |
+
+#### Inherited from
+
+[AttestationCertificateBase](exports_certificate._internal_.AttestationCertificateBase.md).[extensions](exports_certificate._internal_.AttestationCertificateBase.md#extensions)
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:135
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:483
 
 ___
 
@@ -77,9 +95,13 @@ ___
 | `productId?` | `number` |
 | `vendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
 
+#### Overrides
+
+[AttestationCertificateBase](exports_certificate._internal_.AttestationCertificateBase.md).[issuer](exports_certificate._internal_.AttestationCertificateBase.md#issuer)
+
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:120
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:497
 
 ___
 
@@ -87,9 +109,13 @@ ___
 
 • **notAfter**: `number`
 
+#### Inherited from
+
+[AttestationCertificateBase](exports_certificate._internal_.AttestationCertificateBase.md).[notAfter](exports_certificate._internal_.AttestationCertificateBase.md#notafter)
+
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:126
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:478
 
 ___
 
@@ -97,9 +123,13 @@ ___
 
 • **notBefore**: `number`
 
+#### Inherited from
+
+[AttestationCertificateBase](exports_certificate._internal_.AttestationCertificateBase.md).[notBefore](exports_certificate._internal_.AttestationCertificateBase.md#notbefore)
+
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:125
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:477
 
 ___
 
@@ -107,9 +137,13 @@ ___
 
 • **publicKeyAlgorithm**: `number`
 
+#### Inherited from
+
+[AttestationCertificateBase](exports_certificate._internal_.AttestationCertificateBase.md).[publicKeyAlgorithm](exports_certificate._internal_.AttestationCertificateBase.md#publickeyalgorithm)
+
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:132
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:480
 
 ___
 
@@ -117,9 +151,13 @@ ___
 
 • **serialNumber**: `Uint8Array`
 
+#### Inherited from
+
+[AttestationCertificateBase](exports_certificate._internal_.AttestationCertificateBase.md).[serialNumber](exports_certificate._internal_.AttestationCertificateBase.md#serialnumber)
+
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:118
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:474
 
 ___
 
@@ -127,9 +165,13 @@ ___
 
 • **signature**: `Uint8Array`
 
+#### Inherited from
+
+[AttestationCertificateBase](exports_certificate._internal_.AttestationCertificateBase.md).[signature](exports_certificate._internal_.AttestationCertificateBase.md#signature)
+
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:146
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:494
 
 ___
 
@@ -137,9 +179,13 @@ ___
 
 • **signatureAlgorithm**: `number`
 
+#### Inherited from
+
+[AttestationCertificateBase](exports_certificate._internal_.AttestationCertificateBase.md).[signatureAlgorithm](exports_certificate._internal_.AttestationCertificateBase.md#signaturealgorithm)
+
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:119
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:475
 
 ___
 
@@ -155,6 +201,10 @@ ___
 | `productId` | `number` |
 | `vendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
 
+#### Overrides
+
+[AttestationCertificateBase](exports_certificate._internal_.AttestationCertificateBase.md).[subject](exports_certificate._internal_.AttestationCertificateBase.md#subject)
+
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:127
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:502

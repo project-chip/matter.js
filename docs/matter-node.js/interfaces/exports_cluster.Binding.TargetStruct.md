@@ -28,7 +28,7 @@ MatterSpecification.v11.Core § 9.6.5.1
 
 ### cluster
 
-• `Optional` **cluster**: [`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>
+• `Optional` **cluster**: [`ClusterId`](../modules/exports_datatype.md#clusterid)
 
 This field is the cluster ID (client & server) on the local and target endpoint(s). If this field is
 present, the client cluster shall also exist on this endpoint (with this Binding cluster). If this field is

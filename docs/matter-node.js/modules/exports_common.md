@@ -24,6 +24,7 @@
 - [InternalError](../classes/exports_common.InternalError.md)
 - [MatterError](../classes/exports_common.MatterError.md)
 - [MatterFabricConflictError](../classes/exports_common.MatterFabricConflictError.md)
+- [MatterFabricInvalidAdminSubjectError](../classes/exports_common.MatterFabricInvalidAdminSubjectError.md)
 - [MatterFlowError](../classes/exports_common.MatterFlowError.md)
 - [NoProviderError](../classes/exports_common.NoProviderError.md)
 - [NotImplementedError](../classes/exports_common.NotImplementedError.md)

@@ -14,7 +14,7 @@ import { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
 import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
-import { Network } from "../../../net/Network.js";
+import { InterfaceType, Network, NetworkInterface, NetworkInterfaceDetailed } from "../../../net/Network.js";
 import { UdpInterface } from "../../../net/UdpInterface.js";
 import { ServerNode } from "../../../node/ServerNode.js";
 import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
@@ -24,6 +24,15 @@ import { SessionManager } from "../../../session/SessionManager.js";
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
+
+function convertNetworkEnvironmentType(type: string | number) {
+    const convertedType: InterfaceType =
+        typeof type === "string" ? InterfaceType[type as keyof typeof InterfaceType] : type;
+    if (typeof convertedType !== "number" || convertedType < 1 || convertedType > 4) {
+        return undefined;
+    }
+    return convertedType;
+}
 
 /**
  * Handles network functionality for {@link NodeServer}.
@@ -64,6 +73,32 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#mdnsBroadcaster;
     }
 
+    get networkInterfaceConfiguration(): NetworkInterface[] {
+        const interfaceConfig = this.owner.env.vars.get<Record<string, { type: string | number }>>(
+            "network.interface",
+            {},
+        );
+
+        return Object.entries(interfaceConfig).map(([name, { type }]) => ({
+            name,
+            type: convertNetworkEnvironmentType(type),
+        }));
+    }
+
+    get networkInterfaces(): NetworkInterfaceDetailed[] {
+        const network = this.owner.env.get(Network);
+
+        const interfaces = network.getNetInterfaces(this.networkInterfaceConfiguration);
+        const interfaceDetails = new Array<NetworkInterfaceDetailed>();
+        interfaces.forEach(({ name, type }) => {
+            const details = network.getIpMac(name);
+            if (details !== undefined) {
+                interfaceDetails.push({ name, type, ...details });
+            }
+        });
+        return interfaceDetails;
+    }
+
     async openAdvertisementWindow() {
         if (!this.#matterDevice) {
             throw new InternalError("Server runtime device instance is missing");
@@ -82,7 +117,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     }
 
     /**
-     * The IPv6 {@link UdpInterface}.  We create this interface independently of the server so the OS can select a port
+     * The IPv6 {@link UdpInterface}. We create this interface independently of the server so the OS can select a port
      * before we are fully online.
      */
     protected async getPrimaryNetInterface() {
@@ -168,7 +203,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     }
 
     /**
-     * When the first Faric gets added we need to enable MDNS broadcasting.
+     * When the first Fabric gets added we need to enable MDNS broadcasting.
      */
     enableMdnsBroadcasting() {
         const mdnsBroadcaster = this.mdnsBroadcaster;
@@ -243,6 +278,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
                 productDescription: this.owner.state.productDescription,
                 ble: !!this.owner.state.network.ble,
             }),
+            this.owner.state.basicInformation.capabilityMinima.caseSessionsPerFabric, // Internally it is "Session and Node", so we support even more
             (_fabricIndex: FabricIndex, _fabricAction: FabricAction) => {
                 // We use events directly
             },

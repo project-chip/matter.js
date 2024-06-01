@@ -68,7 +68,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/Network.d.ts:11
+packages/matter.js/dist/esm/net/Network.d.ts:47
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/net/NetworkNode.ts#L64)
+[packages/matter-node.js/src/net/NetworkNode.ts:71](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/net/NetworkNode.ts#L71)
 
 ## Methods
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/net/NetworkNode.ts#L70)
+[packages/matter-node.js/src/net/NetworkNode.ts:77](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/net/NetworkNode.ts#L77)
 
 ___
 
@@ -120,13 +120,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:129](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/net/NetworkNode.ts#L129)
+[packages/matter-node.js/src/net/NetworkNode.ts:152](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/net/NetworkNode.ts#L152)
 
 ___
 
 ### getIpMac
 
-▸ **getIpMac**(`netInterface`): `undefined` \| \{ `ips`: `string`[] ; `mac`: `string`  }
+▸ **getIpMac**(`netInterface`): `undefined` \| [`NetworkInterfaceDetails`](../modules/net_export.md#networkinterfacedetails)
 
 #### Parameters
 
@@ -136,7 +136,7 @@ ___
 
 #### Returns
 
-`undefined` \| \{ `ips`: `string`[] ; `mac`: `string`  }
+`undefined` \| [`NetworkInterfaceDetails`](../modules/net_export.md#networkinterfacedetails)
 
 #### Overrides
 
@@ -144,17 +144,27 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:123](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/net/NetworkNode.ts#L123)
+[packages/matter-node.js/src/net/NetworkNode.ts:144](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/net/NetworkNode.ts#L144)
 
 ___
 
 ### getNetInterfaces
 
-▸ **getNetInterfaces**(): `string`[]
+▸ **getNetInterfaces**(`configuration?`): [`NetworkInterface`](../modules/net_export.md#networkinterface)[]
+
+Get all network interfaces.
+The optional configuration parameter allows to map interface names to types if this mapping is known.
+Each network interface which has no mapped type is returned as Ethernet for now.
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `configuration` | [`NetworkInterface`](../modules/net_export.md#networkinterface)[] | `[]` | An array of objects with the name and type properties. |
 
 #### Returns
 
-`string`[]
+[`NetworkInterface`](../modules/net_export.md#networkinterface)[]
 
 #### Overrides
 
@@ -162,7 +172,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:111](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/net/NetworkNode.ts#L111)
+[packages/matter-node.js/src/net/NetworkNode.ts:125](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/net/NetworkNode.ts#L125)
 
 ___
 
@@ -183,7 +193,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/net/NetworkNode.ts#L28)
+[packages/matter-node.js/src/net/NetworkNode.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/net/NetworkNode.ts#L35)
 
 ___
 
@@ -203,7 +213,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/net/NetworkNode.ts#L17)
+[packages/matter-node.js/src/net/NetworkNode.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/net/NetworkNode.ts#L24)
 
 ___
 
@@ -223,7 +233,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/net/NetworkNode.ts#L58)
+[packages/matter-node.js/src/net/NetworkNode.ts:65](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/net/NetworkNode.ts#L65)
 
 ___
 
@@ -243,7 +253,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/net/NetworkNode.ts#L74)
+[packages/matter-node.js/src/net/NetworkNode.ts:81](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/net/NetworkNode.ts#L81)
 
 ___
 
@@ -263,7 +273,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/net/NetworkNode.ts#L52)
+[packages/matter-node.js/src/net/NetworkNode.ts:59](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/net/NetworkNode.ts#L59)
 
 ___
 
@@ -284,4 +294,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:98](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/net/NetworkNode.ts#L98)
+[packages/matter-node.js/src/net/NetworkNode.ts:105](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/net/NetworkNode.ts#L105)

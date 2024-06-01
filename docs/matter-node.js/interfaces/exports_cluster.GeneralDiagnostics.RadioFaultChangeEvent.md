@@ -29,13 +29,19 @@ MatterSpecification.v11.Core § 11.11.8.2
 
 • **current**: [`RadioFault`](../enums/exports_cluster.GeneralDiagnostics.RadioFault.md)[]
 
+This field shall represent the set of faults currently detected, as per Section 11.11.4.2, “RadioFaultEnum”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.11.8.2.1
+
 #### Inherited from
 
 TypeFromSchema.current
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:340
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:345
 
 ___
 
@@ -43,10 +49,17 @@ ___
 
 • **previous**: [`RadioFault`](../enums/exports_cluster.GeneralDiagnostics.RadioFault.md)[]
 
+This field shall represent the set of faults detected prior to this change event, as per Section 11.11.4.2,
+“RadioFaultEnum”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.11.8.2.2
+
 #### Inherited from
 
 TypeFromSchema.previous
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:341
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:352

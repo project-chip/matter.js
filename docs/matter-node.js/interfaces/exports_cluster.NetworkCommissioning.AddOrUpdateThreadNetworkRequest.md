@@ -29,13 +29,19 @@ MatterSpecification.v11.Core § 11.8.7.4
 
 • `Optional` **breadcrumb**: `number` \| `bigint`
 
+See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.4.2
+
 #### Inherited from
 
 TypeFromSchema.breadcrumb
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:665
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:740
 
 ___
 
@@ -49,8 +55,6 @@ Extended PAN ID.
 The encoding for the OperationalDataset field is defined in the Thread specification. The client shall pass
 the OperationalDataset as an opaque octet string.
 
-See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.8.7.4.1
@@ -61,4 +65,4 @@ TypeFromSchema.operationalDataset
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:664
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:734

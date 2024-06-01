@@ -19,13 +19,16 @@
 ### Properties
 
 - [eventNames](behavior_definitions_identify_export.IdentifyServer.Events.md#eventnames)
-- [identifyTime$Change](behavior_definitions_identify_export.IdentifyServer.Events.md#identifytime$change)
-- [identifyType$Change](behavior_definitions_identify_export.IdentifyServer.Events.md#identifytype$change)
+- [identifyTime$Changed](behavior_definitions_identify_export.IdentifyServer.Events.md#identifytime$changed)
+- [identifyTime$Changing](behavior_definitions_identify_export.IdentifyServer.Events.md#identifytime$changing)
+- [identifyType$Changed](behavior_definitions_identify_export.IdentifyServer.Events.md#identifytype$changed)
+- [identifyType$Changing](behavior_definitions_identify_export.IdentifyServer.Events.md#identifytype$changing)
 - [startIdentifying](behavior_definitions_identify_export.IdentifyServer.Events.md#startidentifying)
 - [stopIdentifying](behavior_definitions_identify_export.IdentifyServer.Events.md#stopidentifying)
 
 ### Methods
 
+- [[dispose]](behavior_definitions_identify_export.IdentifyServer.Events.md#[dispose])
 - [addListener](behavior_definitions_identify_export.IdentifyServer.Events.md#addlistener)
 - [emit](behavior_definitions_identify_export.IdentifyServer.Events.md#emit)
 - [removeListener](behavior_definitions_identify_export.IdentifyServer.Events.md#removelistener)
@@ -46,7 +49,7 @@ IdentifyBehavior.Events.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L25)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L25)
 
 ## Properties
 
@@ -60,27 +63,47 @@ IdentifyBehavior.Events.eventNames
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:332](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L332)
+[packages/matter.js/src/util/Observable.ts:370](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L370)
 
 ___
 
-### identifyTime$Change
+### identifyTime$Changed
 
-• **identifyTime$Change**: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\>\>
+• **identifyTime$Changed**: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\>\>
 
 #### Inherited from
 
-IdentifyBehavior.Events.identifyTime$Change
+IdentifyBehavior.Events.identifyTime$Changed
 
 ___
 
-### identifyType$Change
+### identifyTime$Changing
 
-• **identifyType$Change**: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`IdentifyType`](../enums/cluster_export.Identify.IdentifyType.md), `any`\>\>
+• **identifyTime$Changing**: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\>\>
 
 #### Inherited from
 
-IdentifyBehavior.Events.identifyType$Change
+IdentifyBehavior.Events.identifyTime$Changing
+
+___
+
+### identifyType$Changed
+
+• **identifyType$Changed**: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`IdentifyType`](../enums/cluster_export.Identify.IdentifyType.md), `any`\>\>
+
+#### Inherited from
+
+IdentifyBehavior.Events.identifyType$Changed
+
+___
+
+### identifyType$Changing
+
+• **identifyType$Changing**: [`AttributeObservable`](../modules/behavior_cluster_export.ClusterEvents.md#attributeobservable)\<[`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`IdentifyType`](../enums/cluster_export.Identify.IdentifyType.md), `any`\>\>
+
+#### Inherited from
+
+IdentifyBehavior.Events.identifyType$Changing
 
 ___
 
@@ -90,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts#L100)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts:99](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts#L99)
 
 ___
 
@@ -100,9 +123,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts#L101)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts:100](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts#L100)
 
 ## Methods
+
+### [dispose]
+
+▸ **[dispose]**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+IdentifyBehavior.Events.[dispose]
+
+#### Defined in
+
+[packages/matter.js/src/util/Observable.ts:374](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L374)
+
+___
 
 ### addListener
 
@@ -133,7 +174,7 @@ IdentifyBehavior.Events.addListener
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:316](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L316)
+[packages/matter.js/src/util/Observable.ts:354](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L354)
 
 ___
 
@@ -166,7 +207,7 @@ IdentifyBehavior.Events.emit
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:312](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L312)
+[packages/matter.js/src/util/Observable.ts:350](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L350)
 
 ___
 
@@ -199,4 +240,4 @@ IdentifyBehavior.Events.removeListener
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:324](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L324)
+[packages/matter.js/src/util/Observable.ts:362](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L362)

@@ -13,6 +13,10 @@ Matter.js uses this key/value API to manage persistent state.
 
 ## Table of contents
 
+### Properties
+
+- [initialized](storage_export.Storage.md#initialized)
+
 ### Methods
 
 - [clearAll](storage_export.Storage.md#clearall)
@@ -24,6 +28,16 @@ Matter.js uses this key/value API to manage persistent state.
 - [keys](storage_export.Storage.md#keys)
 - [set](storage_export.Storage.md#set)
 - [values](storage_export.Storage.md#values)
+
+## Properties
+
+### initialized
+
+• `Readonly` **initialized**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/Storage.d.ts:15
 
 ## Methods
 
@@ -43,7 +57,7 @@ Matter.js uses this key/value API to manage persistent state.
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:24
+packages/matter.js/dist/esm/storage/Storage.d.ts:25
 
 ___
 
@@ -57,7 +71,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:16
+packages/matter.js/dist/esm/storage/Storage.d.ts:17
 
 ___
 
@@ -77,7 +91,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:23
+packages/matter.js/dist/esm/storage/Storage.d.ts:24
 
 ___
 
@@ -98,7 +112,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:20
+packages/matter.js/dist/esm/storage/Storage.d.ts:21
 
 ___
 
@@ -119,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:17
+packages/matter.js/dist/esm/storage/Storage.d.ts:18
 
 ___
 
@@ -133,7 +147,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:15
+packages/matter.js/dist/esm/storage/Storage.d.ts:16
 
 ___
 
@@ -153,7 +167,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:21
+packages/matter.js/dist/esm/storage/Storage.d.ts:22
 
 ___
 
@@ -174,7 +188,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:18
+packages/matter.js/dist/esm/storage/Storage.d.ts:19
 
 ▸ **set**(`contexts`, `key`, `value`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
@@ -192,7 +206,7 @@ packages/matter.js/dist/esm/storage/Storage.d.ts:18
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:19
+packages/matter.js/dist/esm/storage/Storage.d.ts:20
 
 ___
 
@@ -212,4 +226,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:22
+packages/matter.js/dist/esm/storage/Storage.d.ts:23

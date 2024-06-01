@@ -107,7 +107,7 @@ export class TvTestInstance implements TestInstance {
                 },
                 productDescription: {
                     name: this.appName,
-                    deviceType: DeviceTypeId(0xffff),
+                    deviceType: DeviceTypeId(0xbfff),
                 },
                 basicInformation: {
                     vendorName: "Binford",

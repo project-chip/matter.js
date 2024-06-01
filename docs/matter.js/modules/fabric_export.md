@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](fabric_export._internal_.md)
+
 ### Enumerations
 
 - [FabricAction](../enums/fabric_export.FabricAction.md)
@@ -15,6 +19,7 @@
 - [FabricManager](../classes/fabric_export.FabricManager.md)
 - [FabricNotFoundError](../classes/fabric_export.FabricNotFoundError.md)
 - [FabricTableFullError](../classes/fabric_export.FabricTableFullError.md)
+- [PublicKeyError](../classes/fabric_export.PublicKeyError.md)
 
 ### Type Aliases
 
@@ -40,7 +45,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/Fabric.ts#L52)
+[packages/matter.js/src/fabric/Fabric.ts:95](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/fabric/Fabric.ts#L95)
 
 ___
 
@@ -71,4 +76,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/fabric/Fabric.ts#L33)
+[packages/matter.js/src/fabric/Fabric.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/fabric/Fabric.ts#L38)

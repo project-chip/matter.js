@@ -23,14 +23,12 @@
 
 Ƭ **BitmapSize**: ``1`` \| ``2`` \| ``4`` \| ``8``
 
-Legal bitmap sizes.  The Matter specification defines enums as
-extensions of int8 or in16 so the size information is not used for
-actual enums, just for bitmaps, which are used (somewhat inconsistently)
-as base types.
+Legal bitmap sizes.  The Matter specification defines enums as extensions of int8 or in16 so the size information
+is not used for actual enums, just for bitmaps, which are used (somewhat inconsistently) as base types.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/ValueElement.ts#L105)
+[packages/matter.js/src/model/elements/ValueElement.ts:103](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/ValueElement.ts#L103)
 
 ___
 
@@ -46,7 +44,7 @@ A pool of datatype definitions indexed by name.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:92](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/ValueElement.ts#L92)
+[packages/matter.js/src/model/elements/ValueElement.ts:92](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/ValueElement.ts#L92)
 
 ___
 
@@ -56,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/ValueElement.ts#L79)
+[packages/matter.js/src/model/elements/ValueElement.ts:79](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/ValueElement.ts#L79)
 
 ___
 
@@ -68,4 +66,4 @@ Valid sizes for ints.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:97](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/elements/ValueElement.ts#L97)
+[packages/matter.js/src/model/elements/ValueElement.ts:97](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/ValueElement.ts#L97)

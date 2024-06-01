@@ -42,7 +42,7 @@ A function that asserts access control requirements are met.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:97](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L97)
+[packages/matter.js/src/behavior/AccessControl.ts:97](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L97)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 Ƭ **Verification**: (`session`: [`Session`](../interfaces/behavior_export.AccessControl.Session.md), `location`: [`Location`](../interfaces/behavior_export.AccessControl.Location.md)) => `boolean`
 
-A function that returns true iff access control requirements are met.
+A function that returns true if access control requirements are met.
 
 #### Type declaration
 
@@ -69,4 +69,4 @@ A function that returns true iff access control requirements are met.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:102](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L102)
+[packages/matter.js/src/behavior/AccessControl.ts:102](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L102)

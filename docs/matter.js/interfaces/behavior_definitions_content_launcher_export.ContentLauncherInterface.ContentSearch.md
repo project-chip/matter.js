@@ -35,4 +35,4 @@ MatterSpecification.v11.Cluster § 6.7.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L63)
+[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:63](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L63)

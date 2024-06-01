@@ -8,6 +8,10 @@
 
 - [\<internal\>](net_export._internal_.md)
 
+### Enumerations
+
+- [InterfaceType](../enums/net_export.InterfaceType.md)
+
 ### Classes
 
 - [Network](../classes/net_export.Network.md)
@@ -30,6 +34,9 @@
 ### Type Aliases
 
 - [ListenerFunc](net_export.md#listenerfunc)
+- [NetworkInterface](net_export.md#networkinterface)
+- [NetworkInterfaceDetailed](net_export.md#networkinterfacedetailed)
+- [NetworkInterfaceDetails](net_export.md#networkinterfacedetails)
 
 ### Variables
 
@@ -65,6 +72,51 @@
 #### Defined in
 
 packages/matter.js/dist/esm/net/fake/SimulatedNetwork.d.ts:8
+
+___
+
+### NetworkInterface
+
+Ƭ **NetworkInterface**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `name` | `string` |
+| `type?` | [`InterfaceType`](../enums/net_export.InterfaceType.md) |
+
+#### Defined in
+
+packages/matter.js/dist/esm/net/Network.d.ts:36
+
+___
+
+### NetworkInterfaceDetailed
+
+Ƭ **NetworkInterfaceDetailed**: [`NetworkInterface`](net_export.md#networkinterface) & [`NetworkInterfaceDetails`](net_export.md#networkinterfacedetails)
+
+#### Defined in
+
+packages/matter.js/dist/esm/net/Network.d.ts:45
+
+___
+
+### NetworkInterfaceDetails
+
+Ƭ **NetworkInterfaceDetails**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `ipV4` | `string`[] |
+| `ipV6` | `string`[] |
+| `mac` | `string` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/net/Network.d.ts:40
 
 ## Variables
 

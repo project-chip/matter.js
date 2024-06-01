@@ -209,7 +209,7 @@ ValueElement.id
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:14
+packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:15
 
 ___
 
@@ -252,7 +252,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:13
+packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:14
 
 ___
 

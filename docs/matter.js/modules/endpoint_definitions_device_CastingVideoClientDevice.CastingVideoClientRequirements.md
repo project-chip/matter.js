@@ -36,7 +36,7 @@ We provide this alias to the default implementation [AccountLoginBehavior](endpo
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:154](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L154)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:154](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L154)
 
 ___
 
@@ -50,7 +50,7 @@ We provide this alias to the default implementation [ApplicationBasicBehavior](e
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L84)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:84](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L84)
 
 ___
 
@@ -64,7 +64,7 @@ We provide this alias to the default implementation [ApplicationLauncherBehavior
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:147](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L147)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:147](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L147)
 
 ___
 
@@ -78,7 +78,7 @@ We provide this alias to the default implementation [AudioOutputBehavior](endpoi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:140](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L140)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:140](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L140)
 
 ___
 
@@ -92,7 +92,7 @@ We provide this alias to the default implementation [ChannelBehavior](endpoint_d
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L105)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:105](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L105)
 
 ___
 
@@ -106,7 +106,7 @@ We provide this alias to the default implementation [ContentLauncherBehavior](en
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:77](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L77)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:77](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L77)
 
 ___
 
@@ -120,7 +120,7 @@ We provide this alias to the default implementation [KeypadInputBehavior](endpoi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L70)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:70](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L70)
 
 ___
 
@@ -134,7 +134,7 @@ We provide this alias to the default implementation [LevelControlBehavior](endpo
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L91)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:91](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L91)
 
 ___
 
@@ -148,7 +148,7 @@ We provide this alias to the default implementation [LowPowerBehavior](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:133](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L133)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:133](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L133)
 
 ___
 
@@ -162,7 +162,7 @@ We provide this alias to the default implementation [MediaInputBehavior](endpoin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:126](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L126)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:126](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L126)
 
 ___
 
@@ -176,7 +176,7 @@ We provide this alias to the default implementation [MediaPlaybackBehavior](endp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:119](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L119)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:119](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L119)
 
 ___
 
@@ -190,7 +190,7 @@ We provide this alias to the default implementation [OnOffBehavior](endpoint_def
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L63)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:63](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L63)
 
 ___
 
@@ -204,7 +204,7 @@ We provide this alias to the default implementation [TargetNavigatorBehavior](en
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L112)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:112](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L112)
 
 ___
 
@@ -218,7 +218,7 @@ We provide this alias to the default implementation [WakeOnLanBehavior](endpoint
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:98](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L98)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:98](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L98)
 
 ___
 
@@ -251,4 +251,4 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:159](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L159)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:159](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L159)

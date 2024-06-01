@@ -9,6 +9,7 @@ import { LocalStorage } from "node-localstorage";
 
 export class StorageBackendDisk extends SyncStorage {
     private readonly localStorage;
+    protected isInitialized = false;
 
     constructor(path: string, clear = false) {
         super();
@@ -16,12 +17,16 @@ export class StorageBackendDisk extends SyncStorage {
         if (clear) this.clear();
     }
 
+    get initialized() {
+        return this.isInitialized;
+    }
+
     initialize() {
-        // nothing to do
+        this.isInitialized = true;
     }
 
     close() {
-        // nothing to do
+        this.isInitialized = false;
     }
 
     clear() {

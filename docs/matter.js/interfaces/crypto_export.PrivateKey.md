@@ -78,7 +78,7 @@ EC key with extractable private fields.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L112)
+[packages/matter.js/src/crypto/Key.ts:112](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L112)
 
 ___
 
@@ -94,7 +94,7 @@ The key algorithm, alias for JWK "alg" field.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L84)
+[packages/matter.js/src/crypto/Key.ts:84](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L84)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:113](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L113)
+[packages/matter.js/src/crypto/Key.ts:113](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L113)
 
 ___
 
@@ -124,7 +124,7 @@ The elliptic curve type, alias for JWK "crv" field.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:197](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L197)
+[packages/matter.js/src/crypto/Key.ts:197](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L197)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:210](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L210)
+[packages/matter.js/src/crypto/Key.ts:210](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L210)
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:115](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L115)
+[packages/matter.js/src/crypto/Key.ts:115](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L115)
 
 ___
 
@@ -166,7 +166,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:116](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L116)
+[packages/matter.js/src/crypto/Key.ts:116](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L116)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L117)
+[packages/matter.js/src/crypto/Key.ts:117](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L117)
 
 ___
 
@@ -194,7 +194,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:118](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L118)
+[packages/matter.js/src/crypto/Key.ts:118](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L118)
 
 ___
 
@@ -211,7 +211,7 @@ field.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L110)
+[packages/matter.js/src/crypto/Key.ts:110](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L110)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:119](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L119)
+[packages/matter.js/src/crypto/Key.ts:119](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L119)
 
 ___
 
@@ -241,7 +241,7 @@ Alias for keyPairBits that throws if a complete key pair is not present.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:213](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L213)
+[packages/matter.js/src/crypto/Key.ts:213](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L213)
 
 ___
 
@@ -258,7 +258,7 @@ serialization format for legacy reasons.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:214](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L214)
+[packages/matter.js/src/crypto/Key.ts:214](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L214)
 
 ___
 
@@ -272,7 +272,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:120](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L120)
+[packages/matter.js/src/crypto/Key.ts:120](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L120)
 
 ___
 
@@ -286,7 +286,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:121](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L121)
+[packages/matter.js/src/crypto/Key.ts:121](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L121)
 
 ___
 
@@ -300,7 +300,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:122](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L122)
+[packages/matter.js/src/crypto/Key.ts:122](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L122)
 
 ___
 
@@ -316,7 +316,7 @@ Operations supported by the key, alias for JWK "key_ops" field.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:99](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L99)
+[packages/matter.js/src/crypto/Key.ts:99](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L99)
 
 ___
 
@@ -330,7 +330,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:123](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L123)
+[packages/matter.js/src/crypto/Key.ts:123](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L123)
 
 ___
 
@@ -344,7 +344,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:124](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L124)
+[packages/matter.js/src/crypto/Key.ts:124](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L124)
 
 ___
 
@@ -360,7 +360,7 @@ Import (write-only) of private keys encoded in PKCS #8 format.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:157](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L157)
+[packages/matter.js/src/crypto/Key.ts:157](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L157)
 
 ___
 
@@ -376,7 +376,7 @@ The private key, alias for JWK "d" field.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:209](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L209)
+[packages/matter.js/src/crypto/Key.ts:209](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L209)
 
 ___
 
@@ -393,7 +393,7 @@ base-64 private key.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:211](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L211)
+[packages/matter.js/src/crypto/Key.ts:211](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L211)
 
 ___
 
@@ -409,7 +409,7 @@ Alias for privateBits that throws if no private key is present.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:212](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L212)
+[packages/matter.js/src/crypto/Key.ts:212](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L212)
 
 ___
 
@@ -426,7 +426,7 @@ fields internally.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:202](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L202)
+[packages/matter.js/src/crypto/Key.ts:202](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L202)
 
 ___
 
@@ -442,7 +442,7 @@ Alias for publicBits that throws if no public key is present.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:179](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L179)
+[packages/matter.js/src/crypto/Key.ts:179](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L179)
 
 ___
 
@@ -456,7 +456,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:125](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L125)
+[packages/matter.js/src/crypto/Key.ts:125](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L125)
 
 ___
 
@@ -470,7 +470,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:126](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L126)
+[packages/matter.js/src/crypto/Key.ts:126](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L126)
 
 ___
 
@@ -486,7 +486,7 @@ Import (write-only) of private keys encoded in SEC1 format.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:152](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L152)
+[packages/matter.js/src/crypto/Key.ts:152](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L152)
 
 ___
 
@@ -502,7 +502,7 @@ Import (write-only) of public keys encoded in SPKI format.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:162](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L162)
+[packages/matter.js/src/crypto/Key.ts:162](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L162)
 
 ___
 
@@ -518,7 +518,7 @@ The key type, alias for JWK "kty" field.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L196)
+[packages/matter.js/src/crypto/Key.ts:196](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L196)
 
 ___
 
@@ -532,7 +532,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:127](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L127)
+[packages/matter.js/src/crypto/Key.ts:127](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L127)
 
 ___
 
@@ -546,7 +546,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:198](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L198)
+[packages/matter.js/src/crypto/Key.ts:198](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L198)
 
 ___
 
@@ -563,7 +563,7 @@ x-point on EC public keys.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:200](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L200)
+[packages/matter.js/src/crypto/Key.ts:200](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L200)
 
 ___
 
@@ -577,7 +577,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:199](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L199)
+[packages/matter.js/src/crypto/Key.ts:199](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L199)
 
 ___
 
@@ -594,4 +594,4 @@ y-point on EC public keys.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:201](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/crypto/Key.ts#L201)
+[packages/matter.js/src/crypto/Key.ts:201](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/crypto/Key.ts#L201)

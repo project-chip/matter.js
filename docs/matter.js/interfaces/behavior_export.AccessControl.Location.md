@@ -10,11 +10,25 @@ Metadata that varies with position in the data model.
 
 ### Properties
 
+- [accessLevels](behavior_export.AccessControl.Location.md#accesslevels)
 - [cluster](behavior_export.AccessControl.Location.md#cluster)
 - [owningFabric](behavior_export.AccessControl.Location.md#owningfabric)
 - [path](behavior_export.AccessControl.Location.md#path)
 
 ## Properties
+
+### accessLevels
+
+• `Optional` **accessLevels**: [`AccessLevel`](../enums/cluster_export.AccessLevel.md)[]
+
+The access levels already retrieved for this location. With this subtree elements can access the same
+access levels without re-evaluating.
+
+#### Defined in
+
+[packages/matter.js/src/behavior/AccessControl.ts:128](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L128)
+
+___
 
 ### cluster
 
@@ -24,7 +38,7 @@ The owning behavior.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:116](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L116)
+[packages/matter.js/src/behavior/AccessControl.ts:116](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L116)
 
 ___
 
@@ -37,7 +51,7 @@ enforcement.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:122](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L122)
+[packages/matter.js/src/behavior/AccessControl.ts:122](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L122)
 
 ___
 
@@ -49,4 +63,4 @@ The diagnostic path to the location.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:111](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L111)
+[packages/matter.js/src/behavior/AccessControl.ts:111](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L111)

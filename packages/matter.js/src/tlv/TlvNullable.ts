@@ -30,13 +30,12 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
     override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): T | null {
         if (typeLength.type === TlvType.Null) return null;
         const value = this.schema.decodeTlvInternalValue(reader, typeLength);
-        // The Matter standard allows to send an empty string or Array for nullable elements with a minimum length > 0.
+        // The Matter standard allows to send an empty string or Array for nullable elements that have a length.
         // This should be handled like null, so make sure to convert that correctly when decoding.
+        // @see {@link MatterSpecification.v12.Core} § 7.17.1
         if (
             value !== null &&
             (this.schema instanceof ArraySchema || this.schema instanceof StringSchema) &&
-            this.schema.minLength !== undefined &&
-            this.schema.minLength > 0 &&
             (value as any).length === 0
         ) {
             return null;

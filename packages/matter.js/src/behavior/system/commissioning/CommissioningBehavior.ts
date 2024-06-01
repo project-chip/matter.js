@@ -34,6 +34,7 @@ import { BasicInformationBehavior } from "../../definitions/basic-information/Ba
 import { OperationalCredentialsBehavior } from "../../definitions/operational-credentials/OperationalCredentialsBehavior.js";
 import { Val } from "../../state/Val.js";
 import { NetworkServer } from "../network/NetworkServer.js";
+import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { CommissioningOptions } from "./CommissioningOptions.js";
 
 const logger = Logger.get("Commissioning");
@@ -115,6 +116,7 @@ export class CommissioningBehavior extends Behavior {
             }
         }
 
+        let doFactoryReset = false;
         if (commissioned !== this.state.commissioned) {
             this.state.commissioned = commissioned;
             if (commissioned) {
@@ -124,13 +126,35 @@ export class CommissioningBehavior extends Behavior {
                 this.events.decommissioned.emit(this.context);
                 (this.endpoint.lifecycle as NodeLifecycle).decommissioned.emit(this.context);
 
-                this.endpoint.env.runtime.add(
-                    (this.endpoint as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
-                );
+                doFactoryReset = true;
             }
         }
 
         this.events.fabricsChanged.emit(fabricIndex, fabricAction);
+
+        if (doFactoryReset) {
+            const sessions = this.agent.get(SessionsBehavior);
+            if (Object.keys(sessions.state.sessions).length > 0) {
+                // We have still open sessions, wait for them to close
+                this.reactTo(sessions.events.closed, this.#handleSessionClosed);
+            } else {
+                this.#triggerFactoryReset();
+            }
+        }
+    }
+
+    #handleSessionClosed() {
+        const sessions = this.agent.get(SessionsBehavior);
+        if (Object.keys(sessions.state.sessions).length === 0) {
+            // Do we need to remove this listener? I think now
+            this.#triggerFactoryReset();
+        }
+    }
+
+    #triggerFactoryReset() {
+        this.endpoint.env.runtime.add(
+            (this.endpoint as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
+        );
     }
 
     #monitorFailsafe(failsafe: FailsafeContext) {

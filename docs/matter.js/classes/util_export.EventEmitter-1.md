@@ -31,6 +31,7 @@ To maintain type safety, implementers define events as observable child properti
 
 ### Methods
 
+- [[dispose]](util_export.EventEmitter-1.md#[dispose])
 - [addListener](util_export.EventEmitter-1.md#addlistener)
 - [emit](util_export.EventEmitter-1.md#emit)
 - [removeListener](util_export.EventEmitter-1.md#removelistener)
@@ -57,9 +58,23 @@ To maintain type safety, implementers define events as observable child properti
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:332](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L332)
+[packages/matter.js/src/util/Observable.ts:370](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L370)
 
 ## Methods
+
+### [dispose]
+
+▸ **[dispose]**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/util/Observable.ts:374](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L374)
+
+___
 
 ### addListener
 
@@ -86,7 +101,7 @@ To maintain type safety, implementers define events as observable child properti
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:316](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L316)
+[packages/matter.js/src/util/Observable.ts:354](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L354)
 
 ___
 
@@ -115,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:312](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L312)
+[packages/matter.js/src/util/Observable.ts:350](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L350)
 
 ___
 
@@ -144,4 +159,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:324](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L324)
+[packages/matter.js/src/util/Observable.ts:362](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L362)

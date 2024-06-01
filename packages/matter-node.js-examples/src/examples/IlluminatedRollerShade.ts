@@ -7,7 +7,11 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import "@project-chip/matter-node.js";
 
-import { GoToLiftPercentageRequest, WindowCoveringServer } from "@project-chip/matter.js/behaviors/window-covering";
+import {
+    MovementDirection,
+    MovementType,
+    WindowCoveringServer,
+} from "@project-chip/matter.js/behaviors/window-covering";
 import { OnOffLightDevice, OnOffLightRequirements } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { WindowCoveringDevice } from "@project-chip/matter.js/devices/WindowCoveringDevice";
 import { ServerNode } from "@project-chip/matter.js/node";
@@ -22,61 +26,22 @@ const LiftingWindowCoveringServer = WindowCoveringServer.with("Lift", "AbsoluteP
 
 /**
  * Implementation of the Matter WindowCovering cluster for the shade motor.
- *
- * TODO - some of this should probably move to WindowCoveringServer
  */
 class RollerShade extends LiftingWindowCoveringServer {
-    get currentPos() {
-        return this.state.currentPositionLiftPercent100ths ?? 0;
-    }
+    override async handleMovement(
+        type: MovementType,
+        reversed: boolean,
+        direction: MovementDirection,
+        targetPercent100ths?: number,
+    ) {
+        console.log(
+            "Move window shade",
+            direction === MovementDirection.Open ? "Open" : "Close",
+            targetPercent100ths !== undefined ? `${targetPercent100ths / 100}%` : "",
+        );
 
-    get targetPos() {
-        return this.state.targetPositionLiftPercent100ths ?? 0;
-    }
-
-    set targetPos(position: number) {
-        this.state.targetPositionLiftPercent100ths = position ?? 0;
-    }
-
-    override async initialize() {
-        this.reactTo(this.events.targetPositionLiftPercent100ths$Changed, this.writeTargetToMotor);
-
-        await this.readTargetFromMotor();
-        if (this.targetPos === null) {
-            this.targetPos = this.currentPos;
-        }
-    }
-
-    override upOrOpen() {
-        // 0 = 0%, fully open
-        this.targetPos = 0;
-    }
-
-    override downOrClose() {
-        // 10000 = 100%, fully closed
-        this.targetPos = 10000;
-    }
-
-    override stopMotion() {
-        this.targetPos = this.currentPos;
-    }
-
-    override goToLiftPercentage(this: RollerShade, request: GoToLiftPercentageRequest) {
-        this.targetPos = request.liftPercent100thsValue;
-    }
-
-    protected async writeTargetToMotor() {
-        // For this contrived example we just log the target position and don't actually animate our fake roller shade
-        console.log("Window covering target position is now", `${this.targetPos / 100}%`);
-    }
-
-    protected async readTargetFromMotor() {
-        // Our fake shade is stuck open
-        this.state.currentPositionLiftPercent100ths = 0;
-    }
-
-    protected set currentPos(value: number) {
-        this.state.currentPositionLiftPercent100ths = value;
+        // Updates the shade position
+        await super.handleMovement(type, reversed, direction, targetPercent100ths);
     }
 }
 

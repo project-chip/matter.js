@@ -38,6 +38,8 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`CryptoError`](crypto_export.CryptoError.md)
 
+  ↳↳ [`PublicKeyError`](fabric_export.PublicKeyError.md)
+
   ↳↳ [`FabricNotFoundError`](fabric_export.FabricNotFoundError.md)
 
   ↳↳ [`FabricTableFullError`](fabric_export.FabricTableFullError.md)

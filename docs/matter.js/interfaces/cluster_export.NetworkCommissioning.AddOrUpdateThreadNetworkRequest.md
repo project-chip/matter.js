@@ -29,13 +29,19 @@ MatterSpecification.v11.Core § 11.8.7.4
 
 • `Optional` **breadcrumb**: `number` \| `bigint`
 
+See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.4.2
+
 #### Inherited from
 
 TypeFromSchema.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:647](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L647)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:728](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L728)
 
 ___
 
@@ -49,8 +55,6 @@ Extended PAN ID.
 The encoding for the OperationalDataset field is defined in the Thread specification. The client shall pass
 the OperationalDataset as an opaque octet string.
 
-See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.8.7.4.1
@@ -61,4 +65,4 @@ TypeFromSchema.operationalDataset
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:645](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L645)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:721](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L721)

@@ -48,7 +48,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:50
+packages/matter.js/dist/esm/storage/Storage.d.ts:53
 
 ___
 

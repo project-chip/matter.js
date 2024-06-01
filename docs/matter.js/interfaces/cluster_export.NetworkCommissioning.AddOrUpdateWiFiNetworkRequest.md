@@ -30,13 +30,19 @@ MatterSpecification.v11.Core § 11.8.7.3
 
 • `Optional` **breadcrumb**: `number` \| `bigint`
 
+See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.3.3
+
 #### Inherited from
 
 TypeFromSchema.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:618](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L618)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:696](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L696)
 
 ___
 
@@ -78,11 +84,9 @@ Note that it may occur that a station cannot connect to a particular access poin
 selects a lower security connectivity type if the link quality is deemed to be too low to achieve successful
 operation, or if all retry attempts fail.
 
-See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
-
 **`See`**
 
-MatterSpecification.v11.Core § 11.8.7.3.1
+MatterSpecification.v11.Core § 11.8.7.3.2
 
 #### Inherited from
 
@@ -90,7 +94,7 @@ TypeFromSchema.credentials
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:616](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L616)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:689](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L689)
 
 ___
 
@@ -98,10 +102,17 @@ ___
 
 • **ssid**: `Uint8Array`
 
+This field shall contain the SSID to which to attempt connection. Specific BSSID selection is not supported
+by this cluster.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.3.1
+
 #### Inherited from
 
 TypeFromSchema.ssid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:575](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L575)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:650](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L650)

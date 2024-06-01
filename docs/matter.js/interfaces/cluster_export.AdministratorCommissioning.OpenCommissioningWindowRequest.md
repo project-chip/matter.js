@@ -48,7 +48,7 @@ TypeFromSchema.commissioningTimeout
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L73)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:89](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L89)
 
 ___
 
@@ -70,7 +70,7 @@ TypeFromSchema.discriminator
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L94)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:110](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L110)
 
 ___
 
@@ -94,7 +94,7 @@ TypeFromSchema.iterations
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:121](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L121)
 
 ___
 
@@ -119,7 +119,7 @@ TypeFromSchema.pakePasscodeVerifier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:85](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:101](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L101)
 
 ___
 
@@ -150,4 +150,4 @@ TypeFromSchema.salt
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:123](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L123)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:139](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L139)

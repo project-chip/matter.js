@@ -31,7 +31,9 @@ import {
     TlvEventStatus,
 } from "./InteractionProtocol.js";
 import {
+    AttributePath,
     AttributeWithPath,
+    EventPath,
     EventWithPath,
     INTERACTION_MODEL_REVISION,
     INTERACTION_PROTOCOL_ID,
@@ -368,7 +370,7 @@ export class SubscriptionHandler {
         newEvents
             .flatMap(({ path, event: { schema } }): EventPathWithEventData<any>[] => {
                 // But we use eventFilters because we do not want to send all events to the controller
-                const matchingEvents = this.eventHandler.getEvents(path, this.eventFilters);
+                const matchingEvents = this.eventHandler.getEvents(path, this.eventFilters) ?? [];
                 return matchingEvents.map(event => ({
                     schema,
                     path,
@@ -466,6 +468,11 @@ export class SubscriptionHandler {
             await this.sendUpdateMessage(attributeUpdatesToSend, eventUpdatesToSend);
             this.sendUpdateErrorCounter = 0;
         } catch (error) {
+            if (this.server.isClosing) {
+                // No need to care about resubmissions when the server is closing
+                return;
+            }
+
             this.sendUpdateErrorCounter++;
             logger.error(
                 `Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`,
@@ -495,7 +502,12 @@ export class SubscriptionHandler {
 
     async sendInitialReport(
         messenger: InteractionServerMessenger,
-        readAttribute: (attribute: AnyAttributeServer<any>) => Promise<any>,
+        readAttribute: (path: AttributePath, attribute: AnyAttributeServer<any>) => Promise<any>,
+        readEvent: (
+            path: EventPath,
+            event: EventServer<any, any>,
+            eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
+        ) => Promise<EventStorageData<any>[]>,
     ) {
         this.updateTimer.stop();
 
@@ -505,6 +517,7 @@ export class SubscriptionHandler {
             this.dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
         );
 
+        let attributesFilteredWithVersion = false;
         const attributes = new Array<{
             path: TypeFromSchema<typeof TlvAttributePath>;
             value: any;
@@ -512,19 +525,25 @@ export class SubscriptionHandler {
             schema: TlvSchema<any>;
         }>();
         for (const { path, attribute } of newAttributes) {
-            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
-            const { value, version } = await readAttribute(attribute);
-            if (value === undefined) continue;
+            try {
+                const { value, version } = await readAttribute(path, attribute);
+                if (value === undefined) continue;
 
-            const { nodeId, endpointId, clusterId } = path;
+                const { nodeId, endpointId, clusterId } = path;
 
-            const versionFilterValue =
-                endpointId !== undefined && clusterId !== undefined
-                    ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
-                    : undefined;
-            if (versionFilterValue !== undefined && versionFilterValue === version) continue;
+                const versionFilterValue =
+                    endpointId !== undefined && clusterId !== undefined
+                        ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                        : undefined;
+                if (versionFilterValue !== undefined && versionFilterValue === version) {
+                    attributesFilteredWithVersion = true;
+                    continue;
+                }
 
-            attributes.push({ path, value, version, schema: attribute.schema });
+                attributes.push({ path, value, version, schema: attribute.schema });
+            } catch (error) {
+                logger.error(`Error reading attribute ${this.endpointStructure.resolveAttributeName(path)}:`, error);
+            }
         }
         const attributeReportsPayload: AttributeReportPayload[] = attributes.map(
             ({ path, schema, value, version }) => ({
@@ -540,33 +559,50 @@ export class SubscriptionHandler {
 
         const { newEvents, eventErrors } = this.registerNewEvents();
 
-        const eventReportsPayload = newEvents
-            .flatMap(({ path, event: { schema } }): EventReportPayload[] => {
-                const matchingEvents = this.eventHandler.getEvents(path, this.eventFilters);
-                return matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
-                    eventData: {
-                        path,
-                        eventNumber,
-                        priority,
-                        epochTimestamp,
-                        payload: data,
-                        schema,
-                    },
-                }));
-            })
-            .sort((a, b) => {
-                const eventNumberA = a.eventData?.eventNumber ?? 0;
-                const eventNumberB = b.eventData?.eventNumber ?? 0;
-                if (eventNumberA > eventNumberB) {
-                    return 1;
-                } else if (eventNumberA < eventNumberB) {
-                    return -1;
+        let eventsFiltered = false;
+        const eventReportsPayload = new Array<EventReportPayload>();
+        for (const { path, event } of newEvents) {
+            const { schema } = event;
+            try {
+                const matchingEvents = await readEvent(path, event, this.eventFilters);
+                if (matchingEvents.length === 0) {
+                    eventsFiltered = true;
                 } else {
-                    return 0;
+                    matchingEvents.forEach(({ eventNumber, priority, epochTimestamp, data }) => {
+                        eventReportsPayload.push({
+                            eventData: {
+                                path,
+                                eventNumber,
+                                priority,
+                                epochTimestamp,
+                                payload: data,
+                                schema,
+                            },
+                        });
+                    });
                 }
-            });
+            } catch (error) {
+                logger.error(`Error reading event ${this.endpointStructure.resolveEventName(path)}:`, error);
+            }
+        }
+        eventReportsPayload.sort((a, b) => {
+            const eventNumberA = a.eventData?.eventNumber ?? 0;
+            const eventNumberB = b.eventData?.eventNumber ?? 0;
+            if (eventNumberA > eventNumberB) {
+                return 1;
+            } else if (eventNumberA < eventNumberB) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
 
-        if (newAttributes.length === 0 && newEvents.length === 0) {
+        if (
+            attributes.length === 0 &&
+            !attributesFilteredWithVersion &&
+            eventReportsPayload.length === 0 &&
+            !eventsFiltered
+        ) {
             throw new StatusResponseError(
                 "Subscription failed because no attributes or events are matching the query",
                 StatusCode.InvalidAction,

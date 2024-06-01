@@ -40,7 +40,7 @@ StateType.maxMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L132)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:132](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L132)
 
 ___
 
@@ -64,7 +64,7 @@ StateType.measuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L112)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:112](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L112)
 
 ___
 
@@ -87,7 +87,7 @@ StateType.minMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:122](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L122)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:122](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L122)
 
 ___
 
@@ -109,4 +109,4 @@ StateType.tolerance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:141](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L141)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:141](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L141)

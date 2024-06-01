@@ -4,8 +4,6 @@
 
 [exports/cluster](../modules/exports_cluster.md).[GroupKeyManagement](../modules/exports_cluster.GroupKeyManagement.md).GroupInfoMapStruct
 
-This field uniquely identifies the group within the scope of the given Fabric.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.2.6.5
@@ -35,7 +33,7 @@ This field provides the list of Endpoint IDs on the Node to which messages to th
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.2.6.5.1
+MatterSpecification.v11.Core § 11.2.6.5.2
 
 #### Inherited from
 
@@ -43,7 +41,7 @@ TypeFromSchema.endpoints
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:52
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:55
 
 ___
 
@@ -57,7 +55,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:60
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:63
 
 ___
 
@@ -65,13 +63,19 @@ ___
 
 • **groupId**: [`GroupId`](../modules/exports_datatype.md#groupid)
 
+This field uniquely identifies the group within the scope of the given Fabric.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.2.6.5.1
+
 #### Inherited from
 
 TypeFromSchema.groupId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:46
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:49
 
 ___
 
@@ -84,7 +88,7 @@ GroupId on any Endpoint via the Groups cluster.
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.2.6.5.2
+MatterSpecification.v11.Core § 11.2.6.5.3
 
 #### Inherited from
 
@@ -92,4 +96,4 @@ TypeFromSchema.groupName
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:59
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:62

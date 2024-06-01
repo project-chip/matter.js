@@ -27,7 +27,7 @@ This value sets the pump to run with the local settings of the pump, regardless 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:136](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L136)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:136](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L136)
 
 ___
 
@@ -39,7 +39,7 @@ This value sets the pump to run at its maximum possible speed.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L131)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:131](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L131)
 
 ___
 
@@ -51,7 +51,7 @@ This value sets the pump to run at the minimum possible speed it can without bei
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:126](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L126)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:126](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L126)
 
 ___
 
@@ -71,4 +71,4 @@ MatterSpecification.v11.Cluster § 4.2.6.2.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:121](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L121)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:121](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L121)

@@ -37,7 +37,7 @@ StateType.currentHeapFree
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:194](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L194)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:206](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L206)
 
 ___
 
@@ -58,7 +58,7 @@ StateType.currentHeapUsed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:202](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L202)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:214](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L214)
 
 ___
 
@@ -79,4 +79,4 @@ StateType.threadMetrics
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:186](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L186)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:198](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L198)

@@ -36,7 +36,7 @@ information such as, but not limited to, thread backtraces or register contents.
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.12.8.1.1
+MatterSpecification.v11.Core § 11.12.8.1.3
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ TypeFromSchema.faultRecording
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:99](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L99)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:111](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L111)
 
 ___
 
@@ -52,13 +52,19 @@ ___
 
 • **id**: `number` \| `bigint`
 
+The ID field shall be set to the ID of the software thread in which the last software fault occurred.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.12.8.1.1
+
 #### Inherited from
 
 TypeFromSchema.id
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L89)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:94](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L94)
 
 ___
 
@@ -66,10 +72,17 @@ ___
 
 • `Optional` **name**: `string`
 
+The Name field shall be set to a manufacturer-specified name or prefix of the software thread in which the
+last software fault occurred.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.12.8.1.2
+
 #### Inherited from
 
 TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:102](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L102)

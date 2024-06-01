@@ -34,8 +34,8 @@ BallastConfigurationBehavior is the base class for objects that support interact
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts:16](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts:21](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/ballast-configuration/BallastConfigurationBehavior.ts#L21)

@@ -47,9 +47,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L41)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:41](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L41)
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:152](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L152)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:152](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L152)
 
 ___
 
@@ -65,7 +65,7 @@ MatterSpecification.v11.Cluster § 6.10.4.12
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L18)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:18](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L18)
 
 ___
 
@@ -81,7 +81,7 @@ MatterSpecification.v11.Cluster § 6.10.4.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L39)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:39](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L39)
 
 ___
 
@@ -97,7 +97,7 @@ MatterSpecification.v11.Cluster § 6.10.4.10
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L32)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L32)
 
 ___
 
@@ -113,7 +113,7 @@ MatterSpecification.v11.Cluster § 6.10.4.9
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L25)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L25)
 
 ## Variables
 
@@ -128,8 +128,8 @@ using MediaPlaybackBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts#L24)
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts#L26)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackBehavior.ts#L26)

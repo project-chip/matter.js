@@ -70,7 +70,7 @@ Notifications of structural change bubble via Endpoint.lifecycle.changed.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L32)
+[packages/matter.js/src/endpoint/properties/Parts.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L32)
 
 ## Properties
 
@@ -95,7 +95,7 @@ Notifications of structural change bubble via Endpoint.lifecycle.changed.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L28)
+[packages/matter.js/src/endpoint/properties/Parts.ts:28](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L28)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L29)
+[packages/matter.js/src/endpoint/properties/Parts.ts:29](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L29)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L30)
+[packages/matter.js/src/endpoint/properties/Parts.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L30)
 
 ## Accessors
 
@@ -133,7 +133,7 @@ ObservableSet.added
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:121](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L121)
+[packages/matter.js/src/endpoint/properties/Parts.ts:121](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L121)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:103](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L103)
+[packages/matter.js/src/endpoint/properties/Parts.ts:103](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L103)
 
 ___
 
@@ -165,7 +165,7 @@ ObservableSet.deleted
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:125](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L125)
+[packages/matter.js/src/endpoint/properties/Parts.ts:125](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L125)
 
 ___
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:129](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L129)
+[packages/matter.js/src/endpoint/properties/Parts.ts:129](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L129)
 
 ## Methods
 
@@ -201,7 +201,7 @@ Take ownership of an endpoint.  Invoked when an endpoint is added.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:156](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L156)
+[packages/matter.js/src/endpoint/properties/Parts.ts:156](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L156)
 
 ___
 
@@ -223,7 +223,7 @@ Terminate ownership of an endpoint.  Invoked when an endpoint is destroyed or re
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:180](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L180)
+[packages/matter.js/src/endpoint/properties/Parts.ts:180](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L180)
 
 ___
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:220](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L220)
+[packages/matter.js/src/endpoint/properties/Parts.ts:220](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L220)
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L82)
+[packages/matter.js/src/endpoint/properties/Parts.ts:82](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L82)
 
 ___
 
@@ -285,7 +285,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:187](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L187)
+[packages/matter.js/src/endpoint/properties/Parts.ts:187](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L187)
 
 ___
 
@@ -299,7 +299,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:133](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L133)
+[packages/matter.js/src/endpoint/properties/Parts.ts:133](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L133)
 
 ___
 
@@ -323,7 +323,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L50)
+[packages/matter.js/src/endpoint/properties/Parts.ts:50](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L50)
 
 ___
 
@@ -346,7 +346,7 @@ Confirm availability of an ID amongst the endpoint's children.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:140](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L140)
+[packages/matter.js/src/endpoint/properties/Parts.ts:140](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L140)
 
 ___
 
@@ -364,7 +364,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L60)
+[packages/matter.js/src/endpoint/properties/Parts.ts:60](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L60)
 
 ___
 
@@ -378,7 +378,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:147](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L147)
+[packages/matter.js/src/endpoint/properties/Parts.ts:147](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L147)
 
 ___
 
@@ -402,7 +402,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L56)
+[packages/matter.js/src/endpoint/properties/Parts.ts:56](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L56)
 
 ___
 
@@ -422,7 +422,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L64)
+[packages/matter.js/src/endpoint/properties/Parts.ts:64](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L64)
 
 ___
 
@@ -442,7 +442,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L90)
+[packages/matter.js/src/endpoint/properties/Parts.ts:90](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L90)
 
 ___
 
@@ -462,7 +462,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:107](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L107)
+[packages/matter.js/src/endpoint/properties/Parts.ts:107](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L107)
 
 ___
 
@@ -482,4 +482,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Parts.ts:72](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/Parts.ts#L72)
+[packages/matter.js/src/endpoint/properties/Parts.ts:72](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/properties/Parts.ts#L72)

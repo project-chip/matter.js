@@ -11,13 +11,24 @@
 - [Administer](exports_cluster.AccessLevel.md#administer)
 - [Manage](exports_cluster.AccessLevel.md#manage)
 - [Operate](exports_cluster.AccessLevel.md#operate)
+- [ProxyView](exports_cluster.AccessLevel.md#proxyview)
 - [View](exports_cluster.AccessLevel.md#view)
 
 ## Enumeration Members
 
 ### Administer
 
-• **Administer** = ``4``
+• **Administer** = ``5``
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:23
+
+___
+
+### Manage
+
+• **Manage** = ``4``
 
 #### Defined in
 
@@ -25,9 +36,9 @@ packages/matter.js/dist/esm/cluster/Cluster.d.ts:22
 
 ___
 
-### Manage
+### Operate
 
-• **Manage** = ``3``
+• **Operate** = ``3``
 
 #### Defined in
 
@@ -35,9 +46,9 @@ packages/matter.js/dist/esm/cluster/Cluster.d.ts:21
 
 ___
 
-### Operate
+### ProxyView
 
-• **Operate** = ``2``
+• **ProxyView** = ``2``
 
 #### Defined in
 

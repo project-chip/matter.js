@@ -28,7 +28,7 @@ MatterSpecification.v11.Core § 9.5.4.1
 
 ### deviceType
 
-• **deviceType**: [`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)\<`number`\>
+• **deviceType**: [`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)
 
 This shall indicate the device type definition. The endpoint shall conform to the device type definition and
 cluster specifications required by the device type.
@@ -43,7 +43,7 @@ TypeFromSchema.deviceType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L35)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L35)
 
 ___
 
@@ -64,4 +64,4 @@ TypeFromSchema.revision
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L43)

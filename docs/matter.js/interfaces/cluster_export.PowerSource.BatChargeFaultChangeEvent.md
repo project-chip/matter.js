@@ -29,13 +29,20 @@ MatterSpecification.v11.Core § 11.7.7.3
 
 • **current**: [`BatChargeFault`](../enums/cluster_export.PowerSource.BatChargeFault.md)[]
 
+This field shall represent the set of faults currently detected, as per Section 11.7.6.31,
+“ActiveBatChargeFaults Attribute”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.7.7.3.1
+
 #### Inherited from
 
 TypeFromSchema.current
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:848](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L848)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:867](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L867)
 
 ___
 
@@ -43,10 +50,17 @@ ___
 
 • **previous**: [`BatChargeFault`](../enums/cluster_export.PowerSource.BatChargeFault.md)[]
 
+This field shall represent the set of faults detected prior to this change event, as per Section 11.7.6.31,
+“ActiveBatChargeFaults Attribute”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.7.7.3.2
+
 #### Inherited from
 
 TypeFromSchema.previous
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:849](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L849)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:875](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L875)

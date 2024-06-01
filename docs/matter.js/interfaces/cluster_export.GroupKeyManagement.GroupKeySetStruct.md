@@ -4,9 +4,6 @@
 
 [cluster/export](../modules/cluster_export.md).[GroupKeyManagement](../modules/cluster_export.GroupKeyManagement.md).GroupKeySetStruct
 
-This field shall provide the fabric-unique index for the associated group key set, as specified in Section
-4.15.3.5.1, “Group Key Set ID”.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.2.6.4
@@ -42,7 +39,7 @@ epoch slot 0 of the given group key set. If EpochKey0 is not null, EpochStartTim
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.2.6.4.2
+MatterSpecification.v11.Core § 11.2.6.4.3
 
 #### Inherited from
 
@@ -50,7 +47,7 @@ TypeFromSchema.epochKey0
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:159](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L159)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:163](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L163)
 
 ___
 
@@ -63,7 +60,7 @@ epoch slot 1 of the given group key set. If EpochKey1 is not null, EpochStartTim
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.2.6.4.4
+MatterSpecification.v11.Core § 11.2.6.4.5
 
 #### Inherited from
 
@@ -71,7 +68,7 @@ TypeFromSchema.epochKey1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:175](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L175)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:179](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L179)
 
 ___
 
@@ -84,7 +81,7 @@ epoch slot 2 of the given group key set. If EpochKey2 is not null, EpochStartTim
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.2.6.4.6
+MatterSpecification.v11.Core § 11.2.6.4.7
 
 #### Inherited from
 
@@ -92,7 +89,7 @@ TypeFromSchema.epochKey2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:191](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L191)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:195](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L195)
 
 ___
 
@@ -105,7 +102,7 @@ Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us 
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.2.6.4.3
+MatterSpecification.v11.Core § 11.2.6.4.4
 
 #### Inherited from
 
@@ -113,7 +110,7 @@ TypeFromSchema.epochStartTime0
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L167)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:171](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L171)
 
 ___
 
@@ -126,7 +123,7 @@ Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us 
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.2.6.4.5
+MatterSpecification.v11.Core § 11.2.6.4.6
 
 #### Inherited from
 
@@ -134,7 +131,7 @@ TypeFromSchema.epochStartTime1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:183](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L183)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:187](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L187)
 
 ___
 
@@ -147,7 +144,7 @@ Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us 
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.2.6.4.7
+MatterSpecification.v11.Core § 11.2.6.4.8
 
 #### Inherited from
 
@@ -155,13 +152,13 @@ TypeFromSchema.epochStartTime2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:199](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L199)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:203](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L203)
 
 ___
 
 ### groupKeyMulticastPolicy
 
-• **groupKeyMulticastPolicy**: [`GroupKeyMulticastPolicy`](../enums/cluster_export.GroupKeyManagement.GroupKeyMulticastPolicy.md)
+• `Optional` **groupKeyMulticastPolicy**: [`GroupKeyMulticastPolicy`](../enums/cluster_export.GroupKeyManagement.GroupKeyMulticastPolicy.md)
 
 This field specifies how the IPv6 Multicast Address shall be formed for groups using this operational group
 key set.
@@ -176,7 +173,7 @@ PerGroupID.
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.2.6.4.8
+MatterSpecification.v11.Core § 11.2.6.4.9
 
 #### Inherited from
 
@@ -184,7 +181,7 @@ TypeFromSchema.groupKeyMulticastPolicy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:215](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L215)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:219](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L219)
 
 ___
 
@@ -199,7 +196,7 @@ CacheAndSync in the GroupKeySecurityPolicy field shall fail with an INVALID_COMM
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.2.6.4.1
+MatterSpecification.v11.Core § 11.2.6.4.2
 
 #### Inherited from
 
@@ -207,7 +204,7 @@ TypeFromSchema.groupKeySecurityPolicy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:151](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L151)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:155](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L155)
 
 ___
 
@@ -215,10 +212,17 @@ ___
 
 • **groupKeySetId**: `number`
 
+This field shall provide the fabric-unique index for the associated group key set, as specified in Section
+4.15.3.5.1, “Group Key Set ID”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.2.6.4.1
+
 #### Inherited from
 
 TypeFromSchema.groupKeySetId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:141](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L141)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:145](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L145)

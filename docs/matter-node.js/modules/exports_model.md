@@ -97,9 +97,7 @@
 - [IllegalFeatureCombinations](exports_model.md#illegalfeaturecombinations)
 - [InferredComponent](exports_model.md#inferredcomponent)
 - [InferredComponents](exports_model.md#inferredcomponents)
-- [ManufacturerExtensibleIdentifier](exports_model.md#manufacturerextensibleidentifier)
 - [MatterElement](exports_model.md#matterelement)
-- [Mei](exports_model.md#mei)
 - [NamedComponent](exports_model.md#namedcomponent)
 - [NamedComponents](exports_model.md#namedcomponents)
 - [NodeElement](exports_model.md#nodeelement)
@@ -323,28 +321,6 @@ packages/matter.js/dist/esm/model/logic/cluster-variance/InferredComponents.d.ts
 
 ___
 
-### ManufacturerExtensibleIdentifier
-
-Ƭ **ManufacturerExtensibleIdentifier**: `number`
-
-Base type for semantic identifiers per Matter specification.  Formally a
-32-bit unsigned integer with assigned bit functions:
-
-    Bits 0-15 are the identifier's scope:
-        0x0000: Standard (global) or scoped (within cluster) ID
-        0x0001 - 0xfff0: Manufacturer code as defined by CSA group
-        0xfff1 - 0xfff4: Test manufacturer codes
-    Bits 16-31 are the actual identifier
-
-For this and following types, the specification defines restrictions that
-we do not express statically with TypeScript.
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/definitions/identifiers.d.ts:19
-
-___
-
 ### MatterElement
 
 Ƭ **MatterElement**: [`BaseElement`](../interfaces/exports_model.BaseElement-1.md) & \{ `children`: [`Child`](exports_model.MatterElement.md#child)[] ; `tag`: \`$\{Matter}\` ; `version?`: `string`  }
@@ -358,16 +334,6 @@ packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:23
 packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:18
 
 packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:24
-
-___
-
-### Mei
-
-Ƭ **Mei**: [`ManufacturerExtensibleIdentifier`](exports_model.md#manufacturerextensibleidentifier)
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/definitions/identifiers.d.ts:20
 
 ___
 
@@ -505,7 +471,7 @@ packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:13
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:41
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:42
 
 ___
 
@@ -515,7 +481,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:39
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:40
 
 ___
 
@@ -552,7 +518,6 @@ these types or derive new types.
 | `FabricIndex` | [`FieldElement`](../interfaces/exports_model.FieldElement-1.md) | - |
 | `FeatureMap` | [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) | - |
 | `GeneratedCommandList` | [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) | - |
-| `SubjectId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `actionId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `any` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `attributeId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
@@ -563,6 +528,7 @@ these types or derive new types.
 | `date` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `deviceTypeId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `double` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `elapsedS` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `endpointNo` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `entryIdx` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `enum16` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
@@ -604,8 +570,10 @@ these types or derive new types.
 | `status` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `string` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `struct` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `subjectId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `systimeMs` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `systimeUs` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `temperature` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `tod` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `transactionId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 | `uint16` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
@@ -631,7 +599,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:40
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:41
 
 ___
 
@@ -723,7 +691,7 @@ packages/matter.js/dist/esm/model/elements/Globals.d.ts:12
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:16
+packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:17
 
 ___
 
@@ -764,7 +732,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:34
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:35
 
 ___
 
@@ -807,7 +775,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:18
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:19
 
 ___
 
@@ -874,7 +842,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:22
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:23
 
 ___
 
@@ -914,7 +882,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:18
 
 ___
 
@@ -974,7 +942,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:21
+packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:22
 
 ___
 

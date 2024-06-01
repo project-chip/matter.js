@@ -71,7 +71,7 @@ Timed operations are exclusive for a node.
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:27
+matter.js/dist/esm/common/FailsafeContext.d.ts:30
 
 ## Properties
 
@@ -81,7 +81,7 @@ matter.js/dist/esm/common/FailsafeContext.d.ts:27
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:26
+matter.js/dist/esm/common/FailsafeContext.d.ts:29
 
 ## Accessors
 
@@ -95,7 +95,7 @@ matter.js/dist/esm/common/FailsafeContext.d.ts:26
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:32
+matter.js/dist/esm/common/FailsafeContext.d.ts:35
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:31
+matter.js/dist/esm/common/FailsafeContext.d.ts:34
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:30
+matter.js/dist/esm/common/FailsafeContext.d.ts:33
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:33
+matter.js/dist/esm/common/FailsafeContext.d.ts:36
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:29
+matter.js/dist/esm/common/FailsafeContext.d.ts:32
 
 ___
 
@@ -165,7 +165,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:34
+matter.js/dist/esm/common/FailsafeContext.d.ts:37
 
 ___
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:35
+matter.js/dist/esm/common/FailsafeContext.d.ts:38
 
 ## Methods
 
@@ -199,7 +199,7 @@ matter.js/dist/esm/common/FailsafeContext.d.ts:35
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:39
+matter.js/dist/esm/common/FailsafeContext.d.ts:42
 
 ___
 
@@ -226,7 +226,7 @@ Build a new Fabric object for a new fabric for the "AddNoc" case of the Operatio
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:56
+matter.js/dist/esm/common/FailsafeContext.d.ts:59
 
 ___
 
@@ -250,7 +250,7 @@ cluster.
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:54
+matter.js/dist/esm/common/FailsafeContext.d.ts:57
 
 ___
 
@@ -264,7 +264,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:47
+matter.js/dist/esm/common/FailsafeContext.d.ts:50
 
 ___
 
@@ -278,7 +278,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:36
+matter.js/dist/esm/common/FailsafeContext.d.ts:39
 
 ___
 
@@ -302,7 +302,7 @@ validity checks.
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:45
+matter.js/dist/esm/common/FailsafeContext.d.ts:48
 
 ___
 
@@ -323,7 +323,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:28
+matter.js/dist/esm/common/FailsafeContext.d.ts:31
 
 ___
 
@@ -337,7 +337,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:37
+matter.js/dist/esm/common/FailsafeContext.d.ts:40
 
 ___
 
@@ -351,7 +351,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:38
+matter.js/dist/esm/common/FailsafeContext.d.ts:41
 
 ___
 
@@ -365,7 +365,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:46
+matter.js/dist/esm/common/FailsafeContext.d.ts:49
 
 ___
 
@@ -379,7 +379,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:69
+matter.js/dist/esm/common/FailsafeContext.d.ts:72
 
 ___
 
@@ -399,7 +399,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:67
+matter.js/dist/esm/common/FailsafeContext.d.ts:70
 
 ___
 
@@ -415,7 +415,7 @@ Restore Cluster data when the FailSafe context expired.
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:66
+matter.js/dist/esm/common/FailsafeContext.d.ts:69
 
 ___
 
@@ -435,7 +435,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:68
+matter.js/dist/esm/common/FailsafeContext.d.ts:71
 
 ___
 
@@ -449,7 +449,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:63
+matter.js/dist/esm/common/FailsafeContext.d.ts:66
 
 ___
 
@@ -471,7 +471,7 @@ Handles adding a trusted root certificate from Operational Credentials cluster.
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:49
+matter.js/dist/esm/common/FailsafeContext.d.ts:52
 
 ___
 
@@ -485,7 +485,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:64
+matter.js/dist/esm/common/FailsafeContext.d.ts:67
 
 ___
 
@@ -505,4 +505,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/FailsafeContext.d.ts:40
+matter.js/dist/esm/common/FailsafeContext.d.ts:43

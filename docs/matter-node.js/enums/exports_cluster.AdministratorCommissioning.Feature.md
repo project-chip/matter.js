@@ -28,4 +28,4 @@ Node supports Basic Commissioning Method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:188
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:205

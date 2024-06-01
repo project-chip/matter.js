@@ -93,7 +93,7 @@ Modify elements using [ElementModifier.set](../classes/exports_cluster.ElementMo
 
 | Name | Type |
 | :------ | :------ |
-| `ValuesT` | extends `number` \| [`AttributeValues`](../modules/exports_cluster.ClusterType.md#attributevalues)\<`T`\> \| (...`args`: `any`[]) => `any` & `object` & \{ [K in string \| number \| symbol as [AttributesOf\<T\>[K]] extends [Object] ? never : K]: AttributesOf\<T\>[K] extends Object ? T : never } & \{ [K in string \| number \| symbol as [AttributesOf\<T\>[K]] extends [Object] ? K : never]?: AttributesOf\<T\>[K] extends Object ? T : never } \| \{ [K in string \| number \| symbol]: RelaxTypes\<AttributeValues\<T\>[K]\> } |
+| `ValuesT` | extends `number` \| `bigint` \| [`AttributeValues`](../modules/exports_cluster.ClusterType.md#attributevalues)\<`T`\> \| (...`args`: `any`[]) => `any` & `object` & \{ [K in string \| number \| symbol as [AttributesOf\<T\>[K]] extends [Object] ? never : K]: AttributesOf\<T\>[K] extends Object ? T : never } & \{ [K in string \| number \| symbol as [AttributesOf\<T\>[K]] extends [Object] ? K : never]?: AttributesOf\<T\>[K] extends Object ? T : never } \| \{ [K in string \| number \| symbol]: RelaxTypes\<AttributeValues\<T\>[K]\> } |
 
 #### Parameters
 

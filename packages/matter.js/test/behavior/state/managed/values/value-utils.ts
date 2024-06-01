@@ -6,11 +6,12 @@
 
 import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
 import { OnlineContext } from "../../../../../src/behavior/context/server/OnlineContext.js";
-import { Datasource } from "../../../../../src/behavior/state/managed/Datasource.js";
 import { Val } from "../../../../../src/behavior/state/Val.js";
+import { Datasource } from "../../../../../src/behavior/state/managed/Datasource.js";
 import { RootSupervisor } from "../../../../../src/behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../../../../src/behavior/supervision/ValueSupervisor.js";
 import { DataModelPath } from "../../../../../src/endpoint/DataModelPath.js";
+import { Endpoint } from "../../../../../src/endpoint/Endpoint.js";
 import { DatatypeModel, FieldElement } from "../../../../../src/model/index.js";
 import { Observable } from "../../../../../src/util/Observable.js";
 import { MaybePromise } from "../../../../../src/util/Promises.js";
@@ -117,3 +118,11 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
 }
 
 export type TestStruct = Identity<ReturnType<typeof TestStruct>>;
+
+export function aclEndpoint(acls: number[]) {
+    return {
+        act: () => ({
+            accessLevelsFor: () => acls,
+        }),
+    } as unknown as Endpoint<any>;
+}

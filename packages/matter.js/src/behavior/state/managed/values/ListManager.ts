@@ -278,14 +278,14 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
                 const formerLength = getListLength();
 
                 reference.change(() => {
-                    for (let i = length; i < formerLength; i++) {
-                        const entry = writeVal()[i] as undefined | { fabricIndex?: number };
+                    for (let i = formerLength - 1; i >= length; i--) {
+                        const entry = writeVal()[mapScopedToActual(i, true)] as undefined | { fabricIndex?: number };
                         if (
                             typeof entry === "object" &&
                             (session.offline || !entry.fabricIndex || entry.fabricIndex === session.fabric)
                         ) {
                             writeVal().splice(mapScopedToActual(i, false), 1);
-                        } else {
+                        } else if (entry !== undefined) {
                             throw new WriteError(
                                 reference.location,
                                 `Fabric scoped list value is not an object`,

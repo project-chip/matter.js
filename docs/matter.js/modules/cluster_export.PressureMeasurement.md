@@ -50,7 +50,7 @@ These elements and properties are present in all PressureMeasurement clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L88)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:88](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L88)
 
 ___
 
@@ -60,9 +60,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L167)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:167](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L167)
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:169](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L169)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:169](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L169)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:154](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L154)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:154](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L154)
 
 ___
 
@@ -86,9 +86,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:207](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L207)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:207](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L207)
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:209](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L209)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:209](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L209)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:176](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L176)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:176](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L176)
 
 ___
 
@@ -125,4 +125,4 @@ A PressureMeasurementCluster supports these elements if it supports feature Exte
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L21)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:21](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L21)

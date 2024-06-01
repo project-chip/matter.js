@@ -43,7 +43,7 @@
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/NobleBleClient.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L40)
+[matter-node-ble.js/src/ble/NobleBleClient.ts:40](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L40)
 
 ## Properties
 
@@ -53,7 +53,7 @@
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/NobleBleClient.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L38)
+[matter-node-ble.js/src/ble/NobleBleClient.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L38)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/NobleBleClient.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L31)
+[matter-node-ble.js/src/ble/NobleBleClient.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L31)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/NobleBleClient.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L36)
+[matter-node-ble.js/src/ble/NobleBleClient.ts:36](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L36)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/NobleBleClient.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L37)
+[matter-node-ble.js/src/ble/NobleBleClient.ts:37](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L37)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/NobleBleClient.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L35)
+[matter-node-ble.js/src/ble/NobleBleClient.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L35)
 
 ## Methods
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/NobleBleClient.ts:92](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L92)
+[matter-node-ble.js/src/ble/NobleBleClient.ts:92](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L92)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/NobleBleClient.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L67)
+[matter-node-ble.js/src/ble/NobleBleClient.ts:67](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L67)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/NobleBleClient.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L74)
+[matter-node-ble.js/src/ble/NobleBleClient.ts:74](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L74)
 
 ___
 
@@ -161,4 +161,4 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/NobleBleClient.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L86)
+[matter-node-ble.js/src/ble/NobleBleClient.ts:86](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/NobleBleClient.ts#L86)

@@ -5,7 +5,6 @@
  */
 
 import { CommissioningServer } from "../../src/CommissioningServer.js";
-import { DeviceCertification } from "../../src/behavior/definitions/operational-credentials/DeviceCertification.js";
 import { AccessControlCluster } from "../../src/cluster/definitions/AccessControlCluster.js";
 import { AdministratorCommissioning } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
@@ -94,14 +93,12 @@ function addRequiredRootClusters(
                     trustedRootCertificates: [],
                     currentFabricIndex: FabricIndex.NO_FABRIC,
                 },
-                OperationalCredentialsClusterHandler(
-                    new DeviceCertification({
-                        privateKey: DUMMY_KEY,
-                        certificate: ByteArray.fromHex("00"),
-                        intermediateCertificate: ByteArray.fromHex("00"),
-                        declaration: ByteArray.fromHex("00"),
-                    }),
-                ),
+                OperationalCredentialsClusterHandler({
+                    privateKey: DUMMY_KEY,
+                    certificate: ByteArray.fromHex("00"),
+                    intermediateCertificate: ByteArray.fromHex("00"),
+                    declaration: ByteArray.fromHex("00"),
+                }),
             ),
         );
     }
@@ -169,8 +166,8 @@ function addRequiredRootClusters(
             {
                 groupKeyMap: [],
                 groupTable: [],
-                maxGroupsPerFabric: 254,
-                maxGroupKeysPerFabric: 254,
+                maxGroupsPerFabric: 0,
+                maxGroupKeysPerFabric: 1,
             },
             GroupKeyManagementClusterHandler(),
         ),
@@ -253,10 +250,10 @@ async function commissioningServer({ storage, values }: { storage?: boolean; val
             serialNumber: `node-matter-0000`,
         },
         certificates: {
-            devicePrivateKey: PRIVATE_KEY,
-            deviceCertificate: ByteArray.fromHex("00"),
-            deviceIntermediateCertificate: ByteArray.fromHex("00"),
-            certificationDeclaration: ByteArray.fromHex("00"),
+            privateKey: PRIVATE_KEY,
+            certificate: ByteArray.fromHex("00"),
+            intermediateCertificate: ByteArray.fromHex("00"),
+            declaration: ByteArray.fromHex("00"),
         },
     });
 

@@ -8,6 +8,6 @@ Datasource events.
 
 ## Hierarchy
 
-- `Record`\<`string`, [`Observable`](util_export.Observable.md)\<`Parameters`\<[`ValueObserver`](behavior_cluster_export._internal_.Datasource.ValueObserver.md)\>\>\>
+- `Record`\<`string`, [`Observable`](util_export.Observable.md)\<`Parameters`\<[`ValueObserver`](behavior_cluster_export._internal_.Datasource.ValueObserver.md)\>, [`MaybePromise`](../modules/util_export.md#maybepromise)\>\>
 
   ↳ **`Events`**

@@ -10,12 +10,17 @@
 
 - [BitString](codec_export.DerType.md#bitstring)
 - [Boolean](codec_export.DerType.md#boolean)
+- [GeneralizedTime](codec_export.DerType.md#generalizedtime)
+- [IA5String](codec_export.DerType.md#ia5string)
+- [Integer](codec_export.DerType.md#integer)
+- [Null](codec_export.DerType.md#null)
 - [ObjectIdentifier](codec_export.DerType.md#objectidentifier)
 - [OctetString](codec_export.DerType.md#octetstring)
+- [PrintableString](codec_export.DerType.md#printablestring)
 - [Sequence](codec_export.DerType.md#sequence)
 - [Set](codec_export.DerType.md#set)
+- [T16String](codec_export.DerType.md#t16string)
 - [UTF8String](codec_export.DerType.md#utf8string)
-- [UnsignedInt](codec_export.DerType.md#unsignedint)
 - [UtcDate](codec_export.DerType.md#utcdate)
 
 ## Enumeration Members
@@ -26,7 +31,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L20)
+[packages/matter.js/src/codec/DerCodec.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L23)
 
 ___
 
@@ -36,7 +41,47 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L18)
+[packages/matter.js/src/codec/DerCodec.ts:21](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L21)
+
+___
+
+### GeneralizedTime
+
+• **GeneralizedTime** = ``24``
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:34](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L34)
+
+___
+
+### IA5String
+
+• **IA5String** = ``22``
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L32)
+
+___
+
+### Integer
+
+• **Integer** = ``2``
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L22)
+
+___
+
+### Null
+
+• **Null** = ``5``
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L25)
 
 ___
 
@@ -46,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L22)
+[packages/matter.js/src/codec/DerCodec.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L26)
 
 ___
 
@@ -56,7 +101,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L21)
+[packages/matter.js/src/codec/DerCodec.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L24)
+
+___
+
+### PrintableString
+
+• **PrintableString** = ``19``
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L30)
 
 ___
 
@@ -66,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L24)
+[packages/matter.js/src/codec/DerCodec.ts:28](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L28)
 
 ___
 
@@ -76,7 +131,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L25)
+[packages/matter.js/src/codec/DerCodec.ts:29](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L29)
+
+___
+
+### T16String
+
+• **T16String** = ``20``
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L31)
 
 ___
 
@@ -86,17 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L23)
-
-___
-
-### UnsignedInt
-
-• **UnsignedInt** = ``2``
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L19)
+[packages/matter.js/src/codec/DerCodec.ts:27](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L27)
 
 ___
 
@@ -106,4 +161,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L26)
+[packages/matter.js/src/codec/DerCodec.ts:33](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L33)

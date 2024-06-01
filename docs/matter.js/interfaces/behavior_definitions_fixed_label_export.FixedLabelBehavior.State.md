@@ -32,4 +32,4 @@ StateType.labelList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts#L29)
+[packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts:29](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts#L29)

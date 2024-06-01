@@ -44,7 +44,7 @@ TypeFromSchema.lineupInfoType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:114](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L114)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:114](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L114)
 
 ___
 
@@ -58,7 +58,7 @@ TypeFromSchema.lineupName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:106](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L106)
 
 ___
 
@@ -78,7 +78,7 @@ TypeFromSchema.operatorName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:104](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L104)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:104](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L104)
 
 ___
 
@@ -92,4 +92,4 @@ TypeFromSchema.postalCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:107](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L107)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:107](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L107)

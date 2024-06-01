@@ -18,11 +18,9 @@
 - ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvVoid"](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvVoid_.md)
 - ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md)
 - [AsyncConstruction](exports_cluster._internal_.AsyncConstruction.md)
-- [DeviceCertification](exports_cluster._internal_.DeviceCertification.md)
 
 ### Classes
 
-- [DeviceCertification](../classes/exports_cluster._internal_.DeviceCertification-1.md)
 - [MatterDevice](../classes/exports_cluster._internal_.MatterDevice.md)
 
 ### Interfaces
@@ -60,6 +58,7 @@
 - [ClusterExtend](exports_cluster._internal_.md#clusterextend)
 - [CommandHandlers](exports_cluster._internal_.md#commandhandlers)
 - [CommandServers](exports_cluster._internal_.md#commandservers)
+- [DelayedChangeData](exports_cluster._internal_.md#delayedchangedata)
 - [GetterTypeFromSpec](exports_cluster._internal_.md#gettertypefromspec)
 - [GetterTypeFromSpec](exports_cluster._internal_.md#gettertypefromspec-1)
 - [MakeAttributeMandatory](exports_cluster._internal_.md#makeattributemandatory)
@@ -304,9 +303,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:248
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:249
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:254
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:255
 
 ___
 
@@ -341,6 +340,24 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:64
+
+___
+
+### DelayedChangeData
+
+Ƭ **DelayedChangeData**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `changed` | `boolean` |
+| `newValue` | `any` |
+| `oldValue` | `any` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:25
 
 ___
 
@@ -651,7 +668,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:254
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:255
 
 ___
 

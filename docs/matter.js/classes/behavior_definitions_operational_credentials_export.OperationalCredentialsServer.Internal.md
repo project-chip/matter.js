@@ -29,11 +29,11 @@
 
 ### certification
 
-• `Optional` **certification**: [`DeviceCertification`](export._internal_.DeviceCertification-1.md)
+• `Optional` **certification**: [`DeviceCertification`](behavior_definitions_operational_credentials_export._internal_.DeviceCertification-1.md)
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:399](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L399)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:488](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L488)
 
 ___
 
@@ -43,4 +43,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:400](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L400)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:489](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L489)

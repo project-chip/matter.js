@@ -4,22 +4,24 @@
 
 ## Table of contents
 
-### Type Aliases
+### Namespaces
 
-- [Unsigned](exports_certificate._internal_.md#unsigned)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
-## Type Aliases
+### Interfaces
 
-### Unsigned
+- [AttestationCertificateBase](../interfaces/exports_certificate._internal_.AttestationCertificateBase.md)
 
-Ƭ **Unsigned**\<`Type`\>: \{ [Property in keyof Type as Exclude\<Property, "signature"\>]: Type[Property] }
+### Variables
 
-#### Type parameters
+- [TlvBaseCertificate](exports_certificate._internal_.md#tlvbasecertificate)
 
-| Name |
-| :------ |
-| `Type` |
+## Variables
+
+### TlvBaseCertificate
+
+• `Const` **TlvBaseCertificate**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:224
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:374

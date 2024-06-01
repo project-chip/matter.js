@@ -12,6 +12,8 @@ Error thrown when an unexpected case in the matter flow is encountered. Please r
 
   ↳ **`MatterFlowError`**
 
+  ↳↳ [`MatterFabricInvalidAdminSubjectError`](common_export.MatterFabricInvalidAdminSubjectError.md)
+
   ↳↳ [`MatterFabricConflictError`](common_export.MatterFabricConflictError.md)
 
   ↳↳ [`MaximumPasePairingErrorsReachedError`](session_export.MaximumPasePairingErrorsReachedError.md)

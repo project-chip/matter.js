@@ -34,13 +34,20 @@ MatterSpecification.v11.Core § 11.17.6.6
 
 • **attestationSignature**: `Uint8Array`
 
+This field shall contain the octet string of the necessary attestation_signature as described in Section
+11.17.4.9, “NOCSR Information”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.17.6.6.2
+
 #### Inherited from
 
 TypeFromSchema.attestationSignature
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:246
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:249
 
 ___
 
@@ -49,9 +56,6 @@ ___
 • **nocsrElements**: `Uint8Array`
 
 This field shall contain the octet string of the serialized nocsr_elements_message.
-
-This field shall contain the octet string of the necessary attestation_signature as described in Section
-11.17.4.9, “NOCSR Information”.
 
 **`See`**
 
@@ -63,4 +67,4 @@ TypeFromSchema.nocsrElements
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:245
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:242

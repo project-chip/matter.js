@@ -34,13 +34,20 @@ MatterSpecification.v11.Core § 11.17.6.6
 
 • **attestationSignature**: `Uint8Array`
 
+This field shall contain the octet string of the necessary attestation_signature as described in Section
+11.17.4.9, “NOCSR Information”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.17.6.6.2
+
 #### Inherited from
 
 TypeFromSchema.attestationSignature
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:281](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L281)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:284](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L284)
 
 ___
 
@@ -49,9 +56,6 @@ ___
 • **nocsrElements**: `Uint8Array`
 
 This field shall contain the octet string of the serialized nocsr_elements_message.
-
-This field shall contain the octet string of the necessary attestation_signature as described in Section
-11.17.4.9, “NOCSR Information”.
 
 **`See`**
 
@@ -63,4 +67,4 @@ TypeFromSchema.nocsrElements
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:279](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L279)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:276](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L276)

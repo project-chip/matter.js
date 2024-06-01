@@ -51,7 +51,6 @@ A cluster property description.
 - [conformance](exports_model.AttributeModel.md#conformance)
 - [constraint](exports_model.AttributeModel.md#constraint)
 - [definingModel](exports_model.AttributeModel.md#definingmodel)
-- [deprecated](exports_model.AttributeModel.md#deprecated)
 - [directMetatype](exports_model.AttributeModel.md#directmetatype)
 - [disallowed](exports_model.AttributeModel.md#disallowed)
 - [discriminator](exports_model.AttributeModel.md#discriminator)
@@ -68,6 +67,7 @@ A cluster property description.
 - [fabricScoped](exports_model.AttributeModel.md#fabricscoped)
 - [fixed](exports_model.AttributeModel.md#fixed)
 - [globalBase](exports_model.AttributeModel.md#globalbase)
+- [isDeprecated](exports_model.AttributeModel.md#isdeprecated)
 - [isGlobalAttribute](exports_model.AttributeModel.md#isglobalattribute)
 - [key](exports_model.AttributeModel.md#key)
 - [listEntry](exports_model.AttributeModel.md#listentry)
@@ -125,7 +125,7 @@ A cluster property description.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:17
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:18
 
 ## Properties
 
@@ -271,7 +271,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:11
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:12
 
 ___
 
@@ -356,7 +356,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:10
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:11
 
 ___
 
@@ -407,7 +407,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:18
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:19
 
 ___
 
@@ -692,26 +692,6 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:67
 
 ___
 
-### deprecated
-
-• `get` **deprecated**(): `boolean`
-
-Is this model deprecated?
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-PropertyModel.deprecated
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
-
-___
-
 ### directMetatype
 
 • `get` **directMetatype**(): `undefined` \| [`Metatype`](../enums/exports_model.Metatype-1.md)
@@ -977,7 +957,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:15
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:16
 
 ___
 
@@ -991,7 +971,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:16
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:17
 
 ___
 
@@ -1015,6 +995,26 @@ packages/matter.js/dist/esm/model/models/Model.d.ts:98
 
 ___
 
+### isDeprecated
+
+• `get` **isDeprecated**(): `boolean`
+
+Is this model deprecated?
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+PropertyModel.isDeprecated
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
+
+___
+
 ### isGlobalAttribute
 
 • `get` **isGlobalAttribute**(): `undefined` \| ``true``
@@ -1029,7 +1029,7 @@ PropertyModel.isGlobalAttribute
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:13
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:14
 
 ___
 
@@ -1379,7 +1379,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:14
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:15
 
 ## Methods
 
@@ -1778,4 +1778,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:12
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:13

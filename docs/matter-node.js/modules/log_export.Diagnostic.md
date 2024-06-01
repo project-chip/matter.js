@@ -24,6 +24,7 @@
 - [dict](log_export.Diagnostic.md#dict)
 - [elapsed](log_export.Diagnostic.md#elapsed)
 - [error](log_export.Diagnostic.md#error)
+- [hex](log_export.Diagnostic.md#hex)
 - [interval](log_export.Diagnostic.md#interval)
 - [lifecycle](log_export.Diagnostic.md#lifecycle)
 - [lifecycleList](log_export.Diagnostic.md#lifecyclelist)
@@ -115,6 +116,28 @@ Create a Diagnostic for an error.
 #### Defined in
 
 packages/matter.js/dist/esm/log/Diagnostic.d.ts:88
+
+___
+
+### hex
+
+▸ **hex**(`value`): `string`
+
+Convert a number or bigint to a hex string which is prefixed by "0x" for logging purposes
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `number` \| `bigint` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:118
 
 ___
 

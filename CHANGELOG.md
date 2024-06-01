@@ -6,10 +6,39 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 <!--
 	Placeholder for the next version (at the beginning of the line):
-	## __WORK IN PROGRESS__
+	### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.9.1 (2024-06-01)
+* IMPORTANT: This version adds Access Control functionality and also tries to set missing ACL entries on startup on a best effort basis. If you encounter issues and have Access/Permission denied errors ain the logs then please delete and recommission the device to make sure all ACLs are set correctly. If this is not possible open GitHub issue or contact us in Discord to get help.
+* Matter-Core functionality:
+  * Feature: Implemented Access Control List (ACL) as required by Matter specification
+  * Enhancement: Enhanced several internal structures needed to support ACL properly
+  * Enhancement: Enhanced all datatypes that are MEIs to allow validation of the MEI and the allowed scopes and value ranges
+  * Enhancement: Remembers CATs from Sessions and uses them for CASE session resumptions
+  * Enhancement: Allows decoding of TlvLists with protocol specific tags
+  * Enhancement: Refactored channel management to match specification and allow several channels per fabric and node
+  * Enhancement: Closing message exchanges already when last message got acknowledged and prevent up to 9s waiting time for closures
+  * Enhancement: Prevents to announce a new commissionable device just before doing a factory reset
+  * Enhancement: Expires announcements for last removed fabric directly
+  * Fix: Fixes deepCopy to really doing a deep copy and not just copying the first level 
+  
+* matter.js Legacy API:
+  * Feature: Added Access Control cluster implementation
+  * Feature: Added minimal Group key management cluster implementation which supports no additional groups (so only IPK allowed)
+  * Enhancement: Enhanced Operational Credentials cluster to add needed ACLs on commissioning including backward compatibility
+
+* matter.js New API:
+  * Feature: Added Access Control cluster implementation
+  * Feature: Added minimal Group key management cluster implementation which supports no additional groups (so only IPK allowed)
+  * Enhancement: Enhanced Operational Credentials cluster to add needed ACLs on commissioning including backward 
+  * Enhancement: Optimized Factory reset logic when last Fabric is removed
+  * Fix: Persist also writable and fabric scoped data in new API
+  * Fix: Releases locks also in Precommit errors
+* Chip testing:
+  * Added automatic testing of chip tests suites for ACE, ACL and partly IDM
+
+### 0.9.0 (2024-05-14)
 * Matter-Core functionality:
   * Feature: cluster default implementations for the following clusters were added/updated:
     * BooleanState: Automatically emit the StateChange event when enabled for the cluster and the stateValue changes
@@ -26,9 +55,13 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Adds additional logging information for PASE and CASE to better understand errors without debug logging
   * Enhancement: Adds several Optimizations and adjustments for Obervers (e.g. Observable.isObserved)
   * Fix: Corrects returned errors for two commands on OperationalCredentials cluster 
-* matter.js New API code flows:
+* matter.js Legacy API:
+  * Breaking: The object type for providing custom production certificates has changed to be now in sync with the DeviceCertification class (just the property names changed)
+  * Feature: Added on demand certification determination via an async certificate provider method (alternative to provideing certs directly) to determine certificates on first commissioning request
+* matter.js New API:
   * Breaking: The name of the *$Change Events for attributes and such are changed to *$Changed . Please adjust your code!
   * Breaking: Introduced ExtensionInterface to define extensible/custom methods for behavior/Cluster-Server implementation to be available when extending this class (needed because of a TS bug 27965)
+  * Feature: Added on demand certification determination via an async certificate provider method (alternative to provideing certs directly) to determine certificates on first commissioning request
   * Enhancement: Optimized constraint validations and conformance error messages
   * Enhancement: Conditionally enables the ReachableChanged event on the Root Endpoint BasicInformation cluster if the reachable attribute is defined in the defaults
   * Enhancement: Allow to register events directly when initializing endpoints like in legacy API
@@ -37,6 +70,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Allows "fieldName$Changed" and "fieldName$Changing" event handlers to be async
   * Enhancement: Adds Conformance validation for enums, fieldname references and some more cases
   * Enhancement: Makes various config variables apply dynamically
+  * Enhancement: Added environment variable `network.interfaceNameTypeMap' to allow mapping of network interface names to types (Wifi, Thread, Ethernet)
   * Fix: Fixes some issues around event handling in the new API and makes sure events are not de-registered on factory resets
   * Fix: Corrects the returned status error code when an Enum value is set to an invalid value
   * Fix: Fixes a floating promise in FailsafeTimer; it tended to kill a test run without an easy way to identify the cause

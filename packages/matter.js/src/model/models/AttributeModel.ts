@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ElementTag, Mei } from "../definitions/index.js";
+import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
+import { ElementTag } from "../definitions/index.js";
 import { AttributeElement, Globals } from "../elements/index.js";
 import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";

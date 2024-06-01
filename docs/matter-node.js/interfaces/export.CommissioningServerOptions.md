@@ -58,7 +58,7 @@ about the open sessions and their status.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:124
+packages/matter.js/dist/esm/CommissioningServer.d.ts:120
 
 ___
 
@@ -70,7 +70,7 @@ Optional Vendor specific additional BLE Advertisement data.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:65
+packages/matter.js/dist/esm/CommissioningServer.d.ts:66
 
 ___
 
@@ -83,29 +83,20 @@ not set here.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:89
+packages/matter.js/dist/esm/CommissioningServer.d.ts:90
 
 ___
 
 ### certificates
 
-• `Optional` **certificates**: `Object`
+• `Optional` **certificates**: [`Definition`](../modules/export._internal_.md#definition)
 
 Vendor specific certificates to be used for the OperationalCredentials cluster. If not set Test certificates
 (official Chip tool test Root certificate is used) are generated automatically.
 
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `certificationDeclaration` | `Uint8Array` |
-| `deviceCertificate` | `Uint8Array` |
-| `deviceIntermediateCertificate` | `Uint8Array` |
-| `devicePrivateKey` | `Uint8Array` |
-
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:99
+packages/matter.js/dist/esm/CommissioningServer.d.ts:100
 
 ___
 
@@ -133,7 +124,7 @@ fabricIndex can be used together with getCommissionedFabricInformation() to get 
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:118
+packages/matter.js/dist/esm/CommissioningServer.d.ts:114
 
 ___
 
@@ -145,7 +136,7 @@ Should the device directly be announced automatically by the MatterServer of man
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:67
+packages/matter.js/dist/esm/CommissioningServer.d.ts:68
 
 ___
 
@@ -157,7 +148,7 @@ The device name to be used for the BasicInformation cluster.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:53
+packages/matter.js/dist/esm/CommissioningServer.d.ts:54
 
 ___
 
@@ -169,7 +160,7 @@ The device type to be used for the BasicInformation cluster.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:55
+packages/matter.js/dist/esm/CommissioningServer.d.ts:56
 
 ___
 
@@ -181,7 +172,7 @@ The Discriminator to use for initial commissioning.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:61
+packages/matter.js/dist/esm/CommissioningServer.d.ts:62
 
 ___
 
@@ -193,7 +184,7 @@ The Flow type of the Commissioning flow used in announcements.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:63
+packages/matter.js/dist/esm/CommissioningServer.d.ts:64
 
 ___
 
@@ -206,7 +197,7 @@ Use these options to limit the allowed countries for regulatory configuration.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:109
+packages/matter.js/dist/esm/CommissioningServer.d.ts:105
 
 ___
 
@@ -218,7 +209,7 @@ IPv4 listener address, defaults to all interfaces.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:49
+packages/matter.js/dist/esm/CommissioningServer.d.ts:50
 
 ___
 
@@ -230,7 +221,7 @@ IPv6 listener address, defaults to all interfaces.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:51
+packages/matter.js/dist/esm/CommissioningServer.d.ts:52
 
 ___
 
@@ -242,7 +233,7 @@ The next endpoint ID to be assigned to a new endpoint.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:57
+packages/matter.js/dist/esm/CommissioningServer.d.ts:58
 
 ___
 
@@ -254,7 +245,7 @@ The passcode/pin of the device to use for initial commissioning.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:59
+packages/matter.js/dist/esm/CommissioningServer.d.ts:60
 
 ___
 
@@ -266,7 +257,7 @@ Port of the server, normally automatically managed.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:47
+packages/matter.js/dist/esm/CommissioningServer.d.ts:48
 
 ___
 
@@ -279,7 +270,7 @@ and inside the range requested by the connected controller.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:72
+packages/matter.js/dist/esm/CommissioningServer.d.ts:73
 
 ___
 
@@ -293,7 +284,7 @@ limits.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:78
+packages/matter.js/dist/esm/CommissioningServer.d.ts:79
 
 ___
 
@@ -307,4 +298,4 @@ powered on in parallel not all send at the same timepoint.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:84
+packages/matter.js/dist/esm/CommissioningServer.d.ts:85

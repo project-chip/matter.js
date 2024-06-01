@@ -38,6 +38,10 @@ export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
         this.store.initialize();
     }
 
+    get initialized() {
+        return this.store?.initialized ?? false;
+    }
+
     override async get<T extends SupportedStorageTypes>(contexts: string[], key: string): Promise<T | undefined> {
         if (this.store === undefined) {
             throw new InternalError("Storage not initialized.");

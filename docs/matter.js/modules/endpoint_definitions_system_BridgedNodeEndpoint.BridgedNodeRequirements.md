@@ -25,7 +25,7 @@ We provide this alias to the default implementation [BridgedDeviceBasicInformati
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L39)
+[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:39](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L39)
 
 ___
 
@@ -39,7 +39,7 @@ We provide this alias to the default implementation [PowerSourceConfigurationSer
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L46)
+[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:46](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L46)
 
 ___
 
@@ -53,7 +53,7 @@ We provide this alias to the default implementation [PowerSourceServer](endpoint
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L53)
+[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L53)
 
 ___
 
@@ -77,4 +77,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L58)
+[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:58](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L58)

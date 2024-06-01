@@ -4,11 +4,6 @@
 
 [exports/cluster](../modules/exports_cluster.md).[ThreadNetworkDiagnostics](../modules/exports_cluster.ThreadNetworkDiagnostics.md).RouteTableStruct
 
-This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table entry
-corresponds.
-
-This field shall specify the RLOC16 for the Node for which this route table entry corresponds.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.13.5.5
@@ -40,13 +35,20 @@ MatterSpecification.v11.Core § 11.13.5.5
 
 • **age**: `number`
 
+This field shall specify the duration of time, in seconds, since a frame has been received from the Node for
+which this route table entry corresponds.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.13.5.5.8
+
 #### Inherited from
 
 TypeFromSchema.age
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:202
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:211
 
 ___
 
@@ -58,7 +60,7 @@ This field shall specify if the router ID as defined within the RouterId field h
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.6
+MatterSpecification.v11.Core § 11.13.5.5.9
 
 #### Inherited from
 
@@ -66,7 +68,7 @@ TypeFromSchema.allocated
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:208
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:217
 
 ___
 
@@ -74,13 +76,20 @@ ___
 
 • **extAddress**: `number` \| `bigint`
 
+This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table entry
+corresponds.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.13.5.5.1
+
 #### Inherited from
 
 TypeFromSchema.extAddress
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:164
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:165
 
 ___
 
@@ -93,7 +102,7 @@ corresponds.
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.7
+MatterSpecification.v11.Core § 11.13.5.5.10
 
 #### Inherited from
 
@@ -101,7 +110,7 @@ TypeFromSchema.linkEstablished
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:215
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:224
 
 ___
 
@@ -114,7 +123,7 @@ scaled from 0 to 255, from the perspective of the Node reporting the neighbor ta
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.4
+MatterSpecification.v11.Core § 11.13.5.5.6
 
 #### Inherited from
 
@@ -122,7 +131,7 @@ TypeFromSchema.lqiIn
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:191
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:197
 
 ___
 
@@ -133,12 +142,9 @@ ___
 This field shall specify the implementation specific mix of IEEE 802.15.4 PDU receive quality indicators,
 scaled from 0 to 255, from the perspective of the Node specified within the NextHop field.
 
-This field shall specify the duration of time, in seconds, since a frame has been received from the Node for
-which this route table entry corresponds.
-
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.5
+MatterSpecification.v11.Core § 11.13.5.5.7
 
 #### Inherited from
 
@@ -146,7 +152,7 @@ TypeFromSchema.lqiOut
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:201
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:204
 
 ___
 
@@ -159,7 +165,7 @@ entry corresponds.
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.2
+MatterSpecification.v11.Core § 11.13.5.5.4
 
 #### Inherited from
 
@@ -167,7 +173,7 @@ TypeFromSchema.nextHop
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:178
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:184
 
 ___
 
@@ -179,7 +185,7 @@ This Field shall specify the cost of the route to the Node for which this route 
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.3
+MatterSpecification.v11.Core § 11.13.5.5.5
 
 #### Inherited from
 
@@ -187,7 +193,7 @@ TypeFromSchema.pathCost
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:184
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:190
 
 ___
 
@@ -195,13 +201,19 @@ ___
 
 • **rloc16**: `number`
 
+This field shall specify the RLOC16 for the Node for which this route table entry corresponds.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.13.5.5.2
+
 #### Inherited from
 
 TypeFromSchema.rloc16
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:165
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:171
 
 ___
 
@@ -213,7 +225,7 @@ This field shall specify the Router ID for the Node for which this route table e
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.13.5.5.1
+MatterSpecification.v11.Core § 11.13.5.5.3
 
 #### Inherited from
 
@@ -221,4 +233,4 @@ TypeFromSchema.routerId
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:171
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:177

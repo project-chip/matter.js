@@ -15,6 +15,7 @@
 - [FabricManager](../classes/exports_fabric.FabricManager.md)
 - [FabricNotFoundError](../classes/exports_fabric.FabricNotFoundError.md)
 - [FabricTableFullError](../classes/exports_fabric.FabricTableFullError.md)
+- [PublicKeyError](../classes/exports_fabric.PublicKeyError.md)
 
 ### Type Aliases
 
@@ -40,7 +41,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:35
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:39
 
 ___
 
@@ -71,4 +72,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:17
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:21

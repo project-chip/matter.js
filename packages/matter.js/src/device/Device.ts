@@ -11,7 +11,6 @@ import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/Bri
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { ClusterServerHandlers, ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
-import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { AtLeastOne } from "../util/Array.js";
@@ -35,6 +34,16 @@ export const WrapCommandHandler = <C extends Cluster<any, any, any, any, any>>(
     }
     const mergedHandler = {} as any;
     for (const key in handler) {
+        if (
+            key.endsWith("AttributeGetter") ||
+            key.endsWith("AttributeSetter") ||
+            key.endsWith("AttributeValidator") ||
+            key === "initializeClusterServer" ||
+            key === "destroyClusterServer"
+        ) {
+            mergedHandler[key] = (handler as any)[key];
+            continue;
+        }
         mergedHandler[key] = async (...args: any[]) => {
             if (commandHandler.hasHandler(key)) {
                 return await commandHandler.executeHandler(key, ...args);
@@ -104,14 +113,11 @@ export class PairedDevice extends Endpoint {
  * Root endpoint of a device. This is used internally and not needed to be instanced by the user.
  */
 export class RootEndpoint extends Endpoint {
-    readonly deviceType: DeviceTypeId;
-
     /**
      * Create a new RootEndpoint instance. This is automatically instanced by the CommissioningServer class.
      */
     constructor() {
         super([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
-        this.deviceType = DeviceTypes.ROOT.code;
     }
 
     /**
@@ -164,7 +170,6 @@ export class RootEndpoint extends Endpoint {
  * Base class for all devices. This class should be extended by all devices.
  */
 export class Device extends Endpoint {
-    readonly deviceType: number;
     protected commandHandler = new NamedHandler<any>();
 
     /**
@@ -178,7 +183,6 @@ export class Device extends Endpoint {
             throw new NotImplementedError("MatterNode devices are not supported");
         }
         super([definition], options);
-        this.deviceType = definition.code;
         if (definition.deviceClass === DeviceClasses.Simple || definition.deviceClass === DeviceClasses.Client) {
             this.addClusterServer(
                 ClusterServer(

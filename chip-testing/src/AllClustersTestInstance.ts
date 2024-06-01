@@ -149,7 +149,10 @@ export class AllClustersTestInstance implements TestInstance {
                 },
                 productDescription: {
                     name: this.appName,
-                    deviceType: DeviceTypeId(0xffff),
+                    deviceType: DeviceTypeId(0xbfff),
+                },
+                accessControl: {
+                    extension: [],
                 },
                 administratorCommissioning: {
                     windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,

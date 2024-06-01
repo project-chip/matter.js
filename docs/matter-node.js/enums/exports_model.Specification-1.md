@@ -13,6 +13,7 @@ The Matter specification documents.
 - [Cluster](exports_model.Specification-1.md#cluster)
 - [Core](exports_model.Specification-1.md#core)
 - [Device](exports_model.Specification-1.md#device)
+- [Namespace](exports_model.Specification-1.md#namespace)
 
 ## Enumeration Members
 
@@ -43,3 +44,13 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/model/definitions/Specification.d.ts:12
+
+___
+
+### Namespace
+
+• **Namespace** = ``"namespace"``
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/definitions/Specification.d.ts:13

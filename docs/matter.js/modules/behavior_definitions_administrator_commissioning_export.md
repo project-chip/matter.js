@@ -46,9 +46,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts#L80)
+[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts:69](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts#L69)
 
-[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts#L167)
+[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts:145](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts#L145)
 
 ___
 
@@ -74,24 +74,13 @@ The commissioning into a new Fabric completes when the Node successfully receive
 see Section 5.5, “Commissioning Flows”. The new Administrator shall discover the Node on the IP network using
 DNS-based Service Discovery (DNS-SD) for commissioning.
 
-This field shall specify the time in seconds during which commissioning session establishment is allowed by the
-Node. This is known as Open Basic Commissioning Window (OBCW). This timeout shall follow guidance as specified in
-Announcement Duration.
-
-When a Node receives the Open Basic Commissioning Window command, it shall begin advertising on DNS-SD as described
-in Section 4.3.1, “Commissionable Node Discovery” and for a time period as described in Section 11.18.8.2.1,
-“CommissioningTimeout Field”. When the command is received by a SED, it shall enter into active mode and set its
-fast-polling interval to SLEEPY_AC
-
-TIVE_INTERVAL for at least the entire duration of the CommissioningTimeout.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.18.8.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts:78](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts#L78)
+[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts:67](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts#L67)
 
 ___
 
@@ -133,7 +122,7 @@ MatterSpecification.v11.Core § 11.18.8.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts#L44)
+[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts:44](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningInterface.ts#L44)
 
 ## Variables
 
@@ -148,8 +137,8 @@ features using AdministratorCommissioningBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts#L20)
+[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts#L20)
 
-[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts#L25)
+[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts#L25)
 
-[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts#L27)
+[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts:27](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningBehavior.ts#L27)

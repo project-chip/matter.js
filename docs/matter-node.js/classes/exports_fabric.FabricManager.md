@@ -21,6 +21,7 @@
 ### Methods
 
 - [addFabric](exports_fabric.FabricManager.md#addfabric)
+- [findByKeypair](exports_fabric.FabricManager.md#findbykeypair)
 - [findFabricFromDestinationId](exports_fabric.FabricManager.md#findfabricfromdestinationid)
 - [getFabrics](exports_fabric.FabricManager.md#getfabrics)
 - [getNextFabricIndex](exports_fabric.FabricManager.md#getnextfabricindex)
@@ -48,7 +49,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:25
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:26
 
 ## Properties
 
@@ -58,7 +59,7 @@ packages/matter.js/dist/esm/fabric/FabricManager.d.ts:25
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:24
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:25
 
 ## Accessors
 
@@ -78,7 +79,7 @@ packages/matter.js/dist/esm/fabric/FabricManager.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:27
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:28
 
 ## Methods
 
@@ -98,7 +99,27 @@ packages/matter.js/dist/esm/fabric/FabricManager.d.ts:27
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:34
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:35
+
+___
+
+### findByKeypair
+
+▸ **findByKeypair**(`keypair`): `undefined` \| [`Fabric`](exports_fabric.Fabric.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `keypair` | [`Key`](../interfaces/crypto_export.Key.md) |
+
+#### Returns
+
+`undefined` \| [`Fabric`](exports_fabric.Fabric.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:39
 
 ___
 
@@ -119,7 +140,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:37
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:38
 
 ___
 
@@ -133,7 +154,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:36
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:37
 
 ___
 
@@ -147,7 +168,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:32
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:33
 
 ___
 
@@ -161,7 +182,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:26
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:27
 
 ___
 
@@ -175,7 +196,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:33
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:34
 
 ___
 
@@ -195,7 +216,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:35
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:36
 
 ___
 
@@ -215,7 +236,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:39
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:41
 
 ___
 
@@ -235,4 +256,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:38
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:40

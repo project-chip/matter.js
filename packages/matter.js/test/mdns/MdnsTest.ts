@@ -52,7 +52,7 @@ const NODE_ID = NodeId(BigInt(1));
         },
     ];
     if (testIpv4Enabled && serverHasIpv4Addresses) {
-        IPDnsRecords.unshift({
+        IPDnsRecords.push({
             flushCache: false,
             name: "00B0D063C2260000.local",
             recordType: 1,

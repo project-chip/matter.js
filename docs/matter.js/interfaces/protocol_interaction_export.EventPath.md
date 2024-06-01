@@ -11,6 +11,7 @@
 - [clusterId](protocol_interaction_export.EventPath.md#clusterid)
 - [endpointId](protocol_interaction_export.EventPath.md#endpointid)
 - [eventId](protocol_interaction_export.EventPath.md#eventid)
+- [nodeId](protocol_interaction_export.EventPath.md#nodeid)
 
 ## Properties
 
@@ -20,7 +21,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L87)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:97](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L97)
 
 ___
 
@@ -30,7 +31,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L86)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:96](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L96)
 
 ___
 
@@ -40,4 +41,14 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L88)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:98](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L98)
+
+___
+
+### nodeId
+
+• `Optional` **nodeId**: [`NodeId`](../modules/datatype_export.md#nodeid)
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:95](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L95)

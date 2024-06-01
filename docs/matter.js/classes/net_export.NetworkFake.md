@@ -18,7 +18,8 @@
 
 ### Properties
 
-- [ips](net_export.NetworkFake.md#ips)
+- [ipV4](net_export.NetworkFake.md#ipv4)
+- [ipV6](net_export.NetworkFake.md#ipv6)
 - [mac](net_export.NetworkFake.md#mac)
 - [get](net_export.NetworkFake.md#get)
 
@@ -52,17 +53,27 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/NetworkFake.ts:13](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/NetworkFake.ts#L13)
+[packages/matter.js/src/net/fake/NetworkFake.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/fake/NetworkFake.ts#L17)
 
 ## Properties
 
-### ips
+### ipV4
 
-• `Private` `Readonly` **ips**: `string`[]
+• `Private` `Readonly` **ipV4**: `string`[]
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/NetworkFake.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/NetworkFake.ts#L15)
+[packages/matter.js/src/net/fake/NetworkFake.ts:14](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/fake/NetworkFake.ts#L14)
+
+___
+
+### ipV6
+
+• `Private` `Readonly` **ipV6**: `string`[]
+
+#### Defined in
+
+[packages/matter.js/src/net/fake/NetworkFake.ts:15](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/fake/NetworkFake.ts#L15)
 
 ___
 
@@ -72,7 +83,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/NetworkFake.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/NetworkFake.ts#L14)
+[packages/matter.js/src/net/fake/NetworkFake.ts:18](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/fake/NetworkFake.ts#L18)
 
 ___
 
@@ -94,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/Network.ts#L14)
+[packages/matter.js/src/net/Network.ts:58](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/Network.ts#L58)
 
 ## Methods
 
@@ -112,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/Network.ts#L22)
+[packages/matter.js/src/net/Network.ts:66](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/Network.ts#L66)
 
 ___
 
@@ -136,13 +147,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/NetworkFake.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/NetworkFake.ts#L28)
+[packages/matter.js/src/net/fake/NetworkFake.ts:34](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/fake/NetworkFake.ts#L34)
 
 ___
 
 ### getIpMac
 
-▸ **getIpMac**(`_netInterface`): `Object`
+▸ **getIpMac**(`_netInterface`): [`NetworkInterfaceDetails`](../modules/net_export.md#networkinterfacedetails)
 
 #### Parameters
 
@@ -152,12 +163,7 @@ ___
 
 #### Returns
 
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `ips` | `string`[] |
-| `mac` | `string` |
+[`NetworkInterfaceDetails`](../modules/net_export.md#networkinterfacedetails)
 
 #### Overrides
 
@@ -165,17 +171,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/NetworkFake.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/NetworkFake.ts#L24)
+[packages/matter.js/src/net/fake/NetworkFake.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/fake/NetworkFake.ts#L30)
 
 ___
 
 ### getNetInterfaces
 
-▸ **getNetInterfaces**(): `string`[]
+▸ **getNetInterfaces**(): [`NetworkInterface`](../modules/net_export.md#networkinterface)[]
 
 #### Returns
 
-`string`[]
+[`NetworkInterface`](../modules/net_export.md#networkinterface)[]
 
 #### Overrides
 
@@ -183,4 +189,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/NetworkFake.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/fake/NetworkFake.ts#L20)
+[packages/matter.js/src/net/fake/NetworkFake.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/fake/NetworkFake.ts#L26)

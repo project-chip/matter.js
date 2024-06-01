@@ -56,34 +56,26 @@
 - [BITS\_PADDING](codec_export.md#bits_padding)
 - [BYTES\_KEY](codec_export.md#bytes_key)
 - [ELEMENTS\_KEY](codec_export.md#elements_key)
-- [EcdsaWithSHA256\_X962](codec_export.md#ecdsawithsha256_x962)
-- [KeyUsage\_Signature\_ContentCommited\_X509](codec_export.md#keyusage_signature_contentcommited_x509)
-- [KeyUsage\_Signature\_X509](codec_export.md#keyusage_signature_x509)
 - [MAX\_MDNS\_MESSAGE\_SIZE](codec_export.md#max_mdns_message_size)
 - [MAX\_MESSAGE\_SIZE](codec_export.md#max_message_size)
 - [OBJECT\_ID\_KEY](codec_export.md#object_id_key)
-- [SHA256\_CMS](codec_export.md#sha256_cms)
+- [RAW\_DATA\_KEY](codec_export.md#raw_data_key)
 - [TAG\_ID\_KEY](codec_export.md#tag_id_key)
+- [TYPE\_OVERRIDE\_KEY](codec_export.md#type_override_key)
 
 ### Functions
 
 - [AAAARecord](codec_export.md#aaaarecord)
 - [ARecord](codec_export.md#arecord)
-- [AuthorityKeyIdentifier\_X509](codec_export.md#authoritykeyidentifier_x509)
-- [BasicConstraints\_X509](codec_export.md#basicconstraints_x509)
 - [BitByteArray](codec_export.md#bitbytearray)
 - [ContextTagged](codec_export.md#contexttagged)
 - [ContextTaggedBytes](codec_export.md#contexttaggedbytes)
+- [DatatypeOverride](codec_export.md#datatypeoverride)
 - [DerObject](codec_export.md#derobject)
-- [ExtendedKeyUsage\_X509](codec_export.md#extendedkeyusage_x509)
 - [ObjectId](codec_export.md#objectid)
-- [OrganisationName\_X520](codec_export.md#organisationname_x520)
-- [Pkcs7Data](codec_export.md#pkcs7data)
-- [Pkcs7SignedData](codec_export.md#pkcs7signeddata)
 - [PtrRecord](codec_export.md#ptrrecord)
-- [PublicKeyEcPrime256v1\_X962](codec_export.md#publickeyecprime256v1_x962)
+- [RawBytes](codec_export.md#rawbytes)
 - [SrvRecord](codec_export.md#srvrecord)
-- [SubjectKeyIdentifier\_X509](codec_export.md#subjectkeyidentifier_x509)
 - [TxtRecord](codec_export.md#txtrecord)
 
 ## Type Aliases
@@ -103,7 +95,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L56)
+[packages/matter.js/src/codec/DerCodec.ts:71](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L71)
 
 ___
 
@@ -124,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DnsCodec.ts#L88)
+[packages/matter.js/src/codec/DnsCodec.ts:88](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DnsCodec.ts#L88)
 
 ___
 
@@ -134,7 +126,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:97](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DnsCodec.ts#L97)
+[packages/matter.js/src/codec/DnsCodec.ts:97](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DnsCodec.ts#L97)
 
 ___
 
@@ -153,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:72](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DnsCodec.ts#L72)
+[packages/matter.js/src/codec/DnsCodec.ts:72](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DnsCodec.ts#L72)
 
 ___
 
@@ -180,7 +172,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DnsCodec.ts#L79)
+[packages/matter.js/src/codec/DnsCodec.ts:79](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DnsCodec.ts#L79)
 
 ___
 
@@ -199,7 +191,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:65](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DnsCodec.ts#L65)
+[packages/matter.js/src/codec/DnsCodec.ts:65](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DnsCodec.ts#L65)
 
 ## Variables
 
@@ -209,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L15)
+[packages/matter.js/src/codec/DerCodec.ts:16](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L16)
 
 ___
 
@@ -219,7 +211,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:13](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L13)
+[packages/matter.js/src/codec/DerCodec.ts:14](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L14)
 
 ___
 
@@ -229,37 +221,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L14)
-
-___
-
-### EcdsaWithSHA256\_X962
-
-• `Const` **EcdsaWithSHA256\_X962**: `any`
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:218](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L218)
-
-___
-
-### KeyUsage\_Signature\_ContentCommited\_X509
-
-• `Const` **KeyUsage\_Signature\_ContentCommited\_X509**: `any`
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:239](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L239)
-
-___
-
-### KeyUsage\_Signature\_X509
-
-• `Const` **KeyUsage\_Signature\_X509**: `any`
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:235](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L235)
+[packages/matter.js/src/codec/DerCodec.ts:15](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L15)
 
 ___
 
@@ -272,7 +234,7 @@ when needed.
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DnsCodec.ts#L17)
+[packages/matter.js/src/codec/DnsCodec.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DnsCodec.ts#L17)
 
 ___
 
@@ -286,7 +248,7 @@ MatterSpecification.v12.Core § 4.4.4
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/MessageCodec.ts#L16)
+[packages/matter.js/src/codec/MessageCodec.ts:16](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/MessageCodec.ts#L16)
 
 ___
 
@@ -296,17 +258,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:11](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L11)
+[packages/matter.js/src/codec/DerCodec.ts:12](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L12)
 
 ___
 
-### SHA256\_CMS
+### RAW\_DATA\_KEY
 
-• `Const` **SHA256\_CMS**: `any`
+• `Const` **RAW\_DATA\_KEY**: ``"_raw"``
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:219](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L219)
+[packages/matter.js/src/codec/DerCodec.ts:18](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L18)
 
 ___
 
@@ -316,7 +278,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:12](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L12)
+[packages/matter.js/src/codec/DerCodec.ts:13](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L13)
+
+___
+
+### TYPE\_OVERRIDE\_KEY
+
+• `Const` **TYPE\_OVERRIDE\_KEY**: ``"_type"``
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L17)
 
 ## Functions
 
@@ -339,7 +311,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DnsCodec.ts#L35)
+[packages/matter.js/src/codec/DnsCodec.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DnsCodec.ts#L35)
 
 ___
 
@@ -362,47 +334,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DnsCodec.ts#L27)
-
-___
-
-### AuthorityKeyIdentifier\_X509
-
-▸ **AuthorityKeyIdentifier_X509**(`identifier`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `identifier` | `Uint8Array` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:223](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L223)
-
-___
-
-### BasicConstraints\_X509
-
-▸ **BasicConstraints_X509**(`constraints`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `constraints` | `any` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:225](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L225)
+[packages/matter.js/src/codec/DnsCodec.ts:27](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DnsCodec.ts#L27)
 
 ___
 
@@ -429,7 +361,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L42)
+[packages/matter.js/src/codec/DerCodec.ts:50](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L50)
 
 ___
 
@@ -455,7 +387,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L47)
+[packages/matter.js/src/codec/DerCodec.ts:55](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L55)
 
 ___
 
@@ -481,7 +413,33 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L51)
+[packages/matter.js/src/codec/DerCodec.ts:59](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L59)
+
+___
+
+### DatatypeOverride
+
+▸ **DatatypeOverride**(`type`, `value`): `Object`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `type` | [`DerType`](../enums/codec_export.DerType.md) |
+| `value` | `any` |
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `_raw` | `any` |
+| `_type` | [`DerType`](../enums/codec_export.DerType.md) |
+
+#### Defined in
+
+[packages/matter.js/src/codec/DerCodec.ts:63](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L63)
 
 ___
 
@@ -502,29 +460,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L41)
-
-___
-
-### ExtendedKeyUsage\_X509
-
-▸ **ExtendedKeyUsage_X509**(`«destructured»`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `clientAuth` | `boolean` |
-| › `serverAuth` | `boolean` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:227](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L227)
+[packages/matter.js/src/codec/DerCodec.ts:49](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L49)
 
 ___
 
@@ -549,67 +485,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L37)
-
-___
-
-### OrganisationName\_X520
-
-▸ **OrganisationName_X520**(`name`): `any`[]
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-
-#### Returns
-
-`any`[]
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:220](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L220)
-
-___
-
-### Pkcs7Data
-
-▸ **Pkcs7Data**(`data`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `data` | `any` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:243](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L243)
-
-___
-
-### Pkcs7SignedData
-
-▸ **Pkcs7SignedData**(`data`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `data` | `any` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:244](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L244)
+[packages/matter.js/src/codec/DerCodec.ts:45](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L45)
 
 ___
 
@@ -632,19 +508,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DnsCodec.ts#L19)
+[packages/matter.js/src/codec/DnsCodec.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DnsCodec.ts#L19)
 
 ___
 
-### PublicKeyEcPrime256v1\_X962
+### RawBytes
 
-▸ **PublicKeyEcPrime256v1_X962**(`key`): `Object`
+▸ **RawBytes**(`bytes`): `Object`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `key` | `Uint8Array` |
+| `bytes` | `Uint8Array` |
 
 #### Returns
 
@@ -652,21 +528,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `bytes` | \{ `_bytes`: `Uint8Array` = data; `_padding`: `number` = padding; `_tag`: `number`  } |
-| `bytes._bytes` | `Uint8Array` |
-| `bytes._padding` | `number` |
-| `bytes._tag` | `number` |
-| `type` | \{ `algorithm`: \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  } ; `curve`: \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  }  } |
-| `type.algorithm` | \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  } |
-| `type.algorithm._bytes` | `Uint8Array` |
-| `type.algorithm._tag` | `number` |
-| `type.curve` | \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  } |
-| `type.curve._bytes` | `Uint8Array` |
-| `type.curve._tag` | `number` |
+| `_bytes` | `Uint8Array` |
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:211](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L211)
+[packages/matter.js/src/codec/DerCodec.ts:67](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DerCodec.ts#L67)
 
 ___
 
@@ -689,27 +555,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DnsCodec.ts#L51)
-
-___
-
-### SubjectKeyIdentifier\_X509
-
-▸ **SubjectKeyIdentifier_X509**(`identifier`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `identifier` | `Uint8Array` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-[packages/matter.js/src/codec/DerCodec.ts:221](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DerCodec.ts#L221)
+[packages/matter.js/src/codec/DnsCodec.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DnsCodec.ts#L51)
 
 ___
 
@@ -732,4 +578,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/codec/DnsCodec.ts#L43)
+[packages/matter.js/src/codec/DnsCodec.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/DnsCodec.ts#L43)

@@ -13,6 +13,10 @@ Matter.js uses this key/value API to manage persistent state.
 
 ## Table of contents
 
+### Properties
+
+- [initialized](storage_export.Storage.md#initialized)
+
 ### Methods
 
 - [clearAll](storage_export.Storage.md#clearall)
@@ -24,6 +28,16 @@ Matter.js uses this key/value API to manage persistent state.
 - [keys](storage_export.Storage.md#keys)
 - [set](storage_export.Storage.md#set)
 - [values](storage_export.Storage.md#values)
+
+## Properties
+
+### initialized
+
+• `Readonly` **initialized**: `boolean`
+
+#### Defined in
+
+[packages/matter.js/src/storage/Storage.ts:16](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/storage/Storage.ts#L16)
 
 ## Methods
 
@@ -43,7 +57,7 @@ Matter.js uses this key/value API to manage persistent state.
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/Storage.ts#L25)
+[packages/matter.js/src/storage/Storage.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/storage/Storage.ts#L26)
 
 ___
 
@@ -57,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/Storage.ts#L17)
+[packages/matter.js/src/storage/Storage.ts:18](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/storage/Storage.ts#L18)
 
 ___
 
@@ -77,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/Storage.ts#L24)
+[packages/matter.js/src/storage/Storage.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/storage/Storage.ts#L25)
 
 ___
 
@@ -98,7 +112,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/Storage.ts#L21)
+[packages/matter.js/src/storage/Storage.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/storage/Storage.ts#L22)
 
 ___
 
@@ -119,7 +133,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/Storage.ts#L18)
+[packages/matter.js/src/storage/Storage.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/storage/Storage.ts#L19)
 
 ___
 
@@ -133,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/Storage.ts#L16)
+[packages/matter.js/src/storage/Storage.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/storage/Storage.ts#L17)
 
 ___
 
@@ -153,7 +167,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/Storage.ts#L22)
+[packages/matter.js/src/storage/Storage.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/storage/Storage.ts#L23)
 
 ___
 
@@ -174,7 +188,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/Storage.ts#L19)
+[packages/matter.js/src/storage/Storage.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/storage/Storage.ts#L20)
 
 ▸ **set**(`contexts`, `key`, `value`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
@@ -192,7 +206,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/Storage.ts#L20)
+[packages/matter.js/src/storage/Storage.ts:21](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/storage/Storage.ts#L21)
 
 ___
 
@@ -212,4 +226,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/storage/Storage.ts#L23)
+[packages/matter.js/src/storage/Storage.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/storage/Storage.ts#L24)

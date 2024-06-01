@@ -16,6 +16,10 @@ Matter.js uses this key/value API to manage persistent state.
 
 - [constructor](storage_export.MaybeAsyncStorage.md#constructor)
 
+### Properties
+
+- [initialized](storage_export.MaybeAsyncStorage.md#initialized)
+
 ### Methods
 
 - [clearAll](storage_export.MaybeAsyncStorage.md#clearall)
@@ -37,6 +41,20 @@ Matter.js uses this key/value API to manage persistent state.
 #### Returns
 
 [`MaybeAsyncStorage`](storage_export.MaybeAsyncStorage.md)
+
+## Properties
+
+### initialized
+
+• `Abstract` **initialized**: `boolean`
+
+#### Implementation of
+
+[Storage](../interfaces/storage_export.Storage.md).[initialized](../interfaces/storage_export.Storage.md#initialized)
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/Storage.d.ts:28
 
 ## Methods
 
@@ -60,7 +78,7 @@ Matter.js uses this key/value API to manage persistent state.
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:36
+packages/matter.js/dist/esm/storage/Storage.d.ts:38
 
 ___
 
@@ -78,7 +96,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:28
+packages/matter.js/dist/esm/storage/Storage.d.ts:30
 
 ___
 
@@ -102,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:35
+packages/matter.js/dist/esm/storage/Storage.d.ts:37
 
 ___
 
@@ -127,7 +145,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:32
+packages/matter.js/dist/esm/storage/Storage.d.ts:34
 
 ___
 
@@ -158,7 +176,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:29
+packages/matter.js/dist/esm/storage/Storage.d.ts:31
 
 ___
 
@@ -176,7 +194,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:27
+packages/matter.js/dist/esm/storage/Storage.d.ts:29
 
 ___
 
@@ -200,7 +218,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:33
+packages/matter.js/dist/esm/storage/Storage.d.ts:35
 
 ___
 
@@ -225,7 +243,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:30
+packages/matter.js/dist/esm/storage/Storage.d.ts:32
 
 ▸ **set**(`contexts`, `key`, `value`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
@@ -247,7 +265,7 @@ packages/matter.js/dist/esm/storage/Storage.d.ts:30
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:31
+packages/matter.js/dist/esm/storage/Storage.d.ts:33
 
 ___
 
@@ -271,4 +289,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/Storage.d.ts:34
+packages/matter.js/dist/esm/storage/Storage.d.ts:36

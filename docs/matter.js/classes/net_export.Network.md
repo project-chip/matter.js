@@ -53,7 +53,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/Network.ts#L14)
+[packages/matter.js/src/net/Network.ts:58](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/Network.ts#L58)
 
 ## Methods
 
@@ -67,7 +67,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/Network.ts#L22)
+[packages/matter.js/src/net/Network.ts:66](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/Network.ts#L66)
 
 ___
 
@@ -87,13 +87,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/Network.ts#L20)
+[packages/matter.js/src/net/Network.ts:64](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/Network.ts#L64)
 
 ___
 
 ### getIpMac
 
-▸ **getIpMac**(`netInterface`): `undefined` \| \{ `ips`: `string`[] ; `mac`: `string`  }
+▸ **getIpMac**(`netInterface`): `undefined` \| [`NetworkInterfaceDetails`](../modules/net_export.md#networkinterfacedetails)
 
 #### Parameters
 
@@ -103,22 +103,28 @@ ___
 
 #### Returns
 
-`undefined` \| \{ `ips`: `string`[] ; `mac`: `string`  }
+`undefined` \| [`NetworkInterfaceDetails`](../modules/net_export.md#networkinterfacedetails)
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/Network.ts#L19)
+[packages/matter.js/src/net/Network.ts:63](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/Network.ts#L63)
 
 ___
 
 ### getNetInterfaces
 
-▸ **getNetInterfaces**(): `string`[]
+▸ **getNetInterfaces**(`configuration?`): [`NetworkInterface`](../modules/net_export.md#networkinterface)[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `configuration?` | [`NetworkInterface`](../modules/net_export.md#networkinterface)[] |
 
 #### Returns
 
-`string`[]
+[`NetworkInterface`](../modules/net_export.md#networkinterface)[]
 
 #### Defined in
 
-[packages/matter.js/src/net/Network.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/net/Network.ts#L18)
+[packages/matter.js/src/net/Network.ts:62](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/net/Network.ts#L62)

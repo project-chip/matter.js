@@ -17,7 +17,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/fixed-label/FixedLabelBehavior.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/fixed-label/FixedLabelBehavior.ts#L17)
+[packages/matter.js/src/behavior/definitions/fixed-label/FixedLabelBehavior.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/fixed-label/FixedLabelBehavior.ts#L17)
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/fixed-label/FixedLabelBehavior.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/fixed-label/FixedLabelBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/fixed-label/FixedLabelBehavior.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/fixed-label/FixedLabelBehavior.ts#L19)

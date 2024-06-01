@@ -19,14 +19,14 @@
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:54
+matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:58
 
 ___
 
 ### path
 
-• **path**: [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`FieldType`](internal_.FieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\<`number`\>\> ; `commandId`: [`FieldType`](internal_.FieldType.md)\<[`CommandId`](../modules/internal_.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\>  }\>
+• **path**: [`CommandPath`](internal_.CommandPath.md)
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:53
+matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:57

@@ -453,7 +453,7 @@ export class InteractionClient {
                         ({ endpointId, clusterId, attribute: { id }, value, dataVersion }) =>
                             `${resolveAttributeName({ endpointId, clusterId, attributeId: id })} = ${Logger.toJSON(
                                 value,
-                            )} (version=${dataVersion}`,
+                            )} (version=${dataVersion})`,
                     )
                     .join(", ")}`,
             );

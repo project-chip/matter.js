@@ -52,7 +52,6 @@ subvalues of logical structs.
 - [conformance](exports_model.PropertyModel.md#conformance)
 - [constraint](exports_model.PropertyModel.md#constraint)
 - [definingModel](exports_model.PropertyModel.md#definingmodel)
-- [deprecated](exports_model.PropertyModel.md#deprecated)
 - [directMetatype](exports_model.PropertyModel.md#directmetatype)
 - [disallowed](exports_model.PropertyModel.md#disallowed)
 - [discriminator](exports_model.PropertyModel.md#discriminator)
@@ -67,6 +66,7 @@ subvalues of logical structs.
 - [effectiveXref](exports_model.PropertyModel.md#effectivexref)
 - [elements](exports_model.PropertyModel.md#elements)
 - [globalBase](exports_model.PropertyModel.md#globalbase)
+- [isDeprecated](exports_model.PropertyModel.md#isdeprecated)
 - [key](exports_model.PropertyModel.md#key)
 - [listEntry](exports_model.PropertyModel.md#listentry)
 - [mandatory](exports_model.PropertyModel.md#mandatory)
@@ -588,26 +588,6 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:67
 
 ___
 
-### deprecated
-
-• `get` **deprecated**(): `boolean`
-
-Is this model deprecated?
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-ValueModel.deprecated
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
-
-___
-
 ### directMetatype
 
 • `get` **directMetatype**(): `undefined` \| [`Metatype`](../enums/exports_model.Metatype-1.md)
@@ -880,6 +860,26 @@ ValueModel.globalBase
 #### Defined in
 
 packages/matter.js/dist/esm/model/models/Model.d.ts:98
+
+___
+
+### isDeprecated
+
+• `get` **isDeprecated**(): `boolean`
+
+Is this model deprecated?
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+ValueModel.isDeprecated
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
 
 ___
 

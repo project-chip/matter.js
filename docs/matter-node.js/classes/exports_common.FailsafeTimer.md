@@ -14,10 +14,8 @@ Manages the failsafe timer associated with a [FailsafeContext](../modules/export
 
 ### Properties
 
+- [#private](exports_common.FailsafeTimer.md##private)
 - [associatedFabric](exports_common.FailsafeTimer.md#associatedfabric)
-- [expiryCallback](exports_common.FailsafeTimer.md#expirycallback)
-- [failsafeTimer](exports_common.FailsafeTimer.md#failsafetimer)
-- [maxCumulativeFailsafeTimer](exports_common.FailsafeTimer.md#maxcumulativefailsafetimer)
 
 ### Methods
 
@@ -47,9 +45,19 @@ Manages the failsafe timer associated with a [FailsafeContext](../modules/export
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:19
+packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:16
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:14
+
+___
 
 ### associatedFabric
 
@@ -59,49 +67,19 @@ packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:19
 
 packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:15
 
-___
-
-### expiryCallback
-
-• `Private` `Readonly` **expiryCallback**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:16
-
-___
-
-### failsafeTimer
-
-• **failsafeTimer**: [`Timer`](../interfaces/time_export.Timer.md)
-
-#### Defined in
-
-packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:17
-
-___
-
-### maxCumulativeFailsafeTimer
-
-• `Private` **maxCumulativeFailsafeTimer**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:18
-
 ## Methods
 
 ### close
 
-▸ **close**(): `void`
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:20
+packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:17
 
 ___
 
@@ -117,7 +95,7 @@ Complete the FailSafe context. This is called when the commissioning is complete
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:26
+packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:23
 
 ___
 
@@ -133,7 +111,7 @@ Expire the FailSafe context. This is called by the timer and can also be called 
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:24
+packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:21
 
 ___
 
@@ -156,4 +134,4 @@ Handle "Re-Arming" an existing FailSafe context to extend the timer, expire or f
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:22
+packages/matter.js/dist/esm/common/FailsafeTimer.d.ts:19

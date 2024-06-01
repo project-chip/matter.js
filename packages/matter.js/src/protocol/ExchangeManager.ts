@@ -259,7 +259,7 @@ export class ExchangeManager<ContextT> {
     async deleteExchange(exchangeIndex: number) {
         const exchange = this.exchanges.get(exchangeIndex);
         if (exchange === undefined) {
-            logger.warn(`Exchange with index ${exchangeIndex} to delete not found or already deleted.`);
+            logger.info(`Exchange with index ${exchangeIndex} to delete not found or already deleted.`);
             return;
         }
         const { session } = exchange;

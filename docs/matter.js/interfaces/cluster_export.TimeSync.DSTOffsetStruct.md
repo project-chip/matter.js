@@ -4,10 +4,6 @@
 
 [cluster/export](../modules/cluster_export.md).[TimeSync](../modules/cluster_export.TimeSync.md).DSTOffsetStruct
 
-The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this field will
-accept any values in the int32 range to accommodate potential future legislation that does not fit with these
-assumptions.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.16.6.4
@@ -32,13 +28,21 @@ MatterSpecification.v11.Core § 11.16.6.4
 
 • **offset**: `number`
 
+The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this field will
+accept any values in the int32 range to accommodate potential future legislation that does not fit with
+these assumptions.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.16.6.4.1
+
 #### Inherited from
 
 TypeFromSchema.offset
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L75)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:78](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L78)
 
 ___
 
@@ -50,7 +54,7 @@ The UTC time when the offset shall be applied.
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.16.6.4.1
+MatterSpecification.v11.Core § 11.16.6.4.2
 
 #### Inherited from
 
@@ -58,7 +62,7 @@ TypeFromSchema.validStarting
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L82)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:85](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L85)
 
 ___
 
@@ -71,7 +75,7 @@ time.
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.16.6.4.2
+MatterSpecification.v11.Core § 11.16.6.4.3
 
 #### Inherited from
 
@@ -79,4 +83,4 @@ TypeFromSchema.validUntil
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:93](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L93)

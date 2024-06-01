@@ -12,10 +12,8 @@
 
 ### Properties
 
-- [channels](exports_protocol.ChannelManager.md#channels)
-- [getChannelKey](exports_protocol.ChannelManager.md#getchannelkey)
+- [#private](exports_protocol.ChannelManager.md##private)
 - [getOrCreateAsPaseChannel](exports_protocol.ChannelManager.md#getorcreateaspasechannel)
-- [paseChannels](exports_protocol.ChannelManager.md#pasechannels)
 
 ### Methods
 
@@ -23,6 +21,7 @@
 - [getChannel](exports_protocol.ChannelManager.md#getchannel)
 - [getChannelForSession](exports_protocol.ChannelManager.md#getchannelforsession)
 - [getOrCreateChannel](exports_protocol.ChannelManager.md#getorcreatechannel)
+- [removeAllNodeChannels](exports_protocol.ChannelManager.md#removeallnodechannels)
 - [removeChannel](exports_protocol.ChannelManager.md#removechannel)
 - [setChannel](exports_protocol.ChannelManager.md#setchannel)
 
@@ -30,31 +29,31 @@
 
 ### constructor
 
-• **new ChannelManager**(): [`ChannelManager`](exports_protocol.ChannelManager.md)
+• **new ChannelManager**(`caseSessionsPerFabricAndNode?`): [`ChannelManager`](exports_protocol.ChannelManager.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `caseSessionsPerFabricAndNode?` | `number` |
 
 #### Returns
 
 [`ChannelManager`](exports_protocol.ChannelManager.md)
 
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:17
+
 ## Properties
 
-### channels
+### #private
 
-• `Private` `Readonly` **channels**: `any`
+• `Private` **#private**: `any`
 
 #### Defined in
 
 packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:16
-
-___
-
-### getChannelKey
-
-• `Private` **getChannelKey**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:18
 
 ___
 
@@ -64,17 +63,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:23
-
-___
-
-### paseChannels
-
-• `Private` `Readonly` **paseChannels**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:17
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:26
 
 ## Methods
 
@@ -88,13 +77,13 @@ packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:17
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:25
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:28
 
 ___
 
 ### getChannel
 
-▸ **getChannel**(`fabric`, `nodeId`): [`MessageChannel`](exports_protocol.MessageChannel.md)\<`any`\>
+▸ **getChannel**(`fabric`, `nodeId`, `session?`): [`MessageChannel`](exports_protocol.MessageChannel.md)\<`any`\>
 
 #### Parameters
 
@@ -102,6 +91,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `session?` | [`Session`](exports_session.Session.md)\<`any`\> |
 
 #### Returns
 
@@ -109,13 +99,15 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:20
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:19
 
 ___
 
 ### getChannelForSession
 
 ▸ **getChannelForSession**(`session`): `undefined` \| [`MessageChannel`](exports_protocol.MessageChannel.md)\<`any`\>
+
+Returns the last established session for a Fabric and Node
 
 #### Parameters
 
@@ -129,7 +121,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:21
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:23
 
 ___
 
@@ -150,13 +142,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:24
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:27
 
 ___
 
-### removeChannel
+### removeAllNodeChannels
 
-▸ **removeChannel**(`fabric`, `nodeId`): `Promise`\<`void`\>
+▸ **removeAllNodeChannels**(`fabric`, `nodeId`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -171,7 +163,29 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:22
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:24
+
+___
+
+### removeChannel
+
+▸ **removeChannel**(`fabric`, `nodeId`, `session`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `session` | [`Session`](exports_session.Session.md)\<`any`\> |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:25
 
 ___
 
@@ -193,4 +207,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:19
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:18

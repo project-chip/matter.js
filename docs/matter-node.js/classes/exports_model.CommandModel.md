@@ -53,7 +53,6 @@ A command describes a remote procedure call.
 - [conformance](exports_model.CommandModel.md#conformance)
 - [constraint](exports_model.CommandModel.md#constraint)
 - [definingModel](exports_model.CommandModel.md#definingmodel)
-- [deprecated](exports_model.CommandModel.md#deprecated)
 - [directMetatype](exports_model.CommandModel.md#directmetatype)
 - [disallowed](exports_model.CommandModel.md#disallowed)
 - [discriminator](exports_model.CommandModel.md#discriminator)
@@ -68,6 +67,7 @@ A command describes a remote procedure call.
 - [effectiveXref](exports_model.CommandModel.md#effectivexref)
 - [elements](exports_model.CommandModel.md#elements)
 - [globalBase](exports_model.CommandModel.md#globalbase)
+- [isDeprecated](exports_model.CommandModel.md#isdeprecated)
 - [isRequest](exports_model.CommandModel.md#isrequest)
 - [isResponse](exports_model.CommandModel.md#isresponse)
 - [key](exports_model.CommandModel.md#key)
@@ -720,26 +720,6 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:67
 
 ___
 
-### deprecated
-
-• `get` **deprecated**(): `boolean`
-
-Is this model deprecated?
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-ValueModel.deprecated
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
-
-___
-
 ### directMetatype
 
 • `get` **directMetatype**(): `undefined` \| [`Metatype`](../enums/exports_model.Metatype-1.md)
@@ -1013,6 +993,26 @@ ValueModel.globalBase
 #### Defined in
 
 packages/matter.js/dist/esm/model/models/Model.d.ts:98
+
+___
+
+### isDeprecated
+
+• `get` **isDeprecated**(): `boolean`
+
+Is this model deprecated?
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+ValueModel.isDeprecated
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
 
 ___
 

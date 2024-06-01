@@ -43,9 +43,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts:11](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts#L11)
+[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts:11](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts#L11)
 
-[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts#L36)
+[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts:36](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsInterface.ts#L36)
 
 ## Variables
 
@@ -60,8 +60,8 @@ features using SoftwareDiagnosticsBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts#L20)
+[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts#L20)
 
-[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts#L25)
+[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts#L25)
 
-[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts#L27)
+[packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts:27](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/software-diagnostics/SoftwareDiagnosticsBehavior.ts#L27)

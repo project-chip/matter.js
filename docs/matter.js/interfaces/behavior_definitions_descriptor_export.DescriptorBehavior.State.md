@@ -23,7 +23,7 @@
 
 ### clientList
 
-• **clientList**: [`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>[]
+• **clientList**: [`ClusterId`](../modules/datatype_export.md#clusterid)[]
 
 This attribute shall list each cluster ID for the client clusters present on the endpoint instance.
 
@@ -37,13 +37,13 @@ StateType.clientList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:87](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L87)
 
 ___
 
 ### deviceTypeList
 
-• **deviceTypeList**: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `deviceType`: [`FieldType`](tlv_export.FieldType.md)\<[`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)\<`number`\>\> ; `revision`: [`FieldType`](tlv_export.FieldType.md)\<`number`\>  }\>[]
+• **deviceTypeList**: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `deviceType`: [`FieldType`](tlv_export.FieldType.md)\<[`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)\> ; `revision`: [`FieldType`](tlv_export.FieldType.md)\<`number`\>  }\>[]
 
 This is a list of device types and corresponding revisions declaring endpoint conformance (see
 DeviceTypeStruct). At least one device type entry shall be present.
@@ -62,7 +62,7 @@ StateType.deviceTypeList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L73)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:73](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L73)
 
 ___
 
@@ -84,13 +84,13 @@ StateType.partsList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L96)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:96](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L96)
 
 ___
 
 ### serverList
 
-• **serverList**: [`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>[]
+• **serverList**: [`ClusterId`](../modules/datatype_export.md#clusterid)[]
 
 This attribute shall list each cluster ID for the server clusters present on the endpoint instance.
 
@@ -104,4 +104,4 @@ StateType.serverList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L80)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:80](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L80)

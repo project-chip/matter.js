@@ -27,7 +27,7 @@ Application is running but not visible to the user.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L74)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:74](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L74)
 
 ___
 
@@ -39,7 +39,7 @@ Application is running, is visible to the user, and is the active target for inp
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:69](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L69)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:69](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L69)
 
 ___
 
@@ -51,7 +51,7 @@ Application is running and visible, but is not the active target for input.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L79)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:79](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L79)
 
 ___
 
@@ -63,4 +63,4 @@ Application is not running.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L64)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:64](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L64)

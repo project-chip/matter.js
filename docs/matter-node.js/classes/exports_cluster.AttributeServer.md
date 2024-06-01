@@ -28,8 +28,10 @@ Attribute server for normal attributes that can be read and written.
 
 ### Properties
 
+- [#private](exports_cluster.AttributeServer.md##private)
 - [datasource](exports_cluster.AttributeServer.md#datasource)
 - [defaultValue](exports_cluster.AttributeServer.md#defaultvalue)
+- [delayedChangeData](exports_cluster.AttributeServer.md#delayedchangedata)
 - [endpoint](exports_cluster.AttributeServer.md#endpoint)
 - [getter](exports_cluster.AttributeServer.md#getter)
 - [id](exports_cluster.AttributeServer.md#id)
@@ -44,6 +46,11 @@ Attribute server for normal attributes that can be read and written.
 - [value](exports_cluster.AttributeServer.md#value)
 - [valueChangeListeners](exports_cluster.AttributeServer.md#valuechangelisteners)
 - [valueSetListeners](exports_cluster.AttributeServer.md#valuesetlisteners)
+
+### Accessors
+
+- [readAcl](exports_cluster.AttributeServer.md#readacl)
+- [writeAcl](exports_cluster.AttributeServer.md#writeacl)
 
 ### Methods
 
@@ -62,6 +69,7 @@ Attribute server for normal attributes that can be read and written.
 - [setLocal](exports_cluster.AttributeServer.md#setlocal)
 - [setRemote](exports_cluster.AttributeServer.md#setremote)
 - [subscribe](exports_cluster.AttributeServer.md#subscribe)
+- [triggerDelayedChangeEvents](exports_cluster.AttributeServer.md#triggerdelayedchangeevents)
 - [updated](exports_cluster.AttributeServer.md#updated)
 - [updatedLocal](exports_cluster.AttributeServer.md#updatedlocal)
 - [validateWithSchema](exports_cluster.AttributeServer.md#validatewithschema)
@@ -70,7 +78,7 @@ Attribute server for normal attributes that can be read and written.
 
 ### constructor
 
-• **new AttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `initValue`, `defaultValue`, `datasource`, `getter?`, `setter?`, `validator?`): [`AttributeServer`](exports_cluster.AttributeServer.md)\<`T`\>
+• **new AttributeServer**\<`T`\>(`id`, `name`, `readAcl`, `writeAcl`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `initValue`, `defaultValue`, `datasource`, `getter?`, `setter?`, `validator?`): [`AttributeServer`](exports_cluster.AttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -84,6 +92,8 @@ Attribute server for normal attributes that can be read and written.
 | :------ | :------ | :------ |
 | `id` | [`AttributeId`](../modules/exports_datatype.md#attributeid) | - |
 | `name` | `string` | - |
+| `readAcl` | `undefined` \| [`AccessLevel`](../enums/exports_cluster.AccessLevel.md) | - |
+| `writeAcl` | `undefined` \| [`AccessLevel`](../enums/exports_cluster.AccessLevel.md) | - |
 | `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> | - |
 | `isWritable` | `boolean` | - |
 | `isSubscribable` | `boolean` | - |
@@ -105,9 +115,23 @@ Attribute server for normal attributes that can be read and written.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:135
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:144
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Inherited from
+
+[FixedAttributeServer](exports_cluster.FixedAttributeServer.md).[#private](exports_cluster.FixedAttributeServer.md##private)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:38
+
+___
 
 ### datasource
 
@@ -119,7 +143,7 @@ packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:135
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:67
 
 ___
 
@@ -133,7 +157,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:50
+
+___
+
+### delayedChangeData
+
+• `Protected` `Optional` **delayedChangeData**: [`DelayedChangeData`](../modules/exports_cluster._internal_.md#delayedchangedata)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:143
 
 ___
 
@@ -147,7 +181,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:49
 
 ___
 
@@ -178,7 +212,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:61
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:69
 
 ___
 
@@ -192,7 +226,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:33
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:39
 
 ___
 
@@ -206,7 +240,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:130
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:138
 
 ___
 
@@ -220,7 +254,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:37
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
 
 ___
 
@@ -234,7 +268,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:36
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
 
 ___
 
@@ -248,7 +282,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:34
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:40
 
 ___
 
@@ -262,7 +296,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:38
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
 
 ___
 
@@ -276,7 +310,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:35
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:41
 
 ___
 
@@ -303,7 +337,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:133
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:141
 
 ___
 
@@ -329,7 +363,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:134
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:142
 
 ___
 
@@ -345,7 +379,7 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:48
 
 ___
 
@@ -355,7 +389,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:131
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:139
 
 ___
 
@@ -365,7 +399,43 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:132
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:140
+
+## Accessors
+
+### readAcl
+
+• `get` **readAcl**(): [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Inherited from
+
+FixedAttributeServer.readAcl
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
+
+___
+
+### writeAcl
+
+• `get` **writeAcl**(): [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Inherited from
+
+FixedAttributeServer.writeAcl
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
 
 ## Methods
 
@@ -392,7 +462,7 @@ new value and the version number.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:217
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:227
 
 ___
 
@@ -419,7 +489,7 @@ new value and the old value.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:226
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:236
 
 ___
 
@@ -443,7 +513,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:47
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53
 
 ___
 
@@ -474,7 +544,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:78
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:86
 
 ___
 
@@ -496,7 +566,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:95
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:103
 
 ___
 
@@ -533,7 +603,7 @@ attributes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:86
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:94
 
 ___
 
@@ -558,7 +628,7 @@ internally.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:196
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:206
 
 ___
 
@@ -585,13 +655,13 @@ adjusted before the Device gets announced. Do not use this method to change valu
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:163
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:172
 
 ___
 
 ### processSet
 
-▸ **processSet**(`value`, `session?`, `message?`): `void`
+▸ **processSet**(`value`, `session?`, `message?`, `delayChangeEvents?`): `void`
 
 Helper Method to process the set of a value in a generic way. This method is used internally.
 
@@ -602,6 +672,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 | `value` | `T` |
 | `session?` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `message?` | [`Message`](../interfaces/exports_codec.Message.md) |
+| `delayChangeEvents?` | `boolean` |
 
 #### Returns
 
@@ -609,7 +680,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:191
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:200
 
 ___
 
@@ -635,7 +706,7 @@ Remove an internal listener.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:221
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:231
 
 ___
 
@@ -661,13 +732,13 @@ Remove an external listener.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:235
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:245
 
 ___
 
 ### set
 
-▸ **set**(`value`, `session`, `message?`): `void`
+▸ **set**(`value`, `session`, `message?`, `delayChangeEvents?`): `void`
 
 Set the value of the attribute. This method is used by the Interaction model to write the value of the attribute
 and includes the ACL check. It should not be used locally in the code!
@@ -683,6 +754,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 | `value` | `T` |
 | `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `message?` | [`Message`](../interfaces/exports_codec.Message.md) |
+| `delayChangeEvents?` | `boolean` |
 
 #### Returns
 
@@ -690,7 +762,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:172
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:181
 
 ___
 
@@ -719,13 +791,13 @@ Listeners are called when the value changes (internal listeners) or in any case 
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:187
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:196
 
 ___
 
 ### setRemote
 
-▸ **setRemote**(`value`, `session`, `message?`): `void`
+▸ **setRemote**(`value`, `session`, `message?`, `delayChangeEvents?`): `void`
 
 Method that contains the logic to set a value "from remote" (e.g. from a client).
 
@@ -736,6 +808,7 @@ Method that contains the logic to set a value "from remote" (e.g. from a client)
 | `value` | `T` |
 | `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `message?` | [`Message`](../interfaces/exports_codec.Message.md) |
+| `delayChangeEvents?` | `boolean` |
 
 #### Returns
 
@@ -743,7 +816,7 @@ Method that contains the logic to set a value "from remote" (e.g. from a client)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:176
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:185
 
 ___
 
@@ -770,7 +843,21 @@ new value and the old value. This method is a convenient alias for addValueSetLi
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:231
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:241
+
+___
+
+### triggerDelayedChangeEvents
+
+▸ **triggerDelayedChangeEvents**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:201
 
 ___
 
@@ -796,7 +883,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:204
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:214
 
 ___
 
@@ -816,7 +903,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:212
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:222
 
 ___
 
@@ -840,4 +927,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:46
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52

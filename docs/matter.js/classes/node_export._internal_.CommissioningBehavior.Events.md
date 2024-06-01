@@ -33,6 +33,7 @@ To maintain type safety, implementers define events as observable child properti
 
 ### Methods
 
+- [[dispose]](node_export._internal_.CommissioningBehavior.Events.md#[dispose])
 - [addListener](node_export._internal_.CommissioningBehavior.Events.md#addlistener)
 - [emit](node_export._internal_.CommissioningBehavior.Events.md#emit)
 - [removeListener](node_export._internal_.CommissioningBehavior.Events.md#removelistener)
@@ -59,7 +60,7 @@ To maintain type safety, implementers define events as observable child properti
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:278](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L278)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:302](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L302)
 
 ___
 
@@ -69,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:279](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L279)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:303](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L303)
 
 ___
 
@@ -79,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:280](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L280)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:304](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L304)
 
 ## Accessors
 
@@ -97,9 +98,27 @@ EventEmitter.eventNames
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:332](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L332)
+[packages/matter.js/src/util/Observable.ts:370](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L370)
 
 ## Methods
+
+### [dispose]
+
+▸ **[dispose]**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EventEmitter](util_export.EventEmitter-1.md).[[dispose]](util_export.EventEmitter-1.md#[dispose])
+
+#### Defined in
+
+[packages/matter.js/src/util/Observable.ts:374](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L374)
+
+___
 
 ### addListener
 
@@ -130,7 +149,7 @@ EventEmitter.eventNames
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:316](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L316)
+[packages/matter.js/src/util/Observable.ts:354](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L354)
 
 ___
 
@@ -163,7 +182,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:312](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L312)
+[packages/matter.js/src/util/Observable.ts:350](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L350)
 
 ___
 
@@ -196,4 +215,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:324](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L324)
+[packages/matter.js/src/util/Observable.ts:362](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L362)

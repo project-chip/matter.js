@@ -65,7 +65,7 @@ no guarantee they will exist beyond the lifecycle of a single transaction.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L35)
+[packages/matter.js/src/endpoint/Agent.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L35)
 
 ## Properties
 
@@ -75,7 +75,7 @@ no guarantee they will exist beyond the lifecycle of a single transaction.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L33)
+[packages/matter.js/src/endpoint/Agent.ts:33](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L33)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L32)
+[packages/matter.js/src/endpoint/Agent.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L32)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L31)
+[packages/matter.js/src/endpoint/Agent.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L31)
 
 ## Accessors
 
@@ -111,7 +111,7 @@ Access the agent's [ActionContext](../interfaces/behavior_cluster_export._intern
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L60)
+[packages/matter.js/src/endpoint/Agent.ts:60](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L60)
 
 ___
 
@@ -127,7 +127,7 @@ Access the [Endpoint](endpoint_export.Endpoint-1.md) this agent acts on behalf o
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L43)
+[packages/matter.js/src/endpoint/Agent.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L43)
 
 ___
 
@@ -143,7 +143,7 @@ Access an [Agent](endpoint_export.Agent-1.md) for this agent's owner.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L50)
+[packages/matter.js/src/endpoint/Agent.ts:50](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L50)
 
 ## Methods
 
@@ -163,7 +163,7 @@ Access an [Agent](endpoint_export.Agent-1.md) for this agent's owner.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:150](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L150)
+[packages/matter.js/src/endpoint/Agent.ts:150](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L150)
 
 ___
 
@@ -187,7 +187,7 @@ Functionally identical to [load](endpoint_export.Agent-1.md#load) but has no ret
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L106)
+[packages/matter.js/src/endpoint/Agent.ts:106](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L106)
 
 ___
 
@@ -221,7 +221,7 @@ Property access is available in TypeScript when the set of behaviors is defined 
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L80)
+[packages/matter.js/src/endpoint/Agent.ts:80](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L80)
 
 ___
 
@@ -249,7 +249,7 @@ this is InstanceType\<BehaviorT\>
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L67)
+[packages/matter.js/src/endpoint/Agent.ts:67](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L67)
 
 ___
 
@@ -271,7 +271,7 @@ Determine whether a behavior is loaded (does not validate class, only by ID).
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:120](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L120)
+[packages/matter.js/src/endpoint/Agent.ts:120](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L120)
 
 ___
 
@@ -300,7 +300,7 @@ if the behavior is not yet initialized.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:92](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L92)
+[packages/matter.js/src/endpoint/Agent.ts:92](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L92)
 
 ___
 
@@ -329,7 +329,7 @@ Add support for a [Behavior.Type](../interfaces/behavior_export.Behavior.Type.md
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:113](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L113)
+[packages/matter.js/src/endpoint/Agent.ts:113](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L113)
 
 ___
 
@@ -343,7 +343,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:124](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L124)
+[packages/matter.js/src/endpoint/Agent.ts:124](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L124)
 
 ___
 
@@ -372,4 +372,4 @@ Create a new [Agent](endpoint_export.Agent-1.md) that supports the specified beh
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Agent.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Agent.ts#L131)
+[packages/matter.js/src/endpoint/Agent.ts:131](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/Agent.ts#L131)

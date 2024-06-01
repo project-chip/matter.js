@@ -153,7 +153,7 @@ ___
 
 ### targets
 
-• **targets**: ``null`` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `cluster`: [`FieldType`](exports_tlv.FieldType.md)\<``null`` \| [`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>\> ; `deviceType`: [`FieldType`](exports_tlv.FieldType.md)\<``null`` \| [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)\<`number`\>\> ; `endpoint`: [`FieldType`](exports_tlv.FieldType.md)\<``null`` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\>  }\>[]
+• **targets**: ``null`` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `cluster`: [`FieldType`](exports_tlv.FieldType.md)\<``null`` \| [`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `deviceType`: [`FieldType`](exports_tlv.FieldType.md)\<``null`` \| [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)\> ; `endpoint`: [`FieldType`](exports_tlv.FieldType.md)\<``null`` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\>  }\>[]
 
 The targets field shall specify a list of AccessControlTargetStruct, which define the clusters on this Node
 to which this Access Control Entry grants access.

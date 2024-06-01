@@ -29,13 +29,19 @@ MatterSpecification.v11.Core § 11.11.8.2
 
 • **current**: [`RadioFault`](../enums/cluster_export.GeneralDiagnostics.RadioFault.md)[]
 
+This field shall represent the set of faults currently detected, as per Section 11.11.4.2, “RadioFaultEnum”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.11.8.2.1
+
 #### Inherited from
 
 TypeFromSchema.current
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:405](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L405)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:410](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L410)
 
 ___
 
@@ -43,10 +49,17 @@ ___
 
 • **previous**: [`RadioFault`](../enums/cluster_export.GeneralDiagnostics.RadioFault.md)[]
 
+This field shall represent the set of faults detected prior to this change event, as per Section 11.11.4.2,
+“RadioFaultEnum”.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.11.8.2.2
+
 #### Inherited from
 
 TypeFromSchema.previous
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:406](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L406)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:418](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L418)

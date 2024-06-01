@@ -7,8 +7,8 @@
 import * as assert from "assert";
 
 import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
+import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
 import {
-    AccessControl,
     AdministratorCommissioning,
     BasicInformation,
     ClusterServer,
@@ -87,6 +87,7 @@ describe("Integration Test", () => {
     let commissioningController2: CommissioningController;
     let commissioningServer: CommissioningServer;
     let commissioningServer2: CommissioningServer;
+    let commissioningServer2CertificateProviderCalled = false;
     let onOffLightDeviceServer: OnOffLightDevice;
     let serverMdnsScanner: MdnsScanner;
     let clientMdnsScanner: MdnsScanner;
@@ -728,7 +729,7 @@ describe("Integration Test", () => {
             assert.ok(basicInfoCluster);
 
             await assert.rejects(async () => await basicInfoCluster.attributes.location.set("XXX"), {
-                message: "(Validation/135) String is too long: 3, max 2.",
+                message: '(Validation/135) String "XXX" is too long: 3, max 2.',
             });
         });
 
@@ -829,6 +830,16 @@ describe("Integration Test", () => {
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel4");
             assert.equal(await basicInfoCluster.attributes.location.get(true), "GB");
+
+            // Wait for subscription updates to arrive
+            const { promise, resolver } = createPromise<string>();
+            const callback = (value: string) => resolver(value);
+
+            basicInfoCluster.attributes.nodeLabel.addListener(callback);
+
+            await MockTime.advance(60);
+            await MockTime.advance(60);
+            await promise;
         });
     });
 
@@ -1094,7 +1105,7 @@ describe("Integration Test", () => {
             const updateReport = await updatePromise;
             assert.deepEqual(updateReport, {
                 value: {
-                    eventNumber: EventNumber(3),
+                    eventNumber: EventNumber(4),
                     priority: 1,
                     epochTimestamp: BigInt(startTime + 200), // Triggered directly
                     data: {
@@ -1115,7 +1126,7 @@ describe("Integration Test", () => {
             const updateReport2 = await updatePromise2;
             assert.deepEqual(updateReport2, {
                 value: {
-                    eventNumber: EventNumber(3),
+                    eventNumber: EventNumber(4),
                     priority: 1,
                     epochTimestamp: BigInt(startTime + 200), // Triggered directly
                     data: {
@@ -1135,26 +1146,6 @@ describe("Integration Test", () => {
             assert.equal(sessionInfo.length, 1);
             assert.ok(sessionInfo[0].fabric);
             assert.ok(sessionInfo[0].numberOfActiveSubscriptions >= 5);
-        });
-    });
-
-    describe("Access Control server fabric scoped attribute storage", () => {
-        it("set empty acl", async () => {
-            const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
-            assert.ok(node);
-            const accessControlCluster = node.getRootClusterClient(AccessControl.Cluster);
-            assert.ok(accessControlCluster);
-            await accessControlCluster.attributes.acl.set([]);
-            await accessControlCluster.setAclAttribute([]);
-
-            const acl = await accessControlCluster.attributes.acl.get();
-            const acl2 = await accessControlCluster.getAclAttribute();
-
-            assert.ok(Array.isArray(acl));
-            assert.ok(Array.isArray(acl2));
-            assert.equal(acl.length, 0);
-            assert.equal(acl2.length, 0);
         });
     });
 
@@ -1305,6 +1296,19 @@ describe("Integration Test", () => {
                     commissioningChangedCallsServer2.push({ fabricIndex, time: MockTime.nowMs() }),
                 activeSessionsChangedCallback: (fabricIndex: FabricIndex) =>
                     sessionChangedCallsServer2.push({ fabricIndex, time: MockTime.nowMs() }),
+                certificates: async () => {
+                    const paa = new AttestationCertificateManager(vendorId);
+                    const { keyPair: dacKeyPair, dac } = paa.getDACert(productId);
+                    const declaration = CertificationDeclarationManager.generate(vendorId, productId);
+
+                    commissioningServer2CertificateProviderCalled = true;
+                    return {
+                        privateKey: dacKeyPair.privateKey,
+                        certificate: dac,
+                        intermediateCertificate: paa.getPAICert(),
+                        declaration,
+                    };
+                },
             });
 
             onOffLightDeviceServer = new OnOffLightDevice();
@@ -1320,6 +1324,7 @@ describe("Integration Test", () => {
 
             assert.equal(commissioningChangedCallsServer2.length, 0);
             assert.equal(sessionChangedCallsServer2.length, 0);
+            assert.equal(commissioningServer2CertificateProviderCalled, false);
         });
 
         it("the client commissions the second device", async () => {
@@ -1348,6 +1353,7 @@ describe("Integration Test", () => {
 
             assert.deepEqual(commissioningController.getCommissionedNodes(), [...existingNodes, node.nodeId]);
 
+            assert.equal(commissioningServer2CertificateProviderCalled, true);
             assert.equal(commissioningChangedCallsServer2.length, 1);
             assert.equal(sessionChangedCallsServer2.length, 1);
             assert.equal(sessionChangedCallsServer2[0].fabricIndex, FabricIndex(1));

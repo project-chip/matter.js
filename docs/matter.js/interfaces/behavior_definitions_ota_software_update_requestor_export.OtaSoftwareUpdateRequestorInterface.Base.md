@@ -22,9 +22,6 @@ This command shall be scoped to the accessing fabric.
 
 If the accessing fabric index is 0, this command shall fail with an UNSUPPORTED_ACCESS status code.
 
-This field shall contain the Node ID of a Node implementing the OTA Provider cluster server, on the
-accessing fabric.
-
 #### Parameters
 
 | Name | Type |
@@ -41,4 +38,4 @@ MatterSpecification.v11.Core § 11.19.7.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/ota-software-update-requestor/OtaSoftwareUpdateRequestorInterface.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/ota-software-update-requestor/OtaSoftwareUpdateRequestorInterface.ts#L40)
+[packages/matter.js/src/behavior/definitions/ota-software-update-requestor/OtaSoftwareUpdateRequestorInterface.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/ota-software-update-requestor/OtaSoftwareUpdateRequestorInterface.ts#L35)

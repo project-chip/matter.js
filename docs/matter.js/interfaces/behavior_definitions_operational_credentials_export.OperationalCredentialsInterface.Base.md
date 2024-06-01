@@ -49,7 +49,7 @@ MatterSpecification.v11.Core § 11.17.6.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:361](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L361)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:309](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L309)
 
 ___
 
@@ -97,7 +97,7 @@ MatterSpecification.v11.Core § 11.17.6.13
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:535](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L535)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:430](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L430)
 
 ___
 
@@ -127,7 +127,7 @@ MatterSpecification.v11.Core § 11.17.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:308](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L308)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:256](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L256)
 
 ___
 
@@ -154,7 +154,7 @@ MatterSpecification.v11.Core § 11.17.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:316](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L316)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:264](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L264)
 
 ___
 
@@ -203,7 +203,7 @@ MatterSpecification.v11.Core § 11.17.6.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:346](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L346)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:294](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L294)
 
 ___
 
@@ -228,42 +228,6 @@ method SHOULD be used to notify the other Administrative Domain’s party of the
 only observe the removal of a Fabric association as persistently failing attempts to reach a Node
 operationally.
 
-This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric which is
-to be removed from the device.
-
-Effect on Receipt
-
-If the FabricIndex field does not match the FabricIndex of any entry within the Fabrics list, then an
-NOCResponse with a StatusCode of InvalidFabricIndex shall be returned for the command and there shall NOT be
-any permanent changes to any device data.
-
-Otherwise, one of the following outcomes shall occur:
-
-  1. If the FabricIndex matches the last remaining entry in the Fabrics list, then the device shall delete
-     all Matter related data on the node which was created since it was commissioned. This includes all
-     Fabric-Scoped data, including Access Control List, bindings, scenes, group keys,
-
-operational certificates, etc. All Trusted Roots shall also be removed. Any Matter related data including
-logs, secure sessions, exchanges and interaction model constructs shall also be removed. Since this
-operation involves the removal of the secure session data that may underpin the current set of exchanges,
-the Node invoking the command SHOULD NOT expect a response before terminating its secure session with the
-target.
-
-2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the process of
-irrevocably deleting all associated Fabric-Scoped data, including Access Control List, bindings, group keys,
-operational certificates, etc. Any remaining Trusted Roots no longer referenced by any operational
-certificate shall also be removed. All secure sessions, exchanges and interaction model constructs related
-to the Operational Identity under the given Fabric shall also be removed. Following the removal, an
-NOCResponse with a StatusCode of OK shall be returned.
-
-3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of
-irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, bindings, group
-keys, operational certificates, etc. Any remaining Trusted Roots no longer referenced by any operational
-certificate shall also be removed. All secure sessions, exchanges and interaction model constructs related
-to the Operational Identity under the given Fabric shall also be removed. Since this operation involves the
-removal of the secure session data that may underpin the current set of exchanges, the Node invoking the
-command SHOULD NOT expect a response before terminating its secure session with the target.
-
 #### Parameters
 
 | Name | Type |
@@ -280,7 +244,7 @@ MatterSpecification.v11.Core § 11.17.6.12
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:506](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L506)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:401](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L401)
 
 ___
 
@@ -293,23 +257,6 @@ reflected by entries in the Fabrics attribute.
 
 The Label SHOULD be used by Administrators to provide additional per-fabric context when operations such as
 RemoveFabric are used.
-
-This field shall contain the label to set for the fabric associated with the current secure session.
-
-Effect on Receipt
-
-If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that is not
-the accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be returned for the
-command and there shall NOT be any permanent changes to any Fabric data.
-
-Otherwise, the Label field for the accesing fabric shall immediately be updated to reflect the
-
-Label argument provided. Following the update, an NOCResponse with a StatusCode of OK shall be returned.
-
-If the command was invoked within a fail-safe context after a successful UpdateNOC command, then the label
-update shall apply to the pending update state that will be reverted if fail-safe expires prior to a
-CommissioningComplete command. In other words, label updates apply to the state of the Fabrics Attribute as
-currently visible, even for an existing fabric currently in process of being updated.
 
 #### Parameters
 
@@ -327,7 +274,7 @@ MatterSpecification.v11.Core § 11.17.6.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:448](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L448)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:379](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L379)
 
 ___
 
@@ -405,4 +352,4 @@ MatterSpecification.v11.Core § 11.17.6.9
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:420](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L420)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:368](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L368)

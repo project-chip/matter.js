@@ -53,13 +53,13 @@ export class MatterDevice {
     private readonly scanners = new Array<Scanner>();
     private readonly broadcasters = new Array<InstanceBroadcaster>();
     private readonly transportInterfaces = new Array<TransportInterface | NetInterface>();
-    private readonly channelManager = new ChannelManager();
+    private readonly channelManager: ChannelManager;
     private readonly secureChannelProtocol = new SecureChannelProtocol(() => this.endCommissioning());
     private activeCommissioningMode = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
     private activeCommissioningEndCallback?: () => void;
     private announceInterval: Timer;
     private announcementStartedTime: number | null = null;
-    private isClosing = false;
+    #isClosing = false;
     readonly #exchangeManager;
     readonly #fabricManager: FabricManager;
     readonly #sessionManager: SessionManager<MatterDevice>;
@@ -79,6 +79,7 @@ export class MatterDevice {
         sessionStorage: StorageContext,
         fabricStorage: StorageContext,
         getCommissioningConfig: () => CommissioningOptions.Configuration,
+        minimumCaseSessionsPerFabricAndNode = 3,
         commissioningChangedCallback: (fabricIndex: FabricIndex, fabricAction: FabricAction) => void,
         sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
@@ -87,6 +88,7 @@ export class MatterDevice {
             sessionStorage,
             fabricStorage,
             getCommissioningConfig,
+            minimumCaseSessionsPerFabricAndNode,
             commissioningChangedCallback,
             sessionChangedCallback,
         );
@@ -96,9 +98,12 @@ export class MatterDevice {
         readonly sessionStorage: StorageContext,
         readonly fabricStorage: StorageContext,
         private readonly getCommissioningConfig: () => CommissioningOptions.Configuration,
+        minimumCaseSessionsPerFabricAndNode: number,
         private readonly commissioningChangedCallback: (fabricIndex: FabricIndex, fabricAction: FabricAction) => void,
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
+        this.channelManager = new ChannelManager(minimumCaseSessionsPerFabricAndNode);
+
         this.#fabricManager = new FabricManager(fabricStorage);
 
         this.#fabricManager.events.deleted.on(async fabric => {
@@ -106,6 +111,10 @@ export class MatterDevice {
             // When fabric is removed, also remove the resumption record
             await this.#sessionManager.removeResumptionRecord(rootNodeId);
             this.commissioningChangedCallback(fabricIndex, FabricAction.Removed);
+            if (this.#fabricManager.getFabrics().length === 0) {
+                // Last fabric got removed, so expire all announcements
+                await this.expireAllFabricAnnouncements();
+            }
         });
         this.#fabricManager.events.updated.on(({ fabricIndex }) =>
             this.commissioningChangedCallback(fabricIndex, FabricAction.Updated),
@@ -141,7 +150,12 @@ export class MatterDevice {
             if (this.isClosing) {
                 return;
             }
-            await this.startAnnouncement();
+            // When a session closes, announce existing fabrics again so that controller can detect the device again.
+            // When session was closed and no fabric exist anymore then this is triggering a factory reset in upper layer
+            // and it would be not good to announce a commissionable device and then reset that again with the factory reset
+            if (this.#fabricManager.getFabrics().length > 0 || !currentFabric) {
+                await this.startAnnouncement();
+            }
         });
 
         this.#sessionManager.subscriptionsChanged.on(session => {
@@ -178,6 +192,10 @@ export class MatterDevice {
     get failsafeContext() {
         this.assertFailSafeArmed();
         return this.#failsafeContext as FailsafeContext;
+    }
+
+    get isClosing() {
+        return this.#isClosing;
     }
 
     async beginTimed(failsafeContext: FailsafeContext) {
@@ -273,6 +291,12 @@ export class MatterDevice {
         await this.announce();
     }
 
+    async expireAllFabricAnnouncements() {
+        for (const broadcaster of this.broadcasters) {
+            await broadcaster.expireAllAnnouncements();
+        }
+    }
+
     async announce(announceOnce = false) {
         if (!announceOnce) {
             // Stop announcement if duration is reached
@@ -311,9 +335,7 @@ export class MatterDevice {
         } else {
             // No fabric paired yet, so announce as "ready for commissioning"
             // And expire operational Fabric announcements (if fabric got just deleted)
-            for (const broadcaster of this.broadcasters) {
-                await broadcaster.expireFabricAnnouncement(); // make sure no Fabric is announced anymore
-            }
+            await this.expireAllFabricAnnouncements();
             await this.allowBasicCommissioning();
         }
     }
@@ -483,7 +505,7 @@ export class MatterDevice {
     }
 
     async close() {
-        this.isClosing = true;
+        this.#isClosing = true;
         await this.endCommissioning();
         await this.#announcementMutex;
         for (const broadcaster of this.broadcasters) {

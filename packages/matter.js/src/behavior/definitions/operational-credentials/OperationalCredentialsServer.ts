@@ -6,11 +6,14 @@
 
 import { CertificateError } from "../../../certificate/CertificateManager.js";
 import { AccessLevel, Command } from "../../../cluster/Cluster.js";
+import { AccessControl } from "../../../cluster/definitions/AccessControlCluster.js";
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
+import { MatterFabricInvalidAdminSubjectError } from "../../../common/FailsafeContext.js";
 import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
 import { MatterFlowError, UnexpectedDataError } from "../../../common/MatterError.js";
 import { ValidationError } from "../../../common/ValidationError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
+import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { Fabric, PublicKeyError } from "../../../fabric/Fabric.js";
 import { FabricAction, FabricManager, FabricTableFullError } from "../../../fabric/FabricManager.js";
 import { Logger } from "../../../log/Logger.js";
@@ -24,6 +27,7 @@ import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { CommissioningBehavior } from "../../system/commissioning/CommissioningBehavior.js";
 import { ProductDescriptionServer } from "../../system/product-description/ProductDescriptionServer.js";
+import { AccessControlServer } from "../access-control/AccessControlServer.js";
 import { DeviceCertification } from "./DeviceCertification.js";
 import { OperationalCredentialsBehavior } from "./OperationalCredentialsBehavior.js";
 import {
@@ -89,22 +93,25 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline);
     }
 
-    override attestationRequest({ attestationNonce }: AttestationRequest) {
+    override async attestationRequest({ attestationNonce }: AttestationRequest) {
         if (attestationNonce.length !== 32) {
             throw new StatusResponseError("Invalid attestation nonce length", StatusCode.InvalidCommand);
         }
+
+        const certification = await this.getCertification();
+
         const elements = TlvAttestation.encode({
-            declaration: this.#certification.declaration,
+            declaration: certification.declaration,
             attestationNonce: attestationNonce,
             timestamp: 0,
         });
         return {
             attestationElements: elements,
-            attestationSignature: this.#certification.sign(this.session, elements),
+            attestationSignature: certification.sign(this.session, elements),
         };
     }
 
-    override csrRequest({ csrNonce, isForUpdateNoc }: CsrRequest) {
+    override async csrRequest({ csrNonce, isForUpdateNoc }: CsrRequest) {
         if (csrNonce.length !== 32) {
             throw new StatusResponseError("Invalid csr nonce length", StatusCode.InvalidCommand);
         }
@@ -124,20 +131,24 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             );
         }
 
+        const certification = await this.getCertification();
+
         const certSigningRequest = failsafeContext.createCertificateSigningRequest(
             isForUpdateNoc ?? false,
             this.session.id,
         );
         const nocsrElements = TlvCertSigningRequest.encode({ certSigningRequest, csrNonce });
-        return { nocsrElements, attestationSignature: this.#certification.sign(this.session, nocsrElements) };
+        return { nocsrElements, attestationSignature: certification.sign(this.session, nocsrElements) };
     }
 
-    override certificateChainRequest({ certificateType }: CertificateChainRequest) {
+    override async certificateChainRequest({ certificateType }: CertificateChainRequest) {
+        const certification = await this.getCertification();
+
         switch (certificateType) {
             case OperationalCredentials.CertificateChainType.DacCertificate:
-                return { certificate: this.#certification.certificate };
+                return { certificate: certification.certificate };
             case OperationalCredentials.CertificateChainType.PaiCertificate:
-                return { certificate: this.#certification.intermediateCertificate };
+                return { certificate: certification.intermediateCertificate };
             default:
                 throw new StatusResponseError(
                     `Unsupported certificate type: ${certificateType}`,
@@ -169,6 +180,11 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         } else if (error instanceof PublicKeyError) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidPublicKey,
+                debugText: error.message,
+            };
+        } else if (error instanceof MatterFabricInvalidAdminSubjectError) {
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidAdminSubject,
                 debugText: error.message,
             };
         }
@@ -228,6 +244,17 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             return this.#mapNocErrors(error);
         }
 
+        // The receiver SHALL create and add a new Access Control Entry using the CaseAdminSubject field to grant
+        // subsequent Administer access to an Administrator member of the new Fabric.
+        const aclCluster = this.agent.get(AccessControlServer);
+        aclCluster.state.acl.push({
+            fabricIndex: fabric.fabricIndex,
+            privilege: AccessControl.AccessControlEntryPrivilege.Administer,
+            authMode: AccessControl.AccessControlEntryAuthMode.Case,
+            subjects: [caseAdminSubject],
+            targets: null, // entire node
+        });
+
         await failsafeContext.addFabric(fabric);
 
         try {
@@ -249,11 +276,6 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             await fabric.remove(this.session.id);
             throw e;
         }
-
-        // TODO: The receiver SHALL create and add a new Access Control Entry using the CaseAdminSubject field to grant
-        //  subsequent Administer access to an Administrator member of the new Fabric. It is RECOMMENDED that the
-        //  Administrator presented in CaseAdminSubject exist within the same entity that is currently invoking the
-        //  AddNOC command, within another of the Fabrics of which it is a member.
 
         // TODO The incoming IPKValue SHALL be stored in the Fabric-scoped slot within the Group Key Management cluster
         //  (see KeySetWrite), for subsequent use during CASE.
@@ -423,16 +445,18 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         await this.context.transaction.commit();
     }
 
-    get #certification() {
-        const certification = this.internal.certification;
-        if (certification) {
-            return certification;
-        }
+    async getCertification() {
+        const certification =
+            this.internal.certification ??
+            (this.internal.certification = new DeviceCertification(
+                this.state.certification,
+                this.agent.get(ProductDescriptionServer).state,
+            ));
 
-        return (this.internal.certification = new DeviceCertification(
-            this.state.certification,
-            this.agent.get(ProductDescriptionServer).state,
-        ));
+        if (!certification.construction.ready) {
+            await certification.construction;
+        }
+        return certification;
     }
 
     async #handleAddedFabric({ fabricIndex }: Fabric) {
@@ -475,9 +499,9 @@ export namespace OperationalCredentialsServer {
          * Development devices and those intended for personal use may use a development certificate.  This is the
          * default if you do not provide an official certification in {@link ServerOptions.certification}.
          */
-        certification?: DeviceCertification.Configuration = undefined;
+        certification?: DeviceCertification.Definition = undefined;
 
-        [Val.properties](_endpoint: any, session: ValueSupervisor.Session) {
+        [Val.properties](_endpoint: Endpoint, session: ValueSupervisor.Session) {
             return {
                 get currentFabricIndex() {
                     return session.fabric ?? FabricIndex.NO_FABRIC;

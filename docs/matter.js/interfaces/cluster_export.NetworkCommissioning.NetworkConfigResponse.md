@@ -14,23 +14,6 @@ NetworkingStatus matching the response.
 Before generating a NetworkConfigResponse, the server shall set the LastNetworkID attribute value to the
 NetworkID that was used in the command for which an invocation caused the response to be generated.
 
-The NetworkingStatus field shall indicate the status of the last operation attempting to modify the Networks
-attribute configuration, taking one of these values:
-
-  • Success: Operation succeeded.
-
-  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
-
-  • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section 11.8.6.1,
-    “MaxNetworks Attribute”.
-
-  • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the added
-    network configurations in Networks attribute.
-
-  • UnknownError: An internal error occurred during the operation.
-
-See Section 11.8.7.2.2, “DebugText Field” for usage.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.8.7.8
@@ -55,13 +38,19 @@ MatterSpecification.v11.Core § 11.8.7.8
 
 • `Optional` **debugText**: `string`
 
+See Section 11.8.7.2.2, “DebugText Field” for usage.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.8.2
+
 #### Inherited from
 
 TypeFromSchema.debugText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:391](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L391)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:411](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L411)
 
 ___
 
@@ -75,7 +64,7 @@ request command.
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.8.7.8.1
+MatterSpecification.v11.Core § 11.8.7.8.3
 
 #### Inherited from
 
@@ -83,7 +72,7 @@ TypeFromSchema.networkIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:400](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L400)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:420](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L420)
 
 ___
 
@@ -91,10 +80,29 @@ ___
 
 • **networkingStatus**: [`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)
 
+The NetworkingStatus field shall indicate the status of the last operation attempting to modify the Networks
+attribute configuration, taking one of these values:
+
+  • Success: Operation succeeded.
+
+  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
+
+  • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section 11.8.6.1,
+    “MaxNetworks Attribute”.
+
+  • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the added
+    network configurations in Networks attribute.
+
+  • UnknownError: An internal error occurred during the operation.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.8.1
+
 #### Inherited from
 
 TypeFromSchema.networkingStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:390](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L390)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:404](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L404)

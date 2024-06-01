@@ -22,4 +22,4 @@ Timed access required.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:137
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:140

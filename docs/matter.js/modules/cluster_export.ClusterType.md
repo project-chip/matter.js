@@ -46,7 +46,7 @@ Definition of a cluster attribute.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:65](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L65)
+[packages/matter.js/src/cluster/ClusterType.ts:65](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L65)
 
 ___
 
@@ -64,7 +64,7 @@ The collective object type of the cluster's attributes.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:215](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L215)
+[packages/matter.js/src/cluster/ClusterType.ts:215](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L215)
 
 ___
 
@@ -82,7 +82,7 @@ Extract the type of a cluster's attributes (excluding global attributes).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:178](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L178)
+[packages/matter.js/src/cluster/ClusterType.ts:178](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L178)
 
 ___
 
@@ -94,7 +94,7 @@ Definition of a cluster command.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L70)
+[packages/matter.js/src/cluster/ClusterType.ts:70](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L70)
 
 ___
 
@@ -112,7 +112,7 @@ Extract the type of a cluster's commands.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:191](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L191)
+[packages/matter.js/src/cluster/ClusterType.ts:191](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L191)
 
 ___
 
@@ -130,7 +130,7 @@ An "element set" defines the set of elements (commands, attributes or events) of
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:119](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L119)
+[packages/matter.js/src/cluster/ClusterType.ts:119](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L119)
 
 ___
 
@@ -149,7 +149,7 @@ index generically by string.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:210](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L210)
+[packages/matter.js/src/cluster/ClusterType.ts:210](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L210)
 
 ___
 
@@ -161,7 +161,7 @@ Definition of a cluster event.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L75)
+[packages/matter.js/src/cluster/ClusterType.ts:75](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L75)
 
 ___
 
@@ -179,7 +179,7 @@ Extract the type of a cluster's events.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:200](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L200)
+[packages/matter.js/src/cluster/ClusterType.ts:200](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L200)
 
 ___
 
@@ -197,7 +197,7 @@ A slightly relaxed version of AttributeValues for input.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:256](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L256)
+[packages/matter.js/src/cluster/ClusterType.ts:260](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L260)
 
 ___
 
@@ -216,13 +216,13 @@ Input to [ClusterType](cluster_export.md#clustertype) function.  This is a relax
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L100)
+[packages/matter.js/src/cluster/ClusterType.ts:100](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L100)
 
 ___
 
 ### PatchType
 
-Ƭ **PatchType**\<`V`\>: `V` extends infer E[] ? `Record`\<\`$\{number}\`, [`PatchType`](cluster_export.ClusterType.md#patchtype)\<`E`\>\> \| [`PatchType`](cluster_export.ClusterType.md#patchtype)\<`E`\>[] : `V` extends `number` ? `number` : `V` extends `object` ? `V` extends (...`args`: `any`[]) => `any` ? `never` : \{ [K in keyof V]?: PatchType\<V[K]\> } : `V`
+Ƭ **PatchType**\<`V`\>: `V` extends infer E[] ? `Record`\<\`$\{number}\`, [`PatchType`](cluster_export.ClusterType.md#patchtype)\<`E`\>\> \| [`PatchType`](cluster_export.ClusterType.md#patchtype)\<`E`\>[] : `V` extends `number` ? `number` : `V` extends `bigint` ? `bigint` : `V` extends `object` ? `V` extends (...`args`: `any`[]) => `any` ? `never` : \{ [K in keyof V]?: PatchType\<V[K]\> } : `V`
 
 #### Type parameters
 
@@ -232,13 +232,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:241](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L241)
+[packages/matter.js/src/cluster/ClusterType.ts:243](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L243)
 
 ___
 
 ### RelaxTypes
 
-Ƭ **RelaxTypes**\<`V`\>: `V` extends `number` ? `number` : `V` extends `object` ? `V` extends (...`args`: `any`[]) => `any` ? `V` : \{ [K in keyof V]: RelaxTypes\<V[K]\> } : `V`
+Ƭ **RelaxTypes**\<`V`\>: `V` extends `number` ? `number` : `V` extends `bigint` ? `bigint` : `V` extends `object` ? `V` extends (...`args`: `any`[]) => `any` ? `V` : \{ [K in keyof V]: RelaxTypes\<V[K]\> } : `V`
 
 #### Type parameters
 
@@ -248,7 +248,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:231](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L231)
+[packages/matter.js/src/cluster/ClusterType.ts:231](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L231)
 
 ___
 
@@ -258,9 +258,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:293](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L293)
+[packages/matter.js/src/cluster/ClusterType.ts:297](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L297)
 
-[packages/matter.js/src/cluster/ClusterType.ts:302](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L302)
+[packages/matter.js/src/cluster/ClusterType.ts:306](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L306)
 
 ___
 
@@ -276,7 +276,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:217](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L217)
+[packages/matter.js/src/cluster/ClusterType.ts:217](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L217)
 
 ## Variables
 
@@ -288,6 +288,6 @@ A placeholder cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:293](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L293)
+[packages/matter.js/src/cluster/ClusterType.ts:297](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L297)
 
-[packages/matter.js/src/cluster/ClusterType.ts:302](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/ClusterType.ts#L302)
+[packages/matter.js/src/cluster/ClusterType.ts:306](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/ClusterType.ts#L306)

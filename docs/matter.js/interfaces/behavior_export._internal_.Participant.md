@@ -11,6 +11,7 @@ Components with support for transactionality implement this interface.
 ### Properties
 
 - [postCommit](behavior_export._internal_.Participant.md#postcommit)
+- [preCommit](behavior_export._internal_.Participant.md#precommit)
 - [role](behavior_export._internal_.Participant.md#role)
 
 ### Methods
@@ -38,7 +39,33 @@ Post-commit logic.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L37)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Participant.ts#L48)
+
+___
+
+### preCommit
+
+• `Optional` **preCommit**: () => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`boolean`\>
+
+Pre-commit logic.
+
+Pre-commit logic returns a boolean indicating whether it performed an action that affects state.  The transaction
+will cycle through participants continuously until all participants return false.
+
+Thus `preCommit` implementations must be stateful and expect to be invoked more than once for a single
+transaction.
+
+#### Type declaration
+
+▸ (): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`boolean`\>
+
+##### Returns
+
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`boolean`\>
+
+#### Defined in
+
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:33](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Participant.ts#L33)
 
 ___
 
@@ -51,7 +78,7 @@ a participant from the transaction.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L22)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Participant.ts#L22)
 
 ## Methods
 
@@ -67,7 +94,7 @@ Commit phase one.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L27)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Participant.ts#L38)
 
 ___
 
@@ -83,7 +110,7 @@ Commit phase two.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L32)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Participant.ts#L43)
 
 ___
 
@@ -99,7 +126,7 @@ Drop isolated writes and revert to original canonical source.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L42)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Participant.ts#L53)
 
 ___
 
@@ -115,4 +142,4 @@ Description used in error messages.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L16)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:16](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Participant.ts#L16)

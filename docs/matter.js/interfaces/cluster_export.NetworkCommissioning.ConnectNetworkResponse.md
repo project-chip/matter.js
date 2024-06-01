@@ -14,27 +14,6 @@ Before generating a ConnectNetworkResponse, the server shall:
   • Set the LastConnectErrorValue attribute value to the ErrorValue matching the response, including setting it
     to null if the ErrorValue is not applicable.
 
-The NetworkingStatus field shall indicate the status of the last connection attempt, taking one of these values:
-
-  • Success: Connection succeeded.
-
-  • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the attempt to
-    join the network.
-
-  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
-
-  • NetworkIdNotFound: The network identifier was not found among the added network configurations in Networks
-    attribute.
-
-  • RegulatoryError: Could not connect to a network due to lack of regulatory configuration.
-
-  • UnknownError: An internal error occurred during the operation.
-
-  • Association errors (see also description of errors in Section 11.8.5.3, “NetworkCommissioningStatusEnum”):
-    AuthFailure, UnsupportedSecurity, OtherConnectionFailure, IPV6Failed, IPBindFailed
-
-See Section 11.8.7.2.2, “DebugText Field” for usage.
-
 **`See`**
 
 MatterSpecification.v11.Core § 11.8.7.10
@@ -59,13 +38,19 @@ MatterSpecification.v11.Core § 11.8.7.10
 
 • `Optional` **debugText**: `string`
 
+See Section 11.8.7.2.2, “DebugText Field” for usage.
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.10.2
+
 #### Inherited from
 
 TypeFromSchema.debugText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:488](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L488)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:512](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L512)
 
 ___
 
@@ -94,7 +79,7 @@ ___
 
 **`See`**
 
-MatterSpecification.v11.Core § 11.8.7.10.1
+MatterSpecification.v11.Core § 11.8.7.10.3
 
 #### Inherited from
 
@@ -102,7 +87,7 @@ TypeFromSchema.errorValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:512](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L512)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:536](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L536)
 
 ___
 
@@ -110,10 +95,35 @@ ___
 
 • **networkingStatus**: [`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)
 
+The NetworkingStatus field shall indicate the status of the last connection attempt, taking one of these
+values:
+
+  • Success: Connection succeeded.
+
+  • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the attempt
+    to join the network.
+
+  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
+
+  • NetworkIdNotFound: The network identifier was not found among the added network configurations in
+    Networks attribute.
+
+  • RegulatoryError: Could not connect to a network due to lack of regulatory configuration.
+
+  • UnknownError: An internal error occurred during the operation.
+
+  • Association errors (see also description of errors in Section 11.8.5.3,
+    “NetworkCommissioningStatusEnum”): AuthFailure, UnsupportedSecurity, OtherConnectionFailure, IPV6Failed,
+    IPBindFailed
+
+**`See`**
+
+MatterSpecification.v11.Core § 11.8.7.10.1
+
 #### Inherited from
 
 TypeFromSchema.networkingStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:487](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L487)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:505](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L505)

@@ -10,6 +10,7 @@
 
 - [Map](../interfaces/environment_export.VariableService.Map.md)
 - [Options](../interfaces/environment_export.VariableService.Options.md)
+- [Usage](../interfaces/environment_export.VariableService.Usage.md)
 
 ### Type Aliases
 
@@ -25,7 +26,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:174](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L174)
+[packages/matter.js/src/environment/VariableService.ts:237](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/VariableService.ts#L237)
 
 ___
 
@@ -35,7 +36,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:175](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L175)
+[packages/matter.js/src/environment/VariableService.ts:238](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/VariableService.ts#L238)
 
 ___
 
@@ -45,4 +46,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:176](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L176)
+[packages/matter.js/src/environment/VariableService.ts:239](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/VariableService.ts#L239)

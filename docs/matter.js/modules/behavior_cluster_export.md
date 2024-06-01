@@ -26,6 +26,7 @@
 - [ClusterInterface](behavior_cluster_export.md#clusterinterface)
 - [ClusterOf](behavior_cluster_export.md#clusterof)
 - [ClusterState](behavior_cluster_export.md#clusterstate)
+- [ExtensionInterfaceOf](behavior_cluster_export.md#extensioninterfaceof)
 
 ### Functions
 
@@ -49,9 +50,9 @@ Event instance type for ClusterBehaviors.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L17)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L17)
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L23)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L23)
 
 ___
 
@@ -61,28 +62,31 @@ ___
 
 This type defines methods for a behavior grouped by named cluster component.
 
-Ideally we would do this using a simple mapped type.  Unfortunately as of
-TypeScript 5.2 there is no way to define a method using a mapped type.
-Instead the mapped type defines function properties.
+Ideally we would do this using a simple mapped type.  Unfortunately as of TypeScript 5.2 there is no way to define a
+method using a mapped type. Instead the mapped type defines function properties.
 
-Function properties work identically to methods semantically but TypeScript
-doesn't allow you to override them with standard methods (see error TS2425).
+Function properties work identically to methods semantically but TypeScript doesn't allow you to override them with
+standard methods (see error TS2425).
 
-Thus we are forced to generate an interface for every cluster component
-and assemble based on selected features using logic that mirrors
-[ClusterComposer.Of](cluster_export.ClusterComposer.md#of).
+Thus we are forced to generate an interface for every cluster component and assemble based on selected features using
+logic that mirrors [ClusterComposer.Of](cluster_export.ClusterComposer.md#of).
 
-Note that we only need to do this for commands.  The public interface for
-attributes and events consists solely of properties so we generate using
-mapped types.  This is handled by ClusterState and
-ClusterEvents respectively.
+Note that we only need to do this for commands.  The public interface for attributes and events consists solely of
+properties so we generate using mapped types.  This is handled by ClusterState and ClusterEvents respectively.
 
 If TS team ever fixes:
 
   https://github.com/microsoft/TypeScript/issues/27965
 
-...then we can remove the interface and just use
-[ClusterInterface.MappedMethodsOf](behavior_cluster_export.ClusterInterface.md#mappedmethodsof).
+...then we can remove the interface and just use [ClusterInterface.MappedMethodsOf](behavior_cluster_export.ClusterInterface.md#mappedmethodsof).
+
+This appears to be a duplicate (but is still open):
+
+  https://github.com/microsoft/TypeScript/issues/27689
+
+Proposed solution is to just remove the error:
+
+  https://github.com/microsoft/TypeScript/issues/48125
 
 #### Type parameters
 
@@ -98,9 +102,9 @@ If TS team ever fixes:
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L39)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L43)
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L43)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:47](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L47)
 
 ___
 
@@ -118,7 +122,7 @@ The cluster type for a behavior.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L87)
+[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:87](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L87)
 
 ___
 
@@ -137,9 +141,27 @@ Instance type for complete (endpoint + fabric) state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterState.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterState.ts#L15)
+[packages/matter.js/src/behavior/cluster/ClusterState.ts:15](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterState.ts#L15)
 
-[packages/matter.js/src/behavior/cluster/ClusterState.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterState.ts#L17)
+[packages/matter.js/src/behavior/cluster/ClusterState.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterState.ts#L17)
+
+___
+
+### ExtensionInterfaceOf
+
+Ƭ **ExtensionInterfaceOf**\<`B`\>: `B` extends \{ `ExtensionInterface`: infer I  } ? `I` : {}
+
+The extension interface for a behavior.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `B` | extends [`Type`](../interfaces/behavior_export.Behavior.Type.md) |
+
+#### Defined in
+
+[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:94](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L94)
 
 ## Functions
 
@@ -181,7 +203,7 @@ This is the actual implementation of ClusterBehavior.for().  The result must mat
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L30)
+[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L30)
 
 ___
 
@@ -203,4 +225,4 @@ Create a non-functional instance of a [Behavior](../classes/behavior_export.Beha
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L23)
+[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L23)

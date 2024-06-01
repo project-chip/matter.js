@@ -38,7 +38,7 @@ StateType.maxMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L59)
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:59](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L59)
 
 ___
 
@@ -70,7 +70,7 @@ StateType.measuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L43)
 
 ___
 
@@ -91,7 +91,7 @@ StateType.minMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L51)
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L51)
 
 ___
 
@@ -111,4 +111,4 @@ StateType.tolerance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:66](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L66)
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:66](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L66)

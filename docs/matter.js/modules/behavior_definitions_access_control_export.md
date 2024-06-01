@@ -35,8 +35,8 @@ AccessControlBehavior is the base class for objects that support interaction wit
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L15)
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:15](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L15)
 
-[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L18)
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:18](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L18)
 
-[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L20)
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L20)

@@ -52,7 +52,6 @@ An event is triggered by endpoints.
 - [conformance](exports_model.EventModel.md#conformance)
 - [constraint](exports_model.EventModel.md#constraint)
 - [definingModel](exports_model.EventModel.md#definingmodel)
-- [deprecated](exports_model.EventModel.md#deprecated)
 - [directMetatype](exports_model.EventModel.md#directmetatype)
 - [disallowed](exports_model.EventModel.md#disallowed)
 - [discriminator](exports_model.EventModel.md#discriminator)
@@ -67,6 +66,7 @@ An event is triggered by endpoints.
 - [effectiveXref](exports_model.EventModel.md#effectivexref)
 - [elements](exports_model.EventModel.md#elements)
 - [globalBase](exports_model.EventModel.md#globalbase)
+- [isDeprecated](exports_model.EventModel.md#isdeprecated)
 - [key](exports_model.EventModel.md#key)
 - [listEntry](exports_model.EventModel.md#listentry)
 - [mandatory](exports_model.EventModel.md#mandatory)
@@ -702,26 +702,6 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:67
 
 ___
 
-### deprecated
-
-• `get` **deprecated**(): `boolean`
-
-Is this model deprecated?
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-ValueModel.deprecated
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
-
-___
-
 ### directMetatype
 
 • `get` **directMetatype**(): `undefined` \| [`Metatype`](../enums/exports_model.Metatype-1.md)
@@ -994,6 +974,26 @@ ValueModel.globalBase
 #### Defined in
 
 packages/matter.js/dist/esm/model/models/Model.d.ts:98
+
+___
+
+### isDeprecated
+
+• `get` **isDeprecated**(): `boolean`
+
+Is this model deprecated?
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+ValueModel.isDeprecated
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
 
 ___
 

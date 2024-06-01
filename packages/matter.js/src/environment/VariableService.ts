@@ -65,7 +65,9 @@ export class VariableService {
 
     get<T extends VariableService.Primitive>(name: string, fallback?: T): T;
 
-    get<T>(name: string, fallback?: VariableService.Value): VariableService.Value | undefined;
+    get<T extends VariableService.Value>(name: string, fallback: T): T;
+
+    get<T extends VariableService.Value>(name: string): T | undefined;
 
     get(name: string, fallback?: VariableService.Value) {
         for (const collector of this.#usageCollectors) {

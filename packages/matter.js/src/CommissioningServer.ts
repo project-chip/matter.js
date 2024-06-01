@@ -13,7 +13,7 @@ import { AttestationCertificateManager } from "./certificate/AttestationCertific
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 import { ClusterClientObj } from "./cluster/client/ClusterClientTypes.js";
-import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
+import { AccessControl } from "./cluster/definitions/AccessControlCluster.js";
 import {
     AdministratorCommissioning,
     AdministratorCommissioningCluster,
@@ -26,7 +26,12 @@ import {
 import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "./cluster/definitions/GeneralDiagnosticsCluster.js";
 import { GroupKeyManagementCluster } from "./cluster/definitions/GroupKeyManagementCluster.js";
 import { OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
+import { createDefaultAccessControlClusterServer } from "./cluster/server/AccessControlServer.js";
 import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
+import {
+    genericFabricScopedAttributeGetterFromFabric,
+    genericFabricScopedAttributeSetterForFabric,
+} from "./cluster/server/AttributeServer.js";
 import { ClusterServer } from "./cluster/server/ClusterServer.js";
 import {
     AttributeInitialValues,
@@ -35,6 +40,7 @@ import {
     ClusterServerObj,
 } from "./cluster/server/ClusterServerTypes.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
+import { createDefaultGeneralDiagnosticsClusterServer } from "./cluster/server/GeneralDiagnosticsServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
 import { OperationalCredentialsClusterHandler } from "./cluster/server/OperationalCredentialsServer.js";
 import { ImplementationError, InternalError, NoProviderError } from "./common/MatterError.js";
@@ -45,6 +51,7 @@ import { VendorId } from "./datatype/VendorId.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { Device, RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
+import { LegacyInteractionServer } from "./device/LegacyInteractionServer.js";
 import { EndpointInterface } from "./endpoint/EndpointInterface.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { Logger } from "./log/Logger.js";
@@ -55,7 +62,6 @@ import { Network } from "./net/Network.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { EventHandler } from "./protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
-import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
 import { BitSchema, TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import {
     CommissioningFlowType,
@@ -169,12 +175,7 @@ export interface CommissioningServerOptions {
      * Vendor specific certificates to be used for the OperationalCredentials cluster. If not set Test certificates
      * (official Chip tool test Root certificate is used) are generated automatically.
      */
-    certificates?: {
-        devicePrivateKey: ByteArray;
-        deviceCertificate: ByteArray;
-        deviceIntermediateCertificate: ByteArray;
-        certificationDeclaration: ByteArray;
-    };
+    certificates?: DeviceCertification.Definition;
 
     /**
      * Optional configuration for the GeneralCommissioning cluster. If not set the default values are used.
@@ -203,7 +204,7 @@ export interface CommissioningServerOptions {
 /**
  * Commands exposed by the CommissioningServer
  */
-type CommissioningServerCommands = {
+export type CommissioningServerCommands = {
     /** Provide a means for certification tests to trigger some test-plan-specific events. */
     testEventTrigger: ClusterServerHandlers<typeof GeneralDiagnosticsCluster>["testEventTrigger"];
 };
@@ -222,7 +223,6 @@ export class CommissioningServer extends MatterNode {
     private readonly discriminator: number;
     private readonly flowType: CommissioningFlowType;
     private readonly productDescription: ProductDescription;
-    private readonly certification: DeviceCertification;
 
     private storage?: StorageContext<SyncStorage>;
     private endpointStructureStorage?: StorageContext<SyncStorage>;
@@ -233,7 +233,7 @@ export class CommissioningServer extends MatterNode {
     private deviceInstance?: MatterDevice;
     private eventHandler?: EventHandler;
     private endpointStructure: InteractionEndpointStructure;
-    private interactionServer?: InteractionServer;
+    private interactionServer?: LegacyInteractionServer;
 
     protected readonly rootEndpoint = new RootEndpoint();
 
@@ -285,8 +285,8 @@ export class CommissioningServer extends MatterNode {
                 softwareVersion: 1,
                 softwareVersionString: "v1",
                 capabilityMinima: {
-                    caseSessionsPerFabric: 3, // TODO get that limit from Sessionmanager or such or sync with it, add limit?
-                    subscriptionsPerFabric: 3, // TODO get that limit from Interactionserver? Respect it?
+                    caseSessionsPerFabric: 3, // TODO get that limit from Sessionmanager or such or sync with it, add limit? Just a minima?
+                    subscriptionsPerFabric: 3, // TODO get that limit from Interactionserver? Respect it? It is just a minima?
                 },
                 serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`,
             },
@@ -319,13 +319,13 @@ export class CommissioningServer extends MatterNode {
         if (certificates == undefined) {
             const paa = new AttestationCertificateManager(vendorId);
             const { keyPair: dacKeyPair, dac } = paa.getDACert(productId);
-            const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
+            const declaration = CertificationDeclarationManager.generate(vendorId, productId);
 
             certificates = {
-                devicePrivateKey: dacKeyPair.privateKey,
-                deviceCertificate: dac,
-                deviceIntermediateCertificate: paa.getPAICert(),
-                certificationDeclaration,
+                privateKey: dacKeyPair.privateKey,
+                certificate: dac,
+                intermediateCertificate: paa.getPAICert(),
+                declaration,
             };
         }
 
@@ -335,16 +335,6 @@ export class CommissioningServer extends MatterNode {
             vendorId: vendorId,
             productId: productId,
         };
-
-        this.certification = new DeviceCertification(
-            {
-                certificate: certificates.deviceCertificate,
-                declaration: certificates.certificationDeclaration,
-                intermediateCertificate: certificates.deviceIntermediateCertificate,
-                privateKey: certificates.devicePrivateKey,
-            },
-            this.productDescription,
-        );
 
         // Add Operational credentials cluster to root directly because it is not allowed to be changed afterward
         // TODO Get the defaults from the cluster meta details
@@ -359,7 +349,7 @@ export class CommissioningServer extends MatterNode {
                     trustedRootCertificates: [],
                     currentFabricIndex: FabricIndex.NO_FABRIC,
                 },
-                OperationalCredentialsClusterHandler(this.certification),
+                OperationalCredentialsClusterHandler(certificates, this.productDescription),
             ),
         );
 
@@ -388,23 +378,7 @@ export class CommissioningServer extends MatterNode {
         );
 
         // TODO Get the defaults from the cluster meta details
-        this.rootEndpoint.addClusterServer(
-            ClusterServer(
-                AccessControlCluster,
-                {
-                    acl: [],
-                    extension: [],
-                    subjectsPerAccessControlEntry: 4,
-                    targetsPerAccessControlEntry: 4,
-                    accessControlEntriesPerFabric: 4,
-                },
-                {},
-                {
-                    accessControlEntryChanged: true, // TODO
-                    accessControlExtensionChanged: true, // TODO
-                },
-            ),
-        );
+        this.rootEndpoint.addClusterServer(createDefaultAccessControlClusterServer());
 
         // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
@@ -413,7 +387,7 @@ export class CommissioningServer extends MatterNode {
                 {
                     groupKeyMap: [],
                     groupTable: [],
-                    maxGroupsPerFabric: 1, // TODO: Increase once we add group support, for now only IPK is supported
+                    maxGroupsPerFabric: 0, // TODO: Increase once we add group support, for now only IPK is supported
                     maxGroupKeysPerFabric: 1,
                 },
                 GroupKeyManagementClusterHandler(),
@@ -421,28 +395,7 @@ export class CommissioningServer extends MatterNode {
         );
 
         // TODO Get the defaults from the cluster meta details
-        this.rootEndpoint.addClusterServer(
-            ClusterServer(
-                GeneralDiagnosticsCluster,
-                {
-                    networkInterfaces: [],
-                    rebootCount: 0,
-                    upTime: 0,
-                    totalOperationalHours: 0,
-                    bootReason: GeneralDiagnostics.BootReason.Unspecified,
-                    activeHardwareFaults: [],
-                    activeRadioFaults: [],
-                    activeNetworkFaults: [],
-                    testEventTriggersEnabled: false,
-                },
-                {
-                    testEventTrigger: async args => await this.commandHandler.executeHandler("testEventTrigger", args),
-                },
-                {
-                    bootReason: true,
-                },
-            ),
-        );
+        this.rootEndpoint.addClusterServer(createDefaultGeneralDiagnosticsClusterServer(this.commandHandler));
 
         this.rootEndpoint.addClusterServer(
             ClusterServer(
@@ -594,7 +547,7 @@ export class CommissioningServer extends MatterNode {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
 
-        this.interactionServer = new InteractionServer({
+        this.interactionServer = new LegacyInteractionServer({
             endpointStructure: this.endpointStructure,
             eventHandler: this.eventHandler,
             subscriptionOptions: {
@@ -609,16 +562,11 @@ export class CommissioningServer extends MatterNode {
         this.assignEndpointIds(); // Make sure to have unique endpoint ids
         this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
         this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
+
         this.endpointStructure.initializeFromEndpoint(this.rootEndpoint);
 
         // TODO adjust later and refactor MatterDevice
         const deviceInstance = await MatterDevice.create(
-            // this.options.deviceName,
-            // DeviceTypeId(this.options.deviceType),
-            // vendorId,
-            // productId,
-            // this.discriminator,
-            // this.passcode,
             this.storage.createContext("SessionManager"),
             this.storage.createContext("FabricManager"),
             () => ({
@@ -631,6 +579,7 @@ export class CommissioningServer extends MatterNode {
                 // We don't use this
                 ble: false,
             }),
+            basicInformation.getCapabilityMinimaAttribute().caseSessionsPerFabric, // Internally it is "Session and Node", so we support even more
             (fabricIndex: FabricIndex) => {
                 const fabricsCount = this.deviceInstance?.getFabrics().length ?? 0;
                 if (fabricsCount === 1) {
@@ -667,6 +616,37 @@ export class CommissioningServer extends MatterNode {
         }
 
         if (this.isCommissioned()) {
+            // Handle Backward compatibility to Matter.js before 0.9.1 and add the missing ACL entry if no entry was set
+            // so far by the controller
+            const fabrics = deviceInstance.getFabrics();
+            for (const fabric of fabrics) {
+                if (
+                    genericFabricScopedAttributeGetterFromFabric<AccessControl.AccessControlEntryStruct[] | undefined>(
+                        fabric,
+                        AccessControl.Cluster,
+                        "acl",
+                        undefined,
+                    ) === undefined
+                ) {
+                    genericFabricScopedAttributeSetterForFabric(fabric, AccessControl.Cluster, "acl", [
+                        {
+                            fabricIndex: fabric.fabricIndex,
+                            privilege: AccessControl.AccessControlEntryPrivilege.Administer,
+                            authMode: AccessControl.AccessControlEntryAuthMode.Case,
+                            subjects: [fabric.rootNodeId],
+                            targets: null, // entire node
+                        },
+                    ]);
+                    logger.warn(
+                        "Added missing ACL entry for fabric",
+                        fabric.fabricIndex,
+                        "for Node ID",
+                        fabric.rootNodeId,
+                        ". This should only happen once after upgrading to matter.js 0.9.1",
+                    );
+                }
+            }
+
             limitTo = { onIpNetwork: true }; // If already commissioned the device is on network already
         } else {
             // BLE or SoftAP only relevant when not commissioned yet

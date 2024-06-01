@@ -35,7 +35,7 @@ export class InsecureSession<T> extends Session<T> {
             messageReceptionState: new MessageReceptionStateUnencryptedWithRollover(),
         });
         this.#context = context;
-        this.#initiatorNodeId = initiatorNodeId ?? NodeId.getRandomOperationalNodeId();
+        this.#initiatorNodeId = initiatorNodeId ?? NodeId.randomOperationalNodeId();
     }
 
     get isSecure() {

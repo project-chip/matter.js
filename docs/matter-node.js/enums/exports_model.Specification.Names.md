@@ -13,6 +13,7 @@ Long names for Matter specification documents.
 - [cluster](exports_model.Specification.Names.md#cluster)
 - [core](exports_model.Specification.Names.md#core)
 - [device](exports_model.Specification.Names.md#device)
+- [namespace](exports_model.Specification.Names.md#namespace)
 
 ## Enumeration Members
 
@@ -22,7 +23,7 @@ Long names for Matter specification documents.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/definitions/Specification.d.ts:20
+packages/matter.js/dist/esm/model/definitions/Specification.d.ts:21
 
 ___
 
@@ -32,7 +33,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/definitions/Specification.d.ts:19
+packages/matter.js/dist/esm/model/definitions/Specification.d.ts:20
 
 ___
 
@@ -42,4 +43,14 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/definitions/Specification.d.ts:21
+packages/matter.js/dist/esm/model/definitions/Specification.d.ts:22
+
+___
+
+### namespace
+
+• **namespace** = ``"Matter Standard Namespace Specification"``
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/definitions/Specification.d.ts:23
