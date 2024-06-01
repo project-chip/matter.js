@@ -87,8 +87,8 @@ export class AccessControlServer extends AccessControlBehavior {
             acl,
             (aclList, aclEntry, subjectDesc, endpoint, clusterId) =>
                 this.extensionEntryAccessCheck(
-                    aclList as unknown as AccessControlTypes.AccessControlEntryStruct[],
-                    aclEntry as unknown as AccessControlTypes.AccessControlEntryStruct,
+                    aclList as unknown as AccessControlTypes.AccessControlEntry[],
+                    aclEntry as unknown as AccessControlTypes.AccessControlEntry,
                     subjectDesc,
                     endpoint,
                     clusterId,
@@ -98,7 +98,7 @@ export class AccessControlServer extends AccessControlBehavior {
         this.reactTo(this.events.acl$Changed, this.#updateAccessControlList);
     }
 
-    #validateAccessControlListChanges(value: AccessControlTypes.AccessControlEntryStruct[]) {
+    #validateAccessControlListChanges(value: AccessControlTypes.AccessControlEntry[]) {
         // TODO: This might be not really correct for local ACL changes because there the session fabric could be
         //  different which would lead to missing validation of the relevant entries
         const relevantFabricIndex = this.context.session?.associatedFabric.fabricIndex;
@@ -196,8 +196,8 @@ export class AccessControlServer extends AccessControlBehavior {
     }
 
     #handleAccessControlListChange(
-        value: AccessControlTypes.AccessControlEntryStruct[],
-        oldValue: AccessControlTypes.AccessControlEntryStruct[],
+        value: AccessControlTypes.AccessControlEntry[],
+        oldValue: AccessControlTypes.AccessControlEntry[],
     ) {
         if (this.internal.aclManager === undefined) {
             return; // Too early to send events
@@ -259,7 +259,7 @@ export class AccessControlServer extends AccessControlBehavior {
         }
     }
 
-    #validateAccessControlExtensionChanges(value: AccessControlTypes.AccessControlExtensionStruct[]) {
+    #validateAccessControlExtensionChanges(value: AccessControlTypes.AccessControlExtension[]) {
         // TODO: This might be not really correct for local ACL changes because there the session fabric could be
         //  different which would lead to missing validation of the relevant entries
         const relevantFabricIndex = this.context.session?.associatedFabric.fabricIndex;
@@ -282,8 +282,8 @@ export class AccessControlServer extends AccessControlBehavior {
     }
 
     #handleAccessControlExtensionChange(
-        value: AccessControlTypes.AccessControlExtensionStruct[],
-        oldValue: AccessControlTypes.AccessControlExtensionStruct[],
+        value: AccessControlTypes.AccessControlExtension[],
+        oldValue: AccessControlTypes.AccessControlExtension[],
     ) {
         if (this.internal.aclManager === undefined) {
             return; // Too early to send events
@@ -366,7 +366,7 @@ export class AccessControlServer extends AccessControlBehavior {
      *
      * Override this method in your own behavior to implement custom validation.
      */
-    protected extensionEntryValidator(extension: AccessControlTypes.AccessControlExtensionStruct) {
+    protected extensionEntryValidator(extension: AccessControlTypes.AccessControlExtension) {
         const { data } = extension;
         if (data.length < 2 || data[0] !== TlvType.List || data[data.length - 1] !== TlvType.EndOfContainer) {
             // Easier to check that way that it is an Listen without any tags in general
@@ -387,8 +387,8 @@ export class AccessControlServer extends AccessControlBehavior {
      * validation.
      */
     protected extensionEntryAccessCheck(
-        _aclList: AccessControlTypes.AccessControlEntryStruct[],
-        _aclEntry: AccessControlTypes.AccessControlEntryStruct,
+        _aclList: AccessControlTypes.AccessControlEntry[],
+        _aclEntry: AccessControlTypes.AccessControlEntry,
         _subjectDesc: IncomingSubjectDescriptor,
         _endpoint: EndpointInterface,
         _clusterId: ClusterId,
@@ -406,7 +406,7 @@ export class AccessControlServer extends AccessControlBehavior {
         return this.internal.aclManager;
     }
 
-    #updateAccessControlList(acl: AccessControlTypes.AccessControlEntryStruct[]) {
+    #updateAccessControlList(acl: AccessControlTypes.AccessControlEntry[]) {
         if (!this.aclUpdateDelayed) {
             logger.info("ACL updated, updating ACL manager", acl);
             this.aclManager.updateAccessControlList(deepCopy(acl));
@@ -460,6 +460,6 @@ export namespace AccessControlServer {
         aclUpdateDelayed = false;
 
         /** Latest delayed data of acl */
-        delayedAclData?: AccessControlTypes.AccessControlEntryStruct[];
+        delayedAclData?: AccessControlTypes.AccessControlEntry[];
     }
 }
