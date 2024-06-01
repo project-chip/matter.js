@@ -12,15 +12,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 ### __WORK_IN_PROGRESS__
 
 -   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
-
--   Matter.js API:
-
-    -   Feature: Adds all elements (clusters, attributes, events, commands, device types and datatypes) introduced in Matter 1.2 and Matter 1.3.
+-   Matter.js Parser and Code generator:
     -   Feature: We now generate all Matter datatypes and elements. This includes some we defined by hand previously and those introduced by the Matter 1.2 and Matter 1.3 specifications.
     -   Feature: We now generate some datatypes that are not officially global or part of a specific cluster but are nevertheless defined in Matter specifications.
-    -   Feature: Adds default implementations for i18n clusters including Localization, Time Format Localization and Unit Localization.
     -   Enhancement: Expanded dialect for conformance, constraint and "other quality" DSLs.
-    -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
+    -   Enhancement: Includes numerous code generation improvements.
+-   Matter.js Matter Definition, Clusters, Schemas and Device-Types (independent of the used API)
     -   Breaking: Cluster revisions have increased and there are new mandatory elements for a few clusters. We have implemented these in places where we provide non-skeletal cluster implementations.
     -   Breaking: Previously we generated redundant definitions for struct, enum and bitmap types in *Interface.ts and *Cluster.ts files. We've eliminated those in the interface files.
     -   Breaking: Previously we generated redundant TLV and types for datatypes used by multiple clusters. We now only provide these types in their canonical location (globally or in the `ClusterName` namespace for the base cluster).
@@ -28,9 +25,15 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Breaking: We've removed a few deprecated definitions for unused Matter elements such as the Scenes cluster.
     -   Breaking: Globals.ts previously defined core datatypes for the Matter object model. These are now generated and individually importable.
     -   Breaking: We've removed a few old draft datatypes defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip) that were abandoned, renamed or are still "draft" as of Matter 1.3.
-
--   Under the hood:
--   -   Includes numerous code generation improvements.
+    -   Feature: Adds all elements (clusters, attributes, events, commands, device types and datatypes) introduced in Matter 1.2 and Matter 1.3.
+-   Matter-Core functionality:
+    -   Feature: Increase Data Model revision to 17 (introduced by Matter 1.2)
+-   matter.js New API:
+    -   Feature: Adds default implementations for i18n clusters including Localization, Time Format Localization and Unit Localization.
+-   matter.js Legacy API:
+    -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
+    -   Removal: We removed the old Scenes cluster implementation which was never used
+-   matter.js chip and python Testing:
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 
 ### 0.9.1 (2024-06-01)
@@ -48,11 +51,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: Expires announcements for last removed fabric directly
     -   Fix: Fixes deepCopy to really doing a deep copy and not just copying the first level
 -   matter.js Legacy API:
-
     -   Feature: Added Access Control cluster implementation
     -   Feature: Added minimal Group key management cluster implementation which supports no additional groups (so only IPK allowed)
     -   Enhancement: Enhanced Operational Credentials cluster to add needed ACLs on commissioning including backward compatibility
-
 -   matter.js New API:
     -   Feature: Added Access Control cluster implementation
     -   Feature: Added minimal Group key management cluster implementation which supports no additional groups (so only IPK allowed)
