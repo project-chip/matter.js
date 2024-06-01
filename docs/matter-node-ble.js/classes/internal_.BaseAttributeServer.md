@@ -26,6 +26,7 @@ Base class for all attribute servers.
 
 ### Properties
 
+- [#private](internal_.BaseAttributeServer.md##private)
 - [defaultValue](internal_.BaseAttributeServer.md#defaultvalue)
 - [endpoint](internal_.BaseAttributeServer.md#endpoint)
 - [id](internal_.BaseAttributeServer.md#id)
@@ -35,6 +36,11 @@ Base class for all attribute servers.
 - [requiresTimedInteraction](internal_.BaseAttributeServer.md#requirestimedinteraction)
 - [schema](internal_.BaseAttributeServer.md#schema)
 - [value](internal_.BaseAttributeServer.md#value)
+
+### Accessors
+
+- [readAcl](internal_.BaseAttributeServer.md#readacl)
+- [writeAcl](internal_.BaseAttributeServer.md#writeacl)
 
 ### Methods
 
@@ -46,7 +52,7 @@ Base class for all attribute servers.
 
 ### constructor
 
-• **new BaseAttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `initValue`, `defaultValue`): [`BaseAttributeServer`](internal_.BaseAttributeServer.md)\<`T`\>
+• **new BaseAttributeServer**\<`T`\>(`id`, `name`, `readAcl`, `writeAcl`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `initValue`, `defaultValue`): [`BaseAttributeServer`](internal_.BaseAttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -60,6 +66,8 @@ Base class for all attribute servers.
 | :------ | :------ |
 | `id` | [`AttributeId`](../modules/internal_.md#attributeid) |
 | `name` | `string` |
+| `readAcl` | `undefined` \| [`AccessLevel`](../enums/internal_.AccessLevel.md) |
+| `writeAcl` | `undefined` \| [`AccessLevel`](../enums/internal_.AccessLevel.md) |
 | `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
 | `isWritable` | `boolean` |
 | `isSubscribable` | `boolean` |
@@ -73,9 +81,19 @@ Base class for all attribute servers.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:45
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:51
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:38
+
+___
 
 ### defaultValue
 
@@ -83,7 +101,7 @@ matter.js/dist/esm/cluster/server/AttributeServer.d.ts:45
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:50
 
 ___
 
@@ -93,7 +111,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:49
 
 ___
 
@@ -103,7 +121,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:33
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:39
 
 ___
 
@@ -113,7 +131,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:37
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
 
 ___
 
@@ -123,7 +141,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:36
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
 
 ___
 
@@ -133,7 +151,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:34
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:40
 
 ___
 
@@ -143,7 +161,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:38
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
 
 ___
 
@@ -153,7 +171,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:35
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:41
 
 ___
 
@@ -165,7 +183,35 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:48
+
+## Accessors
+
+### readAcl
+
+• `get` **readAcl**(): [`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
+
+___
+
+### writeAcl
+
+• `get` **writeAcl**(): [`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
 
 ## Methods
 
@@ -185,7 +231,7 @@ matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:47
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53
 
 ___
 
@@ -208,7 +254,7 @@ adjusted before the Device gets announced. Do not use this method to change valu
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:58
 
 ___
 
@@ -228,4 +274,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:46
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52

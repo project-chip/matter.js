@@ -8,15 +8,23 @@
 
 - ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 - [AsyncConstruction](internal_.AsyncConstruction.md)
+- [AttributeId](internal_.AttributeId.md)
 - [CaseAuthenticatedTag](internal_.CaseAuthenticatedTag.md)
 - [ClusterDatasource](internal_.ClusterDatasource.md)
 - [ClusterId](internal_.ClusterId.md)
 - [ClusterType](internal_.ClusterType.md)
+- [CommandId](internal_.CommandId.md)
+- [DeviceTypeId](internal_.DeviceTypeId.md)
 - [Diagnostic](internal_.Diagnostic.md)
+- [EndpointNumber](internal_.EndpointNumber.md)
+- [EventId](internal_.EventId.md)
 - [FabricIndex](internal_.FabricIndex.md)
 - [FailsafeContext](internal_.FailsafeContext.md)
+- [FieldId](internal_.FieldId.md)
+- [GroupId](internal_.GroupId.md)
 - [NodeId](internal_.NodeId.md)
 - [SubscriptionOptions](internal_.SubscriptionOptions.md)
+- [VendorId](internal_.VendorId.md)
 
 ### Enumerations
 
@@ -28,6 +36,8 @@
 - [DeviceClasses](../enums/internal_.DeviceClasses.md)
 - [EventPriority](../enums/internal_.EventPriority.md)
 - [FabricAction](../enums/internal_.FabricAction.md)
+- [GroupKeyMulticastPolicy](../enums/internal_.GroupKeyMulticastPolicy.md)
+- [GroupKeySecurityPolicy](../enums/internal_.GroupKeySecurityPolicy.md)
 - [InterfaceType](../enums/internal_.InterfaceType.md)
 - [KeyType](../enums/internal_.KeyType.md)
 - [NodeStateInformation](../enums/internal_.NodeStateInformation.md)
@@ -229,6 +239,7 @@
 - [DecodedAttributeReportValue](internal_.md#decodedattributereportvalue)
 - [DecodedEventData](internal_.md#decodedeventdata)
 - [DecodedEventReportValue](internal_.md#decodedeventreportvalue)
+- [DelayedChangeData](internal_.md#delayedchangedata)
 - [DeviceTypeId](internal_.md#devicetypeid)
 - [DiscoverableDevice](internal_.md#discoverabledevice)
 - [DiscoveryData](internal_.md#discoverydata)
@@ -585,6 +596,8 @@ matter.js/dist/esm/datatype/AttributeId.d.ts:14
 
 matter.js/dist/esm/datatype/AttributeId.d.ts:13
 
+matter.js/dist/esm/datatype/AttributeId.d.ts:15
+
 ___
 
 ### AttributeJsType
@@ -599,7 +612,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:83
+matter.js/dist/esm/cluster/Cluster.d.ts:84
 
 ___
 
@@ -962,7 +975,7 @@ ___
 
 ### ClusterId
 
-Ƭ **ClusterId**\<`ID`\>: [`Branded`](internal_.md#branded)\<`ID`, ``"ClusterId"``\>
+Ƭ **ClusterId**: [`Branded`](internal_.md#branded)\<`number`, ``"ClusterId"``\>
 
 A Cluster Identifier is a 32 bit number and SHALL reference a single cluster specification and
 SHALL define conformance to that specification.
@@ -970,12 +983,6 @@ SHALL define conformance to that specification.
 **`See`**
 
 MatterSpecification.v10.Core § 7.10
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ID` | extends `number` = `number` |
 
 #### Defined in
 
@@ -1020,6 +1027,8 @@ matter.js/dist/esm/datatype/CommandId.d.ts:14
 
 matter.js/dist/esm/datatype/CommandId.d.ts:13
 
+matter.js/dist/esm/datatype/CommandId.d.ts:15
+
 ___
 
 ### CommandServers
@@ -1054,7 +1063,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L25)
+[matter-node-ble.js/src/ble/BleScanner.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L25)
 
 ___
 
@@ -1152,7 +1161,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:24
+matter.js/dist/esm/cluster/Cluster.d.ts:25
 
 ___
 
@@ -1274,9 +1283,27 @@ matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:23
 
 ___
 
+### DelayedChangeData
+
+Ƭ **DelayedChangeData**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `changed` | `boolean` |
+| `newValue` | `any` |
+| `oldValue` | `any` |
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:25
+
+___
+
 ### DeviceTypeId
 
-Ƭ **DeviceTypeId**\<`ID`\>: [`Branded`](internal_.md#branded)\<`ID`, ``"DeviceTypeId"``\>
+Ƭ **DeviceTypeId**: [`Branded`](internal_.md#branded)\<`number`, ``"DeviceTypeId"``\>
 
 A Device type ID is a 32-bit number that defines the type of the device.
 
@@ -1284,17 +1311,13 @@ A Device type ID is a 32-bit number that defines the type of the device.
 
 MatterSpecification.v10.Core § 7.15
 
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ID` | extends `number` = `number` |
-
 #### Defined in
 
 matter.js/dist/esm/datatype/DeviceTypeId.d.ts:14
 
 matter.js/dist/esm/datatype/DeviceTypeId.d.ts:13
+
+matter.js/dist/esm/datatype/DeviceTypeId.d.ts:15
 
 ___
 
@@ -1358,6 +1381,8 @@ MatterSpecification.v10.Core § 7.18.2.11
 matter.js/dist/esm/datatype/EndpointNumber.d.ts:14
 
 matter.js/dist/esm/datatype/EndpointNumber.d.ts:13
+
+matter.js/dist/esm/datatype/EndpointNumber.d.ts:15
 
 ___
 
@@ -1424,6 +1449,8 @@ matter.js/dist/esm/datatype/EventId.d.ts:14
 
 matter.js/dist/esm/datatype/EventId.d.ts:13
 
+matter.js/dist/esm/datatype/EventId.d.ts:15
+
 ___
 
 ### EventNumber
@@ -1469,7 +1496,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:194
+matter.js/dist/esm/cluster/Cluster.d.ts:195
 
 ___
 
@@ -1509,7 +1536,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:38
+matter.js/dist/esm/fabric/Fabric.d.ts:39
 
 ___
 
@@ -1584,7 +1611,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:20
+matter.js/dist/esm/fabric/Fabric.d.ts:21
 
 ___
 
@@ -1620,6 +1647,8 @@ MatterSpecification.v11.Core § 7.18.2.18
 matter.js/dist/esm/datatype/FieldId.d.ts:15
 
 matter.js/dist/esm/datatype/FieldId.d.ts:14
+
+matter.js/dist/esm/datatype/FieldId.d.ts:16
 
 ___
 
@@ -1667,7 +1696,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:121
+matter.js/dist/esm/cluster/Cluster.d.ts:122
 
 ___
 
@@ -1698,9 +1727,9 @@ MatterSpecification.v11.Core § 7.13
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:211
+matter.js/dist/esm/cluster/Cluster.d.ts:212
 
-matter.js/dist/esm/cluster/Cluster.d.ts:225
+matter.js/dist/esm/cluster/Cluster.d.ts:226
 
 ___
 
@@ -1726,6 +1755,8 @@ MatterSpecification.v10.Core § 2.5.4
 matter.js/dist/esm/datatype/GroupId.d.ts:21
 
 matter.js/dist/esm/datatype/GroupId.d.ts:20
+
+matter.js/dist/esm/datatype/GroupId.d.ts:22
 
 ___
 
@@ -1759,7 +1790,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:115
+matter.js/dist/esm/cluster/Cluster.d.ts:116
 
 ___
 
@@ -1793,7 +1824,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:195
+matter.js/dist/esm/cluster/Cluster.d.ts:196
 
 ___
 
@@ -2015,7 +2046,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:118
+matter.js/dist/esm/cluster/Cluster.d.ts:119
 
 ___
 
@@ -2047,7 +2078,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:198
+matter.js/dist/esm/cluster/Cluster.d.ts:199
 
 ___
 
@@ -2098,7 +2129,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:142
+matter.js/dist/esm/cluster/Cluster.d.ts:143
 
 ___
 
@@ -2114,7 +2145,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:141
+matter.js/dist/esm/cluster/Cluster.d.ts:142
 
 ___
 
@@ -2279,7 +2310,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:50
+matter.js/dist/esm/storage/Storage.d.ts:53
 
 ___
 
@@ -2559,6 +2590,8 @@ MatterSpecification.v10.Core § 2.5.2
 matter.js/dist/esm/datatype/VendorId.d.ts:16
 
 matter.js/dist/esm/datatype/VendorId.d.ts:15
+
+matter.js/dist/esm/datatype/VendorId.d.ts:17
 
 ___
 
@@ -2874,19 +2907,20 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:97
+matter.js/dist/esm/cluster/Cluster.d.ts:98
 
 ___
 
 ### AttributeId
 
-▸ **AttributeId**(`id`): [`AttributeId`](internal_.md#attributeid)
+▸ **AttributeId**(`attributeId`, `validate?`): [`AttributeId`](internal_.md#attributeid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` |
+| `attributeId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -3050,29 +3084,24 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:237
+matter.js/dist/esm/cluster/Cluster.d.ts:238
 
 ___
 
 ### ClusterId
 
-▸ **ClusterId**\<`ID`\>(`id`): [`ClusterId`](internal_.md#clusterid)\<`ID`\>
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ID` | extends `number` |
+▸ **ClusterId**(`clusterId`, `validate?`): [`ClusterId`](internal_.md#clusterid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `ID` |
+| `clusterId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
-[`ClusterId`](internal_.md#clusterid)\<`ID`\>
+[`ClusterId`](internal_.md#clusterid)
 
 #### Defined in
 
@@ -3136,19 +3165,20 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:151
+matter.js/dist/esm/cluster/Cluster.d.ts:152
 
 ___
 
 ### CommandId
 
-▸ **CommandId**(`v`): [`CommandId`](internal_.md#commandid)
+▸ **CommandId**(`commandId`, `validate?`): [`CommandId`](internal_.md#commandid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `commandId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -3212,23 +3242,18 @@ ___
 
 ### DeviceTypeId
 
-▸ **DeviceTypeId**\<`ID`\>(`v`): [`DeviceTypeId`](internal_.md#devicetypeid)\<`ID`\>
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ID` | extends `number` |
+▸ **DeviceTypeId**(`deviceTypeId`, `validate?`): [`DeviceTypeId`](internal_.md#devicetypeid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `ID` |
+| `deviceTypeId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
-[`DeviceTypeId`](internal_.md#devicetypeid)\<`ID`\>
+[`DeviceTypeId`](internal_.md#devicetypeid)
 
 #### Defined in
 
@@ -3261,13 +3286,14 @@ ___
 
 ### EndpointNumber
 
-▸ **EndpointNumber**(`n`): [`EndpointNumber`](internal_.md#endpointnumber)
+▸ **EndpointNumber**(`endpointId`, `validate?`): [`EndpointNumber`](internal_.md#endpointnumber)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `n` | `number` |
+| `endpointId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -3325,19 +3351,20 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:190
+matter.js/dist/esm/cluster/Cluster.d.ts:191
 
 ___
 
 ### EventId
 
-▸ **EventId**(`v`): [`EventId`](internal_.md#eventid)
+▸ **EventId**(`eventId`, `validate?`): [`EventId`](internal_.md#eventid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `eventId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -3435,19 +3462,20 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:103
+matter.js/dist/esm/cluster/Cluster.d.ts:104
 
 ___
 
 ### FieldId
 
-▸ **FieldId**(`id`): [`FieldId`](internal_.md#fieldid)
+▸ **FieldId**(`fieldId`, `validate?`): [`FieldId`](internal_.md#fieldid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` |
+| `fieldId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -3485,7 +3513,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:107
+matter.js/dist/esm/cluster/Cluster.d.ts:108
 
 ___
 
@@ -3511,19 +3539,20 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:225
+matter.js/dist/esm/cluster/Cluster.d.ts:226
 
 ___
 
 ### GroupId
 
-▸ **GroupId**(`v`): [`GroupId`](internal_.md#groupid)
+▸ **GroupId**(`groupId`, `validate?`): [`GroupId`](internal_.md#groupid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `groupId` | `number` \| `bigint` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -3631,7 +3660,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:98
+matter.js/dist/esm/cluster/Cluster.d.ts:99
 
 ___
 
@@ -3663,7 +3692,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:152
+matter.js/dist/esm/cluster/Cluster.d.ts:153
 
 ___
 
@@ -3693,7 +3722,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:191
+matter.js/dist/esm/cluster/Cluster.d.ts:192
 
 ___
 
@@ -3723,7 +3752,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:109
+matter.js/dist/esm/cluster/Cluster.d.ts:110
 
 ___
 
@@ -3753,7 +3782,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:101
+matter.js/dist/esm/cluster/Cluster.d.ts:102
 
 ___
 
@@ -3783,19 +3812,20 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:105
+matter.js/dist/esm/cluster/Cluster.d.ts:106
 
 ___
 
 ### VendorId
 
-▸ **VendorId**(`v`): [`VendorId`](internal_.md#vendorid)
+▸ **VendorId**(`vendorId`, `validate?`): [`VendorId`](internal_.md#vendorid)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `vendorId` | `number` |
+| `validate?` | `boolean` |
 
 #### Returns
 
@@ -3833,7 +3863,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:100
+matter.js/dist/esm/cluster/Cluster.d.ts:101
 
 ___
 
@@ -3863,7 +3893,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/Cluster.d.ts:104
+matter.js/dist/esm/cluster/Cluster.d.ts:105
 
 ___
 

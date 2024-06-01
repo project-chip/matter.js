@@ -26,7 +26,7 @@ Set the OnOff attribute to FALSE
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L29)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:29](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L29)
 
 ___
 
@@ -38,7 +38,7 @@ Set the OnOff attribute to TRUE
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:34](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L34)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:34](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L34)
 
 ___
 
@@ -51,4 +51,4 @@ previous value of the OnOff attribute is equal to TRUE, set the OnOff attribute 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L40)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:40](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L40)

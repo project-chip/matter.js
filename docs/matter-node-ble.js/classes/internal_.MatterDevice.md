@@ -23,7 +23,6 @@
 - [commissioningChangedCallback](internal_.MatterDevice.md#commissioningchangedcallback)
 - [fabricStorage](internal_.MatterDevice.md#fabricstorage)
 - [getCommissioningConfig](internal_.MatterDevice.md#getcommissioningconfig)
-- [isClosing](internal_.MatterDevice.md#isclosing)
 - [scanners](internal_.MatterDevice.md#scanners)
 - [secureChannelProtocol](internal_.MatterDevice.md#securechannelprotocol)
 - [sessionChangedCallback](internal_.MatterDevice.md#sessionchangedcallback)
@@ -36,6 +35,7 @@
 - [exchangeManager](internal_.MatterDevice.md#exchangemanager)
 - [fabricManager](internal_.MatterDevice.md#fabricmanager)
 - [failsafeContext](internal_.MatterDevice.md#failsafecontext)
+- [isClosing](internal_.MatterDevice.md#isclosing)
 - [sessionManager](internal_.MatterDevice.md#sessionmanager)
 
 ### Methods
@@ -54,6 +54,7 @@
 - [deleteTransportInterface](internal_.MatterDevice.md#deletetransportinterface)
 - [endCommissioning](internal_.MatterDevice.md#endcommissioning)
 - [existsOpenPaseSession](internal_.MatterDevice.md#existsopenpasesession)
+- [expireAllFabricAnnouncements](internal_.MatterDevice.md#expireallfabricannouncements)
 - [findDevice](internal_.MatterDevice.md#finddevice)
 - [findFabricFromDestinationId](internal_.MatterDevice.md#findfabricfromdestinationid)
 - [findResumptionRecordById](internal_.MatterDevice.md#findresumptionrecordbyid)
@@ -77,7 +78,7 @@
 
 ### constructor
 
-• **new MatterDevice**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `commissioningChangedCallback`, `sessionChangedCallback`): [`MatterDevice`](internal_.MatterDevice.md)
+• **new MatterDevice**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `minimumCaseSessionsPerFabricAndNode`, `commissioningChangedCallback`, `sessionChangedCallback`): [`MatterDevice`](internal_.MatterDevice.md)
 
 #### Parameters
 
@@ -86,6 +87,7 @@
 | `sessionStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
 | `fabricStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
 | `getCommissioningConfig` | () => [`Configuration`](../interfaces/internal_.Configuration-1.md) |
+| `minimumCaseSessionsPerFabricAndNode` | `number` |
 | `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex), `fabricAction`: [`FabricAction`](../enums/internal_.FabricAction.md)) => `void` |
 | `sessionChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex)) => `void` |
 
@@ -95,7 +97,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:44
+matter.js/dist/esm/MatterDevice.d.ts:43
 
 ## Properties
 
@@ -135,7 +137,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:63
+matter.js/dist/esm/MatterDevice.d.ts:64
 
 ___
 
@@ -209,16 +211,6 @@ matter.js/dist/esm/MatterDevice.d.ts:29
 
 ___
 
-### isClosing
-
-• `Private` **isClosing**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:41
-
-___
-
 ### scanners
 
 • `Private` `Readonly` **scanners**: `any`
@@ -279,7 +271,7 @@ matter.js/dist/esm/MatterDevice.d.ts:34
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:42
+matter.js/dist/esm/MatterDevice.d.ts:41
 
 ___
 
@@ -293,7 +285,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:47
+matter.js/dist/esm/MatterDevice.d.ts:46
 
 ___
 
@@ -307,7 +299,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:45
+matter.js/dist/esm/MatterDevice.d.ts:44
 
 ___
 
@@ -318,6 +310,20 @@ ___
 #### Returns
 
 [`FailsafeContext`](internal_.FailsafeContext-1.md)
+
+#### Defined in
+
+matter.js/dist/esm/MatterDevice.d.ts:47
+
+___
+
+### isClosing
+
+• `get` **isClosing**(): `boolean`
+
+#### Returns
+
+`boolean`
 
 #### Defined in
 
@@ -335,7 +341,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:46
+matter.js/dist/esm/MatterDevice.d.ts:45
 
 ## Methods
 
@@ -435,7 +441,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:75
+matter.js/dist/esm/MatterDevice.d.ts:76
 
 ___
 
@@ -457,7 +463,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:74
+matter.js/dist/esm/MatterDevice.d.ts:75
 
 ___
 
@@ -477,7 +483,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:62
+matter.js/dist/esm/MatterDevice.d.ts:63
 
 ___
 
@@ -531,7 +537,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:82
+matter.js/dist/esm/MatterDevice.d.ts:83
 
 ___
 
@@ -585,7 +591,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:76
+matter.js/dist/esm/MatterDevice.d.ts:77
 
 ___
 
@@ -599,7 +605,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:77
+matter.js/dist/esm/MatterDevice.d.ts:78
+
+___
+
+### expireAllFabricAnnouncements
+
+▸ **expireAllFabricAnnouncements**(): `Promise`\<`void`\>
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+matter.js/dist/esm/MatterDevice.d.ts:62
 
 ___
 
@@ -621,7 +641,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:78
+matter.js/dist/esm/MatterDevice.d.ts:79
 
 ___
 
@@ -642,7 +662,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:66
+matter.js/dist/esm/MatterDevice.d.ts:67
 
 ___
 
@@ -662,7 +682,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:70
+matter.js/dist/esm/MatterDevice.d.ts:71
 
 ___
 
@@ -676,7 +696,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:83
+matter.js/dist/esm/MatterDevice.d.ts:84
 
 ___
 
@@ -696,7 +716,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:68
+matter.js/dist/esm/MatterDevice.d.ts:69
 
 ___
 
@@ -710,7 +730,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:72
+matter.js/dist/esm/MatterDevice.d.ts:73
 
 ___
 
@@ -724,7 +744,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:65
+matter.js/dist/esm/MatterDevice.d.ts:66
 
 ___
 
@@ -786,7 +806,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:69
+matter.js/dist/esm/MatterDevice.d.ts:70
 
 ___
 
@@ -800,7 +820,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:73
+matter.js/dist/esm/MatterDevice.d.ts:74
 
 ___
 
@@ -834,7 +854,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:71
+matter.js/dist/esm/MatterDevice.d.ts:72
 
 ___
 
@@ -855,7 +875,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:64
+matter.js/dist/esm/MatterDevice.d.ts:65
 
 ___
 
@@ -876,7 +896,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:67
+matter.js/dist/esm/MatterDevice.d.ts:68
 
 ___
 
@@ -910,7 +930,7 @@ ___
 
 ### create
 
-▸ **create**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `commissioningChangedCallback`, `sessionChangedCallback`): `Promise`\<[`MatterDevice`](internal_.MatterDevice.md)\>
+▸ **create**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `minimumCaseSessionsPerFabricAndNode`, `commissioningChangedCallback`, `sessionChangedCallback`): `Promise`\<[`MatterDevice`](internal_.MatterDevice.md)\>
 
 #### Parameters
 
@@ -919,6 +939,7 @@ ___
 | `sessionStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
 | `fabricStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
 | `getCommissioningConfig` | () => [`Configuration`](../interfaces/internal_.Configuration-1.md) |
+| `minimumCaseSessionsPerFabricAndNode` | `undefined` \| `number` |
 | `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex), `fabricAction`: [`FabricAction`](../enums/internal_.FabricAction.md)) => `void` |
 | `sessionChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex)) => `void` |
 
@@ -928,4 +949,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:43
+matter.js/dist/esm/MatterDevice.d.ts:42

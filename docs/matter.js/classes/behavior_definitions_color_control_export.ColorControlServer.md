@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`ClusterBehavior`](behavior_cluster_export.ClusterBehavior-1.md)\<`this`\> & `Omit`\<[`ColorControlServerLogic`](behavior_definitions_color_control_export.ColorControlServerLogic-1.md), ``"state"`` \| ``"initialize"`` \| typeof `asyncDispose` \| ``"cluster"`` \| ``"events"`` \| ``"colorLoopSet"`` \| ``"stopMoveStep"`` \| keyof HueSaturation \| keyof Xy \| keyof ColorTemperature \| keyof EnhancedHue \| ``"moveToHueLogic"`` \| ``"moveHueLogic"`` \| ``"stopHueAndSaturationMovement"`` \| ``"stepHueLogic"`` \| ``"moveToSaturationLogic"`` \| ``"moveSaturationLogic"`` \| ``"stepSaturationLogic"`` \| ``"moveToHueAndSaturationLogic"`` \| ``"moveToColorLogic"`` \| ``"stopAllColorMovement"`` \| ``"moveColorLogic"`` \| ``"stepColorLogic"`` \| ``"moveToColorTemperatureLogic"`` \| ``"moveToEnhancedHueAndSaturationLogic"`` \| ``"stopColorLoopLogic"`` \| ``"startColorLoopLogic"`` \| ``"stopMoveStepLogic"`` \| ``"moveColorTemperatureLogic"`` \| ``"stepColorTemperatureLogic"`` \| ``"switchColorMode"`` \| ``"setColorMode"`` \| ``"setEnhancedColorMode"`` \| ``"syncColorTemperatureWithLevelLogic"``\> & `Omit`\<{} & {}, `never`\> & \{ `moveColorLogic`: (`rateX`: `number`, `rateY`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveColorTemperatureLogic`: (`moveMode`: [`MoveMode`](../enums/cluster_export.ColorControl.MoveMode.md), `rate`: `number`, `colorTemperatureMinimumMireds`: `number`, `colorTemperatureMaximumMireds`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveHueLogic`: (`moveMode`: [`MoveMode`](../enums/cluster_export.ColorControl.MoveMode.md), `rate`: `number`, `isEnhancedHue`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveSaturationLogic`: (`moveMode`: [`MoveMode`](../enums/cluster_export.ColorControl.MoveMode.md), `rate`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToColorLogic`: (`targetX`: `number`, `targetY`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToColorTemperatureLogic`: (`targetMireds`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToEnhancedHueAndSaturationLogic`: (`targetEnhancedHue`: `number`, `targetSaturation`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToHueAndSaturationLogic`: (`targetHue`: `number`, `targetSaturation`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToHueLogic`: (`targetHue`: `number`, `direction`: [`ColorControlDirection`](../enums/cluster_export.ColorControl.ColorControlDirection.md), `transitionTime`: `number`, `isEnhancedHue`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToSaturationLogic`: (`targetSaturation`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `setColorMode`: (`mode`: [`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md)) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `setEnhancedColorMode`: (`mode`: [`EnhancedColorMode`](../enums/cluster_export.ColorControl.EnhancedColorMode.md)) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `startColorLoopLogic`: (`startHue`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stepColorLogic`: (`stepX`: `number`, `stepY`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stepColorTemperatureLogic`: (`stepMode`: [`StepMode`](../enums/cluster_export.ColorControl.StepMode.md), `stepSize`: `number`, `transitionTime`: `number`, `colorTemperatureMinimumMireds`: `number`, `colorTemperatureMaximumMireds`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stepHueLogic`: (`stepMode`: [`StepMode`](../enums/cluster_export.ColorControl.StepMode.md), `stepSize`: `number`, `transitionTime`: `number`, `isEnhancedHue`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stepSaturationLogic`: (`stepMode`: [`StepMode`](../enums/cluster_export.ColorControl.StepMode.md), `stepSize`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stopAllColorMovement`: () => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stopColorLoopLogic`: () => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stopHueAndSaturationMovement`: () => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stopMoveStepLogic`: () => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `switchColorMode`: (`oldMode`: [`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md), `newMode`: [`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md)) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `syncColorTemperatureWithLevelLogic`: (`level`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise)  } & \{ `cluster`: [`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: \{ `colorCapabilities`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `colorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md), `any`\> ; `colorPointBIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointBx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointBy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointGx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointRx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `compensationText`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`string`, `any`\> ; `driftCompensation`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`DriftCompensation`](../enums/cluster_export.ColorControl.DriftCompensation.md), `any`\> ; `enhancedColorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EnhancedColorMode`](../enums/cluster_export.ColorControl.EnhancedColorMode.md), `any`\> ; `numberOfPrimaries`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `primary1Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary1X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary1Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary2X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary3X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary4X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary5X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary6X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `remainingTime`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `whitePointX`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `whitePointY`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `currentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `currentSaturation`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `moveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveToSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `stepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `stepSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = HueSaturationComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `currentX`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `currentY`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `moveColor`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveToColor`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `stepColor`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = XyComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorTempPhysicalMaxMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorTempPhysicalMinMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorTemperatureMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `coupleColorTempToLevelMinMireds`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `startUpColorTemperatureMireds`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<... \| ..., `any`\>  } ; `commands`: \{ `moveColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveToColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `stepColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = ColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `enhancedCurrentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `enhancedMoveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `enhancedMoveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `enhancedMoveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `enhancedStepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = EnhancedHueComponent; `flags`: \{ `enhancedHue`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorLoopActive`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorLoopActive`](../enums/cluster_export.ColorControl.ColorLoopActive.md), `any`\> ; `colorLoopDirection`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorLoopDirection`](../enums/cluster_export.ColorControl.ColorLoopDirection.md), `any`\> ; `colorLoopStartEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorLoopStoredEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorLoopTime`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `colorLoopSet`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = ColorLoopComponent; `flags`: \{ `colorLoop`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }] ; `features`: \{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  } ; `id`: ``768`` = 0x300; `name`: ``"ColorControl"`` = "ColorControl"; `revision`: ``5`` = 5 }\> ; `events`: [`ClusterEvents`](../modules/behavior_cluster_export.md#clusterevents)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: \{ `colorCapabilities`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `colorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md), `any`\> ; `colorPointBIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointBx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointBy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointGx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointRx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `compensationText`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`string`, `any`\> ; `driftCompensation`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`DriftCompensation`](../enums/cluster_export.ColorControl.DriftCompensation.md), `any`\> ; `enhancedColorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EnhancedColorMode`](../enums/cluster_export.ColorControl.EnhancedColorMode.md), `any`\> ; `numberOfPrimaries`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `primary1Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary1X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary1Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary2X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary3X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary4X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary5X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary6X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `remainingTime`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `whitePointX`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `whitePointY`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `currentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `currentSaturation`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `moveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `currentX`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `currentY`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `moveColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = XyComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorTempPhysicalMaxMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorTempPhysicalMinMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorTemperatureMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `coupleColorTempToLevelMinMireds`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<..., ...\> ; `startUpColorTemperatureMireds`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<..., ...\>  } ; `commands`: \{ `moveColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = ColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `enhancedCurrentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `enhancedMoveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedMoveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedMoveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedStepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = EnhancedHueComponent; `flags`: \{ `enhancedHue`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorLoopActive`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopDirection`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopStartEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopStoredEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopTime`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `colorLoopSet`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = ColorLoopComponent; `flags`: \{ `colorLoop`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }] ; `features`: \{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  } ; `id`: ``768`` = 0x300; `name`: ``"ColorControl"`` = "ColorControl"; `revision`: ``5`` = 5 }\>, typeof [`ColorControlServerLogic`](../modules/behavior_definitions_color_control_export.ColorControlServerLogic.md)\> ; `features`: {} ; `state`: [`ClusterState`](../modules/behavior_cluster_export.md#clusterstate)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: \{ `colorCapabilities`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `colorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md), `any`\> ; `colorPointBIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointBx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointBy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointGx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointRx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `compensationText`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`string`, `any`\> ; `driftCompensation`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`DriftCompensation`](../enums/cluster_export.ColorControl.DriftCompensation.md), `any`\> ; `enhancedColorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EnhancedColorMode`](../enums/cluster_export.ColorControl.EnhancedColorMode.md), `any`\> ; `numberOfPrimaries`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `primary1Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary1X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary1Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary2X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary3X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary4X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary5X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary6X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `remainingTime`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `whitePointX`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `whitePointY`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `currentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `currentSaturation`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `moveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `currentX`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `currentY`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `moveColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = XyComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorTempPhysicalMaxMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorTempPhysicalMinMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorTemperatureMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `coupleColorTempToLevelMinMireds`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<..., ...\> ; `startUpColorTemperatureMireds`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<..., ...\>  } ; `commands`: \{ `moveColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = ColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `enhancedCurrentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `enhancedMoveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedMoveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedMoveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedStepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = EnhancedHueComponent; `flags`: \{ `enhancedHue`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorLoopActive`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopDirection`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopStartEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopStoredEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopTime`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `colorLoopSet`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = ColorLoopComponent; `flags`: \{ `colorLoop`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }] ; `features`: \{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  } ; `id`: ``768`` = 0x300; `name`: ``"ColorControl"`` = "ColorControl"; `revision`: ``5`` = 5 }\>, typeof [`ColorControlServerLogic`](../modules/behavior_definitions_color_control_export.ColorControlServerLogic.md)\> ; `[asyncDispose]`: () => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>  }
+- [`ClusterBehavior`](behavior_cluster_export.ClusterBehavior-1.md)\<`this`\> & `Omit`\<[`ColorControlServerLogic`](behavior_definitions_color_control_export.ColorControlServerLogic-1.md), ``"state"`` \| ``"initialize"`` \| typeof `asyncDispose` \| ``"events"`` \| ``"cluster"`` \| ``"colorLoopSet"`` \| ``"stopMoveStep"`` \| keyof HueSaturation \| keyof Xy \| keyof ColorTemperature \| keyof EnhancedHue \| ``"moveToHueLogic"`` \| ``"moveHueLogic"`` \| ``"stopHueAndSaturationMovement"`` \| ``"stepHueLogic"`` \| ``"moveToSaturationLogic"`` \| ``"moveSaturationLogic"`` \| ``"stepSaturationLogic"`` \| ``"moveToHueAndSaturationLogic"`` \| ``"moveToColorLogic"`` \| ``"stopAllColorMovement"`` \| ``"moveColorLogic"`` \| ``"stepColorLogic"`` \| ``"moveToColorTemperatureLogic"`` \| ``"moveToEnhancedHueAndSaturationLogic"`` \| ``"stopColorLoopLogic"`` \| ``"startColorLoopLogic"`` \| ``"stopMoveStepLogic"`` \| ``"moveColorTemperatureLogic"`` \| ``"stepColorTemperatureLogic"`` \| ``"switchColorMode"`` \| ``"setColorMode"`` \| ``"setEnhancedColorMode"`` \| ``"syncColorTemperatureWithLevelLogic"``\> & `Omit`\<{} & {}, `never`\> & \{ `moveColorLogic`: (`rateX`: `number`, `rateY`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveColorTemperatureLogic`: (`moveMode`: [`MoveMode`](../enums/cluster_export.ColorControl.MoveMode.md), `rate`: `number`, `colorTemperatureMinimumMireds`: `number`, `colorTemperatureMaximumMireds`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveHueLogic`: (`moveMode`: [`MoveMode`](../enums/cluster_export.ColorControl.MoveMode.md), `rate`: `number`, `isEnhancedHue`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveSaturationLogic`: (`moveMode`: [`MoveMode`](../enums/cluster_export.ColorControl.MoveMode.md), `rate`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToColorLogic`: (`targetX`: `number`, `targetY`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToColorTemperatureLogic`: (`targetMireds`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToEnhancedHueAndSaturationLogic`: (`targetEnhancedHue`: `number`, `targetSaturation`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToHueAndSaturationLogic`: (`targetHue`: `number`, `targetSaturation`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToHueLogic`: (`targetHue`: `number`, `direction`: [`ColorControlDirection`](../enums/cluster_export.ColorControl.ColorControlDirection.md), `transitionTime`: `number`, `isEnhancedHue`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `moveToSaturationLogic`: (`targetSaturation`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `setColorMode`: (`mode`: [`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md)) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `setEnhancedColorMode`: (`mode`: [`EnhancedColorMode`](../enums/cluster_export.ColorControl.EnhancedColorMode.md)) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `startColorLoopLogic`: (`startHue`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stepColorLogic`: (`stepX`: `number`, `stepY`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stepColorTemperatureLogic`: (`stepMode`: [`StepMode`](../enums/cluster_export.ColorControl.StepMode.md), `stepSize`: `number`, `transitionTime`: `number`, `colorTemperatureMinimumMireds`: `number`, `colorTemperatureMaximumMireds`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stepHueLogic`: (`stepMode`: [`StepMode`](../enums/cluster_export.ColorControl.StepMode.md), `stepSize`: `number`, `transitionTime`: `number`, `isEnhancedHue`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stepSaturationLogic`: (`stepMode`: [`StepMode`](../enums/cluster_export.ColorControl.StepMode.md), `stepSize`: `number`, `transitionTime`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stopAllColorMovement`: () => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stopColorLoopLogic`: () => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stopHueAndSaturationMovement`: () => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `stopMoveStepLogic`: () => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `switchColorMode`: (`oldMode`: [`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md), `newMode`: [`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md)) => [`MaybePromise`](../modules/util_export.md#maybepromise) ; `syncColorTemperatureWithLevelLogic`: (`level`: `number`) => [`MaybePromise`](../modules/util_export.md#maybepromise)  } & \{ `cluster`: [`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: \{ `colorCapabilities`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `colorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md), `any`\> ; `colorPointBIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointBx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointBy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointGx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointRx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `compensationText`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`string`, `any`\> ; `driftCompensation`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`DriftCompensation`](../enums/cluster_export.ColorControl.DriftCompensation.md), `any`\> ; `enhancedColorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EnhancedColorMode`](../enums/cluster_export.ColorControl.EnhancedColorMode.md), `any`\> ; `numberOfPrimaries`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `primary1Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary1X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary1Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary2X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary3X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary4X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary5X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary6X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `remainingTime`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `whitePointX`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `whitePointY`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `currentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `currentSaturation`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `moveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveToSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `stepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `stepSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = HueSaturationComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `currentX`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `currentY`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `moveColor`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveToColor`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `stepColor`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = XyComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorTempPhysicalMaxMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorTempPhysicalMinMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorTemperatureMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `coupleColorTempToLevelMinMireds`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `startUpColorTemperatureMireds`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<... \| ..., `any`\>  } ; `commands`: \{ `moveColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `moveToColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `stepColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = ColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `enhancedCurrentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `enhancedMoveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `enhancedMoveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `enhancedMoveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\> ; `enhancedStepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = EnhancedHueComponent; `flags`: \{ `enhancedHue`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorLoopActive`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorLoopActive`](../enums/cluster_export.ColorControl.ColorLoopActive.md), `any`\> ; `colorLoopDirection`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorLoopDirection`](../enums/cluster_export.ColorControl.ColorLoopDirection.md), `any`\> ; `colorLoopStartEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorLoopStoredEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorLoopTime`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `colorLoopSet`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = ColorLoopComponent; `flags`: \{ `colorLoop`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<...\>, `void`, `any`\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }] ; `features`: \{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  } ; `id`: ``768`` = 0x300; `name`: ``"ColorControl"`` = "ColorControl"; `revision`: ``5`` = 5 }\> ; `events`: [`ClusterEvents`](../modules/behavior_cluster_export.md#clusterevents)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: \{ `colorCapabilities`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `colorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md), `any`\> ; `colorPointBIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointBx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointBy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointGx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointRx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `compensationText`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`string`, `any`\> ; `driftCompensation`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`DriftCompensation`](../enums/cluster_export.ColorControl.DriftCompensation.md), `any`\> ; `enhancedColorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EnhancedColorMode`](../enums/cluster_export.ColorControl.EnhancedColorMode.md), `any`\> ; `numberOfPrimaries`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `primary1Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary1X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary1Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary2X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary3X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary4X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary5X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary6X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `remainingTime`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `whitePointX`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `whitePointY`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `currentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `currentSaturation`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `moveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `currentX`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `currentY`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `moveColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = XyComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorTempPhysicalMaxMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorTempPhysicalMinMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorTemperatureMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `coupleColorTempToLevelMinMireds`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<..., ...\> ; `startUpColorTemperatureMireds`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<..., ...\>  } ; `commands`: \{ `moveColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = ColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `enhancedCurrentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `enhancedMoveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedMoveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedMoveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedStepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = EnhancedHueComponent; `flags`: \{ `enhancedHue`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorLoopActive`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopDirection`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopStartEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopStoredEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopTime`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `colorLoopSet`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = ColorLoopComponent; `flags`: \{ `colorLoop`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }] ; `features`: \{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  } ; `id`: ``768`` = 0x300; `name`: ``"ColorControl"`` = "ColorControl"; `revision`: ``5`` = 5 }\>, typeof [`ColorControlServerLogic`](../modules/behavior_definitions_color_control_export.ColorControlServerLogic.md)\> ; `features`: {} ; `state`: [`ClusterState`](../modules/behavior_cluster_export.md#clusterstate)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: \{ `colorCapabilities`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `colorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md), `any`\> ; `colorPointBIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointBx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointBy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointGx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointRx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `compensationText`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`string`, `any`\> ; `driftCompensation`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`DriftCompensation`](../enums/cluster_export.ColorControl.DriftCompensation.md), `any`\> ; `enhancedColorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EnhancedColorMode`](../enums/cluster_export.ColorControl.EnhancedColorMode.md), `any`\> ; `numberOfPrimaries`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\> ; `primary1Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary1X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary1Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary2X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary3X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary4X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary5X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary6X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `remainingTime`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `whitePointX`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `whitePointY`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `currentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `currentSaturation`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `moveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `currentX`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `currentY`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `moveColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepColor`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = XyComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorTempPhysicalMaxMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorTempPhysicalMinMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorTemperatureMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `coupleColorTempToLevelMinMireds`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<..., ...\> ; `startUpColorTemperatureMireds`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<..., ...\>  } ; `commands`: \{ `moveColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `moveToColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `stepColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = ColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `enhancedCurrentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `enhancedMoveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedMoveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedMoveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\> ; `enhancedStepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = EnhancedHueComponent; `flags`: \{ `enhancedHue`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorLoopActive`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopDirection`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopStartEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopStoredEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\> ; `colorLoopTime`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<..., ...\>  } ; `commands`: \{ `colorLoopSet`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = ColorLoopComponent; `flags`: \{ `colorLoop`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<..., ..., ...\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }] ; `features`: \{ `colorLoop`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `xy`: [`BitFlag`](../modules/schema_export.md#bitflag)  } ; `id`: ``768`` = 0x300; `name`: ``"ColorControl"`` = "ColorControl"; `revision`: ``5`` = 5 }\>, typeof [`ColorControlServerLogic`](../modules/behavior_definitions_color_control_export.ColorControlServerLogic.md)\> ; `[asyncDispose]`: () => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>  }
 
   ↳ **`ColorControlServer`**
 
@@ -122,7 +122,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:201](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L201)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:201](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L201)
 
 ## Properties
 
@@ -136,7 +136,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).#agent
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L51)
+[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L51)
 
 ___
 
@@ -150,15 +150,15 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).[reference]
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L274)
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L274)
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L274)
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L274)
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L274)
 
 ___
 
@@ -172,15 +172,15 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).agent
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L80)
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L80)
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L80)
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L80)
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L80)
 
 ___
 
@@ -196,9 +196,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).cluster
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:47](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L47)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:47](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L47)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:306](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L306)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:306](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L306)
 
 ___
 
@@ -212,9 +212,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).colorPointBx
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:338](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L338)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:338](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L338)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:346](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L346)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:346](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L346)
 
 ___
 
@@ -228,9 +228,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).colorPointGx
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:312](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L312)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:312](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L312)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:320](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L320)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:320](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L320)
 
 ___
 
@@ -244,9 +244,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).colorPointGy
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:325](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L325)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:325](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L325)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:333](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L333)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:333](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L333)
 
 ___
 
@@ -260,9 +260,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).colorPointRx
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:286](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L286)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:286](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L286)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:294](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L294)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:294](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L294)
 
 ___
 
@@ -276,9 +276,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).colorPointRy
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:299](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L299)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:299](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L299)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:307](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L307)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:307](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L307)
 
 ___
 
@@ -292,15 +292,15 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).context
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L94)
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L94)
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L94)
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L94)
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L94)
 
 ___
 
@@ -314,15 +314,15 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).endpoint
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L87)
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L87)
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L87)
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L87)
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L87)
 
 ___
 
@@ -336,9 +336,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).enhancedHue
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:186](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L186)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:186](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L186)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:193](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L193)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:193](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L193)
 
 ___
 
@@ -354,9 +354,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).events
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L145)
+[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L145)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:316](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L316)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:316](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L316)
 
 ___
 
@@ -372,23 +372,23 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).features
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:54](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L54)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:321](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L321)
 
 ___
 
@@ -402,9 +402,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).hue
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:174](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L174)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:174](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L174)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:181](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L181)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:181](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L181)
 
 ___
 
@@ -418,9 +418,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).kelvin
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:230](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L230)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:230](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L230)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:235](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L235)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:235](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L235)
 
 ___
 
@@ -434,7 +434,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).maximumColorTemperat
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:253](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L253)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:253](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L253)
 
 ___
 
@@ -448,7 +448,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).minimumColorTemperat
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:243](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L243)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:243](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L243)
 
 ___
 
@@ -462,9 +462,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).mireds
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:214](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L214)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:214](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L214)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:221](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L221)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:221](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L221)
 
 ___
 
@@ -478,9 +478,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).saturation
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:198](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L198)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:198](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L198)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:205](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L205)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:205](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L205)
 
 ___
 
@@ -494,15 +494,15 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).session
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L101)
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L101)
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L101)
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L101)
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L101)
 
 ___
 
@@ -518,9 +518,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).state
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:140](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L140)
+[packages/matter.js/src/behavior/Behavior.ts:140](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L140)
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:311](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L311)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:311](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L311)
 
 ___
 
@@ -534,9 +534,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).whitePointX
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:260](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L260)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:260](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L260)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:268](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L268)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:268](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L268)
 
 ___
 
@@ -550,9 +550,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).whitePointY
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:273](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L273)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:273](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L273)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:281](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L281)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:281](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L281)
 
 ___
 
@@ -566,9 +566,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).x
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:146](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L146)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:146](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L146)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:154](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L154)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:154](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L154)
 
 ___
 
@@ -582,9 +582,9 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).y
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:159](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L159)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:159](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L159)
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:167](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L167)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:167](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L167)
 
 ___
 
@@ -598,7 +598,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).Events
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:215](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L215)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:215](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L215)
 
 ___
 
@@ -640,7 +640,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).ExtensionInterface
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:226](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L226)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:226](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L226)
 
 ___
 
@@ -654,7 +654,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).Interface
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:218](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L218)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:218](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L218)
 
 ___
 
@@ -668,7 +668,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).Internal
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:217](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L217)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:217](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L217)
 
 ___
 
@@ -690,7 +690,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).State
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
 
 ___
 
@@ -706,7 +706,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).cluster
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:213](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L213)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:213](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L213)
 
 ___
 
@@ -720,7 +720,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).defaults
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:222](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L222)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:222](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L222)
 
 ___
 
@@ -734,7 +734,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).dependencies
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:224](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L224)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:224](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L224)
 
 ___
 
@@ -748,7 +748,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).early
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:221](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L221)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:221](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L221)
 
 ___
 
@@ -764,7 +764,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).id
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:208](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L208)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:208](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L208)
 
 ___
 
@@ -778,7 +778,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).name
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:203](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L203)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:203](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L203)
 
 ___
 
@@ -792,7 +792,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).schema
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:220](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L220)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:220](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L220)
 
 ___
 
@@ -806,7 +806,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).supervisor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:223](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L223)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:223](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L223)
 
 ___
 
@@ -834,7 +834,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).supports
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:225](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L225)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:225](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L225)
 
 ## Methods
 
@@ -855,7 +855,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).[asyncDispose]
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:198](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L198)
+[packages/matter.js/src/behavior/Behavior.ts:198](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L198)
 
 ___
 
@@ -888,7 +888,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).asAdmin
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L125)
+[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L125)
 
 ___
 
@@ -920,7 +920,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).assertAttributeEnabl
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:183](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L183)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:183](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L183)
 
 ___
 
@@ -969,7 +969,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).callback
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L226)
+[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L226)
 
 ___
 
@@ -999,7 +999,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).initialize
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:192](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L192)
+[packages/matter.js/src/behavior/Behavior.ts:192](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L192)
 
 ___
 
@@ -1024,7 +1024,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).moveColorLogic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2202](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2202)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2202](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2202)
 
 ___
 
@@ -1051,7 +1051,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).moveColorTemperature
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2213](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2213)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2213](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2213)
 
 ___
 
@@ -1077,7 +1077,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).moveHueLogic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2188](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2188)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2188](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2188)
 
 ___
 
@@ -1102,7 +1102,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).moveSaturationLogic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2197](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2197)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2197](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2197)
 
 ___
 
@@ -1128,7 +1128,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).moveToColorLogic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2200](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2200)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2200](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2200)
 
 ___
 
@@ -1153,7 +1153,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).moveToColorTemperatu
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2204](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2204)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2204](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2204)
 
 ___
 
@@ -1179,7 +1179,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).moveToEnhancedHueAnd
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2205](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2205)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2205](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2205)
 
 ___
 
@@ -1205,7 +1205,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).moveToHueAndSaturati
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2199](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2199)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2199](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2199)
 
 ___
 
@@ -1232,7 +1232,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).moveToHueLogic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2182](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2182)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2182](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2182)
 
 ___
 
@@ -1257,7 +1257,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).moveToSaturationLogi
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2196](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2196)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2196](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2196)
 
 ___
 
@@ -1293,7 +1293,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).reactTo
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L212)
+[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L212)
 
 ___
 
@@ -1325,7 +1325,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).requireAttributeEnab
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:171](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L171)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:171](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L171)
 
 ___
 
@@ -1349,7 +1349,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).setColorMode
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2227](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2227)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2227](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2227)
 
 ___
 
@@ -1373,7 +1373,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).setEnhancedColorMode
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2228](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2228)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2228](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2228)
 
 ___
 
@@ -1397,7 +1397,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).startColorLoopLogic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2211](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2211)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2211](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2211)
 
 ___
 
@@ -1423,7 +1423,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).stepColorLogic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2203](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2203)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2203](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2203)
 
 ___
 
@@ -1451,7 +1451,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).stepColorTemperature
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2219](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2219)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2219](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2219)
 
 ___
 
@@ -1478,7 +1478,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).stepHueLogic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2190](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2190)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2190](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2190)
 
 ___
 
@@ -1504,7 +1504,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).stepSaturationLogic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2198](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2198)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2198](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2198)
 
 ___
 
@@ -1522,7 +1522,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).stopAllColorMovement
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2201](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2201)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2201](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2201)
 
 ___
 
@@ -1540,7 +1540,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).stopColorLoopLogic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2210](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2210)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2210](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2210)
 
 ___
 
@@ -1558,7 +1558,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).stopHueAndSaturation
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2189](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2189)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2189](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2189)
 
 ___
 
@@ -1576,7 +1576,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).stopMoveStepLogic
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2212](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2212)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2212](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2212)
 
 ___
 
@@ -1601,7 +1601,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).switchColorMode
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2226](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2226)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2226](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2226)
 
 ___
 
@@ -1630,7 +1630,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).syncColorTemperature
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1597](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1597)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:1597](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L1597)
 
 ___
 
@@ -1654,7 +1654,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).syncColorTemperature
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2229](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2229)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2229](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2229)
 
 ___
 
@@ -1674,7 +1674,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).toString
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L203)
+[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L203)
 
 ___
 
@@ -1706,7 +1706,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).alter
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:254](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L254)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:254](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L254)
 
 ___
 
@@ -1738,7 +1738,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).enable
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:264](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L264)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:264](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L264)
 
 ___
 
@@ -1771,7 +1771,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).for
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:240](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L240)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:240](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L240)
 
 ___
 
@@ -1802,7 +1802,7 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).set
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:262](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L262)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:262](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L262)
 
 ___
 
@@ -1834,4 +1834,4 @@ ColorControlServerLogic.for(ClusterType(ColorControl.Base)).with
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:246](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L246)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:246](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L246)

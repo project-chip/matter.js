@@ -32,7 +32,7 @@ TypeFromSchema.attributeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L23)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L23)
 
 ___
 
@@ -46,7 +46,7 @@ TypeFromSchema.numberOfIntervals
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L25)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L25)
 
 ___
 
@@ -60,4 +60,4 @@ TypeFromSchema.startTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L24)

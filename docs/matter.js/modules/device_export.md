@@ -70,7 +70,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:92](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/device/PairedNode.ts#L92)
+[packages/matter.js/src/device/PairedNode.ts:92](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/device/PairedNode.ts#L92)
 
 ___
 
@@ -103,7 +103,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/EndpointStructureLogger.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/device/EndpointStructureLogger.ts#L23)
+[packages/matter.js/src/device/EndpointStructureLogger.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/device/EndpointStructureLogger.ts#L23)
 
 ## Variables
 
@@ -117,7 +117,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:118](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/device/DeviceTypes.ts#L118)
+[packages/matter.js/src/device/DeviceTypes.ts:118](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/device/DeviceTypes.ts#L118)
 
 ## Functions
 
@@ -147,7 +147,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:83](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/device/DeviceTypes.ts#L83)
+[packages/matter.js/src/device/DeviceTypes.ts:83](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/device/DeviceTypes.ts#L83)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:988](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/device/DeviceTypes.ts#L988)
+[packages/matter.js/src/device/DeviceTypes.ts:988](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/device/DeviceTypes.ts#L988)
 
 ___
 
@@ -197,7 +197,7 @@ the custom ones are used if defined
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/device/Device.ts#L29)
+[packages/matter.js/src/device/Device.ts:28](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/device/Device.ts#L28)
 
 ___
 
@@ -231,7 +231,7 @@ for multiple clusters
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:34](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/device/OnOffDevices.ts#L34)
+[packages/matter.js/src/device/OnOffDevices.ts:34](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/device/OnOffDevices.ts#L34)
 
 ___
 
@@ -251,7 +251,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:997](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/device/DeviceTypes.ts#L997)
+[packages/matter.js/src/device/DeviceTypes.ts:997](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/device/DeviceTypes.ts#L997)
 
 ___
 
@@ -272,4 +272,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/EndpointStructureLogger.ts:237](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/device/EndpointStructureLogger.ts#L237)
+[packages/matter.js/src/device/EndpointStructureLogger.ts:237](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/device/EndpointStructureLogger.ts#L237)

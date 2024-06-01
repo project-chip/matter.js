@@ -29,7 +29,7 @@ MatterSpecification.v11.Cluster § 1.4.9.13
 
 ### extensionFieldSets
 
-• `Optional` **extensionFieldSets**: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `attributeValue`: [`FieldType`](tlv_export.FieldType.md)\<[`TlvStream`](../modules/tlv_export.md#tlvstream)\>  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\>  }\>[]
+• `Optional` **extensionFieldSets**: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `attributeValue`: [`FieldType`](tlv_export.FieldType.md)\<[`TlvStream`](../modules/tlv_export.md#tlvstream)\>  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\>  }\>[]
 
 #### Inherited from
 
@@ -37,7 +37,7 @@ TypeFromSchema.extensionFieldSets
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:158](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L158)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:158](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L158)
 
 ___
 
@@ -51,7 +51,7 @@ TypeFromSchema.groupId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:154](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L154)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:154](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L154)
 
 ___
 
@@ -65,7 +65,7 @@ TypeFromSchema.sceneId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:155](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L155)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:155](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L155)
 
 ___
 
@@ -79,7 +79,7 @@ TypeFromSchema.sceneName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:157](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:157](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L157)
 
 ___
 
@@ -93,7 +93,7 @@ TypeFromSchema.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:153](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L153)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:153](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L153)
 
 ___
 
@@ -107,4 +107,4 @@ TypeFromSchema.transitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:156](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L156)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:156](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L156)

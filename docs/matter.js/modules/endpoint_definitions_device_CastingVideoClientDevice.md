@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:55](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L55)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:55](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L55)
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:190](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L190)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:190](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L190)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:182](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L182)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:182](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L182)

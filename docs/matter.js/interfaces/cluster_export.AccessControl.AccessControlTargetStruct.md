@@ -26,7 +26,7 @@ MatterSpecification.v11.Core § 9.10.4.4
 
 ### cluster
 
-• **cluster**: ``null`` \| [`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>
+• **cluster**: ``null`` \| [`ClusterId`](../modules/datatype_export.md#clusterid)
 
 #### Inherited from
 
@@ -34,13 +34,13 @@ TypeFromSchema.cluster
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:104](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L104)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:104](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L104)
 
 ___
 
 ### deviceType
 
-• **deviceType**: ``null`` \| [`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)\<`number`\>
+• **deviceType**: ``null`` \| [`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)
 
 #### Inherited from
 
@@ -48,7 +48,7 @@ TypeFromSchema.deviceType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:106](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:106](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L106)
 
 ___
 
@@ -62,4 +62,4 @@ TypeFromSchema.endpoint
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:105](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:105](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L105)

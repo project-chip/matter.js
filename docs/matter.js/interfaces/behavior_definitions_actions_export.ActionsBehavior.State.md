@@ -37,7 +37,7 @@ StateType.actionList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:711](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L711)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:711](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L711)
 
 ___
 
@@ -58,7 +58,7 @@ StateType.endpointLists
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:719](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L719)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:719](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L719)
 
 ___
 
@@ -97,4 +97,4 @@ StateType.setupUrl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:745](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L745)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:745](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L745)

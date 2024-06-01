@@ -8,6 +8,7 @@
 
 ### Properties
 
+- [caseAuthenticatedTags](internal_.ResumptionRecord.md#caseauthenticatedtags)
 - [fabric](internal_.ResumptionRecord.md#fabric)
 - [peerNodeId](internal_.ResumptionRecord.md#peernodeid)
 - [resumptionId](internal_.ResumptionRecord.md#resumptionid)
@@ -16,13 +17,23 @@
 
 ## Properties
 
+### caseAuthenticatedTags
+
+• `Optional` **caseAuthenticatedTags**: [`CaseAuthenticatedTag`](../modules/internal_.md#caseauthenticatedtag)[]
+
+#### Defined in
+
+matter.js/dist/esm/session/SessionManager.d.ts:22
+
+___
+
 ### fabric
 
 • **fabric**: [`Fabric`](../classes/internal_.Fabric.md)
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:18
+matter.js/dist/esm/session/SessionManager.d.ts:19
 
 ___
 
@@ -32,7 +43,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:19
+matter.js/dist/esm/session/SessionManager.d.ts:20
 
 ___
 
@@ -42,7 +53,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:17
+matter.js/dist/esm/session/SessionManager.d.ts:18
 
 ___
 
@@ -52,7 +63,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:20
+matter.js/dist/esm/session/SessionManager.d.ts:21
 
 ___
 
@@ -62,4 +73,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:16
+matter.js/dist/esm/session/SessionManager.d.ts:17

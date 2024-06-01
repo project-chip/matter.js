@@ -12,6 +12,10 @@ Matter.js uses this key/value API to manage persistent state.
 
 ## Table of contents
 
+### Properties
+
+- [initialized](internal_.Storage.md#initialized)
+
 ### Methods
 
 - [clearAll](internal_.Storage.md#clearall)
@@ -23,6 +27,16 @@ Matter.js uses this key/value API to manage persistent state.
 - [keys](internal_.Storage.md#keys)
 - [set](internal_.Storage.md#set)
 - [values](internal_.Storage.md#values)
+
+## Properties
+
+### initialized
+
+• `Readonly` **initialized**: `boolean`
+
+#### Defined in
+
+matter.js/dist/esm/storage/Storage.d.ts:15
 
 ## Methods
 
@@ -42,7 +56,7 @@ Matter.js uses this key/value API to manage persistent state.
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:24
+matter.js/dist/esm/storage/Storage.d.ts:25
 
 ___
 
@@ -56,7 +70,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:16
+matter.js/dist/esm/storage/Storage.d.ts:17
 
 ___
 
@@ -76,7 +90,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:23
+matter.js/dist/esm/storage/Storage.d.ts:24
 
 ___
 
@@ -97,7 +111,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:20
+matter.js/dist/esm/storage/Storage.d.ts:21
 
 ___
 
@@ -118,7 +132,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:17
+matter.js/dist/esm/storage/Storage.d.ts:18
 
 ___
 
@@ -132,7 +146,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:15
+matter.js/dist/esm/storage/Storage.d.ts:16
 
 ___
 
@@ -152,7 +166,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:21
+matter.js/dist/esm/storage/Storage.d.ts:22
 
 ___
 
@@ -173,7 +187,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:18
+matter.js/dist/esm/storage/Storage.d.ts:19
 
 ▸ **set**(`contexts`, `key`, `value`): [`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\>
 
@@ -191,7 +205,7 @@ matter.js/dist/esm/storage/Storage.d.ts:18
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:19
+matter.js/dist/esm/storage/Storage.d.ts:20
 
 ___
 
@@ -211,4 +225,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:22
+matter.js/dist/esm/storage/Storage.d.ts:23

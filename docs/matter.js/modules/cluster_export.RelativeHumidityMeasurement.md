@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:79](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L79)
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:79](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L79)
 
-[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:81](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L81)
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:81](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L81)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:20](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L20)
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L20)
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:83](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L83)
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:83](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L83)

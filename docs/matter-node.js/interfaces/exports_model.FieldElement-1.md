@@ -94,7 +94,7 @@ ValueElement.children
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:19
+packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:20
 
 ___
 
@@ -208,7 +208,7 @@ ValueElement.id
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:18
+packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:19
 
 ___
 
@@ -251,7 +251,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:13
+packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:14
 
 ___
 

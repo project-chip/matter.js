@@ -12,10 +12,8 @@
 
 ### Properties
 
-- [channels](internal_.ChannelManager.md#channels)
-- [getChannelKey](internal_.ChannelManager.md#getchannelkey)
+- [#private](internal_.ChannelManager.md##private)
 - [getOrCreateAsPaseChannel](internal_.ChannelManager.md#getorcreateaspasechannel)
-- [paseChannels](internal_.ChannelManager.md#pasechannels)
 
 ### Methods
 
@@ -23,6 +21,7 @@
 - [getChannel](internal_.ChannelManager.md#getchannel)
 - [getChannelForSession](internal_.ChannelManager.md#getchannelforsession)
 - [getOrCreateChannel](internal_.ChannelManager.md#getorcreatechannel)
+- [removeAllNodeChannels](internal_.ChannelManager.md#removeallnodechannels)
 - [removeChannel](internal_.ChannelManager.md#removechannel)
 - [setChannel](internal_.ChannelManager.md#setchannel)
 
@@ -30,31 +29,31 @@
 
 ### constructor
 
-• **new ChannelManager**(): [`ChannelManager`](internal_.ChannelManager.md)
+• **new ChannelManager**(`caseSessionsPerFabricAndNode?`): [`ChannelManager`](internal_.ChannelManager.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `caseSessionsPerFabricAndNode?` | `number` |
 
 #### Returns
 
 [`ChannelManager`](internal_.ChannelManager.md)
 
+#### Defined in
+
+matter.js/dist/esm/protocol/ChannelManager.d.ts:17
+
 ## Properties
 
-### channels
+### #private
 
-• `Private` `Readonly` **channels**: `any`
+• `Private` **#private**: `any`
 
 #### Defined in
 
 matter.js/dist/esm/protocol/ChannelManager.d.ts:16
-
-___
-
-### getChannelKey
-
-• `Private` **getChannelKey**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/protocol/ChannelManager.d.ts:18
 
 ___
 
@@ -64,17 +63,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ChannelManager.d.ts:23
-
-___
-
-### paseChannels
-
-• `Private` `Readonly` **paseChannels**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/protocol/ChannelManager.d.ts:17
+matter.js/dist/esm/protocol/ChannelManager.d.ts:26
 
 ## Methods
 
@@ -88,13 +77,13 @@ matter.js/dist/esm/protocol/ChannelManager.d.ts:17
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ChannelManager.d.ts:25
+matter.js/dist/esm/protocol/ChannelManager.d.ts:28
 
 ___
 
 ### getChannel
 
-▸ **getChannel**(`fabric`, `nodeId`): [`MessageChannel`](internal_.MessageChannel.md)\<`any`\>
+▸ **getChannel**(`fabric`, `nodeId`, `session?`): [`MessageChannel`](internal_.MessageChannel.md)\<`any`\>
 
 #### Parameters
 
@@ -102,6 +91,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](internal_.Fabric.md) |
 | `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
+| `session?` | [`Session`](internal_.Session.md)\<`any`\> |
 
 #### Returns
 
@@ -109,13 +99,15 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ChannelManager.d.ts:20
+matter.js/dist/esm/protocol/ChannelManager.d.ts:19
 
 ___
 
 ### getChannelForSession
 
 ▸ **getChannelForSession**(`session`): `undefined` \| [`MessageChannel`](internal_.MessageChannel.md)\<`any`\>
+
+Returns the last established session for a Fabric and Node
 
 #### Parameters
 
@@ -129,7 +121,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ChannelManager.d.ts:21
+matter.js/dist/esm/protocol/ChannelManager.d.ts:23
 
 ___
 
@@ -150,13 +142,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ChannelManager.d.ts:24
+matter.js/dist/esm/protocol/ChannelManager.d.ts:27
 
 ___
 
-### removeChannel
+### removeAllNodeChannels
 
-▸ **removeChannel**(`fabric`, `nodeId`): `Promise`\<`void`\>
+▸ **removeAllNodeChannels**(`fabric`, `nodeId`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -171,7 +163,29 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ChannelManager.d.ts:22
+matter.js/dist/esm/protocol/ChannelManager.d.ts:24
+
+___
+
+### removeChannel
+
+▸ **removeChannel**(`fabric`, `nodeId`, `session`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](internal_.Fabric.md) |
+| `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
+| `session` | [`Session`](internal_.Session.md)\<`any`\> |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+matter.js/dist/esm/protocol/ChannelManager.d.ts:25
 
 ___
 
@@ -193,4 +207,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ChannelManager.d.ts:19
+matter.js/dist/esm/protocol/ChannelManager.d.ts:18

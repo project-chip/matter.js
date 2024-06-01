@@ -45,9 +45,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L31)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L31)
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L46)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:46](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L46)
 
 ___
 
@@ -67,7 +67,7 @@ MatterSpecification.v11.Cluster § 6.8.3.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:22](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L22)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L22)
 
 ___
 
@@ -83,7 +83,7 @@ MatterSpecification.v11.Cluster § 6.8.3.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L29)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:29](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L29)
 
 ## Variables
 
@@ -95,8 +95,8 @@ KeypadInputBehavior is the base class for objects that support interaction with 
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:16](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:16](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:21](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L23)

@@ -13,12 +13,13 @@
 ### Functions
 
 - [extractAsCaseAuthenticatedTag](internal_.NodeId.md#extractascaseauthenticatedtag)
-- [getFromCaseAuthenticatedTag](internal_.NodeId.md#getfromcaseauthenticatedtag)
-- [getFromGroupNodeId](internal_.NodeId.md#getfromgroupnodeid)
+- [fromCaseAuthenticatedTag](internal_.NodeId.md#fromcaseauthenticatedtag)
+- [fromGroupNodeId](internal_.NodeId.md#fromgroupnodeid)
+- [fromTemporaryLocalNodeId](internal_.NodeId.md#fromtemporarylocalnodeid)
 - [getFromPakeKeyIdentifier](internal_.NodeId.md#getfrompakekeyidentifier)
-- [getFromTemporaryLocalNodeId](internal_.NodeId.md#getfromtemporarylocalnodeid)
-- [getRandomOperationalNodeId](internal_.NodeId.md#getrandomoperationalnodeid)
+- [isCaseAuthenticatedTag](internal_.NodeId.md#iscaseauthenticatedtag)
 - [isOperationalNodeId](internal_.NodeId.md#isoperationalnodeid)
+- [randomOperationalNodeId](internal_.NodeId.md#randomoperationalnodeid)
 - [toHexString](internal_.NodeId.md#tohexstring)
 
 ## Variables
@@ -52,13 +53,13 @@ matter.js/dist/esm/datatype/NodeId.d.ts:22
 
 #### Defined in
 
-matter.js/dist/esm/datatype/NodeId.d.ts:47
+matter.js/dist/esm/datatype/NodeId.d.ts:48
 
 ___
 
-### getFromCaseAuthenticatedTag
+### fromCaseAuthenticatedTag
 
-▸ **getFromCaseAuthenticatedTag**(`id`): [`NodeId`](internal_.md#nodeid)
+▸ **fromCaseAuthenticatedTag**(`id`): [`NodeId`](internal_.md#nodeid)
 
 This subrange of Node ID is used to assign an access control subject to a group of peer nodes that share a
 single CASE session as specified in Section 6.6.2.1.2, “Subjects identified by CASE Authenticated Tag”.
@@ -79,9 +80,9 @@ matter.js/dist/esm/datatype/NodeId.d.ts:46
 
 ___
 
-### getFromGroupNodeId
+### fromGroupNodeId
 
-▸ **getFromGroupNodeId**(`groupId`): [`NodeId`](internal_.md#nodeid)
+▸ **fromGroupNodeId**(`groupId`): [`NodeId`](internal_.md#nodeid)
 
 A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the lower half of the Node ID.
 
@@ -98,6 +99,30 @@ A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the l
 #### Defined in
 
 matter.js/dist/esm/datatype/NodeId.d.ts:35
+
+___
+
+### fromTemporaryLocalNodeId
+
+▸ **fromTemporaryLocalNodeId**(`id`): [`NodeId`](internal_.md#nodeid)
+
+A Temporary Local Node ID is a 64-bit Node ID that contains an implementation-dependent value in its lower
+32 bits. This allows implementations to keep track of connections or transport-layer links and similar
+housekeeping internal usage purposes in contexts where an Operational Node ID is unavailable.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+[`NodeId`](internal_.md#nodeid)
+
+#### Defined in
+
+matter.js/dist/esm/datatype/NodeId.d.ts:41
 
 ___
 
@@ -121,49 +146,27 @@ administrative access to any commissioner communicating via a PASE session estab
 
 #### Defined in
 
-matter.js/dist/esm/datatype/NodeId.d.ts:53
+matter.js/dist/esm/datatype/NodeId.d.ts:54
 
 ___
 
-### getFromTemporaryLocalNodeId
+### isCaseAuthenticatedTag
 
-▸ **getFromTemporaryLocalNodeId**(`id`): [`NodeId`](internal_.md#nodeid)
-
-A Temporary Local Node ID is a 64-bit Node ID that contains an implementation-dependent value in its lower
-32 bits. This allows implementations to keep track of connections or transport-layer links and similar
-housekeeping internal usage purposes in contexts where an Operational Node ID is unavailable.
+▸ **isCaseAuthenticatedTag**(`nodeId`): `boolean`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` |
+| `nodeId` | [`NodeId`](internal_.md#nodeid) |
 
 #### Returns
 
-[`NodeId`](internal_.md#nodeid)
+`boolean`
 
 #### Defined in
 
-matter.js/dist/esm/datatype/NodeId.d.ts:41
-
-___
-
-### getRandomOperationalNodeId
-
-▸ **getRandomOperationalNodeId**(): [`NodeId`](internal_.md#nodeid)
-
-An Operational Node ID is a 64-bit number that uniquely identifies an individual Node on a Fabric. All messages
-must have an Operational Node ID as the source address. All unicast messages must have an Operational Node ID
-as the destination address.
-
-#### Returns
-
-[`NodeId`](internal_.md#nodeid)
-
-#### Defined in
-
-matter.js/dist/esm/datatype/NodeId.d.ts:29
+matter.js/dist/esm/datatype/NodeId.d.ts:47
 
 ___
 
@@ -186,6 +189,24 @@ Returns whether the given Node ID is an Operational Node ID.
 #### Defined in
 
 matter.js/dist/esm/datatype/NodeId.d.ts:33
+
+___
+
+### randomOperationalNodeId
+
+▸ **randomOperationalNodeId**(): [`NodeId`](internal_.md#nodeid)
+
+An Operational Node ID is a 64-bit number that uniquely identifies an individual Node on a Fabric. All messages
+must have an Operational Node ID as the source address. All unicast messages must have an Operational Node ID
+as the destination address.
+
+#### Returns
+
+[`NodeId`](internal_.md#nodeid)
+
+#### Defined in
+
+matter.js/dist/esm/datatype/NodeId.d.ts:29
 
 ___
 

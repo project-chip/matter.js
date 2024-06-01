@@ -9,13 +9,14 @@
 ### Functions
 
 - [buildVendorSpecific](exports_datatype.ClusterId.md#buildvendorspecific)
+- [isValid](exports_datatype.ClusterId.md#isvalid)
 - [isVendorSpecific](exports_datatype.ClusterId.md#isvendorspecific)
 
 ## Functions
 
 ### buildVendorSpecific
 
-▸ **buildVendorSpecific**(`vendorPrefix`, `clusterSuffix`): [`ClusterId`](exports_datatype.md#clusterid)\<`number`\>
+▸ **buildVendorSpecific**(`vendorPrefix`, `clusterSuffix`): [`ClusterId`](exports_datatype.md#clusterid)
 
 #### Parameters
 
@@ -26,7 +27,27 @@
 
 #### Returns
 
-[`ClusterId`](exports_datatype.md#clusterid)\<`number`\>
+[`ClusterId`](exports_datatype.md#clusterid)
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/ClusterId.d.ts:20
+
+___
+
+### isValid
+
+▸ **isValid**(`clusterId`): clusterId is ClusterId
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `clusterId` | `number` |
+
+#### Returns
+
+clusterId is ClusterId
 
 #### Defined in
 
@@ -42,7 +63,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `clusterId` | [`ClusterId`](exports_datatype.md#clusterid)\<`number`\> |
+| `clusterId` | [`ClusterId`](exports_datatype.md#clusterid) |
 
 #### Returns
 

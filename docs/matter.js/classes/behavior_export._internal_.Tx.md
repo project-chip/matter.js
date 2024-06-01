@@ -80,7 +80,7 @@ The concrete implementation of the Transaction interface.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:141](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L141)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:142](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L142)
 
 ## Properties
 
@@ -90,7 +90,7 @@ The concrete implementation of the Transaction interface.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:139](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L139)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:140](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L140)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:132](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L132)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:133](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L133)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:134](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L134)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:135](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L135)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:133](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L133)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:134](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L134)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:138](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L138)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:139](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L139)
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:135](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L135)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:136](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L136)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:137](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L137)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:138](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L138)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:136](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L136)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:137](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L137)
 
 ## Accessors
 
@@ -180,7 +180,7 @@ Transaction participants.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:166](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L166)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:167](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L167)
 
 ___
 
@@ -200,7 +200,7 @@ Resources addressed by the participants.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:170](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L170)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:171](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L171)
 
 ___
 
@@ -220,7 +220,7 @@ The status of the transaction.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:162](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L162)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:163](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L163)
 
 ___
 
@@ -240,7 +240,7 @@ Diagnostic description of the transaction's source.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:158](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L158)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:159](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L159)
 
 ___
 
@@ -260,7 +260,7 @@ The transactions currently blocking this transaction, if any.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:174](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L174)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:175](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L175)
 
 ## Methods
 
@@ -274,7 +274,7 @@ The transactions currently blocking this transaction, if any.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:692](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L692)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:699](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L699)
 
 ___
 
@@ -290,7 +290,7 @@ Commit logic passed to #finalize.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:503](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L503)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:510](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L510)
 
 ___
 
@@ -304,7 +304,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:512](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L512)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:519](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L519)
 
 ___
 
@@ -318,7 +318,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:558](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L558)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:565](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L565)
 
 ___
 
@@ -338,7 +338,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:599](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L599)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:606](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L606)
 
 ___
 
@@ -354,7 +354,7 @@ Iteratively execute pre-commit until all participants "settle" and report no pos
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:408](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L408)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:409](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L409)
 
 ___
 
@@ -370,7 +370,7 @@ Rollback logic passed to #finish.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:626](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L626)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:633](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L633)
 
 ___
 
@@ -394,7 +394,7 @@ Shared implementation for commit and rollback.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:364](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L364)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:365](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L365)
 
 ___
 
@@ -415,7 +415,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:678](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L678)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:685](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L685)
 
 ___
 
@@ -435,7 +435,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:674](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L674)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:681](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L681)
 
 ___
 
@@ -461,7 +461,7 @@ Add [ParticipantType](../modules/behavior_export._internal_.md#participanttype)s
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:267](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L267)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:268](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L268)
 
 ___
 
@@ -490,7 +490,7 @@ waiting for other writers to finish if necessary.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:196](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L196)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:197](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L197)
 
 ___
 
@@ -519,7 +519,7 @@ transaction is exclusive and the resources cannot be locked.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:208](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L208)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:209](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L209)
 
 ___
 
@@ -556,7 +556,7 @@ these issues the error message will suggest solutions.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:224](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L224)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:225](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L225)
 
 ___
 
@@ -579,7 +579,7 @@ transaction.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:246](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L246)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:247](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L247)
 
 ___
 
@@ -593,7 +593,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:150](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L150)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:151](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L151)
 
 ___
 
@@ -618,7 +618,7 @@ After commit an exclusive transaction becomes shared and data references refresh
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:298](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L298)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:299](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L299)
 
 ___
 
@@ -644,7 +644,7 @@ Retrieve a participant with a specific role.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:292](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L292)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:293](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L293)
 
 ___
 
@@ -670,7 +670,7 @@ Listen for [Transaction.status](../interfaces/behavior_export._internal_.Transac
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:186](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L186)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:187](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L187)
 
 ___
 
@@ -697,7 +697,7 @@ Listen for transaction commit or roll back.  This may occur more than once for a
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:178](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L178)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:179](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L179)
 
 ___
 
@@ -722,7 +722,7 @@ After rollback an exclusive transaction becomes shared and data references refre
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:323](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L323)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:324](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L324)
 
 ___
 
@@ -736,7 +736,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:357](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L357)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:358](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L358)
 
 ___
 
@@ -762,4 +762,4 @@ Wait for a set of transactions to complete.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Tx.ts:329](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/state/transaction/Tx.ts#L329)
+[packages/matter.js/src/behavior/state/transaction/Tx.ts:330](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Tx.ts#L330)

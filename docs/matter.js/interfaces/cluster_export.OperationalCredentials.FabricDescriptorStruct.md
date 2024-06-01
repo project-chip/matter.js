@@ -47,7 +47,7 @@ TypeFromSchema.fabricId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:107](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L107)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:107](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L107)
 
 ___
 
@@ -61,7 +61,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:126](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L126)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:126](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L126)
 
 ___
 
@@ -82,7 +82,7 @@ TypeFromSchema.label
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:124](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L124)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:124](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L124)
 
 ___
 
@@ -104,7 +104,7 @@ TypeFromSchema.nodeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:116](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L116)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:116](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L116)
 
 ___
 
@@ -127,7 +127,7 @@ TypeFromSchema.rootPublicKey
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:86](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L86)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:86](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L86)
 
 ___
 
@@ -152,4 +152,4 @@ TypeFromSchema.vendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:98](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L98)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:98](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L98)

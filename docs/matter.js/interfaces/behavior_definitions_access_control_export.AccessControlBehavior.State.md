@@ -44,13 +44,13 @@ StateType.accessControlEntriesPerFabric
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:455](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L455)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:455](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L455)
 
 ___
 
 ### acl
 
-• **acl**: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `authMode`: [`FieldType`](tlv_export.FieldType.md)\<[`AccessControlEntryAuthMode`](../enums/cluster_export.AccessControl.AccessControlEntryAuthMode.md)\> ; `fabricIndex`: [`FieldType`](tlv_export.FieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `privilege`: [`FieldType`](tlv_export.FieldType.md)\<[`AccessControlEntryPrivilege`](../enums/cluster_export.AccessControl.AccessControlEntryPrivilege.md)\> ; `subjects`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`NodeId`](../modules/datatype_export.md#nodeid)[]\> ; `targets`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `cluster`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`ClusterId`](../modules/datatype_export.md#clusterid)\<...\>\> ; `deviceType`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)\<...\>\> ; `endpoint`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\>  }\>[]\>  }\>[]
+• **acl**: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `authMode`: [`FieldType`](tlv_export.FieldType.md)\<[`AccessControlEntryAuthMode`](../enums/cluster_export.AccessControl.AccessControlEntryAuthMode.md)\> ; `fabricIndex`: [`FieldType`](tlv_export.FieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `privilege`: [`FieldType`](tlv_export.FieldType.md)\<[`AccessControlEntryPrivilege`](../enums/cluster_export.AccessControl.AccessControlEntryPrivilege.md)\> ; `subjects`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`NodeId`](../modules/datatype_export.md#nodeid)[]\> ; `targets`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `cluster`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `deviceType`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)\> ; `endpoint`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\>  }\>[]\>  }\>[]
 
 An attempt to add an Access Control Entry when no more entries are available shall result in a
 RESOURCE_EXHAUSTED error being reported and the ACL attribute shall NOT have the entry
@@ -74,7 +74,7 @@ StateType.acl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:400](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L400)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:400](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L400)
 
 ___
 
@@ -97,7 +97,7 @@ StateType.extension
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:414](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L414)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:414](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L414)
 
 ___
 
@@ -122,7 +122,7 @@ StateType.subjectsPerAccessControlEntry
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:430](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L430)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:430](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L430)
 
 ___
 
@@ -147,4 +147,4 @@ StateType.targetsPerAccessControlEntry
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:442](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L442)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:442](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L442)

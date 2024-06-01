@@ -20,11 +20,14 @@ Root endpoint of a device. This is used internally and not needed to be instance
 
 ### Properties
 
-- [deviceType](exports_device.RootEndpoint.md#devicetype)
 - [deviceTypes](exports_device.RootEndpoint.md#devicetypes)
 - [name](exports_device.RootEndpoint.md#name)
 - [number](exports_device.RootEndpoint.md#number)
 - [uniqueStorageKey](exports_device.RootEndpoint.md#uniquestoragekey)
+
+### Accessors
+
+- [deviceType](exports_device.RootEndpoint.md#devicetype)
 
 ### Methods
 
@@ -75,19 +78,9 @@ Create a new RootEndpoint instance. This is automatically instanced by the Commi
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:57
+packages/matter.js/dist/esm/device/Device.d.ts:55
 
 ## Properties
-
-### deviceType
-
-• `Readonly` **deviceType**: [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)
-
-#### Defined in
-
-packages/matter.js/dist/esm/device/Device.d.ts:53
-
-___
 
 ### deviceTypes
 
@@ -99,7 +92,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:20
+packages/matter.js/dist/esm/device/Endpoint.d.ts:21
 
 ___
 
@@ -113,7 +106,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:26
+packages/matter.js/dist/esm/device/Endpoint.d.ts:27
 
 ___
 
@@ -127,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:24
+packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ___
 
@@ -141,7 +134,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:25
+packages/matter.js/dist/esm/device/Endpoint.d.ts:26
+
+## Accessors
+
+### deviceType
+
+• `get` **deviceType**(): [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)
+
+#### Returns
+
+[`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)
+
+#### Inherited from
+
+Endpoint.deviceType
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ## Methods
 
@@ -165,7 +176,7 @@ packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:52
+packages/matter.js/dist/esm/device/Endpoint.d.ts:54
 
 ___
 
@@ -198,7 +209,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:43
+packages/matter.js/dist/esm/device/Endpoint.d.ts:45
 
 ___
 
@@ -229,7 +240,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:42
+packages/matter.js/dist/esm/device/Endpoint.d.ts:44
 
 ___
 
@@ -254,7 +265,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:40
+packages/matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -285,7 +296,7 @@ Add a cluster client to the root endpoint. This is mainly used internally and no
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:69
+packages/matter.js/dist/esm/device/Device.d.ts:67
 
 ___
 
@@ -310,7 +321,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:41
+packages/matter.js/dist/esm/device/Endpoint.d.ts:43
 
 ___
 
@@ -328,7 +339,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:38
+packages/matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
@@ -346,7 +357,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:56
+packages/matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -364,7 +375,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:59
+packages/matter.js/dist/esm/device/Endpoint.d.ts:61
 
 ___
 
@@ -382,7 +393,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:58
+packages/matter.js/dist/esm/device/Endpoint.d.ts:60
 
 ___
 
@@ -406,7 +417,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:53
+packages/matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -424,7 +435,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:54
+packages/matter.js/dist/esm/device/Endpoint.d.ts:56
 
 ___
 
@@ -458,7 +469,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:45
+packages/matter.js/dist/esm/device/Endpoint.d.ts:47
 
 ___
 
@@ -482,7 +493,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:47
+packages/matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -516,7 +527,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:44
+packages/matter.js/dist/esm/device/Endpoint.d.ts:46
 
 ___
 
@@ -540,7 +551,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:46
+packages/matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -558,7 +569,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:50
+packages/matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -576,7 +587,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:39
+packages/matter.js/dist/esm/device/Endpoint.d.ts:41
 
 ___
 
@@ -608,7 +619,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:75
+packages/matter.js/dist/esm/device/Device.d.ts:73
 
 ___
 
@@ -640,7 +651,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:63
+packages/matter.js/dist/esm/device/Device.d.ts:61
 
 ___
 
@@ -674,7 +685,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:49
+packages/matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -708,7 +719,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:48
+packages/matter.js/dist/esm/device/Endpoint.d.ts:50
 
 ___
 
@@ -732,7 +743,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:55
+packages/matter.js/dist/esm/device/Endpoint.d.ts:57
 
 ___
 
@@ -750,7 +761,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:37
+packages/matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -774,7 +785,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:51
+packages/matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -798,7 +809,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:36
+packages/matter.js/dist/esm/device/Endpoint.d.ts:38
 
 ___
 
@@ -816,7 +827,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:60
+packages/matter.js/dist/esm/device/Endpoint.d.ts:62
 
 ___
 
@@ -834,4 +845,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:57
+packages/matter.js/dist/esm/device/Endpoint.d.ts:59

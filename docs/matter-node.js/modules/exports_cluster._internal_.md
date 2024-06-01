@@ -58,6 +58,7 @@
 - [ClusterExtend](exports_cluster._internal_.md#clusterextend)
 - [CommandHandlers](exports_cluster._internal_.md#commandhandlers)
 - [CommandServers](exports_cluster._internal_.md#commandservers)
+- [DelayedChangeData](exports_cluster._internal_.md#delayedchangedata)
 - [GetterTypeFromSpec](exports_cluster._internal_.md#gettertypefromspec)
 - [GetterTypeFromSpec](exports_cluster._internal_.md#gettertypefromspec-1)
 - [MakeAttributeMandatory](exports_cluster._internal_.md#makeattributemandatory)
@@ -302,9 +303,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:248
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:249
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:254
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:255
 
 ___
 
@@ -339,6 +340,24 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:64
+
+___
+
+### DelayedChangeData
+
+Ƭ **DelayedChangeData**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `changed` | `boolean` |
+| `newValue` | `any` |
+| `oldValue` | `any` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:25
 
 ___
 
@@ -649,7 +668,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:254
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:255
 
 ___
 

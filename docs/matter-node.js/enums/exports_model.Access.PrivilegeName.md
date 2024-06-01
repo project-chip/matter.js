@@ -23,7 +23,7 @@ Reverse map of Privilege.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:119
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:122
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:118
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:121
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:117
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:120
 
 ___
 
@@ -53,4 +53,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:116
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:119

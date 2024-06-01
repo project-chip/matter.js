@@ -30,9 +30,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:167](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L167)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:167](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L167)
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:169](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L169)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:169](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L169)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:85](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:85](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L85)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:170](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:170](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L170)
 
 ___
 
@@ -72,4 +72,4 @@ MatterSpecification.v11.Cluster § 6.3.4.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:26](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L26)

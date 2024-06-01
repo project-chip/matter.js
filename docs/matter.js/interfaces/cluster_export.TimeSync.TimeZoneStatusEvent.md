@@ -42,7 +42,7 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:120](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L120)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:120](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L120)
 
 ___
 
@@ -62,4 +62,4 @@ TypeFromSchema.offset
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:112](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L112)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:112](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L112)

@@ -17,6 +17,7 @@ TODO - this is a transitional interface that allows us to have multiple implemen
 
 ### Properties
 
+- [deviceType](endpoint_export.EndpointInterface.md#devicetype)
 - [name](endpoint_export.EndpointInterface.md#name)
 - [number](endpoint_export.EndpointInterface.md#number)
 
@@ -43,13 +44,23 @@ TODO - this is a transitional interface that allows us to have multiple implemen
 
 ## Properties
 
+### deviceType
+
+• **deviceType**: [`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)
+
+#### Defined in
+
+[packages/matter.js/src/endpoint/EndpointInterface.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L24)
+
+___
+
 ### name
 
 • **name**: `string`
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L21)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L22)
 
 ___
 
@@ -59,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:22](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L22)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L23)
 
 ## Methods
 
@@ -79,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:60](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L60)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:62](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L62)
 
 ___
 
@@ -108,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L46)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L48)
 
 ___
 
@@ -135,7 +146,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:32](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L32)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:34](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L34)
 
 ___
 
@@ -149,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L29)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L31)
 
 ___
 
@@ -163,7 +174,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:27](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L27)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:29](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L29)
 
 ___
 
@@ -177,7 +188,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:58](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L58)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:60](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L60)
 
 ___
 
@@ -191,7 +202,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:44](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L44)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:46](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L46)
 
 ___
 
@@ -211,7 +222,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:61](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L61)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:63](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L63)
 
 ___
 
@@ -225,7 +236,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:26](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L26)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:28](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L28)
 
 ___
 
@@ -255,7 +266,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:49](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L49)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L51)
 
 ___
 
@@ -285,7 +296,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:34](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L34)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:36](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L36)
 
 ___
 
@@ -305,7 +316,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:43](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L43)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:45](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L45)
 
 ___
 
@@ -319,7 +330,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L23)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L25)
 
 ___
 
@@ -339,7 +350,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L33)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L35)
 
 ___
 
@@ -353,7 +364,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L24)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L26)
 
 ___
 
@@ -373,7 +384,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:30](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L30)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L32)
 
 ___
 
@@ -387,7 +398,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L25)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:27](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L27)
 
 ___
 
@@ -401,4 +412,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/EndpointInterface.ts:28](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/endpoint/EndpointInterface.ts#L28)
+[packages/matter.js/src/endpoint/EndpointInterface.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/EndpointInterface.ts#L30)

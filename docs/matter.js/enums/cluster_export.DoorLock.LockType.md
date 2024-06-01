@@ -36,7 +36,7 @@ Physical lock type is cylindrical lock
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1039](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1039)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1039](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1039)
 
 ___
 
@@ -48,7 +48,7 @@ Physical lock type is dead latch
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1054](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1054)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1054](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1054)
 
 ___
 
@@ -60,7 +60,7 @@ Physical lock type is dead bolt
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1009](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1009)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1009](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1009)
 
 ___
 
@@ -72,7 +72,7 @@ Physical lock type is door furniture
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1059](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1059)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1059](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1059)
 
 ___
 
@@ -84,7 +84,7 @@ Physical lock type is interconnected lock
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1049](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1049)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1049](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1049)
 
 ___
 
@@ -96,7 +96,7 @@ Physical lock type is latch bolt
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1034](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1034)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1034](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1034)
 
 ___
 
@@ -108,7 +108,7 @@ Physical lock type is magnetic
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1014](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1014)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1014](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1014)
 
 ___
 
@@ -120,7 +120,7 @@ Physical lock type is mortise
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1024](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1024)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1024](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1024)
 
 ___
 
@@ -132,7 +132,7 @@ Physical lock type is other
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1019](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1019)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1019](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1019)
 
 ___
 
@@ -144,7 +144,7 @@ Physical lock type is rim
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1029](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1029)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1029](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1029)
 
 ___
 
@@ -156,4 +156,4 @@ Physical lock type is tubular lock
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1044](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1044)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1044](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1044)

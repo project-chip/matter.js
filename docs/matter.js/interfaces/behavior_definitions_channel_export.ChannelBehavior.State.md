@@ -35,4 +35,4 @@ StateType.currentChannel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:345](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L345)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:345](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L345)

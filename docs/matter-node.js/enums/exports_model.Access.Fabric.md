@@ -24,7 +24,7 @@ Writable only by scoped fabric.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:85
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:88
 
 ___
 
@@ -36,7 +36,7 @@ Readable and writable only by scoped fabric.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:89
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:92
 
 ___
 
@@ -48,4 +48,4 @@ Extension - allows for override of fabric specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:81
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:84

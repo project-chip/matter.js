@@ -34,7 +34,7 @@ TypeFromSchema.id
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:32](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L32)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L32)
 
 ___
 
@@ -48,7 +48,7 @@ TypeFromSchema.numCallsToFail
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:34](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L34)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:34](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L34)
 
 ___
 
@@ -62,7 +62,7 @@ TypeFromSchema.numCallsToSkip
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L33)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:33](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L33)
 
 ___
 
@@ -76,7 +76,7 @@ TypeFromSchema.takeMutex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:35](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L35)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L35)
 
 ___
 
@@ -90,4 +90,4 @@ TypeFromSchema.type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:31](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L31)

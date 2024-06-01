@@ -49,7 +49,7 @@ IdentifyBehavior.Events.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L25)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L25)
 
 ## Properties
 
@@ -63,7 +63,7 @@ IdentifyBehavior.Events.eventNames
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:370](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/util/Observable.ts#L370)
+[packages/matter.js/src/util/Observable.ts:370](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L370)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts:99](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts#L99)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts:99](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts#L99)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts:100](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts#L100)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts:100](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyServer.ts#L100)
 
 ## Methods
 
@@ -141,7 +141,7 @@ IdentifyBehavior.Events.[dispose]
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:374](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/util/Observable.ts#L374)
+[packages/matter.js/src/util/Observable.ts:374](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L374)
 
 ___
 
@@ -174,7 +174,7 @@ IdentifyBehavior.Events.addListener
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:354](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/util/Observable.ts#L354)
+[packages/matter.js/src/util/Observable.ts:354](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L354)
 
 ___
 
@@ -207,7 +207,7 @@ IdentifyBehavior.Events.emit
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:350](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/util/Observable.ts#L350)
+[packages/matter.js/src/util/Observable.ts:350](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L350)
 
 ___
 
@@ -240,4 +240,4 @@ IdentifyBehavior.Events.removeListener
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:362](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/util/Observable.ts#L362)
+[packages/matter.js/src/util/Observable.ts:362](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L362)

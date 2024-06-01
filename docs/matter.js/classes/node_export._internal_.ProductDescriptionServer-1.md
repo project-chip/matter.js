@@ -75,7 +75,7 @@ Supplies key product information used in advertisements and commissioning.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:147](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L147)
+[packages/matter.js/src/behavior/Behavior.ts:147](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L147)
 
 ## Properties
 
@@ -89,7 +89,7 @@ Supplies key product information used in advertisements and commissioning.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L51)
+[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L51)
 
 ___
 
@@ -105,7 +105,7 @@ Access the behavior's events.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L145)
+[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L145)
 
 ___
 
@@ -121,7 +121,7 @@ Access the behavior's state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts#L25)
+[packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts#L25)
 
 ___
 
@@ -137,7 +137,7 @@ Implementation of the events property.  Subclasses may override to extend.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:183](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L183)
+[packages/matter.js/src/behavior/Behavior.ts:183](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L183)
 
 ___
 
@@ -161,7 +161,7 @@ Implementation of internal state.  Subclasses may override to extend.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:178](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L178)
+[packages/matter.js/src/behavior/Behavior.ts:178](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L178)
 
 ___
 
@@ -180,7 +180,7 @@ automatically.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:272](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L272)
+[packages/matter.js/src/behavior/Behavior.ts:272](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L272)
 
 ___
 
@@ -197,7 +197,7 @@ immediately when the endpoint initializes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:75](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L75)
+[packages/matter.js/src/behavior/Behavior.ts:75](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L75)
 
 ___
 
@@ -218,7 +218,7 @@ EndpointBuilder also uses the ID when replacing behaviors using the with() build
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts#L23)
+[packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts#L23)
 
 ___
 
@@ -237,7 +237,7 @@ control.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:69](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L69)
+[packages/matter.js/src/behavior/Behavior.ts:69](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L69)
 
 ## Accessors
 
@@ -255,7 +255,7 @@ Behavior.[reference]
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L274)
 
 ___
 
@@ -275,7 +275,7 @@ Behavior.agent
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L80)
 
 ___
 
@@ -295,7 +295,7 @@ Behavior.context
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L94)
 
 ___
 
@@ -315,7 +315,7 @@ Behavior.endpoint
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L87)
 
 ___
 
@@ -335,7 +335,7 @@ Behavior.session
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L101)
 
 ___
 
@@ -355,7 +355,7 @@ Behavior.defaults
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:244](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L244)
+[packages/matter.js/src/behavior/Behavior.ts:244](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L244)
 
 ___
 
@@ -375,7 +375,7 @@ Behavior.supervisor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:161](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L161)
+[packages/matter.js/src/behavior/Behavior.ts:161](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L161)
 
 ## Methods
 
@@ -389,7 +389,7 @@ Behavior.supervisor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts:47](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts#L47)
+[packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts:47](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts#L47)
 
 ___
 
@@ -410,7 +410,7 @@ state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:198](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L198)
+[packages/matter.js/src/behavior/Behavior.ts:198](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L198)
 
 ___
 
@@ -443,7 +443,7 @@ You should only elevate privileges for synchronous logic.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L125)
+[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L125)
 
 ___
 
@@ -492,7 +492,7 @@ Because of this: The reactor MUST be a real JS function - arrow functions will n
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L226)
+[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L226)
 
 ___
 
@@ -516,7 +516,7 @@ use until initialization completes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts:27](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts#L27)
+[packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts:27](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/product-description/ProductDescriptionServer.ts#L27)
 
 ___
 
@@ -552,7 +552,7 @@ Important: The reactor MUST be a real JS function - arrow functions will not wor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L212)
+[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L212)
 
 ___
 
@@ -572,7 +572,7 @@ Description used in diagnostic messages.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L203)
+[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L203)
 
 ___
 
@@ -605,7 +605,7 @@ Create a new behavior with different default state values.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:251](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L251)
+[packages/matter.js/src/behavior/Behavior.ts:251](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L251)
 
 ___
 
@@ -631,4 +631,4 @@ Does this behavior support functionality of a specific implementation?
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:237](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/Behavior.ts#L237)
+[packages/matter.js/src/behavior/Behavior.ts:237](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L237)

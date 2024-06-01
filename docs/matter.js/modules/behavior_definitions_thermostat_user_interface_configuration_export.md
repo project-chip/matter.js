@@ -34,8 +34,8 @@ ThermostatUserInterfaceConfigurationBehavior is the base class for objects that 
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts:18](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts#L18)
+[packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts:18](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts#L18)
 
-[packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts:22](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts#L22)
+[packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts#L22)
 
-[packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationBehavior.ts#L24)

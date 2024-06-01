@@ -19,14 +19,14 @@
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:46
+matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:50
 
 ___
 
 ### path
 
-• **path**: [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](internal_.OptionalFieldType.md)\<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\<`number`\>\> ; `enableTagCompression`: [`OptionalFieldType`](internal_.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](internal_.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>
+• **path**: [`AttributePath`](internal_.AttributePath.md)
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:45
+matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:49

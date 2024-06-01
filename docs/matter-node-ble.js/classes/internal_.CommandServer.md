@@ -19,6 +19,7 @@
 
 ### Properties
 
+- [#private](internal_.CommandServer.md##private)
 - [handler](internal_.CommandServer.md#handler)
 - [invokeId](internal_.CommandServer.md#invokeid)
 - [name](internal_.CommandServer.md#name)
@@ -26,6 +27,10 @@
 - [requiresTimedInteraction](internal_.CommandServer.md#requirestimedinteraction)
 - [responseId](internal_.CommandServer.md#responseid)
 - [responseSchema](internal_.CommandServer.md#responseschema)
+
+### Accessors
+
+- [invokeAcl](internal_.CommandServer.md#invokeacl)
 
 ### Methods
 
@@ -36,7 +41,7 @@
 
 ### constructor
 
-• **new CommandServer**\<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`): [`CommandServer`](internal_.CommandServer.md)\<`RequestT`, `ResponseT`\>
+• **new CommandServer**\<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `invokeAcl`, `handler`): [`CommandServer`](internal_.CommandServer.md)\<`RequestT`, `ResponseT`\>
 
 #### Type parameters
 
@@ -55,6 +60,7 @@
 | `requestSchema` | [`TlvSchema`](internal_.TlvSchema.md)\<`RequestT`\> |
 | `responseSchema` | [`TlvSchema`](internal_.TlvSchema.md)\<`ResponseT`\> |
 | `requiresTimedInteraction` | `boolean` |
+| `invokeAcl` | [`AccessLevel`](../enums/internal_.AccessLevel.md) |
 | `handler` | (`request`: `RequestT`, `session`: [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/internal_.Message.md), `endpoint`: [`EndpointInterface`](../interfaces/internal_.EndpointInterface.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
 
 #### Returns
@@ -63,9 +69,19 @@
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:23
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:15
+
+___
 
 ### handler
 
@@ -90,7 +106,7 @@ matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/CommandServer.d.ts:20
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:22
 
 ___
 
@@ -100,7 +116,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/CommandServer.d.ts:14
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:16
 
 ___
 
@@ -110,7 +126,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/CommandServer.d.ts:16
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 
 ___
 
@@ -120,7 +136,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/CommandServer.d.ts:17
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:19
 
 ___
 
@@ -130,7 +146,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/CommandServer.d.ts:19
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 
 ___
 
@@ -140,7 +156,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/CommandServer.d.ts:15
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:17
 
 ___
 
@@ -150,7 +166,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:20
+
+## Accessors
+
+### invokeAcl
+
+• `get` **invokeAcl**(): [`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:35
 
 ## Methods
 
@@ -170,7 +200,7 @@ matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/CommandServer.d.ts:32
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:34
 
 ___
 
@@ -193,4 +223,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/CommandServer.d.ts:22
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:24

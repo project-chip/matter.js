@@ -24,7 +24,7 @@ position and the implementation needs to determine it himself.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:53](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L53)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L53)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L54)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:54](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L54)
 
 ___
 
@@ -44,4 +44,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:52](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L52)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:52](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L52)

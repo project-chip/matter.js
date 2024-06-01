@@ -40,9 +40,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:512](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L512)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:512](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L512)
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:514](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L514)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:514](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L514)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:379](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L379)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:379](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L379)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:515](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L515)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:515](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L515)
 
 ___
 
@@ -82,13 +82,13 @@ MatterSpecification.v11.Core § 9.10.7.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:273](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L273)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:273](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L273)
 
 ___
 
 ### TlvAccessControlEntryStruct
 
-• `Const` **TlvAccessControlEntryStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `authMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`AccessControlEntryAuthMode`](../enums/cluster_export.AccessControl.AccessControlEntryAuthMode.md)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `privilege`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`AccessControlEntryPrivilege`](../enums/cluster_export.AccessControl.AccessControlEntryPrivilege.md)\> ; `subjects`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`NodeId`](datatype_export.md#nodeid)[]\> ; `targets`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `cluster`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`ClusterId`](datatype_export.md#clusterid)\<`number`\>\> ; `deviceType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`DeviceTypeId`](datatype_export.md#devicetypeid)\<`number`\>\> ; `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`EndpointNumber`](datatype_export.md#endpointnumber)\>  }\>[]\>  }\>
+• `Const` **TlvAccessControlEntryStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `authMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`AccessControlEntryAuthMode`](../enums/cluster_export.AccessControl.AccessControlEntryAuthMode.md)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `privilege`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`AccessControlEntryPrivilege`](../enums/cluster_export.AccessControl.AccessControlEntryPrivilege.md)\> ; `subjects`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`NodeId`](datatype_export.md#nodeid)[]\> ; `targets`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `cluster`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`ClusterId`](datatype_export.md#clusterid)\> ; `deviceType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`DeviceTypeId`](datatype_export.md#devicetypeid)\> ; `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`EndpointNumber`](datatype_export.md#endpointnumber)\>  }\>[]\>  }\>
 
 **`See`**
 
@@ -96,7 +96,7 @@ MatterSpecification.v11.Core § 9.10.4.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:117](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L117)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:117](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L117)
 
 ___
 
@@ -112,7 +112,7 @@ MatterSpecification.v11.Core § 9.10.7.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:327](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L327)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:327](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L327)
 
 ___
 
@@ -126,13 +126,13 @@ MatterSpecification.v11.Core § 9.10.4.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:224](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L224)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:224](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L224)
 
 ___
 
 ### TlvAccessControlTargetStruct
 
-• `Const` **TlvAccessControlTargetStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `cluster`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`ClusterId`](datatype_export.md#clusterid)\<`number`\>\> ; `deviceType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`DeviceTypeId`](datatype_export.md#devicetypeid)\<`number`\>\> ; `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`EndpointNumber`](datatype_export.md#endpointnumber)\>  }\>
+• `Const` **TlvAccessControlTargetStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `cluster`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`ClusterId`](datatype_export.md#clusterid)\> ; `deviceType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`DeviceTypeId`](datatype_export.md#devicetypeid)\> ; `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`EndpointNumber`](datatype_export.md#endpointnumber)\>  }\>
 
 **`See`**
 
@@ -140,4 +140,4 @@ MatterSpecification.v11.Core § 9.10.4.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:103](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L103)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:103](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L103)

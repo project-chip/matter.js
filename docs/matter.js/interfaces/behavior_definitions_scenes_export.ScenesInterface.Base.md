@@ -33,7 +33,7 @@ no extension field sets at all.
 
 | Name | Type |
 | :------ | :------ |
-| `request` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<...\> ; `attributeValue`: [`FieldType`](tlv_export.FieldType.md)\<...\>  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`FieldType`](tlv_export.FieldType.md)\<`string`\> ; `transitionTime`: [`FieldType`](tlv_export.FieldType.md)\<`number`\>  }\> |
+| `request` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<...\> ; `attributeValue`: [`FieldType`](tlv_export.FieldType.md)\<...\>  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`FieldType`](tlv_export.FieldType.md)\<`string`\> ; `transitionTime`: [`FieldType`](tlv_export.FieldType.md)\<`number`\>  }\> |
 
 #### Returns
 
@@ -45,7 +45,7 @@ MatterSpecification.v11.Cluster § 1.4.9.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:133](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L133)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:133](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L133)
 
 ___
 
@@ -72,7 +72,7 @@ MatterSpecification.v11.Cluster § 1.4.9.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:197](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L197)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:197](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L197)
 
 ___
 
@@ -91,7 +91,7 @@ The TransitionTime data field shall be measured in tenths of a second rather tha
 
 | Name | Type |
 | :------ | :------ |
-| `request` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<...\> ; `attributeValue`: [`FieldType`](tlv_export.FieldType.md)\<...\>  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`FieldType`](tlv_export.FieldType.md)\<`string`\> ; `transitionTime`: [`FieldType`](tlv_export.FieldType.md)\<`number`\>  }\> |
+| `request` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<...\> ; `attributeValue`: [`FieldType`](tlv_export.FieldType.md)\<...\>  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`FieldType`](tlv_export.FieldType.md)\<`string`\> ; `transitionTime`: [`FieldType`](tlv_export.FieldType.md)\<`number`\>  }\> |
 
 #### Returns
 
@@ -103,13 +103,13 @@ MatterSpecification.v11.Cluster § 1.4.9.9
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:179](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L179)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:179](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L179)
 
 ___
 
 ### enhancedViewScene
 
-▸ **enhancedViewScene**(`request`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: ... ; `attributeValue`: ...  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `transitionTime`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>\>
+▸ **enhancedViewScene**(`request`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: ... ; `attributeValue`: ...  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `transitionTime`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>\>
 
 The EnhancedViewScene command allows a scene to be retrieved using a finer scene transition time than the
 ViewScene command.
@@ -124,7 +124,7 @@ This command shall have the same data fields as the ViewScene command.
 
 #### Returns
 
-[`MaybePromise`](../modules/util_export.md#maybepromise)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: ... ; `attributeValue`: ...  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `transitionTime`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>\>
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: ... ; `attributeValue`: ...  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `transitionTime`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>\>
 
 **`See`**
 
@@ -132,7 +132,7 @@ MatterSpecification.v11.Cluster § 1.4.9.10
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:189](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L189)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:189](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L189)
 
 ___
 
@@ -160,7 +160,7 @@ MatterSpecification.v11.Cluster § 1.4.9.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:167](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L167)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:167](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L167)
 
 ___
 
@@ -184,7 +184,7 @@ MatterSpecification.v11.Cluster § 1.4.9.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:158](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L158)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:158](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L158)
 
 ___
 
@@ -208,7 +208,7 @@ MatterSpecification.v11.Cluster § 1.4.9.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:148](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L148)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:148](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L148)
 
 ___
 
@@ -232,7 +232,7 @@ MatterSpecification.v11.Cluster § 1.4.9.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:143](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L143)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:143](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L143)
 
 ___
 
@@ -256,13 +256,13 @@ MatterSpecification.v11.Cluster § 1.4.9.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:153](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L153)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:153](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L153)
 
 ___
 
 ### viewScene
 
-▸ **viewScene**(`request`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: ... ; `attributeValue`: ...  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `transitionTime`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>\>
+▸ **viewScene**(`request`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: ... ; `attributeValue`: ...  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `transitionTime`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>\>
 
 #### Parameters
 
@@ -272,7 +272,7 @@ ___
 
 #### Returns
 
-[`MaybePromise`](../modules/util_export.md#maybepromise)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: ... ; `attributeValue`: ...  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `transitionTime`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>\>
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `extensionFieldSets`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: ... ; `attributeValue`: ...  }\>[]\> ; `clusterId`: [`FieldType`](tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\>  }\>[]\> ; `groupId`: [`FieldType`](tlv_export.FieldType.md)\<[`GroupId`](../modules/datatype_export.md#groupid)\> ; `sceneId`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `sceneName`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `transitionTime`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`number`\>  }\>\>
 
 **`See`**
 
@@ -280,4 +280,4 @@ MatterSpecification.v11.Cluster § 1.4.9.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:138](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L138)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:138](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L138)

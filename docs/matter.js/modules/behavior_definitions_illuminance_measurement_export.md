@@ -34,8 +34,8 @@ IlluminanceMeasurementBehavior is the base class for objects that support intera
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts:16](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts:16](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts:19](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts:21](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.ts#L21)

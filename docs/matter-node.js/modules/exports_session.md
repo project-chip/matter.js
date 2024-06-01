@@ -414,7 +414,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:14
+packages/matter.js/dist/esm/session/SessionManager.d.ts:15
 
 ## Functions
 
@@ -441,4 +441,4 @@ asserts session is SecureSession\<T\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:72
+packages/matter.js/dist/esm/session/SecureSession.d.ts:77

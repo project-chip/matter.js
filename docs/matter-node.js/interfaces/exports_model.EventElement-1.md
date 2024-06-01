@@ -210,7 +210,7 @@ ValueElement.id
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:13
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:14
 
 ___
 
@@ -237,7 +237,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:15
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:16
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:14
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:15
 
 ___
 

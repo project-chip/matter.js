@@ -103,7 +103,7 @@ A "model" is a class that implements runtime functionality associated with the c
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:36
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:37
 
 ## Properties
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:20
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:21
 
 ___
 
@@ -199,7 +199,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:19
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:20
 
 ___
 
@@ -231,7 +231,7 @@ Indicates that an element may have type definitions as children.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:21
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:22
 
 ___
 
@@ -255,7 +255,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:22
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:23
 
 ___
 
@@ -265,7 +265,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:23
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:24
 
 ___
 
@@ -279,7 +279,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:18
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:19
 
 ___
 
@@ -317,7 +317,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:37
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:38
 
 ___
 
@@ -371,7 +371,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:24
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:25
 
 ___
 
@@ -411,7 +411,7 @@ Model.children
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:32
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:33
 
 • `set` **children**(`children`): `void`
 
@@ -433,7 +433,7 @@ Model.children
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:33
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:34
 
 ___
 
@@ -447,7 +447,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:25
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:26
 
 ___
 
@@ -461,7 +461,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:27
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:28
 
 ___
 
@@ -495,7 +495,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:35
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:36
 
 ___
 
@@ -529,7 +529,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:34
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:35
 
 ___
 
@@ -606,7 +606,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:26
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:27
 
 ___
 
@@ -620,7 +620,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:31
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:32
 
 ___
 
@@ -634,7 +634,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:30
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:31
 
 ___
 
@@ -689,7 +689,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:28
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:29
 
 ___
 
@@ -765,7 +765,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:29
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:30
 
 ___
 

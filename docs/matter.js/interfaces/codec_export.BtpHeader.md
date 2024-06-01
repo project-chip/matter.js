@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:40](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/BtpCodec.ts#L40)
+[packages/matter.js/src/codec/BtpCodec.ts:40](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/BtpCodec.ts#L40)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:39](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/BtpCodec.ts#L39)
+[packages/matter.js/src/codec/BtpCodec.ts:39](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/BtpCodec.ts#L39)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:43](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/BtpCodec.ts#L43)
+[packages/matter.js/src/codec/BtpCodec.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/BtpCodec.ts#L43)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:42](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/BtpCodec.ts#L42)
+[packages/matter.js/src/codec/BtpCodec.ts:42](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/BtpCodec.ts#L42)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/BtpCodec.ts#L41)
+[packages/matter.js/src/codec/BtpCodec.ts:41](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/BtpCodec.ts#L41)
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:38](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/codec/BtpCodec.ts#L38)
+[packages/matter.js/src/codec/BtpCodec.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/codec/BtpCodec.ts#L38)

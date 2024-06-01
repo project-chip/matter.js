@@ -24,7 +24,7 @@ Covering is moving from open to closed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:192](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L192)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:192](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L192)
 
 ___
 
@@ -36,7 +36,7 @@ Covering is moving from closed to open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:187](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L187)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:187](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L187)
 
 ___
 
@@ -48,4 +48,4 @@ Covering is not moving
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:182](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L182)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:182](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L182)

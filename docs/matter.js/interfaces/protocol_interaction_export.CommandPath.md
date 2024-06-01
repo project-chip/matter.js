@@ -11,6 +11,7 @@
 - [clusterId](protocol_interaction_export.CommandPath.md#clusterid)
 - [commandId](protocol_interaction_export.CommandPath.md#commandid)
 - [endpointId](protocol_interaction_export.CommandPath.md#endpointid)
+- [nodeId](protocol_interaction_export.CommandPath.md#nodeid)
 
 ## Properties
 
@@ -20,7 +21,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:75](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L75)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:83](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L83)
 
 ___
 
@@ -30,7 +31,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:76](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L76)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:84](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L84)
 
 ___
 
@@ -40,4 +41,14 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:74](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L74)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:82](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L82)
+
+___
+
+### nodeId
+
+• `Optional` **nodeId**: [`NodeId`](../modules/datatype_export.md#nodeid)
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:81](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L81)

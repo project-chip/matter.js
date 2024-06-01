@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:251](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L251)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:275](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L275)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:252](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L252)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:276](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L276)
