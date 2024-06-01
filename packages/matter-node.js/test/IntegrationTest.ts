@@ -9,7 +9,6 @@ import * as assert from "assert";
 import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
 import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
 import {
-    AccessControl,
     AdministratorCommissioning,
     BasicInformation,
     ClusterServer,
@@ -730,7 +729,7 @@ describe("Integration Test", () => {
             assert.ok(basicInfoCluster);
 
             await assert.rejects(async () => await basicInfoCluster.attributes.location.set("XXX"), {
-                message: "(Validation/135) String is too long: 3, max 2.",
+                message: '(Validation/135) String "XXX" is too long: 3, max 2.',
             });
         });
 
@@ -831,6 +830,16 @@ describe("Integration Test", () => {
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel4");
             assert.equal(await basicInfoCluster.attributes.location.get(true), "GB");
+
+            // Wait for subscription updates to arrive
+            const { promise, resolver } = createPromise<string>();
+            const callback = (value: string) => resolver(value);
+
+            basicInfoCluster.attributes.nodeLabel.addListener(callback);
+
+            await MockTime.advance(60);
+            await MockTime.advance(60);
+            await promise;
         });
     });
 
@@ -1096,7 +1105,7 @@ describe("Integration Test", () => {
             const updateReport = await updatePromise;
             assert.deepEqual(updateReport, {
                 value: {
-                    eventNumber: EventNumber(3),
+                    eventNumber: EventNumber(4),
                     priority: 1,
                     epochTimestamp: BigInt(startTime + 200), // Triggered directly
                     data: {
@@ -1117,7 +1126,7 @@ describe("Integration Test", () => {
             const updateReport2 = await updatePromise2;
             assert.deepEqual(updateReport2, {
                 value: {
-                    eventNumber: EventNumber(3),
+                    eventNumber: EventNumber(4),
                     priority: 1,
                     epochTimestamp: BigInt(startTime + 200), // Triggered directly
                     data: {
@@ -1137,26 +1146,6 @@ describe("Integration Test", () => {
             assert.equal(sessionInfo.length, 1);
             assert.ok(sessionInfo[0].fabric);
             assert.ok(sessionInfo[0].numberOfActiveSubscriptions >= 5);
-        });
-    });
-
-    describe("Access Control server fabric scoped attribute storage", () => {
-        it("set empty acl", async () => {
-            const nodeId = commissioningController.getCommissionedNodes()[0];
-            const node = commissioningController.getConnectedNode(nodeId);
-            assert.ok(node);
-            const accessControlCluster = node.getRootClusterClient(AccessControl.Cluster);
-            assert.ok(accessControlCluster);
-            await accessControlCluster.attributes.acl.set([]);
-            await accessControlCluster.setAclAttribute([]);
-
-            const acl = await accessControlCluster.attributes.acl.get();
-            const acl2 = await accessControlCluster.getAclAttribute();
-
-            assert.ok(Array.isArray(acl));
-            assert.ok(Array.isArray(acl2));
-            assert.equal(acl.length, 0);
-            assert.equal(acl2.length, 0);
         });
     });
 

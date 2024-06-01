@@ -68,7 +68,7 @@ export class ProductDescriptionServer extends Behavior {
 }
 
 export namespace ProductDescriptionServer {
-    export const UNKNOWN_DEVICE_TYPE = DeviceTypeId(-1);
+    export const UNKNOWN_DEVICE_TYPE = DeviceTypeId(-1, false);
 
     export class State implements ProductDescription {
         /**
@@ -84,7 +84,7 @@ export namespace ProductDescriptionServer {
         /**
          * The vendor ID for commissioning announcements.
          */
-        vendorId = VendorId(-1);
+        vendorId = VendorId(-1, false);
 
         /**
          * The product ID for commissioning announcements.

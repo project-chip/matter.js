@@ -309,20 +309,22 @@ export class PairedNode {
                 if (ignoreInitialTriggers) return;
                 const device = this.endpoints.get(endpointId);
                 if (device === undefined) {
-                    logger.info(`Ignoring received attribute update for unknown endpoint ${endpointId}!`);
+                    logger.info(
+                        `Node ${this.nodeId} Ignoring received attribute update for unknown endpoint ${endpointId}!`,
+                    );
                     return;
                 }
                 const cluster = device.getClusterClientById(clusterId);
                 if (cluster === undefined) {
                     logger.info(
-                        `Ignoring received attribute update for unknown cluster ${Diagnostic.hex(
+                        `Node ${this.nodeId} Ignoring received attribute update for unknown cluster ${Diagnostic.hex(
                             clusterId,
                         )} on endpoint ${endpointId}!`,
                     );
                     return;
                 }
                 logger.debug(
-                    `Trigger attribute update for ${endpointId}.${cluster.name}.${attributeId} to ${Logger.toJSON(
+                    `Node ${this.nodeId} Trigger attribute update for ${endpointId}.${cluster.name}.${attributeId} to ${Logger.toJSON(
                         value,
                     )}`,
                 );
@@ -339,20 +341,20 @@ export class PairedNode {
                 if (ignoreInitialTriggers) return;
                 const device = this.endpoints.get(endpointId);
                 if (device === undefined) {
-                    logger.info(`Ignoring received event for unknown endpoint ${endpointId}!`);
+                    logger.info(`Node ${this.nodeId} Ignoring received event for unknown endpoint ${endpointId}!`);
                     return;
                 }
                 const cluster = device.getClusterClientById(clusterId);
                 if (cluster === undefined) {
                     logger.info(
-                        `Ignoring received event for unknown cluster ${Diagnostic.hex(
+                        `Node ${this.nodeId} Ignoring received event for unknown cluster ${Diagnostic.hex(
                             clusterId,
                         )} on endpoint ${endpointId}!`,
                     );
                     return;
                 }
                 logger.debug(
-                    `Trigger event update for ${endpointId}.${cluster.name}.${eventId} for ${events.length} events`,
+                    `Node ${this.nodeId} Trigger event update for ${endpointId}.${cluster.name}.${eventId} for ${events.length} events`,
                 );
                 asClusterClientInternal(cluster)._triggerEventUpdate(eventId, events);
 

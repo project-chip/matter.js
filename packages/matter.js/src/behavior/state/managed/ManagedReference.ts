@@ -120,6 +120,11 @@ export function ManagedReference(
                 expired = true;
                 return;
             }
+            if (parent.value === undefined) {
+                expired = true;
+                replaceValue(undefined);
+                return;
+            }
             replaceValue((parent.value as Container)[index]);
         },
     };

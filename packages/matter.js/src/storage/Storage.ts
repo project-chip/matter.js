@@ -13,6 +13,7 @@ export class StorageError extends MatterError {}
  * Matter.js uses this key/value API to manage persistent state.
  */
 export interface Storage {
+    readonly initialized: boolean;
     initialize(): MaybePromise<void>;
     close(): MaybePromise<void>;
     get(contexts: string[], key: string): MaybePromise<SupportedStorageTypes | undefined>;
@@ -29,6 +30,7 @@ export interface Storage {
 // to have the generics typing support on the "get" method and can be removed when the TS issue is fixed
 // or we remove the legacy API.
 export abstract class MaybeAsyncStorage implements Storage {
+    abstract initialized: boolean;
     abstract initialize(): MaybePromise<void>;
     abstract close(): MaybePromise<void>;
     abstract get<T extends SupportedStorageTypes>(contexts: string[], key: string): MaybePromise<T | undefined>;
@@ -43,6 +45,7 @@ export abstract class MaybeAsyncStorage implements Storage {
 
 // This can be removed once we remove the legacy API
 export abstract class SyncStorage implements Storage {
+    abstract initialized: boolean;
     abstract initialize(): MaybePromise<void>;
     abstract close(): MaybePromise<void>;
     abstract get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined;

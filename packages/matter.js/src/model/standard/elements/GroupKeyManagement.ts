@@ -355,7 +355,7 @@ Matter.children.push(Cluster({
 
                 Field({
                     name: "GroupKeyMulticastPolicy", id: 0x8, type: "GroupKeyMulticastPolicyEnum", access: "S",
-                    conformance: "P, M",
+                    conformance: "O", default: 0,
 
                     details: "This field specifies how the IPv6 Multicast Address shall be formed for groups using this " +
                         "operational group key set." +

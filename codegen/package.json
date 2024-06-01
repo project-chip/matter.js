@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-codegen",
-    "version": "0.9.1-alpha.0-20240525-152ae273",
+    "version": "0.9.1-alpha.0-20240601-573b6cc6",
     "description": "Matter.js tooling",
     "private": true,
     "type": "module",
@@ -28,14 +28,14 @@
     },
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "dependencies": {
-        "@project-chip/matter.js": "0.9.1-alpha.0-20240525-152ae273",
-        "@project-chip/matter.js-intermediate-models": "0.9.1-alpha.0-20240525-152ae273"
+        "@project-chip/matter.js": "0.9.1-alpha.0-20240601-573b6cc6",
+        "@project-chip/matter.js-intermediate-models": "0.9.1-alpha.0-20240601-573b6cc6"
     },
     "engines": {
         "node": ">=18.0.0"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.9.1-alpha.0-20240525-152ae273",
+        "@project-chip/matter.js-tools": "0.9.1-alpha.0-20240601-573b6cc6",
         "@types/jsdom": "^21.1.6",
         "jsdom": "^24.1.0",
         "typescript": "~5.4.5",

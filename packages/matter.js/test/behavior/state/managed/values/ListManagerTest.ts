@@ -8,7 +8,7 @@ import { ActionContext } from "../../../../../src/behavior/context/ActionContext
 import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../../../../src/datatype/NodeId.js";
 import { MaybePromise } from "../../../../../src/util/Promises.js";
-import { TestStruct, listOf, structOf } from "./value-utils.js";
+import { TestStruct, aclEndpoint, listOf, structOf } from "./value-utils.js";
 
 export type ValueList = { value: number }[];
 
@@ -39,12 +39,14 @@ export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLis
         fabricFiltered: true,
         fabric: FabricIndex(1),
         subject: NodeId(1),
+        root: aclEndpoint([1, 3]),
     };
 
     const cx2 = {
         fabricFiltered: true,
         fabric: FabricIndex(2),
         subject: NodeId(2),
+        root: aclEndpoint([1, 3]),
     };
 
     return struct.online2(cx1, cx2, async ({ cx1, cx2, ref1, ref2 }) => {
@@ -68,7 +70,7 @@ describe("ListManager", () => {
     it("basic get/set", async () => {
         const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
-        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1) }, async ref => {
+        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1), root: aclEndpoint([1, 3]) }, async ref => {
             const list = ref.list as string[];
 
             list[0] = "hi";
@@ -86,27 +88,30 @@ describe("ListManager", () => {
     it("basic array functions", async () => {
         const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
-        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1) }, async (ref, cx) => {
-            const list = ref.list as string[];
+        await struct.online(
+            { subject: NodeId(1), fabric: FabricIndex(1), root: aclEndpoint([1, 3]) },
+            async (ref, cx) => {
+                const list = ref.list as string[];
 
-            list[0] = "hi";
-            list.push("there");
-            list.splice(0, 1, "HI");
-            list.unshift("hey");
+                list[0] = "hi";
+                list.push("there");
+                list.splice(0, 1, "HI");
+                list.unshift("hey");
 
-            expect(list[0]).equals("hey");
-            expect(list[1]).equals("HI");
-            expect(list[2]).equals("there");
+                expect(list[0]).equals("hey");
+                expect(list[1]).equals("HI");
+                expect(list[2]).equals("there");
 
-            await cx.transaction.commit();
-            struct.expect({ list: ["hey", "HI", "there"] });
+                await cx.transaction.commit();
+                struct.expect({ list: ["hey", "HI", "there"] });
 
-            expect(list.length).equals(3);
+                expect(list.length).equals(3);
 
-            expect(list.pop()).equals("there");
-            expect(list.shift()).equals("hey");
-            expect(list.length).equals(1);
-        });
+                expect(list.pop()).equals("there");
+                expect(list.shift()).equals("hey");
+                expect(list.length).equals(1);
+            },
+        );
 
         struct.expect({ list: ["HI"] });
     });
@@ -114,7 +119,7 @@ describe("ListManager", () => {
     it("basic array iteration", async () => {
         const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
-        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1) }, async ref => {
+        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1), root: aclEndpoint([1, 3]) }, async ref => {
             const list = ref.list as string[];
 
             (list[0] = "hi"), (list[1] = "there");
@@ -198,9 +203,9 @@ describe("ListManager", () => {
                 ],
             });
 
-            list1.splice(1, 1);
+            list1.splice(1, 1); // removes element value 3
             await cx1.transaction.commit();
-            list2.splice(1, 1);
+            list2.splice(1, 1); // removes element value 4
             await cx2.transaction.commit();
 
             struct.expect({
@@ -212,9 +217,9 @@ describe("ListManager", () => {
                 ],
             });
 
-            list1.pop();
+            list1.pop(); // removes element value 5
             await cx1.transaction.commit();
-            list2.shift();
+            list2.shift(); // removes element value 2
             await cx2.transaction.commit();
 
             struct.expect({
@@ -222,6 +227,68 @@ describe("ListManager", () => {
                     { fabricIndex: 1, value: 1 },
                     { fabricIndex: 2, value: 6 },
                 ],
+            });
+
+            list1.unshift({ value: 7 });
+            await cx1.transaction.commit();
+            list2.push({ value: 8 });
+            await cx2.transaction.commit();
+
+            struct.expect({
+                list: [
+                    { fabricIndex: 1, value: 7 },
+                    { fabricIndex: 2, value: 6 },
+                    { fabricIndex: 1, value: 1 },
+                    { fabricIndex: 2, value: 8 },
+                ],
+            });
+
+            /* TODO these two cases are buggy!! In fact when values are swapped around it seems that the value is set
+                but the "managed reference" is the same so as soon as the first value is set on the entry of the secoond
+                (even after reading that before) it breaks
+            list1.reverse();
+            await cx1.transaction.commit();
+            list2.reverse();
+            await cx2.transaction.commit();
+
+            struct.expect({
+                list: [
+                    { fabricIndex: 1, value: 1 },
+                    { fabricIndex: 2, value: 8 },
+                    { fabricIndex: 1, value: 7 }, // Test fails: value 1
+                    { fabricIndex: 2, value: 6 }, // test fails: value 8
+                ],
+            });
+
+            list1.sort((a, b) => a.value - b.value);
+            await cx1.transaction.commit();
+            list2.sort((a, b) => a.value - b.value);
+            await cx2.transaction.commit();
+
+            struct.expect({
+                list: [
+                    { fabricIndex: 1, value: 1 },
+                    { fabricIndex: 2, value: 6 },
+                    { fabricIndex: 1, value: 7 }, // test fails value 1
+                    { fabricIndex: 2, value: 8 },
+                ],
+            });*/
+
+            list1.length = 0;
+            await cx1.transaction.commit();
+
+            struct.expect({
+                list: [
+                    { fabricIndex: 2, value: 6 },
+                    { fabricIndex: 2, value: 8 },
+                ],
+            });
+
+            list2.length = 0;
+            await cx2.transaction.commit();
+
+            struct.expect({
+                list: [],
             });
         });
     });

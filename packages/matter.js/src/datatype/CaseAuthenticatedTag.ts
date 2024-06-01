@@ -43,7 +43,7 @@ export namespace CaseAuthenticatedTag {
         // Get only the tags: upper 16 bits are identifier value, lower 16 bits are tag version
         const tagIdentifierValues = new Set<number>(tags.map(cat => CaseAuthenticatedTag.getIdentifyValue(cat)));
         if (tagIdentifierValues.size !== tags.length) {
-            throw new ValidationError("CASE Authenticated Tags field contains duplicate identifier values.");
+            throw new ValidationError("CASEAuthenticatedTags field contains duplicate identifier values.");
         }
     };
 }

@@ -47,7 +47,7 @@ export namespace NodeId {
      * must have an Operational Node ID as the source address. All unicast messages must have an Operational Node ID
      * as the destination address.
      */
-    export const getRandomOperationalNodeId = (): NodeId => {
+    export const randomOperationalNodeId = (): NodeId => {
         while (true) {
             const randomBigInt = Crypto.getRandomBigInt(8);
             if (randomBigInt >= OPERATIONAL_NODE_MIN && randomBigInt <= OPERATIONAL_NODE_MAX) {
@@ -64,7 +64,7 @@ export namespace NodeId {
     };
 
     /** A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the lower half of the Node ID. */
-    export const getFromGroupNodeId = (groupId: number): NodeId => {
+    export const fromGroupNodeId = (groupId: number): NodeId => {
         if (groupId < 0 || groupId > 0xffff) {
             throw new UnexpectedDataError(`Invalid group ID: ${groupId}`);
         }
@@ -76,7 +76,7 @@ export namespace NodeId {
      * 32 bits. This allows implementations to keep track of connections or transport-layer links and similar
      * housekeeping internal usage purposes in contexts where an Operational Node ID is unavailable.
      */
-    export const getFromTemporaryLocalNodeId = (id: number): NodeId => {
+    export const fromTemporaryLocalNodeId = (id: number): NodeId => {
         if (id < 0 || id > 0xffffffff) {
             throw new UnexpectedDataError(`Invalid ID: ${id}`);
         }
@@ -87,15 +87,23 @@ export namespace NodeId {
      * This subrange of Node ID is used to assign an access control subject to a group of peer nodes that share a
      * single CASE session as specified in Section 6.6.2.1.2, “Subjects identified by CASE Authenticated Tag”.
      */
-    export const getFromCaseAuthenticatedTag = (id: CaseAuthenticatedTag): NodeId => {
+    export const fromCaseAuthenticatedTag = (id: CaseAuthenticatedTag): NodeId => {
         if (id < 0 || id > 0xffffffff) {
             throw new UnexpectedDataError(`Invalid CASE Authenticated tag: ${id}`);
         }
         return NodeId(BigInt("0xFFFFFFFD" + id.toString(16).padStart(8, "0")));
     };
 
+    export const isCaseAuthenticatedTag = (nodeId: NodeId): boolean => {
+        const nodeIdHex = nodeId.toString(16);
+        return nodeIdHex.startsWith("fffffffd") && nodeIdHex.length === 16;
+    };
+
     export const extractAsCaseAuthenticatedTag = (nodeId: NodeId): CaseAuthenticatedTag => {
-        return CaseAuthenticatedTag(Number(nodeId.toString(16).slice(8)));
+        if (!isCaseAuthenticatedTag(nodeId)) {
+            throw new UnexpectedDataError(`Invalid CASE Authenticated tag: ${nodeId}`);
+        }
+        return CaseAuthenticatedTag(parseInt(nodeId.toString(16).slice(8), 16));
     };
 
     /**

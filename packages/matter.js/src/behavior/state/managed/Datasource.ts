@@ -92,8 +92,8 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
             if (!readOnlyView) {
                 const session: ValueSupervisor.Session = {
                     offline: true,
-                    accessLevelFor() {
-                        return AccessLevel.View;
+                    authorizedFor(desiredAccessLevel: AccessLevel) {
+                        return desiredAccessLevel === AccessLevel.View;
                     },
                     transaction: ReadOnlyTransaction,
                 };
@@ -196,6 +196,7 @@ interface SessionContext {
  */
 interface Internals extends Datasource.Options {
     path: DataModelPath;
+    cluster?: ClusterId;
     values: Val.Struct;
     version: number;
     sessions?: Map<ValueSupervisor.Session, SessionContext>;
@@ -295,7 +296,7 @@ function createSessionContext(resource: Resource, internals: Internals, session:
         },
 
         get location() {
-            return { path: internals.path };
+            return { path: internals.path, cluster: internals.cluster };
         },
 
         set location(_loc: AccessControl.Location) {

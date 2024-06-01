@@ -216,7 +216,7 @@ export namespace GroupKeyManagement {
          *
          * @see {@link MatterSpecification.v11.Core} § 11.2.6.4.9
          */
-        groupKeyMulticastPolicy: TlvField(8, TlvEnum<GroupKeyMulticastPolicy>())
+        groupKeyMulticastPolicy: TlvOptionalField(8, TlvEnum<GroupKeyMulticastPolicy>())
     });
 
     /**

@@ -11,6 +11,7 @@ import {
     TlvRootCertificate,
 } from "../certificate/CertificateManager.js";
 import { Cluster } from "../cluster/Cluster.js";
+import { GroupKeyManagement } from "../cluster/definitions/GroupKeyManagementCluster.js";
 import { InternalError, MatterError, MatterFlowError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { BinaryKeyPair, Key, PrivateKey } from "../crypto/Key.js";
@@ -22,6 +23,7 @@ import { VendorId } from "../datatype/VendorId.js";
 import { Logger } from "../log/Logger.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { SupportedStorageTypes } from "../storage/StringifyTools.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { MaybePromise } from "../util/Promises.js";
@@ -51,6 +53,44 @@ export type FabricJsonObject = {
     caseAuthenticatedTags?: CaseAuthenticatedTag[];
     scopedClusterData: Map<number, Map<string, SupportedStorageTypes>>;
 };
+
+type OperationalGroupKeySet = TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySetStruct> & {
+    operationalEpochKey0: ByteArray;
+    groupSessionId0: number | null;
+    operationalEpochKey1: ByteArray | null;
+    groupSessionId1: number | null;
+    operationalEpochKey2: ByteArray | null;
+    groupSessionId2: number | null;
+};
+
+namespace OperationalGroupKeySet {
+    export const asTlvGroupSet = (
+        operationalGroupSet: OperationalGroupKeySet,
+    ): TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySetStruct> => {
+        const {
+            groupKeySetId,
+            epochKey0,
+            epochStartTime0,
+            epochKey1,
+            epochStartTime1,
+            epochKey2,
+            epochStartTime2,
+            groupKeySecurityPolicy,
+            groupKeyMulticastPolicy,
+        } = operationalGroupSet;
+        return {
+            groupKeySetId,
+            epochKey0,
+            epochStartTime0,
+            epochKey1,
+            epochStartTime1,
+            epochKey2,
+            epochStartTime2,
+            groupKeySecurityPolicy,
+            groupKeyMulticastPolicy,
+        };
+    };
+}
 
 export type ExposedFabricInformation = {
     fabricIndex: FabricIndex;
@@ -267,6 +307,39 @@ export class Fabric {
         return Array.from(this.#scopedClusterData.get(cluster.id).keys());
     }
 
+    getGroupKeySet(groupKeySetId: number) {
+        if (groupKeySetId === 0) {
+            return OperationalGroupKeySet.asTlvGroupSet(this.getGroupSetForIpk());
+        }
+        // TODO add correct group handling later, right now only IPK exists
+        return undefined;
+    }
+
+    private getGroupSetForIpk(): OperationalGroupKeySet {
+        return {
+            groupKeySetId: 0,
+            epochKey0: this.identityProtectionKey,
+            operationalEpochKey0: this.operationalIdentityProtectionKey,
+            epochStartTime0: 0, // or do we need to track Fabric creation date?
+            groupSessionId0: null,
+            epochKey1: null,
+            operationalEpochKey1: null,
+            epochStartTime1: null,
+            groupSessionId1: null,
+            epochKey2: null,
+            operationalEpochKey2: null,
+            epochStartTime2: null,
+            groupSessionId2: null,
+            groupKeySecurityPolicy: GroupKeyManagement.GroupKeySecurityPolicy.TrustFirst,
+            groupKeyMulticastPolicy: GroupKeyManagement.GroupKeyMulticastPolicy.PerGroupId,
+        };
+    }
+
+    getAllGroupKeySets() {
+        // TODO add correct group handling later, right now only IPK exists
+        return [OperationalGroupKeySet.asTlvGroupSet(this.getGroupSetForIpk())];
+    }
+
     get externalInformation(): ExposedFabricInformation {
         return {
             fabricIndex: this.fabricIndex,
@@ -438,8 +511,8 @@ export class FabricBuilder {
             this.#keyPair,
             this.#rootVendorId,
             this.#rootCert,
-            this.#identityProtectionKey,
-            await Crypto.hkdf(this.#identityProtectionKey, operationalId, GROUP_SECURITY_INFO, 16),
+            this.#identityProtectionKey, // Epoch Key
+            await Crypto.hkdf(this.#identityProtectionKey, operationalId, GROUP_SECURITY_INFO),
             this.#intermediateCACert,
             this.#operationalCert,
             this.#label,

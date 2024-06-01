@@ -51,14 +51,10 @@ export function normalizeAndDecodeReadAttributeReport(
     return normalizeAndDecodeAttributeData(dataValues) as DecodedAttributeReportValue<any>[]; // dataVersion existing in incoming data, so must also in outgoing data
 }
 
-/**
- * Normalizes (e.g. prepare data for array un-chinking and resolve Tag compression if used) the attribute details from
- * a received DataReport.
- */
-export function normalizeAttributeData(
+export function expandPathsInAttributeData(
     data: TypeFromSchema<typeof TlvAttributeData>[],
     acceptWildcardPaths = false,
-): TypeFromSchema<typeof TlvAttributeData>[][] {
+): TypeFromSchema<typeof TlvAttributeData>[] {
     // Fill in missing path elements and restore dataVersion when tag compression is used
     let lastPath:
         | {
@@ -92,10 +88,21 @@ export function normalizeAttributeData(
             throw new UnexpectedDataError("Tag compression disabled, but path is incomplete: " + Logger.toJSON(path));
         }
     });
+    return data;
+}
 
+/**
+ * Normalizes (e.g. prepare data for array un-chinking and resolve Tag compression if used) the attribute details from
+ * a received DataReport.
+ */
+export function normalizeAttributeData(
+    data: TypeFromSchema<typeof TlvAttributeData>[],
+    acceptWildcardPaths = false,
+): TypeFromSchema<typeof TlvAttributeData>[][] {
+    const expandedData = expandPathsInAttributeData(data, acceptWildcardPaths);
     // Put all returned values into a map to group by path
-    const responseList = new Map<string, TypeFromSchema<typeof TlvAttributeData>[]>(); // TODO CHECK
-    data.forEach(value => {
+    const responseList = new Map<string, TypeFromSchema<typeof TlvAttributeData>[]>();
+    expandedData.forEach(value => {
         if (!value) return;
         const {
             path: { nodeId, endpointId, clusterId, attributeId },
@@ -180,6 +187,21 @@ function decodeValueForAttribute<A extends Attribute<any, any>>(
     return decodeAttributeValueWithSchema(schema, values);
 }
 
+export function decodeListAttributeValueWithSchema<T>(
+    schema: TlvSchema<T>,
+    values: TypeFromSchema<typeof TlvAttributeData>[],
+    currentValue?: T,
+): T | undefined {
+    // Return contained multiple tlv values as an array
+    if (!(schema instanceof ArraySchema)) {
+        throw new UnexpectedDataError(`Attribute is not an list but multiple values were returned.`);
+    }
+    return schema.decodeFromChunkedArray(
+        values.map(({ data, path: { listIndex } }) => ({ listIndex, element: data })),
+        currentValue as any,
+    ) as T;
+}
+
 /** Decodes the data for one attribute via a schema including array un-chunking. */
 export function decodeAttributeValueWithSchema<T>(
     schema: TlvSchema<T>,
@@ -196,13 +218,7 @@ export function decodeAttributeValueWithSchema<T>(
         return schema.decodeTlv(values[0].data);
     }
 
-    // Return contained multiple tlv values as an array
-    if (!(schema instanceof ArraySchema)) {
-        throw new UnexpectedDataError(`Attribute is not an list but multiple values were returned.`);
-    }
-    return schema.decodeFromChunkedArray(
-        values.map(({ data, path: { listIndex } }) => ({ listIndex, element: data })),
-    ) as T;
+    return decodeListAttributeValueWithSchema(schema, values, defaultValue);
 }
 
 /** Decodes the data for one unknown attribute via the AnySchema including array un-chunking. */

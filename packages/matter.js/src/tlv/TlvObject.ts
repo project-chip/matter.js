@@ -64,6 +64,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
     constructor(
         private readonly fieldDefinitions: F,
         private readonly type: TlvType.Structure | TlvType.List = TlvType.Structure,
+        private readonly allowProtocolSpecificTags = false,
     ) {
         super();
 
@@ -154,7 +155,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
         while (true) {
             const { tag: { profile, id } = {}, typeLength: elementTypeLength } = reader.readTagType();
             if (elementTypeLength.type === TlvType.EndOfContainer) break;
-            if (profile !== undefined)
+            if (profile !== undefined && !this.allowProtocolSpecificTags)
                 throw new UnexpectedDataError("Structure element tags should be context-specific.");
             if (id === undefined) throw new UnexpectedDataError("Structure element tags should have an id.");
             const fieldName = this.fieldById[id];
@@ -293,7 +294,8 @@ export const TlvObject = <F extends TlvFields>(fields: F) => new ObjectSchema(fi
  *      (also with the help of "Repeated Fields") because it not makes any real difference for now for the current
  *      existing data structures. We need to change once this changes.
  */
-export const TlvTaggedList = <F extends TlvFields>(fields: F) => new ObjectSchema(fields, TlvType.List);
+export const TlvTaggedList = <F extends TlvFields>(fields: F, allowProtocolSpecificTags = false) =>
+    new ObjectSchema(fields, TlvType.List, allowProtocolSpecificTags);
 
 // TODO Implement a real TlvList schema that matches the spec to represent a ordered list of TLV elements with optional
 //      tag.

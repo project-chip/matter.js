@@ -6,6 +6,7 @@
 
 import { MatterFlowError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
+import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { FabricId } from "../datatype/FabricId.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -29,6 +30,7 @@ export interface ResumptionRecord {
     fabric: Fabric;
     peerNodeId: NodeId;
     sessionParameters: SessionParameters;
+    caseAuthenticatedTags?: CaseAuthenticatedTag[];
 }
 
 type ResumptionStorageRecord = {
@@ -42,6 +44,7 @@ type ResumptionStorageRecord = {
         activeIntervalMs: number;
         activeThresholdMs: number;
     };
+    caseAuthenticatedTags?: CaseAuthenticatedTag[];
 };
 
 export class SessionManager<ContextT> {
@@ -116,6 +119,7 @@ export class SessionManager<ContextT> {
         isInitiator: boolean;
         isResumption: boolean;
         sessionParameters?: SessionParameterOptions;
+        caseAuthenticatedTags?: CaseAuthenticatedTag[];
     }) {
         const {
             sessionId,
@@ -127,6 +131,7 @@ export class SessionManager<ContextT> {
             isInitiator,
             isResumption,
             sessionParameters,
+            caseAuthenticatedTags,
         } = args;
         const session = await SecureSession.create({
             context: this.context,
@@ -144,6 +149,7 @@ export class SessionManager<ContextT> {
                 await this.#sessionClosed.emit(session);
             },
             sessionParameters,
+            caseAuthenticatedTags,
             subscriptionChangedCallback: () => {
                 this.#subscriptionsChanged.emit(session);
             },
@@ -270,7 +276,10 @@ export class SessionManager<ContextT> {
         await this.#sessionStorage.set(
             "resumptionRecords",
             [...this.#resumptionRecords].map(
-                ([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric, sessionParameters }]) =>
+                ([
+                    nodeId,
+                    { sharedSecret, resumptionId, peerNodeId, fabric, sessionParameters, caseAuthenticatedTags },
+                ]) =>
                     ({
                         nodeId,
                         sharedSecret,
@@ -278,6 +287,7 @@ export class SessionManager<ContextT> {
                         fabricId: fabric.fabricId,
                         peerNodeId: peerNodeId,
                         sessionParameters,
+                        caseAuthenticatedTags,
                     }) as ResumptionStorageRecord,
             ),
         );
@@ -290,7 +300,15 @@ export class SessionManager<ContextT> {
         );
 
         storedResumptionRecords.forEach(
-            ({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId, sessionParameters }) => {
+            ({
+                nodeId,
+                sharedSecret,
+                resumptionId,
+                fabricId,
+                peerNodeId,
+                sessionParameters,
+                caseAuthenticatedTags,
+            }) => {
                 logger.info("restoring resumption record for node", nodeId);
                 const fabric = fabrics.find(fabric => fabric.fabricId === fabricId);
                 if (!fabric) {
@@ -303,6 +321,7 @@ export class SessionManager<ContextT> {
                     fabric,
                     peerNodeId,
                     sessionParameters,
+                    caseAuthenticatedTags,
                 });
             },
         );

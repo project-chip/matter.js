@@ -13,6 +13,7 @@ import { Participant } from "../../../../src/behavior/state/transaction/Particip
 import { Resource } from "../../../../src/behavior/state/transaction/Resource.js";
 import { Status } from "../../../../src/behavior/state/transaction/Status.js";
 import { Transaction } from "../../../../src/behavior/state/transaction/Transaction.js";
+import { StatusCode, StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
 import { MaybePromise } from "../../../../src/util/Promises.js";
 
 class TestResource implements Resource {
@@ -38,6 +39,8 @@ function TestParticipant(options?: Partial<Participant>) {
         },
 
         invoked: Array<string>(),
+
+        preCommit: options?.preCommit,
 
         commit1(): MaybePromise {
             this.invoked.push("commit1");
@@ -65,6 +68,12 @@ function TestParticipant(options?: Partial<Participant>) {
 let transaction: Transaction;
 let transaction2: Transaction;
 let transaction3: Transaction;
+
+function validateUnlocked(transaction: Transaction) {
+    for (const resource of transaction.resources) {
+        expect(resource.lockedBy).undefined;
+    }
+}
 
 export interface JoinOptions extends Partial<Participant> {
     transaction?: Transaction;
@@ -214,6 +223,7 @@ describe("Transaction", () => {
         await transaction.rollback();
 
         p.expect("rollback", "rollback");
+        validateUnlocked(transaction);
     });
 
     test("flows through commit correctly", async () => {
@@ -230,6 +240,7 @@ describe("Transaction", () => {
         expect(transaction.status).equals(Status.Shared);
 
         p.expect("commit1", "commit2", "postCommit");
+        validateUnlocked(transaction);
     });
 
     test("flows through rollback correctly", async () => {
@@ -242,6 +253,7 @@ describe("Transaction", () => {
         expect(transaction.status).equals(Status.Shared);
 
         p.expect("rollback");
+        validateUnlocked(transaction);
     });
 
     describe("invokes onShared", () => {
@@ -268,6 +280,72 @@ describe("Transaction", () => {
         });
     });
 
+    describe("rolls back and throws on precommit phase error", () => {
+        test("synchronously", () => {
+            const p = join({
+                preCommit: () => {
+                    throw new Error("oops in sync participant");
+                },
+            });
+
+            transaction.beginSync();
+
+            expect(() => transaction.commit()).throws(FinalizationError);
+
+            p.expect("rollback");
+            validateUnlocked(transaction);
+        });
+
+        test("asychonously", async () => {
+            const p = join({
+                preCommit: () => {
+                    throw new Error("oops in sync participant");
+                },
+
+                async rollback() {},
+            });
+
+            await transaction.begin();
+
+            await expect(transaction.commit()).rejectedWith(FinalizationError);
+
+            p.expect("rollback");
+            validateUnlocked(transaction);
+        });
+
+        test("synchronously with StatusResponseError", () => {
+            const p = join({
+                preCommit: () => {
+                    throw new StatusResponseError("oops in sync participant", StatusCode.ResourceExhausted);
+                },
+            });
+
+            transaction.beginSync();
+
+            expect(() => transaction.commit()).throws(StatusResponseError);
+
+            p.expect("rollback");
+            validateUnlocked(transaction);
+        });
+
+        test("asychonously with StatusResponseError", async () => {
+            const p = join({
+                preCommit: () => {
+                    throw new StatusResponseError("oops in sync participant", StatusCode.ResourceExhausted);
+                },
+
+                async rollback() {},
+            });
+
+            await transaction.begin();
+
+            await expect(transaction.commit()).rejectedWith(StatusResponseError);
+
+            p.expect("rollback");
+            validateUnlocked(transaction);
+        });
+    });
+
     describe("rolls back and throws on commit phase 1 error", () => {
         test("synchronously", () => {
             const p = join({
@@ -281,6 +359,7 @@ describe("Transaction", () => {
             expect(() => transaction.commit()).throws(FinalizationError);
 
             p.expect("commit1", "rollback");
+            validateUnlocked(transaction);
         });
 
         test("asychonously", async () => {
@@ -297,6 +376,7 @@ describe("Transaction", () => {
             await expect(transaction.commit()).rejectedWith(FinalizationError);
 
             p.expect("commit1", "rollback");
+            validateUnlocked(transaction);
         });
     });
 
@@ -331,6 +411,46 @@ describe("Transaction", () => {
             });
         });
 
+        describe("asynchronously with precommit error", () => {
+            test("on becoming exclusive & committing", async () => {
+                join({
+                    preCommit: async () => {
+                        throw new Error("oops in async participant");
+                    },
+                });
+
+                const resource = new TestResource();
+                await transaction.addResources(resource);
+
+                await transaction.begin();
+
+                expect(resource.lockedBy).equals(transaction);
+
+                await expect(transaction.commit()).rejectedWith(FinalizationError);
+                expect(resource.lockedBy).undefined;
+            });
+        });
+
+        describe("asynchronously with precommit StatusResponseError", () => {
+            test("on becoming exclusive & committing", async () => {
+                join({
+                    preCommit: async () => {
+                        throw new StatusResponseError("oops in async participant", StatusCode.ResourceExhausted);
+                    },
+                });
+
+                const resource = new TestResource();
+                await transaction.addResources(resource);
+
+                await transaction.begin();
+
+                expect(resource.lockedBy).equals(transaction);
+
+                await expect(transaction.commit()).rejectedWith(StatusResponseError);
+                expect(resource.lockedBy).undefined;
+            });
+        });
+
         describe("synchronously", () => {
             test("on becoming exclusive & rolling back", async () => {
                 join();
@@ -357,6 +477,46 @@ describe("Transaction", () => {
                 expect(resource.lockedBy).equals(transaction);
 
                 await transaction.commit();
+                expect(resource.lockedBy).undefined;
+            });
+        });
+
+        describe("synchronously with precommit error", () => {
+            test("on adding to exclusive & committing", async () => {
+                join({
+                    preCommit: async () => {
+                        throw new Error("oops in async participant");
+                    },
+                });
+
+                transaction.beginSync();
+
+                const resource = new TestResource();
+                transaction.addResourcesSync(resource);
+
+                expect(resource.lockedBy).equals(transaction);
+
+                await expect(transaction.commit()).rejectedWith(FinalizationError);
+                expect(resource.lockedBy).undefined;
+            });
+        });
+
+        describe("synchronously with precommit StatusResponseError", () => {
+            test("on adding to exclusive & committing", async () => {
+                join({
+                    preCommit: async () => {
+                        throw new StatusResponseError("oops in async participant", StatusCode.ResourceExhausted);
+                    },
+                });
+
+                transaction.beginSync();
+
+                const resource = new TestResource();
+                transaction.addResourcesSync(resource);
+
+                expect(resource.lockedBy).equals(transaction);
+
+                await expect(transaction.commit()).rejectedWith(StatusResponseError);
                 expect(resource.lockedBy).undefined;
             });
         });

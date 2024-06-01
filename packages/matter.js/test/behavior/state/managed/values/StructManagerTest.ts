@@ -10,7 +10,7 @@ import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../../../../src/datatype/NodeId.js";
 import { FieldElement } from "../../../../../src/model/index.js";
 import { MaybePromise } from "../../../../../src/util/Promises.js";
-import { TestStruct } from "./value-utils.js";
+import { aclEndpoint, TestStruct } from "./value-utils.js";
 
 export type Nested = {
     substruct: {
@@ -21,6 +21,7 @@ export type Nested = {
 const TestContext = {
     fabric: FabricIndex(1),
     subject: NodeId(1),
+    root: aclEndpoint([1, 3]),
 };
 
 function testNested(

@@ -6,8 +6,37 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 <!--
 	Placeholder for the next version (at the beginning of the line):
-	## __WORK IN PROGRESS__
+	### __WORK IN PROGRESS__
 -->
+
+### __WORK IN PROGRESS__
+* IMPORTANT: This version adds Access Control functionality and also tries to set missing ACL entries on startup on a best effort basis. If you encounter issues and have Access/Permission denied errors ain the logs then please delete and recommission the device to make sure all ACLs are set correctly. If this is not possible open GitHub issue or contact us in Discord to get help.
+* Matter-Core functionality:
+  * Feature: Implemented Access Control List (ACL) as required by Matter specification
+  * Enhancement: Enhanced several internal structures needed to support ACL properly
+  * Enhancement: Enhanced all datatypes that are MEIs to allow validation of the MEI and the allowed scopes and value ranges
+  * Enhancement: Remembers CATs from Sessions and uses them for CASE session resumptions
+  * Enhancement: Allows decoding of TlvLists with protocol specific tags
+  * Enhancement: Refactored channel management to match specification and allow several channels per fabric and node
+  * Enhancement: Closing message exchanges already when last message got acknowledged and prevent up to 9s waiting time for closures
+  * Enhancement: Prevents to announce a new commissionable device just before doing a factory reset
+  * Enhancement: Expires announcements for last removed fabric directly
+  * Fix: Fixes deepCopy to really doing a deep copy and not just copying the first level 
+  
+* matter.js Legacy API:
+  * Feature: Added Access Control cluster implementation
+  * Feature: Added minimal Group key management cluster implementation which supports no additional groups (so only IPK allowed)
+  * Enhancement: Enhanced Operational Credentials cluster to add needed ACLs on commissioning including backward compatibility
+
+* matter.js New API:
+  * Feature: Added Access Control cluster implementation
+  * Feature: Added minimal Group key management cluster implementation which supports no additional groups (so only IPK allowed)
+  * Enhancement: Enhanced Operational Credentials cluster to add needed ACLs on commissioning including backward 
+  * Enhancement: Optimized Factory reset logic when last Fabric is removed
+  * Fix: Persist also writable and fabric scoped data in new API
+  * Fix: Releases locks also in Precommit errors
+* Chip testing:
+  * Added automatic testing of chip tests suites for ACE, ACL and partly IDM
 
 ### 0.9.0 (2024-05-14)
 * Matter-Core functionality:

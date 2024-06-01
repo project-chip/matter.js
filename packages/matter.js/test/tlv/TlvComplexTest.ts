@@ -96,7 +96,7 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
         structure: {
             arrayField: [],
         } as any,
-        expectedError: "Array is too short: 0, min 1.",
+        expectedError: "Array [] is too short: 0, min 1.",
         errorFieldName: "arrayField",
     },
     "an object with missing nullable value": {

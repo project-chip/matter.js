@@ -237,7 +237,7 @@ describe("CertificateManager", () => {
             };
             assert.throws(
                 () => CertificateManager.nodeOperationalCertToAsn1(nocWithCat),
-                new ValidationError("CASE Authenticated Tags field contains duplicate identifier values."),
+                new ValidationError("CASEAuthenticatedTags field contains duplicate identifier values."),
             );
         });
     });

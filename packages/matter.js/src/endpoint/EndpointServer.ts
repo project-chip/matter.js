@@ -36,6 +36,10 @@ export class EndpointServer implements EndpointInterface {
         return this.#endpoint;
     }
 
+    get deviceType() {
+        return this.#endpoint.type.deviceType;
+    }
+
     constructor(endpoint: Endpoint) {
         (endpoint as ServerPart)[SERVER] = this;
         this.#endpoint = endpoint;

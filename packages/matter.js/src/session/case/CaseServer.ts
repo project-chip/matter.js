@@ -85,7 +85,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 : undefined;
         // We try to resume the session
         if (peerResumptionId !== undefined && peerResumeMic !== undefined && resumptionRecord !== undefined) {
-            const { sharedSecret, fabric, peerNodeId } = resumptionRecord;
+            const { sharedSecret, fabric, peerNodeId, caseAuthenticatedTags } = resumptionRecord;
             const peerResumeKey = await Crypto.hkdf(
                 sharedSecret,
                 ByteArray.concat(peerRandom, peerResumptionId),
@@ -106,6 +106,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 isInitiator: false,
                 isResumption: true,
                 sessionParameters,
+                caseAuthenticatedTags,
             });
 
             // Generate sigma 2 resume
@@ -198,7 +199,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             });
             const {
                 ellipticCurvePublicKey: peerPublicKey,
-                subject: { fabricId: peerFabricId, nodeId: peerNodeId },
+                subject: { fabricId: peerFabricId, nodeId: peerNodeId, caseAuthenticatedTags },
             } = TlvOperationalCertificate.decode(peerNewOpCert);
 
             if (fabric.fabricId !== peerFabricId) {
@@ -222,6 +223,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 isInitiator: false,
                 isResumption: false,
                 sessionParameters,
+                caseAuthenticatedTags,
             });
             logger.info(
                 `session ${secureSession.id} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
@@ -236,6 +238,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 sharedSecret,
                 resumptionId,
                 sessionParameters: secureSession.getSessionParameters(),
+                caseAuthenticatedTags,
             };
 
             await messenger.close();

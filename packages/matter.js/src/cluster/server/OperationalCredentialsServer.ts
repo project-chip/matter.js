@@ -13,6 +13,7 @@ import {
 } from "../../behavior/definitions/operational-credentials/OperationalCredentialsTypes.js";
 import { ProductDescription } from "../../behavior/system/product-description/ProductDescription.js";
 import { CertificateError } from "../../certificate/CertificateManager.js";
+import { MatterFabricInvalidAdminSubjectError } from "../../common/FailsafeContext.js";
 import { MatterFabricConflictError } from "../../common/FailsafeTimer.js";
 import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
@@ -29,6 +30,7 @@ import { TlvByteString } from "../../tlv/TlvString.js";
 import { AccessLevel, Command } from "../Cluster.js";
 import { BasicInformation } from "../definitions/BasicInformationCluster.js";
 import { OperationalCredentials } from "../definitions/OperationalCredentialsCluster.js";
+import { AccessControl } from "../definitions/index.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("OperationalCredentialsServer");
@@ -140,6 +142,8 @@ export const OperationalCredentialsClusterHandler: (
             request: { nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId },
             attributes: { nocs, commissionedFabrics, fabrics, trustedRootCertificates, supportedFabrics },
             session,
+            endpoint,
+            message,
         }) => {
             if (!session.isSecure)
                 throw new MatterFlowError("addOperationalCert should be called on a secure session.");
@@ -218,6 +222,11 @@ export const OperationalCredentialsClusterHandler: (
                         statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidPublicKey,
                         debugText: error.message,
                     };
+                } else if (error instanceof MatterFabricInvalidAdminSubjectError) {
+                    return {
+                        statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidAdminSubject,
+                        debugText: error.message,
+                    };
                 }
                 throw error;
             }
@@ -235,10 +244,27 @@ export const OperationalCredentialsClusterHandler: (
             fabrics.updated(session);
             trustedRootCertificates.updated(session);
 
-            // TODO: The receiver SHALL create and add a new Access Control Entry using the CaseAdminSubject field to grant
-            //  subsequent Administer access to an Administrator member of the new Fabric. It is RECOMMENDED that the
-            //  Administrator presented in CaseAdminSubject exist within the same entity that is currently invoking the
-            //  AddNOC command, within another of the Fabrics of which it is a member.
+            // The receiver SHALL create and add a new Access Control Entry using the CaseAdminSubject field to grant
+            // subsequent Administer access to an Administrator member of the new Fabric.
+            const aclServer = endpoint.getClusterServer(AccessControl.Cluster);
+            if (aclServer !== undefined) {
+                // Set is fabric filtered automatically, so we can set because this is a new fabric
+                aclServer.attributes.acl.set(
+                    [
+                        {
+                            fabricIndex: fabric.fabricIndex,
+                            privilege: AccessControl.AccessControlEntryPrivilege.Administer,
+                            authMode: AccessControl.AccessControlEntryAuthMode.Case,
+                            subjects: [caseAdminSubject],
+                            targets: null, // entire node
+                        },
+                    ],
+                    session,
+                    message,
+                    false,
+                    true,
+                );
+            }
 
             // TODO The incoming IPKValue SHALL be stored in the Fabric-scoped slot within the Group Key Management cluster
             //  (see KeySetWrite), for subsequent use during CASE.

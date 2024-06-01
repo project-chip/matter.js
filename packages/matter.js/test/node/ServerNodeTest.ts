@@ -260,6 +260,9 @@ describe("ServerNode", () => {
             await node.lifecycle.decommissioned;
         }
 
+        // Simulate receiving the response to the removeFabric request which normally closes the underlying session delayed
+        await context.session.destroy(false, false);
+
         // ...then go offline...
         if (node.lifecycle.isOnline) {
             await MockTime.resolve(node.lifecycle.offline);
@@ -388,7 +391,7 @@ async function almostCommission(node?: MockServerNode, number = 0) {
             nocValue: params.nocValue,
             icacValue: params.icacValue,
             ipkValue: params.ipkValue,
-            caseAdminSubject: NodeId(number * 100),
+            caseAdminSubject: NodeId((number + 1) * 100),
             adminVendorId: VendorId(65521),
         });
         expect(result.statusCode).deep.equals(0);

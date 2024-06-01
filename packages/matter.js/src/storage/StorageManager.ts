@@ -14,16 +14,19 @@ export class StorageManager<S extends Storage = any> {
     constructor(private storage: S) {}
 
     initialize(): MaybePromise<void> {
-        const init = this.storage.initialize();
-        if (MaybePromise.is(init)) {
-            return init.then(() => {
-                this.initialized = true;
-            });
+        if (!this.storage.initialized) {
+            const init = this.storage.initialize();
+            if (MaybePromise.is(init)) {
+                return init.then(() => {
+                    this.initialized = true;
+                });
+            }
         }
         this.initialized = true;
     }
 
     close() {
+        this.initialized = false;
         return this.storage.close();
     }
 

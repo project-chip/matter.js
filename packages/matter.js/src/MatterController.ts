@@ -75,6 +75,8 @@ const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xfff1);
 
 const RECONNECTION_POLLING_INTERVAL = 10 * 60 * 1000; // 10 minutes
 
+const CONNECTIONS_PER_FABRIC_AND_NODE = 3;
+
 const logger = Logger.get("MatterController");
 
 /**
@@ -117,7 +119,7 @@ export class MatterController {
                 sessionClosedCallback,
             );
         } else {
-            const rootNodeId = NodeId.getRandomOperationalNodeId();
+            const rootNodeId = NodeId.randomOperationalNodeId();
             const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
             const fabricBuilder = new FabricBuilder()
                 .setRootCert(certificateManager.getRootCert())
@@ -151,7 +153,7 @@ export class MatterController {
     }
 
     readonly sessionManager: SessionManager<MatterController>;
-    private readonly channelManager = new ChannelManager();
+    private readonly channelManager = new ChannelManager(CONNECTIONS_PER_FABRIC_AND_NODE);
     private readonly exchangeManager: ExchangeManager<MatterController>;
     private readonly paseClient = new PaseClient();
     private readonly caseClient = new CaseClient();
@@ -341,14 +343,14 @@ export class MatterController {
 
     async disconnect(nodeId: NodeId) {
         await this.sessionManager.removeAllSessionsForNode(nodeId, true);
-        await this.channelManager.removeChannel(this.fabric, nodeId);
+        await this.channelManager.removeAllNodeChannels(this.fabric, nodeId);
     }
 
     async removeNode(nodeId: NodeId) {
         logger.info(`Removing commissioned node ${nodeId} from controller.`);
         await this.sessionManager.removeAllSessionsForNode(nodeId);
         await this.sessionManager.removeResumptionRecord(nodeId);
-        await this.channelManager.removeChannel(this.fabric, nodeId);
+        await this.channelManager.removeAllNodeChannels(this.fabric, nodeId);
         this.commissionedNodes.delete(nodeId);
         await this.storeCommissionedNodes();
     }
@@ -454,7 +456,7 @@ export class MatterController {
             Commissionee SHALL exit Commissioning Mode after 20 failed attempts.
          */
 
-        const peerNodeId = commissioningOptions.nodeId ?? NodeId.getRandomOperationalNodeId();
+        const peerNodeId = commissioningOptions.nodeId ?? NodeId.randomOperationalNodeId();
         const commissioningManager = new ControllerCommissioner(
             // Use the created secure session to do the commissioning
             new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel), peerNodeId),
@@ -765,7 +767,7 @@ export class MatterController {
         }
         return new InteractionClient(
             new ExchangeProvider(this.exchangeManager, channel, async () => {
-                await this.channelManager.removeChannel(this.fabric, peerNodeId);
+                await this.channelManager.removeAllNodeChannels(this.fabric, peerNodeId);
                 await this.resume(peerNodeId, 60); // Channel reconnection only waits limited time
                 return this.channelManager.getChannel(this.fabric, peerNodeId);
             }),
