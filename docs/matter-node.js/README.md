@@ -1,4 +1,6 @@
-@project-chip/matter-node.js / [Modules](modules.md)
+**@project-chip/matter-node.js** • [**Docs**](modules.md)
+
+***
 
 # matter-node.js
 

@@ -1,0 +1,151 @@
+[**@project-chip/matter.js**](../../../../../README.md) • **Docs**
+
+***
+
+[@project-chip/matter.js](../../../../../modules.md) / [cluster/export](../../../README.md) / [Actions](../README.md) / ActionType
+
+# Enumeration: ActionType
+
+## See
+
+MatterSpecification.v11.Core § 9.14.4.2
+
+## Enumeration Members
+
+### Alarm
+
+> **Alarm**: `6`
+
+Higher priority notification
+
+Similar to Notification but with a higher priority (and might override other endpoint states which
+Type=Notification would not override).
+
+Example: flash all lights in the house when CO sensor triggers.
+
+#### See
+
+MatterSpecification.v11.Core § 9.14.4.2.6
+
+#### Source
+
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:110](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L110)
+
+***
+
+### Automation
+
+> **Automation**: `3`
+
+Control an automation (e.g. motion sensor controlling lights)
+
+Indications an automation (e.g. a motion sensor controlling lights, an alarm system) which can bee.g.
+started, stopped, paused, resumed. Example: see example 3.
+
+#### See
+
+MatterSpecification.v11.Core § 9.14.4.2.3
+
+#### Source
+
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:74](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L74)
+
+***
+
+### Exception
+
+> **Exception**: `4`
+
+Sequence that will run when something doesn’t happen
+
+Indicates some action which the server will execute when a certain condition (which normally does not
+happen) is not met.
+
+Example: lock the doors when the server’s system has detected no one is at home while the doors are in the
+'unlocked' state.
+
+#### See
+
+MatterSpecification.v11.Core § 9.14.4.2.4
+
+#### Source
+
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:87](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L87)
+
+***
+
+### Notification
+
+> **Notification**: `5`
+
+Use the endpoints to send a message to user
+
+Indicates an action that can be triggered (e.g. by InstantAction) to notify the user.
+
+Example: play a pattern on the lights in the living room if there is someone in the garden in the evening.
+
+#### See
+
+MatterSpecification.v11.Core § 9.14.4.2.5
+
+#### Source
+
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:98](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L98)
+
+***
+
+### Other
+
+> **Other**: `0`
+
+Use this only when none of the other values applies
+
+#### Source
+
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:36](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L36)
+
+***
+
+### Scene
+
+> **Scene**: `1`
+
+Bring the endpoints into a certain state
+
+Can be used to set a static state of the associated endpoints (typically using InstantAction or
+InstantActionWithTransition), or to bring these endpoints into a more dynamic state (typically using
+StartAction), where the endpoints would e.g. gradually cycle through certain colors for a pleasing effect. A
+voice controller could use "set" (to map to InstantAction) or "play" (to map to StartAction) to trig
+
+ger such actions.
+
+Example: see examples 1 and 2.
+
+#### See
+
+MatterSpecification.v11.Core § 9.14.4.2.1
+
+#### Source
+
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:52](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L52)
+
+***
+
+### Sequence
+
+> **Sequence**: `2`
+
+A sequence of states with a certain time pattern
+
+Indicates an action which involves a sequence of events/states of the associated endpoints, such as a
+wake-up experience.
+
+Example: see example 4.
+
+#### See
+
+MatterSpecification.v11.Core § 9.14.4.2.2
+
+#### Source
+
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:64](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L64)

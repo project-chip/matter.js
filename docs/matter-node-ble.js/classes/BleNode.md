@@ -1,48 +1,26 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / BleNode
+[**@project-chip/matter-node-ble.js**](../README.md) • **Docs**
+
+***
+
+[@project-chip/matter-node-ble.js](../globals.md) / BleNode
 
 # Class: BleNode
 
-## Hierarchy
+## Extends
 
-- [`Ble`](internal_.Ble.md)
-
-  ↳ **`BleNode`**
-
-## Table of contents
-
-### Constructors
-
-- [constructor](BleNode.md#constructor)
-
-### Properties
-
-- [bleCentral](BleNode.md#blecentral)
-- [blePeripheral](BleNode.md#bleperipheral)
-- [options](BleNode.md#options)
-- [get](BleNode.md#get)
-
-### Accessors
-
-- [enabled](BleNode.md#enabled)
-
-### Methods
-
-- [getBleBroadcaster](BleNode.md#getblebroadcaster)
-- [getBleCentralInterface](BleNode.md#getblecentralinterface)
-- [getBlePeripheralInterface](BleNode.md#getbleperipheralinterface)
-- [getBleScanner](BleNode.md#getblescanner)
+- [`Ble`](../-internal-/classes/Ble.md)
 
 ## Constructors
 
-### constructor
+### new BleNode()
 
-• **new BleNode**(`options?`): [`BleNode`](BleNode.md)
+> **new BleNode**(`options`?): [`BleNode`](BleNode.md)
 
 #### Parameters
 
-| Name | Type |
+| Parameter | Type |
 | :------ | :------ |
-| `options?` | [`BleOptions`](../modules.md#bleoptions) |
+| `options`? | [`BleOptions`](../globals.md#bleoptions) |
 
 #### Returns
 
@@ -50,61 +28,57 @@
 
 #### Overrides
 
-[Ble](internal_.Ble.md).[constructor](internal_.Ble.md#constructor)
+[`Ble`](../-internal-/classes/Ble.md).[`constructor`](../-internal-/classes/Ble.md#constructors)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleNode.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleNode.ts#L26)
+[matter-node-ble.js/src/ble/BleNode.ts:26](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleNode.ts#L26)
 
 ## Properties
 
 ### bleCentral
 
-• `Private` **bleCentral**: `undefined` \| [`NobleBleClient`](internal_.NobleBleClient.md)
+> `private` **bleCentral**: `undefined` \| [`NobleBleClient`](../-internal-/classes/NobleBleClient.md)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleNode.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleNode.ts#L24)
+[matter-node-ble.js/src/ble/BleNode.ts:24](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleNode.ts#L24)
 
-___
+***
 
 ### blePeripheral
 
-• `Private` **blePeripheral**: `undefined` \| [`BlenoBleServer`](internal_.BlenoBleServer.md)
+> `private` **blePeripheral**: `undefined` \| [`BlenoBleServer`](../-internal-/classes/BlenoBleServer.md)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleNode.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleNode.ts#L23)
+[matter-node-ble.js/src/ble/BleNode.ts:23](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleNode.ts#L23)
 
-___
+***
 
-### options
+### options?
 
-• `Private` `Optional` `Readonly` **options**: [`BleOptions`](../modules.md#bleoptions)
+> `private` `optional` `readonly` **options**: [`BleOptions`](../globals.md#bleoptions)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleNode.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleNode.ts#L26)
+[matter-node-ble.js/src/ble/BleNode.ts:26](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleNode.ts#L26)
 
-___
+***
 
-### get
+### get()
 
-▪ `Static` **get**: () => [`Ble`](internal_.Ble.md)
+> `static` **get**: () => [`Ble`](../-internal-/classes/Ble.md)
 
-#### Type declaration
+#### Returns
 
-▸ (): [`Ble`](internal_.Ble.md)
-
-##### Returns
-
-[`Ble`](internal_.Ble.md)
+[`Ble`](../-internal-/classes/Ble.md)
 
 #### Inherited from
 
-[Ble](internal_.Ble.md).[get](internal_.Ble.md#get)
+[`Ble`](../-internal-/classes/Ble.md).[`get`](../-internal-/classes/Ble.md#get)
 
-#### Defined in
+#### Source
 
 matter.js/dist/esm/ble/Ble.d.ts:16
 
@@ -112,94 +86,90 @@ matter.js/dist/esm/ble/Ble.d.ts:16
 
 ### enabled
 
-• `get` **enabled**(): `boolean`
+> `get` `static` **enabled**(): `boolean`
 
 #### Returns
 
 `boolean`
 
-#### Inherited from
-
-Ble.enabled
-
-#### Defined in
+#### Source
 
 matter.js/dist/esm/ble/Ble.d.ts:17
 
 ## Methods
 
-### getBleBroadcaster
+### getBleBroadcaster()
 
-▸ **getBleBroadcaster**(`additionalAdvertisementData?`): [`InstanceBroadcaster`](../interfaces/internal_.InstanceBroadcaster.md)
+> **getBleBroadcaster**(`additionalAdvertisementData`?): [`InstanceBroadcaster`](../-internal-/interfaces/InstanceBroadcaster.md)
 
 #### Parameters
 
-| Name | Type |
+| Parameter | Type |
 | :------ | :------ |
-| `additionalAdvertisementData?` | `Uint8Array` |
+| `additionalAdvertisementData`? | `Uint8Array` |
 
 #### Returns
 
-[`InstanceBroadcaster`](../interfaces/internal_.InstanceBroadcaster.md)
+[`InstanceBroadcaster`](../-internal-/interfaces/InstanceBroadcaster.md)
 
 #### Overrides
 
-[Ble](internal_.Ble.md).[getBleBroadcaster](internal_.Ble.md#getblebroadcaster)
+[`Ble`](../-internal-/classes/Ble.md).[`getBleBroadcaster`](../-internal-/classes/Ble.md#getblebroadcaster)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleNode.ts:44](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleNode.ts#L44)
+[matter-node-ble.js/src/ble/BleNode.ts:44](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleNode.ts#L44)
 
-___
+***
 
-### getBleCentralInterface
+### getBleCentralInterface()
 
-▸ **getBleCentralInterface**(): [`NetInterface`](../interfaces/internal_.NetInterface.md)
+> **getBleCentralInterface**(): [`NetInterface`](../-internal-/interfaces/NetInterface.md)
 
 #### Returns
 
-[`NetInterface`](../interfaces/internal_.NetInterface.md)
+[`NetInterface`](../-internal-/interfaces/NetInterface.md)
 
 #### Overrides
 
-[Ble](internal_.Ble.md).[getBleCentralInterface](internal_.Ble.md#getblecentralinterface)
+[`Ble`](../-internal-/classes/Ble.md).[`getBleCentralInterface`](../-internal-/classes/Ble.md#getblecentralinterface)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleNode.ts:37](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleNode.ts#L37)
+[matter-node-ble.js/src/ble/BleNode.ts:37](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleNode.ts#L37)
 
-___
+***
 
-### getBlePeripheralInterface
+### getBlePeripheralInterface()
 
-▸ **getBlePeripheralInterface**(): [`TransportInterface`](../interfaces/internal_.TransportInterface.md)
+> **getBlePeripheralInterface**(): [`TransportInterface`](../-internal-/interfaces/TransportInterface.md)
 
 #### Returns
 
-[`TransportInterface`](../interfaces/internal_.TransportInterface.md)
+[`TransportInterface`](../-internal-/interfaces/TransportInterface.md)
 
 #### Overrides
 
-[Ble](internal_.Ble.md).[getBlePeripheralInterface](internal_.Ble.md#getbleperipheralinterface)
+[`Ble`](../-internal-/classes/Ble.md).[`getBlePeripheralInterface`](../-internal-/classes/Ble.md#getbleperipheralinterface)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleNode.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleNode.ts#L30)
+[matter-node-ble.js/src/ble/BleNode.ts:30](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleNode.ts#L30)
 
-___
+***
 
-### getBleScanner
+### getBleScanner()
 
-▸ **getBleScanner**(): [`Scanner`](../interfaces/internal_.Scanner.md)
+> **getBleScanner**(): [`Scanner`](../-internal-/interfaces/Scanner.md)
 
 #### Returns
 
-[`Scanner`](../interfaces/internal_.Scanner.md)
+[`Scanner`](../-internal-/interfaces/Scanner.md)
 
 #### Overrides
 
-[Ble](internal_.Ble.md).[getBleScanner](internal_.Ble.md#getblescanner)
+[`Ble`](../-internal-/classes/Ble.md).[`getBleScanner`](../-internal-/classes/Ble.md#getblescanner)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleNode.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleNode.ts#L51)
+[matter-node-ble.js/src/ble/BleNode.ts:51](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleNode.ts#L51)

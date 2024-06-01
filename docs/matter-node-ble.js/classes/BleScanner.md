@@ -1,127 +1,102 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / BleScanner
+[**@project-chip/matter-node-ble.js**](../README.md) • **Docs**
+
+***
+
+[@project-chip/matter-node-ble.js](../globals.md) / BleScanner
 
 # Class: BleScanner
 
 ## Implements
 
-- [`Scanner`](../interfaces/internal_.Scanner.md)
-
-## Table of contents
-
-### Constructors
-
-- [constructor](BleScanner.md#constructor)
-
-### Properties
-
-- [discoveredMatterDevices](BleScanner.md#discoveredmatterdevices)
-- [nobleClient](BleScanner.md#nobleclient)
-- [recordWaiters](BleScanner.md#recordwaiters)
-
-### Methods
-
-- [buildCommissionableQueryIdentifier](BleScanner.md#buildcommissionablequeryidentifier)
-- [cancelCommissionableDeviceDiscovery](BleScanner.md#cancelcommissionabledevicediscovery)
-- [close](BleScanner.md#close)
-- [findCommissionableDevices](BleScanner.md#findcommissionabledevices)
-- [findCommissionableDevicesContinuously](BleScanner.md#findcommissionabledevicescontinuously)
-- [findCommissionableQueryIdentifier](BleScanner.md#findcommissionablequeryidentifier)
-- [findOperationalDevice](BleScanner.md#findoperationaldevice)
-- [finishWaiter](BleScanner.md#finishwaiter)
-- [getCommissionableDevices](BleScanner.md#getcommissionabledevices)
-- [getDiscoveredCommissionableDevices](BleScanner.md#getdiscoveredcommissionabledevices)
-- [getDiscoveredDevice](BleScanner.md#getdiscovereddevice)
-- [getDiscoveredOperationalDevice](BleScanner.md#getdiscoveredoperationaldevice)
-- [handleDiscoveredDevice](BleScanner.md#handlediscovereddevice)
-- [registerWaiterPromise](BleScanner.md#registerwaiterpromise)
+- [`Scanner`](../-internal-/interfaces/Scanner.md)
 
 ## Constructors
 
-### constructor
+### new BleScanner()
 
-• **new BleScanner**(`nobleClient`): [`BleScanner`](BleScanner.md)
+> **new BleScanner**(`nobleClient`): [`BleScanner`](BleScanner.md)
 
 #### Parameters
 
-| Name | Type |
+| Parameter | Type |
 | :------ | :------ |
-| `nobleClient` | [`NobleBleClient`](internal_.NobleBleClient.md) |
+| `nobleClient` | [`NobleBleClient`](../-internal-/classes/NobleBleClient.md) |
 
 #### Returns
 
 [`BleScanner`](BleScanner.md)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:40](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L40)
+[matter-node-ble.js/src/ble/BleScanner.ts:40](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L40)
 
 ## Properties
 
 ### discoveredMatterDevices
 
-• `Private` `Readonly` **discoveredMatterDevices**: `Map`\<`string`, [`DiscoveredBleDevice`](../modules.md#discoveredbledevice)\>
+> `private` `readonly` **discoveredMatterDevices**: `Map`\<`string`, [`DiscoveredBleDevice`](../globals.md#discoveredbledevice)\>
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L38)
+[matter-node-ble.js/src/ble/BleScanner.ts:38](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L38)
 
-___
+***
 
 ### nobleClient
 
-• `Private` `Readonly` **nobleClient**: [`NobleBleClient`](internal_.NobleBleClient.md)
+> `private` `readonly` **nobleClient**: [`NobleBleClient`](../-internal-/classes/NobleBleClient.md)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:40](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L40)
+[matter-node-ble.js/src/ble/BleScanner.ts:40](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L40)
 
-___
+***
 
 ### recordWaiters
 
-• `Private` `Readonly` **recordWaiters**: `Map`\<`string`, \{ `resolveOnUpdatedRecords`: `boolean` ; `resolver`: () => `void` ; `timer`: [`Timer`](../interfaces/internal_.Timer.md)  }\>
+> `private` `readonly` **recordWaiters**: `Map`\<`string`, `object`\>
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
+[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
 
 ## Methods
 
-### buildCommissionableQueryIdentifier
+### buildCommissionableQueryIdentifier()
 
-▸ **buildCommissionableQueryIdentifier**(`identifier`): `string`
+> `private` **buildCommissionableQueryIdentifier**(`identifier`): `string`
 
 Builds an identifier string for commissionable queries based on the given identifier object.
 Some identifiers are identical to the official DNS-SD identifiers, others are custom.
 
 #### Parameters
 
-| Name | Type |
+| Parameter | Type |
 | :------ | :------ |
-| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/internal_.md#commissionabledeviceidentifiers) |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../-internal-/README.md#commissionabledeviceidentifiers) |
 
 #### Returns
 
 `string`
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:167](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L167)
+[matter-node-ble.js/src/ble/BleScanner.ts:167](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L167)
 
-___
+***
 
-### cancelCommissionableDeviceDiscovery
+### cancelCommissionableDeviceDiscovery()
 
-▸ **cancelCommissionableDeviceDiscovery**(`identifier`): `void`
+> **cancelCommissionableDeviceDiscovery**(`identifier`): `void`
 
 Cancel a running discovery of commissionable devices. The waiter promises are resolved as if the timeout would
 be over.
 
 #### Parameters
 
-| Name | Type |
+| Parameter | Type |
 | :------ | :------ |
-| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/internal_.md#commissionabledeviceidentifiers) |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../-internal-/README.md#commissionabledeviceidentifiers) |
 
 #### Returns
 
@@ -129,17 +104,17 @@ be over.
 
 #### Implementation of
 
-[Scanner](../interfaces/internal_.Scanner.md).[cancelCommissionableDeviceDiscovery](../interfaces/internal_.Scanner.md#cancelcommissionabledevicediscovery)
+[`Scanner`](../-internal-/interfaces/Scanner.md).[`cancelCommissionableDeviceDiscovery`](../-internal-/interfaces/Scanner.md#cancelcommissionabledevicediscovery)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:89](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L89)
+[matter-node-ble.js/src/ble/BleScanner.ts:89](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L89)
 
-___
+***
 
-### close
+### close()
 
-▸ **close**(): `void`
+> **close**(): `void`
 
 Close the scanner server and free resources.
 
@@ -149,45 +124,45 @@ Close the scanner server and free resources.
 
 #### Implementation of
 
-[Scanner](../interfaces/internal_.Scanner.md).[close](../interfaces/internal_.Scanner.md#close)
+[`Scanner`](../-internal-/interfaces/Scanner.md).[`close`](../-internal-/interfaces/Scanner.md#close)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:269](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L269)
+[matter-node-ble.js/src/ble/BleScanner.ts:269](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L269)
 
-___
+***
 
-### findCommissionableDevices
+### findCommissionableDevices()
 
-▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`): `Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+> **findCommissionableDevices**(`identifier`, `timeoutSeconds`): `Promise`\<[`CommissionableDevice`](../-internal-/README.md#commissionabledevice)[]\>
 
 Send DNS-SD queries to discover commissionable devices by a provided identifier (e.g. discriminator,
 vendorId, etc.) and returns as soon as minimum one was found or the timeout is over.
 
 #### Parameters
 
-| Name | Type | Default value |
+| Parameter | Type | Default value |
 | :------ | :------ | :------ |
-| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/internal_.md#commissionabledeviceidentifiers) | `undefined` |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../-internal-/README.md#commissionabledeviceidentifiers) | `undefined` |
 | `timeoutSeconds` | `number` | `10` |
 
 #### Returns
 
-`Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+`Promise`\<[`CommissionableDevice`](../-internal-/README.md#commissionabledevice)[]\>
 
 #### Implementation of
 
-[Scanner](../interfaces/internal_.Scanner.md).[findCommissionableDevices](../interfaces/internal_.Scanner.md#findcommissionabledevices)
+[`Scanner`](../-internal-/interfaces/Scanner.md).[`findCommissionableDevices`](../-internal-/interfaces/Scanner.md#findcommissionabledevices)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:218](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L218)
+[matter-node-ble.js/src/ble/BleScanner.ts:218](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L218)
 
-___
+***
 
-### findCommissionableDevicesContinuously
+### findCommissionableDevicesContinuously()
 
-▸ **findCommissionableDevicesContinuously**(`identifier`, `callback`, `timeoutSeconds?`): `Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+> **findCommissionableDevicesContinuously**(`identifier`, `callback`, `timeoutSeconds`): `Promise`\<[`CommissionableDevice`](../-internal-/README.md#commissionabledevice)[]\>
 
 Send DNS-SD queries to discover commissionable devices by a provided identifier (e.g. discriminator,
 vendorId, etc.) and returns after the timeout is over. For each new discovered device the provided callback is
@@ -195,49 +170,49 @@ called when it is discovered.
 
 #### Parameters
 
-| Name | Type | Default value |
+| Parameter | Type | Default value |
 | :------ | :------ | :------ |
-| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/internal_.md#commissionabledeviceidentifiers) | `undefined` |
-| `callback` | (`device`: [`CommissionableDevice`](../modules/internal_.md#commissionabledevice)) => `void` | `undefined` |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../-internal-/README.md#commissionabledeviceidentifiers) | `undefined` |
+| `callback` | (`device`) => `void` | `undefined` |
 | `timeoutSeconds` | `number` | `60` |
 
 #### Returns
 
-`Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+`Promise`\<[`CommissionableDevice`](../-internal-/README.md#commissionabledevice)[]\>
 
 #### Implementation of
 
-[Scanner](../interfaces/internal_.Scanner.md).[findCommissionableDevicesContinuously](../interfaces/internal_.Scanner.md#findcommissionabledevicescontinuously)
+[`Scanner`](../-internal-/interfaces/Scanner.md).[`findCommissionableDevicesContinuously`](../-internal-/interfaces/Scanner.md#findcommissionabledevicescontinuously)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:235](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L235)
+[matter-node-ble.js/src/ble/BleScanner.ts:235](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L235)
 
-___
+***
 
-### findCommissionableQueryIdentifier
+### findCommissionableQueryIdentifier()
 
-▸ **findCommissionableQueryIdentifier**(`record`): `undefined` \| `string`
+> `private` **findCommissionableQueryIdentifier**(`record`): `undefined` \| `string`
 
 #### Parameters
 
-| Name | Type |
+| Parameter | Type |
 | :------ | :------ |
-| `record` | [`CommissionableDeviceData`](../modules/internal_.md#commissionabledevicedata) |
+| `record` | [`CommissionableDeviceData`](../-internal-/README.md#commissionabledevicedata) |
 
 #### Returns
 
 `undefined` \| `string`
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:128](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L128)
+[matter-node-ble.js/src/ble/BleScanner.ts:128](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L128)
 
-___
+***
 
-### findOperationalDevice
+### findOperationalDevice()
 
-▸ **findOperationalDevice**(): `Promise`\<`undefined`\>
+> **findOperationalDevice**(): `Promise`\<`undefined`\>
 
 Send DNS-SD queries to discover the current addresses of an operational paired device by its operational ID
 and return them.
@@ -248,24 +223,24 @@ and return them.
 
 #### Implementation of
 
-[Scanner](../interfaces/internal_.Scanner.md).[findOperationalDevice](../interfaces/internal_.Scanner.md#findoperationaldevice)
+[`Scanner`](../-internal-/interfaces/Scanner.md).[`findOperationalDevice`](../-internal-/interfaces/Scanner.md#findoperationaldevice)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:208](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L208)
+[matter-node-ble.js/src/ble/BleScanner.ts:208](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L208)
 
-___
+***
 
-### finishWaiter
+### finishWaiter()
 
-▸ **finishWaiter**(`queryId`, `resolvePromise`, `isUpdatedRecord?`): `void`
+> `private` **finishWaiter**(`queryId`, `resolvePromise`, `isUpdatedRecord`): `void`
 
 Remove a waiter promise for a specific queryId and stop the connected timer. If required also resolve the
 promise.
 
 #### Parameters
 
-| Name | Type | Default value |
+| Parameter | Type | Default value |
 | :------ | :------ | :------ |
 | `queryId` | `string` | `undefined` |
 | `resolvePromise` | `boolean` | `undefined` |
@@ -275,81 +250,81 @@ promise.
 
 `void`
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:76](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L76)
+[matter-node-ble.js/src/ble/BleScanner.ts:76](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L76)
 
-___
+***
 
-### getCommissionableDevices
+### getCommissionableDevices()
 
-▸ **getCommissionableDevices**(`identifier`): [`DiscoveredBleDevice`](../modules.md#discoveredbledevice)[]
+> `private` **getCommissionableDevices**(`identifier`): [`DiscoveredBleDevice`](../globals.md#discoveredbledevice)[]
 
 #### Parameters
 
-| Name | Type |
+| Parameter | Type |
 | :------ | :------ |
-| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/internal_.md#commissionabledeviceidentifiers) |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../-internal-/README.md#commissionabledeviceidentifiers) |
 
 #### Returns
 
-[`DiscoveredBleDevice`](../modules.md#discoveredbledevice)[]
+[`DiscoveredBleDevice`](../globals.md#discoveredbledevice)[]
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:180](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L180)
+[matter-node-ble.js/src/ble/BleScanner.ts:180](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L180)
 
-___
+***
 
-### getDiscoveredCommissionableDevices
+### getDiscoveredCommissionableDevices()
 
-▸ **getDiscoveredCommissionableDevices**(`identifier`): [`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]
+> **getDiscoveredCommissionableDevices**(`identifier`): [`CommissionableDevice`](../-internal-/README.md#commissionabledevice)[]
 
 Return already discovered commissionable devices and return them. Does not send out new DNS-SD queries.
 
 #### Parameters
 
-| Name | Type |
+| Parameter | Type |
 | :------ | :------ |
-| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/internal_.md#commissionabledeviceidentifiers) |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../-internal-/README.md#commissionabledeviceidentifiers) |
 
 #### Returns
 
-[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]
+[`CommissionableDevice`](../-internal-/README.md#commissionabledevice)[]
 
 #### Implementation of
 
-[Scanner](../interfaces/internal_.Scanner.md).[getDiscoveredCommissionableDevices](../interfaces/internal_.Scanner.md#getdiscoveredcommissionabledevices)
+[`Scanner`](../-internal-/interfaces/Scanner.md).[`getDiscoveredCommissionableDevices`](../-internal-/interfaces/Scanner.md#getdiscoveredcommissionabledevices)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:265](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L265)
+[matter-node-ble.js/src/ble/BleScanner.ts:265](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L265)
 
-___
+***
 
-### getDiscoveredDevice
+### getDiscoveredDevice()
 
-▸ **getDiscoveredDevice**(`address`): [`DiscoveredBleDevice`](../modules.md#discoveredbledevice)
+> **getDiscoveredDevice**(`address`): [`DiscoveredBleDevice`](../globals.md#discoveredbledevice)
 
 #### Parameters
 
-| Name | Type |
+| Parameter | Type |
 | :------ | :------ |
 | `address` | `string` |
 
 #### Returns
 
-[`DiscoveredBleDevice`](../modules.md#discoveredbledevice)
+[`DiscoveredBleDevice`](../globals.md#discoveredbledevice)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:46](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L46)
+[matter-node-ble.js/src/ble/BleScanner.ts:46](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L46)
 
-___
+***
 
-### getDiscoveredOperationalDevice
+### getDiscoveredOperationalDevice()
 
-▸ **getDiscoveredOperationalDevice**(): `undefined`
+> **getDiscoveredOperationalDevice**(): `undefined`
 
 Return already discovered addresses of an operational paired device and return them. Does not send out new
 DNS-SD queries.
@@ -360,21 +335,21 @@ DNS-SD queries.
 
 #### Implementation of
 
-[Scanner](../interfaces/internal_.Scanner.md).[getDiscoveredOperationalDevice](../interfaces/internal_.Scanner.md#getdiscoveredoperationaldevice)
+[`Scanner`](../-internal-/interfaces/Scanner.md).[`getDiscoveredOperationalDevice`](../-internal-/interfaces/Scanner.md#getdiscoveredoperationaldevice)
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:213](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L213)
+[matter-node-ble.js/src/ble/BleScanner.ts:213](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L213)
 
-___
+***
 
-### handleDiscoveredDevice
+### handleDiscoveredDevice()
 
-▸ **handleDiscoveredDevice**(`peripheral`, `manufacturerServiceData`): `void`
+> `private` **handleDiscoveredDevice**(`peripheral`, `manufacturerServiceData`): `void`
 
 #### Parameters
 
-| Name | Type |
+| Parameter | Type |
 | :------ | :------ |
 | `peripheral` | `Peripheral` |
 | `manufacturerServiceData` | `Uint8Array` |
@@ -383,22 +358,22 @@ ___
 
 `void`
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:94](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L94)
+[matter-node-ble.js/src/ble/BleScanner.ts:94](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L94)
 
-___
+***
 
-### registerWaiterPromise
+### registerWaiterPromise()
 
-▸ **registerWaiterPromise**(`queryId`, `timeoutSeconds`, `resolveOnUpdatedRecords?`): `Promise`\<`void`\>
+> `private` **registerWaiterPromise**(`queryId`, `timeoutSeconds`, `resolveOnUpdatedRecords`): `Promise`\<`void`\>
 
 Registers a deferred promise for a specific queryId together with a timeout and return the promise.
 The promise will be resolved when the timer runs out latest.
 
 #### Parameters
 
-| Name | Type | Default value |
+| Parameter | Type | Default value |
 | :------ | :------ | :------ |
 | `queryId` | `string` | `undefined` |
 | `timeoutSeconds` | `number` | `undefined` |
@@ -408,6 +383,6 @@ The promise will be resolved when the timer runs out latest.
 
 `Promise`\<`void`\>
 
-#### Defined in
+#### Source
 
-[matter-node-ble.js/src/ble/BleScanner.ts:58](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L58)
+[matter-node-ble.js/src/ble/BleScanner.ts:58](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L58)

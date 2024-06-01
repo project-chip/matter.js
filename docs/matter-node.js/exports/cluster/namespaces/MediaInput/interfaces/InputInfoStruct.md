@@ -1,0 +1,99 @@
+[**@project-chip/matter-node.js**](../../../../../README.md) • **Docs**
+
+***
+
+[@project-chip/matter-node.js](../../../../../modules.md) / [exports/cluster](../../../README.md) / [MediaInput](../README.md) / InputInfoStruct
+
+# Interface: InputInfoStruct
+
+This contains information about an input.
+
+## See
+
+MatterSpecification.v11.Cluster § 6.9.5.1
+
+## Extends
+
+- [`TypeFromSchema`](../../../../tlv/README.md#typefromschemas)\<*typeof* [`TlvInputInfoStruct`](../README.md#tlvinputinfostruct)\>
+
+## Properties
+
+### description
+
+> **description**: `string`
+
+This shall indicate the user editable input description, such as “Living room Playstation”. This field may
+be blank, but SHOULD be provided when known.
+
+#### See
+
+MatterSpecification.v11.Cluster § 6.9.5.1.4
+
+#### Inherited from
+
+`TypeFromSchema.description`
+
+#### Source
+
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:82
+
+***
+
+### index
+
+> **index**: `number`
+
+This shall indicate the unique index into the list of Inputs.
+
+#### See
+
+MatterSpecification.v11.Cluster § 6.9.5.1.1
+
+#### Inherited from
+
+`TypeFromSchema.index`
+
+#### Source
+
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:62
+
+***
+
+### inputType
+
+> **inputType**: [`InputType`](../enumerations/InputType.md)
+
+This shall indicate the type of input
+
+#### See
+
+MatterSpecification.v11.Cluster § 6.9.5.1.2
+
+#### Inherited from
+
+`TypeFromSchema.inputType`
+
+#### Source
+
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:68
+
+***
+
+### name
+
+> **name**: `string`
+
+This shall indicate the input name, such as “HDMI 1”. This field may be blank, but SHOULD be provided when
+known.
+
+#### See
+
+MatterSpecification.v11.Cluster § 6.9.5.1.3
+
+#### Inherited from
+
+`TypeFromSchema.name`
+
+#### Source
+
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:75
