@@ -7,32 +7,16 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { DiagnosticLogs } from "../../../cluster/definitions/DiagnosticLogsCluster.js";
-
-/**
- * Reception of this command starts the process of retrieving diagnostic logs from a Node.
- *
- * @see {@link MatterSpecification.v11.Core} § 11.10.5.1
- */
-export type RetrieveLogsRequest = TypeFromSchema<typeof DiagnosticLogs.TlvRetrieveLogsRequest>;
-
-/**
- * This shall be generated as a response to the RetrieveLogsRequest. The data for this command is shown in the
- * following.
- *
- * @see {@link MatterSpecification.v11.Core} § 11.10.5.2
- */
-export type RetrieveLogsResponse = TypeFromSchema<typeof DiagnosticLogs.TlvRetrieveLogsResponse>;
 
 export namespace DiagnosticLogsInterface {
     export interface Base {
         /**
          * Reception of this command starts the process of retrieving diagnostic logs from a Node.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.10.5.1
+         * @see {@link MatterSpecification.v13.Core} § 11.11.5.1
          */
-        retrieveLogsRequest(request: RetrieveLogsRequest): MaybePromise<RetrieveLogsResponse>;
+        retrieveLogsRequest(request: DiagnosticLogs.RetrieveLogsRequest): MaybePromise<DiagnosticLogs.RetrieveLogsResponse>;
     }
 }
 

@@ -13,6 +13,6 @@ import { MatterElement } from "@project-chip/matter.js/model";
 export const LocalMatter = MatterElement({
     name: "LocalMatter",
     description: "Matter.js Matter overrides",
-    version: "1.1",
+    revision: "1.1",
     children: [],
 });

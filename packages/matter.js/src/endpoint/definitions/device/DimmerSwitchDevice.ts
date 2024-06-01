@@ -13,7 +13,9 @@ import {
     LevelControlBehavior as BaseLevelControlBehavior
 } from "../../../behavior/definitions/level-control/LevelControlBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
+import {
+    ScenesManagementBehavior as BaseScenesManagementBehavior
+} from "../../../behavior/definitions/scenes-management/ScenesManagementBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -22,7 +24,7 @@ import { Identity } from "../../../util/Type.js";
  * A Dimmer Switch is a controller device that, when bound to a lighting device such as a Dimmable Light, is capable of
  * being used to switch the device on or off and adjust the intensity of the light being emitted.
  *
- * @see {@link MatterSpecification.v11.Device} § 6.2
+ * @see {@link MatterSpecification.v13.Device} § 6.2
  */
 export interface DimmerSwitchDevice extends Identity<typeof DimmerSwitchDeviceDefinition> {}
 
@@ -63,11 +65,11 @@ export namespace DimmerSwitchRequirements {
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The Scenes cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification
      *
-     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
+     * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
      */
-    export const ScenesBehavior = BaseScenesBehavior;
+    export const ScenesManagementBehavior = BaseScenesManagementBehavior;
 
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
@@ -79,14 +81,14 @@ export namespace DimmerSwitchRequirements {
      */
     export const client = {
         mandatory: { Identify: IdentifyBehavior, OnOff: OnOffBehavior, LevelControl: LevelControlBehavior },
-        optional: { Groups: GroupsBehavior, Scenes: ScenesBehavior }
+        optional: { Groups: GroupsBehavior, ScenesManagement: ScenesManagementBehavior }
     };
 }
 
 export const DimmerSwitchDeviceDefinition = MutableEndpoint({
     name: "DimmerSwitch",
     deviceType: 0x104,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: DimmerSwitchRequirements,
     behaviors: SupportedBehaviors(DimmerSwitchRequirements.server.mandatory.Identify)
 });

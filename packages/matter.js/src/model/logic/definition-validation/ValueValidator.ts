@@ -7,7 +7,9 @@
 import { Access, Conformance, Constraint, Quality } from "../../aspects/index.js";
 import { DefinitionError, FieldValue, Metatype } from "../../definitions/index.js";
 import { ClusterModel, ValueModel } from "../../models/index.js";
+import * as Elements from "../../standard/elements/index.js";
 import { ModelValidator } from "./ModelValidator.js";
+import { ValidationExceptions } from "./ValidationExceptions.js";
 
 /**
  * Validates models that extend DataModel.
@@ -24,7 +26,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
 
         this.model.conformance.validateReferences(name => {
             // Features are all caps, other names are field references
-            if (name.match(/^[A-Z_$]+$/)) {
+            if (name.match(/^[A-Z0-9_$]+$/)) {
                 // Feature lookup
                 const cluster = this.model.owner(ClusterModel);
                 return !!cluster?.features.find(f => f.name === name);
@@ -59,9 +61,8 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
                 return;
             }
 
-            // Spec does not always provide type information for deprecated
-            // fields
-            if (this.model.isDeprecated) {
+            // Spec does not always provide type information for deprecated fields
+            if (this.model.isDeprecated || this.model.isDisallowed) {
                 return;
             }
 
@@ -83,8 +84,8 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
         }
         const metatype = metabase.metatype;
         if (metatype === undefined) {
-            // This shouldn't happen because the presence of the metatype is
-            // what makes it a metabase.  But eslint doesn't know that
+            // This shouldn't happen because the presence of the metatype is what makes it a metabase.  But eslint
+            // doesn't know that
             this.error("METATYPE_MISSING", `Metabase ${metabase.name} has no metatype`);
             return;
         }
@@ -100,11 +101,11 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
 
         // Convert value to proper type if possible
         if (metatype === Metatype.string && defaultValue === "empty") {
-            // Metatype doesn't handle this case because otherwise you'd never
-            // be able to have a string called "empty".  In this case though
-            // the data likely comes from the spec so we're going to take a
-            // flyer and say you can never have "empty" as a default value
-            defaultValue = "";
+            // Metatype doesn't handle this case because otherwise you'd never be able to have a string called "empty".
+            // In this case though the data likely comes from the spec so we're going to take a flyer and say you can
+            // never have "empty" as a default value
+            delete this.model.default;
+            return;
         }
         const cast = Metatype.cast(metatype, defaultValue);
         if (cast === FieldValue.Invalid) {
@@ -137,21 +138,31 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
     }
 
     private validateEntries() {
-        // Note - these checks only apply for first-order derived types, so use
-        // direct metatype
-        const metatype = this.model.directMetatype;
+        // Note - these checks only apply for first-order derived types, so use direct metatype
+        const metatype =
+            this.model.type === undefined
+                ? undefined
+                : (Elements as unknown as Record<string, ValueModel>)[this.model.type]?.metatype;
         switch (metatype) {
             case Metatype.object:
-                if (this.model.metatype || !this.model.children.length) {
+                if (!this.model.children.length) {
                     this.error("CHILDLESS_STRUCT", `struct element with no children`);
                 }
                 break;
 
             case Metatype.enum:
             case Metatype.bitmap:
-                if (!this.model.children.length && !this.model.global) {
+                // Only validate models that inherit directly from base enum types
+                const base = this.model.base;
+                if (!base || !base.isSeed || !base.name.startsWith("enum") || this.model.parent?.name === "semtag") {
+                    break;
+                }
+
+                // Model must have members unless there is an explicit exception
+                if (!this.model.members.length && !ValidationExceptions.AllowedEmptyEnums.has(this.model.path)) {
                     this.error(`CHILDLESS_${metatype.toUpperCase()}`, `${this.model.type} with no children`);
                 }
+
                 if (metatype == Metatype.enum) {
                     this.validateEnumKeys();
                 } else {
@@ -233,8 +244,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             return true;
         }
 
-        // If the default value is a string referencing another field, convert
-        // to a reference object
+        // If the default value is a string referencing another field, convert to a reference object
         if (typeof def === "string") {
             const other = this.model.parent?.member(def);
             if (other) {
@@ -243,8 +253,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             }
         }
 
-        // If the default value for bitmaps is an array, treat as a set of
-        // flag names or IDs; validate as such
+        // If the default value for bitmaps is an array, treat as a set of flag names or IDs; validate as such
         if (metatype === Metatype.bitmap && Array.isArray(def)) {
             for (const value of def) {
                 if (typeof value !== "string" && typeof value !== "number") {

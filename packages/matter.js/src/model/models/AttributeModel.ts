@@ -5,31 +5,16 @@
  */
 
 import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
-import { ElementTag } from "../definitions/index.js";
-import { AttributeElement, Globals } from "../elements/index.js";
+import { AttributeElement } from "../elements/index.js";
 import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
 
-const globalIds = new Set<number>();
-for (const element of Object.values(Globals)) {
-    if (element.tag === ElementTag.Attribute) {
-        globalIds.add(element.id);
-    }
-}
+// Full set of global IDs per core spec 1.3
+const GLOBAL_IDS = new Set([0xfffd, 0xfffc, 0xfffb, 0xfffa, 0xfff9, 0xfff8]);
 
 export class AttributeModel extends PropertyModel implements AttributeElement {
     override tag: AttributeElement.Tag = AttributeElement.Tag;
     override id!: Mei;
-
-    static isGlobal(id: number) {
-        return globalIds.has(id);
-    }
-
-    override get isGlobalAttribute() {
-        if (AttributeModel.isGlobal(this.id)) {
-            return true;
-        }
-    }
 
     get writable() {
         return !this.fixed && this.effectiveAccess.writable;
@@ -49,6 +34,10 @@ export class AttributeModel extends PropertyModel implements AttributeElement {
 
     static {
         Model.types[AttributeElement.Tag] = this;
+    }
+
+    static isGlobal(model: Model) {
+        return model instanceof AttributeModel && GLOBAL_IDS.has(model.id);
     }
 
     static Tag = AttributeElement.Tag;

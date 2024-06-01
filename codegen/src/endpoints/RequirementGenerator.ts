@@ -81,8 +81,8 @@ export class RequirementGenerator {
 
     generate() {
         if (this.#mandatoryParts) {
-            this.file.addImport("behavior/system/parts/PartsBehavior.js", "PartsBehavior");
-            this.file.addImport("behavior/system/index/IndexBehavior.js", "IndexBehavior");
+            this.file.addImport("#/behavior/system/parts/PartsBehavior.js", "PartsBehavior");
+            this.file.addImport("#/behavior/system/index/IndexBehavior.js", "IndexBehavior");
             this.mandatoryBlock.atom("Parts", "PartsBehavior");
             this.mandatoryBlock.atom("Index", "IndexBehavior");
         }
@@ -125,7 +125,7 @@ export class RequirementGenerator {
 
     #generateOne(detail: ClusterDetail, target: Block) {
         let name;
-        const prefix = `behavior/definitions/${decamelize(detail.definition.name)}/${detail.definition.name}`;
+        const prefix = `#/behavior/definitions/${decamelize(detail.definition.name)}/${detail.definition.name}`;
         if (this.type === "server") {
             name = `${detail.definition.name}Server`;
             this.file.addImport(`${prefix}Server.js`, `${name} as Base${name}`);

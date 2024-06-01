@@ -23,7 +23,7 @@ import { VendorId } from "../../../src/datatype/VendorId.js";
 import { OnOffLightDevice } from "../../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { Fabric, FabricBuilder } from "../../../src/fabric/Fabric.js";
 import { FabricManager } from "../../../src/fabric/FabricManager.js";
-import { Globals } from "../../../src/model/index.js";
+import { AcceptedCommandList } from "../../../src/model/standard/elements/AcceptedCommandList.js";
 import { ExchangeManager } from "../../../src/protocol/ExchangeManager.js";
 import { MessageExchange } from "../../../src/protocol/MessageExchange.js";
 import { InteractionServerMessenger, MessageType } from "../../../src/protocol/interaction/InteractionMessenger.js";
@@ -89,6 +89,7 @@ class WifiCommissioningServer extends NetworkCommissioningServer.with("WiFiNetwo
         this.state.maxNetworks = 4;
         this.state.scanMaxTimeSeconds = 20;
         this.state.connectMaxTimeSeconds = 40;
+        this.state.supportedWiFiBands = [NetworkCommissioning.WiFiBand["2G4"]];
     }
 }
 
@@ -172,7 +173,7 @@ const AcesWithoutFabric = TlvObject({
     privilege: TlvField(1, TlvEnum<AccessControl.AccessControlEntryPrivilege>()),
     authMode: TlvField(2, TlvEnum<AccessControl.AccessControlEntryAuthMode>()),
     subjects: TlvField(3, TlvNullable(TlvArray(TlvSubjectId))),
-    targets: TlvField(4, TlvNullable(TlvArray(AccessControl.TlvAccessControlTargetStruct))),
+    targets: TlvField(4, TlvNullable(TlvArray(AccessControl.TlvAccessControlTarget))),
 });
 
 async function writeAcl(node: MockServerNode, fabric: Fabric, acl: TypeFromSchema<typeof AcesWithoutFabric>) {
@@ -198,7 +199,7 @@ async function readCommandList(node: MockServerNode, cluster: number, endpoint =
     return await performRead(node, await createFabric(node, 1), false, {
         endpointId: EndpointNumber(endpoint),
         clusterId: ClusterId(cluster),
-        attributeId: AttributeId(Globals.AcceptedCommandList.id),
+        attributeId: AttributeId(AcceptedCommandList.id),
     });
 }
 

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Identify } from "../../../cluster/definitions/IdentifyCluster.js";
 import { Time, Timer } from "../../../time/Time.js";
 import { Observable } from "../../../util/Observable.js";
 import { IdentifyBehavior } from "./IdentifyBehavior.js";
-import { IdentifyQueryResponse, IdentifyRequest } from "./IdentifyInterface.js";
 
 /**
  * This is the default server implementation of {@link IdentifyBehavior}.
@@ -29,6 +29,10 @@ export class IdentifyServer extends IdentifyBehavior {
     declare events: IdentifyServer.Events;
 
     override initialize() {
+        if (this.state.identifyType === undefined) {
+            this.state.identifyType = Identify.IdentifyType.None;
+        }
+
         this.internal.identifyTimer = Time.getPeriodicTimer(
             "Identify time update",
             1000,
@@ -76,13 +80,8 @@ export class IdentifyServer extends IdentifyBehavior {
         this.state.identifyTime = time;
     }
 
-    override identify({ identifyTime }: IdentifyRequest) {
+    override identify({ identifyTime }: Identify.IdentifyRequest) {
         this.state.identifyTime = identifyTime;
-    }
-
-    // TODO - don't think we need this as it's Zigbee only (and dumb - just returns attribute value)
-    identifyQuery(): IdentifyQueryResponse {
-        return { timeout: this.state.identifyTime };
     }
 }
 

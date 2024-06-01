@@ -11,7 +11,7 @@ import { DescriptorServer } from "../descriptor/DescriptorServer.js";
 import { BridgedDeviceBasicInformationBehavior } from "./BridgedDeviceBasicInformationBehavior.js";
 
 const BRIDGED_NODE_DEVICE_TYPE = DeviceTypeId(0x13);
-const BRIDGED_NODE_REVISION = 1;
+const BRIDGED_NODE_REVISION = 2;
 
 /**
  * This is the default server implementation of BridgedDeviceBasicInformationBehavior.

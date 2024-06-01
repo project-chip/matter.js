@@ -8,7 +8,7 @@ import {
     AnyElement,
     ClusterElement,
     DatatypeElement,
-    Globals,
+    MatterModel,
     Metatype,
     ValueElement,
 } from "@project-chip/matter.js/model";
@@ -46,12 +46,11 @@ export async function loadChip(version: string): Promise<ClusterElement[]> {
     });
 }
 
-// CHIP tool has a single global datatype namespace.  This doesn't match Matter
-// semantics but there are few enough duplicate type names in Matter that it
-// works.  This routine installs datatypes into proper cluster scope
+// CHIP tool has a single global datatype namespace.  This doesn't match Matter semantics but there are few enough
+// duplicate type names in Matter that it works.  This routine installs datatypes into proper cluster scope
 function installDatatypes(elements: AnyElement[]) {
     const globals = {} as { [name: string]: AnyElement };
-    Object.values(Globals).forEach(g => (globals[g.name] = g));
+    Object.values(MatterModel.seedGlobals).forEach(g => (globals[g.name] = g));
 
     const datatypes = {} as { [name: string]: DatatypeElement };
     elements.forEach(e => {
@@ -60,9 +59,8 @@ function installDatatypes(elements: AnyElement[]) {
         }
     });
 
-    // Attempt to find a datatype based on an element name.  We first search
-    // using the direct name, then using the name as a suffix because CHIP
-    // uses a variety of naming conventions
+    // Attempt to find a datatype based on an element name.  We first search using the direct name, then using the name
+    // as a suffix because CHIP uses a variety of naming conventions
     function findType(name: string) {
         let result = datatypes[name];
 
@@ -78,8 +76,8 @@ function installDatatypes(elements: AnyElement[]) {
         return result;
     }
 
-    // CHIP tool sometimes defines enums and bitmaps without values, instead
-    // defining them somewhere else.  If we can find them, copy them over
+    // CHIP tool sometimes defines enums and bitmaps without values, instead defining them somewhere else.  If we can
+    // find them, copy them over
     function installChildren(type: string, element: AnyElement) {
         if (!globals[type] || element.children?.length) {
             return;
@@ -106,9 +104,8 @@ function installDatatypes(elements: AnyElement[]) {
         }
     }
 
-    // Perform actual datatype installation.  Recurses into clusters looking
-    // for references.  When a datatype is added, recurses into the datatype
-    // as well
+    // Perform actual datatype installation.  Recurses into clusters looking for references.  When a datatype is added,
+    // recurses into the datatype as well
     function install(into: ClusterElement, referencer: AnyElement, alreadyInstalled: Set<string>) {
         referencer.children?.forEach(c => {
             const type = (c as ValueElement).type;

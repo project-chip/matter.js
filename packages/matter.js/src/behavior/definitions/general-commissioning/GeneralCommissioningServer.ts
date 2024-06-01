@@ -13,7 +13,6 @@ import { assertSecureSession } from "../../../session/SecureSession.js";
 import { AdministratorCommissioningServer } from "../administrator-commissioning/AdministratorCommissioningServer.js";
 import { BasicInformationServer } from "../basic-information/BasicInformationServer.js";
 import { GeneralCommissioningBehavior } from "./GeneralCommissioningBehavior.js";
-import { ArmFailSafeRequest, SetRegulatoryConfigRequest } from "./GeneralCommissioningInterface.js";
 import { ServerNodeFailsafeContext } from "./ServerNodeFailsafeContext.js";
 
 const SuccessResponse = { errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" };
@@ -41,7 +40,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         this.state.breadcrumb = 0;
     }
 
-    override async armFailSafe({ breadcrumb, expiryLengthSeconds }: ArmFailSafeRequest) {
+    override async armFailSafe({ breadcrumb, expiryLengthSeconds }: GeneralCommissioning.ArmFailSafeRequest) {
         assertSecureSession(this.session, "armFailSafe can only be called on a secure session");
         const device = this.session.context;
 
@@ -97,7 +96,11 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         return SuccessResponse;
     }
 
-    override async setRegulatoryConfig({ breadcrumb, newRegulatoryConfig, countryCode }: SetRegulatoryConfigRequest) {
+    override async setRegulatoryConfig({
+        breadcrumb,
+        newRegulatoryConfig,
+        countryCode,
+    }: GeneralCommissioning.SetRegulatoryConfigRequest) {
         const locationCapabilityValue = this.state.locationCapability;
 
         // Check and handle country code

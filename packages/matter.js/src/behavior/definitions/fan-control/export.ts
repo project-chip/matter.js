@@ -6,5 +6,6 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+export * from "./FanControlInterface.js";
 export * from "./FanControlBehavior.js";
 export * from "./FanControlServer.js";

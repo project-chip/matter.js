@@ -6,6 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import {
+    ContentAppObserverServer as BaseContentAppObserverServer
+} from "../../../behavior/definitions/content-app-observer/ContentAppObserverServer.js";
 import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
 import {
     KeypadInputBehavior as BaseKeypadInputBehavior
@@ -40,6 +43,10 @@ import {
 import {
     AccountLoginBehavior as BaseAccountLoginBehavior
 } from "../../../behavior/definitions/account-login/AccountLoginBehavior.js";
+import {
+    ContentControlBehavior as BaseContentControlBehavior
+} from "../../../behavior/definitions/content-control/ContentControlBehavior.js";
+import { MessagesBehavior as BaseMessagesBehavior } from "../../../behavior/definitions/messages/MessagesBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -50,11 +57,18 @@ import { Identity } from "../../../util/Type.js";
  * A Casting Video Client is a client that can launch content on a Casting Video Player, for example, a Smart Speaker
  * or a Content Provider phone app.
  *
- * @see {@link MatterSpecification.v11.Device} § 10.6
+ * @see {@link MatterSpecification.v13.Device} § 10.6
  */
 export interface CastingVideoClientDevice extends Identity<typeof CastingVideoClientDeviceDefinition> {}
 
 export namespace CastingVideoClientRequirements {
+    /**
+     * The ContentAppObserver cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ContentAppObserverServer} for convenience.
+     */
+    export const ContentAppObserverServer = BaseContentAppObserverServer;
+
     /**
      * The OnOff cluster is required by the Matter specification
      *
@@ -154,6 +168,25 @@ export namespace CastingVideoClientRequirements {
     export const AccountLoginBehavior = BaseAccountLoginBehavior;
 
     /**
+     * The ContentControl cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ContentControlBehavior} for convenience.
+     */
+    export const ContentControlBehavior = BaseContentControlBehavior;
+
+    /**
+     * The Messages cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link MessagesBehavior} for convenience.
+     */
+    export const MessagesBehavior = BaseMessagesBehavior;
+
+    /**
+     * An implementation for each server cluster supported by the endpoint per the Matter specification.
+     */
+    export const server = { optional: { ContentAppObserver: ContentAppObserverServer }, mandatory: {} };
+
+    /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
     export const client = {
@@ -174,7 +207,9 @@ export namespace CastingVideoClientRequirements {
             LowPower: LowPowerBehavior,
             AudioOutput: AudioOutputBehavior,
             ApplicationLauncher: ApplicationLauncherBehavior,
-            AccountLogin: AccountLoginBehavior
+            AccountLogin: AccountLoginBehavior,
+            ContentControl: ContentControlBehavior,
+            Messages: MessagesBehavior
         }
     };
 }
@@ -182,7 +217,7 @@ export namespace CastingVideoClientRequirements {
 export const CastingVideoClientDeviceDefinition = MutableEndpoint({
     name: "CastingVideoClient",
     deviceType: 0x29,
-    deviceRevision: 1,
+    deviceRevision: 2,
     requirements: CastingVideoClientRequirements,
     behaviors: SupportedBehaviors()
 });

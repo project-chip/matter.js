@@ -5,6 +5,7 @@
  */
 
 import { AnyValueElement } from "./AnyValueElement.js";
+import { BaseElement } from "./BaseElement.js";
 import { ClusterElement } from "./ClusterElement.js";
 import { DeviceTypeElement } from "./DeviceTypeElement.js";
 import { EndpointElement } from "./EndpointElement.js";
@@ -25,3 +26,13 @@ export type AnyElement =
     | FabricElement
     | NodeElement
     | MatterElement;
+
+export namespace AnyElement {
+    /**
+     * General definition for an element factory function.
+     */
+    export interface Type<T = BaseElement> {
+        (definition: T): AnyElement;
+        Tag: string;
+    }
+}

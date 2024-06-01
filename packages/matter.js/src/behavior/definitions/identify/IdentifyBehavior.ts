@@ -12,9 +12,6 @@ import { IdentifyInterface } from "./IdentifyInterface.js";
 
 /**
  * IdentifyBehavior is the base class for objects that support interaction with {@link Identify.Cluster}.
- *
- * This class does not have optional features of Identify.Cluster enabled. You can enable additional features using
- * IdentifyBehavior.with.
  */
 export const IdentifyBehavior = ClusterBehavior
     .withInterface<IdentifyInterface>()

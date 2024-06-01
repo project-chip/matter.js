@@ -22,7 +22,7 @@ export class CommissioningServerFailsafeContext extends FailsafeContext {
     #rootEndpoint: EndpointInterface;
     #storedNetworkClusterState = new Map<
         EndpointNumber,
-        TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfoStruct>[]
+        TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfo>[]
     >();
 
     constructor(rootEndpoint: EndpointInterface, options: FailsafeContext.Options) {

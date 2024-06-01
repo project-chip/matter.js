@@ -4,19 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Globals } from "@project-chip/matter.js/model";
+import { FeatureMap } from "@project-chip/matter.js/elements/FeatureMap";
 import { LocalMatter } from "../local.js";
 
 LocalMatter.children.push({
     tag: "cluster",
     name: "Scenes",
+    until: "1.3",
 
     children: [
         // Enable scene names by default.  Not mandated by the specification but a reasonable default
         {
             tag: "attribute",
-            id: Globals.FeatureMap.id,
-            name: Globals.FeatureMap.name,
+            id: FeatureMap.id,
+            name: FeatureMap.name,
             children: [{ tag: "field", name: "SN", default: true }],
         },
 

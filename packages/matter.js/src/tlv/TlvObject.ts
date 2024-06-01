@@ -7,7 +7,7 @@
 import { UnexpectedDataError } from "../common/MatterError.js";
 import { tryCatch } from "../common/TryCatchHandler.js";
 import { ValidationError } from "../common/ValidationError.js";
-import { Globals } from "../model/index.js";
+import { FabricIndex } from "../model/standard/elements/FabricIndex.js";
 import { Merge } from "../util/Type.js";
 import { TlvAny } from "./TlvAny.js";
 import { LengthConstraints } from "./TlvArray.js";
@@ -84,7 +84,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
         const fieldValue = (value as any)[name];
         if (fieldValue === undefined) {
             if (!isOptional) {
-                if (forWriteInteraction && id === <number>Globals.FabricIndex.id) {
+                if (forWriteInteraction && id === <number>FabricIndex.id) {
                     // FabricIndex field should not be included in encoded data for write interactions
                     return;
                 }

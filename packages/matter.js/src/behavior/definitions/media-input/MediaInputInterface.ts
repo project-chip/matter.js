@@ -7,57 +7,41 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { MediaInput } from "../../../cluster/definitions/MediaInputCluster.js";
-
-/**
- * Upon receipt, this shall change the media input on the device to the input at a specific index in the Input List.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.1
- */
-export type SelectInputRequest = TypeFromSchema<typeof MediaInput.TlvSelectInputRequest>;
-
-/**
- * Upon receipt, this shall rename the input at a specific index in the Input List. Updates to the input name shall
- * appear in the device’s settings menus.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.4
- */
-export type RenameInputRequest = TypeFromSchema<typeof MediaInput.TlvRenameInputRequest>;
 
 export namespace MediaInputInterface {
     export interface Base {
         /**
-         * Upon receipt, this shall change the media input on the device to the input at a specific index in the Input
-         * List.
+         * Upon receipt, this command shall change the media input on the device to the input at a specific index in
+         * the Input List.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.1
+         * @see {@link MatterSpecification.v13.Cluster} § 6.9.7.1
          */
-        selectInput(request: SelectInputRequest): MaybePromise;
+        selectInput(request: MediaInput.SelectInputRequest): MaybePromise;
 
         /**
-         * Upon receipt, this shall display the active status of the input list on screen.
+         * Upon receipt, this command shall display the active status of the input list on screen.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.2
+         * @see {@link MatterSpecification.v13.Cluster} § 6.9.7.2
          */
         showInputStatus(): MaybePromise;
 
         /**
-         * Upon receipt, this shall hide the input list from the screen.
+         * Upon receipt, this command shall hide the input list from the screen.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.3
+         * @see {@link MatterSpecification.v13.Cluster} § 6.9.7.3
          */
         hideInputStatus(): MaybePromise;
     }
 
     export interface NameUpdates {
         /**
-         * Upon receipt, this shall rename the input at a specific index in the Input List. Updates to the input name
-         * shall appear in the device’s settings menus.
+         * Upon receipt, this command shall rename the input at a specific index in the Input List. Updates to the
+         * input name shall appear in the device’s settings menus.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.4
+         * @see {@link MatterSpecification.v13.Cluster} § 6.9.7.4
          */
-        renameInput(request: RenameInputRequest): MaybePromise;
+        renameInput(request: MediaInput.RenameInputRequest): MaybePromise;
     }
 }
 

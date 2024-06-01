@@ -11,9 +11,10 @@ LocalMatter.children.push({
     name: "PumpConfigurationAndControl",
 
     children: [
-        // The spec only defines long-form names for these bits in a
-        // non-standard table we don't bother parsing because it contains
-        // nothing else useful
+        // The spec only defines long-form names for these bits in a non-standard table we don't bother parsing because
+        // it contains nothing else useful.
+        //
+        // This attribute is actually marked as Zigbee-only so we treat as deprecated.  So we may not even need these
         {
             tag: "attribute",
             id: 0x1d,

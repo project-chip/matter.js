@@ -55,10 +55,25 @@ export interface BaseElement {
     children?: AnyElement[];
 
     /**
-     * Is this a global element?  Global elements are defined in Globals.ts
-     * and are available in-scope for every cluster.
+     * Is this a global element?  Global elements are available in-scope for every cluster.
      */
-    global?: boolean;
+    isGlobal?: boolean;
+
+    /**
+     * Is this a "seed" element?  These are global types and cluster elements defined in the core specification, without
+     * which we are fairly incapacitated.
+     */
+    isSeed?: boolean;
+
+    /**
+     * The first Matter specification in which this element appears.
+     */
+    asOf?: Specification.Revision;
+
+    /**
+     * The Matter specification revision in which this element was removed.
+     */
+    until?: Specification.Revision;
 }
 
 export function BaseElement(tag: ElementTag, definition: BaseElement) {

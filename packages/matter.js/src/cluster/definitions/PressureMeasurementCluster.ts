@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalAttribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, OptionalAttribute } from "../Cluster.js";
 import { TlvInt16, TlvUInt16, TlvInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace PressureMeasurement {
     /**
@@ -21,48 +21,47 @@ export namespace PressureMeasurement {
     export const ExtendedComponent = MutableCluster.Component({
         attributes: {
             /**
-             * ScaledValue represents the pressure in Pascals as follows:
+             * Indicates the pressure in Pascals as follows:
              *
              * ScaledValue = 10Scale x Pressure [Pa]
              *
              * The null value indicates that the value is not available.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.4.5.5
+             * @see {@link MatterSpecification.v13.Cluster} § 2.4.5.5
              */
             scaledValue: Attribute(0x10, TlvNullable(TlvInt16), { default: 0 }),
 
             /**
-             * The MinScaledValue attribute indicates the minimum value of ScaledValue that can be measured. The null
-             * value indicates that the value is not available.
+             * Indicates the minimum value of ScaledValue that can be measured. The null value indicates that the value
+             * is not available.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.4.5.6
+             * @see {@link MatterSpecification.v13.Cluster} § 2.4.5.6
              */
             minScaledValue: Attribute(0x11, TlvNullable(TlvInt16.bound({ min: -32767 })), { default: 0 }),
 
             /**
-             * This attribute indicates the maximum value of ScaledValue that can be measured. MaxScaledValue shall be
-             * greater than MinScaledValue.
+             * Indicates the maximum value of ScaledValue that can be measured. The null value indicates that the value
+             * is not available.
              *
-             * The null value indicates that the value is not available.
-             *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.4.5.7
+             * @see {@link MatterSpecification.v13.Cluster} § 2.4.5.7
              */
             maxScaledValue: Attribute(0x12, TlvNullable(TlvInt16), { default: 0 }),
 
             /**
-             * This attribute indicates the magnitude of the possible error that is associated with ScaledValue. The
-             * true value is located in the range
+             * Indicates the magnitude of the possible error that is associated with Scaled
+             *
+             * Value. The true value is located in the range
              *
              * (ScaledValue – ScaledTolerance) to (ScaledValue + ScaledTolerance).
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.4.5.8
+             * @see {@link MatterSpecification.v13.Cluster} § 2.4.5.8
              */
             scaledTolerance: OptionalAttribute(0x13, TlvUInt16.bound({ max: 2048 }), { default: 0 }),
 
             /**
-             * This attribute indicates the base 10 exponent used to obtain ScaledValue (see ScaledValue Attribute).
+             * Indicates the base 10 exponent used to obtain ScaledValue (see ScaledValue).
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.4.5.9
+             * @see {@link MatterSpecification.v13.Cluster} § 2.4.5.9
              */
             scale: Attribute(0x14, TlvInt8.bound({ min: -127 }), { default: 0 })
         }
@@ -71,13 +70,13 @@ export namespace PressureMeasurement {
     /**
      * These are optional features supported by PressureMeasurementCluster.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 2.4.4
+     * @see {@link MatterSpecification.v13.Cluster} § 2.4.4
      */
     export enum Feature {
         /**
          * Extended
          *
-         * The cluster is capable of extended range and resolution
+         * Extended range and resolution
          */
         Extended = "Extended"
     }
@@ -94,49 +93,45 @@ export namespace PressureMeasurement {
             /**
              * Extended
              *
-             * The cluster is capable of extended range and resolution
+             * Extended range and resolution
              */
             extended: BitFlag(0)
         },
 
         attributes: {
             /**
-             * This attribute represents the pressure in kPa as follows:
+             * Indicates the pressure in kPa as follows:
              *
              * MeasuredValue = 10 x Pressure [kPa]
              *
              * The null value indicates that the value is not available.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.4.5.1
+             * @see {@link MatterSpecification.v13.Cluster} § 2.4.5.1
              */
             measuredValue: Attribute(0x0, TlvNullable(TlvInt16)),
 
             /**
-             * This attribute indicates the minimum value of MeasuredValue that can be measured. See Measured Value for
-             * more details.
+             * Indicates the minimum value of MeasuredValue that can be measured. See Measured Value for more details.
              *
              * The null value indicates that the value is not available.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.4.5.2
+             * @see {@link MatterSpecification.v13.Cluster} § 2.4.5.2
              */
             minMeasuredValue: Attribute(0x1, TlvNullable(TlvInt16.bound({ min: -32767 }))),
 
             /**
-             * This attribute indicates the maximum value of MeasuredValue that can be measured. See Measured Value for
-             * more details.
+             * Indicates the maximum value of MeasuredValue that can be measured. See Measured Value for more details.
              *
              * The null value indicates that the value is not available.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.4.5.3
+             * @see {@link MatterSpecification.v13.Cluster} § 2.4.5.3
              */
             maxMeasuredValue: Attribute(0x2, TlvNullable(TlvInt16)),
 
             /**
-             * This attribute indicates the magnitude of the possible error that is associated with ScaledValue.
-             *
              * See Measured Value.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.4.5.4
+             * @see {@link MatterSpecification.v13.Cluster} § 2.4.5.4
              */
             tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 }), { default: 0 })
         },
@@ -151,23 +146,20 @@ export namespace PressureMeasurement {
     /**
      * @see {@link Cluster}
      */
-    export const ClusterInstance = MutableCluster({ ...Base });
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
-     * Pressure Measurement
-     *
      * This cluster provides an interface to pressure measurement functionality, including configuration and provision
      * of notifications of pressure measurements.
      *
      * PressureMeasurementCluster supports optional features that you can enable with the
      * PressureMeasurementCluster.with() factory method.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 2.4
+     * @see {@link MatterSpecification.v13.Cluster} § 2.4
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
-
     const EXT = { extended: true };
 
     /**

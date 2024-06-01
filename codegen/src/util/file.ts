@@ -5,8 +5,9 @@
  */
 
 import { Package } from "@project-chip/matter.js-tools";
+import { createHash } from "crypto";
 import { mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "fs";
-import { dirname, resolve } from "path";
+import { dirname, relative as nodeRelative, resolve } from "path";
 import { fileURLToPath } from "url";
 import { describeList } from "./string.js";
 
@@ -14,12 +15,12 @@ import { describeList } from "./string.js";
 const DIR_MAPPING = {
     "#cache": Package.workspace.resolve("codegen/.cache"),
     "#intermediate": Package.workspace.resolve("models/src"),
+    "#": Package.workspace.resolve("packages/matter.js/src/"),
     "#elements": Package.workspace.resolve("packages/matter.js/src/model/standard/elements"),
     "#clusters": Package.workspace.resolve("packages/matter.js/src/cluster/definitions"),
+    "#globals": Package.workspace.resolve("packages/matter.js/src/cluster/globals"),
     "#endpoints": Package.workspace.resolve("packages/matter.js/src/endpoint/definitions"),
     "#behaviors": Package.workspace.resolve("packages/matter.js/src/behavior/definitions"),
-    "#behavior-servers": Package.workspace.resolve("packages/matter.js/src/behavior/server/definitions"),
-    "#interfaces": Package.workspace.resolve("packages/matter.js/src/behavior/cluster/definitions"),
 } as { [dirname: string]: string | undefined };
 
 function resolveFromPackage(path: string) {
@@ -45,6 +46,10 @@ function resolveFromPackage(path: string) {
     return resolve(dirname(fileURLToPath(import.meta.url)), path);
 }
 
+export function relative(from: string, to: string) {
+    return nodeRelative(resolveFromPackage(from), resolveFromPackage(to));
+}
+
 export function readMatterFile(path: string, encoding: BufferEncoding = "utf-8") {
     return readFileSync(resolveFromPackage(path), { encoding: encoding });
 }
@@ -52,9 +57,28 @@ export function readMatterFile(path: string, encoding: BufferEncoding = "utf-8")
 export function writeMatterFile(path: string, body: any) {
     path = resolveFromPackage(path);
     mkdirSync(dirname(path), { recursive: true });
+
+    let currentHash: string | undefined;
+
+    try {
+        currentHash = createHash("md5").update(readFileSync(path)).digest("hex");
+    } catch (e) {
+        if ((e as { code?: string }).code !== "ENOENT") {
+            throw e;
+        }
+    }
+
     if (!(body instanceof Buffer && !ArrayBuffer.isView(body))) {
         body = body.toString();
     }
+
+    // Compilation is slowest part of our toolchain so it's worth the expense to compare and old and new files so we can
+    // avoid updating timestamps
+    const newHash = createHash("md5").update(body).digest("hex");
+    if (currentHash === newHash) {
+        return;
+    }
+
     writeFileSync(path, body);
 }
 

@@ -10,6 +10,8 @@ import { glob } from "glob";
 import { relative } from "path";
 import { Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
+import { testChip } from "./chip.js";
+import { TestEnvironment } from "./chip/chip-config.js";
 import { listSupportFiles } from "./files.js";
 import { testNode } from "./node.js";
 import { TestOptions } from "./options.js";
@@ -53,6 +55,10 @@ export class TestRunner {
 
     async runWeb(manual = false) {
         await this.run(this.progress, () => testWeb(this, manual));
+    }
+
+    async runChip(environment: TestEnvironment) {
+        await this.run(this.progress, () => testChip(this, environment));
     }
 
     loadFiles(format: "esm" | "cjs") {

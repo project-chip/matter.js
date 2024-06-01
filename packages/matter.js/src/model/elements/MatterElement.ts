@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ElementTag } from "../definitions/index.js";
+import { ElementTag, type Specification } from "../definitions/index.js";
 import { AttributeElement } from "./AttributeElement.js";
 import { BaseElement } from "./BaseElement.js";
 import { ClusterElement } from "./ClusterElement.js";
@@ -19,7 +19,7 @@ import { NodeElement } from "./NodeElement.js";
  */
 export type MatterElement = BaseElement & {
     tag: `${ElementTag.Matter}`;
-    version?: string;
+    revision?: Specification.Revision;
     children: MatterElement.Child[];
 };
 

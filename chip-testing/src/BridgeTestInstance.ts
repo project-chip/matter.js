@@ -7,12 +7,7 @@
 import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
 import { BridgedDeviceBasicInformationServer } from "@project-chip/matter.js/behavior/definitions/bridged-device-basic-information";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
-import {
-    AdministratorCommissioning,
-    BasicInformation,
-    BridgedDeviceBasicInformation,
-    NetworkCommissioning,
-} from "@project-chip/matter.js/cluster";
+import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { AggregatorEndpoint, DimmableLightDevice } from "@project-chip/matter.js/endpoint/definitions";
@@ -134,6 +129,7 @@ export class BridgeTestInstance implements TestInstance {
                         finish: BasicInformation.ProductFinish.Satin,
                         primaryColor: BasicInformation.Color.Purple,
                     },
+                    reachable: true,
                 },
                 administratorCommissioning: {
                     windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,
@@ -169,8 +165,8 @@ export class BridgeTestInstance implements TestInstance {
                 reachable: true,
                 uniqueId: `node-matter-unique`,
                 productAppearance: {
-                    finish: BridgedDeviceBasicInformation.ProductFinish.Satin,
-                    primaryColor: BridgedDeviceBasicInformation.Color.Purple,
+                    finish: BasicInformation.ProductFinish.Satin,
+                    primaryColor: BasicInformation.Color.Purple,
                 },
             },
         });

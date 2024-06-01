@@ -101,6 +101,14 @@ export function astToFunction(
                     case Code.Optional:
                         break;
 
+                    case Code.Value:
+                        if (staticNode.value === undefined) {
+                            disallowValue(value, session, location);
+                        } else {
+                            requireValue(value, session, location);
+                        }
+                        break;
+
                     default:
                         throw new UnsupportedConformanceNodeError(schema, compiledNode);
                 }
@@ -297,17 +305,16 @@ export function astToFunction(
      */
     function createName(param: string): DynamicNode {
         if (featuresAvailable.has(param)) {
-            // Name references a feature.  We know whether features are
-            // supported by a cluster at compile time so this results in a
-            // static node that is conformant iff the feature is supported
+            // Name references a feature.  We know whether features are supported by a cluster at compile time so this
+            // results in a static node that is conformant iff the feature is supported
             if (featuresSupported.has(param)) {
                 return ConformantNode;
             } else {
                 return NonconformantNode;
             }
         } else {
-            // Name references a sibling property.  This results in a value
-            // node but must be evaluated at runtime against a specific struct
+            // Name references a sibling property.  This results in a value node but must be evaluated at runtime
+            // against a specific struct
             param = camelize(param);
             return {
                 code: Code.Evaluate,
@@ -503,17 +510,13 @@ export function astToFunction(
 
     function requireValue(value: Val, _session: AccessControl.Session, location: ValidationLocation) {
         if (value === undefined) {
-            throw new ConformanceError(
-                schema,
-                location,
-                "Value is undefined but is mandatory per Matter specification",
-            );
+            throw new ConformanceError(schema, location, "Matter requires you to set this attribute");
         }
     }
 
     function disallowValue(value: Val, _session: AccessControl.Session, location: ValidationLocation) {
         if (value !== undefined) {
-            throw new ConformanceError(schema, location, "Value is present but disallowed per Matter specification");
+            throw new ConformanceError(schema, location, "Matter does not allow you to set this attribute");
         }
     }
 
@@ -522,7 +525,7 @@ export function astToFunction(
             throw new ConformanceError(
                 schema,
                 location,
-                `Enum value ${schema.name} (ID ${schema.effectiveId}) is disallowed per Matter specification`,
+                `Matter does not allow enum value ${schema.name} (ID ${schema.effectiveId}) here`,
             );
         };
     }

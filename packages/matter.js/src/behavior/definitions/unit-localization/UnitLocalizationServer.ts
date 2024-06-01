@@ -4,11 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
+import { UnitLocalization } from "../../../cluster/definitions/UnitLocalizationCluster.js";
 import { UnitLocalizationBehavior } from "./UnitLocalizationBehavior.js";
 
 /**
  * This is the default server implementation of {@link UnitLocalizationBehavior}.
  */
-export class UnitLocalizationServer extends UnitLocalizationBehavior {}
+export class UnitLocalizationServer extends UnitLocalizationBehavior.with("TemperatureUnit") {
+    override initialize() {
+        if (this.state.temperatureUnit === undefined) {
+            this.state.temperatureUnit = UnitLocalization.TempUnit.Celsius;
+        }
+    }
+}

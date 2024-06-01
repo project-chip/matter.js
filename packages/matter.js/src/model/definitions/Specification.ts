@@ -40,4 +40,24 @@ export namespace Specification {
          */
         section: string;
     };
+
+    /**
+     * Matter specification version.
+     */
+    export type Revision = `${number}.${number}`;
+
+    /**
+     * The default specification revision for Matter.js.
+     */
+    export const REVISION = "1.3";
+
+    /**
+     * Binary version of specification revision defined by Basic Information Cluster.
+     */
+    export const SPECIFICATION_VERSION = 0x01030000;
+
+    /**
+     * Data model revision associated with the default revision of Matter.
+     */
+    export const DATA_MODEL_REVISION = 17;
 }

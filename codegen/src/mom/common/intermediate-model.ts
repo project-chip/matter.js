@@ -37,22 +37,32 @@ export class IntermediateModel {
      * the merge process that generates the final model.
      */
     save() {
+        this.#finish(true);
+    }
+
+    validate() {
+        this.#finish(false);
+    }
+
+    #finish(save: boolean) {
         logger.info(`validate ${this.#source}`);
         const matter = new MatterModel({
             name: `${camelize(this.#source, true)}Matter`,
-            children: this.#elements,
+            children: [...this.#elements],
         });
 
         const validationResult = finalizeModel(matter);
 
-        const file = new TsFile(`#intermediate/v${this.#version}/${this.#source}`);
-        generateElement(
-            file,
-            "@project-chip/matter.js/model",
-            matter,
-            `export const ${camelize(this.#source, true)}Matter = `,
-        );
-        file.save();
+        if (save) {
+            const file = new TsFile(`#intermediate/v${this.#version}/${this.#source}`);
+            generateElement(
+                file,
+                "@project-chip/matter.js/model",
+                matter,
+                `export const ${camelize(this.#source, true)}Matter = `,
+            );
+            file.save();
+        }
 
         validationResult.report();
     }

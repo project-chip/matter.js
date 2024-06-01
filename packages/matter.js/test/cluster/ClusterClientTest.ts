@@ -12,7 +12,7 @@ import {
 import { ClusterClient } from "../../src/cluster/client/ClusterClient.js";
 import { EventClient, SupportedEventClient } from "../../src/cluster/client/EventClient.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
-import { Identify, IdentifyCluster } from "../../src/cluster/definitions/IdentifyCluster.js";
+import { IdentifyCluster } from "../../src/cluster/definitions/IdentifyCluster.js";
 import { AttributeId } from "../../src/datatype/AttributeId.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 import { InteractionClient } from "../../src/protocol/interaction/InteractionClient.js";
@@ -84,8 +84,5 @@ describe("ClusterClient structure", () => {
         expect(identifyClient.isCommandSupported(IdentifyCluster.commands.identify.requestId)).equal(true);
         expect(identifyClient.isCommandSupportedByName("identify")).equal(true);
         expect(typeof identifyClient.commands.identify).equal("function");
-
-        expect(identifyClient.isCommandSupported(Identify.Complete.commands.identifyQuery.requestId)).equal(false);
-        expect(identifyClient.isCommandSupportedByName("identifyQuery")).equal(false);
     });
 });

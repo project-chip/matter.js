@@ -8,7 +8,7 @@
 
 import { PulseWidthModulation } from "../../../cluster/definitions/PulseWidthModulationCluster.js";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
-import { PulseWidthModulationInterface } from "./PulseWidthModulationInterface.js";
+import { LevelControlInterface } from "../level-control/LevelControlInterface.js";
 
 /**
  * PulseWidthModulationBehavior is the base class for objects that support interaction with {@link
@@ -18,7 +18,7 @@ import { PulseWidthModulationInterface } from "./PulseWidthModulationInterface.j
  * features using PulseWidthModulationBehavior.with.
  */
 export const PulseWidthModulationBehavior = ClusterBehavior
-    .withInterface<PulseWidthModulationInterface>()
+    .withInterface<LevelControlInterface>()
     .for(PulseWidthModulation.Cluster);
 
 type PulseWidthModulationBehaviorType = InstanceType<typeof PulseWidthModulationBehavior>;

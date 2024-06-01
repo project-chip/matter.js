@@ -17,15 +17,6 @@ import { ColorControlServer } from "../color-control/ColorControlServer.js";
 import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagnosticsBehavior.js";
 import { OnOffServer } from "../on-off/OnOffServer.js";
 import { LevelControlBehavior } from "./LevelControlBehavior.js";
-import {
-    MoveRequest,
-    MoveToLevelRequest,
-    MoveToLevelWithOnOffRequest,
-    MoveWithOnOffRequest,
-    StepRequest,
-    StepWithOnOffRequest,
-    StopRequest,
-} from "./LevelControlInterface.js";
 
 const logger = Logger.get("LevelControlServer");
 
@@ -149,7 +140,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * requested value. After the options and value checks it uses the {@link moveToLevelLogic} method to set the level.
      * If you want to implement own logic just override {@link moveToLevelLogic} with is also used for {@link moveToLevelWithOnOff}.
      */
-    override moveToLevel({ level, transitionTime, optionsMask, optionsOverride }: MoveToLevelRequest) {
+    override moveToLevel({ level, transitionTime, optionsMask, optionsOverride }: LevelControl.MoveToLevelRequest) {
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
@@ -166,7 +157,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * requested value. After the options and value checks it uses the {@link moveToLevelLogic} method to set the level.
      * If you want to implement own logic just override {@link moveToLevelLogic} with is also used for {@link moveToLevel}.
      */
-    override moveToLevelWithOnOff({ level, transitionTime }: MoveToLevelWithOnOffRequest) {
+    override moveToLevelWithOnOff({ level, transitionTime }: LevelControl.MoveToLevelRequest) {
         this.#assertLevelValue(level);
 
         return this.moveToLevelLogic(level, transitionTime, true);
@@ -220,7 +211,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * server will move as fast as possible, so we set to min/max directly. Else the step logic is applied and the
      * level is increased or decreased by the step size every second.
      */
-    override move({ moveMode, rate, optionsMask, optionsOverride }: MoveRequest) {
+    override move({ moveMode, rate, optionsMask, optionsOverride }: LevelControl.MoveRequest) {
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
@@ -237,7 +228,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * server will move as fast as possible, so we set to min/max directly. Else the step logic is applied and the
      * level is increased or decreased by the step size every second.
      */
-    override moveWithOnOff({ moveMode, rate }: MoveWithOnOffRequest) {
+    override moveWithOnOff({ moveMode, rate }: LevelControl.MoveRequest) {
         return this.moveLogic(moveMode, rate, true);
     }
 
@@ -288,7 +279,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * possible, so we set to currentlevel +/- stepSize directly. Else the step logic is applied and the level is
      * increased or decreased by the step size every transition time interval.
      */
-    override step({ stepMode, stepSize, transitionTime, optionsMask, optionsOverride }: StepRequest) {
+    override step({ stepMode, stepSize, transitionTime, optionsMask, optionsOverride }: LevelControl.StepRequest) {
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
@@ -304,7 +295,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * possible, so we set to min/max directly. Else the step logic is applied and the level is increased or decreased
      * by the step size every transition time interval.
      */
-    override stepWithOnOff({ stepMode, stepSize, transitionTime }: StepWithOnOffRequest) {
+    override stepWithOnOff({ stepMode, stepSize, transitionTime }: LevelControl.StepRequest) {
         return this.stepLogic(stepMode, stepSize, transitionTime, true);
     }
 
@@ -346,7 +337,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         return this.#initiateTransition(effectiveRate, withOnOff, targetLevel, options);
     }
 
-    override stop({ optionsMask, optionsOverride }: StopRequest) {
+    override stop({ optionsMask, optionsOverride }: LevelControl.StopRequest) {
         const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
         if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;

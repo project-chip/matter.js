@@ -13,8 +13,7 @@ import { MatterNode } from "../MatterNode";
 import { camelize } from "../util/String";
 
 function generateAllEventHandlersForCluster(yargs: Argv, theNode: MatterNode) {
-    const model = new MatterModel();
-    model.clusters.forEach(cluster => {
+    MatterModel.standard.clusters.forEach(cluster => {
         yargs = generateClusterEventHandlers(yargs, cluster, theNode);
     });
     return yargs;

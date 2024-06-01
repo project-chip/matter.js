@@ -17,7 +17,6 @@ import { BitSchema } from "../../schema/BitmapSchema.js";
 import { Session } from "../../session/Session.js";
 import { Storage } from "../../storage/Storage.js";
 import { SupportedStorageTypes } from "../../storage/StringifyTools.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Merge } from "../../util/Type.js";
 import { ClusterClientObj } from "../client/ClusterClientTypes.js";
 import {
@@ -46,7 +45,6 @@ import {
     WritableAttribute,
     WritableFabricScopedAttribute,
 } from "../Cluster.js";
-import { Scenes } from "../definitions/ScenesCluster.js";
 import { AttributeServer, FabricScopedAttributeServer, FixedAttributeServer } from "./AttributeServer.js";
 import { CommandServer } from "./CommandServer.js";
 import { EventServer } from "./EventServer.js";
@@ -350,27 +348,6 @@ export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E
      * @param endpoint Endpoint to assign to
      */
     readonly _assignToEndpoint: (endpoint: EndpointInterface) => void;
-
-    /**
-     * Get the Scene Extension Fields for this cluster. Used by the Scenes cluster.
-     * @private
-     */
-    readonly _getSceneExtensionFieldSets: () => TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[];
-
-    /**
-     * Set the Scene Extension Fields for this cluster. Used by the Scenes cluster.
-     * @private
-     */
-    readonly _setSceneExtensionFieldSets: (
-        values: TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[],
-        transitionTime: number,
-    ) => void;
-
-    /**
-     * Verify if a set of Scene Extension Fields match to the current attribute state for this cluster. Used by the Scenes cluster.
-     * @private
-     */
-    readonly _verifySceneExtensionFieldSets: (values: TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[]) => boolean;
 
     /**
      * Destroy internal cluster logics, timers and such

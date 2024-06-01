@@ -7,36 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { MediaPlayback } from "../../../cluster/definitions/MediaPlaybackCluster.js";
-
-/**
- * This command shall be generated in response to various Playback Commands.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.12
- */
-export type PlaybackResponse = TypeFromSchema<typeof MediaPlayback.TlvPlaybackResponse>;
-
-/**
- * Upon receipt, this shall Skip forward in the media by the given number of milliseconds.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.9
- */
-export type SkipForwardRequest = TypeFromSchema<typeof MediaPlayback.TlvSkipForwardRequest>;
-
-/**
- * Upon receipt, this shall Skip backward in the media by the given number of milliseconds.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.10
- */
-export type SkipBackwardRequest = TypeFromSchema<typeof MediaPlayback.TlvSkipBackwardRequest>;
-
-/**
- * Upon receipt, this shall change the playback position in the media to the given position.
- *
- * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.11
- */
-export type SeekRequest = TypeFromSchema<typeof MediaPlayback.TlvSeekRequest>;
 
 export namespace MediaPlaybackInterface {
     export interface Base {
@@ -44,98 +15,129 @@ export namespace MediaPlaybackInterface {
          * Upon receipt, this shall play media. If content is currently in a FastForward or Rewind state. Play shall
          * return media to normal playback speed.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.1
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.1
          */
-        play(): MaybePromise<PlaybackResponse>;
+        play(): MaybePromise<MediaPlayback.PlaybackResponse>;
 
         /**
          * Upon receipt, this shall pause playback of the media.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.2
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.2
          */
-        pause(): MaybePromise<PlaybackResponse>;
+        pause(): MaybePromise<MediaPlayback.PlaybackResponse>;
 
         /**
          * Upon receipt, this shall stop playback of the media. User-visible outcome is context-specific. This may
          * navigate the user back to the location from where the media was originally launched.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.3
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.3
          */
-        stop(): MaybePromise<PlaybackResponse>;
+        stop(): MaybePromise<MediaPlayback.PlaybackResponse>;
 
         /**
          * Upon receipt, this shall Start Over with the current media playback item.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.4
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.4
          */
-        startOver(): MaybePromise<PlaybackResponse>;
+        startOver(): MaybePromise<MediaPlayback.PlaybackResponse>;
 
         /**
          * Upon receipt, this shall cause the handler to be invoked for "Previous". User experience is
          * context-specific. This will often Go back to the previous media playback item.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.5
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.5
          */
-        previous(): MaybePromise<PlaybackResponse>;
+        previous(): MaybePromise<MediaPlayback.PlaybackResponse>;
 
         /**
          * Upon receipt, this shall cause the handler to be invoked for "Next". User experience is context- specific.
          * This will often Go forward to the next media playback item.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.6
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.6
          */
-        next(): MaybePromise<PlaybackResponse>;
+        next(): MaybePromise<MediaPlayback.PlaybackResponse>;
 
         /**
          * Upon receipt, this shall Skip forward in the media by the given number of milliseconds.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.9
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.9
          */
-        skipForward(request: SkipForwardRequest): MaybePromise<PlaybackResponse>;
+        skipForward(request: MediaPlayback.SkipForwardRequest): MaybePromise<MediaPlayback.PlaybackResponse>;
 
         /**
          * Upon receipt, this shall Skip backward in the media by the given number of milliseconds.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.10
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.10
          */
-        skipBackward(request: SkipBackwardRequest): MaybePromise<PlaybackResponse>;
+        skipBackward(request: MediaPlayback.SkipBackwardRequest): MaybePromise<MediaPlayback.PlaybackResponse>;
     }
 
     export interface AdvancedSeek {
         /**
          * Upon receipt, this shall change the playback position in the media to the given position.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.11
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.11
          */
-        seek(request: SeekRequest): MaybePromise<PlaybackResponse>;
+        seek(request: MediaPlayback.SeekRequest): MaybePromise<MediaPlayback.PlaybackResponse>;
+    }
+
+    export interface AudioTracks {
+        /**
+         * Upon receipt, the server shall set the active Audio Track to the one identified by the TrackID in the Track
+         * catalog for the streaming media. If the TrackID does not exist in the Track catalog, OR does not correspond
+         * to the streaming media OR no media is being streamed at the time of receipt of this command, the server will
+         * return an error status of INVALID_ARGUMENT.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.13
+         */
+        activateAudioTrack(request: MediaPlayback.ActivateAudioTrackRequest): MaybePromise;
+    }
+
+    export interface TextTracks {
+        /**
+         * Upon receipt, the server shall set the active Text Track to the one identified by the TrackID in the Track
+         * catalog for the streaming media. If the TrackID does not exist in the Track catalog, OR does not correspond
+         * to the streaming media OR no media is being streamed at the time of receipt of this command, the server
+         * shall return an error status of INVALID_ARGUMENT.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.14
+         */
+        activateTextTrack(request: MediaPlayback.ActivateTextTrackRequest): MaybePromise;
+
+        /**
+         * If a Text Track is active (i.e. being displayed), upon receipt of this command, the server shall stop
+         * displaying it.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.15
+         */
+        deactivateTextTrack(): MaybePromise;
     }
 
     export interface VariableSpeed {
         /**
          * Upon receipt, this shall start playback of the media backward in case the media is currently playing in the
          * forward direction or is not playing. If the playback is already happening in the backwards direction receipt
-         * of this command shall increase the speed of the media playback back
+         * of this command shall increase the speed of the media playback backwards.
          *
-         * wards.
-         *
-         * Different "rewind" speeds may be be reflected on the media playback device based upon the number of
-         * sequential calls to this function and the capability of the device. This is to avoid needing to define every
-         * speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it shall be updated to
+         * Different "rewind" speeds may be reflected on the media playback device based upon the number of sequential
+         * calls to this function and the capability of the device. This is to avoid needing to define every speed
+         * (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it shall be updated to
          * reflect the new speed of playback. If the playback speed cannot be changed for the media being played(for
          * example, in live streaming content not supporting seek), the status of NOT_ALLOWED shall be returned. If the
          * playback speed has reached the maximum supported speed for media playing backwards, the status of
          * SPEED_OUT_OF_RANGE shall be returned.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.7
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.7
          */
-        rewind(): MaybePromise<PlaybackResponse>;
+        rewind(request: MediaPlayback.RewindRequest): MaybePromise<MediaPlayback.PlaybackResponse>;
 
         /**
-         * Upon receipt, this shall start playback of the media in the forward direction in case the media is currently
-         * playing in the backward direction or is not playing. If the playback is already happening in the forward
-         * direction receipt of this command shall increase the speed of the media playback.
+         * Upon receipt, this shall start playback of the media in the forward direction in case the media is
          *
-         * Different "fast-forward" speeds may be be reflected on the media playback device based upon the number of
+         * currently playing in the backward direction or is not playing. If the playback is already happening in the
+         * forward direction receipt of this command shall increase the speed of the media playback.
+         *
+         * Different "fast-forward" speeds may be reflected on the media playback device based upon the number of
          * sequential calls to this function and the capability of the device. This is to avoid needing to define every
          * speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it shall be updated to
          * reflect the new speed of playback. If the playback speed cannot be changed for the media being played(for
@@ -143,9 +145,9 @@ export namespace MediaPlaybackInterface {
          * playback speed has reached the maximum supported speed for media playing forward, the status of
          * SPEED_OUT_OF_RANGE shall be returned.
          *
-         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.8
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.7.8
          */
-        fastForward(): MaybePromise<PlaybackResponse>;
+        fastForward(request: MediaPlayback.FastForwardRequest): MaybePromise<MediaPlayback.PlaybackResponse>;
     }
 }
 
@@ -153,6 +155,8 @@ export type MediaPlaybackInterface = {
     components: [
         { flags: {}, methods: MediaPlaybackInterface.Base },
         { flags: { advancedSeek: true }, methods: MediaPlaybackInterface.AdvancedSeek },
+        { flags: { audioTracks: true }, methods: MediaPlaybackInterface.AudioTracks },
+        { flags: { textTracks: true }, methods: MediaPlaybackInterface.TextTracks },
         { flags: { variableSpeed: true }, methods: MediaPlaybackInterface.VariableSpeed }
     ]
 };

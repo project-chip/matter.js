@@ -13,12 +13,6 @@ import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { MaybePromise } from "../../../util/Promises.js";
 import { WindowCoveringBehavior } from "./WindowCoveringBehavior.js";
-import {
-    GoToLiftPercentageRequest,
-    GoToLiftValueRequest,
-    GoToTiltPercentageRequest,
-    GoToTiltValueRequest,
-} from "./WindowCoveringInterface.js";
 
 const logger = Logger.get("WindowCoveringServer");
 
@@ -131,8 +125,9 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                 : CalibrationMode.Disabled;
         this.reactTo(this.events.mode$Changing, this.#handleModeChanging);
 
-        // Make sure that ConfigStatus is in sync with features (a bit of convenience)
+        // Sync ConfigStatus with features ans set mode to operational if not in maintenance or calibration
         const configStatus = this.state.configStatus;
+        configStatus.operational = !this.internal.inMaintenanceMode && !this.state.mode.calibrationMode;
         if (this.features.lift) {
             if (this.features.positionAwareLift) {
                 configStatus.liftPositionAware = true;
@@ -559,7 +554,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
      * Move the WindowCovering to a specific lift value. The default implementation calculates the % value for the
      * target position. The method calls the handleMovement method to actually move the device to the defined position.
      */
-    override goToLiftValue({ liftValue }: GoToLiftValueRequest) {
+    override goToLiftValue({ liftValue }: WindowCovering.GoToLiftValueRequest) {
         this.#assertMotionLockStatus();
 
         this.state.targetPositionLiftPercent100ths = this.#liftToPercent100ths(liftValue);
@@ -570,12 +565,15 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
      * Move the WindowCovering to a specific tilt value. The method calls the handleMovement method to actually move the
      * device to the defined position.
      */
-    override goToLiftPercentage({ liftPercent100thsValue }: GoToLiftPercentageRequest) {
+    override goToLiftPercentage({ liftPercent100thsValue }: WindowCovering.GoToLiftPercentageRequest) {
         this.#assertMotionLockStatus();
 
         if (this.features.positionAwareLift) {
             this.state.targetPositionLiftPercent100ths = liftPercent100thsValue;
-            this.#triggerLiftMotion(MovementDirection.DefinedByPosition, this.state.targetPositionLiftPercent100ths);
+            this.#triggerLiftMotion(
+                MovementDirection.DefinedByPosition,
+                this.state.targetPositionLiftPercent100ths ?? undefined,
+            );
         } else {
             if (liftPercent100thsValue === 0) {
                 this.upOrOpen();
@@ -589,7 +587,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
      * Move the WindowCovering to a specific tilt value. The default implementation calculates the % value for the target
      * position. The method calls the handleMovement method to actually move the device to the defined position.
      */
-    override goToTiltValue({ tiltValue }: GoToTiltValueRequest) {
+    override goToTiltValue({ tiltValue }: WindowCovering.GoToTiltValueRequest) {
         this.#assertMotionLockStatus();
 
         this.state.targetPositionTiltPercent100ths = this.#tiltToPercent100ths(tiltValue);
@@ -600,12 +598,15 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
      * Move the WindowCovering to a specific tilt value. The method calls the handleMovement method to actually move the
      * device to the defined position.
      */
-    override goToTiltPercentage({ tiltPercent100thsValue }: GoToTiltPercentageRequest) {
+    override goToTiltPercentage({ tiltPercent100thsValue }: WindowCovering.GoToTiltPercentageRequest) {
         this.#assertMotionLockStatus();
 
         if (this.features.positionAwareTilt) {
-            this.state.targetPositionTiltPercent100ths = tiltPercent100thsValue;
-            this.#triggerTiltMotion(MovementDirection.DefinedByPosition, this.state.targetPositionTiltPercent100ths);
+            this.state.targetPositionTiltPercent100ths = tiltPercent100thsValue ?? null;
+            this.#triggerTiltMotion(
+                MovementDirection.DefinedByPosition,
+                this.state.targetPositionTiltPercent100ths ?? undefined,
+            );
         } else {
             if (tiltPercent100thsValue === 0) {
                 this.upOrOpen();

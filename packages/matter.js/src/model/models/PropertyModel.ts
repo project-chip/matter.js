@@ -7,9 +7,6 @@
 import { ValueModel } from "./ValueModel.js";
 
 /**
- * This is the base class for fields and attributes, both of which define
- * subvalues of logical structs.
+ * This is the base class for fields and attributes, both of which define subvalues of logical structs.
  */
-export abstract class PropertyModel extends ValueModel {
-    abstract isGlobalAttribute?: boolean;
-}
+export abstract class PropertyModel extends ValueModel {}

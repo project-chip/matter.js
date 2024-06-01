@@ -23,6 +23,10 @@ import { LowPowerServer as BaseLowPowerServer } from "../../../behavior/definiti
 import {
     AudioOutputServer as BaseAudioOutputServer
 } from "../../../behavior/definitions/audio-output/AudioOutputServer.js";
+import {
+    ContentControlServer as BaseContentControlServer
+} from "../../../behavior/definitions/content-control/ContentControlServer.js";
+import { MessagesServer as BaseMessagesServer } from "../../../behavior/definitions/messages/MessagesServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -43,7 +47,7 @@ import { Identity } from "../../../util/Type.js";
  * Please see Video Player Architecture for additional Basic Video Player requirements relating to Video Player device
  * endpoint composition, commissioning, feature representation in clusters, and UI context.
  *
- * @see {@link MatterSpecification.v11.Device} § 10.2
+ * @see {@link MatterSpecification.v13.Device} § 10.2
  */
 export interface BasicVideoPlayerDevice extends Identity<typeof BasicVideoPlayerDeviceDefinition> {}
 
@@ -112,6 +116,20 @@ export namespace BasicVideoPlayerRequirements {
     export const AudioOutputServer = BaseAudioOutputServer;
 
     /**
+     * The ContentControl cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ContentControlServer} for convenience.
+     */
+    export const ContentControlServer = BaseContentControlServer;
+
+    /**
+     * The Messages cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link MessagesServer} for convenience.
+     */
+    export const MessagesServer = BaseMessagesServer;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
@@ -123,7 +141,9 @@ export namespace BasicVideoPlayerRequirements {
             TargetNavigator: TargetNavigatorServer,
             MediaInput: MediaInputServer,
             LowPower: LowPowerServer,
-            AudioOutput: AudioOutputServer
+            AudioOutput: AudioOutputServer,
+            ContentControl: ContentControlServer,
+            Messages: MessagesServer
         }
     };
 }
@@ -131,7 +151,7 @@ export namespace BasicVideoPlayerRequirements {
 export const BasicVideoPlayerDeviceDefinition = MutableEndpoint({
     name: "BasicVideoPlayer",
     deviceType: 0x28,
-    deviceRevision: 1,
+    deviceRevision: 2,
     requirements: BasicVideoPlayerRequirements,
     behaviors: SupportedBehaviors(
         BasicVideoPlayerRequirements.server.mandatory.OnOff,

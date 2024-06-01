@@ -37,6 +37,9 @@ import {
 import {
     AccountLoginBehavior as BaseAccountLoginBehavior
 } from "../../../behavior/definitions/account-login/AccountLoginBehavior.js";
+import {
+    ContentControlBehavior as BaseContentControlBehavior
+} from "../../../behavior/definitions/content-control/ContentControlBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -47,7 +50,7 @@ import { Identity } from "../../../util/Type.js";
  * A Video Remote Control is a client that can control a Video Player, for example, a traditional universal remote
  * control.
  *
- * @see {@link MatterSpecification.v11.Device} § 10.7
+ * @see {@link MatterSpecification.v13.Device} § 10.7
  */
 export interface VideoRemoteControlDevice extends Identity<typeof VideoRemoteControlDeviceDefinition> {}
 
@@ -144,6 +147,13 @@ export namespace VideoRemoteControlRequirements {
     export const AccountLoginBehavior = BaseAccountLoginBehavior;
 
     /**
+     * The ContentControl cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ContentControlBehavior} for convenience.
+     */
+    export const ContentControlBehavior = BaseContentControlBehavior;
+
+    /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
     export const client = {
@@ -159,7 +169,8 @@ export namespace VideoRemoteControlRequirements {
             ContentLauncher: ContentLauncherBehavior,
             AudioOutput: AudioOutputBehavior,
             ApplicationLauncher: ApplicationLauncherBehavior,
-            AccountLogin: AccountLoginBehavior
+            AccountLogin: AccountLoginBehavior,
+            ContentControl: ContentControlBehavior
         }
     };
 }
@@ -167,7 +178,7 @@ export namespace VideoRemoteControlRequirements {
 export const VideoRemoteControlDeviceDefinition = MutableEndpoint({
     name: "VideoRemoteControl",
     deviceType: 0x2a,
-    deviceRevision: 1,
+    deviceRevision: 2,
     requirements: VideoRemoteControlRequirements,
     behaviors: SupportedBehaviors()
 });

@@ -14,9 +14,10 @@ import { RequirementGenerator } from "./RequirementGenerator.js";
 
 const logger = Logger.get("EndpointFile");
 
+const SYSTEM_ENDPOINT_TYPES = new Set(["BridgedNode", "Aggregator"]);
+
 export class EndpointFile extends TsFile {
     definitionName: string;
-    definitionPath: string;
     requirementsName: string;
     requirements: Block;
     definitions: Block;
@@ -27,7 +28,10 @@ export class EndpointFile extends TsFile {
         let name;
         let specName;
 
-        if (model.classification === DeviceTypeElement.Classification.Simple && model.name !== "BridgedNode") {
+        if (
+            model.classification === DeviceTypeElement.Classification.Simple &&
+            !SYSTEM_ENDPOINT_TYPES.has(model.name)
+        ) {
             specName = model.name;
             name = `${model.name}Device`;
             path = `device/${name}`;
@@ -44,7 +48,6 @@ export class EndpointFile extends TsFile {
         super(`#endpoints/${path}`);
 
         this.definitionName = name;
-        this.definitionPath = path;
         this.requirementsName = `${specName}Requirements`;
 
         this.interfaceLocation = this.section();
@@ -59,16 +62,6 @@ export class EndpointFile extends TsFile {
     static clean() {
         clean("#endpoints/system");
         clean("#endpoints/device");
-    }
-
-    override addImport(filename: string, symbol: string) {
-        if (filename.startsWith("endpoint/")) {
-            filename = `../../${filename.slice(9)}`;
-        } else {
-            filename = `../../../${filename}`;
-        }
-
-        return super.addImport(filename, symbol);
     }
 
     private generate() {
@@ -102,14 +95,14 @@ export class EndpointFile extends TsFile {
     }
 
     private generateServer(requirements: RequirementGenerator) {
-        this.addImport("endpoint/type/MutableEndpoint.js", "MutableEndpoint");
+        this.addImport("#/endpoint/type/MutableEndpoint.js", "MutableEndpoint");
         const definition = this.expressions(`export const ${this.definitionName}Definition = MutableEndpoint({`, "})");
         definition.atom("name", serialize(this.model.name));
         definition.atom("deviceType", `0x${this.model.id.toString(16)}`);
         definition.atom("deviceRevision", this.model.revision);
         this.addDeviceClass(definition);
 
-        this.addImport("endpoint/properties/SupportedBehaviors.js", "SupportedBehaviors");
+        this.addImport("#/endpoint/properties/SupportedBehaviors.js", "SupportedBehaviors");
         definition.atom(`requirements: ${this.requirementsName}`);
         const behaviors = definition.expressions("behaviors: SupportedBehaviors(", ")");
 
@@ -119,7 +112,7 @@ export class EndpointFile extends TsFile {
             }
         }
 
-        this.addImport("util/Type.js", "Identity");
+        this.addImport("#/util/Type.js", "Identity");
         const intf = this.interfaceLocation.atom(
             `export interface ${this.definitionName} extends Identity<typeof ${this.definitionName}Definition> {}`,
         );
@@ -167,7 +160,7 @@ export class EndpointFile extends TsFile {
                 return;
         }
 
-        this.addImport("device/DeviceTypes.js", "DeviceClasses");
+        this.addImport("#/device/DeviceTypes.js", "DeviceClasses");
         definition.atom("deviceClass", `DeviceClasses.${deviceClass}`);
     }
 }

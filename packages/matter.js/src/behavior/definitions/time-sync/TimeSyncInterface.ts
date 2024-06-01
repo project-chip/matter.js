@@ -8,7 +8,7 @@
 
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
-import { TimeSync } from "../../../cluster/definitions/TimeSyncCluster.js";
+import { TimeSynchronization } from "../../../cluster/definitions/TimeSynchronizationCluster.js";
 
 /**
  * This command may be issued by Administrator to set the time. If the Commissioner does not have a valid time source,
@@ -28,7 +28,7 @@ import { TimeSync } from "../../../cluster/definitions/TimeSyncCluster.js";
  *
  * @see {@link MatterSpecification.v11.Core} § 11.16.9.1
  */
-export type SetUtcTimeRequest = TypeFromSchema<typeof TimeSync.TlvSetUtcTimeRequest>;
+export type SetUtcTimeRequest = TypeFromSchema<typeof TimeSynchronization.TlvSetUtcTimeRequest>;
 
 export namespace TimeSyncInterface {
     export interface Base {

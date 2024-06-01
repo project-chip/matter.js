@@ -9,7 +9,7 @@ import { AnyElement, FieldElement, Specification } from "@project-chip/matter.js
 import { isObject } from "@project-chip/matter.js/util";
 import { addDocumentation } from "./add-documentation.js";
 import { Str } from "./html-translators.js";
-import { HtmlReference } from "./spec-types.js";
+import { HtmlReference, Table } from "./spec-types.js";
 
 const logger = Logger.get("translate-table");
 
@@ -55,23 +55,29 @@ type FieldType<F> =
             : never;
 
 // Create TS object type from schema definition
-type TableRecord<T extends TableSchema> = {
+export type TableRecord<T extends TableSchema> = {
     [name in keyof T]: FieldType<T[name]>;
 } & { xref?: Specification.CrossReference; name?: string; details?: string };
 
 const has = (object: object, name: string) => !!Object.getOwnPropertyDescriptor(object, name);
 
-/** Translates an array of key => HTMLElement records into a proper TS type */
+/**
+ * Translates records from an HtmlRef table to typed TS objects.
+ */
 export function translateTable<T extends TableSchema>(
     tag: string,
     definition: HtmlReference | undefined,
     schema: T,
+    table?: Table,
 ): Array<TableRecord<T>> {
     if (!definition) {
         return [];
     }
 
-    if (!definition.table) {
+    if (!table) {
+        table = definition.tables?.[0];
+    }
+    if (!table) {
         logger.warn(`no ${tag} table § ${definition.xref.section}`);
         return [];
     }
@@ -115,7 +121,7 @@ export function translateTable<T extends TableSchema>(
     }
 
     // Translate each table row
-    nextRow: for (let source of definition.table.rows) {
+    nextRow: for (let source of table.rows) {
         source = { ...source };
 
         // Map aliased columns to their normalized name
@@ -134,7 +140,7 @@ export function translateTable<T extends TableSchema>(
             const el = source[name];
             let value;
             if (typeof translator === "function") {
-                value = el === undefined ? undefined : translator(el);
+                value = el === undefined || el === null ? undefined : translator(el);
             } else {
                 value = translator;
             }
@@ -160,7 +166,7 @@ export function translateTable<T extends TableSchema>(
                 ...missing,
             ).join(", ")}`,
         );
-        logger.error(`keys present are: ${Object.keys(definition.table.rows[0]).join(", ")}`);
+        logger.error(`keys present are: ${Object.keys(table.rows[0]).join(", ")}`);
     }
 
     if (definition.details) {
@@ -198,7 +204,13 @@ export function translateRecordsToMatter<R, E extends { id?: number; name: strin
 function installPreciseDetails(
     tag: string,
     definitions: HtmlReference[],
-    records: Array<{ name?: string; xref?: Specification.CrossReference; details?: string; children?: AnyElement[] }>,
+    records: Array<{
+        name?: string;
+        xref?: Specification.CrossReference;
+        details?: string;
+        children?: AnyElement[];
+        element?: string;
+    }>,
     childTranslator?: ChildTranslator,
 ) {
     const lookup = Object.fromEntries(
@@ -210,7 +222,30 @@ function installPreciseDetails(
             return;
         }
 
-        const detail = lookup[`${r.name.toLowerCase()} ${tag}`] || lookup[`${r.name.toLowerCase()}`];
+        let titleSuffix;
+        if (r.element?.endsWith("field")) {
+            titleSuffix = "field";
+        } else if (r.element) {
+            titleSuffix = r.element;
+        } else {
+            titleSuffix = tag;
+        }
+
+        const name = r.name.toLowerCase();
+        let detail = lookup[`${name} ${titleSuffix}`] || lookup[`${name}`];
+
+        // Grr WC (at least) doing their own thing per usual and uses "bits" suffix instead of "bit"
+        if (detail === undefined && titleSuffix === "bit") {
+            detail = lookup[`${name} bits`];
+        }
+
+        if (detail === undefined) {
+            const description = (r as { description?: string }).description?.toLowerCase();
+            if (description !== undefined) {
+                detail = lookup[`${description} ${titleSuffix}`] || lookup[`${description}`];
+            }
+        }
+
         if (detail) {
             r.xref = detail.xref;
 
@@ -237,7 +272,7 @@ enum InferredFieldType {
 
 /** Examine a field in every row to infer the type of a field */
 function inferFieldType(definition: HtmlReference, name: string): InferredFieldType {
-    if (!definition.table) {
+    if (!definition.tables) {
         return InferredFieldType.Unknown;
     }
 
@@ -245,7 +280,7 @@ function inferFieldType(definition: HtmlReference, name: string): InferredFieldT
     let inferredType = InferredFieldType.Unknown;
 
     // Examine each row
-    for (const row of definition.table.rows) {
+    for (const row of definition.tables[0].rows) {
         // Extract the value and rows without the named field
         const value = row[name];
         if (!value) {
@@ -283,7 +318,7 @@ function inferFieldType(definition: HtmlReference, name: string): InferredFieldT
 
 /** Infer the columns to use for ID and name */
 export function chooseIdentityAliases(definition: HtmlReference, preferredIds: string[], preferredNames: string[]) {
-    const fields = definition.table?.fields;
+    const fields = definition.tables?.[0]?.fields;
 
     let ids: string[] | undefined;
     let names: string[] | undefined;

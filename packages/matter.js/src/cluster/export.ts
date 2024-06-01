@@ -19,6 +19,8 @@ export * from "./mutation/ElementModifier.js";
 export * from "./mutation/MutableCluster.js";
 // Export all Cluster definitions
 export * from "./definitions/index.js";
+// Export all globals
+export * from "./globals/index.js";
 // Export all Server handler
 export * from "./server/AdministratorCommissioningServer.js";
 export * from "./server/AttributeServer.js";
@@ -35,4 +37,3 @@ export * from "./server/IdentifyServer.js";
 export * from "./server/LevelControlServer.js";
 export * from "./server/OnOffServer.js";
 export * from "./server/OperationalCredentialsServer.js";
-export * from "./server/ScenesServer.js";

@@ -7,12 +7,12 @@
 // This utility dumps names from the model to make it easier to look for
 // inconsistencies
 
-import { Matter, MatterModel } from "@project-chip/matter.js/model";
+import { MatterModel } from "@project-chip/matter.js/model";
 
 export async function main() {
     const names = {} as { [name: string]: number };
 
-    new MatterModel(Matter).visit(model => {
+    MatterModel.standard.visit(model => {
         if (names[model.name]) {
             names[model.name]++;
         } else {

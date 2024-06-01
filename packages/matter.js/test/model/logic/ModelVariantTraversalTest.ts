@@ -87,7 +87,7 @@ function traverseClusters(children1: AnyElement[], children2: AnyElement[]) {
             }
             recurse();
         }
-    })(["variant1", "variant2", "variant3"]);
+    })("1.1", ["variant1", "variant2", "variant3"]);
 
     const inputVariants = {
         variant2: new MatterModel({

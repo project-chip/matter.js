@@ -342,7 +342,7 @@ describe("ClusterBehavior", () => {
         });
 
         it("sets defaults for newly-enabled properties", () => {
-            const MyOnOffServer = OnOffServer.with("LevelControlForLighting").enable({ attributes: { onTime: true } });
+            const MyOnOffServer = OnOffServer.with("Lighting").enable({ attributes: { onTime: true } });
             expect(new MyOnOffServer.State().onTime).equals(0);
 
             const MyLevelControl2 = LevelControlServer.with("Lighting");

@@ -9,7 +9,7 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { Globals } from "../../model/index.js";
+import { FabricIndex as FabricIndexElement } from "../../model/standard/elements/FabricIndex.js";
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
 import { NoAssociatedFabricError } from "../../session/SecureSession.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
@@ -68,7 +68,7 @@ export class AttributeClient<T> {
 
         value = this.schema.injectField(
             value,
-            <number>Globals.FabricIndex.id,
+            <number>FabricIndexElement.id,
             FabricIndex.OMIT_FABRIC,
             existingFieldIndex => existingFieldIndex === undefined,
         );
@@ -79,7 +79,7 @@ export class AttributeClient<T> {
             // Remove fabric index from structures if the OMIT_FABRIC instance was used (Should be used for all outgoing writes)
             value = this.schema.removeField(
                 value,
-                <number>Globals.FabricIndex.id,
+                <number>FabricIndexElement.id,
                 existingFieldIndex => existingFieldIndex === FabricIndex.OMIT_FABRIC,
             );
             value = tryCatch(
@@ -88,7 +88,7 @@ export class AttributeClient<T> {
                     // also remove fabric index if it is the same as the session fabric
                     return this.schema.removeField(
                         value,
-                        <number>Globals.FabricIndex.id,
+                        <number>FabricIndexElement.id,
                         existingFieldIndex => existingFieldIndex.index === sessionFabric.fabricIndex,
                     );
                 },

@@ -54,7 +54,7 @@ export type FabricJsonObject = {
     scopedClusterData: Map<number, Map<string, SupportedStorageTypes>>;
 };
 
-type OperationalGroupKeySet = TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySetStruct> & {
+type OperationalGroupKeySet = TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySet> & {
     operationalEpochKey0: ByteArray;
     groupSessionId0: number | null;
     operationalEpochKey1: ByteArray | null;
@@ -66,7 +66,7 @@ type OperationalGroupKeySet = TypeFromSchema<typeof GroupKeyManagement.TlvGroupK
 namespace OperationalGroupKeySet {
     export const asTlvGroupSet = (
         operationalGroupSet: OperationalGroupKeySet,
-    ): TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySetStruct> => {
+    ): TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySet> => {
         const {
             groupKeySetId,
             epochKey0,

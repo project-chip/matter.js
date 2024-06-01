@@ -5,22 +5,26 @@
  */
 
 import { InternalError } from "../../common/MatterError.js";
-import { ElementTag, Metatype } from "../definitions/index.js";
+import { Constraint } from "../aspects/index.js";
+import { ElementTag, Metatype, Specification } from "../definitions/index.js";
 import { AnyElement } from "../elements/index.js";
-import { Constraint } from "../index.js";
 import { Model, ValueModel } from "../models/index.js";
 import { ModelVariantTraversal, TraverseMap, VariantDetail } from "./ModelVariantTraversal.js";
 
 /**
  * Merge multiple variants of an element into a single element.
  */
-export function MergedModel(variants: TraverseMap, priorities = MergedModel.DefaultPriorities): Model {
+export function MergedModel(
+    revision: Specification.Revision,
+    variants: TraverseMap,
+    priorities = MergedModel.DefaultPriorities,
+): Model {
     const priority = new PriorityHandler(priorities || MergedModel.DefaultPriorities);
-    const visitor = new MergeTraversal<Model>(priority, (variants, recurse) => {
+    const visitor = new MergeTraversal<Model>(revision, priority, (variants, recurse) => {
         const merged = merge(variants);
 
         if (variants.tag === ElementTag.Cluster) {
-            reparentToCanonicalParent(priority, variants);
+            reparentToCanonicalParent(revision, priority, variants);
         }
 
         // If the manual override specifies a type but no children, ignore children from other variants.  This allows us
@@ -89,10 +93,11 @@ export function MergedModel(variants: TraverseMap, priorities = MergedModel.Defa
  */
 class MergeTraversal<S> extends ModelVariantTraversal<S> {
     constructor(
+        revision: Specification.Revision,
         public priority: PriorityHandler,
         public visitor: (variants: VariantDetail, recurse: () => S[]) => S,
     ) {
-        super(priority.get("*", "type"));
+        super(revision, priority.get("*", "type"));
     }
 
     visit(variants: VariantDetail, recurse: () => S[]) {
@@ -212,12 +217,16 @@ class PriorityHandler {
  * cluster-scoped type, not the other way around.  We know this is true because CHIP doesn't support direct children and
  * the structures we build ourselves are already in the preferred format.
  */
-function reparentToCanonicalParent(priority: PriorityHandler, variants: VariantDetail) {
+function reparentToCanonicalParent(
+    revision: Specification.Revision,
+    priority: PriorityHandler,
+    variants: VariantDetail,
+) {
     // Collect datatypes from which we move children so we can discard
     const deparented = Array<Model>();
 
     // Now visit the tree and reparent as necessary
-    const traversal = new MergeTraversal(priority, (variants, recurse) => {
+    const traversal = new MergeTraversal(revision, priority, (variants, recurse) => {
         // Determine the canonical type for this element
         const type = traversal.chooseType(variants);
         if (!(type instanceof ValueModel)) {
@@ -225,9 +234,9 @@ function reparentToCanonicalParent(priority: PriorityHandler, variants: VariantD
             return;
         }
 
-        // If the canonical type is a global type that can have children, variants that reference a local type with
+        // If the canonical type is a seed type that can have children, variants that reference a local type with
         // children need to be rewritten
-        if (type.base?.global && Metatype.hasChildren(type.effectiveMetatype)) {
+        if (type.base?.isSeed && Metatype.hasChildren(type.effectiveMetatype)) {
             for (const variantName in variants.map) {
                 // Skip if this is the canonical variant or this variant already has children
                 const variant = variants.map[variantName];

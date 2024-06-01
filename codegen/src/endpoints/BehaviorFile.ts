@@ -6,6 +6,7 @@
 
 import { Logger } from "@project-chip/matter.js/log";
 import { ClusterModel, ClusterVariance, CommandModel } from "@project-chip/matter.js/model";
+import { decamelize } from "@project-chip/matter.js/util";
 import { TsFile } from "../util/TsFile.js";
 
 const logger = Logger.get("BehaviorFile");
@@ -29,19 +30,31 @@ export class BehaviorFile extends TsFile {
     private generate() {
         logger.info(`${this.cluster.name} → ${this.name}.ts`);
 
-        this.addImport(`../../../cluster/definitions/${this.cluster.name}Cluster.js`, this.cluster.name);
-        this.addImport("../../cluster/ClusterBehavior.js", "ClusterBehavior");
+        this.addImport(`#clusters/${this.cluster.name}Cluster.js`, this.cluster.name);
+        this.addImport("#/behavior/cluster/ClusterBehavior.js", "ClusterBehavior");
 
         const builder = this.builder(`export const ${this.cluster.name}Behavior = ClusterBehavior`);
 
-        if (this.cluster.all(CommandModel).length) {
-            this.addImport(`./${this.cluster.name}Interface.js`, `${this.cluster.name}Interface`);
-            builder.atom(`withInterface<${this.cluster.name}Interface>()`);
+        // Install the interface if there are commands
+        const definingCluster = this.variance.cluster;
+        if (definingCluster.all(CommandModel).length) {
+            const interfaceName = `${definingCluster.name}Interface`;
+
+            if (definingCluster === this.cluster) {
+                // The cluster defines its own interface
+                this.addImport(`./${interfaceName}.js`, interfaceName);
+            } else {
+                // This is an alias so just import the interface of the base cluster
+                this.addImport(`../${decamelize(definingCluster.name)}/${interfaceName}.js`, interfaceName);
+            }
+
+            builder.atom(`withInterface<${interfaceName}>()`);
         }
 
+        // Inject the cluster and appropriate documentation
         let extraDocs;
         if (this.variance.requiresFeatures) {
-            this.addImport(`../../../cluster/ClusterType.js`, "ClusterType");
+            this.addImport(`#/cluster/ClusterType.js`, "ClusterType");
             builder.atom(`for(ClusterType(${this.cluster.name}.Base))`);
             extraDocs =
                 `${this.cluster.name}.Cluster requires you to enable one or more optional features.  ` +

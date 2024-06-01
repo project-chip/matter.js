@@ -18,6 +18,7 @@ import {
     PowerSourceServer as BasePowerSourceServer
 } from "../../../behavior/definitions/power-source/PowerSourceServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
+import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 
@@ -26,7 +27,7 @@ import { Identity } from "../../../util/Type.js";
  * describes itself and any other endpoints that make up the Bridged Node. A Bridged Node endpoint represents a device
  * on a foreign network, but is not the root endpoint of the bridge itself.
  *
- * @see {@link MatterSpecification.v11.Device} § 2.6
+ * @see {@link MatterSpecification.v13.Device} § 2.5
  */
 export interface BridgedNodeEndpoint extends Identity<typeof BridgedNodeEndpointDefinition> {}
 
@@ -68,7 +69,8 @@ export namespace BridgedNodeRequirements {
 export const BridgedNodeEndpointDefinition = MutableEndpoint({
     name: "BridgedNode",
     deviceType: 0x13,
-    deviceRevision: 1,
+    deviceRevision: 2,
+    deviceClass: DeviceClasses.Utility,
     requirements: BridgedNodeRequirements,
     behaviors: SupportedBehaviors(
         BridgedNodeRequirements.server.mandatory.Parts,

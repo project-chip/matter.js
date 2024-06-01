@@ -132,12 +132,21 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
     for (const name in newAttributes) {
         // Determine whether attribute applies based on conformance.  If it doesn't, make sure to overwrite any existing
         // value from previous configurations as otherwise conformance may not pass
-        const attrSchema = schema.get(AttributeModel, camelize(name, true));
-        if (attrSchema && !attrSchema.effectiveConformance.isApplicable(featuresAvailable, featuresSupported)) {
-            if (oldDefaults[name] !== undefined) {
-                defaults[name] = undefined;
+        const attrs = schema.all(AttributeModel, camelize(name, true));
+        if (attrs.length) {
+            let applies = false;
+            for (const attr of attrs) {
+                if (attr.effectiveConformance.isApplicable(featuresAvailable, featuresSupported)) {
+                    applies = true;
+                    break;
+                }
             }
-            continue;
+            if (!applies) {
+                if (oldDefaults[name] !== undefined) {
+                    defaults[name] = undefined;
+                }
+                continue;
+            }
         }
 
         // Attribute applies.  Make sure a default value is present

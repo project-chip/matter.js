@@ -7,13 +7,17 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
+import { ProxyDiscovery } from "../../../cluster/definitions/ProxyDiscoveryCluster.js";
 
 export namespace ProxyDiscoveryInterface {
     export interface Base {
         /**
-         * @see {@link MatterSpecification.v11.Core} § 9.15.13.5
+         * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery & Assignment
+         * Flow”.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 9.15.12.4.1
          */
-        proxyDiscoverRequest(): MaybePromise;
+        proxyDiscoverRequest(request: ProxyDiscovery.ProxyDiscoverRequest): MaybePromise;
     }
 }
 

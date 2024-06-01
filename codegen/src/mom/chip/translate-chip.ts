@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { list, string } from "@project-chip/matter.js/elements";
 import { Logger } from "@project-chip/matter.js/log";
 import {
     Access,
@@ -18,7 +19,6 @@ import {
     ElementTag,
     EventElement,
     FieldElement,
-    Globals,
     ValueElement,
 } from "@project-chip/matter.js/model";
 import { NumericRanges } from "../../clusters/NumberConstants.js";
@@ -195,8 +195,8 @@ function mapType(chipType: string | undefined) {
 function setBounds(source: Element, element: ValueElement) {
     let typeBounds: { min: number; max: number };
     switch (element.type) {
-        case Globals.list.name:
-        case Globals.string.name:
+        case list.name:
+        case string.name:
             const length = int(source.getAttribute("length"));
             if (length !== undefined) {
                 element.constraint = { max: length };

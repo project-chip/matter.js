@@ -12,7 +12,7 @@ ModelValidator.validators[CommandElement.Tag] = class CommandValidator extends M
     override validate() {
         this.validateStructure(true, FieldModel);
         this.validateProperty({
-            name: "direction",
+            name: "effectiveDirection",
             type: CommandElement.Direction,
             required: true,
         });

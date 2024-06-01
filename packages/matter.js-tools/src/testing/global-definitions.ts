@@ -33,6 +33,6 @@ Object.assign(globalThis, {
 });
 
 if (typeof window === "object" && globalThis === window) {
-    generalSetup(Mocha);
+    generalSetup(mocha);
     browserSetup(mocha);
 }

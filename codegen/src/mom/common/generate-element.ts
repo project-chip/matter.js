@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AnyElement } from "@project-chip/matter.js/model";
+import { Model } from "@project-chip/matter.js/model";
 import { Block } from "../../util/TsFile.js";
 import { camelize, serialize, wordWrap } from "../../util/string.js";
 
-export function generateElement(target: Block, importFrom: string, element: AnyElement, prefix = "", suffix = "") {
+export function generateElement(target: Block, importFrom: string, element: Model, prefix = "", suffix = "") {
     const factory = camelize(element.tag, true);
     target.file.addImport(importFrom, `${factory}Element as ${factory}`);
     const block = target.expressions(`${prefix}${factory}({`, `})${suffix}`);
@@ -77,10 +77,9 @@ export function generateElement(target: Block, importFrom: string, element: AnyE
     }
 
     // Children
-    const children = element.children?.filter(c => !c.global);
-    if (children?.length) {
+    if (element.children?.length) {
         const childBlock = block.expressions(`children: [`, "]");
-        for (const child of children) {
+        for (const child of element.children) {
             generateElement(childBlock, importFrom, child);
         }
     }

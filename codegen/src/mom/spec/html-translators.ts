@@ -6,13 +6,31 @@
 
 import { camelize } from "../../util/string.js";
 import { Words } from "../../util/words.js";
+import { repairConformanceRule } from "./repairs/aspect-repairs.js";
 
 /** String, trimmed with whitespace collapsed */
 export const Str = (el: HTMLElement) => {
-    // Remove footnote references
+    // Remove footnote references.  We can reliably detect these by looking for spans that contain only a single digit
     for (const child of el.querySelectorAll("span")) {
         if (child.textContent?.match(/^[*0-9]$/)) {
             child.remove();
+        }
+    }
+
+    // Except in some places in 1.2 and 1.3 where the malformatted columns confuse Adobe and it sticks footnotes in the
+    // middle of a symbol.  This we have to go through some contortions to detect correctly
+    for (const child of el.querySelectorAll("p")) {
+        if (
+            // P starts with text
+            child.firstChild?.nodeType === 3 /** TEXT_CONTENT */ &&
+            // Containing a single digit
+            child.firstChild.textContent?.match(/^[0-9]$/) &&
+            // Followed by a span
+            (child.firstChild.nextSibling as Element)?.tagName === "SPAN" &&
+            // That doesn't indicate numeric arity
+            ["st", "nd", "rd", "th"].indexOf(child.firstChild.nextSibling?.textContent as string) === -1
+        ) {
+            child.firstChild?.remove();
         }
     }
 
@@ -52,6 +70,26 @@ export const Integer = (el: HTMLElement) => {
     return Number.parseInt(NoSpace(el));
 };
 
+/** Size in bytes */
+export const ByteSize = (el: HTMLElement): number | string | undefined => {
+    const text = Str(el);
+
+    let match = text.match(/^(\d+) bytes?$/);
+    if (match) {
+        return Number.parseInt(match[1]);
+    }
+
+    match = text.match(/^(\d+) or (\d+) bytes$/);
+    if (match) {
+        return `${match[1]}, ${match[2]}`;
+    }
+
+    match = text.match(/(\d+) to (\d+) bytes$/);
+    if (match) {
+        return `${match[1]} to ${match[2]}`;
+    }
+};
+
 /** Number encoded as BIT(n) */
 export const Bit = (el: HTMLElement) => {
     const text = Str(el).replace(/bit\((\d+)\)/i, "$1");
@@ -59,9 +97,8 @@ export const Bit = (el: HTMLElement) => {
 };
 
 /**
- * DSL or identifier.  Note we replace "Fo o" with "Foo" because space errors
- * are very common in the PDFs, especially in narrow columns and we don't want
- * to end up with FoO
+ * DSL or identifier.  Note we replace "Fo o" with "Foo" because space errors are very common in the PDFs, especially in
+ * narrow columns and we don't want to end up with FoO
  */
 export const Code = (el: HTMLElement) => {
     let str = Str(el);
@@ -75,8 +112,7 @@ export const Code = (el: HTMLElement) => {
             continue;
         }
 
-        // If a word starts with lowercase, see if it's a word when
-        // concatenated with the previous word
+        // If a word starts with lowercase, see if it's a word when concatenated with the previous word
         if (parts[i + 1].match(/^[a-z]/)) {
             // Get beginning of word from current part
             const beginning = parts[i].replace(/^.*([A-Z])/, "$1");
@@ -103,12 +139,14 @@ export const Code = (el: HTMLElement) => {
 export const Identifier = (el: HTMLElement) => {
     let str = Code(el);
 
-    // Strip everything following a subset of characters known to be inside
-    // what is properly a "key"
+    // Strip everything following a subset of characters known to be inside what is properly a "key"
     str = str.replace(/^([a-z0-9 _:,/\-$]+).*/i, "$1");
 
     return camelize(str, true);
 };
+
+/** Conformance definition */
+export const ConformanceCode = (el: HTMLElement) => repairConformanceRule(Code(el));
 
 /** Identifier, all lowercase.  Used for matching so "_" removed */
 export const LowerIdentifier = (el: HTMLElement) => Identifier(el).toLowerCase();

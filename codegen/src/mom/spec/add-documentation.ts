@@ -29,6 +29,7 @@ function extractUsefulDocumentation(p: HTMLElement) {
     return Str(p)
         .replace(/SHALL/g, "shall")
         .replace(/MAY/g, "may")
+        .replace(/RECOMMENDED/g, "recommended")
         .replace(/This data type is derived from \S+(?: and has its values listed below)?\./, "")
         .replace(/The data type \S+ is derived from \S+\./, "")
         .replace(/The data type of the(?: \w+)+ is derived from \S+\./, "")
@@ -46,11 +47,14 @@ function extractUsefulDocumentation(p: HTMLElement) {
         .replace(/ as described in the table below:/, "")
         .replace(/,? using(?: the)? data as follows:$/, ".")
         .replace(/Here are some examples:/, "")
+        .replace(/Valid combinations using null fields are shown below:/, "")
         .replace(/,? shown below:$/, "")
         .replace(/ such that:$/, "")
         .replace(/, derived from \w+,/, "")
         .replace(/\([^)]*$/, "")
         .replace(/\s\s+/, "  ")
+        .replace(/This attribute shall (?:indicate|represent)/, "Indicates")
+        .replace(/This attribute shall be null/, "Null")
         .trim();
 }
 
@@ -73,9 +77,8 @@ function mergeSplitParagraphs(paragraphs: string[]) {
 }
 
 /**
- * Make a valiant attempt to extract comprehensible documentation from the
- * gobbledy gook produced by tired spec writers -> word -> PDF -> HTML -> us
- * pipeline.
+ * Make a valiant attempt to extract comprehensible documentation from the gobbledy gook produced by tired spec writers
+ * -> word -> PDF -> HTML -> us pipeline.
  */
 export function addDocumentation(target: { details?: string }, definition: HtmlReference) {
     const prose = definition.prose;
@@ -97,10 +100,9 @@ export function addDocumentation(target: { details?: string }, definition: HtmlR
                 continue;
             }
 
-            // This edge case happens a half dozen times or so; subsection
-            // headings would otherwise appear as unadorned text.  Instead
-            // stick a markdownish prefix on them.  Heuristically ignore
-            // various junk that also appears in links but isn't a heading
+            // This edge case happens a half dozen times or so; subsection headings would otherwise appear as unadorned
+            // text.  Instead stick a markdownish prefix on them.  Heuristically ignore various junk that also appears
+            // in links but isn't a heading
             if (text.match(/^[^(.:]*$/)) {
                 looksLikeHeading = true;
             }
