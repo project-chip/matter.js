@@ -7,8 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { TimeFormatLocalization } from "../../../cluster/definitions/TimeFormatLocalizationCluster.js";
-import { TimeFormatLocalizationBehavior } from "./TimeFormatLocalizationBehavior.js";
 import { Logger } from "../../../log/Logger.js";
+import { TimeFormatLocalizationBehavior } from "./TimeFormatLocalizationBehavior.js";
 
 const logger = Logger.get("TimeFormatLocalizationServer");
 
