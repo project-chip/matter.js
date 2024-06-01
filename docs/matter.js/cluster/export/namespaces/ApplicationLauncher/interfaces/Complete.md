@@ -1,0 +1,616 @@
+[**@project-chip/matter.js**](../../../../../README.md) • **Docs**
+
+***
+
+[@project-chip/matter.js](../../../../../modules.md) / [cluster/export](../../../README.md) / [ApplicationLauncher](../README.md) / Complete
+
+# Interface: Complete
+
+This cluster supports all ApplicationLauncher features. It may support illegal feature combinations.
+
+If you use this cluster you must manually specify which features are active and ensure the set of active
+features is legal per the Matter specification.
+
+## Extends
+
+- [`Identity`](../../../../../util/export/README.md#identityt)\<*typeof* [`CompleteInstance`](../README.md#completeinstance)\>
+
+## Properties
+
+### attributes
+
+> **attributes**: [`Merge`](../../../../../util/export/README.md#mergeab)\<`object`, [`GlobalAttributes`](../../../README.md#globalattributesf)\<`object`\>\>
+
+#### Type declaration
+
+##### acceptedCommandList
+
+> `readonly` **acceptedCommandList**: [`Attribute`](../../../interfaces/Attribute.md)\<[`CommandId`](../../../../../datatype/export/README.md#commandid)[], `never`\>
+
+List of client generated commands which are supported by this cluster server instance.
+
+##### attributeList
+
+> `readonly` **attributeList**: [`Attribute`](../../../interfaces/Attribute.md)\<[`AttributeId`](../../../../../datatype/export/README.md#attributeid)[], `never`\>
+
+List of the attribute IDs of the attributes supported by the cluster instance.
+
+##### catalogList
+
+> `readonly` **catalogList**: [`Attribute`](../../../interfaces/Attribute.md)\<`number`[], `any`\> & `object`
+
+###### Type declaration
+
+###### isConditional
+
+> `readonly` **isConditional**: `true` = `true`
+
+###### mandatoryIf
+
+> `readonly` **mandatoryIf**: [] \| [`object`]
+
+###### optional
+
+> `readonly` **optional**: `true` = `true`
+
+###### optionalIf
+
+> `readonly` **optionalIf**: [] \| [`ConditionalFeatureList`](../../../README.md#conditionalfeaturelistf)\<[`BitSchema`](../../../../../schema/export/README.md#bitschema)\>
+
+##### clusterRevision
+
+> `readonly` **clusterRevision**: [`Attribute`](../../../interfaces/Attribute.md)\<`number`, `never`\>
+
+Indicates the revision of the server cluster specification supported by the cluster instance.
+
+##### currentApp
+
+> `readonly` **currentApp**: [`OptionalAttribute`](../../../interfaces/OptionalAttribute.md)\<`null` \| [`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, `any`\>
+
+This attribute shall specify the current in-focus application, identified using an Application ID,
+catalog vendor ID and the corresponding endpoint number when the application is represented by a Content
+App endpoint. A null shall be used to indicate there is no current in-focus application.
+
+###### See
+
+MatterSpecification.v11.Cluster § 6.4.3.2
+
+##### eventList
+
+> `readonly` **eventList**: [`Attribute`](../../../interfaces/Attribute.md)\<[`EventId`](../../../../../datatype/export/README.md#eventid)[], `never`\>
+
+List of the event IDs of the events supported by the cluster instance.
+
+##### featureMap
+
+> `readonly` **featureMap**: [`Attribute`](../../../interfaces/Attribute.md)\<[`TypeFromPartialBitSchema`](../../../../../schema/export/README.md#typefrompartialbitschemat)\<`object`\>, `never`\>
+
+Indicates whether the server supports zero or more optional cluster features.
+
+##### generatedCommandList
+
+> `readonly` **generatedCommandList**: [`Attribute`](../../../interfaces/Attribute.md)\<[`CommandId`](../../../../../datatype/export/README.md#commandid)[], `never`\>
+
+List of server generated commands (server to client commands).
+
+#### Inherited from
+
+`Identity.attributes`
+
+#### Source
+
+[packages/matter.js/src/cluster/ClusterType.ts:86](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/ClusterType.ts#L86)
+
+***
+
+### base
+
+> **base**: `undefined`
+
+#### Inherited from
+
+`Identity.base`
+
+#### Source
+
+[packages/matter.js/src/cluster/ClusterType.ts:92](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/ClusterType.ts#L92)
+
+***
+
+### commands
+
+> **commands**: `object`
+
+#### hideApp
+
+> `readonly` **hideApp**: [`Command`](../../../interfaces/Command.md)\<[`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, [`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, `any`\>
+
+Upon receipt of this command, the server shall hide the application. The application shall be either
+
+  • the specified application, if the Application Platform feature is supported;
+
+  • otherwise the application corresponding to the endpoint.
+
+The endpoint may decide to stop the application based on manufacturer specific behavior or resource
+constraints if any. The Status attribute shall be updated to ACTIVE_HIDDEN or STOPPED, depending on the
+action taken, on the Application Basic cluster of the Endpoint corresponding to the application on which
+the action was taken. The Status attribute shall be updated on any other application whose Status may
+have changed as a result of this command.
+
+This command returns a Launcher Response.
+
+##### See
+
+MatterSpecification.v11.Cluster § 6.4.4.3
+
+#### launchApp
+
+> `readonly` **launchApp**: [`Command`](../../../interfaces/Command.md)\<[`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, [`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, `any`\>
+
+Upon receipt of this command, the server shall launch the application with optional data. The
+application shall be either
+
+  • the specified application, if the Application Platform feature is supported;
+
+  • otherwise the application corresponding to the endpoint.
+
+The endpoint shall launch and bring to foreground the requisite application if the application is not
+already launched and in foreground. The Status attribute shall be updated to ACTIVE_VISIBLE_FOCUS on the
+Application Basic cluster of the Endpoint corresponding to the launched application. The Status
+attribute shall be updated on any other application whose Status may have changed as a result of this
+command. The CurrentApp attribute, if supported, shall be updated to reflect the new application in the
+foreground.
+
+This command returns a Launcher Response.
+
+##### See
+
+MatterSpecification.v11.Cluster § 6.4.4.1
+
+#### stopApp
+
+> `readonly` **stopApp**: [`Command`](../../../interfaces/Command.md)\<[`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, [`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, `any`\>
+
+Upon receipt of this command, the server shall stop the application if it is running. The application
+shall be either
+
+  • the specified application, if the Application Platform feature is supported;
+
+  • otherwise the application corresponding to the endpoint.
+
+The Status attribute shall be updated to STOPPED on the Application Basic cluster of the Endpoint
+corresponding to the stopped application. The Status attribute shall be updated on any other application
+whose Status may have changed as a result of this command.
+
+This command returns a Launcher Response.
+
+##### See
+
+MatterSpecification.v11.Cluster § 6.4.4.2
+
+#### Inherited from
+
+`Identity.commands`
+
+#### Source
+
+[packages/matter.js/src/cluster/ClusterType.ts:89](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/ClusterType.ts#L89)
+
+***
+
+### events
+
+> **events**: `object`
+
+#### Inherited from
+
+`Identity.events`
+
+#### Source
+
+[packages/matter.js/src/cluster/ClusterType.ts:90](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/ClusterType.ts#L90)
+
+***
+
+### extensions
+
+> **extensions**: `undefined`
+
+#### Inherited from
+
+`Identity.extensions`
+
+#### Source
+
+[packages/matter.js/src/cluster/ClusterType.ts:93](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/ClusterType.ts#L93)
+
+***
+
+### features
+
+> **features**: `object`
+
+#### applicationPlatform
+
+> `readonly` **applicationPlatform**: [`BitFlag`](../../../../../schema/export/README.md#bitflag)
+
+ApplicationPlatform
+
+Support for attributes and commands required for endpoint to support launching any application within
+the supported application catalogs
+
+#### Inherited from
+
+`Identity.features`
+
+#### Source
+
+[packages/matter.js/src/cluster/ClusterType.ts:84](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/ClusterType.ts#L84)
+
+***
+
+### id
+
+> **id**: [`Branded`](../../../../../util/export/README.md#brandedtb)\<[`Branded`](../../../../../util/export/README.md#brandedtb)\<`1292`, `"ClusterId"`\>, `"ClusterId"`\>
+
+#### Inherited from
+
+`Identity.id`
+
+#### Source
+
+[packages/matter.js/src/cluster/ClusterType.ts:81](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/ClusterType.ts#L81)
+
+***
+
+### name
+
+> **name**: `"ApplicationLauncher"`
+
+#### Inherited from
+
+`Identity.name`
+
+#### Source
+
+[packages/matter.js/src/cluster/ClusterType.ts:82](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/ClusterType.ts#L82)
+
+***
+
+### revision
+
+> **revision**: `1`
+
+#### Inherited from
+
+`Identity.revision`
+
+#### Source
+
+[packages/matter.js/src/cluster/ClusterType.ts:83](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/ClusterType.ts#L83)
+
+***
+
+### supportedFeatures
+
+> **supportedFeatures**: `object`
+
+#### Inherited from
+
+`Identity.supportedFeatures`
+
+#### Source
+
+[packages/matter.js/src/cluster/ClusterType.ts:85](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/ClusterType.ts#L85)
+
+***
+
+### unknown
+
+> **unknown**: `false`
+
+#### Inherited from
+
+`Identity.unknown`
+
+#### Source
+
+[packages/matter.js/src/cluster/ClusterType.ts:91](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/ClusterType.ts#L91)
+
+## Methods
+
+### alter()
+
+> **alter**\<`AlterationsT`\>(`alterations`): [`WithAlterations`](../../ElementModifier/README.md#withalterationstalterationst)\<[`Of`](../../ClusterType/interfaces/Of.md)\<`object`\>, `AlterationsT`\>
+
+Modify elements using [ElementModifier.alter](../../../classes/ElementModifier.md#alter).
+
+#### Type parameters
+
+| Type parameter |
+| :------ |
+| `AlterationsT` *extends* [`Alterations`](../../ElementModifier/README.md#alterationsoriginalt)\<[`Of`](../../ClusterType/interfaces/Of.md)\<`object`\>\> |
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `alterations` | `AlterationsT` |
+
+#### Returns
+
+[`WithAlterations`](../../ElementModifier/README.md#withalterationstalterationst)\<[`Of`](../../ClusterType/interfaces/Of.md)\<`object`\>, `AlterationsT`\>
+
+#### Inherited from
+
+`Identity.alter`
+
+#### Source
+
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:74](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L74)
+
+***
+
+### enable()
+
+> **enable**\<`FlagsT`\>(`flags`): [`WithFlags`](../../ElementModifier/README.md#withflagstflagst)\<[`Of`](../../ClusterType/interfaces/Of.md)\<`object`\>, `FlagsT`\>
+
+Modify elements using [ElementModifier.enable](../../../classes/ElementModifier.md#enable).
+
+#### Type parameters
+
+| Type parameter |
+| :------ |
+| `FlagsT` *extends* [`ElementFlags`](../../ElementModifier/README.md#elementflagsclustert)\<[`Of`](../../ClusterType/interfaces/Of.md)\<`object`\>\> |
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `flags` | `FlagsT` |
+
+#### Returns
+
+[`WithFlags`](../../ElementModifier/README.md#withflagstflagst)\<[`Of`](../../ClusterType/interfaces/Of.md)\<`object`\>, `FlagsT`\>
+
+#### Inherited from
+
+`Identity.enable`
+
+#### Source
+
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:88](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L88)
+
+***
+
+### set()
+
+> **set**\<`ValuesT`\>(`values`): [`WithValues`](../../ElementModifier/README.md#withvaluestvaluest)\<[`Of`](../../ClusterType/interfaces/Of.md)\<`object`\>, `ValuesT`\>
+
+Modify elements using [ElementModifier.set](../../../classes/ElementModifier.md#set).
+
+#### Type parameters
+
+| Type parameter |
+| :------ |
+| `ValuesT` *extends* `object` |
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `values` | `ValuesT` |
+
+#### Returns
+
+[`WithValues`](../../ElementModifier/README.md#withvaluestvaluest)\<[`Of`](../../ClusterType/interfaces/Of.md)\<`object`\>, `ValuesT`\>
+
+#### Inherited from
+
+`Identity.set`
+
+#### Source
+
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:81](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L81)
+
+***
+
+### with()
+
+> **with**\<`SelectionT`\>(...`selection`): [`Of`](../../ClusterType/interfaces/Of.md)\<`object`\>
+
+Select features using [ClusterComposer.compose](../../../classes/ClusterComposer.md#compose).
+
+#### Type parameters
+
+| Type parameter |
+| :------ |
+| `SelectionT` *extends* [`FeatureSelection`](../../ClusterComposer/README.md#featureselectiont)\<[`Of`](../../ClusterType/interfaces/Of.md)\<`object`\>\> |
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| ...`selection` | `SelectionT` |
+
+#### Returns
+
+[`Of`](../../ClusterType/interfaces/Of.md)\<`object`\>
+
+##### attributes
+
+> `readonly` **attributes**: `object`
+
+##### attributes.acceptedCommandList
+
+> `readonly` **acceptedCommandList**: [`Attribute`](../../../interfaces/Attribute.md)\<[`CommandId`](../../../../../datatype/export/README.md#commandid)[], `never`\>
+
+List of client generated commands which are supported by this cluster server instance.
+
+##### attributes.attributeList
+
+> `readonly` **attributeList**: [`Attribute`](../../../interfaces/Attribute.md)\<[`AttributeId`](../../../../../datatype/export/README.md#attributeid)[], `never`\>
+
+List of the attribute IDs of the attributes supported by the cluster instance.
+
+##### attributes.catalogList
+
+> `readonly` **catalogList**: [`Attribute`](../../../interfaces/Attribute.md)\<`number`[], `any`\> & `object`
+
+###### Type declaration
+
+###### isConditional
+
+> `readonly` **isConditional**: `true` = `true`
+
+###### mandatoryIf
+
+> `readonly` **mandatoryIf**: [] \| [`object`]
+
+###### optional
+
+> `readonly` **optional**: `true` = `true`
+
+###### optionalIf
+
+> `readonly` **optionalIf**: [] \| [`ConditionalFeatureList`](../../../README.md#conditionalfeaturelistf)\<[`BitSchema`](../../../../../schema/export/README.md#bitschema)\>
+
+##### attributes.clusterRevision
+
+> `readonly` **clusterRevision**: [`Attribute`](../../../interfaces/Attribute.md)\<`number`, `never`\>
+
+Indicates the revision of the server cluster specification supported by the cluster instance.
+
+##### attributes.currentApp
+
+> `readonly` **currentApp**: [`OptionalAttribute`](../../../interfaces/OptionalAttribute.md)\<`null` \| [`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, `any`\>
+
+This attribute shall specify the current in-focus application, identified using an Application ID,
+catalog vendor ID and the corresponding endpoint number when the application is represented by a Content
+App endpoint. A null shall be used to indicate there is no current in-focus application.
+
+###### See
+
+MatterSpecification.v11.Cluster § 6.4.3.2
+
+##### attributes.eventList
+
+> `readonly` **eventList**: [`Attribute`](../../../interfaces/Attribute.md)\<[`EventId`](../../../../../datatype/export/README.md#eventid)[], `never`\>
+
+List of the event IDs of the events supported by the cluster instance.
+
+##### attributes.featureMap
+
+> `readonly` **featureMap**: [`Attribute`](../../../interfaces/Attribute.md)\<[`TypeFromPartialBitSchema`](../../../../../schema/export/README.md#typefrompartialbitschemat)\<`object`\>, `never`\>
+
+Indicates whether the server supports zero or more optional cluster features.
+
+##### attributes.generatedCommandList
+
+> `readonly` **generatedCommandList**: [`Attribute`](../../../interfaces/Attribute.md)\<[`CommandId`](../../../../../datatype/export/README.md#commandid)[], `never`\>
+
+List of server generated commands (server to client commands).
+
+##### commands
+
+> `readonly` **commands**: `object` = `Cluster.commands`
+
+##### commands.hideApp
+
+> `readonly` **hideApp**: [`Command`](../../../interfaces/Command.md)\<[`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, [`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, `any`\>
+
+Upon receipt of this command, the server shall hide the application. The application shall be either
+
+  • the specified application, if the Application Platform feature is supported;
+
+  • otherwise the application corresponding to the endpoint.
+
+The endpoint may decide to stop the application based on manufacturer specific behavior or resource
+constraints if any. The Status attribute shall be updated to ACTIVE_HIDDEN or STOPPED, depending on the
+action taken, on the Application Basic cluster of the Endpoint corresponding to the application on which
+the action was taken. The Status attribute shall be updated on any other application whose Status may
+have changed as a result of this command.
+
+This command returns a Launcher Response.
+
+###### See
+
+MatterSpecification.v11.Cluster § 6.4.4.3
+
+##### commands.launchApp
+
+> `readonly` **launchApp**: [`Command`](../../../interfaces/Command.md)\<[`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, [`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, `any`\>
+
+Upon receipt of this command, the server shall launch the application with optional data. The
+application shall be either
+
+  • the specified application, if the Application Platform feature is supported;
+
+  • otherwise the application corresponding to the endpoint.
+
+The endpoint shall launch and bring to foreground the requisite application if the application is not
+already launched and in foreground. The Status attribute shall be updated to ACTIVE_VISIBLE_FOCUS on the
+Application Basic cluster of the Endpoint corresponding to the launched application. The Status
+attribute shall be updated on any other application whose Status may have changed as a result of this
+command. The CurrentApp attribute, if supported, shall be updated to reflect the new application in the
+foreground.
+
+This command returns a Launcher Response.
+
+###### See
+
+MatterSpecification.v11.Cluster § 6.4.4.1
+
+##### commands.stopApp
+
+> `readonly` **stopApp**: [`Command`](../../../interfaces/Command.md)\<[`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, [`TypeFromFields`](../../../../../tlv/export/README.md#typefromfieldsf)\<`object`\>, `any`\>
+
+Upon receipt of this command, the server shall stop the application if it is running. The application
+shall be either
+
+  • the specified application, if the Application Platform feature is supported;
+
+  • otherwise the application corresponding to the endpoint.
+
+The Status attribute shall be updated to STOPPED on the Application Basic cluster of the Endpoint
+corresponding to the stopped application. The Status attribute shall be updated on any other application
+whose Status may have changed as a result of this command.
+
+This command returns a Launcher Response.
+
+###### See
+
+MatterSpecification.v11.Cluster § 6.4.4.2
+
+##### features
+
+> `readonly` **features**: `object` = `Cluster.features`
+
+##### features.applicationPlatform
+
+> `readonly` **applicationPlatform**: [`BitFlag`](../../../../../schema/export/README.md#bitflag)
+
+ApplicationPlatform
+
+Support for attributes and commands required for endpoint to support launching any application within
+the supported application catalogs
+
+##### id
+
+> `readonly` **id**: [`Branded`](../../../../../util/export/README.md#brandedtb)\<`1292`, `"ClusterId"`\> = `Cluster.id`
+
+##### name
+
+> `readonly` **name**: `"ApplicationLauncher"` = `Cluster.name`
+
+##### revision
+
+> `readonly` **revision**: `1` = `Cluster.revision`
+
+#### Inherited from
+
+`Identity.with`
+
+#### Source
+
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:67](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L67)

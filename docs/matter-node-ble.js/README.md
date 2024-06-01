@@ -1,4 +1,6 @@
-@project-chip/matter-node-ble.js / [Exports](modules.md)
+**@project-chip/matter-node-ble.js** • [**Docs**](globals.md)
+
+***
 
 # matter-node-ble.js
 

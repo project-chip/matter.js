@@ -1,0 +1,242 @@
+[**@project-chip/matter.js**](../../../README.md) • **Docs**
+
+***
+
+[@project-chip/matter.js](../../../modules.md) / [cluster/export](../README.md) / SupportedEventClient
+
+# Class: SupportedEventClient\<T\>
+
+Special EventClient class to allow identifying events that are supported because reported by the Devices.
+
+## Extends
+
+- [`EventClient`](EventClient.md)\<`T`\>
+
+## Type parameters
+
+| Type parameter |
+| :------ |
+| `T` |
+
+## Constructors
+
+### new SupportedEventClient()
+
+> **new SupportedEventClient**\<`T`\>(`event`, `name`, `endpointId`, `clusterId`, `interactionClient`): [`SupportedEventClient`](SupportedEventClient.md)\<`T`\>
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `event` | [`Event`](../interfaces/Event.md)\<`T`, `any`\> |
+| `name` | `string` |
+| `endpointId` | [`EndpointNumber`](../../../datatype/export/README.md#endpointnumber) |
+| `clusterId` | [`ClusterId`](../../../datatype/export/README.md#clusterid) |
+| `interactionClient` | [`InteractionClient`](../../../protocol/interaction/export/classes/InteractionClient.md) |
+
+#### Returns
+
+[`SupportedEventClient`](SupportedEventClient.md)\<`T`\>
+
+#### Inherited from
+
+[`EventClient`](EventClient.md).[`constructor`](EventClient.md#constructors)
+
+#### Source
+
+[packages/matter.js/src/cluster/client/EventClient.ts:42](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/client/EventClient.ts#L42)
+
+## Properties
+
+### clusterId
+
+> `readonly` **clusterId**: [`ClusterId`](../../../datatype/export/README.md#clusterid)
+
+#### Inherited from
+
+[`EventClient`](EventClient.md).[`clusterId`](EventClient.md#clusterid)
+
+#### Source
+
+[packages/matter.js/src/cluster/client/EventClient.ts:46](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/client/EventClient.ts#L46)
+
+***
+
+### endpointId
+
+> `readonly` **endpointId**: [`EndpointNumber`](../../../datatype/export/README.md#endpointnumber)
+
+#### Inherited from
+
+[`EventClient`](EventClient.md).[`endpointId`](EventClient.md#endpointid)
+
+#### Source
+
+[packages/matter.js/src/cluster/client/EventClient.ts:45](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/client/EventClient.ts#L45)
+
+***
+
+### event
+
+> `readonly` **event**: [`Event`](../interfaces/Event.md)\<`T`, `any`\>
+
+#### Inherited from
+
+[`EventClient`](EventClient.md).[`event`](EventClient.md#event)
+
+#### Source
+
+[packages/matter.js/src/cluster/client/EventClient.ts:43](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/client/EventClient.ts#L43)
+
+***
+
+### id
+
+> `readonly` **id**: [`EventId`](../../../datatype/export/README.md#eventid)
+
+#### Inherited from
+
+[`EventClient`](EventClient.md).[`id`](EventClient.md#id)
+
+#### Source
+
+[packages/matter.js/src/cluster/client/EventClient.ts:40](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/client/EventClient.ts#L40)
+
+***
+
+### name
+
+> `readonly` **name**: `string`
+
+#### Inherited from
+
+[`EventClient`](EventClient.md).[`name`](EventClient.md#name)
+
+#### Source
+
+[packages/matter.js/src/cluster/client/EventClient.ts:44](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/client/EventClient.ts#L44)
+
+## Methods
+
+### addListener()
+
+> **addListener**(`listener`): `void`
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `listener` | (`newValue`) => `void` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`EventClient`](EventClient.md).[`addListener`](EventClient.md#addlistener)
+
+#### Source
+
+[packages/matter.js/src/cluster/client/EventClient.ts:91](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/client/EventClient.ts#L91)
+
+***
+
+### get()
+
+> **get**(`minimumEventNumber`?, `isFabricFiltered`?): `Promise`\<`undefined` \| [`DecodedEventData`](../../../protocol/interaction/export/README.md#decodedeventdatat)\<`T`\>[]\>
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `minimumEventNumber`? | [`EventNumber`](../../../datatype/export/README.md#eventnumber) |
+| `isFabricFiltered`? | `boolean` |
+
+#### Returns
+
+`Promise`\<`undefined` \| [`DecodedEventData`](../../../protocol/interaction/export/README.md#decodedeventdatat)\<`T`\>[]\>
+
+#### Inherited from
+
+[`EventClient`](EventClient.md).[`get`](EventClient.md#get)
+
+#### Source
+
+[packages/matter.js/src/cluster/client/EventClient.ts:52](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/client/EventClient.ts#L52)
+
+***
+
+### removeListener()
+
+> **removeListener**(`listener`): `void`
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `listener` | (`newValue`) => `void` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`EventClient`](EventClient.md).[`removeListener`](EventClient.md#removelistener)
+
+#### Source
+
+[packages/matter.js/src/cluster/client/EventClient.ts:95](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/client/EventClient.ts#L95)
+
+***
+
+### subscribe()
+
+> **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `isUrgent`, `minimumEventNumber`?, `isFabricFiltered`?): `Promise`\<`void`\>
+
+#### Parameters
+
+| Parameter | Type | Default value |
+| :------ | :------ | :------ |
+| `minIntervalFloorSeconds` | `number` | `undefined` |
+| `maxIntervalCeilingSeconds` | `number` | `undefined` |
+| `isUrgent` | `boolean` | `true` |
+| `minimumEventNumber`? | [`EventNumber`](../../../datatype/export/README.md#eventnumber) | `undefined` |
+| `isFabricFiltered`? | `boolean` | `undefined` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Inherited from
+
+[`EventClient`](EventClient.md).[`subscribe`](EventClient.md#subscribe)
+
+#### Source
+
+[packages/matter.js/src/cluster/client/EventClient.ts:65](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/client/EventClient.ts#L65)
+
+***
+
+### update()
+
+> **update**(`newEvent`): `void`
+
+#### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `newEvent` | [`DecodedEventData`](../../../protocol/interaction/export/README.md#decodedeventdatat)\<`T`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`EventClient`](EventClient.md).[`update`](EventClient.md#update)
+
+#### Source
+
+[packages/matter.js/src/cluster/client/EventClient.ts:85](https://github.com/project-chip/matter.js/blob/7a8cbb56b87d4ccf34bec5a9a95ab40a1711324f/packages/matter.js/src/cluster/client/EventClient.ts#L85)
