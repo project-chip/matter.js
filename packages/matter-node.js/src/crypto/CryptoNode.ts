@@ -153,9 +153,8 @@ export class CryptoNode extends Crypto {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
 
-        // The key exported from Node doesn't include most-significant bytes
-        // that are 0.  This doesn't affect how we currently use keys but it's
-        // a little weird so 0 pad to avoid future confusion
+        // The key exported from Node doesn't include most-significant bytes that are 0.  This doesn't affect how we
+        // currently use keys but it's a little weird so 0 pad to avoid future confusion
         const privateKey = new ByteArray(CRYPTO_EC_KEY_BYTES);
         const nodePrivateKey = ecdh.getPrivateKey();
         privateKey.set(nodePrivateKey, CRYPTO_EC_KEY_BYTES - nodePrivateKey.length);

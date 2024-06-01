@@ -280,7 +280,7 @@ export class CommissioningServer extends MatterNode {
                 caseSessionsPerFabric: 3, // TODO get that limit from Sessionmanager or such or sync with it, add limit? Just a minima?
                 subscriptionsPerFabric: 3, // TODO get that limit from Interactionserver? Respect it? It is just a minima?
             },
-            serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`,
+            serialNumber: `matter.js-${Crypto.get().getRandomData(4).toHex()}`,
             specificationVersion: Specification.SPECIFICATION_VERSION,
             maxPathsPerInvoke: 1,
 

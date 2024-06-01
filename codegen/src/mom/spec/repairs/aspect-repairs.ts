@@ -66,7 +66,7 @@ export function repairConformanceRule(conformance?: string) {
 
 export function repairConformance(record: { name?: string; conformance?: string }) {
     if (record.name === "SCH" && record.conformance === "[Zigbee], D") {
-        // Assuming this is just laziness and will change until confirmed here:
+        // Assuming this is just laziness and will change until confirmed otherwise here:
         //
         //   https://github.com/espressif/esp-matter/issues/923#issuecomment-2105989691
         record.conformance = "O";
