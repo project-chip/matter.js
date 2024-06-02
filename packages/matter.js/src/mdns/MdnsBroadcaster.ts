@@ -89,7 +89,21 @@ export class MdnsBroadcaster {
         return instance;
     }
 
-    validatePairingInstructions(
+    #validateCommissioningData(data: CommissioningModeInstanceData) {
+        const { sessionIdleInterval, sessionActiveInterval, sessionActiveThreshold } = data;
+
+        if (sessionIdleInterval !== undefined && sessionIdleInterval > 3_600_000) {
+            throw new ImplementationError("Session Idle Interval must be less than 1 hour");
+        }
+        if (sessionActiveInterval !== undefined && sessionActiveInterval > 3_600_000) {
+            throw new ImplementationError("Session Active Interval must be less than 1 hour");
+        }
+        if (sessionActiveThreshold !== undefined && sessionActiveThreshold > 65_535) {
+            throw new ImplementationError("Session Active Threshold must be less than 65535 seconds");
+        }
+    }
+
+    #validatePairingInstructions(
         pairingHint: TypeFromPartialBitSchema<typeof PairingHintBitmap>,
         pairingInstructions: string,
     ) {
@@ -133,7 +147,11 @@ export class MdnsBroadcaster {
     async setCommissionMode(
         announcedNetPort: number,
         mode: number,
-        {
+        commissioningModeData: CommissioningModeInstanceData,
+    ) {
+        this.#validateCommissioningData(commissioningModeData); // Throws error if invalid!
+
+        const {
             name: deviceName,
             deviceType,
             vendorId,
@@ -144,8 +162,9 @@ export class MdnsBroadcaster {
             sessionActiveThreshold = SESSION_ACTIVE_THRESHOLD_MS,
             pairingHint = DEFAULT_PAIRING_HINT,
             pairingInstructions = "",
-        }: CommissioningModeInstanceData,
-    ) {
+        } = commissioningModeData;
+        this.#validatePairingInstructions(pairingHint, pairingInstructions); // Throws error if invalid!
+
         // When doing a commission announcement, we need to expire any previous commissioning announcements
         await this.expireCommissioningAnnouncement(announcedNetPort);
 
