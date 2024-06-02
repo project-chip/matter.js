@@ -937,6 +937,18 @@ export class MdnsScanner implements Scanner {
                 }
             }
         }
+
+        // Fill in some defaults for convenience
+        if (result.T === undefined) {
+            result.T = 0; // TCP not supported
+        } else if (result.T === 1) {
+            // Value 1 is reserved and should be handled as 0 according to Matter spec
+            result.T = 0; // TCP not supported
+        }
+        if (result.ICD === undefined) {
+            result.ICD = 0; // Device is not operating as Long Idle Time ICD
+        }
+
         return result;
     }
 
