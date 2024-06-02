@@ -49,28 +49,31 @@ export class MdnsServer {
         );
     }
 
-    private recordsGenerator = new Map<string, (netInterface: string) => DnsRecord<any>[]>();
-    private readonly records = new Cache<Map<string, DnsRecord<any>[]>>(
+    #recordsGenerator = new Map<string, (netInterface: string) => DnsRecord<any>[]>();
+    readonly #records = new Cache<Map<string, DnsRecord<any>[]>>(
         "MDNS discovery",
         (multicastInterface: string) => {
             const portTypeMap = new Map<string, DnsRecord<any>[]>();
-            for (const [announceTypePort, generator] of this.recordsGenerator) {
+            for (const [announceTypePort, generator] of this.#recordsGenerator) {
                 portTypeMap.set(announceTypePort, generator(multicastInterface));
             }
             return portTypeMap;
         },
         15 * 60 * 1000 /* 15mn - also matches maximum commissioning window time. */,
     );
-    private readonly recordLastSentAsMulticastAnswer = new Map<string, number>();
+    readonly #recordLastSentAsMulticastAnswer = new Map<string, number>();
 
-    constructor(
-        private readonly network: Network,
-        private readonly multicastServer: UdpMulticastServer,
-        private readonly netInterface: string | undefined,
-    ) {
+    readonly #network: Network;
+    readonly #multicastServer: UdpMulticastServer;
+    readonly #netInterface: string | undefined;
+
+    constructor(network: Network, multicastServer: UdpMulticastServer, netInterface: string | undefined) {
         multicastServer.onMessage(
-            (message, remoteIp, netInterface) => void this.handleDnsMessage(message, remoteIp, netInterface),
+            (message, remoteIp, netInterface) => void this.#handleDnsMessage(message, remoteIp, netInterface),
         );
+        this.#network = network;
+        this.#multicastServer = multicastServer;
+        this.#netInterface = netInterface;
     }
 
     buildDnsRecordKey(record: DnsRecord<any>, netInterface?: string) {
@@ -85,10 +88,10 @@ export class MdnsServer {
         return key.startsWith(`${port}-`);
     }
 
-    private async handleDnsMessage(messageBytes: ByteArray, remoteIp: string, netInterface: string) {
+    async #handleDnsMessage(messageBytes: ByteArray, remoteIp: string, netInterface: string) {
         // This message was on a subnet not supported by this device
         if (netInterface === undefined) return;
-        const records = this.records.get(netInterface);
+        const records = this.#records.get(netInterface);
 
         // No need to process the DNS message if there are no records to serve
         if (records.size === 0) return;
@@ -99,7 +102,7 @@ export class MdnsServer {
         if (messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery) return;
         if (queries.length === 0) return; // No queries to answer, can happen in a TruncatedQuery, let's ignore for now
         for (const portRecords of records.values()) {
-            let answers = queries.flatMap(query => this.queryRecords(query, portRecords));
+            let answers = queries.flatMap(query => this.#queryRecords(query, portRecords));
             if (answers.length === 0) continue;
 
             // Only send additional records if the query is not for A or AAAA records
@@ -128,7 +131,8 @@ export class MdnsServer {
             let uniCastResponse = queries.filter(query => !query.uniCastResponse).length === 0;
             const answersTimeSinceLastMultiCast = answers.map(answer => ({
                 timeSinceLastMultiCast:
-                    now - (this.recordLastSentAsMulticastAnswer.get(this.buildDnsRecordKey(answer, netInterface)) ?? 0),
+                    now -
+                    (this.#recordLastSentAsMulticastAnswer.get(this.buildDnsRecordKey(answer, netInterface)) ?? 0),
                 ttl: answer.ttl,
             }));
             if (
@@ -147,11 +151,11 @@ export class MdnsServer {
                 if (answers.length === 0) continue; // Nothing to send
 
                 answers.forEach(answer =>
-                    this.recordLastSentAsMulticastAnswer.set(this.buildDnsRecordKey(answer, netInterface), now),
+                    this.#recordLastSentAsMulticastAnswer.set(this.buildDnsRecordKey(answer, netInterface), now),
                 );
             }
 
-            this.sendRecords(
+            this.#sendRecords(
                 {
                     messageType: DnsMessageType.Response,
                     transactionId,
@@ -167,11 +171,11 @@ export class MdnsServer {
         }
     }
 
-    private async announceRecordsForInterface(netInterface: string, records: DnsRecord<any>[]) {
+    async #announceRecordsForInterface(netInterface: string, records: DnsRecord<any>[]) {
         const answers = records.filter(({ recordType }) => recordType === DnsRecordType.PTR);
         const additionalRecords = records.filter(({ recordType }) => recordType !== DnsRecordType.PTR);
 
-        await this.sendRecords(
+        await this.#sendRecords(
             {
                 messageType: DnsMessageType.Response,
                 answers,
@@ -181,7 +185,7 @@ export class MdnsServer {
         );
     }
 
-    private async sendRecords(dnsMessageData: Partial<DnsMessage>, netInterface: string, unicastTarget?: string) {
+    async #sendRecords(dnsMessageData: Partial<DnsMessage>, netInterface: string, unicastTarget?: string) {
         const { answers = [], additionalRecords = [] } = dnsMessageData;
         const answersToSend = [...answers];
         const additionalRecordsToSend = [...additionalRecords];
@@ -207,7 +211,11 @@ export class MdnsServer {
 
                 if (dnsMessageSize > MAX_MDNS_MESSAGE_SIZE) {
                     // New answer do not fit anymore, send out the message
-                    await this.multicastServer.send(DnsCodec.encode(dnsMessageDataToSend), netInterface, unicastTarget);
+                    await this.#multicastServer.send(
+                        DnsCodec.encode(dnsMessageDataToSend),
+                        netInterface,
+                        unicastTarget,
+                    );
 
                     // Reset the message, length counter and included answers to count for next message
                     dnsMessageDataToSend.answers.length = 0;
@@ -228,18 +236,18 @@ export class MdnsServer {
             dnsMessageDataToSend.additionalRecords.push(additionalRecordEncoded);
         }
 
-        await this.multicastServer.send(DnsCodec.encode(dnsMessageDataToSend), netInterface, unicastTarget);
+        await this.#multicastServer.send(DnsCodec.encode(dnsMessageDataToSend), netInterface, unicastTarget);
     }
 
     async announce(announcedNetPort?: number) {
         await Promise.all(
-            this.getMulticastInterfacesForAnnounce().map(async ({ name: netInterface }) => {
-                const records = this.records.get(netInterface);
+            this.#getMulticastInterfacesForAnnounce().map(async ({ name: netInterface }) => {
+                const records = this.#records.get(netInterface);
                 for (const [portType, portTypeRecords] of records) {
                     if (announcedNetPort !== undefined && !this.isKeyForPort(portType, announcedNetPort)) continue;
 
                     // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
-                    await this.announceRecordsForInterface(netInterface, portTypeRecords);
+                    await this.#announceRecordsForInterface(netInterface, portTypeRecords);
                     await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
@@ -248,8 +256,8 @@ export class MdnsServer {
 
     async expireAnnouncements(announcedNetPort?: number, type?: AnnouncementType) {
         await Promise.all(
-            this.records.keys().map(async netInterface => {
-                const records = this.records.get(netInterface);
+            this.#records.keys().map(async netInterface => {
+                const records = this.#records.get(netInterface);
                 for (const [portType, portTypeRecords] of records) {
                     if (announcedNetPort !== undefined && !this.isKeyForPort(portType, announcedNetPort)) continue;
                     if (
@@ -275,14 +283,14 @@ export class MdnsServer {
                     );
 
                     // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
-                    await this.announceRecordsForInterface(netInterface, portTypeRecords);
-                    this.recordsGenerator.delete(portType);
+                    await this.#announceRecordsForInterface(netInterface, portTypeRecords);
+                    this.#recordsGenerator.delete(portType);
                     await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
         );
-        await this.records.clear();
-        this.recordLastSentAsMulticastAnswer.clear();
+        await this.#records.clear();
+        this.#recordLastSentAsMulticastAnswer.clear();
     }
 
     async setRecordsGenerator(
@@ -290,22 +298,22 @@ export class MdnsServer {
         type: AnnouncementType,
         generator: (netInterface: string) => DnsRecord<any>[],
     ) {
-        await this.records.clear();
-        this.recordLastSentAsMulticastAnswer.clear();
-        this.recordsGenerator.set(this.buildTypePortKey(type, hostPort), generator);
+        await this.#records.clear();
+        this.#recordLastSentAsMulticastAnswer.clear();
+        this.#recordsGenerator.set(this.buildTypePortKey(type, hostPort), generator);
     }
 
     async close() {
-        await this.records.close();
-        this.recordLastSentAsMulticastAnswer.clear();
-        await this.multicastServer.close();
+        await this.#records.close();
+        this.#recordLastSentAsMulticastAnswer.clear();
+        await this.#multicastServer.close();
     }
 
-    private getMulticastInterfacesForAnnounce() {
-        return this.netInterface === undefined ? this.network.getNetInterfaces() : [{ name: this.netInterface }];
+    #getMulticastInterfacesForAnnounce() {
+        return this.#netInterface === undefined ? this.#network.getNetInterfaces() : [{ name: this.#netInterface }];
     }
 
-    private queryRecords({ name, recordType }: { name: string; recordType: DnsRecordType }, records: DnsRecord<any>[]) {
+    #queryRecords({ name, recordType }: { name: string; recordType: DnsRecordType }, records: DnsRecord<any>[]) {
         if (recordType === DnsRecordType.ANY) {
             return records.filter(record => record.name === name);
         } else {
