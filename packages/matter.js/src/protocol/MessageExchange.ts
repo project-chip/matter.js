@@ -114,57 +114,71 @@ export class MessageExchange<ContextT> {
         );
     }
 
-    private readonly activeIntervalMs: number;
-    private readonly idleIntervalMs: number;
-    private readonly activeThresholdMs: number;
-    private readonly maxTransmissions: number;
-    private readonly messagesQueue = new Queue<Message>();
-    private receivedMessageToAck: Message | undefined;
-    private receivedMessageAckTimer = Time.getTimer("Ack receipt timeout", MRP_STANDALONE_ACK_TIMEOUT_MS, () => {
-        if (this.receivedMessageToAck !== undefined) {
-            const messageToAck = this.receivedMessageToAck;
-            this.receivedMessageToAck = undefined;
+    readonly #activeIntervalMs: number;
+    readonly #idleIntervalMs: number;
+    readonly #activeThresholdMs: number;
+    readonly #maxTransmissions: number;
+    readonly #messagesQueue = new Queue<Message>();
+    #receivedMessageToAck: Message | undefined;
+    #receivedMessageAckTimer = Time.getTimer("Ack receipt timeout", MRP_STANDALONE_ACK_TIMEOUT_MS, () => {
+        if (this.#receivedMessageToAck !== undefined) {
+            const messageToAck = this.#receivedMessageToAck;
+            this.#receivedMessageToAck = undefined;
             // TODO: We need to track this promise later
             this.sendStandaloneAckForMessage(messageToAck).catch(error =>
                 logger.error("An error happened when sending a standalone ack", error),
             );
         }
     });
-    private sentMessageToAck: Message | undefined;
-    private sentMessageAckSuccess: ((...args: any[]) => void) | undefined;
-    private sentMessageAckFailure: ((error?: Error) => void) | undefined;
-    private retransmissionTimer: Timer | undefined;
-    private retransmissionCounter = 0;
-    private closeTimer: Timer | undefined;
-    private timedInteractionTimer: Timer | undefined;
+    #sentMessageToAck: Message | undefined;
+    #sentMessageAckSuccess: ((...args: any[]) => void) | undefined;
+    #sentMessageAckFailure: ((error?: Error) => void) | undefined;
+    #retransmissionTimer: Timer | undefined;
+    #retransmissionCounter = 0;
+    #closeTimer: Timer | undefined;
+    #timedInteractionTimer: Timer | undefined;
+
+    readonly #peerSessionId: number;
+    readonly #nodeId: NodeId | undefined;
+    readonly #peerNodeId: NodeId | undefined;
+    readonly #exchangeId: number;
+    readonly #protocolId: number;
+    readonly #closeCallback: () => Promise<void>;
 
     constructor(
         readonly session: Session<ContextT>,
         readonly channel: MessageChannel<ContextT>,
         readonly isInitiator: boolean,
-        private readonly peerSessionId: number,
-        private readonly nodeId: NodeId | undefined,
-        private readonly peerNodeId: NodeId | undefined,
-        private readonly exchangeId: number,
-        private readonly protocolId: number,
-        private readonly closeCallback: () => Promise<void>,
+        peerSessionId: number,
+        nodeId: NodeId | undefined,
+        peerNodeId: NodeId | undefined,
+        exchangeId: number,
+        protocolId: number,
+        closeCallback: () => Promise<void>,
     ) {
+        this.#peerSessionId = peerSessionId;
+        this.#nodeId = nodeId;
+        this.#peerNodeId = peerNodeId;
+        this.#exchangeId = exchangeId;
+        this.#protocolId = protocolId;
+        this.#closeCallback = closeCallback;
+
         const { activeIntervalMs, idleIntervalMs, activeThresholdMs } = session.getSessionParameters();
-        this.activeIntervalMs = activeIntervalMs ?? SESSION_ACTIVE_INTERVAL_MS;
-        this.idleIntervalMs = idleIntervalMs ?? SESSION_IDLE_INTERVAL_MS;
-        this.activeThresholdMs = activeThresholdMs ?? SESSION_ACTIVE_THRESHOLD_MS;
-        this.maxTransmissions = MRP_MAX_TRANSMISSIONS;
+        this.#activeIntervalMs = activeIntervalMs ?? SESSION_ACTIVE_INTERVAL_MS;
+        this.#idleIntervalMs = idleIntervalMs ?? SESSION_IDLE_INTERVAL_MS;
+        this.#activeThresholdMs = activeThresholdMs ?? SESSION_ACTIVE_THRESHOLD_MS;
+        this.#maxTransmissions = MRP_MAX_TRANSMISSIONS;
         logger.debug(
             "New exchange",
             Diagnostic.dict({
-                protocol: this.protocolId,
-                id: this.exchangeId,
+                protocol: this.#protocolId,
+                id: this.#exchangeId,
                 session: session.name,
-                peerSessionId: this.peerSessionId,
-                "active threshold ms": this.activeThresholdMs,
-                "active interval ms": this.activeIntervalMs,
-                "idle interval ms": this.idleIntervalMs,
-                maxTransmissions: this.maxTransmissions,
+                peerSessionId: this.#peerSessionId,
+                "active threshold ms": this.#activeThresholdMs,
+                "active interval ms": this.#activeIntervalMs,
+                "idle interval ms": this.#idleIntervalMs,
+                maxTransmissions: this.#maxTransmissions,
             }),
         );
     }
@@ -187,9 +201,9 @@ export class MessageExchange<ContextT> {
 
         logger.debug("Message «", MessageCodec.messageDiagnostics(message, isDuplicate));
 
-        if (protocolId !== this.protocolId) {
+        if (protocolId !== this.#protocolId) {
             throw new MatterFlowError(
-                `Drop received a message for an unexpected protocol. Expected: ${this.protocolId}, received: ${protocolId}`,
+                `Drop received a message for an unexpected protocol. Expected: ${this.#protocolId}, received: ${protocolId}`,
             );
         }
 
@@ -202,13 +216,13 @@ export class MessageExchange<ContextT> {
             }
             return;
         }
-        if (messageId === this.sentMessageToAck?.payloadHeader.ackedMessageId) {
+        if (messageId === this.#sentMessageToAck?.payloadHeader.ackedMessageId) {
             // Received a message retransmission, this means that the other side didn't get our ack
             // Resending the previous reply message which contains the ack
-            await this.channel.send(this.sentMessageToAck);
+            await this.channel.send(this.#sentMessageToAck);
             return;
         }
-        const sentMessageIdToAck = this.sentMessageToAck?.packetHeader.messageId;
+        const sentMessageIdToAck = this.#sentMessageToAck?.packetHeader.messageId;
         if (sentMessageIdToAck !== undefined) {
             if (ackedMessageId === undefined) {
                 // The message has no ack, but one previous message sent still needs to be acked.
@@ -224,13 +238,13 @@ export class MessageExchange<ContextT> {
                 }
             } else {
                 // The other side has received our previous message
-                this.retransmissionTimer?.stop();
-                this.retransmissionCounter = 0;
-                this.sentMessageAckSuccess?.(message);
-                this.sentMessageAckSuccess = undefined;
-                this.sentMessageAckFailure = undefined;
-                this.sentMessageToAck = undefined;
-                if (SecureChannelProtocol.isStandaloneAck(protocolId, messageType) && this.closeTimer !== undefined) {
+                this.#retransmissionTimer?.stop();
+                this.#retransmissionCounter = 0;
+                this.#sentMessageAckSuccess?.(message);
+                this.#sentMessageAckSuccess = undefined;
+                this.#sentMessageAckFailure = undefined;
+                this.#sentMessageToAck = undefined;
+                if (SecureChannelProtocol.isStandaloneAck(protocolId, messageType) && this.#closeTimer !== undefined) {
                     // All resubmissions done and in closing, no need to wait further
                     return this.closeInternal();
                 }
@@ -242,15 +256,15 @@ export class MessageExchange<ContextT> {
         }
         if (requiresAck) {
             // We still have a message to ack, so ack this one as standalone ack directly
-            if (this.receivedMessageToAck !== undefined) {
-                this.receivedMessageAckTimer.stop();
-                await this.sendStandaloneAckForMessage(this.receivedMessageToAck);
+            if (this.#receivedMessageToAck !== undefined) {
+                this.#receivedMessageAckTimer.stop();
+                await this.sendStandaloneAckForMessage(this.#receivedMessageToAck);
                 return;
             }
-            this.receivedMessageToAck = message;
-            this.receivedMessageAckTimer.start();
+            this.#receivedMessageToAck = message;
+            this.#receivedMessageAckTimer.start();
         }
-        await this.messagesQueue.write(message);
+        await this.#messagesQueue.write(message);
     }
 
     async send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
@@ -263,35 +277,35 @@ export class MessageExchange<ContextT> {
         if (messageType === MessageType.StandaloneAck && requiresAck) {
             throw new MatterFlowError("A standalone ack may not require acknowledgement.");
         }
-        if (this.sentMessageToAck !== undefined && messageType !== MessageType.StandaloneAck)
+        if (this.#sentMessageToAck !== undefined && messageType !== MessageType.StandaloneAck)
             throw new MatterFlowError("The previous message has not been acked yet, cannot send a new message.");
 
         this.session.notifyActivity(false);
 
         let ackedMessageId = includeAcknowledgeMessageId;
         if (ackedMessageId === undefined) {
-            ackedMessageId = this.receivedMessageToAck?.packetHeader.messageId;
+            ackedMessageId = this.#receivedMessageToAck?.packetHeader.messageId;
             if (ackedMessageId !== undefined && messageType !== MessageType.StandaloneAck) {
-                this.receivedMessageAckTimer.stop();
-                this.receivedMessageToAck = undefined;
+                this.#receivedMessageAckTimer.stop();
+                this.#receivedMessageToAck = undefined;
             }
         }
 
         // TODO Add support to also send controlMessages for Group messages, use different messagecounter!
         const message: Message = {
             packetHeader: {
-                sessionId: this.peerSessionId,
+                sessionId: this.#peerSessionId,
                 sessionType: SessionType.Unicast, // TODO: support multicast/groups
                 messageId: await this.session.getIncrementedMessageCounter(),
-                destNodeId: this.peerNodeId,
-                sourceNodeId: this.nodeId,
+                destNodeId: this.#peerNodeId,
+                sourceNodeId: this.#nodeId,
                 hasPrivacyEnhancements: false,
                 isControlMessage: false,
                 hasMessageExtensions: false,
             },
             payloadHeader: {
-                exchangeId: this.exchangeId,
-                protocolId: messageType === MessageType.StandaloneAck ? SECURE_CHANNEL_PROTOCOL_ID : this.protocolId,
+                exchangeId: this.#exchangeId,
+                protocolId: messageType === MessageType.StandaloneAck ? SECURE_CHANNEL_PROTOCOL_ID : this.#protocolId,
                 messageType,
                 isInitiatorMessage: this.isInitiator,
                 requiresAck: requiresAck ?? messageType !== MessageType.StandaloneAck,
@@ -303,28 +317,31 @@ export class MessageExchange<ContextT> {
 
         let ackPromise: Promise<Message> | undefined;
         if (message.payloadHeader.requiresAck) {
-            this.sentMessageToAck = message;
-            this.retransmissionTimer = Time.getTimer("Message retransmission", this.getResubmissionBackOffTime(0), () =>
-                this.retransmitMessage(
-                    message,
-                    minimumResponseTimeoutMs !== undefined ? Time.nowMs() + minimumResponseTimeoutMs : undefined,
-                ),
+            this.#sentMessageToAck = message;
+            this.#retransmissionTimer = Time.getTimer(
+                "Message retransmission",
+                this.getResubmissionBackOffTime(0),
+                () =>
+                    this.retransmitMessage(
+                        message,
+                        minimumResponseTimeoutMs !== undefined ? Time.nowMs() + minimumResponseTimeoutMs : undefined,
+                    ),
             );
             const { promise, resolver, rejecter } = createPromise<Message>();
             ackPromise = promise;
-            this.sentMessageAckSuccess = resolver;
-            this.sentMessageAckFailure = rejecter;
+            this.#sentMessageAckSuccess = resolver;
+            this.#sentMessageAckFailure = rejecter;
         }
 
         await this.channel.send(message);
 
         if (ackPromise !== undefined) {
-            this.retransmissionCounter = 0;
-            this.retransmissionTimer?.start();
+            this.#retransmissionCounter = 0;
+            this.#retransmissionTimer?.start();
             // Await Response to be received (or Message retransmit limit reached which rejects the promise)
             const responseMessage = await ackPromise;
-            this.sentMessageAckSuccess = undefined;
-            this.sentMessageAckFailure = undefined;
+            this.#sentMessageAckSuccess = undefined;
+            this.#sentMessageAckFailure = undefined;
             // If we only expect an Ack without data but got data, throw an error
             const {
                 payloadHeader: { protocolId, messageType },
@@ -336,11 +353,11 @@ export class MessageExchange<ContextT> {
     }
 
     nextMessage() {
-        return this.messagesQueue.read();
+        return this.#messagesQueue.read();
     }
 
     async waitFor(messageType: number, timeoutMs = 180_000) {
-        const message = await this.messagesQueue.read(timeoutMs);
+        const message = await this.#messagesQueue.read(timeoutMs);
         const {
             payloadHeader: { messageType: receivedMessageType },
         } = message;
@@ -355,7 +372,7 @@ export class MessageExchange<ContextT> {
 
     /** @see {@link MatterSpecification.v10.Core}, section 4.11.2.1 */
     private getResubmissionBackOffTime(retransmissionCount: number) {
-        const baseInterval = this.session.isPeerActive() ? this.activeIntervalMs : this.idleIntervalMs;
+        const baseInterval = this.session.isPeerActive() ? this.#activeIntervalMs : this.#idleIntervalMs;
         return Math.floor(
             MRP_BACKOFF_MARGIN *
                 baseInterval *
@@ -365,18 +382,18 @@ export class MessageExchange<ContextT> {
     }
 
     private retransmitMessage(message: Message, notTimeoutBeforeTimeMs?: number) {
-        this.retransmissionCounter++;
+        this.#retransmissionCounter++;
         if (
-            this.retransmissionCounter >= this.maxTransmissions &&
+            this.#retransmissionCounter >= this.#maxTransmissions &&
             (notTimeoutBeforeTimeMs === undefined || Time.nowMs() > notTimeoutBeforeTimeMs)
         ) {
-            if (this.sentMessageToAck !== undefined && this.sentMessageAckFailure !== undefined) {
-                this.receivedMessageToAck = undefined;
-                this.sentMessageAckFailure(new RetransmissionLimitReachedError());
-                this.sentMessageAckFailure = undefined;
-                this.sentMessageAckSuccess = undefined;
+            if (this.#sentMessageToAck !== undefined && this.#sentMessageAckFailure !== undefined) {
+                this.#receivedMessageToAck = undefined;
+                this.#sentMessageAckFailure(new RetransmissionLimitReachedError());
+                this.#sentMessageAckFailure = undefined;
+                this.#sentMessageAckSuccess = undefined;
             }
-            if (this.closeTimer !== undefined) {
+            if (this.#closeTimer !== undefined) {
                 // All resubmissions done and in closing, no need to wait further
                 this.closeInternal().catch(error => logger.error("An error happened when closing the exchange", error));
             }
@@ -385,18 +402,18 @@ export class MessageExchange<ContextT> {
 
         this.session.notifyActivity(false);
 
-        if (this.retransmissionCounter === 1) {
+        if (this.#retransmissionCounter === 1) {
             // this.session.context.announce(); // TODO: announce
         }
-        const resubmissionBackoffTime = this.getResubmissionBackOffTime(this.retransmissionCounter);
+        const resubmissionBackoffTime = this.getResubmissionBackOffTime(this.#retransmissionCounter);
         logger.debug(
-            `Resubmit message ${message.packetHeader.messageId} (retransmission attempt ${this.retransmissionCounter}, backoff time ${resubmissionBackoffTime}ms))`,
+            `Resubmit message ${message.packetHeader.messageId} (retransmission attempt ${this.#retransmissionCounter}, backoff time ${resubmissionBackoffTime}ms))`,
         );
 
         this.channel
             .send(message)
             .then(() => {
-                this.retransmissionTimer = Time.getTimer("Message retransmission", resubmissionBackoffTime, () =>
+                this.#retransmissionTimer = Time.getTimer("Message retransmission", resubmissionBackoffTime, () =>
                     this.retransmitMessage(message, notTimeoutBeforeTimeMs),
                 ).start();
             })
@@ -411,10 +428,10 @@ export class MessageExchange<ContextT> {
     }
 
     async destroy() {
-        if (this.closeTimer === undefined && this.receivedMessageToAck !== undefined) {
-            this.receivedMessageAckTimer.stop();
-            const messageToAck = this.receivedMessageToAck;
-            this.receivedMessageToAck = undefined;
+        if (this.#closeTimer === undefined && this.#receivedMessageToAck !== undefined) {
+            this.#receivedMessageAckTimer.stop();
+            const messageToAck = this.#receivedMessageToAck;
+            this.#receivedMessageToAck = undefined;
             try {
                 await this.sendStandaloneAckForMessage(messageToAck);
             } catch (error) {
@@ -425,56 +442,58 @@ export class MessageExchange<ContextT> {
     }
 
     startTimedInteraction(timeoutMs: number) {
-        if (this.timedInteractionTimer !== undefined && this.timedInteractionTimer.isRunning) {
-            this.timedInteractionTimer.stop();
+        if (this.#timedInteractionTimer !== undefined && this.#timedInteractionTimer.isRunning) {
+            this.#timedInteractionTimer.stop();
             throw new StatusResponseError(
                 "Timed interaction already running for this exchange",
                 StatusCode.InvalidAction,
             );
         }
         logger.debug(
-            `Starting timed interaction with Transaction ID ${this.exchangeId} for ${timeoutMs}ms from ${this.channel.name}`,
+            `Starting timed interaction with Transaction ID ${this.#exchangeId} for ${timeoutMs}ms from ${this.channel.name}`,
         );
-        this.timedInteractionTimer = Time.getTimer("Timed interaction", timeoutMs, () => {
+        this.#timedInteractionTimer = Time.getTimer("Timed interaction", timeoutMs, () => {
             logger.debug(
-                `Timed interaction with Transaction ID ${this.exchangeId} from ${this.channel.name} timed out`,
+                `Timed interaction with Transaction ID ${this.#exchangeId} from ${this.channel.name} timed out`,
             );
         }).start();
     }
 
     clearTimedInteraction() {
-        if (this.timedInteractionTimer !== undefined) {
-            logger.debug(`Clearing timed interaction with Transaction ID ${this.exchangeId} from ${this.channel.name}`);
-            this.timedInteractionTimer.stop();
-            this.timedInteractionTimer = undefined;
+        if (this.#timedInteractionTimer !== undefined) {
+            logger.debug(
+                `Clearing timed interaction with Transaction ID ${this.#exchangeId} from ${this.channel.name}`,
+            );
+            this.#timedInteractionTimer.stop();
+            this.#timedInteractionTimer = undefined;
         }
     }
 
     hasTimedInteraction() {
-        return this.timedInteractionTimer !== undefined;
+        return this.#timedInteractionTimer !== undefined;
     }
 
     hasActiveTimedInteraction() {
-        return this.timedInteractionTimer !== undefined && this.timedInteractionTimer.isRunning;
+        return this.#timedInteractionTimer !== undefined && this.#timedInteractionTimer.isRunning;
     }
 
     hasExpiredTimedInteraction() {
-        return this.timedInteractionTimer !== undefined && !this.timedInteractionTimer.isRunning;
+        return this.#timedInteractionTimer !== undefined && !this.#timedInteractionTimer.isRunning;
     }
 
     async close() {
-        if (this.closeTimer !== undefined) return; // close was already called
+        if (this.#closeTimer !== undefined) return; // close was already called
 
-        if (this.receivedMessageToAck !== undefined) {
-            this.receivedMessageAckTimer.stop();
-            const messageToAck = this.receivedMessageToAck;
-            this.receivedMessageToAck = undefined;
+        if (this.#receivedMessageToAck !== undefined) {
+            this.#receivedMessageAckTimer.stop();
+            const messageToAck = this.#receivedMessageToAck;
+            this.#receivedMessageToAck = undefined;
             try {
                 await this.sendStandaloneAckForMessage(messageToAck);
             } catch (error) {
                 logger.error("An error happened when closing the exchange", error);
             }
-        } else if (this.sentMessageToAck === undefined) {
+        } else if (this.#sentMessageToAck === undefined) {
             // No message left that we need to ack and no sent message left that waits for an ack, close directly
             return this.closeInternal();
         }
@@ -483,10 +502,10 @@ export class MessageExchange<ContextT> {
         // We might wait a bit longer then needed but because this is mainly a failsafe mechanism it is acceptable.
         // in normal case this timer is cancelled before it triggers when all retries are done.
         let maxResubmissionTime = 0;
-        for (let i = this.retransmissionCounter; i <= this.maxTransmissions; i++) {
+        for (let i = this.#retransmissionCounter; i <= this.#maxTransmissions; i++) {
             maxResubmissionTime += this.getResubmissionBackOffTime(i);
         }
-        this.closeTimer = Time.getTimer(
+        this.#closeTimer = Time.getTimer(
             "Message exchange cleanup",
             maxResubmissionTime,
             async () => await this.closeInternal(),
@@ -494,10 +513,10 @@ export class MessageExchange<ContextT> {
     }
 
     private async closeInternal() {
-        this.retransmissionTimer?.stop();
-        this.closeTimer?.stop();
-        this.timedInteractionTimer?.stop();
-        this.messagesQueue.close();
-        await this.closeCallback();
+        this.#retransmissionTimer?.stop();
+        this.#closeTimer?.stop();
+        this.#timedInteractionTimer?.stop();
+        this.#messagesQueue.close();
+        await this.#closeCallback();
     }
 }
