@@ -189,6 +189,13 @@ export class MessageExchange<ContextT> {
         } = message;
 
         logger.debug("Message «", MessageCodec.messageDiagnostics(message, isDuplicate));
+
+        if (protocolId !== this.protocolId) {
+            throw new MatterFlowError(
+                `Drop received a message for an unexpected protocol. Expected: ${this.protocolId}, received: ${protocolId}`,
+            );
+        }
+
         this.session.notifyActivity(true);
 
         if (isDuplicate) {
@@ -234,11 +241,6 @@ export class MessageExchange<ContextT> {
         if (SecureChannelProtocol.isStandaloneAck(protocolId, messageType)) {
             // Don't include standalone acks in the message stream
             return;
-        }
-        if (protocolId !== this.protocolId) {
-            throw new MatterFlowError(
-                `Received a message for an unexpected protocol. Expected: ${this.protocolId}, received: ${protocolId}`,
-            );
         }
         if (requiresAck) {
             // We still have a message to ack, so ack this one as standalone ack directly
