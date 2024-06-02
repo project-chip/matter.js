@@ -71,10 +71,6 @@ const MRP_BACKOFF_MARGIN = 1.1;
 /** The number of retransmissions before transitioning from linear to exponential backoff. */
 const MRP_BACKOFF_THRESHOLD = 1;
 
-/** @see {@link MatterSpecification.v12.Core}, section 4.11.2.1 */
-// TODO this is calculated too static and only valid for the session timing defaults. Adjust to be dynamic or really counter based
-const MAXIMUM_TRANSMISSION_TIME_MS = 9495; // 413 + 825 + 1485 + 2541 + 4231 ms as per specs
-
 /** @see {@link MatterSpecification.v12.Core}, section 4.11.8 */
 const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
 
@@ -138,6 +134,7 @@ export class MessageExchange<ContextT> {
     private sentMessageAckSuccess: ((...args: any[]) => void) | undefined;
     private sentMessageAckFailure: ((error?: Error) => void) | undefined;
     private retransmissionTimer: Timer | undefined;
+    private retransmissionCounter = 0;
     private closeTimer: Timer | undefined;
     private timedInteractionTimer: Timer | undefined;
 
@@ -228,6 +225,7 @@ export class MessageExchange<ContextT> {
             } else {
                 // The other side has received our previous message
                 this.retransmissionTimer?.stop();
+                this.retransmissionCounter = 0;
                 this.sentMessageAckSuccess?.(message);
                 this.sentMessageAckSuccess = undefined;
                 this.sentMessageAckFailure = undefined;
@@ -309,7 +307,6 @@ export class MessageExchange<ContextT> {
             this.retransmissionTimer = Time.getTimer("Message retransmission", this.getResubmissionBackOffTime(0), () =>
                 this.retransmitMessage(
                     message,
-                    0,
                     minimumResponseTimeoutMs !== undefined ? Time.nowMs() + minimumResponseTimeoutMs : undefined,
                 ),
             );
@@ -322,6 +319,7 @@ export class MessageExchange<ContextT> {
         await this.channel.send(message);
 
         if (ackPromise !== undefined) {
+            this.retransmissionCounter = 0;
             this.retransmissionTimer?.start();
             // Await Response to be received (or Message retransmit limit reached which rejects the promise)
             const responseMessage = await ackPromise;
@@ -366,10 +364,10 @@ export class MessageExchange<ContextT> {
         );
     }
 
-    private retransmitMessage(message: Message, retransmissionCount: number, notTimeoutBeforeTimeMs?: number) {
-        retransmissionCount++;
+    private retransmitMessage(message: Message, notTimeoutBeforeTimeMs?: number) {
+        this.retransmissionCounter++;
         if (
-            retransmissionCount >= this.maxTransmissions &&
+            this.retransmissionCounter >= this.maxTransmissions &&
             (notTimeoutBeforeTimeMs === undefined || Time.nowMs() > notTimeoutBeforeTimeMs)
         ) {
             if (this.sentMessageToAck !== undefined && this.sentMessageAckFailure !== undefined) {
@@ -387,19 +385,19 @@ export class MessageExchange<ContextT> {
 
         this.session.notifyActivity(false);
 
-        if (retransmissionCount === 1) {
+        if (this.retransmissionCounter === 1) {
             // this.session.context.announce(); // TODO: announce
         }
-        const resubmissionBackoffTime = this.getResubmissionBackOffTime(retransmissionCount);
+        const resubmissionBackoffTime = this.getResubmissionBackOffTime(this.retransmissionCounter);
         logger.debug(
-            `Resubmit message ${message.packetHeader.messageId} (retransmission attempt ${retransmissionCount}, next backoff time ${resubmissionBackoffTime}ms))`,
+            `Resubmit message ${message.packetHeader.messageId} (retransmission attempt ${this.retransmissionCounter}, backoff time ${resubmissionBackoffTime}ms))`,
         );
 
         this.channel
             .send(message)
             .then(() => {
                 this.retransmissionTimer = Time.getTimer("Message retransmission", resubmissionBackoffTime, () =>
-                    this.retransmitMessage(message, retransmissionCount, notTimeoutBeforeTimeMs),
+                    this.retransmitMessage(message, notTimeoutBeforeTimeMs),
                 ).start();
             })
             .catch(error => {
@@ -481,11 +479,16 @@ export class MessageExchange<ContextT> {
             return this.closeInternal();
         }
 
-        // Wait until all potential Resubmissions are done, also for Standalone-Acks
-        // TODO: Make this dynamic based on the values?
+        // Wait until all potential Resubmissions are done, also for Standalone-Acks.
+        // We might wait a bit longer then needed but because this is mainly a failsafe mechanism it is acceptable.
+        // in normal case this timer is cancelled before it triggers when all retries are done.
+        let maxResubmissionTime = 0;
+        for (let i = this.retransmissionCounter; i <= this.maxTransmissions; i++) {
+            maxResubmissionTime += this.getResubmissionBackOffTime(i);
+        }
         this.closeTimer = Time.getTimer(
             "Message exchange cleanup",
-            MAXIMUM_TRANSMISSION_TIME_MS,
+            maxResubmissionTime,
             async () => await this.closeInternal(),
         ).start();
     }
