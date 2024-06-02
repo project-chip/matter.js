@@ -12,13 +12,19 @@ import { MessageReceptionState } from "../protocol/MessageReceptionState.js";
 import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 
-/** Maximum sleep interval of node when in active mode. */
-export const SESSION_ACTIVE_INTERVAL_MS = 500;
+/**
+ * Minimum amount of time between sender retries when the destination node is Active. This SHALL be greater than or
+ * equal to the maximum amount of time a node may be non-responsive to incoming messages when Active.
+ */
+export const SESSION_ACTIVE_INTERVAL_MS = 300;
 
-/** Maximum sleep interval of node when in idle mode. */
-export const SESSION_IDLE_INTERVAL_MS = 300;
+/**
+ * Minimum amount of time between sender retries when the destination node is Idle. This SHALL be greater than or equal
+ * to the maximum amount of time a node may be non-responsive to incoming messages when Idle.
+ */
+export const SESSION_IDLE_INTERVAL_MS = 500;
 
-/** Minimum amount the node SHOULD stay awake after network activity. */
+/** Minimum amount of time the node SHOULD stay active after network activity. */
 export const SESSION_ACTIVE_THRESHOLD_MS = 4000;
 
 export interface SessionParameters {
