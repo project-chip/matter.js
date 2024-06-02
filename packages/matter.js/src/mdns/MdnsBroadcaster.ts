@@ -47,8 +47,8 @@ import { AnnouncementType, MdnsServer } from "./MdnsServer.js";
 
 const logger = Logger.get("MdnsBroadcaster");
 
-const TCP_SUPPORTED = 0;
-const ICD_SUPPORTED = 0; // TODO: Implement ICD later
+//const TCP_SUPPORTED = 0;
+//const ICD_SUPPORTED = 0; // TODO: Implement ICD later
 const DEFAULT_PAIRING_HINT = {
     powerCycle: true,
     deviceManual: true,
@@ -202,12 +202,12 @@ export class MdnsBroadcaster {
                     `SII=${sessionIdleInterval}` /* Session Idle Interval */,
                     `SAI=${sessionActiveInterval}` /* Session Active Interval */,
                     `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
-                    `T=${TCP_SUPPORTED}` /* TCP not supported */,
+                    //`T=${TCP_SUPPORTED}` /* TCP not supported */,
                     `D=${discriminator}` /* Discriminator */,
                     `CM=${mode}` /* Commission Mode */,
                     `PH=${PairingHintBitmapSchema.encode(pairingHint)}` /* Pairing Hint */,
                     `PI=${pairingInstructions}` /* Pairing Instruction */,
-                    `ICD=${ICD_SUPPORTED}` /* ICD not supported */,
+                    //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
                 ]),
             ];
             records.push(...this.getIpRecords(hostname, [...ipV6, ...ipV4]));
@@ -271,8 +271,8 @@ export class MdnsBroadcaster {
                         `SII=${sessionIdleInterval}` /* Session Idle Interval */,
                         `SAI=${sessionActiveInterval}` /* Session Active Interval */,
                         `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
-                        `T=${TCP_SUPPORTED}` /* TCP not supported */,
-                        `ICD=${ICD_SUPPORTED}` /* ICD not supported */,
+                        //`T=${TCP_SUPPORTED}` /* TCP not supported */,
+                        //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
                     ]),
                 ];
                 records.push(...fabricRecords);
@@ -327,8 +327,8 @@ export class MdnsBroadcaster {
                     `SII=${sessionIdleInterval}` /* Session Idle Interval */,
                     `SAI=${sessionActiveInterval}` /* Session Active Interval */,
                     `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
-                    `T=${TCP_SUPPORTED}` /* TCP not supported */,
-                    `ICD=${ICD_SUPPORTED}` /* ICD not supported */,
+                    //`T=${TCP_SUPPORTED}` /* TCP not supported */,
+                    //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
                 ]),
             ];
             if (deviceType !== undefined) {
