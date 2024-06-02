@@ -90,7 +90,11 @@ export class ExchangeManager<ContextT> {
                     return;
                 }
 
-                this.onMessage(socket, data).catch(error => logger.error(error));
+                try {
+                    this.onMessage(socket, data).catch(error => logger.error(error));
+                } catch (error) {
+                    logger.warn("Ignoring UDP message with error", error);
+                }
             }),
         );
     }
