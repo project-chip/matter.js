@@ -121,7 +121,7 @@ export class MessageExchange<ContextT> {
     private readonly activeIntervalMs: number;
     private readonly idleIntervalMs: number;
     private readonly activeThresholdMs: number;
-    private readonly retransmissionRetries: number;
+    private readonly maxTransmissions: number;
     private readonly messagesQueue = new Queue<Message>();
     private receivedMessageToAck: Message | undefined;
     private receivedMessageAckTimer = Time.getTimer("Ack receipt timeout", MRP_STANDALONE_ACK_TIMEOUT_MS, () => {
@@ -156,7 +156,7 @@ export class MessageExchange<ContextT> {
         this.activeIntervalMs = activeIntervalMs ?? SESSION_ACTIVE_INTERVAL_MS;
         this.idleIntervalMs = idleIntervalMs ?? SESSION_IDLE_INTERVAL_MS;
         this.activeThresholdMs = activeThresholdMs ?? SESSION_ACTIVE_THRESHOLD_MS;
-        this.retransmissionRetries = MRP_MAX_TRANSMISSIONS;
+        this.maxTransmissions = MRP_MAX_TRANSMISSIONS;
         logger.debug(
             "New exchange",
             Diagnostic.dict({
@@ -167,7 +167,7 @@ export class MessageExchange<ContextT> {
                 "active threshold ms": this.activeThresholdMs,
                 "active interval ms": this.activeIntervalMs,
                 "idle interval ms": this.idleIntervalMs,
-                retries: this.retransmissionRetries,
+                maxTransmissions: this.maxTransmissions,
             }),
         );
     }
@@ -369,7 +369,7 @@ export class MessageExchange<ContextT> {
     private retransmitMessage(message: Message, retransmissionCount: number, notTimeoutBeforeTimeMs?: number) {
         retransmissionCount++;
         if (
-            retransmissionCount >= this.retransmissionRetries &&
+            retransmissionCount >= this.maxTransmissions &&
             (notTimeoutBeforeTimeMs === undefined || Time.nowMs() > notTimeoutBeforeTimeMs)
         ) {
             if (this.sentMessageToAck !== undefined && this.sentMessageAckFailure !== undefined) {
