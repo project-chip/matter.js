@@ -12,12 +12,6 @@ import { MessageReceptionState } from "../protocol/MessageReceptionState.js";
 import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 
-/**
- * The maximum number of transmission attempts for a given reliable message. The sender MAY choose this value as it
- * sees fit.
- */
-export const MRP_MAX_TRANSMISSIONS = 5;
-
 /** Maximum sleep interval of node when in active mode. */
 export const SESSION_ACTIVE_INTERVAL_MS = 500;
 

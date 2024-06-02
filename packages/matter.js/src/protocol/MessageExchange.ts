@@ -10,7 +10,6 @@ import { NodeId } from "../datatype/NodeId.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import {
-    MRP_MAX_TRANSMISSIONS,
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,
     SESSION_IDLE_INTERVAL_MS,
@@ -58,6 +57,12 @@ export type ExchangeSendOptions = {
     /** Use the provided acknowledge MessageId instead checking the latest to send one */
     includeAcknowledgeMessageId?: number;
 };
+
+/**
+ * The maximum number of transmission attempts for a given reliable message. The sender MAY choose this value as it
+ * sees fit.
+ */
+const MRP_MAX_TRANSMISSIONS = 5;
 
 /** The base number for the exponential backoff equation. */
 const MRP_BACKOFF_BASE = 1.6;
