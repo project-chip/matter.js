@@ -10,8 +10,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 -->
 
 ### __WORK_IN_PROGRESS__
-
 -   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
+
 -   Matter.js Parser and Code generator:
     -   Feature: We now generate all Matter datatypes and elements. This includes some we defined by hand previously and those introduced by the Matter 1.2 and Matter 1.3 specifications.
     -   Feature: We now generate some datatypes that are not officially global or part of a specific cluster but are nevertheless defined in Matter specifications.
@@ -28,6 +28,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: Adds all elements (clusters, attributes, events, commands, device types and datatypes) introduced in Matter 1.2 and Matter 1.3.
 -   Matter-Core functionality:
     -   Feature: Increase Data Model revision to 17 (introduced by Matter 1.2)
+    -   Enhancement: Removes TCP and ICD TXT records from MDNS responses because both currently not supported and optional to reduce the size of the MDNS responses
 -   matter.js New API:
     -   Feature: Adds default implementations for i18n clusters including Localization, Time Format Localization and Unit Localization.
 -   matter.js Legacy API:
