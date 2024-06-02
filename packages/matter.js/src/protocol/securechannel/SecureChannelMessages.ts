@@ -60,10 +60,19 @@ export enum MessageType {
 }
 
 export enum ProtocolStatusCode {
+    /** Indication that the last session establishment message was successfully processed. */
     Success = 0x0000,
+
+    /** Failure to find a common set of shared roots. */
     NoSharedTrustRoots = 0x0001,
+
+    /** Generic failure during session establishment. */
     InvalidParam = 0x0002,
+
+    /** Indication that the sender will close the current session. See Section “CloseSession” for more details. */
     CloseSession = 0x0003,
+
+    /** Indication that the sender cannot currently fulfill the request. See Section “Busy” for more details. */
     Busy = 0x0004,
 }
 
