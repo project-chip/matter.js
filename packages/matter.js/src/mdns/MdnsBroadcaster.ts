@@ -127,7 +127,7 @@ export class MdnsBroadcaster {
         }
     }
 
-    private getIpRecords(hostname: string, ips: string[]) {
+    #getIpRecords(hostname: string, ips: string[]) {
         const records = new Array<DnsRecord<any>>();
         ips.forEach(ip => {
             if (isIPv6(ip)) {
@@ -182,8 +182,6 @@ export class MdnsBroadcaster {
         const commissionModeQname = getCommissioningModeQname();
         const deviceQname = getDeviceInstanceQname(instanceId);
 
-        this.validatePairingInstructions(pairingHint, pairingInstructions); // Throws error if invalid!
-
         await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
             const ipMac = this.#network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
@@ -229,7 +227,7 @@ export class MdnsBroadcaster {
                     //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
                 ]),
             ];
-            records.push(...this.getIpRecords(hostname, [...ipV6, ...ipV4]));
+            records.push(...this.#getIpRecords(hostname, [...ipV6, ...ipV4]));
             return records;
         });
     }
@@ -296,7 +294,7 @@ export class MdnsBroadcaster {
                 ];
                 records.push(...fabricRecords);
             });
-            records.push(...this.getIpRecords(hostname, [...ipV6, ...ipV4]));
+            records.push(...this.#getIpRecords(hostname, [...ipV6, ...ipV4]));
             return records;
         });
     }
@@ -355,7 +353,7 @@ export class MdnsBroadcaster {
                 records.push(PtrRecord(deviceTypeQname, deviceQname));
             }
 
-            records.push(...this.getIpRecords(hostname, [...ipV6, ...ipV4]));
+            records.push(...this.#getIpRecords(hostname, [...ipV6, ...ipV4]));
             return records;
         });
     }
