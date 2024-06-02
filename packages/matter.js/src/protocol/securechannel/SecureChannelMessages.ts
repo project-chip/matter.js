@@ -4,20 +4,59 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export const SECURE_CHANNEL_PROTOCOL_ID = 0x00000000;
+export const SECURE_CHANNEL_PROTOCOL_ID = 0x0000;
 
 export enum MessageType {
+    /**
+     * The Message Counter Synchronization Request message queries the current message counter from a peer to bootstrap
+     * replay protection.
+     */
+    MsgCounterSyncReq = 0x00,
+
+    /**
+     * The Message Counter Synchronization Response message provides the current message counter from a peer to
+     * bootstrap replay protection.
+     */
+    MsgCounterSyncRsp = 0x01,
+
+    /**
+     * This message is dedicated for the purpose of sending a stand-alone acknowledgement when there is no other data
+     * message available to piggyback an acknowledgement on top of.
+     */
     StandaloneAck = 0x10,
+
+    /** The request for PBKDF parameters necessary to complete the PASE protocol. */
     PbkdfParamRequest = 0x20,
+
+    /** The PBKDF parameters sent in response to PBKDFParamRequest during the PASE protocol. */
     PbkdfParamResponse = 0x21,
+
+    /** The first PAKE message of the PASE protocol. */
     PasePake1 = 0x22,
+
+    /** The second PAKE message of the PASE protocol. */
     PasePake2 = 0x23,
+
+    /** The third PAKE message of the PASE protocol. */
     PasePake3 = 0x24,
+
+    /** The first message of the CASE protocol. */
     Sigma1 = 0x30,
+
+    /** The second message of the CASE protocol. */
     Sigma2 = 0x31,
+
+    /** The third message of the CASE protocol. */
     Sigma3 = 0x32,
+
+    /** The second resumption message of the CASE protocol. */
     Sigma2Resume = 0x33,
+
+    /** The Status Report message encodes the result of an operation in the Secure Channel as well as other protocols. */
     StatusReport = 0x40,
+
+    /** The Check-in message notifies a client that the ICD is available for communication. */
+    IcdCheckInMessage = 0x50,
 }
 
 export enum ProtocolStatusCode {
