@@ -161,6 +161,10 @@ export class SecureSession<T> extends Session<T> {
                 idleIntervalMs: this.idleIntervalMs,
                 activeIntervalMs: this.activeIntervalMs,
                 activeThresholdMs: this.activeThresholdMs,
+                dataModelRevision: this.dataModelRevision,
+                interactionModelRevision: this.interactionModelRevision,
+                specificationVersion: this.specificationVersion,
+                maxPathsPerInvoke: this.maxPathsPerInvoke,
             }),
         );
     }
@@ -221,7 +225,7 @@ export class SecureSession<T> extends Session<T> {
         return { header, applicationPayload: Crypto.encrypt(this.#encryptKey, applicationPayload, nonce, headerBytes) };
     }
 
-    getAttestationChallengeKey(): ByteArray {
+    get attestationChallengeKey(): ByteArray {
         return this.#attestationKey;
     }
 

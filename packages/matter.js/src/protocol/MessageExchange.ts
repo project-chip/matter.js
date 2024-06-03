@@ -168,7 +168,7 @@ export class MessageExchange<ContextT> {
         this.#protocolId = protocolId;
         this.#closeCallback = closeCallback;
 
-        const { activeIntervalMs, idleIntervalMs, activeThresholdMs } = session.getSessionParameters();
+        const { activeIntervalMs, idleIntervalMs, activeThresholdMs } = session.parameters;
         this.#activeIntervalMs = activeIntervalMs ?? SESSION_ACTIVE_INTERVAL_MS;
         this.#idleIntervalMs = idleIntervalMs ?? SESSION_IDLE_INTERVAL_MS;
         this.#activeThresholdMs = activeThresholdMs ?? SESSION_ACTIVE_THRESHOLD_MS;

@@ -28,6 +28,7 @@ import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
+import { Specification } from "../../model/definitions/Specification.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
@@ -72,8 +73,14 @@ import { StatusCode, StatusResponseError } from "./StatusCode.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 import { SubscriptionOptions } from "./SubscriptionOptions.js";
 
+/** Protocol ID for the Interaction Protocol as per Matter specification. */
 export const INTERACTION_PROTOCOL_ID = 0x0001;
-export const INTERACTION_MODEL_REVISION = 11;
+
+/** Backward compatible re-export for Interaction Model version we support currently. */
+export const INTERACTION_MODEL_REVISION = Specification.INTERACTION_MODEL_REVISION;
+
+/** Number of Invoke Path setting from our Interaction model implementation. */
+export const MAX_PATHS_PER_INVOKE = 1;
 
 const logger = Logger.get("InteractionServer");
 
@@ -1066,8 +1073,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             }
         }
 
-        if (invokeRequests.length > 1) {
-            throw new StatusResponseError("Multi-command invoke requests are not supported", StatusCode.InvalidAction);
+        if (invokeRequests.length > MAX_PATHS_PER_INVOKE) {
+            throw new StatusResponseError(
+                `We only support ${MAX_PATHS_PER_INVOKE} invoke requests in one message. This message contained ${invokeRequests.length}`,
+                StatusCode.InvalidAction,
+            );
         }
 
         const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];

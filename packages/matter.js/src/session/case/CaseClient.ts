@@ -79,7 +79,7 @@ export class CaseClient {
             const { sessionId: peerSessionId, resumptionId, resumeMic } = sigma2Resume;
 
             const sessionParameters = {
-                ...exchange.session.getSessionParameters(),
+                ...exchange.session.parameters,
                 ...(resumptionSessionParams ?? {}),
             };
 
@@ -103,7 +103,7 @@ export class CaseClient {
             logger.info(`Case client: session resumed with ${messenger.getChannelName()}`);
 
             resumptionRecord.resumptionId = resumptionId; /* update resumptionId */
-            resumptionRecord.sessionParameters = secureSession.getSessionParameters(); /* update mrpParams */
+            resumptionRecord.sessionParameters = secureSession.parameters; /* update mrpParams */
         } else {
             // Process sigma2
             const {
@@ -114,7 +114,7 @@ export class CaseClient {
                 sessionParams: sigma2SessionParams,
             } = sigma2;
             const sessionParameters = {
-                ...exchange.session.getSessionParameters(),
+                ...exchange.session.parameters,
                 ...(sigma2SessionParams ?? {}),
             };
             const sharedSecret = Crypto.ecdhGenerateSecret(peerEcdhPublicKey, ecdh);
@@ -213,7 +213,7 @@ export class CaseClient {
                 peerNodeId,
                 sharedSecret,
                 resumptionId: peerResumptionId,
-                sessionParameters: secureSession.getSessionParameters(),
+                sessionParameters: secureSession.parameters,
             };
         }
 

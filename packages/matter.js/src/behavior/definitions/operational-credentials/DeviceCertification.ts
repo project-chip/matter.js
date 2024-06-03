@@ -23,7 +23,7 @@ export class DeviceCertification {
     #certificate?: ByteArray;
     #intermediateCertificate?: ByteArray;
     #declaration?: ByteArray;
-    #construction: AsyncConstruction<DeviceCertification>;
+    readonly #construction: AsyncConstruction<DeviceCertification>;
 
     get construction() {
         return this.#construction;
@@ -81,11 +81,11 @@ export class DeviceCertification {
     }
 
     sign(session: SecureSession<MatterDevice>, data: ByteArray) {
-        return Crypto.sign(this.#assertInitialized().privateKey, [data, session.getAttestationChallengeKey()]);
+        return Crypto.sign(this.#assertInitialized().privateKey, [data, session.attestationChallengeKey]);
     }
 
     /**
-     * Makes sure that the device certification is initialized and construction is completed and returns "Non undefined"
+     * Makes sure that the device certification is initialized and construction is completed and returns "Non-undefined"
      * values
      */
     #assertInitialized() {

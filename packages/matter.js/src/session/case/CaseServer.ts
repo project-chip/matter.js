@@ -237,7 +237,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 fabric,
                 sharedSecret,
                 resumptionId,
-                sessionParameters: secureSession.getSessionParameters(),
+                sessionParameters: secureSession.parameters,
                 caseAuthenticatedTags,
             };
 
