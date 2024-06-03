@@ -28,7 +28,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: Adds all elements (clusters, attributes, events, commands, device types and datatypes) introduced in Matter 1.2 and Matter 1.3.
 -   Matter-Core functionality:
     -   Feature: Increase Data Model revision to 17 (introduced by Matter 1.2)
+    -   Enhancement: Update Session parameters in PASE/CASE to match Matter 1.3 specification
     -   Enhancement: Removes TCP and ICD TXT records from MDNS responses because both currently not supported and optional to reduce the size of the MDNS responses
+    -   Enhancement/Fix: Several fixes and optimizations in Session and Message Exchange handling
 -   matter.js New API:
     -   Feature: Adds default implementations for i18n clusters including Localization, Time Format Localization and Unit Localization.
 -   matter.js Legacy API:
