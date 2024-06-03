@@ -181,7 +181,6 @@ export class SessionManager<ContextT> {
         this.#sessions.add(session);
         this.#sessionOpened.emit(session);
 
-        // TODO: Add a maximum of sessions and respect/close the "least recently used" session. See Core Specs 4.10.1.1
         return session;
     }
 

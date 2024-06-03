@@ -50,7 +50,6 @@ export type FabricJsonObject = {
     intermediateCACert: ByteArray | undefined;
     operationalCert: ByteArray;
     label: string;
-    caseAuthenticatedTags?: CaseAuthenticatedTag[];
     scopedClusterData: Map<number, Map<string, SupportedStorageTypes>>;
 };
 
@@ -125,7 +124,6 @@ export class Fabric {
         readonly intermediateCACert: ByteArray | undefined,
         readonly operationalCert: ByteArray,
         public label: string,
-        readonly caseAuthenticatedTags = new Array<CaseAuthenticatedTag>(),
         scopedClusterData?: Map<number, Map<string, SupportedStorageTypes>>,
     ) {
         this.#keyPair = keyPair;
@@ -148,7 +146,6 @@ export class Fabric {
             intermediateCACert: this.intermediateCACert,
             operationalCert: this.operationalCert,
             label: this.label,
-            caseAuthenticatedTags: this.caseAuthenticatedTags,
             scopedClusterData: this.#scopedClusterData,
         };
     }
@@ -169,7 +166,6 @@ export class Fabric {
             fabricObject.intermediateCACert,
             fabricObject.operationalCert,
             fabricObject.label,
-            fabricObject.caseAuthenticatedTags,
             fabricObject.scopedClusterData,
         );
     }
@@ -365,7 +361,6 @@ export class FabricBuilder {
     #identityProtectionKey?: ByteArray;
     #fabricIndex?: FabricIndex;
     #label = "";
-    #caseAuthenticatedTags = new Array<CaseAuthenticatedTag>();
 
     get publicKey() {
         return this.#keyPair.publicKey;
@@ -401,6 +396,9 @@ export class FabricBuilder {
         logger.debug(
             `FabricBuilder setOperationalCert: nodeId=${nodeId}, fabricId=${fabricId}, caseAuthenticatedTags=${caseAuthenticatedTags}`,
         );
+        if (caseAuthenticatedTags !== undefined) {
+            CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
+        }
 
         if (!ellipticCurvePublicKey.equals(this.#keyPair.publicKey)) {
             throw new PublicKeyError("Operational Certificate does not match public key.");
@@ -431,10 +429,7 @@ export class FabricBuilder {
         this.#intermediateCACert = intermediateCACert;
         this.#fabricId = FabricId(fabricId);
         this.#nodeId = nodeId;
-        if (caseAuthenticatedTags !== undefined) {
-            CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
-            this.#caseAuthenticatedTags = caseAuthenticatedTags;
-        }
+
         return this;
     }
 
@@ -516,7 +511,6 @@ export class FabricBuilder {
             this.#intermediateCACert,
             this.#operationalCert,
             this.#label,
-            this.#caseAuthenticatedTags,
         );
     }
 }

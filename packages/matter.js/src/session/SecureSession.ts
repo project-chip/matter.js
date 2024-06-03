@@ -150,7 +150,7 @@ export class SecureSession<T> extends Session<T> {
         this.#encryptKey = encryptKey;
         this.#attestationKey = attestationKey;
         this.#subscriptionChangedCallback = subscriptionChangedCallback;
-        this.#caseAuthenticatedTags = caseAuthenticatedTags ?? fabric?.caseAuthenticatedTags ?? [];
+        this.#caseAuthenticatedTags = caseAuthenticatedTags ?? [];
 
         fabric?.addSession(this);
 
@@ -238,7 +238,6 @@ export class SecureSession<T> extends Session<T> {
             throw new MatterFlowError("Session already has an associated Fabric. Cannot change this.");
         }
         this.#fabric = fabric;
-        this.#caseAuthenticatedTags = fabric.caseAuthenticatedTags;
     }
 
     get id() {
