@@ -13,13 +13,25 @@ import { TlvByteString } from "../../tlv/TlvString.js";
 /** @see {@link MatterSpecification.v12.Core} § 4.11.8 */
 export const TlvSessionParameters = TlvObject({
     /** Maximum sleep interval of node when in idle mode. */
-    idleIntervalMs: TlvOptionalField(1, TlvUInt32) /* default: 500ms */,
+    idleIntervalMs: TlvOptionalField(1, TlvUInt32) /* default: SESSION_IDLE_INTERVAL */,
 
     /** Maximum sleep interval of node when in active mode. */
-    activeIntervalMs: TlvOptionalField(2, TlvUInt32) /* default: 300ms */,
+    activeIntervalMs: TlvOptionalField(2, TlvUInt32) /* default: SESSION_ACTIVE_INTERVAL */,
 
     /** Minimum amount of time the node SHOULD stay active after network activity. */
-    activeThresholdMs: TlvOptionalField(3, TlvUInt16) /* default: 4000ms */,
+    activeThresholdMs: TlvOptionalField(3, TlvUInt16) /* default: SESSION_ACTIVE_THRESHOLD */,
+
+    /** Data model revision. */
+    dataModelRevision: TlvOptionalField(4, TlvUInt16) /* default: 16 OR 17, we choose 17 aka Matter 1.2 */,
+
+    /** Interaction model revision. */
+    interactionModelRevision: TlvOptionalField(5, TlvUInt16) /* default 10 OR 11, we choose 11 aka Matter 1.2 */,
+
+    /** Specification version. */
+    specificationVersion: TlvOptionalField(6, TlvUInt32) /* default: STRICTLY SMALLER THAN 0x01030000, we choose 0 */,
+
+    /** Maximum Paths pert Invoke */
+    maxPathsPerInvoke: TlvOptionalField(7, TlvUInt16) /* default: 1 */,
 });
 
 /** @see {@link MatterSpecification.v10.Core} § 4.13.1.2 */

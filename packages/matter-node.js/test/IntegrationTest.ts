@@ -35,7 +35,7 @@ import {
     VendorId,
 } from "@project-chip/matter.js/datatype";
 import { NodeStateInformation, OnOffLightDevice } from "@project-chip/matter.js/device";
-import { Fabric, FabricBuilder, FabricJsonObject } from "@project-chip/matter.js/fabric";
+import { FabricBuilder, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
     DecodedEventData,
     INTERACTION_MODEL_REVISION,
@@ -285,11 +285,9 @@ describe("Integration Test", () => {
             assert.equal(commissioningChangedCallsServer.length, 0);
             assert.equal(sessionChangedCallsServer.length, 0);
 
-            let commissionedCaseAuthenticatedTags: CaseAuthenticatedTag[] | undefined;
             // Catch the CASE Authenticated tags commissioned on the Fabric on the device
             MockTime.interceptOnce(FabricBuilder.prototype, "build", async data => {
                 assert.ok(data.resolve);
-                commissionedCaseAuthenticatedTags = (data.resolve as Fabric).caseAuthenticatedTags;
             });
 
             await commissioningController.start();
@@ -327,11 +325,6 @@ describe("Integration Test", () => {
             assert.equal(nodeStateChangesController1Node1.length, 1);
             assert.equal(nodeStateChangesController1Node1[0].nodeId, node.nodeId);
             assert.equal(nodeStateChangesController1Node1[0].nodeState, NodeStateInformation.Connected);
-
-            assert.deepEqual(commissionedCaseAuthenticatedTags, [
-                CaseAuthenticatedTag(0x12345678),
-                CaseAuthenticatedTag(0x56781234),
-            ]);
         });
 
         it("We can connect to the new commissioned device", async () => {

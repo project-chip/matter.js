@@ -36,7 +36,7 @@ export class ChannelManager {
     #findLeastActiveChannel(channels: MessageChannel<any>[]) {
         let oldest = channels[0];
         for (const channel of channels) {
-            if (channel.session.activeTimestamp < oldest.session.activeTimestamp) {
+            if (channel.session.timestamp < oldest.session.timestamp) {
                 oldest = channel;
             }
         }

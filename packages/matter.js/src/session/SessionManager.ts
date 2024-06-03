@@ -11,14 +11,26 @@ import { FabricId } from "../datatype/FabricId.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
+import { Specification } from "../model/definitions/Specification.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
+import { MAX_PATHS_PER_INVOKE } from "../protocol/interaction/InteractionServer.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { AsyncObservable, Observable } from "../util/Observable.js";
 import { BasicSet } from "../util/Set.js";
 import { InsecureSession } from "./InsecureSession.js";
 import { SecureSession } from "./SecureSession.js";
-import { SessionParameterOptions, SessionParameters } from "./Session.js";
+import {
+    FALLBACK_DATAMODEL_REVISION,
+    FALLBACK_INTERACTIONMODEL_REVISION,
+    FALLBACK_MAX_PATHS_PER_INVOKE,
+    FALLBACK_SPECIFICATION_VERSION,
+    SESSION_ACTIVE_INTERVAL_MS,
+    SESSION_ACTIVE_THRESHOLD_MS,
+    SESSION_IDLE_INTERVAL_MS,
+    SessionParameterOptions,
+    SessionParameters,
+} from "./Session.js";
 
 const logger = Logger.get("SessionManager");
 
@@ -43,6 +55,10 @@ type ResumptionStorageRecord = {
         idleIntervalMs: number;
         activeIntervalMs: number;
         activeThresholdMs: number;
+        dataModelRevision: number;
+        interactionModelRevision: number;
+        specificationVersion: number;
+        maxPathsPerInvoke: number;
     };
     caseAuthenticatedTags?: CaseAuthenticatedTag[];
 };
@@ -97,7 +113,14 @@ export class SessionManager<ContextT> {
                     this.#insecureSessions.delete(session.nodeId);
                 },
                 initiatorNodeId,
-                sessionParameters,
+                sessionParameters: {
+                    // We initiate the session, so we choose the parameters
+                    dataModelRevision: Specification.DATA_MODEL_REVISION,
+                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+                    specificationVersion: Specification.SPECIFICATION_VERSION, // TODO: formally wrong?
+                    maxPathsPerInvoke: MAX_PATHS_PER_INVOKE,
+                    ...sessionParameters,
+                },
                 isInitiator: isInitiator ?? false,
             });
 
@@ -158,7 +181,6 @@ export class SessionManager<ContextT> {
         this.#sessions.add(session);
         this.#sessionOpened.emit(session);
 
-        // TODO: Add a maximum of sessions and respect/close the "least recently used" session. See Core Specs 4.10.1.1
         return session;
     }
 
@@ -306,7 +328,15 @@ export class SessionManager<ContextT> {
                 resumptionId,
                 fabricId,
                 peerNodeId,
-                sessionParameters,
+                sessionParameters: {
+                    idleIntervalMs,
+                    activeIntervalMs,
+                    activeThresholdMs,
+                    dataModelRevision,
+                    interactionModelRevision,
+                    specificationVersion,
+                    maxPathsPerInvoke,
+                },
                 caseAuthenticatedTags,
             }) => {
                 logger.info("restoring resumption record for node", nodeId);
@@ -320,7 +350,16 @@ export class SessionManager<ContextT> {
                     resumptionId,
                     fabric,
                     peerNodeId,
-                    sessionParameters,
+                    sessionParameters: {
+                        // Make sure to initialize default values when restoring an older resumption record
+                        idleIntervalMs: idleIntervalMs ?? SESSION_IDLE_INTERVAL_MS,
+                        activeIntervalMs: activeIntervalMs ?? SESSION_ACTIVE_INTERVAL_MS,
+                        activeThresholdMs: activeThresholdMs ?? SESSION_ACTIVE_THRESHOLD_MS,
+                        dataModelRevision: dataModelRevision ?? FALLBACK_DATAMODEL_REVISION,
+                        interactionModelRevision: interactionModelRevision ?? FALLBACK_INTERACTIONMODEL_REVISION,
+                        specificationVersion: specificationVersion ?? FALLBACK_SPECIFICATION_VERSION,
+                        maxPathsPerInvoke: maxPathsPerInvoke ?? FALLBACK_MAX_PATHS_PER_INVOKE,
+                    },
                     caseAuthenticatedTags,
                 });
             },

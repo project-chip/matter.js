@@ -60,4 +60,9 @@ export namespace Specification {
      * Data model revision associated with the default revision of Matter.
      */
     export const DATA_MODEL_REVISION = 17;
+
+    /**
+     * Interaction model revision associated with the default revision of Matter.
+     */
+    export const INTERACTION_MODEL_REVISION = 11; // For now still Matter 1.2, change to 12 when relevant features are included
 }

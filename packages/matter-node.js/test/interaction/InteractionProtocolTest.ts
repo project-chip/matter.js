@@ -1417,7 +1417,7 @@ describe("InteractionProtocol", () => {
                         } as Message,
                     ),
                 {
-                    message: "(128) Multi-command invoke requests are not supported",
+                    message: "(128) Only 1 invoke requests are supported in one message. This message contains 6",
                 },
             );
 
