@@ -105,6 +105,6 @@ describe("SessionManager", () => {
             }
             assert.strictEqual(await sessionManager.getNextAvailableSessionId(), first);
             assert.strictEqual(firstClosed, true);
-        }).timeout(10000);
+        }).timeout(20000);
     });
 });

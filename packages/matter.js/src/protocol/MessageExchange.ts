@@ -206,7 +206,8 @@ export class MessageExchange<ContextT> {
 
         logger.debug("Message «", MessageCodec.messageDiagnostics(message, isDuplicate));
 
-        if (protocolId !== this.#protocolId) {
+        const isStandaloneAck = SecureChannelProtocol.isStandaloneAck(protocolId, messageType);
+        if (protocolId !== this.#protocolId && !isStandaloneAck) {
             throw new MatterFlowError(
                 `Drop received a message for an unexpected protocol. Expected: ${this.#protocolId}, received: ${protocolId}`,
             );
@@ -234,7 +235,7 @@ export class MessageExchange<ContextT> {
                 throw new MatterFlowError("Previous message ack is missing");
             } else if (ackedMessageId !== sentMessageIdToAck) {
                 // The message has an ack for another message.
-                if (SecureChannelProtocol.isStandaloneAck(protocolId, messageType)) {
+                if (isStandaloneAck) {
                     // Ignore if this is a standalone ack, probably this was a retransmission.
                 } else {
                     throw new MatterFlowError(
@@ -249,13 +250,13 @@ export class MessageExchange<ContextT> {
                 this.#sentMessageAckSuccess = undefined;
                 this.#sentMessageAckFailure = undefined;
                 this.#sentMessageToAck = undefined;
-                if (SecureChannelProtocol.isStandaloneAck(protocolId, messageType) && this.#closeTimer !== undefined) {
+                if (isStandaloneAck && this.#closeTimer !== undefined) {
                     // All resubmissions done and in closing, no need to wait further
                     return this.closeInternal();
                 }
             }
         }
-        if (SecureChannelProtocol.isStandaloneAck(protocolId, messageType)) {
+        if (isStandaloneAck) {
             // Don't include standalone acks in the message stream
             return;
         }

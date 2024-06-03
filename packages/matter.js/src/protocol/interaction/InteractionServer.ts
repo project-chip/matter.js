@@ -1075,7 +1075,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
         if (invokeRequests.length > MAX_PATHS_PER_INVOKE) {
             throw new StatusResponseError(
-                `We only support ${MAX_PATHS_PER_INVOKE} invoke requests in one message. This message contained ${invokeRequests.length}`,
+                `Only ${MAX_PATHS_PER_INVOKE} invoke requests are supported in one message. This message contains ${invokeRequests.length}`,
                 StatusCode.InvalidAction,
             );
         }

@@ -157,8 +157,8 @@ export class MdnsBroadcaster {
             vendorId,
             productId,
             discriminator,
-            sessionIdleInterval = SESSION_ACTIVE_INTERVAL_MS,
-            sessionActiveInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionIdleInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionActiveInterval = SESSION_ACTIVE_INTERVAL_MS,
             sessionActiveThreshold = SESSION_ACTIVE_THRESHOLD_MS,
             pairingHint = DEFAULT_PAIRING_HINT,
             pairingInstructions = "",
@@ -237,8 +237,8 @@ export class MdnsBroadcaster {
         announcedNetPort: number,
         fabrics: Fabric[],
         {
-            sessionIdleInterval = SESSION_ACTIVE_INTERVAL_MS,
-            sessionActiveInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionIdleInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionActiveInterval = SESSION_ACTIVE_INTERVAL_MS,
             sessionActiveThreshold = SESSION_ACTIVE_THRESHOLD_MS,
         }: OperationalInstanceData = {},
     ) {
@@ -307,8 +307,8 @@ export class MdnsBroadcaster {
             deviceType,
             vendorId,
             productId,
-            sessionIdleInterval = SESSION_ACTIVE_INTERVAL_MS,
-            sessionActiveInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionIdleInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionActiveInterval = SESSION_ACTIVE_INTERVAL_MS,
             sessionActiveThreshold = SESSION_ACTIVE_THRESHOLD_MS,
         }: CommissionerInstanceData,
     ) {
