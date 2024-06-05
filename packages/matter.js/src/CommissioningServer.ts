@@ -801,7 +801,6 @@ export class CommissioningServer extends MatterNode {
             discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
                 discoveryCapabilities ?? {
                     ble: bleEnabled,
-                    softAccessPoint: false,
                     onIpNetwork: true,
                 },
             ),
