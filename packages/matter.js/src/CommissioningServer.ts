@@ -659,10 +659,6 @@ export class CommissioningServer extends MatterNode {
                     throw error;
                 }
             }
-
-            if (limitTo?.softAccessPoint) {
-                logger.error("Advertising as SoftAP not implemented yet. Ignoring ...");
-            }
         }
 
         if (limitTo === undefined || limitTo.onIpNetwork) {

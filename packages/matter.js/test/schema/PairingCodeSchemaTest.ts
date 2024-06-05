@@ -22,7 +22,6 @@ const QR_CODE_DATA: QrCodeData = {
     discoveryCapabilities: DiscoveryCapabilitiesSchema.encode({
         onIpNetwork: false,
         ble: true,
-        softAccessPoint: false,
     }),
     discriminator: 2976,
     passcode: 34567890,

@@ -32,9 +32,6 @@ export enum CommissioningFlowType {
 
 /** See {@link MatterSpecification.v10.Core} § 5.1.3.1 Table 36 */
 export const DiscoveryCapabilitiesBitmap = {
-    /** Device supports hosting a Soft-AP when not commissioned. */
-    softAccessPoint: BitFlag(0),
-
     /** Device supports BLE for discovery when not commissioned. */
     ble: BitFlag(1),
 
