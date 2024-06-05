@@ -4,10 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError } from "../common/MatterError.js";
+import { ImplementationError, UnexpectedDataError } from "../common/MatterError.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Verhoeff } from "../math/Verhoeff.js";
+import { TlvAny } from "../tlv/TlvAny.js";
+import { TlvType } from "../tlv/TlvCodec.js";
+import { TlvUInt16, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
+import { TlvSchema } from "../tlv/TlvSchema.js";
+import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { deepCopy } from "../util/DeepCopy.js";
 import { Base38 } from "./Base38Schema.js";
 import {
     BitField,
@@ -51,6 +58,7 @@ const QrCodeDataSchema = ByteArrayBitmapSchema({
     discriminator: BitField(45, 12),
     passcode: BitField(57, 27),
 });
+
 export type QrCodeData = TypeFromBitmapSchema<typeof QrCodeDataSchema> & {
     /**
      * See {@link MatterSpecification.v13.Core} § 5.1.5
@@ -58,6 +66,29 @@ export type QrCodeData = TypeFromBitmapSchema<typeof QrCodeDataSchema> & {
      * All elements SHALL be housed within an anonymous top-level structure container.
      */
     tlvData?: ByteArray;
+};
+
+/**
+ * Default field definition that can be enhanced with manufacturer specific Fields for the TlvSchema to use.
+ * See {@link MatterSpecification.v13.Core} § 5.1.5
+ */
+export const QrCodeTlvDataDefaultFields = {
+    /** Device Serial # */
+    serialNumber: TlvOptionalField(0x00, TlvAny), // can be TlvString with up to 32 bytes or Unsigned Int up to 8 bytes
+    pbkdfIterations: TlvOptionalField(0x01, TlvUInt32.bound({ min: 1000, max: 100_000 })), // Or could also be UInt 16?
+    pbkdfSalt: TlvOptionalField(0x02, TlvByteString.bound({ minLength: 16, maxLength: 32 })),
+
+    /**
+     * Number of devices that are expected to be onboarded using this payload when using the Enhanced Commissioning
+     * Method
+     */
+    numberOfDevices: TlvOptionalField(0x03, TlvUInt8.bound({ min: 1 })),
+
+    /**
+     * Time, in seconds, during which the device(s) are expected to be commissionable using the Enhanced Commissioning
+     * Method
+     */
+    commissioningTimeout: TlvOptionalField(0x04, TlvUInt16),
 };
 
 const PREFIX = "MT:";
@@ -79,6 +110,60 @@ class QrPairingCodeSchema extends Schema<QrCodeData, string> {
             ...QrCodeDataSchema.decode(data.slice(0, 11)),
             tlvData: data.length > 11 ? data.slice(11) : undefined, // TlvData (if any) is after the fixed-length data
         };
+    }
+
+    /**
+     * Decodes the TLV data from the QR code payload.
+     * This method especially also handles that an encoded serialNumber can be UTF-8-String or a Unsigned Integer.
+     *
+     * @param data Encoded TLV data
+     * @param schema The schema to use for decoding the TLV data, by default a schema with the QrCodeTlvDataDefaultFields is used
+     */
+    decodeTlvData(data: ByteArray, schema: TlvSchema<any> = TlvObject(QrCodeTlvDataDefaultFields)) {
+        const decoded = schema.decode(data);
+        if (decoded.serialNumber !== undefined) {
+            if (
+                !Array.isArray(decoded.serialNumber) ||
+                decoded.serialNumber.length !== 1 ||
+                decoded.serialNumber[0].typeLength === undefined ||
+                decoded.serialNumber[0].value === undefined
+            ) {
+                throw new UnexpectedDataError("Invalid serial number TLV data");
+            }
+            switch (decoded.serialNumber[0].typeLength.type) {
+                case TlvType.Utf8String:
+                case TlvType.UnsignedInt:
+                    decoded.serialNumber = decoded.serialNumber[0].value;
+                    break;
+                default:
+                    throw new UnexpectedDataError("Invalid serial number TLV data");
+            }
+        }
+        return decoded;
+    }
+
+    /**
+     * Encodes the TLV data for the QR code payload.
+     * This method especially also handles that an encoded serialNumber can be UTF-8-String or a Unsigned Integer.
+     *
+     * @param data Data object to encode
+     * @param schema The schema to use for encoding the TLV data, by default a schema with the QrCodeTlvDataDefaultFields is used
+     */
+    encodeTlvData(data: Record<string, any>, schema: TlvSchema<any> = TlvObject(QrCodeTlvDataDefaultFields)) {
+        const dataToEncode = deepCopy(data);
+        if ("serialNumber" in dataToEncode && dataToEncode.serialNumber !== undefined) {
+            switch (typeof dataToEncode.serialNumber) {
+                case "string":
+                    dataToEncode.serialNumber = TlvString.encodeTlv(dataToEncode.serialNumber);
+                    break;
+                case "number":
+                    dataToEncode.serialNumber = TlvUInt8.encodeTlv(dataToEncode.serialNumber);
+                    break;
+                default:
+                    throw new ImplementationError("Invalid serial number data");
+            }
+        }
+        return schema.encode(dataToEncode);
     }
 }
 

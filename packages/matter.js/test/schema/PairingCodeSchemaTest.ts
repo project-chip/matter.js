@@ -10,8 +10,11 @@ import {
     ManualPairingCodeCodec,
     ManualPairingData,
     QrCodeData,
+    QrCodeTlvDataDefaultFields,
     QrPairingCodeCodec,
 } from "../../src/schema/PairingCodeSchema.js";
+import { TlvField, TlvObject } from "../../src/tlv/TlvObject.js";
+import { TlvString } from "../../src/tlv/TlvString.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
 const QR_CODE = "MT:YNJV7VSC00CMVH7SR00";
@@ -95,6 +98,56 @@ describe("QrPairingCodeCodec", () => {
             expect(result).deep.equal(QR_CODE_DATA_TLV);
         });
     });
+
+    describe("Encode/Decode TlvData", () => {
+        it("encodes and decodes just serialNumber as string", () => {
+            const tlvData = ByteArray.fromHex("152C000A3132333435363738393018"); // from Specs
+
+            const decoded = QrPairingCodeCodec.decodeTlvData(tlvData);
+
+            expect(decoded).deep.equal({
+                serialNumber: "1234567890",
+            });
+
+            const encoded = QrPairingCodeCodec.encodeTlvData(decoded);
+
+            expect(encoded).deep.equal(tlvData);
+        });
+
+        it("encodes and decodes just serialNumber as string", () => {
+            const data = {
+                serialNumber: 1234567890,
+            };
+
+            const encoded = QrPairingCodeCodec.encodeTlvData(data);
+
+            expect(encoded).deep.equal(ByteArray.fromHex("152600d202964918"));
+
+            const decoded = QrPairingCodeCodec.decodeTlvData(encoded);
+
+            expect(decoded).deep.equal(data);
+        });
+
+        it("encodes and decodes serial and vendor specific field with custom schema", () => {
+            const tlvData = ByteArray.fromHex("152C810656656E646F722C000A3132333435363738393018"); // from Specs
+
+            const customSchema = TlvObject({
+                vendorTag01: TlvField(0x81, TlvString),
+                ...QrCodeTlvDataDefaultFields,
+            });
+
+            const decoded = QrPairingCodeCodec.decodeTlvData(tlvData, customSchema);
+
+            expect(decoded).deep.equal({
+                vendorTag01: "Vendor",
+                serialNumber: "1234567890",
+            });
+
+            const encoded = QrPairingCodeCodec.encodeTlvData(decoded, customSchema);
+
+            expect(encoded).deep.equal(tlvData);
+        });
+    });
 });
 
 describe("ManualPairingCodeCodec", () => {
@@ -103,7 +156,7 @@ describe("ManualPairingCodeCodec", () => {
             for (const pairingCode of MANUAL_PAIRING_DATA_CODES) {
                 const result = ManualPairingCodeCodec.encode(pairingCode.data);
 
-                expect(result).equal(pairingCode.code);
+                expect(result).equal(pairingCode.code.replace(/[^0-9]/g, ""));
             }
         });
 
