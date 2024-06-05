@@ -55,7 +55,7 @@ const MANUAL_PAIRING_DATA_CODES: Array<MANUAL_PAIRING_DATA_CODE> = [
             shortDiscriminator: 0,
             passcode: 12345678,
         },
-        code: "00852607537",
+        code: "0085 260 7537",
     },
     {
         data: {
@@ -63,7 +63,7 @@ const MANUAL_PAIRING_DATA_CODES: Array<MANUAL_PAIRING_DATA_CODE> = [
             shortDiscriminator: 7,
             passcode: 23456789,
         },
-        code: "16043714310",
+        code: "1604-371-4310",
     },
 ];
 
