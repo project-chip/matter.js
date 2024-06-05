@@ -791,20 +791,22 @@ export class CommissioningServer extends MatterNode {
             }
         }
 
-        const qrPairingCode = QrPairingCodeCodec.encode({
-            version: 0,
-            vendorId: vendorId,
-            productId,
-            flowType: this.flowType,
-            discriminator: this.discriminator,
-            passcode: this.passcode,
-            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
-                discoveryCapabilities ?? {
-                    ble: bleEnabled,
-                    onIpNetwork: true,
-                },
-            ),
-        });
+        const qrPairingCode = QrPairingCodeCodec.encode([
+            {
+                version: 0,
+                vendorId: vendorId,
+                productId,
+                flowType: this.flowType,
+                discriminator: this.discriminator,
+                passcode: this.passcode,
+                discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
+                    discoveryCapabilities ?? {
+                        ble: bleEnabled,
+                        onIpNetwork: true,
+                    },
+                ),
+            },
+        ]);
 
         return {
             manualPairingCode: ManualPairingCodeCodec.encode({

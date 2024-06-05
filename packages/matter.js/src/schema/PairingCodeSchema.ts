@@ -93,23 +93,36 @@ export const QrCodeTlvDataDefaultFields = {
 
 const PREFIX = "MT:";
 
-class QrPairingCodeSchema extends Schema<QrCodeData, string> {
-    protected encodeInternal(payloadData: QrCodeData): string {
-        const { tlvData } = payloadData;
-        const data =
-            tlvData !== undefined && tlvData.length > 0
-                ? ByteArray.concat(QrCodeDataSchema.encode(payloadData), tlvData)
-                : QrCodeDataSchema.encode(payloadData);
-        return PREFIX + Base38.encode(data);
+class QrPairingCodeSchema extends Schema<QrCodeData[], string> {
+    protected encodeInternal(payloadData: QrCodeData[]): string {
+        if (payloadData.length === 0) throw new ImplementationError("Provided Payload data is empty");
+        return (
+            PREFIX +
+            payloadData
+                .map(payloadData => {
+                    const { tlvData } = payloadData;
+                    const data =
+                        tlvData !== undefined && tlvData.length > 0
+                            ? ByteArray.concat(QrCodeDataSchema.encode(payloadData), tlvData)
+                            : QrCodeDataSchema.encode(payloadData);
+                    return Base38.encode(data);
+                })
+                .join("*")
+        );
     }
 
-    protected decodeInternal(encoded: string): QrCodeData {
+    protected decodeInternal(encoded: string): QrCodeData[] {
         if (!encoded.startsWith(PREFIX)) throw new UnexpectedDataError("The pairing code should start with MT:");
-        const data = Base38.decode(encoded.slice(PREFIX.length));
-        return {
-            ...QrCodeDataSchema.decode(data.slice(0, 11)),
-            tlvData: data.length > 11 ? data.slice(11) : undefined, // TlvData (if any) is after the fixed-length data
-        };
+        return encoded
+            .slice(PREFIX.length)
+            .split("*")
+            .map(encodedData => {
+                const data = Base38.decode(encodedData);
+                return {
+                    ...QrCodeDataSchema.decode(data.slice(0, 11)),
+                    tlvData: data.length > 11 ? data.slice(11) : undefined, // TlvData (if any) is after the fixed-length data
+                };
+            });
     }
 
     /**

@@ -32,11 +32,14 @@ const QR_CODE_DATA: QrCodeData = {
     tlvData: undefined,
 };
 
-const QR_CODE_TLV = "MT:YNJV7VSC00CMVH7E4810AK00";
-const QR_CODE_DATA_TLV: QrCodeData = {
+const QR_CODE_WITHTLV = "MT:YNJV7VSC00CMVH7E4810AK00";
+const QR_CODE_WITHTLV_DATA: QrCodeData = {
     ...QR_CODE_DATA,
     tlvData: ByteArray.fromHex("010203"),
 };
+
+const MULTI_QR_CODE = QR_CODE + "*" + QR_CODE_WITHTLV.slice(3);
+const MULTI_QR_CODE_DATA = [QR_CODE_DATA, QR_CODE_WITHTLV_DATA];
 
 type MANUAL_PAIRING_DATA_CODE = {
     data: ManualPairingData;
@@ -73,15 +76,21 @@ const MANUAL_PAIRING_DATA_CODES: Array<MANUAL_PAIRING_DATA_CODE> = [
 describe("QrPairingCodeCodec", () => {
     describe("encode", () => {
         it("encodes the data", () => {
-            const result = QrPairingCodeCodec.encode(QR_CODE_DATA);
+            const result = QrPairingCodeCodec.encode([QR_CODE_DATA]);
 
             expect(result).equal(QR_CODE);
         });
 
         it("encodes the data with TLV Data", () => {
-            const result = QrPairingCodeCodec.encode(QR_CODE_DATA_TLV);
+            const result = QrPairingCodeCodec.encode([QR_CODE_WITHTLV_DATA]);
 
-            expect(result).equal(QR_CODE_TLV);
+            expect(result).equal(QR_CODE_WITHTLV);
+        });
+
+        it("encodes the data of a multi qrcode", () => {
+            const result = QrPairingCodeCodec.encode(MULTI_QR_CODE_DATA);
+
+            expect(result).equal(MULTI_QR_CODE);
         });
     });
 
@@ -89,13 +98,19 @@ describe("QrPairingCodeCodec", () => {
         it("decodes the data", () => {
             const result = QrPairingCodeCodec.decode(QR_CODE);
 
-            expect(result).deep.equal(QR_CODE_DATA);
+            expect(result).deep.equal([QR_CODE_DATA]);
         });
 
         it("decodes the data with TLV Data", () => {
-            const result = QrPairingCodeCodec.decode(QR_CODE_TLV);
+            const result = QrPairingCodeCodec.decode(QR_CODE_WITHTLV);
 
-            expect(result).deep.equal(QR_CODE_DATA_TLV);
+            expect(result).deep.equal([QR_CODE_WITHTLV_DATA]);
+        });
+
+        it("decodes the data of a multi qrcode", () => {
+            const result = QrPairingCodeCodec.decode(MULTI_QR_CODE);
+
+            expect(result).deep.equal(MULTI_QR_CODE_DATA);
         });
     });
 
@@ -114,7 +129,7 @@ describe("QrPairingCodeCodec", () => {
             expect(encoded).deep.equal(tlvData);
         });
 
-        it("encodes and decodes just serialNumber as string", () => {
+        it("encodes and decodes just serialNumber as number", () => {
             const data = {
                 serialNumber: 1234567890,
             };
