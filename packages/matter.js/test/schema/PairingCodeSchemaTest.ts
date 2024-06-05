@@ -12,6 +12,7 @@ import {
     QrCodeData,
     QrPairingCodeCodec,
 } from "../../src/schema/PairingCodeSchema.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
 
 const QR_CODE = "MT:YNJV7VSC00CMVH7SR00";
 const QR_CODE_DATA: QrCodeData = {
@@ -25,6 +26,13 @@ const QR_CODE_DATA: QrCodeData = {
     }),
     discriminator: 2976,
     passcode: 34567890,
+    tlvData: undefined,
+};
+
+const QR_CODE_TLV = "MT:YNJV7VSC00CMVH7E4810AK00";
+const QR_CODE_DATA_TLV: QrCodeData = {
+    ...QR_CODE_DATA,
+    tlvData: ByteArray.fromHex("010203"),
 };
 
 type MANUAL_PAIRING_DATA_CODE = {
@@ -66,6 +74,12 @@ describe("QrPairingCodeCodec", () => {
 
             expect(result).equal(QR_CODE);
         });
+
+        it("encodes the data with TLV Data", () => {
+            const result = QrPairingCodeCodec.encode(QR_CODE_DATA_TLV);
+
+            expect(result).equal(QR_CODE_TLV);
+        });
     });
 
     describe("decode", () => {
@@ -73,6 +87,12 @@ describe("QrPairingCodeCodec", () => {
             const result = QrPairingCodeCodec.decode(QR_CODE);
 
             expect(result).deep.equal(QR_CODE_DATA);
+        });
+
+        it("decodes the data with TLV Data", () => {
+            const result = QrPairingCodeCodec.decode(QR_CODE_TLV);
+
+            expect(result).deep.equal(QR_CODE_DATA_TLV);
         });
     });
 });
