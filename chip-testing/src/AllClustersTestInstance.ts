@@ -149,7 +149,7 @@ export class AllClustersTestInstance implements TestInstance {
                 },
                 productDescription: {
                     name: this.appName,
-                    deviceType: DeviceTypeId(0xbfff),
+                    deviceType: DeviceTypeId(0x0101),
                 },
                 accessControl: {
                     extension: [],
