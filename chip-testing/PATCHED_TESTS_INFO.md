@@ -5,7 +5,6 @@
 | Test                          | Reason                                                           |
 |-------------------------------|------------------------------------------------------------------|
 | TestAccessControlCluster.yaml | see https://github.com/project-chip/connectedhomeip/issues/33578 |
-| TestDiscovery.yaml            | see https://github.com/project-chip/connectedhomeip/issues/33697 |
 
 # CI-PICS
 
