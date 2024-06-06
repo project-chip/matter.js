@@ -731,17 +731,19 @@ export class PairedNode {
         });
 
         // TODO: If Timeout is shorter then 15 minutes set the timeout also in TlvData of QR-Code
-        const qrPairingCode = QrPairingCodeCodec.encode({
-            version: 0,
-            vendorId,
-            productId,
-            flowType: CommissioningFlowType.Standard,
-            discriminator: discriminator,
-            passcode: passcode,
-            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode({
-                onIpNetwork: true,
-            }),
-        });
+        const qrPairingCode = QrPairingCodeCodec.encode([
+            {
+                version: 0,
+                vendorId,
+                productId,
+                flowType: CommissioningFlowType.Standard,
+                discriminator: discriminator,
+                passcode: passcode,
+                discoveryCapabilities: DiscoveryCapabilitiesSchema.encode({
+                    onIpNetwork: true,
+                }),
+            },
+        ]);
 
         return {
             manualPairingCode: ManualPairingCodeCodec.encode({

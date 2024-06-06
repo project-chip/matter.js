@@ -659,10 +659,6 @@ export class CommissioningServer extends MatterNode {
                     throw error;
                 }
             }
-
-            if (limitTo?.softAccessPoint) {
-                logger.error("Advertising as SoftAP not implemented yet. Ignoring ...");
-            }
         }
 
         if (limitTo === undefined || limitTo.onIpNetwork) {
@@ -795,21 +791,22 @@ export class CommissioningServer extends MatterNode {
             }
         }
 
-        const qrPairingCode = QrPairingCodeCodec.encode({
-            version: 0,
-            vendorId: vendorId,
-            productId,
-            flowType: this.flowType,
-            discriminator: this.discriminator,
-            passcode: this.passcode,
-            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
-                discoveryCapabilities ?? {
-                    ble: bleEnabled,
-                    softAccessPoint: false,
-                    onIpNetwork: true,
-                },
-            ),
-        });
+        const qrPairingCode = QrPairingCodeCodec.encode([
+            {
+                version: 0,
+                vendorId: vendorId,
+                productId,
+                flowType: this.flowType,
+                discriminator: this.discriminator,
+                passcode: this.passcode,
+                discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
+                    discoveryCapabilities ?? {
+                        ble: bleEnabled,
+                        onIpNetwork: true,
+                    },
+                ),
+            },
+        ]);
 
         return {
             manualPairingCode: ManualPairingCodeCodec.encode({

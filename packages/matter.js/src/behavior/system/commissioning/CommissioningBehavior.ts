@@ -220,15 +220,17 @@ export class CommissioningBehavior extends Behavior {
         const comm = node.stateOf(CommissioningBehavior);
         const net = node.stateOf(NetworkServer);
 
-        const qrPairingCode = QrPairingCodeCodec.encode({
-            version: 0,
-            vendorId: bi.vendorId,
-            productId: bi.productId,
-            flowType: comm.flowType,
-            discriminator: comm.discriminator,
-            passcode: comm.passcode,
-            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(net.discoveryCapabilities),
-        });
+        const qrPairingCode = QrPairingCodeCodec.encode([
+            {
+                version: 0,
+                vendorId: bi.vendorId,
+                productId: bi.productId,
+                flowType: comm.flowType,
+                discriminator: comm.discriminator,
+                passcode: comm.passcode,
+                discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(net.discoveryCapabilities),
+            },
+        ]);
 
         return {
             manualPairingCode: ManualPairingCodeCodec.encode({

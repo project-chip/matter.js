@@ -51,10 +51,6 @@ export class NetworkServer extends NetworkBehavior {
             discoveryCaps.onIpNetwork = true;
         }
 
-        if (discoveryCaps.softAccessPoint) {
-            logger.warn("Soft access point commissioning is not supported yet");
-        }
-
         this.reactTo(this.agent.get(CommissioningBehavior).events.commissioned, this.#endUncommissionedMode);
 
         return super.initialize();
