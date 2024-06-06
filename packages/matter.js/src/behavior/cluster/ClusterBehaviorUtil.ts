@@ -179,7 +179,7 @@ function isGlobal(attribute: ClusterType.Attribute) {
  * Extend events with additional implementations.
  */
 function createDerivedEvents(cluster: ClusterType, base: Behavior.Type, stateNames: Set<string>) {
-    const names = new Set<string>();
+    const names = new Set<string>(["interactionBegin", "interactionEnd"]);
 
     const baseInstance = new base.Events() as unknown as Record<string, unknown>;
 

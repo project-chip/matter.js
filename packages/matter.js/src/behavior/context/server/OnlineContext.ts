@@ -9,6 +9,7 @@ import { AccessLevel } from "../../../cluster/Cluster.js";
 import type { Message } from "../../../codec/MessageCodec.js";
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
+import { NodeId } from "../../../datatype/NodeId.js";
 import { SubjectId } from "../../../datatype/SubjectId.js";
 import { Agent } from "../../../endpoint/Agent.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
@@ -16,9 +17,9 @@ import { EndpointInterface } from "../../../endpoint/EndpointInterface.js";
 import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
 import { EndpointType } from "../../../endpoint/type/EndpointType.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
+import { MessageExchange } from "../../../protocol/MessageExchange.js";
 import { StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
-import { Session } from "../../../session/Session.js";
 import { MaybePromise } from "../../../util/Promises.js";
 import { AccessControl } from "../../AccessControl.js";
 import { AccessControlServer } from "../../definitions/access-control/AccessControlServer.js";
@@ -40,7 +41,8 @@ export function OnlineContext(options: OnlineContext.Options) {
             let fabric: FabricIndex | undefined;
             let subject: SubjectId;
 
-            const { session } = options;
+            const { exchange } = options;
+            const session = exchange?.session;
 
             if (session) {
                 assertSecureSession(session);
@@ -50,7 +52,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                 subject = session.peerNodeId;
             } else {
                 fabric = options.fabric;
-                subject = options.subject;
+                subject = options.subject as NodeId;
             }
 
             if (subject === undefined) {
@@ -92,6 +94,8 @@ export function OnlineContext(options: OnlineContext.Options) {
                     fabric,
                     transaction,
                     trace,
+
+                    interactionComplete: exchange?.closed,
 
                     authorizedFor(desiredAccessLevel: AccessLevel, location?: AccessControl.Location) {
                         if (location === undefined) {
@@ -186,7 +190,7 @@ export namespace OnlineContext {
         endpoint?: EndpointInterface;
         root?: Endpoint<RootEndpoint>;
     } & (
-        | { session: Session<MatterDevice>; fabric?: undefined; subject?: undefined }
-        | { session?: undefined; fabric: FabricIndex; subject: SubjectId }
+        | { exchange: MessageExchange<MatterDevice>; fabric?: undefined; subject?: undefined }
+        | { exchange?: undefined; fabric: FabricIndex; subject: SubjectId }
     );
 }

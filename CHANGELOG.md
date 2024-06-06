@@ -9,7 +9,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 	### __WORK IN PROGRESS__
 -->
 
-### __WORK_IN_PROGRESS__
+### **WORK_IN_PROGRESS**
+
 -   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
 
 -   Matter.js Parser and Code generator:
@@ -33,13 +34,14 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: Removes TCP and ICD TXT records from MDNS responses because both currently not supported and optional to reduce the size of the MDNS responses
     -   Enhancement: Adds encoding and decoding of custom TlvData in QR-Codes including extensible Schema support for the defined Matter fields
     -   Enhancement: Adds encoding/decoding support for multiple device information in one QR-Code
-    -   Enhancement: Makes processing of manual Pairing codes more robust directly on decoding level  
+    -   Enhancement: Makes processing of manual Pairing codes more robust directly on decoding level
     -   Enhancement/Fix: Several fixes and optimizations in Session and Message Exchange handling
--   matter.js New API:
+-   matter.js API:
     -   Feature: Adds default implementations for i18n clusters including Localization, Time Format Localization and Unit Localization.
+    -   Feature: Adds interactionBegin and interactionEnd events for ClusterBehaviors to demarcate online interactions that mutate state.
 -   matter.js Legacy API:
     -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
-    -   Removal: We removed the old Scenes cluster implementation which was never used
+    -   Removal: We removed old Scenes cluster implementation which was never fully implemented or used by any Matter controller
 -   matter.js chip and python Testing:
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 
