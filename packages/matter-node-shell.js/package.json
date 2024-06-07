@@ -29,7 +29,7 @@
         "shell": "matter-run src/app.ts"
     },
     "bin": {
-        "shell": "./dist/cjs/app.js"
+        "matter-shell": "./dist/cjs/app.js"
     },
     "devDependencies": {
         "typescript": "~5.4.5"

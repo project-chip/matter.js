@@ -19,7 +19,7 @@ export async function main(argv = process.argv) {
     argv = argv.slice(3);
 
     if (script === undefined || script === "") {
-        console.log("Error: Script name required");
+        console.error("Error: Script name required");
         exit(1);
     }
 
@@ -27,13 +27,11 @@ export async function main(argv = process.argv) {
     let dir;
 
     if (script.match(/[\\/]node_modules[\\/].bin[\\/]/)) {
-        // When executing a script linked under node_modules, search for the
-        // project from cwd.  This occurs when running tooling such as
-        // "matter-test"
+        // When executing a script linked under node_modules, search for the project from cwd.  This occurs when running
+        // tooling such as "matter-test"
         dir = process.cwd();
     } else {
-        // When executing outside of node modules we want to build the project
-        // containing the script
+        // When executing outside of node modules we want to build the project containing the script
         dir = dirname(script);
     }
 
@@ -49,11 +47,16 @@ export async function main(argv = process.argv) {
         exit(2);
     }
 
-    // TODO - should we do a full build of dependencies unconditionally or
-    // as an option?  Currently doing the former
+    // Currently we build package and dependencies unconditionally before running
     const builder = new Builder();
     const dependencies = await Graph.forProject(dir);
-    await dependencies.build(builder, false);
+    if (dependencies) {
+        // Project is in a workspace; build along with dependencies from the same workspace
+        await dependencies.build(builder, false);
+    } else {
+        // Project is not in a workspace; only build the project
+        await builder.build(project);
+    }
 
     script = project.pkg.resolve(
         project.pkg

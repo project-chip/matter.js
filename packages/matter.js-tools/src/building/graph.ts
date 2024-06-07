@@ -6,7 +6,7 @@
 
 import mapWorkspaces from "@npmcli/map-workspaces";
 import colors from "ansi-colors";
-import { Package } from "../util/package.js";
+import { JsonNotFoundError, Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
 import { Builder } from "./builder.js";
 import { InternalBuildError } from "./error.js";
@@ -26,14 +26,25 @@ export class Graph {
         return await this.#createGraph(Object.values(nodeMap));
     }
 
-    static async forProject(path: string) {
-        const workspace = Package.workspaceFor(path);
+    static async forProject(path: string): Promise<Graph | undefined> {
+        let workspace;
+        try {
+            workspace = Package.workspaceFor(path);
+        } catch (e) {
+            if (e instanceof JsonNotFoundError) {
+                // Project is not in a workspace
+                return;
+            }
+            throw e;
+        }
+
         const nodeMap = await this.#loadNodes(workspace);
 
         const rootPkg = new Package({ path: path });
         const rootNode = nodeMap[rootPkg.json.name];
         if (!rootNode) {
-            throw new InternalBuildError(`Package ${rootPkg.json.name} is not in workspace`);
+            // Project resides under a workspace but is not part of the workspace
+            return;
         }
 
         const nodes = new Set<Graph.Node>();
