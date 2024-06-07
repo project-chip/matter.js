@@ -10,6 +10,8 @@ import { dirname, relative, resolve } from "path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
 import { Progress } from "./progress.js";
 
+export class JsonNotFoundError extends Error {}
+
 function findJson(filename: string, path: string = ".", title?: string) {
     path = resolve(path);
     while (true) {
@@ -23,7 +25,7 @@ function findJson(filename: string, path: string = ".", title?: string) {
         }
         const parent = dirname(path);
         if (parent === path) {
-            throw new Error(`Could not locate ${title ?? filename}`);
+            throw new JsonNotFoundError(`Could not locate ${title ?? filename}`);
         }
         path = parent;
     }
