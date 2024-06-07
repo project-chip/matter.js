@@ -331,12 +331,12 @@ export namespace ClusterBehavior {
         /**
          * Emitted when state associated with this behavior is first mutated by a specific interaction.
          */
-        interactionBegin = new Observable<[]>();
+        interactionBegin = Observable<[]>();
 
         /**
          * Emitted when a mutating interaction completes.
          */
-        interactionEnd = new AsyncObservable<[]>();
+        interactionEnd = AsyncObservable<[]>();
     }
 
     /**

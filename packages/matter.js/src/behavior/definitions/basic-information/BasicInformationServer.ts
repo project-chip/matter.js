@@ -66,7 +66,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         if (this.state.reachable !== undefined && this.events.reachable$Changed !== undefined) {
             // Manually enable the reachableChanged event if not yet existing when reachable attribute exists
             if (this.events.reachableChanged === undefined) {
-                this.events.reachableChanged = new Observable<
+                this.events.reachableChanged = Observable<
                     [payload: BasicInformation.ReachableChangedEvent, context: ActionContext],
                     void
                 >();

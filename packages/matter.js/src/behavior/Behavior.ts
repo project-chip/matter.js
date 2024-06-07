@@ -224,7 +224,7 @@ export abstract class Behavior {
      * Because of this: The reactor MUST be a real JS function - arrow functions will not work!
      */
     protected callback<A extends any[], R>(reactor: Reactor<A, R>, options?: Reactor.Options) {
-        const observable = new Observable<A, R>();
+        const observable = Observable<A, R>();
 
         this.reactTo(observable, reactor, options);
 

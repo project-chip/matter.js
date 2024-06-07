@@ -53,7 +53,7 @@ function MockContext(offline = true) {
 }
 
 class MockEndpoint {
-    event = new Observable<[value: string, context?: ActionContext], MaybePromise<string>>();
+    event = Observable<[value: string, context?: ActionContext], MaybePromise<string>>();
     env = new Environment("reactor-test");
     activity = new NodeActivity();
     backing = {

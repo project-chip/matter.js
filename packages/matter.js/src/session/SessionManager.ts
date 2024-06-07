@@ -70,9 +70,9 @@ export class SessionManager<ContextT> {
     #resumptionRecords = new Map<NodeId, ResumptionRecord>();
     readonly #sessionStorage: StorageContext;
     readonly #globalUnencryptedMessageCounter = new MessageCounter();
-    readonly #subscriptionsChanged = new Observable<[session: SecureSession<ContextT>]>();
-    readonly #sessionOpened = new Observable<[session: SecureSession<ContextT>]>();
-    readonly #sessionClosed = new AsyncObservable<[session: SecureSession<ContextT>], void>();
+    readonly #subscriptionsChanged = Observable<[session: SecureSession<ContextT>]>();
+    readonly #sessionOpened = Observable<[session: SecureSession<ContextT>]>();
+    readonly #sessionClosed = AsyncObservable<[session: SecureSession<ContextT>], void>();
 
     constructor(
         private readonly context: ContextT,

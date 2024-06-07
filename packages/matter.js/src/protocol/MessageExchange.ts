@@ -138,7 +138,7 @@ export class MessageExchange<ContextT> {
     readonly #peerNodeId: NodeId | undefined;
     readonly #exchangeId: number;
     readonly #protocolId: number;
-    readonly #closed = new AsyncObservable<[]>();
+    readonly #closed = AsyncObservable<[]>();
 
     constructor(
         readonly session: Session<ContextT>,

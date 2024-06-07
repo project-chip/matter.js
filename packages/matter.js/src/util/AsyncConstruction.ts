@@ -202,7 +202,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
 
         get change() {
             if (change === undefined) {
-                change = new Observable();
+                change = Observable();
             }
             return change;
         },
