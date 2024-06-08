@@ -108,7 +108,12 @@ export namespace Datasource {
     /**
      * Datasource events.
      */
-    export interface Events extends Record<string, Observable<Parameters<ValueObserver>, MaybePromise>> {}
+    export type Events = {
+        interactionBegin?: Observable<[]>;
+        interactionEnd?: Observable<[], MaybePromise>;
+    } & {
+        [K in `${string}$Changing` | `${string}$Changed`]: Observable<Parameters<ValueObserver>, MaybePromise>;
+    };
 
     /**
      * Datasource configuration options.
@@ -200,6 +205,7 @@ interface Internals extends Datasource.Options {
     values: Val.Struct;
     version: number;
     sessions?: Map<ValueSupervisor.Session, SessionContext>;
+    interactionObserver(): MaybePromise<void>;
 }
 
 /**
@@ -229,6 +235,21 @@ function configure(options: Datasource.Options): Internals {
         ...options,
         version: Crypto.getRandomUInt32(),
         values: values,
+
+        interactionObserver() {
+            function handleObserverError(error: any) {
+                logger.error(`Error in ${options.path} observer:`, error);
+            }
+
+            try {
+                const result = options.events?.interactionEnd?.emit();
+                if (MaybePromise.is(result)) {
+                    return result.then(handleObserverError);
+                }
+            } catch (e) {
+                handleObserverError(e);
+            }
+        },
     };
 }
 
@@ -385,6 +406,11 @@ function createSessionContext(resource: Resource, internals: Internals, session:
 
         // Enter exclusive mode.  This will throw if my lock is unavailable
         transaction.beginSync();
+
+        if (session.interactionComplete && !session.interactionComplete.isObservedBy(internals.interactionObserver)) {
+            internals.events?.interactionBegin?.emit();
+            session.interactionComplete.on(internals.interactionObserver);
+        }
     }
 
     // Need to invoke this anytime we change values

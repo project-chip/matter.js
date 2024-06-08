@@ -17,6 +17,7 @@ import {
 } from "../session/Session.js";
 import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { AsyncObservable } from "../util/Observable.js";
 import { createPromise } from "../util/Promises.js";
 import { Queue } from "../util/Queue.js";
 import { ChannelNotConnectedError, MessageChannel } from "./ExchangeManager.js";
@@ -80,11 +81,7 @@ const MRP_BACKOFF_THRESHOLD = 1;
 const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
 
 export class MessageExchange<ContextT> {
-    static fromInitialMessage<ContextT>(
-        channel: MessageChannel<ContextT>,
-        initialMessage: Message,
-        closeCallback: () => Promise<void>,
-    ) {
+    static fromInitialMessage<ContextT>(channel: MessageChannel<ContextT>, initialMessage: Message) {
         const { session } = channel;
         return new MessageExchange<ContextT>(
             session,
@@ -95,16 +92,10 @@ export class MessageExchange<ContextT> {
             initialMessage.packetHeader.sourceNodeId,
             initialMessage.payloadHeader.exchangeId,
             initialMessage.payloadHeader.protocolId,
-            closeCallback,
         );
     }
 
-    static initiate<ContextT>(
-        channel: MessageChannel<ContextT>,
-        exchangeId: number,
-        protocolId: number,
-        closeCallback: () => Promise<void>,
-    ) {
+    static initiate<ContextT>(channel: MessageChannel<ContextT>, exchangeId: number, protocolId: number) {
         const { session } = channel;
         return new MessageExchange(
             session,
@@ -115,7 +106,6 @@ export class MessageExchange<ContextT> {
             session.peerNodeId,
             exchangeId,
             protocolId,
-            closeCallback,
         );
     }
 
@@ -148,7 +138,7 @@ export class MessageExchange<ContextT> {
     readonly #peerNodeId: NodeId | undefined;
     readonly #exchangeId: number;
     readonly #protocolId: number;
-    readonly #closeCallback: () => Promise<void>;
+    readonly #closed = AsyncObservable<[]>();
 
     constructor(
         readonly session: Session<ContextT>,
@@ -159,14 +149,12 @@ export class MessageExchange<ContextT> {
         peerNodeId: NodeId | undefined,
         exchangeId: number,
         protocolId: number,
-        closeCallback: () => Promise<void>,
     ) {
         this.#peerSessionId = peerSessionId;
         this.#nodeId = nodeId;
         this.#peerNodeId = peerNodeId;
         this.#exchangeId = exchangeId;
         this.#protocolId = protocolId;
-        this.#closeCallback = closeCallback;
 
         const { activeIntervalMs, idleIntervalMs, activeThresholdMs } = session.parameters;
         this.#activeIntervalMs = activeIntervalMs ?? SESSION_ACTIVE_INTERVAL_MS;
@@ -186,6 +174,10 @@ export class MessageExchange<ContextT> {
                 maxTransmissions: this.#maxTransmissions,
             }),
         );
+    }
+
+    get closed() {
+        return this.#closed;
     }
 
     async sendStandaloneAckForMessage(message: Message) {
@@ -523,6 +515,6 @@ export class MessageExchange<ContextT> {
         this.#closeTimer?.stop();
         this.#timedInteractionTimer?.stop();
         this.#messagesQueue.close();
-        await this.#closeCallback();
+        await this.#closed.emit();
     }
 }

@@ -17,7 +17,7 @@ import type { ClusterOf } from "./ClusterBehaviorUtil.js";
 export type ClusterEvents<ClusterT extends ClusterType, BaseT extends Behavior.Type> =
     // Keep observables *not* supplied by the old cluster
     Omit<InstanceType<BaseT["Events"]>, keyof ClusterEvents.Properties<ClusterOf<BaseT>>> &
-        // Add observables supplied by the old cluster
+        // Add observables supplied by the new cluster
         ClusterEvents.Properties<ClusterT>;
 
 export namespace ClusterEvents {

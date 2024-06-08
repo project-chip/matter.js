@@ -141,14 +141,14 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
 
     get added() {
         if (this.#added === undefined) {
-            this.#added = new Observable();
+            this.#added = Observable();
         }
         return this.#added;
     }
 
     get deleted() {
         if (this.#deleted === undefined) {
-            this.#deleted = new Observable();
+            this.#deleted = Observable();
         }
         return this.#deleted;
     }

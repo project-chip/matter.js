@@ -132,6 +132,6 @@ export namespace IndexBehavior {
         /**
          * Emitted when the index changes.
          */
-        change = new Observable<[]>();
+        change = Observable<[]>();
     }
 }

@@ -24,14 +24,14 @@ export class EndpointLifecycle {
     #isTreeReady = false;
     #hasId = false;
     #hasNumber = false;
-    #installed = new Observable<[]>(error => this.emitError("installed", error));
-    #ready = new Observable<[]>(error => this.emitError("ready", error));
-    #treeReady = new Observable<[]>(error => this.emitError("treeReady", error));
-    #destroyed = new Observable<[]>(error => this.emitError("destroyed", error));
-    #changed = new Observable<[type: EndpointLifecycle.Change, endpoint: Endpoint]>(error =>
+    #installed = Observable<[]>(error => this.emitError("installed", error));
+    #ready = Observable<[]>(error => this.emitError("ready", error));
+    #treeReady = Observable<[]>(error => this.emitError("treeReady", error));
+    #destroyed = Observable<[]>(error => this.emitError("destroyed", error));
+    #changed = Observable<[type: EndpointLifecycle.Change, endpoint: Endpoint]>(error =>
         this.emitError("changed", error),
     );
-    #reset = new AsyncObservable<[]>();
+    #reset = AsyncObservable<[]>();
     #queuedUpdates?: Array<EndpointLifecycle.Change>;
 
     /**

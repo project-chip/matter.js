@@ -69,7 +69,7 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
         options: Partial<OnlineContext.Options>,
         actor: (agent: Agent.Instance<T>) => MaybePromise<R>,
     ): MaybePromise<R> {
-        if (!options.session) {
+        if (!options.exchange) {
             if (!options.fabric) {
                 options.fabric = FabricIndex.NO_FABRIC;
             }

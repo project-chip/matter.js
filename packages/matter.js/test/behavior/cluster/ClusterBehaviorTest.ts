@@ -33,7 +33,7 @@ class MyEventedBehavior extends MyBehavior {
 
 namespace MyEventedBehavior {
     export class Events extends MyBehavior.Events {
-        somethingHappened = new Observable<[]>();
+        somethingHappened = Observable<[]>();
     }
 }
 

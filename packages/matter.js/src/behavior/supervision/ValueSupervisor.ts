@@ -5,6 +5,7 @@
  */
 
 import { DataModelPath } from "../../endpoint/DataModelPath.js";
+import { AsyncObservable } from "../../util/Observable.js";
 import type { AccessControl } from "../AccessControl.js";
 import { ActionTracer } from "../context/ActionTracer.js";
 import type { Val } from "../state/Val.js";
@@ -84,6 +85,11 @@ export namespace ValueSupervisor {
          * deferred.
          */
         acceptInvalid?: boolean;
+
+        /**
+         * If present the session is associated with an online interaction.  Emits when the interaction ends.
+         */
+        interactionComplete?: AsyncObservable<[]>;
     }
 
     export type Validate = (value: Val, session: Session, location: ValidationLocation) => void;
