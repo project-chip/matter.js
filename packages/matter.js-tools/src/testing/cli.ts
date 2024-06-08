@@ -103,7 +103,11 @@ export async function main(argv = process.argv) {
 
     const builder = new Builder();
     const dependencies = await Graph.forProject(packageLocation);
-    await dependencies.build(builder, false);
+    if (dependencies) {
+        await dependencies.build(builder, false);
+    } else {
+        await builder.build(project);
+    }
 
     const progress = project.pkg.start("Testing");
     const runner = new TestRunner(project.pkg, progress, args);
