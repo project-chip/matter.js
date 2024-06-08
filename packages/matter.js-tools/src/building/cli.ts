@@ -55,7 +55,11 @@ export async function main(argv = process.argv) {
             break;
 
         case Mode.BuildProjectWithDependencies:
-            await (await Graph.forProject(args.prefix)).build(builder());
+            const graph = await Graph.forProject(args.prefix);
+            if (graph === undefined) {
+                throw new Error(`Cannot build with dependencies because ${args.prefix} is not in a workspace`);
+            }
+            await graph.build(builder());
             break;
 
         case Mode.BuildWorkspace:

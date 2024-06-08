@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 /**
  * @license
  * Copyright 2022-2023 Project CHIP Authors
