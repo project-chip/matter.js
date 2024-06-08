@@ -469,7 +469,7 @@ const translators: { [name: string]: Translator } = {
         });
 
         if (bool(source.getAttribute("singleton"))) {
-            cluster.singleton = true;
+            cluster.quality = "I";
         }
 
         for (const n of source.childNodes) {

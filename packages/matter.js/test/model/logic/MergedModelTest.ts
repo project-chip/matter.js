@@ -218,7 +218,6 @@ namespace Fixtures {
             name: "BasicInformation",
             id: 0x28,
             description: "Basic Information",
-            singleton: true,
             children: [
                 {
                     tag: "attribute",

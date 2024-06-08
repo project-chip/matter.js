@@ -30519,7 +30519,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "SoftwareDiagnostics", id: 0x34, classification: "node", pics: "DGSW",
+            name: "SoftwareDiagnostics", id: 0x34, classification: "node", pics: "DGSW", quality: "K",
             details: "The Software Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that " +
                 "may be used by a Node to assist a user or Administrator in diagnosing potential problems. The " +
                 "Software Diagnostics Cluster attempts to centralize all metrics that are relevant to the software " +
@@ -30669,7 +30669,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "ThreadNetworkDiagnostics", id: 0x35, classification: "node", pics: "DGTHREAD",
+            name: "ThreadNetworkDiagnostics", id: 0x35, classification: "node", pics: "DGTHREAD", quality: "K",
             details: "The Thread Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics " +
                 "that may be used by a Node to assist a user or Administrator in diagnosing potential problems. The " +
                 "Thread Network Diagnostics Cluster attempts to centralize all metrics that are relevant to a " +
@@ -31653,7 +31653,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "WiFiNetworkDiagnostics", id: 0x36, classification: "node", pics: "DGWIFI",
+            name: "WiFiNetworkDiagnostics", id: 0x36, classification: "node", pics: "DGWIFI", quality: "K",
             details: "The Wi-Fi Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics " +
                 "that may be used by a Node to assist a user or Administrator in diagnosing potential problems. The " +
                 "Wi-Fi Network Diagnostics Cluster attempts to centralize all metrics that are relevant to a " +
@@ -31975,7 +31975,7 @@ export const SpecMatter = Matter({
         }),
 
         Cluster({
-            name: "EthernetNetworkDiagnostics", id: 0x37, classification: "node", pics: "DGETH",
+            name: "EthernetNetworkDiagnostics", id: 0x37, classification: "node", pics: "DGETH", quality: "K",
             details: "The Ethernet Network Diagnostics Cluster provides a means to acquire standardized diagnostics " +
                 "metrics that may be used by a Node to assist a user or Administrator in diagnosing potential " +
                 "problems. The Ethernet Network Diagnostics Cluster attempts to centralize all metrics that are " +

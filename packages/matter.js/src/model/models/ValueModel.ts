@@ -288,7 +288,7 @@ export abstract class ValueModel extends Model implements ValueElement {
         }
 
         if (definition instanceof Model) {
-            Aspects.cloneAspects(definition, this, [CONSTRAINT, CONFORMANCE, ACCESS, QUALITY]);
+            Aspects.cloneAspects(definition, this, CONSTRAINT, CONFORMANCE, ACCESS, QUALITY);
         }
     }
 }
