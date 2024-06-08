@@ -11,6 +11,7 @@ import { ActionTracer } from "../../behavior/context/ActionTracer.js";
 import { NodeActivity } from "../../behavior/context/NodeActivity.js";
 import { OnlineContext } from "../../behavior/context/server/OnlineContext.js";
 import { AccessControlServer } from "../../behavior/definitions/access-control/AccessControlServer.js";
+import { AccessControlCluster } from "../../cluster/definitions/AccessControlCluster.js";
 import { AnyAttributeServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
@@ -48,6 +49,9 @@ interface WithActivity {
     [activityKey]?: NodeActivity.Activity;
 }
 
+const AclClusterId = AccessControlCluster.id;
+const AclAttributeId = AccessControlCluster.attributes.acl.id;
+
 /**
  * Wire up an InteractionServer that initializes an InvocationContext earlier than the cluster API supports.
  *
@@ -67,6 +71,7 @@ export class TransactionalInteractionServer extends InteractionServer {
     #activity: NodeActivity;
     #newActivityBlocked = false;
     #aclServer?: AccessControlServer;
+    #aclUpdateIsDelayed = false;
 
     constructor(endpoint: Endpoint<ServerNode.RootEndpoint>) {
         const structure = new InteractionEndpointStructure();
@@ -193,13 +198,13 @@ export class TransactionalInteractionServer extends InteractionServer {
         writeRequest: WriteRequest,
         message: Message,
     ): Promise<WriteResponse> {
-        // TODO: This is a hack to prevent the ACL from updating while we are in the middle of a write transaction and will
-        //  be removed again once we somehow handle relevant sub transactions
-        this.aclServer.aclUpdateDelayed = true;
-
         const result = await super.handleWriteRequest(exchange, writeRequest, message);
 
-        this.aclServer.aclUpdateDelayed = false;
+        // We delayed the ACL update during the write transaction, so we need to update it now that anything is written
+        if (this.#aclUpdateIsDelayed) {
+            this.aclServer.aclUpdateDelayed = false;
+            this.#aclUpdateIsDelayed = false;
+        }
         return result;
     }
 
@@ -216,7 +221,17 @@ export class TransactionalInteractionServer extends InteractionServer {
         const writeAttribute = () =>
             super.writeAttribute(path, attribute, value, exchange, message, endpoint, timed, isListWrite);
 
-        // TODO add handling for List writes that require sub transactions and remove the delayed ACL update
+        if (path.endpointId === 0 && path.clusterId === AclClusterId && path.attributeId === AclAttributeId) {
+            // This is a hack to prevent the ACL from updating while we are in the middle of a write transaction
+            // and is needed because Acl should not become effective during writing of the ACL itself.
+            this.aclServer.aclUpdateDelayed = true;
+            this.#aclUpdateIsDelayed = true;
+        } else if (this.#aclUpdateIsDelayed) {
+            // Ok it seems that acl was written, but we now write another path, so we can update Acl attribute now
+            this.aclServer.aclUpdateDelayed = false;
+            this.#aclUpdateIsDelayed = false;
+        }
+
         return OnlineContext({
             activity: (exchange as WithActivity)[activityKey],
             timed,
