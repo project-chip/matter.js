@@ -146,7 +146,7 @@ export namespace TimeFormatLocalization {
      */
     export enum Feature {
         /**
-         * CalendarFormat
+         * CalendarFormat (CALFMT)
          *
          * The Node can be configured to use different calendar formats when conveying values to a user.
          */

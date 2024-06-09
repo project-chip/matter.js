@@ -892,7 +892,7 @@ export namespace WindowCovering {
      */
     export enum Feature {
         /**
-         * Lift
+         * Lift (LF)
          *
          * The Lift feature applies to window coverings that lift up and down (e.g. for a roller shade, Up and Down is
          * lift Open and Close) or slide left to right (e.g. for a sliding curtain, Left and Right is lift Open and
@@ -903,7 +903,7 @@ export namespace WindowCovering {
         Lift = "Lift",
 
         /**
-         * Tilt
+         * Tilt (TL)
          *
          * The Tilt feature applies to window coverings with vertical or horizontal strips.
          *
@@ -912,14 +912,14 @@ export namespace WindowCovering {
         Tilt = "Tilt",
 
         /**
-         * PositionAwareLift
+         * PositionAwareLift (PA_LF)
          *
          * Position aware lift control is supported.
          */
         PositionAwareLift = "PositionAwareLift",
 
         /**
-         * AbsolutePosition
+         * AbsolutePosition (ABS)
          *
          * The percentage attributes shall indicate the position as a percentage between the InstalledOpenLimits and
          * InstalledClosedLimits attributes of the window covering starting at the open (0.00%).
@@ -932,7 +932,7 @@ export namespace WindowCovering {
         AbsolutePosition = "AbsolutePosition",
 
         /**
-         * PositionAwareTilt
+         * PositionAwareTilt (PA_TL)
          *
          * Position aware tilt control is supported.
          */

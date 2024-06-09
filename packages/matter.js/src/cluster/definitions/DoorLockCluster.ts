@@ -4009,7 +4009,7 @@ export namespace DoorLock {
      */
     export enum Feature {
         /**
-         * PinCredential
+         * PinCredential (PIN)
          *
          * If the User Feature is also supported then any PIN Code stored in the lock shall be associated with a User.
          *
@@ -4022,7 +4022,7 @@ export namespace DoorLock {
         PinCredential = "PinCredential",
 
         /**
-         * RfidCredential
+         * RfidCredential (RID)
          *
          * If the User Feature is also supported then any RFID credential stored in the lock shall be associated with a
          * User.
@@ -4037,7 +4037,7 @@ export namespace DoorLock {
         RfidCredential = "RfidCredential",
 
         /**
-         * FingerCredentials
+         * FingerCredentials (FGP)
          *
          * Currently the cluster only defines the metadata format for notifications when a fingerprint/ finger vein
          * credential is used to access the lock and doesn’t describe how to create fingerprint/finger vein
@@ -4053,7 +4053,7 @@ export namespace DoorLock {
         FingerCredentials = "FingerCredentials",
 
         /**
-         * Logging
+         * Logging (LOG)
          *
          * If Events are not supported the logging feature shall replace the Event reporting structure. If Events are
          * supported the logging feature shall NOT be supported.
@@ -4063,7 +4063,7 @@ export namespace DoorLock {
         Logging = "Logging",
 
         /**
-         * WeekDayAccessSchedules
+         * WeekDayAccessSchedules (WDSCH)
          *
          * If the User feature is supported then Week Day Schedules are applied to a User and not a credential.
          *
@@ -4077,7 +4077,7 @@ export namespace DoorLock {
         WeekDayAccessSchedules = "WeekDayAccessSchedules",
 
         /**
-         * DoorPositionSensor
+         * DoorPositionSensor (DPS)
          *
          * If this feature is supported this indicates that the lock has the ability to determine the position of the
          * door which is separate from the state of the lock.
@@ -4087,7 +4087,7 @@ export namespace DoorLock {
         DoorPositionSensor = "DoorPositionSensor",
 
         /**
-         * FaceCredentials
+         * FaceCredentials (FACE)
          *
          * Currently the cluster only defines the metadata format for notifications when a face recognition, iris, or
          * retina credential is used to access the lock and doesn’t describe how to create face recognition, iris, or
@@ -4102,7 +4102,7 @@ export namespace DoorLock {
         FaceCredentials = "FaceCredentials",
 
         /**
-         * CredentialOverTheAirAccess
+         * CredentialOverTheAirAccess (COTA)
          *
          * If this feature is supported then the lock supports the ability to verify a credential provided in a
          * lock/unlock command. Currently the cluster only supports providing the PIN credential to the lock/unlock
@@ -4113,7 +4113,7 @@ export namespace DoorLock {
         CredentialOverTheAirAccess = "CredentialOverTheAirAccess",
 
         /**
-         * User
+         * User (USR)
          *
          * If the User Feature is supported then a lock employs a User database. A User within the User database is
          * used to associate credentials and schedules to single user record within the lock. This also means the
@@ -4124,7 +4124,7 @@ export namespace DoorLock {
         User = "User",
 
         /**
-         * Notification
+         * Notification (NOT)
          *
          * This is a feature used before support of events. This feature supports notification commands and masks used
          * to filter these notifications.
@@ -4134,7 +4134,7 @@ export namespace DoorLock {
         Notification = "Notification",
 
         /**
-         * YearDayAccessSchedules
+         * YearDayAccessSchedules (YDSCH)
          *
          * If the User feature is supported then Year Day Schedules are applied to a User and not a credential.
          *
@@ -4147,7 +4147,7 @@ export namespace DoorLock {
         YearDayAccessSchedules = "YearDayAccessSchedules",
 
         /**
-         * HolidaySchedules
+         * HolidaySchedules (HDSCH)
          *
          * This feature is used to setup Holiday Schedule in the lock device. A Holiday Schedule sets a start and stop
          * end date/time for the lock to use the specified operating mode set by the Holiday Schedule.
@@ -4157,7 +4157,7 @@ export namespace DoorLock {
         HolidaySchedules = "HolidaySchedules",
 
         /**
-         * Unbolting
+         * Unbolting (UBOLT)
          *
          * Locks that support this feature differentiate between unbolting and unlocking. The Unbolt Door command
          * retracts the bolt without pulling the latch. The Unlock Door command fully unlocks the door by retracting

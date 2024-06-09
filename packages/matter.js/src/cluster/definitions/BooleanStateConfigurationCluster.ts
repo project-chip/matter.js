@@ -291,21 +291,21 @@ export namespace BooleanStateConfiguration {
      */
     export enum Feature {
         /**
-         * Visual
+         * Visual (VIS)
          *
          * Supports visual alarms
          */
         Visual = "Visual",
 
         /**
-         * Audible
+         * Audible (AUD)
          *
          * Supports audible alarms
          */
         Audible = "Audible",
 
         /**
-         * AlarmSuppress
+         * AlarmSuppress (SPRS)
          *
          * This feature shall indicate that the device is able to suppress the supported alarm modes, when the user
          * acknowledges the alarm. This is intended to stop visual and/or audible alarms, when the user has become
@@ -330,7 +330,7 @@ export namespace BooleanStateConfiguration {
         AlarmSuppress = "AlarmSuppress",
 
         /**
-         * SensitivityLevel
+         * SensitivityLevel (SENSLVL)
          *
          * Supports ability to set sensor sensitivity
          */

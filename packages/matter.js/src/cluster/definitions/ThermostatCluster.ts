@@ -1266,49 +1266,49 @@ export namespace Thermostat {
      */
     export enum Feature {
         /**
-         * Heating
+         * Heating (HEAT)
          *
          * Thermostat is capable of managing a heating device
          */
         Heating = "Heating",
 
         /**
-         * Cooling
+         * Cooling (COOL)
          *
          * Thermostat is capable of managing a cooling device
          */
         Cooling = "Cooling",
 
         /**
-         * Occupancy
+         * Occupancy (OCC)
          *
          * Supports Occupied and Unoccupied setpoints
          */
         Occupancy = "Occupancy",
 
         /**
-         * ScheduleConfiguration
+         * ScheduleConfiguration (SCH)
          *
          * Supports remote configuration of a weekly schedule of setpoint transitions
          */
         ScheduleConfiguration = "ScheduleConfiguration",
 
         /**
-         * Setback
+         * Setback (SB)
          *
          * Supports configurable setback (or span)
          */
         Setback = "Setback",
 
         /**
-         * AutoMode
+         * AutoMode (AUTO)
          *
          * Supports a System Mode of Auto
          */
         AutoMode = "AutoMode",
 
         /**
-         * LocalTemperatureNotExposed
+         * LocalTemperatureNotExposed (LTNE)
          *
          * This feature indicates that the Calculated Local Temperature used internally is unavailable to report
          * externally, for example due to the temperature control being done by a separate subsystem which does not

@@ -182,7 +182,7 @@ export namespace EnergyPreference {
      */
     export enum Feature {
         /**
-         * EnergyBalance
+         * EnergyBalance (BALA)
          *
          * This feature allows a user to select from a list of energy balances with associated descriptions of which
          * strategies a device will use to target the specified balance.
@@ -192,7 +192,7 @@ export namespace EnergyPreference {
         EnergyBalance = "EnergyBalance",
 
         /**
-         * LowPowerModeSensitivity
+         * LowPowerModeSensitivity (LPMS)
          *
          * This feature allows the user to select a condition or set of conditions which will cause the device to
          * switch to a mode using less power. For example, a device might provide a scale of durations that must elapse

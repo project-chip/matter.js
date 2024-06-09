@@ -832,7 +832,7 @@ export namespace ScenesManagement {
      */
     export enum Feature {
         /**
-         * SceneNames
+         * SceneNames (SN)
          *
          * This feature indicates the ability to store a name for a scene when a scene is added.
          *

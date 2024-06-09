@@ -1282,7 +1282,7 @@ export namespace DeviceEnergyManagement {
      */
     export enum Feature {
         /**
-         * PowerAdjustment
+         * PowerAdjustment (PA)
          *
          * For Energy Smart Appliances (ESA) the definition of being 'smart' mandates that they can report their
          * current power adjustment capability and have an EMS request a temporary adjustment. This may typically be to
@@ -1303,7 +1303,7 @@ export namespace DeviceEnergyManagement {
         PowerAdjustment = "PowerAdjustment",
 
         /**
-         * PowerForecastReporting
+         * PowerForecastReporting (PFR)
          *
          * For Energy Smart Appliances (ESA) the definition of being 'smart' implies that they can report their
          * indicative forecast power demands or generation, to a greater or lesser extent. For some ESAs this is highly
@@ -1347,7 +1347,7 @@ export namespace DeviceEnergyManagement {
         PowerForecastReporting = "PowerForecastReporting",
 
         /**
-         * StateForecastReporting
+         * StateForecastReporting (SFR)
          *
          * Some ESAs do not know their actual power consumption, but do know the state of operation. Like the
          * PowerForecastingReporting feature, this uses the same slot structure mechanism to indicate a change in state
@@ -1367,7 +1367,7 @@ export namespace DeviceEnergyManagement {
         StateForecastReporting = "StateForecastReporting",
 
         /**
-         * StartTimeAdjustment
+         * StartTimeAdjustment (STA)
          *
          * ESAs which support the Start Time Adjustment feature, allow an EMS to recommend a change to the start time
          * of the energy transfer that the ESA has previously suggested it would use.
@@ -1392,7 +1392,7 @@ export namespace DeviceEnergyManagement {
         StartTimeAdjustment = "StartTimeAdjustment",
 
         /**
-         * Pausable
+         * Pausable (PAU)
          *
          * ESAs which support the Pausable feature, allow an EMS to recommend a pause in the middle of a forecast power
          * profile that the ESA is currently using.
@@ -1417,7 +1417,7 @@ export namespace DeviceEnergyManagement {
         Pausable = "Pausable",
 
         /**
-         * ForecastAdjustment
+         * ForecastAdjustment (FA)
          *
          * ESAs which support the Forecast adjustment feature, allow an EMS to recommend a change to the start,
          * duration and/or power level limits of the steps of the power profile that the ESA has previously suggested
@@ -1448,7 +1448,7 @@ export namespace DeviceEnergyManagement {
         ForecastAdjustment = "ForecastAdjustment",
 
         /**
-         * ConstraintBasedAdjustment
+         * ConstraintBasedAdjustment (CON)
          *
          * ESAs which support the Constraint-Based Adjustment feature allow an EMS to inform the ESA of periods during
          * which power usage should be modified (for example when the EMS has been made aware that the grid supplier

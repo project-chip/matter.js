@@ -61,7 +61,7 @@ export namespace UnitLocalization {
      */
     export enum Feature {
         /**
-         * TemperatureUnit
+         * TemperatureUnit (TEMP)
          *
          * The Node can be configured to use different units of temperature when conveying values to a user.
          */

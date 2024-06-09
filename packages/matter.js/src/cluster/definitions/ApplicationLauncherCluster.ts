@@ -221,7 +221,7 @@ export namespace ApplicationLauncher {
      */
     export enum Feature {
         /**
-         * ApplicationPlatform
+         * ApplicationPlatform (AP)
          *
          * Support for attributes and commands required for endpoint to support launching any application within the
          * supported application catalogs

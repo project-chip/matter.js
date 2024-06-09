@@ -1286,35 +1286,35 @@ export namespace ColorControl {
      */
     export enum Feature {
         /**
-         * HueSaturation
+         * HueSaturation (HS)
          *
          * Supports color specification via hue/saturation.
          */
         HueSaturation = "HueSaturation",
 
         /**
-         * EnhancedHue
+         * EnhancedHue (EHUE)
          *
          * Enhanced hue is supported.
          */
         EnhancedHue = "EnhancedHue",
 
         /**
-         * ColorLoop
+         * ColorLoop (CL)
          *
          * Color loop is supported.
          */
         ColorLoop = "ColorLoop",
 
         /**
-         * Xy
+         * Xy (XY)
          *
          * Supports color specification via XY.
          */
         Xy = "Xy",
 
         /**
-         * ColorTemperature
+         * ColorTemperature (CT)
          *
          * Supports specification of color temperature.
          */

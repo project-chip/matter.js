@@ -64,28 +64,28 @@ export namespace AirQuality {
      */
     export enum Feature {
         /**
-         * Fair
+         * Fair (FAIR)
          *
          * Cluster supports the Fair air quality level
          */
         Fair = "Fair",
 
         /**
-         * Moderate
+         * Moderate (MOD)
          *
          * Cluster supports the Moderate air quality level
          */
         Moderate = "Moderate",
 
         /**
-         * VeryPoor
+         * VeryPoor (VPOOR)
          *
          * Cluster supports the Very poor air quality level
          */
         VeryPoor = "VeryPoor",
 
         /**
-         * ExtremelyPoor
+         * ExtremelyPoor (XPOOR)
          *
          * Cluster supports the Extremely poor air quality level
          */

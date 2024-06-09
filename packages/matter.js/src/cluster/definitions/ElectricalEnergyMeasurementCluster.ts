@@ -423,7 +423,7 @@ export namespace ElectricalEnergyMeasurement {
      */
     export enum Feature {
         /**
-         * ImportedEnergy
+         * ImportedEnergy (IMPE)
          *
          * The feature indicates the server is capable of measuring how much energy is imported by the server.
          *
@@ -432,7 +432,7 @@ export namespace ElectricalEnergyMeasurement {
         ImportedEnergy = "ImportedEnergy",
 
         /**
-         * ExportedEnergy
+         * ExportedEnergy (EXPE)
          *
          * The feature indicates the server is capable of measuring how much energy is exported by the server.
          *
@@ -441,7 +441,7 @@ export namespace ElectricalEnergyMeasurement {
         ExportedEnergy = "ExportedEnergy",
 
         /**
-         * CumulativeEnergy
+         * CumulativeEnergy (CUME)
          *
          * The feature indicates the server is capable of measuring how much energy has been imported or exported by
          * the server over the device’s lifetime. This measurement may start from when a device’s firmware is updated
@@ -453,7 +453,7 @@ export namespace ElectricalEnergyMeasurement {
         CumulativeEnergy = "CumulativeEnergy",
 
         /**
-         * PeriodicEnergy
+         * PeriodicEnergy (PERE)
          *
          * The feature indicates the server is capable of measuring how much energy has been imported or exported by
          * the server during a certain period of time. The start and end times for measurement periods shall be

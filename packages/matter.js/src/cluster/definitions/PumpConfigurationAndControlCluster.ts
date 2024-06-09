@@ -465,49 +465,49 @@ export namespace PumpConfigurationAndControl {
      */
     export enum Feature {
         /**
-         * ConstantPressure
+         * ConstantPressure (PRSCONST)
          *
          * Supports operating in constant pressure mode
          */
         ConstantPressure = "ConstantPressure",
 
         /**
-         * CompensatedPressure
+         * CompensatedPressure (PRSCOMP)
          *
          * Supports operating in compensated pressure mode
          */
         CompensatedPressure = "CompensatedPressure",
 
         /**
-         * ConstantFlow
+         * ConstantFlow (FLW)
          *
          * Supports operating in constant flow mode
          */
         ConstantFlow = "ConstantFlow",
 
         /**
-         * ConstantSpeed
+         * ConstantSpeed (SPD)
          *
          * Supports operating in constant speed mode
          */
         ConstantSpeed = "ConstantSpeed",
 
         /**
-         * ConstantTemperature
+         * ConstantTemperature (TEMP)
          *
          * Supports operating in constant temperature mode
          */
         ConstantTemperature = "ConstantTemperature",
 
         /**
-         * Automatic
+         * Automatic (AUTO)
          *
          * Supports operating in automatic mode
          */
         Automatic = "Automatic",
 
         /**
-         * LocalOperation
+         * LocalOperation (LOCAL)
          *
          * Supports operating using local settings
          */

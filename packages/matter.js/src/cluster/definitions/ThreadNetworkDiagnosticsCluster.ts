@@ -917,14 +917,14 @@ export namespace ThreadNetworkDiagnostics {
      */
     export enum Feature {
         /**
-         * PacketCounts
+         * PacketCounts (PKTCNT)
          *
          * Server supports the counts for the number of received and transmitted packets on the Thread interface.
          */
         PacketCounts = "PacketCounts",
 
         /**
-         * ErrorCounts
+         * ErrorCounts (ERRCNT)
          *
          * Server supports the counts for the number of errors that have occurred during the reception and transmission
          * of packets on the Thread interface.
@@ -932,14 +932,14 @@ export namespace ThreadNetworkDiagnostics {
         ErrorCounts = "ErrorCounts",
 
         /**
-         * MleCounts
+         * MleCounts (MLECNT)
          *
          * Server supports the counts for various MLE layer happenings.
          */
         MleCounts = "MleCounts",
 
         /**
-         * MacCounts
+         * MacCounts (MACCNT)
          *
          * Server supports the counts for various MAC layer happenings.
          */

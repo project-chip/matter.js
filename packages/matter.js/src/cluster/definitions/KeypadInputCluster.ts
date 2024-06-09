@@ -176,21 +176,21 @@ export namespace KeypadInput {
      */
     export enum Feature {
         /**
-         * NavigationKeyCodes
+         * NavigationKeyCodes (NV)
          *
          * Supports UP, DOWN, LEFT, RIGHT, SELECT, BACK, EXIT, MENU
          */
         NavigationKeyCodes = "NavigationKeyCodes",
 
         /**
-         * LocationKeys
+         * LocationKeys (LK)
          *
          * Supports CEC keys 0x0A (Settings) and 0x09 (Home)
          */
         LocationKeys = "LocationKeys",
 
         /**
-         * NumberKeys
+         * NumberKeys (NK)
          *
          * Supports numeric input 0..9
          */

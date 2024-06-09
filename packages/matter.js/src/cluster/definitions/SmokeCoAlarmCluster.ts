@@ -468,14 +468,14 @@ export namespace SmokeCoAlarm {
      */
     export enum Feature {
         /**
-         * SmokeAlarm
+         * SmokeAlarm (SMOKE)
          *
          * Supports Smoke alarm
          */
         SmokeAlarm = "SmokeAlarm",
 
         /**
-         * CoAlarm
+         * CoAlarm (CO)
          *
          * Supports CO alarm
          */

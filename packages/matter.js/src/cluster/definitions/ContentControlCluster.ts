@@ -1064,56 +1064,56 @@ export namespace ContentControl {
      */
     export enum Feature {
         /**
-         * ScreenTime
+         * ScreenTime (ST)
          *
          * Supports managing screen time limits.
          */
         ScreenTime = "ScreenTime",
 
         /**
-         * PinManagement
+         * PinManagement (PM)
          *
          * Supports managing a PIN code which is used for restricting access to configuration of this feature.
          */
         PinManagement = "PinManagement",
 
         /**
-         * BlockUnrated
+         * BlockUnrated (BU)
          *
          * Supports managing content controls for unrated content.
          */
         BlockUnrated = "BlockUnrated",
 
         /**
-         * OnDemandContentRating
+         * OnDemandContentRating (OCR)
          *
          * Supports managing content controls based upon rating threshold for on demand content.
          */
         OnDemandContentRating = "OnDemandContentRating",
 
         /**
-         * ScheduledContentRating
+         * ScheduledContentRating (SCR)
          *
          * Supports managing content controls based upon rating threshold for scheduled content.
          */
         ScheduledContentRating = "ScheduledContentRating",
 
         /**
-         * BlockChannels
+         * BlockChannels (BC)
          *
          * Supports managing a set of channels that are prohibited.
          */
         BlockChannels = "BlockChannels",
 
         /**
-         * BlockApplications
+         * BlockApplications (BA)
          *
          * Supports managing a set of applications that are prohibited.
          */
         BlockApplications = "BlockApplications",
 
         /**
-         * BlockContentTimeWindow
+         * BlockContentTimeWindow (BTW)
          *
          * Supports managing content controls based upon setting time window in which all contents and applications
          * SHALL be blocked.

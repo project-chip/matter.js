@@ -74,7 +74,7 @@ export namespace PressureMeasurement {
      */
     export enum Feature {
         /**
-         * Extended
+         * Extended (EXT)
          *
          * Extended range and resolution
          */

@@ -238,7 +238,11 @@ function generateExtensibleClusterBase(file: ClusterFile) {
     });
     for (const f of file.cluster.features) {
         const name = camelize(f.description ?? f.name, true);
-        featureEnum.atom(`${name} = ${serialize(name)}`).document(f);
+        featureEnum.atom(`${name} = ${serialize(name)}`).document({
+            description: f.description ? `${f.description} (${f.name})` : f.name,
+            details: f.details,
+            xref: f.xref,
+        });
     }
 
     // Base component

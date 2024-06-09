@@ -143,7 +143,7 @@ export namespace MediaInput {
      */
     export enum Feature {
         /**
-         * NameUpdates
+         * NameUpdates (NU)
          *
          * Supports updates to the input names
          */

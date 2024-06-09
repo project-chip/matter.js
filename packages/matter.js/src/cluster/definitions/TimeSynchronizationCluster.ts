@@ -809,7 +809,7 @@ export namespace TimeSynchronization {
      */
     export enum Feature {
         /**
-         * TimeZone
+         * TimeZone (TZ)
          *
          * Allows a server to translate a UTC time to a local time using the time zone and daylight savings time (DST)
          * offsets. If a server supports the TimeZone feature, it shall support the SetTimeZone and SetDSTOffset
@@ -821,7 +821,7 @@ export namespace TimeSynchronization {
         TimeZone = "TimeZone",
 
         /**
-         * NtpClient
+         * NtpClient (NTPC)
          *
          * Allows a node to use NTP/SNTP for time synchronization.
          *
@@ -830,7 +830,7 @@ export namespace TimeSynchronization {
         NtpClient = "NtpClient",
 
         /**
-         * NtpServer
+         * NtpServer (NTPS)
          *
          * Allows a Node to host an NTP server for the network so that other Nodes can achieve a high accuracy time
          * synchronization within the network. See Section 11.17.15, “Acting as an NTP Server”.
@@ -840,7 +840,7 @@ export namespace TimeSynchronization {
         NtpServer = "NtpServer",
 
         /**
-         * TimeSyncClient
+         * TimeSyncClient (TSC)
          *
          * This node also supports a time synchronization client and can connect to and read time from other nodes.
          *

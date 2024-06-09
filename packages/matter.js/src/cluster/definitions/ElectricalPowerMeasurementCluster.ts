@@ -520,7 +520,7 @@ export namespace ElectricalPowerMeasurement {
      */
     export enum Feature {
         /**
-         * DirectCurrent
+         * DirectCurrent (DIRC)
          *
          * This feature indicates the cluster can measure a direct current.
          *
@@ -529,7 +529,7 @@ export namespace ElectricalPowerMeasurement {
         DirectCurrent = "DirectCurrent",
 
         /**
-         * AlternatingCurrent
+         * AlternatingCurrent (ALTC)
          *
          * This feature indicates the cluster can measure an alternating current.
          *
@@ -538,7 +538,7 @@ export namespace ElectricalPowerMeasurement {
         AlternatingCurrent = "AlternatingCurrent",
 
         /**
-         * PolyphasePower
+         * PolyphasePower (POLY)
          *
          * This feature indicates the cluster represents the collective measurements for a Polyphase power supply.
          *
@@ -547,7 +547,7 @@ export namespace ElectricalPowerMeasurement {
         PolyphasePower = "PolyphasePower",
 
         /**
-         * Harmonics
+         * Harmonics (HARM)
          *
          * This feature indicates the cluster can measure the harmonics of an alternating current.
          *
@@ -556,7 +556,7 @@ export namespace ElectricalPowerMeasurement {
         Harmonics = "Harmonics",
 
         /**
-         * PowerQuality
+         * PowerQuality (PWRQ)
          *
          * This feature indicates the cluster can measure the harmonic phases of an alternating current.
          *

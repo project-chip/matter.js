@@ -830,7 +830,7 @@ export namespace MediaPlayback {
      */
     export enum Feature {
         /**
-         * AdvancedSeek
+         * AdvancedSeek (AS)
          *
          * This feature provides access to the time offset location within current playback media and allows for
          * jumping to a specific location using time offsets. This enables clients to implement more advanced media
@@ -841,7 +841,7 @@ export namespace MediaPlayback {
         AdvancedSeek = "AdvancedSeek",
 
         /**
-         * VariableSpeed
+         * VariableSpeed (VS)
          *
          * This feature is for a device which supports variable speed playback on media that supports it.
          *
@@ -850,7 +850,7 @@ export namespace MediaPlayback {
         VariableSpeed = "VariableSpeed",
 
         /**
-         * TextTracks
+         * TextTracks (TT)
          *
          * This feature is for a device or app that supports Text Tracks.
          *
@@ -859,7 +859,7 @@ export namespace MediaPlayback {
         TextTracks = "TextTracks",
 
         /**
-         * AudioTracks
+         * AudioTracks (AT)
          *
          * This feature is for a device or app that supports Audio Tracks.
          *
@@ -868,7 +868,7 @@ export namespace MediaPlayback {
         AudioTracks = "AudioTracks",
 
         /**
-         * AudioAdvance
+         * AudioAdvance (AA)
          *
          * This feature is for a device or app that supports playing audio during fast and slow advance and rewind
          * (e.g., while playback speed is not 1). A device that supports this feature may only support playing audio

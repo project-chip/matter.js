@@ -203,21 +203,21 @@ export namespace MicrowaveOvenControl {
      */
     export enum Feature {
         /**
-         * PowerAsNumber
+         * PowerAsNumber (PWRNUM)
          *
          * Power is specified as a unitless number or a percentage
          */
         PowerAsNumber = "PowerAsNumber",
 
         /**
-         * PowerInWatts
+         * PowerInWatts (WATTS)
          *
          * Power is specified in Watts
          */
         PowerInWatts = "PowerInWatts",
 
         /**
-         * PowerNumberLimits
+         * PowerNumberLimits (PWRLMTS)
          *
          * Supports the limit attributes used with the PWRNUM feature
          */
