@@ -29,7 +29,7 @@ export namespace RefrigeratorAlarm {
      */
     export enum Feature {
         /**
-         * Reset
+         * Reset (RESET)
          *
          * Supports the ability to reset alarms
          */

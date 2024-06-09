@@ -163,7 +163,7 @@ export namespace SoftwareDiagnostics {
      */
     export enum Feature {
         /**
-         * Watermarks
+         * Watermarks (WTRMRK)
          *
          * Node makes available the metrics for high watermark related to memory consumption.
          */

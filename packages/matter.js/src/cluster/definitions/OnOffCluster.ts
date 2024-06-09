@@ -278,7 +278,7 @@ export namespace OnOff {
      */
     export enum Feature {
         /**
-         * Lighting
+         * Lighting (LT)
          *
          * This cluster is used for a lighting application.
          *
@@ -293,7 +293,7 @@ export namespace OnOff {
         Lighting = "Lighting",
 
         /**
-         * DeadFrontBehavior
+         * DeadFrontBehavior (DF)
          *
          * When this feature is supported, the device exposing this server cluster exhibits "dead front" behavior when
          * the "OnOff" attribute is FALSE (Off). This "dead front" behavior includes:
@@ -331,7 +331,7 @@ export namespace OnOff {
         DeadFrontBehavior = "DeadFrontBehavior",
 
         /**
-         * OffOnly
+         * OffOnly (OFFONLY)
          *
          * When this feature is supported, the Off command shall be supported and the On and Toggle commands shall NOT
          * be supported.

@@ -303,14 +303,14 @@ export namespace LevelControl {
      */
     export enum Feature {
         /**
-         * OnOff
+         * OnOff (OO)
          *
          * Dependency with the On/Off cluster
          */
         OnOff = "OnOff",
 
         /**
-         * Lighting
+         * Lighting (LT)
          *
          * This feature supports an interface for controlling the level of a light source. For the CurrentLevel
          * attribute:
@@ -328,7 +328,7 @@ export namespace LevelControl {
         Lighting = "Lighting",
 
         /**
-         * Frequency
+         * Frequency (FQ)
          *
          * NOTE The Frequency feature is provisional.
          *

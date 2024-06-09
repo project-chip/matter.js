@@ -319,7 +319,7 @@ export namespace GroupKeyManagement {
      */
     export enum Feature {
         /**
-         * CacheAndSync
+         * CacheAndSync (CS)
          *
          * The ability to support CacheAndSync security policy and MCSP.
          */

@@ -638,7 +638,7 @@ export namespace GeneralDiagnostics {
      */
     export enum Feature {
         /**
-         * DataModelTest
+         * DataModelTest (DMTEST)
          *
          * This feature indicates support for extended Data Model testing commands, which are required in some
          * situations.

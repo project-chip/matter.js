@@ -56,28 +56,28 @@ export namespace PowerTopology {
      */
     export enum Feature {
         /**
-         * NodeTopology
+         * NodeTopology (NODE)
          *
          * This endpoint provides or consumes power to/from the entire node
          */
         NodeTopology = "NodeTopology",
 
         /**
-         * TreeTopology
+         * TreeTopology (TREE)
          *
          * This endpoint provides or consumes power to/from itself and its child endpoints
          */
         TreeTopology = "TreeTopology",
 
         /**
-         * SetTopology
+         * SetTopology (SET)
          *
          * This endpoint provides or consumes power to/from a specified set of endpoints
          */
         SetTopology = "SetTopology",
 
         /**
-         * DynamicPowerFlow
+         * DynamicPowerFlow (DYPF)
          *
          * The specified set of endpoints may change
          */

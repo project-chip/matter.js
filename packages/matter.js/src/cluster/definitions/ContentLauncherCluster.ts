@@ -727,21 +727,21 @@ export namespace ContentLauncher {
      */
     export enum Feature {
         /**
-         * ContentSearch
+         * ContentSearch (CS)
          *
          * Device supports content search (non-app specific)
          */
         ContentSearch = "ContentSearch",
 
         /**
-         * UrlPlayback
+         * UrlPlayback (UP)
          *
          * Device supports basic URL-based file playback
          */
         UrlPlayback = "UrlPlayback",
 
         /**
-         * AdvancedSeek
+         * AdvancedSeek (AS)
          *
          * Enables clients to implement more advanced media seeking behavior in their user interface, such as for
          * example a "seek bar".
@@ -749,14 +749,14 @@ export namespace ContentLauncher {
         AdvancedSeek = "AdvancedSeek",
 
         /**
-         * TextTracks
+         * TextTracks (TT)
          *
          * Device or app supports Text Tracks.
          */
         TextTracks = "TextTracks",
 
         /**
-         * AudioTracks
+         * AudioTracks (AT)
          *
          * Device or app supports Audio Tracks.
          */

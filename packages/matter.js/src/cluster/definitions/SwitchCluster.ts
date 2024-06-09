@@ -308,7 +308,7 @@ export namespace Switch {
      */
     export enum Feature {
         /**
-         * LatchingSwitch
+         * LatchingSwitch (LS)
          *
          * This feature is for a switch that maintains its position after being pressed (or turned).
          *
@@ -317,7 +317,7 @@ export namespace Switch {
         LatchingSwitch = "LatchingSwitch",
 
         /**
-         * MomentarySwitch
+         * MomentarySwitch (MS)
          *
          * This feature is for a switch that does not maintain its position after being pressed (or turned). After
          * releasing, it goes back to its idle position.
@@ -327,7 +327,7 @@ export namespace Switch {
         MomentarySwitch = "MomentarySwitch",
 
         /**
-         * MomentarySwitchRelease
+         * MomentarySwitchRelease (MSR)
          *
          * This feature is for a momentary switch that can distinguish and report release events. When this feature
          * flag MSR is present, MS shall be present as well.
@@ -337,7 +337,7 @@ export namespace Switch {
         MomentarySwitchRelease = "MomentarySwitchRelease",
 
         /**
-         * MomentarySwitchLongPress
+         * MomentarySwitchLongPress (MSL)
          *
          * This feature is for a momentary switch that can distinguish and report long presses from short presses. When
          * this feature flag MSL is present, MS and MSR shall be present as well.
@@ -347,7 +347,7 @@ export namespace Switch {
         MomentarySwitchLongPress = "MomentarySwitchLongPress",
 
         /**
-         * MomentarySwitchMultiPress
+         * MomentarySwitchMultiPress (MSM)
          *
          * This feature is for a momentary switch that can distinguish and report double press and potentially multiple
          * presses with more events, such as triple press, etc. When this feature flag MSM is present, MS and MSR shall

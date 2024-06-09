@@ -311,14 +311,14 @@ export namespace WiFiNetworkDiagnostics {
      */
     export enum Feature {
         /**
-         * PacketCounts
+         * PacketCounts (PKTCNT)
          *
          * Node makes available the counts for the number of received and transmitted packets on the Wi-Fi interface.
          */
         PacketCounts = "PacketCounts",
 
         /**
-         * ErrorCounts
+         * ErrorCounts (ERRCNT)
          *
          * Node makes available the counts for the number of errors that have occurred during the reception and
          * transmission of packets on the Wi-Fi interface.

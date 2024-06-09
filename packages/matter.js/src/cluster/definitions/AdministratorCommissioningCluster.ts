@@ -214,7 +214,7 @@ export namespace AdministratorCommissioning {
      */
     export enum Feature {
         /**
-         * Basic
+         * Basic (BC)
          *
          * Node supports Basic Commissioning Method.
          */

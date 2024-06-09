@@ -1234,28 +1234,28 @@ export namespace PowerSource {
      */
     export enum Feature {
         /**
-         * Wired
+         * Wired (WIRED)
          *
          * A wired power source
          */
         Wired = "Wired",
 
         /**
-         * Battery
+         * Battery (BAT)
          *
          * A battery power source
          */
         Battery = "Battery",
 
         /**
-         * Rechargeable
+         * Rechargeable (RECHG)
          *
          * A rechargeable battery power source
          */
         Rechargeable = "Rechargeable",
 
         /**
-         * Replaceable
+         * Replaceable (REPLC)
          *
          * A replaceable battery power source
          */

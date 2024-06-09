@@ -972,7 +972,7 @@ export namespace EnergyEvse {
      */
     export enum Feature {
         /**
-         * ChargingPreferences
+         * ChargingPreferences (PREF)
          *
          * Since some EVSEs cannot obtain the SoC from the vehicle, some EV charging solutions allow the consumer to
          * specify a daily charging target (for adding energy to the EV’s battery). This feature allows the consumer to
@@ -1000,7 +1000,7 @@ export namespace EnergyEvse {
         ChargingPreferences = "ChargingPreferences",
 
         /**
-         * SoCReporting
+         * SoCReporting (SOC)
          *
          * Vehicles and EVSEs which support ISO 15118 may allow the vehicle to report its battery size and state of
          * charge. If the EVSE supports PLC it may have a vehicle connected which optionally supports reporting of its
@@ -1017,7 +1017,7 @@ export namespace EnergyEvse {
         SoCReporting = "SoCReporting",
 
         /**
-         * PlugAndCharge
+         * PlugAndCharge (PNC)
          *
          * If the EVSE supports PLC, it may be able to support the Plug and Charge feature. e.g. this may allow the
          * vehicle ID to be obtained which may allow an energy management system to track energy usage per vehicle
@@ -1030,7 +1030,7 @@ export namespace EnergyEvse {
         PlugAndCharge = "PlugAndCharge",
 
         /**
-         * Rfid
+         * Rfid (RFID)
          *
          * If the EVSE is fitted with an RFID reader, it may be possible to obtain the User or Vehicle ID from an RFID
          * card. This may be used to record a charging session against a specific charging account, and may optionally
@@ -1045,7 +1045,7 @@ export namespace EnergyEvse {
         Rfid = "Rfid",
 
         /**
-         * V2X
+         * V2X (V2X)
          *
          * If the EVSE can support bi-directional charging, it may be possible to request that the vehicle can
          * discharge to the home or grid.

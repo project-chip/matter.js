@@ -346,7 +346,7 @@ export namespace FanControl {
      */
     export enum Feature {
         /**
-         * MultiSpeed
+         * MultiSpeed (SPD)
          *
          * Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic speed control
          * but left it up to the implementer to decide what was supported. Therefore, it is assumed that legacy client
@@ -363,35 +363,35 @@ export namespace FanControl {
         MultiSpeed = "MultiSpeed",
 
         /**
-         * Auto
+         * Auto (AUT)
          *
          * Automatic mode supported for fan speed
          */
         Auto = "Auto",
 
         /**
-         * Rocking
+         * Rocking (RCK)
          *
          * Rocking movement supported
          */
         Rocking = "Rocking",
 
         /**
-         * Wind
+         * Wind (WND)
          *
          * Wind emulation supported
          */
         Wind = "Wind",
 
         /**
-         * Step
+         * Step (STEP)
          *
          * Step command supported
          */
         Step = "Step",
 
         /**
-         * AirflowDirection
+         * AirflowDirection (DIR)
          *
          * Airflow Direction attribute is supported
          */

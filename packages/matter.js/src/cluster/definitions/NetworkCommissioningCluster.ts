@@ -1128,21 +1128,21 @@ export namespace NetworkCommissioning {
      */
     export enum Feature {
         /**
-         * WiFiNetworkInterface
+         * WiFiNetworkInterface (WI)
          *
          * Wi-Fi related features
          */
         WiFiNetworkInterface = "WiFiNetworkInterface",
 
         /**
-         * ThreadNetworkInterface
+         * ThreadNetworkInterface (TH)
          *
          * Thread related features
          */
         ThreadNetworkInterface = "ThreadNetworkInterface",
 
         /**
-         * EthernetNetworkInterface
+         * EthernetNetworkInterface (ET)
          *
          * Ethernet related features
          */

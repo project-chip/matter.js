@@ -430,7 +430,7 @@ export namespace Messages {
      */
     export enum Feature {
         /**
-         * ReceivedConfirmation
+         * ReceivedConfirmation (CONF)
          *
          * This feature shall indicate that the device can get confirmation from a user that the message was received.
          *
@@ -439,7 +439,7 @@ export namespace Messages {
         ReceivedConfirmation = "ReceivedConfirmation",
 
         /**
-         * ConfirmationResponse
+         * ConfirmationResponse (RESP)
          *
          * This feature shall indicate that the device is capable of presenting a list of responses to the user and
          * recording the user’s choice of response.
@@ -449,7 +449,7 @@ export namespace Messages {
         ConfirmationResponse = "ConfirmationResponse",
 
         /**
-         * ConfirmationReply
+         * ConfirmationReply (RPLY)
          *
          * This feature shall indicate that the device is capable of collecting a free-form text response to a message.
          *
@@ -458,7 +458,7 @@ export namespace Messages {
         ConfirmationReply = "ConfirmationReply",
 
         /**
-         * ProtectedMessages
+         * ProtectedMessages (PROT)
          *
          * This feature shall indicate that the device is capable of requiring the user to authenticate before viewing
          * a message; e.g. entering a PIN or password before viewing a message with billing information.

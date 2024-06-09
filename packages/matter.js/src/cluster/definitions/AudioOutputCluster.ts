@@ -132,7 +132,7 @@ export namespace AudioOutput {
      */
     export enum Feature {
         /**
-         * NameUpdates
+         * NameUpdates (NU)
          *
          * Supports updates to output names
          */

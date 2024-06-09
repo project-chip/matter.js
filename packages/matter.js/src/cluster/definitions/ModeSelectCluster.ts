@@ -147,7 +147,7 @@ export namespace ModeSelect {
      */
     export enum Feature {
         /**
-         * OnOff
+         * OnOff (DEPONOFF)
          *
          * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
          * endpoint. See OnMode for more information.

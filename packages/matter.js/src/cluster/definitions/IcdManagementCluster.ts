@@ -467,7 +467,7 @@ export namespace IcdManagement {
      */
     export enum Feature {
         /**
-         * CheckInProtocolSupport
+         * CheckInProtocolSupport (CIP)
          *
          * When this feature is supported, the device shall support all the associated commands and attributes to
          * properly support the Check-In Protocol.
@@ -477,7 +477,7 @@ export namespace IcdManagement {
         CheckInProtocolSupport = "CheckInProtocolSupport",
 
         /**
-         * UserActiveModeTrigger
+         * UserActiveModeTrigger (UAT)
          *
          * This feature is supported if and only if the device has a user active mode trigger.
          *
@@ -486,7 +486,7 @@ export namespace IcdManagement {
         UserActiveModeTrigger = "UserActiveModeTrigger",
 
         /**
-         * LongIdleTimeSupport
+         * LongIdleTimeSupport (LITS)
          *
          * This feature is supported if and only the device is a Long Idle Time ICD.
          *

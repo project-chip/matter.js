@@ -927,28 +927,28 @@ export namespace Channel {
      */
     export enum Feature {
         /**
-         * ChannelList
+         * ChannelList (CL)
          *
          * Provides list of available channels.
          */
         ChannelList = "ChannelList",
 
         /**
-         * LineupInfo
+         * LineupInfo (LI)
          *
          * Provides lineup info, which is a reference to an external source of lineup information.
          */
         LineupInfo = "LineupInfo",
 
         /**
-         * ElectronicGuide
+         * ElectronicGuide (EG)
          *
          * Provides electronic program guide information.
          */
         ElectronicGuide = "ElectronicGuide",
 
         /**
-         * RecordProgram
+         * RecordProgram (RP)
          *
          * Provides ability to record program.
          */

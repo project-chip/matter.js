@@ -290,7 +290,7 @@ export namespace Groups {
      */
     export enum Feature {
         /**
-         * GroupNames
+         * GroupNames (GN)
          *
          * The Group Names feature indicates the ability to store a name for a group when a group is added.
          *
