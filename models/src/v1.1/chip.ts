@@ -662,7 +662,7 @@ export const ChipMatter = Matter({
         }),
 
         Cluster({
-            name: "BasicInformation", id: 0x28, description: "Basic Information", singleton: true,
+            name: "BasicInformation", id: 0x28, description: "Basic Information", quality: "I",
             details: "This cluster provides attributes and events for determining basic information about Nodes, which " +
                 "supports both Commissioning and operational determination of Node characteristics, such as Vendor " +
                 "ID, Product ID and serial number, which apply to the whole Node. Also allows setting user device " +

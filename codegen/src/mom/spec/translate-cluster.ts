@@ -61,6 +61,7 @@ export function* translateCluster(definition: ClusterReference) {
         id: metadata.id,
         name: metadata.name,
         pics: metadata.pics,
+        quality: metadata.quality,
         classification: metadata.classification,
         children: children,
         type: metadata.derivesFrom,
@@ -91,7 +92,7 @@ export function* translateCluster(definition: ClusterReference) {
 
 // Load misc. values related to cluster definition
 function translateMetadata(definition: ClusterReference, children: Array<ClusterElement.Child>) {
-    const { classification, derivesFrom, pics } = translateClassification();
+    const { classification, derivesFrom, pics, quality } = translateClassification();
 
     const ids = translateIds();
     if (!ids) {
@@ -125,6 +126,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
         id,
         name,
         pics,
+        quality,
         aliases,
         classification,
         revision,
@@ -185,6 +187,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             role: Optional(LowerIdentifier),
             scope: Optional(Alias(LowerIdentifier, "context")),
             pics: Optional(Alias(UpperIdentifier, "picscode")),
+            quality: Optional(Str),
         });
 
         let classification: ClusterElement.Classification;
@@ -207,7 +210,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             }
         }
 
-        return { classification, derivesFrom, pics: classifications[0]?.pics };
+        return { classification, derivesFrom, pics: classifications[0]?.pics, quality: classifications[0]?.quality };
     }
 
     function translateRevision() {

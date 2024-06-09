@@ -20,7 +20,7 @@ export namespace Aspects {
         }
     }
 
-    export function cloneAspects(source: Model, dest: Model, symbols: symbol[]) {
+    export function cloneAspects(source: Model, dest: Model, ...symbols: symbol[]) {
         for (const symbol of symbols) {
             const aspect = (source as any)[symbol];
             if (aspect !== undefined) {
