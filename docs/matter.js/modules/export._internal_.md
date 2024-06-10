@@ -6,6 +6,7 @@
 
 ### Classes
 
+- [LegacyInteractionServer](../classes/export._internal_.LegacyInteractionServer.md)
 - [MatterController](../classes/export._internal_.MatterController.md)
 
 ### Type Aliases
@@ -28,4 +29,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:66](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/MatterController.ts#L66)
+[packages/matter.js/src/MatterController.ts:66](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/MatterController.ts#L66)

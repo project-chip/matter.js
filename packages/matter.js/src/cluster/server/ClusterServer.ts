@@ -12,7 +12,6 @@ import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { capitalize } from "../../util/String.js";
 import {
@@ -24,7 +23,6 @@ import {
     Events,
     TlvNoResponse,
 } from "../Cluster.js";
-import { Scenes } from "../definitions/ScenesCluster.js";
 import { createAttributeServer } from "./AttributeServer.js";
 import {
     AttributeInitialValues,
@@ -163,54 +161,6 @@ export function ClusterServer<
             if (typeof handlers.destroyClusterServer === "function") {
                 handlers.destroyClusterServer();
             }
-        },
-
-        _getSceneExtensionFieldSets: () => {
-            const values = new Array<TypeFromSchema<typeof Scenes.TlvAttributeValuePair>>();
-            for (const name of sceneAttributeList) {
-                const attributeServer = (attributes as any)[name];
-                values.push({
-                    attributeId: attributeServer.id,
-                    attributeValue: attributeServer.schema.encodeTlv(attributeServer.get()),
-                });
-            }
-            return values;
-        },
-
-        _setSceneExtensionFieldSets: (
-            values: TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[],
-            _transitionTime: number,
-        ) => {
-            // TODO It is recommended that, where possible (e.g., it is not possible for attributes with Boolean data type),
-            //  a gradual transition SHOULD take place from the old to the new state over this time. However, the exact
-            //  transition is manufacturer dependent.
-
-            for (const { attributeId, attributeValue } of values) {
-                if (attributeId === undefined) {
-                    logger.warn(`Empty attributeId in scene extension field not supported for "set" yet`);
-                    continue;
-                }
-                const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId);
-                if (attributeName) {
-                    const attributeServer = (attributes as any)[attributeName];
-                    attributeServer.setLocal(attributeServer.schema.decodeTlv(attributeValue));
-                }
-            }
-        },
-
-        _verifySceneExtensionFieldSets(values: TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[]) {
-            for (const { attributeId, attributeValue } of values) {
-                if (attributeId === undefined) {
-                    logger.warn(`Empty attributeId in scene extension field not supported for "verify" yet`);
-                    continue;
-                }
-                const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId);
-                if (attributeName) {
-                    const attributeServer = (attributes as any)[attributeName];
-                    if (attributeServer.getLocal() !== attributeServer.schema.decodeTlv(attributeValue)) return false;
-                }
-            }
-            return true;
         },
 
         isAttributeSupported: (attributeId: AttributeId) => {

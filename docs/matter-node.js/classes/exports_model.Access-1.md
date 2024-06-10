@@ -41,6 +41,8 @@ or cluster element.
 
 - [complete](exports_model.Access-1.md#complete)
 - [empty](exports_model.Access-1.md#empty)
+- [fabricScoped](exports_model.Access-1.md#fabricscoped)
+- [fabricSensitive](exports_model.Access-1.md#fabricsensitive)
 - [readable](exports_model.Access-1.md#readable)
 - [valid](exports_model.Access-1.md#valid)
 - [writable](exports_model.Access-1.md#writable)
@@ -79,7 +81,7 @@ by the Matter Specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:33
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:36
 
 ## Properties
 
@@ -121,7 +123,7 @@ Access.Ast.fabric
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:18
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:19
 
 ___
 
@@ -135,7 +137,7 @@ Access.Ast.readPriv
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:16
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:17
 
 ___
 
@@ -149,7 +151,7 @@ Access.Ast.rw
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:15
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:16
 
 ___
 
@@ -159,7 +161,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:43
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:46
 
 ___
 
@@ -173,7 +175,7 @@ Access.Ast.timed
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:19
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:20
 
 ___
 
@@ -187,7 +189,7 @@ Access.Ast.writePriv
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:17
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:18
 
 ## Accessors
 
@@ -205,7 +207,7 @@ levels.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:28
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:31
 
 ___
 
@@ -223,7 +225,35 @@ Aspect.empty
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:22
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:25
+
+___
+
+### fabricScoped
+
+• `get` **fabricScoped**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:23
+
+___
+
+### fabricSensitive
+
+• `get` **fabricSensitive**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:24
 
 ___
 
@@ -237,7 +267,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:20
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:21
 
 ___
 
@@ -269,7 +299,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:22
 
 ## Methods
 
@@ -371,7 +401,7 @@ Displays access using the standard Matter syntax.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:42
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:45
 
 ___
 
@@ -413,4 +443,4 @@ lenient.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:38
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:41

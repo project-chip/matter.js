@@ -63,6 +63,11 @@ export interface Observable<T extends any[] = any[], R = void> extends AsyncIter
     isObserved: boolean;
 
     /**
+     * Determine whether an observer is registered.
+     */
+    isObservedBy(observer: Observer<T, R>): boolean;
+
+    /**
      * This flag indicates whether the observable is asynchronous.  Any observable that accepts promise returns may
      * be asynchronous but this information is not available at runtime unless you specify here, typically via
      * {@link AsyncObservable}.
@@ -152,6 +157,10 @@ export class BasicObservable<T extends any[] = any[], R = void> implements Obser
         }
 
         return false;
+    }
+
+    isObservedBy(observer: Observer<T, R>) {
+        return !!this.#observers?.has(observer);
     }
 
     emit(...payload: T): R | undefined {

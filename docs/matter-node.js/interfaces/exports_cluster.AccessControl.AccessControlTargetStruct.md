@@ -26,7 +26,7 @@ MatterSpecification.v11.Core § 9.10.4.4
 
 ### cluster
 
-• **cluster**: ``null`` \| [`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>
+• **cluster**: ``null`` \| [`ClusterId`](../modules/exports_datatype.md#clusterid)
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ ___
 
 ### deviceType
 
-• **deviceType**: ``null`` \| [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)\<`number`\>
+• **deviceType**: ``null`` \| [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)
 
 #### Inherited from
 

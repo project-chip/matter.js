@@ -28,9 +28,13 @@ export class Progress {
         this.write(colors.dim(`Skip ${packageIdentity(pkg)}: ${why}\n\n`));
     }
 
-    startup(what: string, pkg: Package) {
+    startup(what: string, pkg?: Package) {
         this.status = Progress.Status.Startup;
-        this.write(`${what} ${packageIdentity(pkg)}\n`);
+        if (pkg === undefined) {
+            this.write(what);
+        } else {
+            this.write(`${what} ${packageIdentity(pkg)}\n`);
+        }
     }
 
     update(text: string, extra?: string) {

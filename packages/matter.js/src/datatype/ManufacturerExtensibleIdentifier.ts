@@ -7,8 +7,8 @@ import { ValidationError } from "../common/ValidationError.js";
 import { VendorId } from "./VendorId.js";
 
 /**
- * Base type for semantic identifiers per Matter specification.  Formally a
- * 32-bit unsigned integer with assigned bit functions:
+ * Base type for semantic identifiers per Matter specification.  Formally a 32-bit unsigned integer with assigned bit
+ * functions:
  *
  *     Bits 0-15 are the identifier's scope:
  *         0x0000: Standard (global) or scoped (within cluster) ID
@@ -16,8 +16,8 @@ import { VendorId } from "./VendorId.js";
  *         0xfff1 - 0xfff4: Test manufacturer codes
  *     Bits 16-31 are the actual identifier
  *
- * For this and following types, the specification defines restrictions that
- * we do not express statically with TypeScript.
+ * For this and following types, the specification defines restrictions that we do not express statically with
+ * TypeScript.
  */
 export type ManufacturerExtensibleIdentifier = number;
 export type Mei = ManufacturerExtensibleIdentifier;

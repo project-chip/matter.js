@@ -1,0 +1,156 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { InternalError } from "@project-chip/matter.js/common";
+import { ClusterModel, DatatypeModel, Model } from "@project-chip/matter.js/model";
+import { Scope } from "../clusters/Scope.js";
+import { TsFile } from "./TsFile.js";
+import { camelize } from "./string.js";
+
+/**
+ * A TS file that understands {@link Scope} semantics.
+ */
+export class ScopeFile extends TsFile {
+    #definesScope: boolean;
+    #scope: Scope;
+
+    constructor(options: ScopeFile.Options) {
+        let filename: string;
+        let scope: Scope | undefined;
+        let definesScope: boolean;
+
+        if (options.name === undefined) {
+            definesScope = true;
+            scope = Scope(options.scope);
+            filename = ScopeFile.filenameFor(scope.owner).replace(/.js$/, "");
+        } else {
+            definesScope = false;
+            scope = options.scope && Scope(options.scope);
+            filename = options.name;
+        }
+
+        super(filename, options.editable);
+
+        this.#definesScope = definesScope;
+        this.#scope = scope;
+    }
+
+    get scope() {
+        return this.#scope;
+    }
+
+    get model() {
+        if (!this.#scope) {
+            throw new InternalError("Model requested from ");
+        }
+        return this.#scope.owner;
+    }
+
+    /**
+     * Reference a model in the context of this file.  Adds appropriate imports and returns the expression used to
+     * reference the import in generated code.
+     *
+     * @param model the model to reference
+     * @param tlv in the case of structs we define both "TlvFoo" and "Foo".  This designates which to import
+     */
+    reference(model: Model, tlv = false) {
+        let sourceScope;
+        if (this.#scope) {
+            const location = this.#scope.locationOf(model);
+            if (location.isLocal) {
+                if (this.#definesScope) {
+                    // Model is defined locally, no import required
+                    return this.#scope.nameFor(model, tlv);
+                }
+                sourceScope = this.#scope;
+            }
+        }
+
+        if (sourceScope === undefined) {
+            sourceScope = Scope(model);
+        }
+
+        // Cluster definitions are namespaced so we must import the namespace.  Otherwise there is no namespace so we
+        // import diredctly
+        let importModel;
+        if (sourceScope.owner instanceof ClusterModel) {
+            importModel = sourceScope.owner;
+        } else {
+            importModel = model;
+        }
+
+        // Determine the name of the definition to import and the name to import as
+        const importName = sourceScope.nameFor(importModel, tlv && importModel === model);
+        let localName;
+        if (this.#scope) {
+            localName = this.#scope.nameFor(importModel, tlv && importModel === model);
+        } else {
+            localName = importName;
+        }
+
+        // Add the import
+        let importExpr;
+        if (localName === importName) {
+            importExpr = importName;
+        } else {
+            importExpr = `${importName} as ${localName}`;
+        }
+        this.addImport(ScopeFile.filenameFor(sourceScope.owner), importExpr);
+
+        // Return the expression for local access
+        if (importModel === model) {
+            return localName;
+        }
+        return `${localName}.${sourceScope.nameFor(model, tlv)}`;
+    }
+
+    static filenameFor(model: Model) {
+        if (!model.isGlobal) {
+            throw new InternalError(
+                `Cannot determine filename for ${model.tag} ${model.name} because it is not global`,
+            );
+        }
+
+        const name = camelize(model.name, true);
+
+        if (model instanceof ClusterModel) {
+            return `#clusters/${name}Cluster.js`;
+        }
+        if (model instanceof DatatypeModel) {
+            return `#globals/${name.replace(/(?:Struct|Enum|Bitmap)$/, "")}.js`;
+        }
+
+        throw new InternalError(
+            `Cannot determine filename for ${model.tag} ${model.name} because it is not a cluster or datatype`,
+        );
+    }
+}
+
+export namespace ScopeFile {
+    /**
+     * Configures a file that defines members for a specific scope.
+     *
+     * References to members owned by the scope are local.  Other references are imported.
+     */
+    interface ScopeDefinitionOptions {
+        name?: undefined;
+        scope: Scope | Model;
+        editable?: boolean;
+    }
+
+    /**
+     * Configures a file that is aware of scope but does not define a scope.
+     *
+     * In this case "scope" parameter makes names available but the file imports all definitions.
+     */
+    interface ScopeAwareOptions {
+        name: string;
+        scope: Scope | Model;
+        editable?: boolean;
+    }
+
+    export type Options = ScopeAwareOptions | ScopeDefinitionOptions;
+}

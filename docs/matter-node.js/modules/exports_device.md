@@ -197,7 +197,7 @@ the custom ones are used if defined
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:23
+packages/matter.js/dist/esm/device/Device.d.ts:22
 
 ___
 

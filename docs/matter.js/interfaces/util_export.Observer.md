@@ -40,7 +40,7 @@ The observer return value effects how an [Observable](../modules/util_export.md#
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:29](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/util/Observable.ts#L29)
+[packages/matter.js/src/util/Observable.ts:29](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L29)
 
 ## Table of contents
 
@@ -56,4 +56,4 @@ The observer return value effects how an [Observable](../modules/util_export.md#
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:30](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/util/Observable.ts#L30)
+[packages/matter.js/src/util/Observable.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L30)

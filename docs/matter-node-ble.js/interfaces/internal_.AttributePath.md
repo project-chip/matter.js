@@ -11,6 +11,7 @@
 - [attributeId](internal_.AttributePath.md#attributeid)
 - [clusterId](internal_.AttributePath.md#clusterid)
 - [endpointId](internal_.AttributePath.md#endpointid)
+- [nodeId](internal_.AttributePath.md#nodeid)
 
 ## Properties
 
@@ -20,7 +21,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:37
+matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:40
 
 ___
 
@@ -30,7 +31,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:36
+matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:39
 
 ___
 
@@ -40,4 +41,14 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:35
+matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:38
+
+___
+
+### nodeId
+
+• `Optional` **nodeId**: [`NodeId`](../modules/internal_.md#nodeid)
+
+#### Defined in
+
+matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:37

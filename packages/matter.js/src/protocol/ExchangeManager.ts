@@ -90,7 +90,11 @@ export class ExchangeManager<ContextT> {
                     return;
                 }
 
-                this.onMessage(socket, data).catch(error => logger.error(error));
+                try {
+                    this.onMessage(socket, data).catch(error => logger.error(error));
+                } catch (error) {
+                    logger.warn("Ignoring UDP message with error", error);
+                }
             }),
         );
     }
@@ -117,14 +121,8 @@ export class ExchangeManager<ContextT> {
     initiateExchangeWithChannel(channel: MessageChannel<ContextT>, protocolId: number) {
         const exchangeId = this.exchangeCounter.getIncrementedCounter();
         const exchangeIndex = exchangeId | 0x10000; // Ensure initiated and received exchange index are different, since the exchangeID can be the same
-        const exchange = MessageExchange.initiate(
-            channel,
-            exchangeId,
-            protocolId,
-            async () => await this.deleteExchange(exchangeIndex),
-        );
-        // Ensure exchangeIds are not colliding in the Map by adding 1 in front of exchanges initiated by this device.
-        this.exchanges.set(exchangeIndex, exchange);
+        const exchange = MessageExchange.initiate(channel, exchangeId, protocolId);
+        this.#addExchange(exchangeIndex, exchange);
         return exchange;
     }
 
@@ -214,18 +212,16 @@ export class ExchangeManager<ContextT> {
                 const exchange = MessageExchange.fromInitialMessage(
                     await this.channelManager.getOrCreateChannel(channel, session),
                     message,
-                    async () => await this.deleteExchange(exchangeIndex),
                 );
-                this.exchanges.set(exchangeIndex, exchange);
+                this.#addExchange(exchangeIndex, exchange);
                 await exchange.onMessageReceived(message);
                 await protocolHandler.onNewExchange(exchange, message);
             } else if (message.payloadHeader.requiresAck) {
                 const exchange = MessageExchange.fromInitialMessage(
                     await this.channelManager.getOrCreateChannel(channel, session),
                     message,
-                    async () => await this.deleteExchange(exchangeIndex),
                 );
-                this.exchanges.set(exchangeIndex, exchange);
+                this.#addExchange(exchangeIndex, exchange);
                 await exchange.send(MessageType.StandaloneAck, new ByteArray(0), {
                     includeAcknowledgeMessageId: message.packetHeader.messageId,
                 });
@@ -319,6 +315,11 @@ export class ExchangeManager<ContextT> {
         }
         this.sessionManager.removeSession(sessionId);
         this.closingSessions.delete(sessionId);
+    }
+
+    #addExchange(exchangeIndex: number, exchange: MessageExchange<ContextT>) {
+        exchange.closed.on(() => this.deleteExchange(exchangeIndex));
+        this.exchanges.set(exchangeIndex, exchange);
     }
 }
 

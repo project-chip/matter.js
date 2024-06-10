@@ -208,11 +208,11 @@ describe("ServerNode", () => {
             },
         });
 
-        const session = await node.createSession();
+        const exchange = await node.createExchange();
 
-        const context = { session, command: true };
+        const contextOptions = { exchange, command: true };
 
-        await node.online(context, async agent => {
+        await node.online(contextOptions, async agent => {
             await agent.generalCommissioning.armFailSafe({
                 expiryLengthSeconds: Fixtures.failsafeLengthS,
                 breadcrumb: 4,
@@ -220,7 +220,7 @@ describe("ServerNode", () => {
         });
         expect(commissioningServer2CertificateProviderCalled).equals(false);
 
-        await node.online(context, async agent => {
+        await node.online(contextOptions, async agent => {
             await agent.generalCommissioning.setRegulatoryConfig({
                 newRegulatoryConfig: 2,
                 countryCode: "XX",
@@ -229,7 +229,7 @@ describe("ServerNode", () => {
         });
         expect(commissioningServer2CertificateProviderCalled).equals(false);
 
-        await node.online(context, async agent => {
+        await node.online(contextOptions, async agent => {
             await agent.operationalCredentials.certificateChainRequest({ certificateType: 2 });
         });
         expect(commissioningServer2CertificateProviderCalled).equals(true);
@@ -244,14 +244,14 @@ describe("ServerNode", () => {
     });
 
     it("decommissions and recommissions", async () => {
-        const { node, context } = await commission();
+        const { node, contextOptions } = await commission();
 
         const fabricIndex = await node.online(
-            context,
+            contextOptions,
             async agent => agent.operationalCredentials.state.currentFabricIndex,
         );
 
-        await node.online(context, async agent => {
+        await node.online(contextOptions, async agent => {
             await agent.operationalCredentials.removeFabric({ fabricIndex });
         });
 
@@ -260,8 +260,9 @@ describe("ServerNode", () => {
             await node.lifecycle.decommissioned;
         }
 
-        // Simulate receiving the response to the removeFabric request which normally closes the underlying session delayed
-        await context.session.destroy(false, false);
+        // Simulate receiving the response to the removeFabric request which normally closes the underlying session
+        // delayed
+        await contextOptions.exchange.session.destroy(false, false);
 
         // ...then go offline...
         if (node.lifecycle.isOnline) {
@@ -335,7 +336,7 @@ describe("ServerNode", () => {
         expect(node.stateOf(DescriptorBehavior).partsList).deep.equals([aggregator.number, light.number, pump.number]);
         expect(aggregator.stateOf(DescriptorBehavior).partsList).deep.equals([light.number, pump.number]);
 
-        expect(light.stateOf(DescriptorBehavior).serverList).deep.equals([3, 4, 5, 6, 29]);
+        expect(light.stateOf(DescriptorBehavior).serverList).deep.equals([3, 4, 98, 6, 29]);
         expect(pump.stateOf(DescriptorBehavior).serverList).deep.equals([6, 3, 512, 29]);
 
         await node.close();
@@ -350,9 +351,9 @@ async function almostCommission(node?: MockServerNode, number = 0) {
     const params = Fixtures.fabrics[number];
     commissionForFabricNumber = number;
 
-    const session = await node.createSession();
+    const exchange = await node.createExchange();
 
-    const context = { session, command: true };
+    const context = { exchange, command: true };
 
     await node.online(context, async agent => {
         await agent.generalCommissioning.armFailSafe({ expiryLengthSeconds: Fixtures.failsafeLengthS, breadcrumb: 4 });
@@ -405,15 +406,15 @@ async function commission(existingNode?: MockServerNode, number = 0) {
 
     // Do not reuse session from initial commissioning because we must now move from CASE to PASE
     const fabric = node.env.get(FabricManager).getFabrics()[number];
-    const context = {
-        session: await node.createSession({
+    const contextOptions = {
+        exchange: await node.createExchange({
             fabric,
             peerNodeId: NodeId(number + 1),
         }),
         command: true,
     };
 
-    await node.online(context, async agent => {
+    await node.online(contextOptions, async agent => {
         // Use MockTime.resolve to wait for broadcaster cleanup
         const result = await MockTime.resolve(agent.generalCommissioning.commissioningComplete());
         expect(result).deep.equals({ errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" });
@@ -423,7 +424,7 @@ async function commission(existingNode?: MockServerNode, number = 0) {
         await node.lifecycle.commissioned;
     }
 
-    return { node, context };
+    return { node, contextOptions };
 }
 
 namespace Fixtures {

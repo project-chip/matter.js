@@ -56,7 +56,7 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
                 !!isFabricFiltered,
                 AccessControlCluster,
                 "acl",
-                new Array<TypeFromBitmapSchema<typeof AccessControl.TlvAccessControlEntryStruct>>(),
+                new Array<TypeFromBitmapSchema<typeof AccessControl.TlvAccessControlEntry>>(),
             );
         },
 
@@ -197,7 +197,7 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
                     fabric,
                     AccessControlCluster,
                     "acl",
-                    new Array<TypeFromBitmapSchema<typeof AccessControl.TlvAccessControlEntryStruct>>(),
+                    new Array<TypeFromBitmapSchema<typeof AccessControl.TlvAccessControlEntry>>(),
                 ) ?? [];
 
             const changed = genericFabricScopedAttributeSetterForFabric(fabric, AccessControlCluster, "acl", value, []);

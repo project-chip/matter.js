@@ -33,12 +33,12 @@ export async function testNode(runner: TestRunner, format: "cjs" | "esm") {
         }
     });
 
-    generalSetup(Mocha);
-
     const mocha = new Mocha({
         inlineDiffs: true,
         reporter: adaptReporter(Mocha, format.toUpperCase(), runner.reporter),
     });
+
+    generalSetup(mocha);
 
     TestOptions.apply(mocha, runner.options);
 
@@ -67,9 +67,8 @@ export async function testNode(runner: TestRunner, format: "cjs" | "esm") {
     }
 }
 
-// We use string concatenation to prevent TS from trying to find profiler
-// library types.  It doesn't build on all platforms we support and doesn't
-// provide type declarations when it doesn't build
+// We use string concatenation to prevent TS from trying to find profiler library types.  It doesn't build on all
+// platforms we support and doesn't provide type declarations when it doesn't build
 //
 // This interface acts as a replacement for proper types
 export interface Profilerish {
@@ -80,9 +79,8 @@ export interface Profilerish {
     };
 }
 
-// v8-profiler-next doesn't manage switching node versions well.  Load
-// dynamically so it doesn't interfere if it's not built and we're not
-// profiling
+// v8-profiler-next doesn't manage switching node versions well.  Load dynamically so it doesn't interfere if it's not
+// built and we're not profiling
 class Profiler {
     #profiler?: Profilerish;
 

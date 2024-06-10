@@ -38,7 +38,7 @@ export class ClusterComponentGenerator {
         private cluster: ClusterModel,
     ) {
         this.file = target.file as ClusterFile;
-        this.tlv = new TlvGenerator(this.cluster, this.file.types);
+        this.tlv = new TlvGenerator(this.file, this.file.types);
         this.defaults = new DefaultValueGenerator(this.tlv);
     }
 
@@ -71,7 +71,7 @@ export class ClusterComponentGenerator {
             }
 
             const factory = factoryParts.join("");
-            this.file.addImport("cluster/Cluster.js", factory);
+            this.file.addImport("#/cluster/Cluster.js", factory);
 
             const tlvType = this.tlv.reference(model);
 
@@ -130,7 +130,7 @@ export class ClusterComponentGenerator {
             } else {
                 factory = "OptionalCommand";
             }
-            this.file.addImport("cluster/Cluster.js", factory);
+            this.file.addImport("#/cluster/Cluster.js", factory);
 
             const block = add(factory);
             block.atom(hex(model.id));
@@ -148,7 +148,7 @@ export class ClusterComponentGenerator {
                 block.atom(hex(responseModel.id));
                 block.atom(this.tlv.reference(responseModel));
             } else {
-                this.file.addImport("cluster/Cluster.js", "TlvNoResponse");
+                this.file.addImport("#/cluster/Cluster.js", "TlvNoResponse");
                 block.atom(hex(model.id));
                 block.atom("TlvNoResponse");
             }
@@ -175,8 +175,8 @@ export class ClusterComponentGenerator {
             } else {
                 factory = "OptionalEvent";
             }
-            this.file.addImport("cluster/Cluster.js", factory);
-            this.file.addImport("cluster/Cluster.js", "EventPriority");
+            this.file.addImport("#/cluster/Cluster.js", factory);
+            this.file.addImport("#/cluster/Cluster.js", "EventPriority");
 
             const priority = camelize(model.priority ?? EventElement.Priority.Debug, true);
 
@@ -200,7 +200,7 @@ export class ClusterComponentGenerator {
     }
 
     private mapPrivilege(privilege: Access.Privilege) {
-        this.file.addImport("cluster/Cluster.js", "AccessLevel");
+        this.file.addImport("#/cluster/Cluster.js", "AccessLevel");
         return `AccessLevel.${Access.PrivilegeName[privilege]}`;
     }
 

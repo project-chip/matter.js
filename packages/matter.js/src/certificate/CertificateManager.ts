@@ -17,7 +17,7 @@ import {
     OBJECT_ID_KEY,
     RawBytes,
 } from "../codec/DerCodec.js";
-import { MatterError } from "../common/MatterError.js";
+import { ImplementationError, MatterError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { Key, PublicKey } from "../crypto/Key.js";
 import { CaseAuthenticatedTag, TlvCaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
@@ -30,7 +30,14 @@ import { Time } from "../time/Time.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvBitmap, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField, TlvOptionalRepeatedField, TlvTaggedList } from "../tlv/TlvObject.js";
+import {
+    TlvField,
+    TlvObject,
+    TlvObjectWithMaxSize,
+    TlvOptionalField,
+    TlvOptionalRepeatedField,
+    TlvTaggedList,
+} from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -42,6 +49,13 @@ export class CertificateError extends MatterError {}
 
 const YEAR_S = 365 * 24 * 60 * 60;
 const EPOCH_OFFSET_S = 10957 * 24 * 60 * 60;
+
+/**
+ * Matter specific Certificate Sizes
+ * @see {@link MatterSpecification.v13.Core} 6.1.3.
+ */
+const MAX_DER_CERTIFICATE_SIZE = 600;
+const MAX_TLV_CERTIFICATE_SIZE = 400;
 
 // TODO replace usage of Date by abstraction
 
@@ -210,47 +224,50 @@ const ExtensionKeyUsageSchema = BitmapSchema(ExtensionKeyUsageBitmap);
  * about them.
  */
 const BaseMatterCertificate = <S, I>(matterFields?: { subject?: S; issuer?: I }) =>
-    TlvObject({
-        serialNumber: TlvField(1, TlvByteString.bound({ maxLength: 20 })),
-        signatureAlgorithm: TlvField(2, TlvUInt8),
-        issuer: TlvField(
-            3,
-            TlvGenericMatterSubjectOrIssuerTaggedList<I>({
-                ...AllowedSubjectAndIssuerMatterFields,
-                ...(matterFields?.issuer ?? {}),
-            } as I),
-        ),
-        notBefore: TlvField(4, TlvUInt32),
-        notAfter: TlvField(5, TlvUInt32),
-        subject: TlvField(
-            6,
-            TlvGenericMatterSubjectOrIssuerTaggedList<S>({
-                ...AllowedSubjectAndIssuerMatterFields,
-                ...(matterFields?.subject ?? {}),
-            } as S),
-        ),
-        publicKeyAlgorithm: TlvField(7, TlvUInt8),
-        ellipticCurveIdentifier: TlvField(8, TlvUInt8),
-        ellipticCurvePublicKey: TlvField(9, TlvByteString),
-        extensions: TlvField(
-            10,
-            TlvTaggedList({
-                basicConstraints: TlvField(
-                    1,
-                    TlvObject({
-                        isCa: TlvField(1, TlvBoolean),
-                        pathLen: TlvOptionalField(2, TlvUInt8),
-                    }),
-                ),
-                keyUsage: TlvField(2, TlvBitmap(TlvUInt16, ExtensionKeyUsageBitmap)),
-                extendedKeyUsage: TlvOptionalField(3, TlvArray(TlvUInt8)),
-                subjectKeyIdentifier: TlvField(4, TlvByteString.bound({ length: 20 })),
-                authorityKeyIdentifier: TlvField(5, TlvByteString.bound({ length: 20 })),
-                futureExtension: TlvOptionalRepeatedField(6, TlvByteString),
-            }),
-        ),
-        signature: TlvField(11, TlvByteString),
-    });
+    TlvObjectWithMaxSize(
+        {
+            serialNumber: TlvField(1, TlvByteString.bound({ maxLength: 20 })),
+            signatureAlgorithm: TlvField(2, TlvUInt8),
+            issuer: TlvField(
+                3,
+                TlvGenericMatterSubjectOrIssuerTaggedList<I>({
+                    ...AllowedSubjectAndIssuerMatterFields,
+                    ...(matterFields?.issuer ?? {}),
+                } as I),
+            ),
+            notBefore: TlvField(4, TlvUInt32),
+            notAfter: TlvField(5, TlvUInt32),
+            subject: TlvField(
+                6,
+                TlvGenericMatterSubjectOrIssuerTaggedList<S>({
+                    ...AllowedSubjectAndIssuerMatterFields,
+                    ...(matterFields?.subject ?? {}),
+                } as S),
+            ),
+            publicKeyAlgorithm: TlvField(7, TlvUInt8),
+            ellipticCurveIdentifier: TlvField(8, TlvUInt8),
+            ellipticCurvePublicKey: TlvField(9, TlvByteString),
+            extensions: TlvField(
+                10,
+                TlvTaggedList({
+                    basicConstraints: TlvField(
+                        1,
+                        TlvObject({
+                            isCa: TlvField(1, TlvBoolean),
+                            pathLen: TlvOptionalField(2, TlvUInt8),
+                        }),
+                    ),
+                    keyUsage: TlvField(2, TlvBitmap(TlvUInt16, ExtensionKeyUsageBitmap)),
+                    extendedKeyUsage: TlvOptionalField(3, TlvArray(TlvUInt8)),
+                    subjectKeyIdentifier: TlvField(4, TlvByteString.bound({ length: 20 })),
+                    authorityKeyIdentifier: TlvField(5, TlvByteString.bound({ length: 20 })),
+                    futureExtension: TlvOptionalRepeatedField(6, TlvByteString),
+                }),
+            ),
+            signature: TlvField(11, TlvByteString),
+        },
+        MAX_TLV_CERTIFICATE_SIZE,
+    );
 
 export const TlvRootCertificate = BaseMatterCertificate({
     subject: {
@@ -546,6 +563,14 @@ function extensionsToAsn1(extensions: BaseCertificate["extensions"]) {
 }
 
 export class CertificateManager {
+    static #assertCertificateDerSize(certBytes: ByteArray) {
+        if (certBytes.length > MAX_DER_CERTIFICATE_SIZE) {
+            throw new ImplementationError(
+                `Certificate to generate is too big: ${certBytes.length} bytes instead of max ${MAX_DER_CERTIFICATE_SIZE} bytes`,
+            );
+        }
+    }
+
     static #genericBuildAsn1Structure({
         serialNumber,
         notBefore,
@@ -577,7 +602,9 @@ export class CertificateManager {
     }
 
     static #genericCertToAsn1(cert: Unsigned<BaseCertificate>) {
-        return DerCodec.encode(this.#genericBuildAsn1Structure(cert));
+        const certBytes = DerCodec.encode(this.#genericBuildAsn1Structure(cert));
+        this.#assertCertificateDerSize(certBytes);
+        return certBytes;
     }
 
     static rootCertToAsn1(cert: Unsigned<RootCertificate>) {
@@ -623,11 +650,13 @@ export class CertificateManager {
 
     static deviceAttestationCertToAsn1(cert: Unsigned<DeviceAttestationCertificate>, key: Key) {
         const certificate = this.#genericBuildAsn1Structure(cert);
-        return DerCodec.encode({
+        const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
+        this.#assertCertificateDerSize(certBytes);
+        return certBytes;
     }
 
     static productAttestationIntermediateCertToAsn1(
@@ -635,20 +664,24 @@ export class CertificateManager {
         key: Key,
     ) {
         const certificate = this.#genericBuildAsn1Structure(cert);
-        return DerCodec.encode({
+        const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
+        this.#assertCertificateDerSize(certBytes);
+        return certBytes;
     }
 
     static productAttestationAuthorityCertToAsn1(cert: Unsigned<ProductAttestationAuthorityCertificate>, key: Key) {
         const certificate = this.#genericBuildAsn1Structure(cert);
-        return DerCodec.encode({
+        const certBytes = DerCodec.encode({
             certificate,
             signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
+        this.#assertCertificateDerSize(certBytes);
+        return certBytes;
     }
 
     static CertificationDeclarationToAsn1(
@@ -671,7 +704,9 @@ export class CertificateManager {
             ],
         };
 
-        return DerCodec.encode(Pkcs7.SignedData(certificate));
+        const certBytes = DerCodec.encode(Pkcs7.SignedData(certificate));
+        this.#assertCertificateDerSize(certBytes);
+        return certBytes;
     }
 
     /**

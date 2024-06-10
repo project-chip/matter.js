@@ -47,8 +47,8 @@ import { AnnouncementType, MdnsServer } from "./MdnsServer.js";
 
 const logger = Logger.get("MdnsBroadcaster");
 
-const TCP_SUPPORTED = 0;
-const ICD_SUPPORTED = 0; // TODO: Implement ICD later
+//const TCP_SUPPORTED = 0;
+//const ICD_SUPPORTED = 0; // TODO: Implement ICD later
 const DEFAULT_PAIRING_HINT = {
     powerCycle: true,
     deviceManual: true,
@@ -89,7 +89,21 @@ export class MdnsBroadcaster {
         return instance;
     }
 
-    validatePairingInstructions(
+    #validateCommissioningData(data: CommissioningModeInstanceData) {
+        const { sessionIdleInterval, sessionActiveInterval, sessionActiveThreshold } = data;
+
+        if (sessionIdleInterval !== undefined && sessionIdleInterval > 3_600_000) {
+            throw new ImplementationError("Session Idle Interval must be less than 1 hour");
+        }
+        if (sessionActiveInterval !== undefined && sessionActiveInterval > 3_600_000) {
+            throw new ImplementationError("Session Active Interval must be less than 1 hour");
+        }
+        if (sessionActiveThreshold !== undefined && sessionActiveThreshold > 65_535) {
+            throw new ImplementationError("Session Active Threshold must be less than 65535 seconds");
+        }
+    }
+
+    #validatePairingInstructions(
         pairingHint: TypeFromPartialBitSchema<typeof PairingHintBitmap>,
         pairingInstructions: string,
     ) {
@@ -113,7 +127,7 @@ export class MdnsBroadcaster {
         }
     }
 
-    private getIpRecords(hostname: string, ips: string[]) {
+    #getIpRecords(hostname: string, ips: string[]) {
         const records = new Array<DnsRecord<any>>();
         ips.forEach(ip => {
             if (isIPv6(ip)) {
@@ -133,19 +147,24 @@ export class MdnsBroadcaster {
     async setCommissionMode(
         announcedNetPort: number,
         mode: number,
-        {
+        commissioningModeData: CommissioningModeInstanceData,
+    ) {
+        this.#validateCommissioningData(commissioningModeData); // Throws error if invalid!
+
+        const {
             name: deviceName,
             deviceType,
             vendorId,
             productId,
             discriminator,
-            sessionIdleInterval = SESSION_ACTIVE_INTERVAL_MS,
-            sessionActiveInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionIdleInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionActiveInterval = SESSION_ACTIVE_INTERVAL_MS,
             sessionActiveThreshold = SESSION_ACTIVE_THRESHOLD_MS,
             pairingHint = DEFAULT_PAIRING_HINT,
             pairingInstructions = "",
-        }: CommissioningModeInstanceData,
-    ) {
+        } = commissioningModeData;
+        this.#validatePairingInstructions(pairingHint, pairingInstructions); // Throws error if invalid!
+
         // When doing a commission announcement, we need to expire any previous commissioning announcements
         await this.expireCommissioningAnnouncement(announcedNetPort);
 
@@ -162,8 +181,6 @@ export class MdnsBroadcaster {
         const longDiscriminatorQname = getLongDiscriminatorQname(discriminator);
         const commissionModeQname = getCommissioningModeQname();
         const deviceQname = getDeviceInstanceQname(instanceId);
-
-        this.validatePairingInstructions(pairingHint, pairingInstructions); // Throws error if invalid!
 
         await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
             const ipMac = this.#network.getIpMac(netInterface);
@@ -202,15 +219,15 @@ export class MdnsBroadcaster {
                     `SII=${sessionIdleInterval}` /* Session Idle Interval */,
                     `SAI=${sessionActiveInterval}` /* Session Active Interval */,
                     `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
-                    `T=${TCP_SUPPORTED}` /* TCP not supported */,
+                    //`T=${TCP_SUPPORTED}` /* TCP not supported */,
                     `D=${discriminator}` /* Discriminator */,
                     `CM=${mode}` /* Commission Mode */,
                     `PH=${PairingHintBitmapSchema.encode(pairingHint)}` /* Pairing Hint */,
                     `PI=${pairingInstructions}` /* Pairing Instruction */,
-                    `ICD=${ICD_SUPPORTED}` /* ICD not supported */,
+                    //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
                 ]),
             ];
-            records.push(...this.getIpRecords(hostname, [...ipV6, ...ipV4]));
+            records.push(...this.#getIpRecords(hostname, [...ipV6, ...ipV4]));
             return records;
         });
     }
@@ -220,8 +237,8 @@ export class MdnsBroadcaster {
         announcedNetPort: number,
         fabrics: Fabric[],
         {
-            sessionIdleInterval = SESSION_ACTIVE_INTERVAL_MS,
-            sessionActiveInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionIdleInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionActiveInterval = SESSION_ACTIVE_INTERVAL_MS,
             sessionActiveThreshold = SESSION_ACTIVE_THRESHOLD_MS,
         }: OperationalInstanceData = {},
     ) {
@@ -271,13 +288,13 @@ export class MdnsBroadcaster {
                         `SII=${sessionIdleInterval}` /* Session Idle Interval */,
                         `SAI=${sessionActiveInterval}` /* Session Active Interval */,
                         `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
-                        `T=${TCP_SUPPORTED}` /* TCP not supported */,
-                        `ICD=${ICD_SUPPORTED}` /* ICD not supported */,
+                        //`T=${TCP_SUPPORTED}` /* TCP not supported */,
+                        //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
                     ]),
                 ];
                 records.push(...fabricRecords);
             });
-            records.push(...this.getIpRecords(hostname, [...ipV6, ...ipV4]));
+            records.push(...this.#getIpRecords(hostname, [...ipV6, ...ipV4]));
             return records;
         });
     }
@@ -290,8 +307,8 @@ export class MdnsBroadcaster {
             deviceType,
             vendorId,
             productId,
-            sessionIdleInterval = SESSION_ACTIVE_INTERVAL_MS,
-            sessionActiveInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionIdleInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionActiveInterval = SESSION_ACTIVE_INTERVAL_MS,
             sessionActiveThreshold = SESSION_ACTIVE_THRESHOLD_MS,
         }: CommissionerInstanceData,
     ) {
@@ -327,8 +344,8 @@ export class MdnsBroadcaster {
                     `SII=${sessionIdleInterval}` /* Session Idle Interval */,
                     `SAI=${sessionActiveInterval}` /* Session Active Interval */,
                     `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
-                    `T=${TCP_SUPPORTED}` /* TCP not supported */,
-                    `ICD=${ICD_SUPPORTED}` /* ICD not supported */,
+                    //`T=${TCP_SUPPORTED}` /* TCP not supported */,
+                    //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
                 ]),
             ];
             if (deviceType !== undefined) {
@@ -336,7 +353,7 @@ export class MdnsBroadcaster {
                 records.push(PtrRecord(deviceTypeQname, deviceQname));
             }
 
-            records.push(...this.getIpRecords(hostname, [...ipV6, ...ipV4]));
+            records.push(...this.#getIpRecords(hostname, [...ipV6, ...ipV4]));
             return records;
         });
     }

@@ -10,6 +10,9 @@ import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definiti
 import {
     BooleanStateServer as BaseBooleanStateServer
 } from "../../../behavior/definitions/boolean-state/BooleanStateServer.js";
+import {
+    BooleanStateConfigurationServer as BaseBooleanStateConfigurationServer
+} from "../../../behavior/definitions/boolean-state-configuration/BooleanStateConfigurationServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -17,7 +20,7 @@ import { Identity } from "../../../util/Type.js";
 /**
  * This defines conformance to the Contact Sensor device type.
  *
- * @see {@link MatterSpecification.v11.Device} § 7.1
+ * @see {@link MatterSpecification.v13.Device} § 7.1
  */
 export interface ContactSensorDevice extends Identity<typeof ContactSensorDeviceDefinition> {}
 
@@ -37,15 +40,25 @@ export namespace ContactSensorRequirements {
     export const BooleanStateServer = BaseBooleanStateServer;
 
     /**
+     * The BooleanStateConfiguration cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link BooleanStateConfigurationServer} for convenience.
+     */
+    export const BooleanStateConfigurationServer = BaseBooleanStateConfigurationServer;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    export const server = { mandatory: { Identify: IdentifyServer, BooleanState: BooleanStateServer } };
+    export const server = {
+        mandatory: { Identify: IdentifyServer, BooleanState: BooleanStateServer },
+        optional: { BooleanStateConfiguration: BooleanStateConfigurationServer }
+    };
 }
 
 export const ContactSensorDeviceDefinition = MutableEndpoint({
     name: "ContactSensor",
     deviceType: 0x15,
-    deviceRevision: 1,
+    deviceRevision: 2,
     requirements: ContactSensorRequirements,
     behaviors: SupportedBehaviors(
         ContactSensorRequirements.server.mandatory.Identify,

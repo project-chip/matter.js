@@ -274,8 +274,8 @@ export namespace SwitchServerLogic {
 
     /** Enhance the relevant events for rawPosition attribute. */
     export class Events extends SwitchServerBase.Events {
-        rawPosition$Changed = new Observable<[value: number, oldValue: number, context?: ActionContext]>();
-        rawPosition$Changing = new Observable<[value: number, oldValue: number, context?: ActionContext]>();
+        rawPosition$Changed = Observable<[value: number, oldValue: number, context?: ActionContext]>();
+        rawPosition$Changing = Observable<[value: number, oldValue: number, context?: ActionContext]>();
     }
 }
 

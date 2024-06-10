@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NotImplementedError } from "../../common/MatterError.js";
 import { WrapCommandHandler } from "../../device/Device.js";
 import { Network, NetworkInterfaceDetailed } from "../../net/Network.js";
 import { Time } from "../../time/Time.js";
@@ -74,6 +75,9 @@ export const GeneralDiagnosticsClusterHandler: () => ClusterServerHandlers<typeo
         },
 
         testEventTrigger: () => {},
+        timeSnapshot: () => {
+            throw new NotImplementedError();
+        },
     };
 };
 

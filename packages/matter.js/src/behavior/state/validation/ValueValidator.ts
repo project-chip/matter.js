@@ -5,7 +5,7 @@
  */
 
 import { DataModelPath } from "../../../endpoint/DataModelPath.js";
-import { ClusterModel, Metatype, ValueModel } from "../../../model/index.js";
+import { AttributeModel, ClusterModel, Metatype, ValueModel } from "../../../model/index.js";
 import { StatusCode } from "../../../protocol/interaction/StatusCode.js";
 import { camelize } from "../../../util/String.js";
 import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
@@ -39,7 +39,6 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
     }
 
     let validator: ValueSupervisor.Validate | undefined;
-
     const metatype = schema.effectiveMetatype;
     switch (metatype) {
         case Metatype.enum:
@@ -201,8 +200,8 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
     const validators = {} as Record<string, ValueSupervisor.Validate>;
 
     for (const field of schema.members) {
-        // Global fields currently handled in lower levels
-        if (field.isGlobalAttribute || field.isDeprecated) {
+        // Skip deprecated, and global attributes we currently handle in lower levels
+        if (field.isDeprecated || AttributeModel.isGlobal(field)) {
             continue;
         }
         const validate = factory.get(field).validate;
@@ -211,7 +210,7 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
         }
     }
 
-    return (struct, session, location) => {
+    const validateStruct: ValueSupervisor.Validate = (struct, session, location) => {
         assertObject(struct, location);
         const sublocation = {
             path: location.path.at(""),
@@ -260,6 +259,8 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
             }
         }
     };
+
+    return validateStruct;
 }
 
 function createListValidator(schema: ValueModel, factory: RootSupervisor): ValueSupervisor.Validate | undefined {

@@ -15,8 +15,8 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "AccessControl", id: 0x1f, classification: "node", description: "Access Control",
+export const AccessControl = Cluster({
+    name: "AccessControl", id: 0x1f, classification: "node", pics: "ACL",
 
     details: "The Access Control Cluster exposes a data model view of a Node’s Access Control List (ACL), which " +
         "codifies the rules used to manage and enforce Access Control for the Node’s endpoints and their " +
@@ -36,9 +36,8 @@ Matter.children.push(Cluster({
             name: "Acl", id: 0x0, type: "list", access: "RW F A", conformance: "M", constraint: "desc",
 
             details: "An attempt to add an Access Control Entry when no more entries are available shall result in a " +
-                "RESOURCE_EXHAUSTED error being reported and the ACL attribute shall NOT have the entry" +
-                "\n" +
-                "added to it. See access control limits." +
+                "RESOURCE_EXHAUSTED error being reported and the ACL attribute shall NOT have the entry added to it. " +
+                "See access control limits." +
                 "\n" +
                 "See the AccessControlEntriesPerFabric attribute for the actual value of the number of entries per " +
                 "fabric supported by the server." +
@@ -161,10 +160,7 @@ Matter.children.push(Cluster({
                     xref: { document: "core", section: "9.10.7.1.4" }
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
 
@@ -223,15 +219,12 @@ Matter.children.push(Cluster({
                     xref: { document: "core", section: "9.10.7.2.4" }
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
 
         Datatype({
-            name: "ChangeTypeEnum", type: "enum8", conformance: "M",
+            name: "ChangeTypeEnum", type: "enum8",
             xref: { document: "core", section: "9.10.4.1" },
             children: [
                 Field({ name: "Changed", id: 0x0, conformance: "M", description: "Entry or extension was changed" }),
@@ -241,7 +234,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "AccessControlEntryPrivilegeEnum", type: "enum8", conformance: "M",
+            name: "AccessControlEntryPrivilegeEnum", type: "enum8",
             details: "Proxy View Value" +
                 "\n" +
                 "This value implicitly grants View privileges",
@@ -281,7 +274,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "AccessControlEntryAuthModeEnum", type: "enum8", conformance: "M",
+            name: "AccessControlEntryAuthModeEnum", type: "enum8",
             xref: { document: "core", section: "9.10.4.3" },
             children: [
                 Field({ name: "Pase", id: 0x1, conformance: "M", description: "Passcode authenticated session" }),
@@ -291,7 +284,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "AccessControlTargetStruct", type: "struct", conformance: "M",
+            name: "AccessControlTargetStruct", type: "struct",
             xref: { document: "core", section: "9.10.4.4" },
             children: [
                 Field({ name: "Cluster", id: 0x0, type: "cluster-id", conformance: "M", quality: "X" }),
@@ -301,7 +294,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "AccessControlEntryStruct", type: "struct", access: "R F", conformance: "M",
+            name: "AccessControlEntryStruct", type: "struct",
             xref: { document: "core", section: "9.10.4.5" },
 
             children: [
@@ -320,7 +313,7 @@ Matter.children.push(Cluster({
                         "privilege levels as well. The following diagram illustrates how the higher privilege levels subsume " +
                         "the lower privilege levels:" +
                         "\n" +
-                        "Figure 39. Access Control Privilege Levels" +
+                        "Figure 43. Access Control Privilege Levels" +
                         "\n" +
                         "Individual clusters shall define whether attributes are readable, writable, or both readable and " +
                         "writable. Clusters also shall define which privilege is minimally required to be able to perform a " +
@@ -353,7 +346,7 @@ Matter.children.push(Cluster({
                         "An attempt to create an entry with more subjects than the node can support shall result in a " +
                         "RESOURCE_EXHAUSTED error and the entry shall NOT be created." +
                         "\n" +
-                        "Subject ID shall be of type uint64 with semantics depending on the entry’s AuthMode as follows:" +
+                        "### Subject ID shall be of type uint64 with semantics depending on the entry’s AuthMode as follows:" +
                         "\n" +
                         "Subject Semantics" +
                         "\n" +
@@ -409,23 +402,19 @@ Matter.children.push(Cluster({
                     children: [Field({ name: "entry", type: "AccessControlTargetStruct" })]
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         }),
 
         Datatype({
-            name: "AccessControlExtensionStruct", type: "struct", access: "R F", conformance: "M",
+            name: "AccessControlExtensionStruct", type: "struct",
             xref: { document: "core", section: "9.10.4.6" },
 
             children: [
                 Field({
                     name: "Data", id: 0x1, type: "octstr", access: "S", conformance: "M", constraint: "max 128",
 
-                    details: "This field may be used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s" +
-                        "\n" +
+                    details: "This field may be used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s " +
                         "Access Control Entries." +
                         "\n" +
                         "The contents shall consist of a top-level anonymous list; each list element shall include a " +
@@ -438,11 +427,10 @@ Matter.children.push(Cluster({
                     xref: { document: "core", section: "9.10.4.6.1" }
                 }),
 
-                Field({
-                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
-                    constraint: "1 to 254"
-                })
+                Field({ name: "FabricIndex", id: 0xfe, type: "FabricIndex" })
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(AccessControl);

@@ -33,8 +33,8 @@ export class Environment {
     #services?: Map<abstract new (...args: any[]) => any, Environmental.Service>;
     #name: string;
     #parent?: Environment;
-    #added = new Observable<[type: abstract new (...args: any[]) => {}, instance: {}]>();
-    #deleted = new Observable<[type: abstract new (...args: any[]) => {}, instance: {}]>();
+    #added = Observable<[type: abstract new (...args: any[]) => {}, instance: {}]>();
+    #deleted = Observable<[type: abstract new (...args: any[]) => {}, instance: {}]>();
     #serviceEvents = new Map<abstract new (...args: any[]) => any, Environmental.ServiceEvents<any>>();
 
     constructor(name: string, parent?: Environment) {

@@ -6,8 +6,12 @@
 
 import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
 import { Access } from "../aspects/Access.js";
+import { Quality } from "../aspects/Quality.js";
 import { FeatureSet, Metatype } from "../definitions/index.js";
-import { ClusterElement, Globals } from "../elements/index.js";
+import { ClusterElement } from "../elements/index.js";
+import { ClusterRevision } from "../standard/elements/ClusterRevision.js";
+import { FeatureMap } from "../standard/elements/FeatureMap.js";
+import { Aspects } from "./Aspects.js";
 import { AttributeModel } from "./AttributeModel.js";
 import { Children } from "./Children.js";
 import { CommandModel } from "./CommandModel.js";
@@ -17,13 +21,25 @@ import type { FieldModel } from "./FieldModel.js";
 import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
 
-export class ClusterModel extends Model {
+const QUALITY = Symbol("quality");
+
+export class ClusterModel extends Model implements ClusterElement {
     override tag: ClusterElement.Tag = ClusterElement.Tag;
     override id?: Mei;
     classification?: ClusterElement.Classification;
+    pics?: string;
     override isTypeScope = true;
-    singleton?: boolean;
     supportedFeatures?: FeatureSet;
+
+    get quality(): Quality {
+        return Aspects.getAspect(this, QUALITY, Quality);
+    }
+    set quality(definition: Quality | Quality.Definition) {
+        Aspects.setAspect(this, QUALITY, Quality, definition);
+    }
+    get effectiveQuality(): Quality {
+        return Aspects.getEffectiveAspect(this, QUALITY, Quality);
+    }
 
     get attributes() {
         return this.all(AttributeModel);
@@ -47,7 +63,7 @@ export class ClusterModel extends Model {
 
     get revision() {
         let revision = 1;
-        const revisionAttr = this.get(AttributeModel, Globals.ClusterRevision.id);
+        const revisionAttr = this.get(AttributeModel, ClusterRevision.id);
         if (typeof revisionAttr?.default === "number") {
             revision = revisionAttr.default;
         }
@@ -59,7 +75,7 @@ export class ClusterModel extends Model {
     }
 
     get featureMap() {
-        return this.get(AttributeModel, Globals.FeatureMap.id) ?? new AttributeModel(Globals.FeatureMap);
+        return this.get(AttributeModel, FeatureMap.id) ?? new AttributeModel(FeatureMap);
     }
 
     override get children(): Children<ClusterModel.Child, ClusterElement.Child> {
@@ -78,8 +94,20 @@ export class ClusterModel extends Model {
         return Access.Default;
     }
 
+    override valueOf() {
+        const result = super.valueOf() as any;
+        if (this.quality && !this.quality.empty) {
+            result.quality = this.quality.valueOf();
+        }
+        return result as ClusterElement;
+    }
+
     constructor(definition: ClusterElement.Properties) {
         super(definition);
+
+        if (definition instanceof Model) {
+            Aspects.cloneAspects(definition, this, QUALITY);
+        }
     }
 
     static Tag = ClusterElement.Tag;

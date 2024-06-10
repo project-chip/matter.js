@@ -12,7 +12,6 @@ import { GroupsCluster } from "../definitions/GroupsCluster.js";
 import { IdentifyCluster } from "../definitions/IdentifyCluster.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
-import { ScenesManager } from "./ScenesServer.js";
 
 /*
 TODO: If the Scenes server cluster is implemented on the same endpoint, the following extension field SHALL
@@ -134,9 +133,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             assertSecureSession(session);
-            const fabric = session.associatedFabric;
             if (await GroupsManager.removeGroup(session.associatedFabric, endpoint.getNumber(), groupId)) {
-                await ScenesManager.removeAllScenesForGroup(fabric, endpoint.getNumber(), groupId);
                 return { status: StatusCode.Success, groupId };
             }
             return { status: StatusCode.NotFound, groupId };
@@ -146,7 +143,6 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             assertSecureSession(session);
             const fabric = session.associatedFabric;
             await GroupsManager.removeAllGroups(fabric, endpoint.getNumber());
-            await ScenesManager.removeAllNonGlobalScenesForEndpoint(fabric, endpoint.getNumber());
 
             return;
         },

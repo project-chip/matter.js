@@ -43,9 +43,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesInterface.ts:11](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesInterface.ts#L11)
+[packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesInterface.ts:11](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesInterface.ts#L11)
 
-[packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesInterface.ts:20](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesInterface.ts#L20)
+[packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesInterface.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesInterface.ts#L20)
 
 ## Variables
 
@@ -57,8 +57,8 @@ ValidProxiesBehavior is the base class for objects that support interaction with
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts:16](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts:16](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts:21](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts:21](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts:23](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/valid-proxies/ValidProxiesBehavior.ts#L23)

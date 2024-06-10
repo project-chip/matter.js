@@ -16,7 +16,9 @@ import {
     ColorControlBehavior as BaseColorControlBehavior
 } from "../../../behavior/definitions/color-control/ColorControlBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
+import {
+    ScenesManagementBehavior as BaseScenesManagementBehavior
+} from "../../../behavior/definitions/scenes-management/ScenesManagementBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -25,7 +27,7 @@ import { Identity } from "../../../util/Type.js";
  * A Color Dimmer Switch is a controller device that, when bound to a lighting device such as an Extended Color Light,
  * is capable of being used to adjust the color of the light being emitted.
  *
- * @see {@link MatterSpecification.v11.Device} § 6.3
+ * @see {@link MatterSpecification.v13.Device} § 6.3
  */
 export interface ColorDimmerSwitchDevice extends Identity<typeof ColorDimmerSwitchDeviceDefinition> {}
 
@@ -73,11 +75,11 @@ export namespace ColorDimmerSwitchRequirements {
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The Scenes cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification
      *
-     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
+     * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
      */
-    export const ScenesBehavior = BaseScenesBehavior;
+    export const ScenesManagementBehavior = BaseScenesManagementBehavior;
 
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
@@ -95,14 +97,14 @@ export namespace ColorDimmerSwitchRequirements {
             ColorControl: ColorControlBehavior
         },
 
-        optional: { Groups: GroupsBehavior, Scenes: ScenesBehavior }
+        optional: { Groups: GroupsBehavior, ScenesManagement: ScenesManagementBehavior }
     };
 }
 
 export const ColorDimmerSwitchDeviceDefinition = MutableEndpoint({
     name: "ColorDimmerSwitch",
     deviceType: 0x105,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: ColorDimmerSwitchRequirements,
     behaviors: SupportedBehaviors(ColorDimmerSwitchRequirements.server.mandatory.Identify)
 });

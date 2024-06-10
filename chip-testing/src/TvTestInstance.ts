@@ -107,7 +107,7 @@ export class TvTestInstance implements TestInstance {
                 },
                 productDescription: {
                     name: this.appName,
-                    deviceType: DeviceTypeId(0xbfff),
+                    deviceType: DeviceTypeId(0x0101),
                 },
                 basicInformation: {
                     vendorName: "Binford",
@@ -126,6 +126,7 @@ export class TvTestInstance implements TestInstance {
                         finish: BasicInformation.ProductFinish.Satin,
                         primaryColor: BasicInformation.Color.Purple,
                     },
+                    reachable: true,
                 },
                 administratorCommissioning: {
                     windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,
@@ -151,7 +152,7 @@ export class TvTestInstance implements TestInstance {
                     applicationVersion: "1",
                 },
                 wakeOnLan: {
-                    macAddress: ByteArray.fromHex("0000000000000000"),
+                    macAddress: "000000000000",
                     linkLocalAddress: ByteArray.fromHex("00000000000000000000000000000000"),
                 },
             },

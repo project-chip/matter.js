@@ -20,12 +20,12 @@ import { StatusCode, StatusResponseError } from "./StatusCode.js";
 
 const logger = Logger.get("AccessControlManager");
 
-export type AclEntry = Omit<TypeFromBitmapSchema<typeof AccessControl.TlvAccessControlEntryStruct>, "privilege"> & {
+export type AclEntry = Omit<TypeFromBitmapSchema<typeof AccessControl.TlvAccessControlEntry>, "privilege"> & {
     privilege: AccessLevel;
 };
 export type AclList = AclEntry[];
 
-export type AclExtensionEntry = TypeFromBitmapSchema<typeof AccessControl.TlvAccessControlExtensionStruct>;
+export type AclExtensionEntry = TypeFromBitmapSchema<typeof AccessControl.TlvAccessControlExtension>;
 export type AclExtensionList = AclExtensionEntry[];
 
 const ImplicitDefaultPaseAclEntry: AclEntry = {
@@ -67,7 +67,7 @@ export class AccessControlManager {
     ) => boolean = () => true;
 
     constructor(
-        aclList: AccessControl.AccessControlEntryStruct[] = [],
+        aclList: AccessControl.AccessControlEntry[] = [],
         extensionEntryAccessCheck?: (
             aclList: AclList,
             aclEntry: AclEntry,
@@ -85,7 +85,7 @@ export class AccessControlManager {
     /**
      * Public method used to update the Access Control List on changes.
      */
-    updateAccessControlList(aclList: AccessControl.AccessControlEntryStruct[] = []): void {
+    updateAccessControlList(aclList: AccessControl.AccessControlEntry[] = []): void {
         this.#aclList = [...aclList] as unknown as AclList; // It is the same structure we just use an internal type for privilege
     }
 

@@ -77,7 +77,7 @@ Create a new supervisor.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:46](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L46)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:46](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L46)
 
 ## Properties
 
@@ -87,7 +87,7 @@ Create a new supervisor.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L33)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:33](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L33)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:34](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L34)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:34](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L34)
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:32](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L32)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L32)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:38](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L38)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L38)
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:36](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L36)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:36](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L36)
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:39](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L39)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:39](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L39)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:37](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L37)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:37](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L37)
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:35](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L35)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L35)
 
 ## Accessors
 
@@ -177,7 +177,7 @@ Consolidated access control information for the schema.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:67](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L67)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:67](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L67)
 
 ___
 
@@ -193,7 +193,7 @@ All available features defined in the schema.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:125](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L125)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:130](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L130)
 
 ___
 
@@ -213,7 +213,7 @@ Create a managed instance of a value.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:75](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L75)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:75](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L75)
 
 ___
 
@@ -229,7 +229,7 @@ The names of all members.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:93](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L93)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:93](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L93)
 
 ___
 
@@ -245,7 +245,7 @@ Retrieve root schema elements that contribute fields to the data model.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:86](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L86)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:86](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L86)
 
 ___
 
@@ -265,7 +265,7 @@ The schema manager that owns this ValueSupervisor.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:59](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L59)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:59](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L59)
 
 ___
 
@@ -285,7 +285,7 @@ Apply changes.  Does not validate perform validation.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:79](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L79)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:79](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L79)
 
 ___
 
@@ -301,7 +301,7 @@ Names of fields configured as non-volatile.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:108](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L108)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:108](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L108)
 
 ___
 
@@ -321,7 +321,7 @@ The logical schema that controls the value's behavior.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:63](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L63)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:63](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L63)
 
 ___
 
@@ -337,7 +337,7 @@ Features supported by this implementation.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:132](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L132)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:137](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L137)
 
 ___
 
@@ -357,7 +357,7 @@ Perform validation.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:71](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L71)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:71](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L71)
 
 ## Methods
 
@@ -377,7 +377,7 @@ Perform validation.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:157](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L157)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:162](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L162)
 
 ___
 
@@ -403,7 +403,7 @@ install stubs that bootstrap each method.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:220](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L220)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:225](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L225)
 
 ___
 
@@ -427,4 +427,4 @@ the I/O implementation
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:142](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L142)
+[packages/matter.js/src/behavior/supervision/RootSupervisor.ts:147](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/RootSupervisor.ts#L147)

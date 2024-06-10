@@ -69,7 +69,7 @@ one BLE device at a time!
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:147](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L147)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:147](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L147)
 
 ## Properties
 
@@ -79,7 +79,7 @@ one BLE device at a time!
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:131](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L131)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:131](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L131)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:132](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L132)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:132](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L132)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:141](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L141)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:141](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L141)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:135](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L135)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:135](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L135)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:140](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L140)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:140](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L140)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:130](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L130)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:130](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L130)
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:134](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L134)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:134](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L134)
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:145](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L145)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:145](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L145)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:137](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L137)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:137](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L137)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:129](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L129)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:129](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L129)
 
 ___
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:138](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L138)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:138](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L138)
 
 ## Accessors
 
@@ -197,7 +197,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:401](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L401)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:401](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L401)
 
 ## Methods
 
@@ -218,7 +218,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:316](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L316)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:316](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L316)
 
 ___
 
@@ -232,7 +232,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:360](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L360)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:360](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L360)
 
 ___
 
@@ -250,7 +250,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:365](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L365)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:365](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L365)
 
 ___
 
@@ -264,7 +264,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:375](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L375)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:375](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L375)
 
 ___
 
@@ -290,7 +290,7 @@ Otherwise, the data are forwarded to the BTP session handler to be decoded and p
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:220](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L220)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:220](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L220)
 
 ___
 
@@ -304,7 +304,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:293](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L293)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:293](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L293)
 
 ___
 
@@ -330,7 +330,7 @@ The BtpSessionHandler instance is wired with the bleno instance for sending data
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:255](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L255)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:255](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L255)
 
 ___
 
@@ -353,7 +353,7 @@ The relevant data needs optionally to be set before advertising, else empty data
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:308](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L308)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:308](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L308)
 
 ___
 
@@ -379,7 +379,7 @@ Send a Matter message to the connected device - need to do BTP assembly first.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:393](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L393)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:393](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L393)
 
 ___
 
@@ -399,7 +399,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:353](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L353)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:353](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L353)
 
 ___
 
@@ -413,4 +413,4 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:341](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L341)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:341](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L341)

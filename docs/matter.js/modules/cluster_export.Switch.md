@@ -70,7 +70,7 @@ These elements and properties are present in all Switch clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:311](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L311)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:311](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L311)
 
 ___
 
@@ -80,9 +80,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:408](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L408)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:408](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L408)
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:410](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L410)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:410](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L410)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:385](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L385)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:385](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L385)
 
 ___
 
@@ -106,9 +106,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:472](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L472)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:472](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L472)
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:474](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L474)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:474](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L474)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:420](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L420)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:420](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L420)
 
 ___
 
@@ -141,7 +141,7 @@ A SwitchCluster supports these elements if it supports feature LatchingSwitch.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:190](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L190)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:190](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L190)
 
 ___
 
@@ -160,7 +160,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitch.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:207](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L207)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:207](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L207)
 
 ___
 
@@ -180,7 +180,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitchLo
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:223](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L223)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:223](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L223)
 
 ___
 
@@ -202,7 +202,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitchMu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:126](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L126)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:126](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L126)
 
 ___
 
@@ -221,7 +221,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitchRe
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:253](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L253)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:253](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L253)
 
 ___
 
@@ -237,7 +237,7 @@ MatterSpecification.v11.Cluster § 1.11.7.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:72](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L72)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:72](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L72)
 
 ___
 
@@ -253,7 +253,7 @@ MatterSpecification.v11.Cluster § 1.11.7.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:86](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L86)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:86](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L86)
 
 ___
 
@@ -269,7 +269,7 @@ MatterSpecification.v11.Cluster § 1.11.7.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:100](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L100)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:100](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L100)
 
 ___
 
@@ -285,7 +285,7 @@ MatterSpecification.v11.Cluster § 1.11.7.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:41](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:41](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L41)
 
 ___
 
@@ -301,7 +301,7 @@ MatterSpecification.v11.Cluster § 1.11.7.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:24](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L24)
 
 ___
 
@@ -317,7 +317,7 @@ MatterSpecification.v11.Cluster § 1.11.7.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:114](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L114)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:114](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L114)
 
 ___
 
@@ -333,4 +333,4 @@ MatterSpecification.v11.Cluster § 1.11.7.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:58](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L58)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:58](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L58)

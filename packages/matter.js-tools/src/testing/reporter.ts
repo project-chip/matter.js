@@ -14,11 +14,11 @@ export type Stats = {
 };
 
 export interface Reporter {
-    beginRun(name: string, stats: Stats): void;
-    beginSuite(name: string[], stats: Stats): void;
-    beginTest(name: string, stats: Stats): void;
+    beginRun(name: string, stats?: Stats, supportsSuites?: boolean): void;
+    beginSuite(name: string[], stats?: Stats): void;
+    beginTest(name: string, stats?: Stats): void;
     failTest(name: string, detail: FailureDetail): void;
-    endRun(stats: Stats): void;
+    endRun(stats?: Stats): void;
     failRun(message: string, stack?: string): void;
 }
 
@@ -43,15 +43,20 @@ export abstract class ProgressReporter implements Reporter {
 
     constructor(private progress: Progress) {}
 
-    beginRun(name: string): void {
+    beginRun(name: string, stats: Stats | undefined, supportsSuites = true): void {
         this.run = name;
+        this.suite = [];
+        this.failures = [];
+        if (!supportsSuites) {
+            this.progress.update(this.summarize(stats));
+        }
     }
 
     beginSuite(name: string[]): void {
         this.suite = name;
     }
 
-    beginTest(_name: string, stats: Stats): void {
+    beginTest(_name: string, stats?: Stats): void {
         // Only update once per suite to keep the line count down in GH action logs
         const title = this.suite[0];
         if (this.lastTitle !== title) {
@@ -70,21 +75,28 @@ export abstract class ProgressReporter implements Reporter {
 
     abstract failRun(message: string, stack?: string): void;
 
-    endRun(stats: Stats): void {
+    endRun(stats?: Stats): void {
         if (this.failures.length) {
             this.progress.failure(this.summarize(stats));
             this.dumpFailures();
-        } else if (!stats.complete) {
+        } else if (stats && !stats.complete) {
             this.progress.failure("No tests found");
         } else {
             this.progress.success(this.summarize(stats));
         }
     }
 
-    private summarize(stats: Stats) {
-        const complete = colors.dim(`${stats.complete}/${stats.total}`);
-        const failures = stats.failures ? colors.redBright(` ${stats.failures.toString()} failed`) : "";
-        return `${colors.bold(this.run)} ${complete}${failures}`;
+    private summarize(stats?: Stats) {
+        let statStr;
+        if (stats) {
+            const complete = colors.dim(`${stats.complete}/${stats.total}`);
+            const failures = stats.failures ? colors.redBright(` ${stats.failures.toString()} failed`) : "";
+            statStr = ` ${complete}${failures}`;
+        } else {
+            statStr = "";
+        }
+
+        return `${colors.bold(this.run)}${statStr}`;
     }
 
     private dumpFailures() {
@@ -120,19 +132,19 @@ function proxy(...args: any[]) {
 export class ConsoleProxyReporter implements Reporter {
     static FLAG = "<<REPORT>> ";
 
-    beginRun(name: string, stats: Stats) {
+    beginRun(name: string, stats?: Stats) {
         proxy("beginRun", name, stats);
     }
 
-    beginSuite(name: string[], stats: Stats) {
+    beginSuite(name: string[], stats?: Stats) {
         proxy("beginSuite", name, stats);
     }
 
-    beginTest(name: string, stats: Stats) {
+    beginTest(name: string, stats?: Stats) {
         proxy("beginTest", name, stats);
     }
 
-    endRun(stats: Stats) {
+    endRun(stats?: Stats) {
         proxy("endRun", stats);
     }
 

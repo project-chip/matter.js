@@ -28,7 +28,7 @@ MatterSpecification.v11.Core § 9.5.4.1
 
 ### deviceType
 
-• **deviceType**: [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)\<`number`\>
+• **deviceType**: [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)
 
 This shall indicate the device type definition. The endpoint shall conform to the device type definition and
 cluster specifications required by the device type.

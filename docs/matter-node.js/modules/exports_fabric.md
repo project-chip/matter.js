@@ -41,7 +41,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:38
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:39
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:20
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:21

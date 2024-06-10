@@ -13,12 +13,13 @@
 ### Functions
 
 - [extractAsCaseAuthenticatedTag](datatype_export.NodeId.md#extractascaseauthenticatedtag)
-- [getFromCaseAuthenticatedTag](datatype_export.NodeId.md#getfromcaseauthenticatedtag)
-- [getFromGroupNodeId](datatype_export.NodeId.md#getfromgroupnodeid)
+- [fromCaseAuthenticatedTag](datatype_export.NodeId.md#fromcaseauthenticatedtag)
+- [fromGroupNodeId](datatype_export.NodeId.md#fromgroupnodeid)
+- [fromTemporaryLocalNodeId](datatype_export.NodeId.md#fromtemporarylocalnodeid)
 - [getFromPakeKeyIdentifier](datatype_export.NodeId.md#getfrompakekeyidentifier)
-- [getFromTemporaryLocalNodeId](datatype_export.NodeId.md#getfromtemporarylocalnodeid)
-- [getRandomOperationalNodeId](datatype_export.NodeId.md#getrandomoperationalnodeid)
+- [isCaseAuthenticatedTag](datatype_export.NodeId.md#iscaseauthenticatedtag)
 - [isOperationalNodeId](datatype_export.NodeId.md#isoperationalnodeid)
+- [randomOperationalNodeId](datatype_export.NodeId.md#randomoperationalnodeid)
 - [toHexString](datatype_export.NodeId.md#tohexstring)
 
 ## Variables
@@ -32,7 +33,7 @@ usage. It exists to mark or detect the presence of uninitialized, missing, or in
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:37](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L37)
+[packages/matter.js/src/datatype/NodeId.ts:37](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/NodeId.ts#L37)
 
 ## Functions
 
@@ -52,13 +53,13 @@ usage. It exists to mark or detect the presence of uninitialized, missing, or in
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:97](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L97)
+[packages/matter.js/src/datatype/NodeId.ts:102](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/NodeId.ts#L102)
 
 ___
 
-### getFromCaseAuthenticatedTag
+### fromCaseAuthenticatedTag
 
-▸ **getFromCaseAuthenticatedTag**(`id`): [`NodeId`](datatype_export.md#nodeid)
+▸ **fromCaseAuthenticatedTag**(`id`): [`NodeId`](datatype_export.md#nodeid)
 
 This subrange of Node ID is used to assign an access control subject to a group of peer nodes that share a
 single CASE session as specified in Section 6.6.2.1.2, “Subjects identified by CASE Authenticated Tag”.
@@ -75,13 +76,13 @@ single CASE session as specified in Section 6.6.2.1.2, “Subjects identified by
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:90](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L90)
+[packages/matter.js/src/datatype/NodeId.ts:90](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/NodeId.ts#L90)
 
 ___
 
-### getFromGroupNodeId
+### fromGroupNodeId
 
-▸ **getFromGroupNodeId**(`groupId`): [`NodeId`](datatype_export.md#nodeid)
+▸ **fromGroupNodeId**(`groupId`): [`NodeId`](datatype_export.md#nodeid)
 
 A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the lower half of the Node ID.
 
@@ -97,7 +98,31 @@ A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the l
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:67](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L67)
+[packages/matter.js/src/datatype/NodeId.ts:67](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/NodeId.ts#L67)
+
+___
+
+### fromTemporaryLocalNodeId
+
+▸ **fromTemporaryLocalNodeId**(`id`): [`NodeId`](datatype_export.md#nodeid)
+
+A Temporary Local Node ID is a 64-bit Node ID that contains an implementation-dependent value in its lower
+32 bits. This allows implementations to keep track of connections or transport-layer links and similar
+housekeeping internal usage purposes in contexts where an Operational Node ID is unavailable.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+[`NodeId`](datatype_export.md#nodeid)
+
+#### Defined in
+
+[packages/matter.js/src/datatype/NodeId.ts:79](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/NodeId.ts#L79)
 
 ___
 
@@ -121,49 +146,27 @@ administrative access to any commissioner communicating via a PASE session estab
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:106](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L106)
+[packages/matter.js/src/datatype/NodeId.ts:114](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/NodeId.ts#L114)
 
 ___
 
-### getFromTemporaryLocalNodeId
+### isCaseAuthenticatedTag
 
-▸ **getFromTemporaryLocalNodeId**(`id`): [`NodeId`](datatype_export.md#nodeid)
-
-A Temporary Local Node ID is a 64-bit Node ID that contains an implementation-dependent value in its lower
-32 bits. This allows implementations to keep track of connections or transport-layer links and similar
-housekeeping internal usage purposes in contexts where an Operational Node ID is unavailable.
+▸ **isCaseAuthenticatedTag**(`nodeId`): `boolean`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` |
+| `nodeId` | [`NodeId`](datatype_export.md#nodeid) |
 
 #### Returns
 
-[`NodeId`](datatype_export.md#nodeid)
+`boolean`
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:79](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L79)
-
-___
-
-### getRandomOperationalNodeId
-
-▸ **getRandomOperationalNodeId**(): [`NodeId`](datatype_export.md#nodeid)
-
-An Operational Node ID is a 64-bit number that uniquely identifies an individual Node on a Fabric. All messages
-must have an Operational Node ID as the source address. All unicast messages must have an Operational Node ID
-as the destination address.
-
-#### Returns
-
-[`NodeId`](datatype_export.md#nodeid)
-
-#### Defined in
-
-[packages/matter.js/src/datatype/NodeId.ts:50](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L50)
+[packages/matter.js/src/datatype/NodeId.ts:97](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/NodeId.ts#L97)
 
 ___
 
@@ -185,7 +188,25 @@ Returns whether the given Node ID is an Operational Node ID.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:62](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L62)
+[packages/matter.js/src/datatype/NodeId.ts:62](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/NodeId.ts#L62)
+
+___
+
+### randomOperationalNodeId
+
+▸ **randomOperationalNodeId**(): [`NodeId`](datatype_export.md#nodeid)
+
+An Operational Node ID is a 64-bit number that uniquely identifies an individual Node on a Fabric. All messages
+must have an Operational Node ID as the source address. All unicast messages must have an Operational Node ID
+as the destination address.
+
+#### Returns
+
+[`NodeId`](datatype_export.md#nodeid)
+
+#### Defined in
+
+[packages/matter.js/src/datatype/NodeId.ts:50](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/NodeId.ts#L50)
 
 ___
 
@@ -205,4 +226,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:39](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/datatype/NodeId.ts#L39)
+[packages/matter.js/src/datatype/NodeId.ts:39](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/datatype/NodeId.ts#L39)

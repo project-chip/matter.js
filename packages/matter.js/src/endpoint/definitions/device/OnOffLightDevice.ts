@@ -8,7 +8,9 @@
 
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
-import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
+import {
+    ScenesManagementServer as BaseScenesManagementServer
+} from "../../../behavior/definitions/scenes-management/ScenesManagementServer.js";
 import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
 import {
     LevelControlServer as BaseLevelControlServer
@@ -25,7 +27,7 @@ import { Identity } from "../../../util/Type.js";
  * device such as an On/Off Light Switch or a Dimmer Switch. In addition, an on/off light is also capable of being
  * switched by means of a bound occupancy sensor.
  *
- * @see {@link MatterSpecification.v11.Device} § 4.1
+ * @see {@link MatterSpecification.v13.Device} § 4.1
  */
 export interface OnOffLightDevice extends Identity<typeof OnOffLightDeviceDefinition> {}
 
@@ -45,25 +47,19 @@ export namespace OnOffLightRequirements {
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The Scenes cluster is required by the Matter specification
+     * The ScenesManagement cluster is required by the Matter specification
      *
-     * This version of {@link ScenesServer} is specialized per the specification.
+     * This version of {@link ScenesManagementServer} is specialized per the specification.
      */
-    export const ScenesServer = BaseScenesServer
-        .alter({
-            commands: {
-                enhancedAddScene: { optional: false },
-                enhancedViewScene: { optional: false },
-                copyScene: { optional: false }
-            }
-        });
+    export const ScenesManagementServer = BaseScenesManagementServer
+        .alter({ commands: { copyScene: { optional: false } } });
 
     /**
      * The OnOff cluster is required by the Matter specification
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
-    export const OnOffServer = BaseOnOffServer.with("LevelControlForLighting");
+    export const OnOffServer = BaseOnOffServer.with("Lighting");
 
     /**
      * The LevelControl cluster is optional per the Matter specification
@@ -91,7 +87,13 @@ export namespace OnOffLightRequirements {
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
-        mandatory: { Identify: IdentifyServer, Groups: GroupsServer, Scenes: ScenesServer, OnOff: OnOffServer },
+        mandatory: {
+            Identify: IdentifyServer,
+            Groups: GroupsServer,
+            ScenesManagement: ScenesManagementServer,
+            OnOff: OnOffServer
+        },
+
         optional: { LevelControl: LevelControlServer }
     };
 
@@ -104,13 +106,13 @@ export namespace OnOffLightRequirements {
 export const OnOffLightDeviceDefinition = MutableEndpoint({
     name: "OnOffLight",
     deviceType: 0x100,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: OnOffLightRequirements,
 
     behaviors: SupportedBehaviors(
         OnOffLightRequirements.server.mandatory.Identify,
         OnOffLightRequirements.server.mandatory.Groups,
-        OnOffLightRequirements.server.mandatory.Scenes,
+        OnOffLightRequirements.server.mandatory.ScenesManagement,
         OnOffLightRequirements.server.mandatory.OnOff
     )
 });

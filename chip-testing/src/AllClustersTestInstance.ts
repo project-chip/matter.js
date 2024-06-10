@@ -149,7 +149,7 @@ export class AllClustersTestInstance implements TestInstance {
                 },
                 productDescription: {
                     name: this.appName,
-                    deviceType: DeviceTypeId(0xbfff),
+                    deviceType: DeviceTypeId(0x0101),
                 },
                 accessControl: {
                     extension: [],
@@ -170,11 +170,11 @@ export class AllClustersTestInstance implements TestInstance {
                     productUrl: "https://test.com",
                     uniqueId: `node-matter-unique`,
                     localConfigDisabled: false,
-                    reachable: true,
                     productAppearance: {
                         finish: BasicInformation.ProductFinish.Satin,
                         primaryColor: BasicInformation.Color.Purple,
                     },
+                    reachable: true,
                 },
                 localizationConfiguration: {
                     activeLocale: "en-US",

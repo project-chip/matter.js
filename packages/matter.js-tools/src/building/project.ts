@@ -89,15 +89,14 @@ export class Project {
             },
         });
 
-        // If you specify --sourceRoot, tsc just sticks whatever the string is
-        // directly into the file.  Not very useful unless you have no
-        // hierarchy or use absolute paths...
+        // If you specify --sourceRoot, tsc just sticks whatever the string is directly into the file.  Not very useful
+        // unless you have no hierarchy or use absolute paths...
         //
-        // We distribute types for src one level higher than we generate them
-        // (dist/esm vs build/types/src) so the paths end up incorrect.
+        // We distribute types for src one level higher than we generate them (dist/esm vs build/types/src) so the paths
+        // end up incorrect.
         //
-        // So...  Rewrite the paths in all source maps under src/.  Do this
-        // directly on buffer for marginal performance win.
+        // So...  Rewrite the paths in all source maps under src/.  Do this directly on buffer for marginal performance
+        // win.
         for (const [source, dest] of srcMaps) {
             // Load map as binary
             const map = await readFile(source);

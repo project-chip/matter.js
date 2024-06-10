@@ -8,7 +8,10 @@
 
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { DoorLockServer as BaseDoorLockServer } from "../../../behavior/definitions/door-lock/DoorLockServer.js";
-import { TimeSyncBehavior as BaseTimeSyncBehavior } from "../../../behavior/definitions/time-sync/TimeSyncBehavior.js";
+import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
+import {
+    ScenesManagementServer as BaseScenesManagementServer
+} from "../../../behavior/definitions/scenes-management/ScenesManagementServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -17,7 +20,7 @@ import { Identity } from "../../../util/Type.js";
  * A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by means of a manual or
  * a remote method.
  *
- * @see {@link MatterSpecification.v11.Device} § 8.1
+ * @see {@link MatterSpecification.v13.Device} § 8.1
  */
 export interface DoorLockDevice extends Identity<typeof DoorLockDeviceDefinition> {}
 
@@ -37,27 +40,32 @@ export namespace DoorLockRequirements {
     export const DoorLockServer = BaseDoorLockServer;
 
     /**
-     * The TimeSync cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification
      *
-     * We provide this alias to the default implementation {@link TimeSyncBehavior} for convenience.
+     * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
-    export const TimeSyncBehavior = BaseTimeSyncBehavior;
+    export const GroupsServer = BaseGroupsServer;
+
+    /**
+     * The ScenesManagement cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ScenesManagementServer} for convenience.
+     */
+    export const ScenesManagementServer = BaseScenesManagementServer;
 
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    export const server = { mandatory: { Identify: IdentifyServer, DoorLock: DoorLockServer } };
-
-    /**
-     * A definition for each client cluster supported by the endpoint per the Matter specification.
-     */
-    export const client = { optional: { TimeSync: TimeSyncBehavior }, mandatory: {} };
+    export const server = {
+        mandatory: { Identify: IdentifyServer, DoorLock: DoorLockServer },
+        optional: { Groups: GroupsServer, ScenesManagement: ScenesManagementServer }
+    };
 }
 
 export const DoorLockDeviceDefinition = MutableEndpoint({
     name: "DoorLock",
     deviceType: 0xa,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: DoorLockRequirements,
     behaviors: SupportedBehaviors(
         DoorLockRequirements.server.mandatory.Identify,

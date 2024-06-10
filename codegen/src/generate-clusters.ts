@@ -4,27 +4,68 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterModel } from "@project-chip/matter.js/model";
+import { Logger } from "@project-chip/matter.js/log";
+import { ClusterModel, MatterModel } from "@project-chip/matter.js/model";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 import { ClusterFile } from "./clusters/ClusterFile.js";
 import { generateCluster } from "./clusters/generate-cluster.js";
+import { generateGlobal } from "./clusters/generate-global.js";
 import { TsFile } from "./util/TsFile.js";
+import { clean } from "./util/file.js";
 import "./util/setup.js";
 
-const mom = new MatterModel();
+const logger = Logger.get("generate-clusters");
 
-ClusterFile.clean();
-const index = new TsFile(ClusterFile.createFilename("index"));
+const args = await yargs(hideBin(process.argv))
+    .usage("Generates the matter.js file from intermediate files")
+    .option("save", { type: "boolean", default: true, describe: "writes the generated model to disk" })
+    .strict().argv;
 
-for (const cluster of mom.clusters) {
-    const file = new ClusterFile(cluster);
-    generateCluster(file);
-    file.save();
+const clusterIndex = new TsFile("#clusters/index");
+const globalIndex = new TsFile("#globals/index");
 
-    if (cluster.id !== undefined) {
-        const exports = index.expressions(`export {`, `} from "./${file.clusterName}.js"`);
-        exports.atom(file.clusterName);
-        exports.atom(file.typesName);
+const files = [clusterIndex, globalIndex];
+
+let fail = false;
+
+for (const model of MatterModel.standard.children) {
+    try {
+        let file;
+        const symbols = Array<string>();
+        let index;
+        if (model instanceof ClusterModel) {
+            file = new ClusterFile(model);
+            generateCluster(file);
+
+            if (model.id !== undefined) {
+                symbols.push(file.clusterName);
+            }
+            symbols.push(file.typesName);
+            index = clusterIndex;
+        } else {
+            file = generateGlobal(model);
+            if (!file) {
+                continue;
+            }
+            index = globalIndex;
+        }
+        index.addReexport(`./${file.basename}.js`, ...symbols);
+        files.push(file);
+    } catch (e) {
+        logger.error(e);
+        fail = true;
     }
 }
 
-index.save();
+if (fail) {
+    logger.error("Not modifying codebase due to errors");
+} else if (args.save) {
+    clean("#clusters");
+    clean("#globals");
+    for (const file of files) {
+        file.save();
+    }
+} else {
+    logger.warn("Not modifying codebase because this is a dry run");
+}

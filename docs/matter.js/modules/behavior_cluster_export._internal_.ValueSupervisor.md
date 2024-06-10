@@ -45,7 +45,7 @@ Re-exports [Session](../interfaces/behavior_cluster_export._internal_.Session.md
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:91](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L91)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:91](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L91)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:93](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L93)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:93](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L93)
 
 ___
 
@@ -97,4 +97,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:89](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L89)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:89](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L89)

@@ -17,7 +17,7 @@ import { Identity } from "../../../util/Type.js";
 /**
  * A Pressure Sensor device measures and reports the pressure of a fluid.
  *
- * @see {@link MatterSpecification.v11.Device} § 7.5
+ * @see {@link MatterSpecification.v13.Device} § 7.5
  */
 export interface PressureSensorDevice extends Identity<typeof PressureSensorDeviceDefinition> {}
 

@@ -16,6 +16,7 @@ TODO - this is a transitional interface that allows us to have multiple implemen
 
 ### Properties
 
+- [deviceType](internal_.EndpointInterface.md#devicetype)
 - [name](internal_.EndpointInterface.md#name)
 - [number](internal_.EndpointInterface.md#number)
 
@@ -42,13 +43,23 @@ TODO - this is a transitional interface that allows us to have multiple implemen
 
 ## Properties
 
+### deviceType
+
+• **deviceType**: [`DeviceTypeId`](../modules/internal_.md#devicetypeid)
+
+#### Defined in
+
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:22
+
+___
+
 ### name
 
 • **name**: `string`
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:19
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:20
 
 ___
 
@@ -58,7 +69,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:20
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:21
 
 ## Methods
 
@@ -78,7 +89,7 @@ matter.js/dist/esm/endpoint/EndpointInterface.d.ts:20
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:37
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:39
 
 ___
 
@@ -107,7 +118,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:34
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:36
 
 ___
 
@@ -134,7 +145,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:29
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:31
 
 ___
 
@@ -148,7 +159,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:27
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:29
 
 ___
 
@@ -162,7 +173,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:25
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:27
 
 ___
 
@@ -176,7 +187,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:36
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:38
 
 ___
 
@@ -190,7 +201,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:33
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:35
 
 ___
 
@@ -210,7 +221,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:38
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:40
 
 ___
 
@@ -224,7 +235,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:24
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:26
 
 ___
 
@@ -254,7 +265,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:35
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:37
 
 ___
 
@@ -284,7 +295,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:31
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:33
 
 ___
 
@@ -304,7 +315,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:32
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:34
 
 ___
 
@@ -318,7 +329,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:21
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:23
 
 ___
 
@@ -338,7 +349,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:30
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:32
 
 ___
 
@@ -352,7 +363,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:22
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:24
 
 ___
 
@@ -372,7 +383,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:28
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:30
 
 ___
 
@@ -386,7 +397,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:23
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:25
 
 ___
 
@@ -400,4 +411,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/endpoint/EndpointInterface.d.ts:26
+matter.js/dist/esm/endpoint/EndpointInterface.d.ts:28

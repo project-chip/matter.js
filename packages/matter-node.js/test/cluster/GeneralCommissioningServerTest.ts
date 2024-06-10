@@ -67,6 +67,8 @@ describe("GeneralCommissioning Server test", () => {
                     subscriptionsPerFabric: 3,
                 },
                 serialNumber: `0000000000`,
+                specificationVersion: 0x01030000,
+                maxPathsPerInvoke: 100,
             },
             {},
             {

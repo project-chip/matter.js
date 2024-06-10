@@ -42,13 +42,15 @@ LocalMatter.children.push(
                 ],
             },
 
-            // Set Mode field names.  They're correct in chip.ts but only
-            // placeholders in spec.ts.  Since spec overrides chip for names we
-            // need to re-write them here
+            // Set Mode field names.  They're correct in chip.ts but only placeholders in spec.ts.  Since spec overrides
+            // chip for names we need to re-write them here
             {
                 tag: "attribute",
                 id: 0x17,
                 name: "Mode",
+
+                // Spec fixed in 1.2
+                until: "1.2",
 
                 children: [
                     { tag: "field", name: "MotorDirectionReversed", constraint: "0" },
@@ -58,12 +60,14 @@ LocalMatter.children.push(
                 ],
             },
 
-            // Set the name of the ConfigStatus config fields.  Same issue as for
-            // Mode
+            // Set the name of the ConfigStatus config fields.  Same issue as for Mode
             {
                 tag: "attribute",
                 id: 7,
                 name: "ConfigStatus",
+
+                // Spec fixed in 1.2
+                until: "1.2",
 
                 children: [
                     { tag: "field", name: "Operational", constraint: "0" },
@@ -76,11 +80,16 @@ LocalMatter.children.push(
                 ],
             },
 
-            // Add Conformance field to the Type attribute
+            // Add conformance to the Type attribute
             {
                 tag: "attribute",
                 id: 0,
                 name: "Type",
+
+                // In 1.2 conformance is still defined incorrectly but definitions moved to TypeEnum (see next
+                // definition)
+                until: "1.2",
+
                 children: [
                     { tag: "field", name: "Rollershade", id: 0, conformance: "LF & !TL" },
                     { tag: "field", name: "Rollershade2Motor", id: 1, conformance: "LF & !TL" },
@@ -97,12 +106,39 @@ LocalMatter.children.push(
                 ],
             },
 
-            // Add Conformance field to the EndProductType attribute
-            // Unclear if "LF" actually means "LF &!TL" and such
+            // Add conformance to TypeEnum
+            {
+                tag: "datatype",
+                name: "TypeEnum",
+
+                asOf: "1.2",
+
+                children: [
+                    { tag: "field", name: "Rollershade", id: 0, conformance: "LF & !TL" },
+                    { tag: "field", name: "Rollershade2Motor", id: 1, conformance: "LF & !TL" },
+                    { tag: "field", name: "RollershadeExterior", id: 2, conformance: "LF & !TL" },
+                    { tag: "field", name: "RollershadeExterior2Motor", id: 3, conformance: "LF & !TL" },
+                    { tag: "field", name: "Drapery", id: 4, conformance: "LF & !TL" },
+                    { tag: "field", name: "Awning", id: 5, conformance: "LF & !TL" },
+                    // see https://github.com/project-chip/connectedhomeip/issues/33135
+                    { tag: "field", name: "Shutter", id: 6, conformance: "LF | TL" },
+                    { tag: "field", name: "TiltBlindTiltOnly", id: 7, conformance: "!LF & TL" },
+                    { tag: "field", name: "TiltBlindLift", id: 8, conformance: "LF & TL" },
+                    { tag: "field", name: "ProjectorScreen", id: 9, conformance: "LF & !TL" },
+                    { tag: "field", name: "Unknown", id: 255, conformance: "O" },
+                ],
+            },
+
+            // Add Conformance field to the EndProductType attribute.  Unclear if "LF" actually means "LF & !TL" and
+            // such
             {
                 tag: "attribute",
                 id: 13,
                 name: "EndProductType",
+
+                // In 1.2 conformance is present (and definitions moved to EndProductTypeEnum)
+                until: "1.2",
+
                 children: [
                     { tag: "field", name: "RollerShade", id: 0, conformance: "LF" },
                     { tag: "field", name: "RomanShade", id: 1, conformance: "LF" },
@@ -132,14 +168,16 @@ LocalMatter.children.push(
                 ],
             },
 
-            // Set the name, type and description of the OperationalStatus config
-            // fields.  Otherwise name would be a placeholder, type would be a bare
-            // number and the description would be overly-verbose bit-level
+            // Set the name, type and description of the OperationalStatus config fields.  Otherwise name would be a
+            // placeholder, type would be a bare number and the description would be overly-verbose bit-level
             // descriptions from the spec
             {
                 tag: "attribute",
                 id: 10,
                 name: "OperationalStatus",
+
+                // Fixed in 1.2, but we still need to install "MovementStatus" as the type (see below)
+                until: "1.2",
 
                 children: [
                     {
@@ -166,6 +204,18 @@ LocalMatter.children.push(
                 ],
             },
 
+            // Set the type of the bit fields so code generates with our "MovementStatus" enum
+            {
+                tag: "datatype",
+                name: "OperationalStatusBitmap",
+
+                children: [
+                    { tag: "field", name: "Global", type: "MovementStatus" },
+                    { tag: "field", name: "Lift", type: "MovementStatus" },
+                    { tag: "field", name: "Tilt", type: "MovementStatus" },
+                ],
+            },
+
             // Adjust the constraints for the GoToLiftValue command parameter to allow automatic validation
             {
                 tag: "command",
@@ -179,24 +229,6 @@ LocalMatter.children.push(
                         type: "uint16",
                         conformance: "M",
                         constraint: "InstalledOpenLimitLift to InstalledClosedLimitLift",
-                    },
-                ],
-            },
-
-            // Fix a Spec bug that listed two parameters but only one is relevant
-            {
-                tag: "command",
-                name: "GoToLiftPercentage",
-                id: 0x5,
-
-                children: [
-                    {
-                        tag: "field",
-                        name: "LiftPercent100thsValue",
-                        id: 0x0,
-                        type: "percent100ths",
-                        conformance: "M",
-                        constraint: "desc",
                     },
                 ],
             },
@@ -218,19 +250,48 @@ LocalMatter.children.push(
                 ],
             },
 
-            // Fix a Spec bug that listed two parameters but only one is relevant
+            // The spec defines two fields but CHIP only uses the first one with a different datatype.  So necessary to
+            // follow defacto standard rather than specification here
+            {
+                tag: "command",
+                name: "GoToLiftPercentage",
+                id: 0x5,
+
+                children: [
+                    {
+                        id: 0,
+                        tag: "field",
+                        name: "LiftPercent100thsValue",
+                        type: "percent100ths",
+                        conformance: "M",
+                    },
+                    {
+                        id: 1,
+                        tag: "field",
+                        name: "Ignored",
+                        conformance: "D",
+                    },
+                ],
+            },
+
+            // Same issue as for GoToLiftPercentage
             {
                 tag: "command",
                 name: "GoToTiltPercentage",
                 id: 0x8,
                 children: [
                     {
+                        id: 0,
                         tag: "field",
                         name: "TiltPercent100thsValue",
-                        id: 0x0,
                         type: "percent100ths",
                         conformance: "M",
-                        constraint: "desc",
+                    },
+                    {
+                        id: 1,
+                        tag: "field",
+                        name: "Ignored",
+                        conformance: "D",
                     },
                 ],
             },

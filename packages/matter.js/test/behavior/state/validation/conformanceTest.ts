@@ -8,6 +8,27 @@ import { ConformanceError } from "../../../../src/behavior/errors.js";
 import { FieldElement } from "../../../../src/model/index.js";
 import { Features, Fields, Tests, testValidation } from "./validation-test-utils.js";
 
+function missing(conformance: string, fieldName = "test") {
+    return {
+        type: ConformanceError,
+        message: `Validating Test.${fieldName}: Conformance "${conformance}": Matter requires you to set this attribute`,
+    };
+}
+
+function disallowed(conformance: string, fieldName = "test") {
+    return {
+        type: ConformanceError,
+        message: `Validating Test.${fieldName}: Conformance "${conformance}": Matter does not allow you to set this attribute`,
+    };
+}
+
+function disallowedEnum(conformance: string, name: string, value: number) {
+    return {
+        type: ConformanceError,
+        message: `Validating Test.test: Conformance "${conformance}": Matter does not allow enum value ${name} (ID ${value}) here`,
+    };
+}
+
 const AllTests = Tests({
     conformance: Tests({
         base: Tests({
@@ -16,13 +37,7 @@ const AllTests = Tests({
                     record: { test: 1234 },
                 },
 
-                requires: {
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "M": Value is undefined but is mandatory per Matter specification',
-                    },
-                },
+                requires: { error: missing("M") },
             }),
 
             optional: Tests(Fields({ conformance: "O" }), {
@@ -43,20 +58,12 @@ const AllTests = Tests({
 
                 "requires if enabled": {
                     supports: ["foo"],
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "F": Value is undefined but is mandatory per Matter specification',
-                    },
+                    error: missing("F"),
                 },
 
                 "disallows if disabled": {
                     record: { test: 1234 },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "F": Value is present but disallowed per Matter specification',
-                    },
+                    error: disallowed("F"),
                 },
 
                 "allows omission if disabled": {},
@@ -74,11 +81,7 @@ const AllTests = Tests({
 
                 "disallows if disabled": {
                     record: { test: 1234 },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "[F]": Value is present but disallowed per Matter specification',
-                    },
+                    error: disallowed("[F]"),
                 },
 
                 "allows omission if disabled": {},
@@ -90,21 +93,13 @@ const AllTests = Tests({
                 },
 
                 "requires if disabled": {
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "!F": Value is undefined but is mandatory per Matter specification',
-                    },
+                    error: missing("!F"),
                 },
 
                 "disallows if enabled": {
                     supports: ["foo"],
                     record: { test: 1234 },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "!F": Value is present but disallowed per Matter specification',
-                    },
+                    error: disallowed("!F"),
                 },
 
                 "allows omission if enabled": {
@@ -122,11 +117,7 @@ const AllTests = Tests({
                 "disallows if enabled": {
                     supports: ["foo"],
                     record: { test: 1234 },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "[!F]": Value is present but disallowed per Matter specification',
-                    },
+                    error: disallowed("[!F]"),
                 },
 
                 "allows omission if enabled": {
@@ -150,11 +141,7 @@ const AllTests = Tests({
 
                     "disallows if disabled": {
                         record: { test: 1234 },
-                        error: {
-                            type: ConformanceError,
-                            message:
-                                'Validating Test.test: Conformance "F | B": Value is present but disallowed per Matter specification',
-                        },
+                        error: disallowed("F | B"),
                     },
 
                     "allows omission if disabled": {},
@@ -181,11 +168,7 @@ const AllTests = Tests({
 
                     "disallows if disabled": {
                         record: { test: 1234 },
-                        error: {
-                            type: ConformanceError,
-                            message:
-                                'Validating Test.test: Conformance "[F | B]": Value is present but disallowed per Matter specification',
-                        },
+                        error: disallowed("[F | B]"),
                     },
 
                     "allows omission if disabled": {},
@@ -201,40 +184,24 @@ const AllTests = Tests({
 
                     "requires if enabled": {
                         supports: ["foo", "bar"],
-                        error: {
-                            type: ConformanceError,
-                            message:
-                                'Validating Test.test: Conformance "F & B": Value is undefined but is mandatory per Matter specification',
-                        },
+                        error: missing("F & B"),
                     },
 
                     "disallows if disabled": {
                         record: { test: 1234 },
-                        error: {
-                            type: ConformanceError,
-                            message:
-                                'Validating Test.test: Conformance "F & B": Value is present but disallowed per Matter specification',
-                        },
+                        error: disallowed("F & B"),
                     },
 
                     "disallows if disabled (LHS enabled)": {
                         supports: ["foo"],
                         record: { test: 1234 },
-                        error: {
-                            type: ConformanceError,
-                            message:
-                                'Validating Test.test: Conformance "F & B": Value is present but disallowed per Matter specification',
-                        },
+                        error: disallowed("F & B"),
                     },
 
                     "disallows if disabled (RHS enabled)": {
                         supports: ["bar"],
                         record: { test: 1234 },
-                        error: {
-                            type: ConformanceError,
-                            message:
-                                'Validating Test.test: Conformance "F & B": Value is present but disallowed per Matter specification',
-                        },
+                        error: disallowed("F & B"),
                     },
 
                     "allows omission if disabled": {},
@@ -260,31 +227,19 @@ const AllTests = Tests({
 
                     "disallows if disabled": {
                         record: { test: 1234 },
-                        error: {
-                            type: ConformanceError,
-                            message:
-                                'Validating Test.test: Conformance "[F & B]": Value is present but disallowed per Matter specification',
-                        },
+                        error: disallowed("[F & B]"),
                     },
 
                     "disallows if disabled (LHS enabled)": {
                         supports: ["foo"],
                         record: { test: 1234 },
-                        error: {
-                            type: ConformanceError,
-                            message:
-                                'Validating Test.test: Conformance "[F & B]": Value is present but disallowed per Matter specification',
-                        },
+                        error: disallowed("[F & B]"),
                     },
 
                     "disallows if disabled (RHS enabled)": {
                         supports: ["bar"],
                         record: { test: 1234 },
-                        error: {
-                            type: ConformanceError,
-                            message:
-                                'Validating Test.test: Conformance "[F & B]": Value is present but disallowed per Matter specification',
-                        },
+                        error: disallowed("[F & B]"),
                     },
 
                     "allows omission if disabled": {},
@@ -313,19 +268,13 @@ const AllTests = Tests({
                     "requires if present": {
                         supports: ["foo"],
                         record: { value: 4 },
-                        error: {
-                            type: ConformanceError,
-                            message: `Validating Test.valueIsSet: Conformance "F & Value": Value is undefined but is mandatory per Matter specification`,
-                        },
+                        error: missing("F & Value", "valueIsSet"),
                     },
 
                     "disallows if not present": {
                         supports: ["foo"],
                         record: { valueIsSet: true },
-                        error: {
-                            type: ConformanceError,
-                            message: `Validating Test.valueIsSet: Conformance "F & Value": Value is present but disallowed per Matter specification`,
-                        },
+                        error: disallowed("F & Value", "valueIsSet"),
                     },
                 },
             ),
@@ -340,21 +289,13 @@ const AllTests = Tests({
 
                 "requires if enabled": {
                     supports: ["aye", "bee", "see"],
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "A & B & C": Value is undefined but is mandatory per Matter specification',
-                    },
+                    error: missing("A & B & C"),
                 },
 
                 "disallows if disabled (RHS & LHS enabled)": {
                     supports: ["aye", "see"],
                     record: { test: 1234 },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "A & B & C": Value is present but disallowed per Matter specification',
-                    },
+                    error: disallowed("A & B & C"),
                 },
 
                 "allows omission if disabled (RHS & LHS enabled)": {
@@ -375,30 +316,18 @@ const AllTests = Tests({
 
                 "requires if enabled (disjunction RHS)": {
                     supports: ["aye", "bee"],
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "A & (B | C)": Value is undefined but is mandatory per Matter specification',
-                    },
+                    error: missing("A & (B | C)"),
                 },
 
                 "requires if enabled (disjunction LHS)": {
                     supports: ["aye", "see"],
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "A & (B | C)": Value is undefined but is mandatory per Matter specification',
-                    },
+                    error: missing("A & (B | C)"),
                 },
 
                 "disallows if disabled (conjunction LHS)": {
                     supports: ["see"],
                     record: { test: 1234 },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "A & (B | C)": Value is present but disallowed per Matter specification',
-                    },
+                    error: disallowed("A & (B | C)"),
                 },
 
                 "allows omission if disabled (conjunction LHS)": {
@@ -420,11 +349,7 @@ const AllTests = Tests({
                 "disallows if disabled (conjunction LHS enabled)": {
                     supports: ["bee"],
                     record: { test: 1234 },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "A | B & C": Value is present but disallowed per Matter specification',
-                    },
+                    error: disallowed("A | B & C"),
                 },
             }),
         }),
@@ -532,20 +457,12 @@ const AllTests = Tests({
 
                 "disallows disallowed": {
                     record: { test: 3 },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "X": Enum value disallowed (ID 3) is disallowed per Matter specification',
-                    },
+                    error: disallowedEnum("X", "disallowed", 3),
                 },
 
                 "disallows non-conformant by feature": {
                     record: { test: 4 },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.test: Conformance "FT": Enum value ifFeature (ID 4) is disallowed per Matter specification',
-                    },
+                    error: disallowedEnum("FT", "ifFeature", 4),
                 },
 
                 "allows conformant by feature": {
@@ -579,20 +496,12 @@ const AllTests = Tests({
 
                 "requires if >": {
                     record: { value: 5 },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.isGreaterThan: Conformance "Value > 4": Value is undefined but is mandatory per Matter specification',
-                    },
+                    error: missing("Value > 4", "isGreaterThan"),
                 },
 
                 "disallows if <": {
                     record: { value: 4, isGreaterThan: true },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.isGreaterThan: Conformance "Value > 4": Value is present but disallowed per Matter specification',
-                    },
+                    error: disallowed("Value > 4", "isGreaterThan"),
                 },
 
                 "allows if <": {
@@ -601,20 +510,12 @@ const AllTests = Tests({
 
                 "requires if <": {
                     record: { value: 3 },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.isLessThan: Conformance "Value < 4": Value is undefined but is mandatory per Matter specification',
-                    },
+                    error: missing("Value < 4", "isLessThan"),
                 },
 
                 "disallows if >": {
                     record: { value: 4, isLessThan: true },
-                    error: {
-                        type: ConformanceError,
-                        message:
-                            'Validating Test.isLessThan: Conformance "Value < 4": Value is present but disallowed per Matter specification',
-                    },
+                    error: disallowed("Value < 4", "isLessThan"),
                 },
             },
         ),

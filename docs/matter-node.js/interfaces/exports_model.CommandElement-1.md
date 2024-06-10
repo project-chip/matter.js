@@ -190,7 +190,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:15
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:16
 
 ___
 
@@ -221,7 +221,7 @@ ValueElement.id
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:13
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:14
 
 ___
 
@@ -264,7 +264,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:16
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:17
 
 ___
 
@@ -274,7 +274,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:14
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:15
 
 ___
 

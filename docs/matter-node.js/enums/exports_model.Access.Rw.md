@@ -25,7 +25,7 @@ Read access.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:60
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:63
 
 ___
 
@@ -37,7 +37,7 @@ Read and mandatory write acess.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:68
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:71
 
 ___
 
@@ -49,7 +49,7 @@ Read and optional write access.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:72
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:75
 
 ___
 
@@ -61,4 +61,4 @@ Write access.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:64
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:67

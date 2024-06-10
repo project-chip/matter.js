@@ -22,7 +22,7 @@ Event priority mapped to official ID.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:36
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:37
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:34
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:35
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:35
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:36

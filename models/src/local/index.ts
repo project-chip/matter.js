@@ -14,18 +14,26 @@
 
 import "./AdministratorCommissioningOverrides.js";
 import "./BasicInformationOverrides.js";
-import "./BridgedDeviceBasicInformationOverrides.js";
+import "./ChannelOverrides.js";
 import "./ColorControlOverrides.js";
+import "./ContentLauncherOverrides.js";
 import "./DoorLockOverrides.js";
+import "./ElectricalPowerMeasurementOverrides.js";
 import "./GroupKeyManagementOverrides.js";
 import "./GroupsOverrides.js";
 import "./IlluminanceMeasurementOverrides.js";
+import "./LevelControlOverrides.js";
 import "./LocalizationConfigurationOverrides.js";
 import "./ModeSelectOverrides.js";
 import "./OperationalCredentialsOverrides.js";
 import "./PumpConfigurationAndControlOverrides.js";
 import "./ScenesOverrides.js";
 import "./TemperatureMeasurementOverrides.js";
+import "./ThermostatOverrides.js";
 import "./TimeFormatLocalizationOverrides.js";
+import "./TimeSynchronizationOverrides.js";
 import "./UserLabelOverrides.js";
 import "./WindowCoveringOverrides.js";
+import "./subject-id.js";
+import "./todOverrides.js";
+import "./any.js";

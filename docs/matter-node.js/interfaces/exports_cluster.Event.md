@@ -41,7 +41,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:164
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:165
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:169
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:170
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:171
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:172
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:167
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:168
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:170
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:171
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:166
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:167
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:168
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:169
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:165
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:166
 
 ___
 
@@ -121,4 +121,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/Cluster.d.ts:172
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:173

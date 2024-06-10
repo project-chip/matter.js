@@ -90,11 +90,6 @@ export class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device, O
         if (!excludeList.includes(Groups.Cluster.id)) {
             this.addClusterServer(createDefaultGroupsClusterServer());
         }
-        /** Scenes cluster is provisional and Matter 1.3 will also change it completely, so do not add for now
-        if (!excludeList.includes(Scenes.Cluster.id)) {
-            this.addClusterServer(createDefaultScenesClusterServer());
-        }
-         */
         if (!excludeList.includes(OnOff.Cluster.id)) {
             this.addClusterServer(
                 createDefaultOnOffClusterServer(
@@ -183,7 +178,7 @@ export class OnOffLightDevice extends OnOffBaseDevice {
                     this.commandHandler,
                     getClusterInitialAttributeValues(
                         attributeInitialValues,
-                        OnOff.Cluster.with(OnOff.Feature.LevelControlForLighting),
+                        OnOff.Cluster.with(OnOff.Feature.Lighting),
                     ),
                     true,
                 ),

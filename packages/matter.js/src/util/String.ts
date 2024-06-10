@@ -129,7 +129,7 @@ export function serialize(value: any) {
         if (typeof value === "number" || value instanceof Number) {
             return value.toString();
         }
-        if (typeof value === "string") {
+        if (typeof value === "string" || value instanceof String) {
             return JSON.stringify(value);
         }
         if (typeof value === "boolean") {

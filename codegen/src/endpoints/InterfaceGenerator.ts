@@ -14,7 +14,7 @@ export class InterfaceGenerator {
     types;
 
     constructor(private file: InterfaceFile) {
-        this.types = new TypeGenerator(file.cluster, file.types);
+        this.types = new TypeGenerator(file, file.types);
     }
 
     generateComponent(name: string, component: InferredComponent) {
@@ -32,7 +32,7 @@ export class InterfaceGenerator {
         const intf = this.file.ns.statements(`export interface ${name} {`, "}");
 
         for (const command of commands) {
-            this.file.addImport("util/Promises.js", "MaybePromise");
+            this.file.addImport("#/util/Promises.js", "MaybePromise");
 
             let request = this.types.reference(command, "");
             if (request.length) {

@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError } from "../common/MatterError.js";
+import { ImplementationError, UnexpectedDataError } from "../common/MatterError.js";
 import { tryCatch } from "../common/TryCatchHandler.js";
 import { ValidationError } from "../common/ValidationError.js";
-import { Globals } from "../model/index.js";
+import { FabricIndex } from "../model/standard/elements/FabricIndex.js";
+import { ByteArray } from "../util/ByteArray.js";
 import { Merge } from "../util/Type.js";
 import { TlvAny } from "./TlvAny.js";
 import { LengthConstraints } from "./TlvArray.js";
@@ -84,7 +85,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
         const fieldValue = (value as any)[name];
         if (fieldValue === undefined) {
             if (!isOptional) {
-                if (forWriteInteraction && id === <number>Globals.FabricIndex.id) {
+                if (forWriteInteraction && id === <number>FabricIndex.id) {
                     // FabricIndex field should not be included in encoded data for write interactions
                     return;
                 }
@@ -284,6 +285,30 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
 
 /** Object TLV schema. */
 export const TlvObject = <F extends TlvFields>(fields: F) => new ObjectSchema(fields, TlvType.Structure);
+
+export class ObjectSchemaWithMaxSize<F extends TlvFields> extends ObjectSchema<F> {
+    constructor(
+        fieldDefinitions: F,
+        protected readonly maxSize: number,
+        type: TlvType.Structure | TlvType.List = TlvType.Structure,
+        allowProtocolSpecificTags = false,
+    ) {
+        super(fieldDefinitions, type, allowProtocolSpecificTags);
+    }
+
+    override encode(value: TypeFromFields<F>): ByteArray {
+        const encoded = super.encode(value);
+        if (encoded.length > this.maxSize) {
+            throw new ImplementationError(
+                `Encoded TLV object with ${encoded.length} bytes exceeds maximum size of ${this.maxSize} bytes.`,
+            );
+        }
+        return encoded;
+    }
+}
+
+export const TlvObjectWithMaxSize = <F extends TlvFields>(fields: F, maxSize: number) =>
+    new ObjectSchemaWithMaxSize(fields, maxSize, TlvType.Structure);
 
 /**
  * List TLV schema with all tagged entries.

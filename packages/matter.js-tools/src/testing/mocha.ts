@@ -7,15 +7,16 @@
 // Can't import Mocha in the browser so just import type here
 import type MochaType from "mocha";
 import { wtf } from "../util/wtf.js";
+import { LoggerHooks } from "./mocks/logging.js";
 import { TestOptions } from "./options.js";
 import { ConsoleProxyReporter, FailureDetail, Reporter } from "./reporter.js";
 
-export function generalSetup(Mocha: typeof MochaType) {
+export function generalSetup(mocha: MochaType) {
     // White text, 16-bit and 256-bit green background
-    Mocha.reporters.Base.colors["diff added inline"] = "97;42;48;5;22" as any;
+    (mocha.constructor as typeof MochaType).reporters.Base.colors["diff added inline"] = "97;42;48;5;22" as any;
 
     // White text, 16-bit and 256-bit red background
-    Mocha.reporters.Base.colors["diff removed inline"] = "97;41;48;5;52" as any;
+    (mocha.constructor as typeof MochaType).reporters.Base.colors["diff removed inline"] = "97;41;48;5;52" as any;
 
     // Some of our test suites have setup/teardown logic that logs profusely. Hide these logs unless something goes
     // wrong
@@ -40,8 +41,8 @@ export function generalSetup(Mocha: typeof MochaType) {
     }
 
     function filterLogs(hook: "beforeAll" | "afterAll" | "beforeEach" | "afterEach") {
-        const actual = Mocha.Suite.prototype[hook] as (this: any, fn: Mocha.Func) => any;
-        Mocha.Suite.prototype[hook] = function (this: any, fn: Mocha.Func) {
+        const actual = mocha.suite[hook] as (this: any, fn: Mocha.Func) => any;
+        mocha.suite[hook] = function (this: any, fn: Mocha.Func) {
             return actual.call(this, async function (this: any, ...args: any) {
                 return await onlyLogFailure(() => fn.apply(this, args));
             });
@@ -55,11 +56,23 @@ export function generalSetup(Mocha: typeof MochaType) {
 
     // Reset mocks before each suite.  Suites could conceivably have callbacks that occur across tests.  If individual
     // tests need a reset the suite needs to handle itself.
-    const actualBeforeAll = Mocha.Suite.prototype.beforeAll;
-    Mocha.Suite.prototype.beforeAll = function (this: Mocha.Context, ...args: any) {
+    const actualBeforeAll = mocha.suite.beforeAll;
+    mocha.suite.beforeAll = function (this: Mocha.Context, ...args: any) {
         MockTime.reset();
         return actualBeforeAll.apply(this, args);
     };
+
+    mocha.suite.beforeEach(() => {
+        for (const hook of LoggerHooks.beforeEach) {
+            hook(mocha);
+        }
+    });
+
+    mocha.suite.afterEach(() => {
+        for (const hook of LoggerHooks.afterEach) {
+            hook(mocha);
+        }
+    });
 }
 
 export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: Reporter) {

@@ -16,6 +16,10 @@ Matter.js uses this key/value API to manage persistent state.
 
 - [constructor](internal_.SyncStorage.md#constructor)
 
+### Properties
+
+- [initialized](internal_.SyncStorage.md#initialized)
+
 ### Methods
 
 - [clearAll](internal_.SyncStorage.md#clearall)
@@ -37,6 +41,20 @@ Matter.js uses this key/value API to manage persistent state.
 #### Returns
 
 [`SyncStorage`](internal_.SyncStorage.md)
+
+## Properties
+
+### initialized
+
+• `Abstract` **initialized**: `boolean`
+
+#### Implementation of
+
+[Storage](../interfaces/internal_.Storage.md).[initialized](../interfaces/internal_.Storage.md#initialized)
+
+#### Defined in
+
+matter.js/dist/esm/storage/Storage.d.ts:41
 
 ## Methods
 
@@ -60,7 +78,7 @@ Matter.js uses this key/value API to manage persistent state.
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:48
+matter.js/dist/esm/storage/Storage.d.ts:51
 
 ___
 
@@ -78,7 +96,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:40
+matter.js/dist/esm/storage/Storage.d.ts:43
 
 ___
 
@@ -102,7 +120,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:47
+matter.js/dist/esm/storage/Storage.d.ts:50
 
 ___
 
@@ -127,7 +145,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:44
+matter.js/dist/esm/storage/Storage.d.ts:47
 
 ___
 
@@ -158,7 +176,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:41
+matter.js/dist/esm/storage/Storage.d.ts:44
 
 ___
 
@@ -176,7 +194,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:39
+matter.js/dist/esm/storage/Storage.d.ts:42
 
 ___
 
@@ -200,7 +218,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:45
+matter.js/dist/esm/storage/Storage.d.ts:48
 
 ___
 
@@ -225,7 +243,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:42
+matter.js/dist/esm/storage/Storage.d.ts:45
 
 ▸ **set**(`contexts`, `key`, `value`): `void`
 
@@ -247,7 +265,7 @@ matter.js/dist/esm/storage/Storage.d.ts:42
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:43
+matter.js/dist/esm/storage/Storage.d.ts:46
 
 ___
 
@@ -271,4 +289,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/Storage.d.ts:46
+matter.js/dist/esm/storage/Storage.d.ts:49

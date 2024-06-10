@@ -8,8 +8,7 @@ import { ClusterModel } from "../../models/index.js";
 import { FeatureBitmap, translateBitmap } from "./FeatureBitmap.js";
 
 /**
- * The condition for supported patterns of complex variance on Cluster
- * Attributes, Commands and Events.
+ * The condition for supported patterns of complex variance on Cluster Attributes, Commands and Events.
  */
 export type VarianceCondition = {
     anyOf?: string[];

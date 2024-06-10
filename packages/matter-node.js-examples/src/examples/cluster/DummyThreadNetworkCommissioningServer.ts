@@ -5,15 +5,7 @@
  */
 
 import { GeneralCommissioningBehavior } from "@project-chip/matter.js/behavior/definitions/general-commissioning";
-import {
-    AddOrUpdateThreadNetworkRequest,
-    ConnectNetworkRequest,
-    NetworkCommissioningBehavior,
-    RemoveNetworkRequest,
-    ReorderNetworkRequest,
-    ScanNetworksRequest,
-    ScanNetworksResponse,
-} from "@project-chip/matter.js/behavior/definitions/network-commissioning";
+import { NetworkCommissioningBehavior } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { NetworkCommissioning } from "@project-chip/matter.js/cluster";
 import { Logger } from "@project-chip/matter.js/log";
 import { ByteArray } from "@project-chip/matter.js/util";
@@ -28,7 +20,9 @@ const firstNetworkId = new ByteArray(32);
 export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningBehavior.with(
     NetworkCommissioning.Feature.ThreadNetworkInterface,
 ) {
-    override scanNetworks({ breadcrumb }: ScanNetworksRequest): ScanNetworksResponse {
+    override scanNetworks({
+        breadcrumb,
+    }: NetworkCommissioning.ScanNetworksRequest): NetworkCommissioning.ScanNetworksResponse {
         console.log(`---> scanNetworks called on NetworkCommissioning cluster: ${breadcrumb}`);
 
         // Simulate successful scan
@@ -62,7 +56,10 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
         };
     }
 
-    override addOrUpdateThreadNetwork({ operationalDataset, breadcrumb }: AddOrUpdateThreadNetworkRequest) {
+    override addOrUpdateThreadNetwork({
+        operationalDataset,
+        breadcrumb,
+    }: NetworkCommissioning.AddOrUpdateThreadNetworkRequest) {
         console.log(
             `---> addOrUpdateThreadNetwork called on NetworkCommissioning cluster: ${operationalDataset.toHex()} ${breadcrumb}`,
         );
@@ -85,7 +82,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
         };
     }
 
-    override removeNetwork({ networkId, breadcrumb }: RemoveNetworkRequest) {
+    override removeNetwork({ networkId, breadcrumb }: NetworkCommissioning.RemoveNetworkRequest) {
         console.log(`---> removeNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
 
         this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
@@ -106,7 +103,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
         };
     }
 
-    override async connectNetwork({ networkId, breadcrumb }: ConnectNetworkRequest) {
+    override async connectNetwork({ networkId, breadcrumb }: NetworkCommissioning.ConnectNetworkRequest) {
         console.log(`---> connectNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
 
         this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
@@ -134,7 +131,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
         };
     }
 
-    override reorderNetwork({ networkId, networkIndex, breadcrumb }: ReorderNetworkRequest) {
+    override reorderNetwork({ networkId, networkIndex, breadcrumb }: NetworkCommissioning.ReorderNetworkRequest) {
         console.log(
             `---> reorderNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${networkIndex} ${breadcrumb}`,
         );

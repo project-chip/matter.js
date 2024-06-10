@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import "mocha";
 import { webcrypto } from "node:crypto";
 
 // Required for Node < 19

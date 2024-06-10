@@ -7,7 +7,6 @@
 import { FieldValue } from "../../model/index.js";
 import { ServerStore } from "../../node/server/storage/ServerStore.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
-import { MaybePromise } from "../../util/Promises.js";
 import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
 import { Val } from "../state/Val.js";
@@ -36,18 +35,21 @@ export class ServerBehaviorBacking extends BehaviorBacking {
     }
 
     protected override invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
-        return MaybePromise.then(
-            () => super.invokeInitializer(behavior, options),
+        const finalizeState = () => {
+            this.#applyTransitiveDefaults(behavior.state);
 
-            () => {
-                this.#applyTransitiveDefaults(behavior.state);
+            // State must now conform to the schema.  Validate the behavior's state rather than internal state
+            // because the behavior likely has uncommitted changes
+            const context = behavior.context;
+            this.datasource.validate(context, behavior.state);
+        };
 
-                // State must now conform to the schema.  Validate the behavior's state rather than internal state
-                // because the behavior likely has uncommitted changes
-                const context = behavior.context;
-                this.datasource.validate(context, behavior.state);
-            },
-        );
+        const promise = super.invokeInitializer(behavior, options);
+        if (promise) {
+            return promise.then(finalizeState);
+        }
+
+        finalizeState();
     }
 
     get #serverStore() {

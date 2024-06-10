@@ -24,6 +24,7 @@ import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
 import { Level } from "../../src/log/Level.js";
+import { Specification } from "../../src/model/index.js";
 import { SyncStorage } from "../../src/storage/Storage.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
@@ -50,6 +51,8 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -112,6 +115,8 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -163,6 +168,8 @@ describe("ClusterServer structure", () => {
                         subscriptionsPerFabric: 3,
                     },
                     manufacturingDate: "12345678",
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -236,6 +243,8 @@ describe("ClusterServer structure", () => {
                         subscriptionsPerFabric: 3,
                     },
                     reachable: true,
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -288,6 +297,8 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -344,6 +355,8 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -780,6 +793,8 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -820,8 +835,6 @@ describe("ClusterServer structure", () => {
             expect(identifyServer.isAttributeSupportedByName("identifyTime")).equal(true);
             expect(identifyServer.isCommandSupported(IdentifyCluster.commands.identify.requestId)).equal(true);
             expect(identifyServer.isCommandSupportedByName("identify")).equal(true);
-            expect(identifyServer.isCommandSupported(Identify.Complete.commands.identifyQuery.requestId)).equal(false);
-            expect(identifyServer.isCommandSupportedByName("identifyQuery")).equal(false);
         });
     });
 });

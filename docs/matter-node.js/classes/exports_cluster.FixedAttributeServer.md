@@ -29,6 +29,7 @@ Attribute server types.
 
 ### Properties
 
+- [#private](exports_cluster.FixedAttributeServer.md##private)
 - [datasource](exports_cluster.FixedAttributeServer.md#datasource)
 - [defaultValue](exports_cluster.FixedAttributeServer.md#defaultvalue)
 - [endpoint](exports_cluster.FixedAttributeServer.md#endpoint)
@@ -41,6 +42,11 @@ Attribute server types.
 - [requiresTimedInteraction](exports_cluster.FixedAttributeServer.md#requirestimedinteraction)
 - [schema](exports_cluster.FixedAttributeServer.md#schema)
 - [value](exports_cluster.FixedAttributeServer.md#value)
+
+### Accessors
+
+- [readAcl](exports_cluster.FixedAttributeServer.md#readacl)
+- [writeAcl](exports_cluster.FixedAttributeServer.md#writeacl)
 
 ### Methods
 
@@ -60,7 +66,7 @@ Attribute server types.
 
 ### constructor
 
-• **new FixedAttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `initValue`, `defaultValue`, `datasource`, `getter?`): [`FixedAttributeServer`](exports_cluster.FixedAttributeServer.md)\<`T`\>
+• **new FixedAttributeServer**\<`T`\>(`id`, `name`, `readAcl`, `writeAcl`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `initValue`, `defaultValue`, `datasource`, `getter?`): [`FixedAttributeServer`](exports_cluster.FixedAttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -74,6 +80,8 @@ Attribute server types.
 | :------ | :------ | :------ |
 | `id` | [`AttributeId`](../modules/exports_datatype.md#attributeid) | - |
 | `name` | `string` | - |
+| `readAcl` | `undefined` \| [`AccessLevel`](../enums/exports_cluster.AccessLevel.md) | - |
+| `writeAcl` | `undefined` \| [`AccessLevel`](../enums/exports_cluster.AccessLevel.md) | - |
 | `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> | - |
 | `isWritable` | `boolean` | - |
 | `isSubscribable` | `boolean` | - |
@@ -93,9 +101,23 @@ Attribute server types.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:62
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:70
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Inherited from
+
+[BaseAttributeServer](exports_cluster.BaseAttributeServer.md).[#private](exports_cluster.BaseAttributeServer.md##private)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:38
+
+___
 
 ### datasource
 
@@ -103,7 +125,7 @@ packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:62
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:67
 
 ___
 
@@ -117,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:50
 
 ___
 
@@ -131,7 +153,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:49
 
 ___
 
@@ -158,7 +180,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:61
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:69
 
 ___
 
@@ -172,7 +194,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:33
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:39
 
 ___
 
@@ -182,7 +204,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:68
 
 ___
 
@@ -196,7 +218,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:37
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
 
 ___
 
@@ -210,7 +232,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:36
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
 
 ___
 
@@ -224,7 +246,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:34
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:40
 
 ___
 
@@ -238,7 +260,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:38
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
 
 ___
 
@@ -252,7 +274,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:35
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:41
 
 ___
 
@@ -268,7 +290,43 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:48
+
+## Accessors
+
+### readAcl
+
+• `get` **readAcl**(): [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Inherited from
+
+BaseAttributeServer.readAcl
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
+
+___
+
+### writeAcl
+
+• `get` **writeAcl**(): [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Returns
+
+[`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Inherited from
+
+BaseAttributeServer.writeAcl
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
 
 ## Methods
 
@@ -291,7 +349,7 @@ new value and the version number.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:106
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:114
 
 ___
 
@@ -314,7 +372,7 @@ new value and the old value.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:115
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:123
 
 ___
 
@@ -338,7 +396,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:47
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53
 
 ___
 
@@ -365,7 +423,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:78
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:86
 
 ___
 
@@ -383,7 +441,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:95
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:103
 
 ___
 
@@ -416,7 +474,7 @@ attributes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:86
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:94
 
 ___
 
@@ -444,7 +502,7 @@ If a getter or setter is defined the value must be undefined The version number 
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:101
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:109
 
 ___
 
@@ -466,7 +524,7 @@ Remove an internal listener.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:110
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:118
 
 ___
 
@@ -488,7 +546,7 @@ Remove an external listener.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:124
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:132
 
 ___
 
@@ -511,7 +569,7 @@ new value and the old value. This method is a convenient alias for addValueSetLi
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:120
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:128
 
 ___
 
@@ -535,4 +593,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:46
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52

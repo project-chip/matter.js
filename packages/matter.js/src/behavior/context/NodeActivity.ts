@@ -12,8 +12,8 @@ import { Observable } from "../../util/Observable.js";
  */
 export class NodeActivity {
     #actors = new Set<NodeActivity.Activity>();
-    #active = new Observable<[]>();
-    #inactive = new Observable<[]>();
+    #active = Observable<[]>();
+    #inactive = Observable<[]>();
 
     get isActive() {
         return this.#actors.size !== 0;

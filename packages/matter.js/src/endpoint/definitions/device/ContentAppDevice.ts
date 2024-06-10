@@ -15,6 +15,7 @@ import {
 import {
     ApplicationBasicServer as BaseApplicationBasicServer
 } from "../../../behavior/definitions/application-basic/ApplicationBasicServer.js";
+import { BindingServer as BaseBindingServer } from "../../../behavior/definitions/binding/BindingServer.js";
 import { ChannelServer as BaseChannelServer } from "../../../behavior/definitions/channel/ChannelServer.js";
 import {
     TargetNavigatorServer as BaseTargetNavigatorServer
@@ -28,6 +29,9 @@ import {
 import {
     AccountLoginServer as BaseAccountLoginServer
 } from "../../../behavior/definitions/account-login/AccountLoginServer.js";
+import {
+    ContentAppObserverBehavior as BaseContentAppObserverBehavior
+} from "../../../behavior/definitions/content-app-observer/ContentAppObserverBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -38,7 +42,7 @@ import { Identity } from "../../../util/Type.js";
  * A Content App is usually an application built by a Content Provider. A Casting Video Player with a Content App
  * Platform is able to launch Content Apps and represent these apps as separate endpoints.
  *
- * @see {@link MatterSpecification.v11.Device} § 10.5
+ * @see {@link MatterSpecification.v13.Device} § 10.5
  */
 export interface ContentAppDevice extends Identity<typeof ContentAppDeviceDefinition> {}
 
@@ -63,6 +67,13 @@ export namespace ContentAppRequirements {
      * We provide this alias to the default implementation {@link ApplicationBasicServer} for convenience.
      */
     export const ApplicationBasicServer = BaseApplicationBasicServer;
+
+    /**
+     * The Binding cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link BindingServer} for convenience.
+     */
+    export const BindingServer = BaseBindingServer;
 
     /**
      * The Channel cluster is optional per the Matter specification
@@ -100,6 +111,13 @@ export namespace ContentAppRequirements {
     export const AccountLoginServer = BaseAccountLoginServer;
 
     /**
+     * The ContentAppObserver cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link ContentAppObserverBehavior} for convenience.
+     */
+    export const ContentAppObserverBehavior = BaseContentAppObserverBehavior;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
@@ -110,6 +128,7 @@ export namespace ContentAppRequirements {
         },
 
         optional: {
+            Binding: BindingServer,
             Channel: ChannelServer,
             TargetNavigator: TargetNavigatorServer,
             MediaPlayback: MediaPlaybackServer,
@@ -117,12 +136,17 @@ export namespace ContentAppRequirements {
             AccountLogin: AccountLoginServer
         }
     };
+
+    /**
+     * A definition for each client cluster supported by the endpoint per the Matter specification.
+     */
+    export const client = { optional: { ContentAppObserver: ContentAppObserverBehavior }, mandatory: {} };
 }
 
 export const ContentAppDeviceDefinition = MutableEndpoint({
     name: "ContentApp",
     deviceType: 0x24,
-    deviceRevision: 1,
+    deviceRevision: 2,
     requirements: ContentAppRequirements,
     behaviors: SupportedBehaviors(
         ContentAppRequirements.server.mandatory.KeypadInput,

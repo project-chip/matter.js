@@ -19,26 +19,6 @@ import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagno
 import { OnOffServer } from "../on-off/OnOffServer.js";
 import { ColorControlBehavior } from "./ColorControlBehavior.js";
 import {
-    ColorLoopSetRequest,
-    EnhancedMoveHueRequest,
-    EnhancedMoveToHueAndSaturationRequest,
-    EnhancedMoveToHueRequest,
-    EnhancedStepHueRequest,
-    MoveColorRequest,
-    MoveColorTemperatureRequest,
-    MoveHueRequest,
-    MoveSaturationRequest,
-    MoveToColorTemperatureRequest,
-    MoveToHueAndSaturationRequest,
-    MoveToHueRequest,
-    MoveToSaturationRequest,
-    StepColorRequest,
-    StepColorTemperatureRequest,
-    StepHueRequest,
-    StepSaturationRequest,
-    StopMoveStepRequest,
-} from "./ColorControlInterface.js";
-import {
     hsvToMireds,
     hsvToXy,
     kelvinToMireds,
@@ -79,46 +59,55 @@ const MAX_CURRENT_LEVEL = 0xfe;
 /**
  * This is the default server implementation of {@link ColorControlBehavior}.
  *
- * This implementation includes all features of {@link ColorControl.Cluster} and implements all mandatory commands.
- * You should use {@link ColorControlServer.with} to specialize the class for the features your implementation supports.
+ * This implementation includes all features of {@link ColorControl.Cluster} and implements all mandatory commands. You
+ * should use {@link ColorControlServer.with} to specialize the class for the features your implementation supports.
  *
- * This default implementation also handles together with the LevelControl cluster the currentLevel dependency as defined
- * by the Matter specification automatically.
+ * This default implementation also handles together with the LevelControl cluster the currentLevel dependency as
+ * defined by the Matter specification automatically.
  *
- * This implementation ignores by default all transition times and sets the new color immediately. Alternatively, you can
- * set the `managedTransitionTimeHandling` state attribute to true to have matter.js manage transition times by
- * changing the level value step-wise every second. This might be an intermediate solution if you develop
- * independently of defined hardware.
+ * This implementation ignores by default all transition times and sets the new color immediately. Alternatively, you
+ * can set the `managedTransitionTimeHandling` state attribute to true to have matter.js manage transition times by
+ * changing the level value step-wise every second. This might be an intermediate solution if you develop independently
+ * of defined hardware.
  *
  * If you develop for a specific hardware you should extend the {@link ColorControlServer} class and implement the
  * following methods to natively use device features to correctly support the transition times. For this the default
  * implementation uses special protected methods which are used by the real commands and are only responsible for the
  * actual value change logic. The benefit of this structure is that basic data validations and options checks are
  * already done and you can focus on the actual hardware interaction:
+ *
  * * {@link ColorControlServerLogic.moveToHueLogic} Logic to move the hue to a defined value in a defined time
  * * {@link ColorControlServerLogic.moveHueLogic} Logic to move the hue by a defined rate/second
  * * {@link ColorControlServerLogic.stepHueLogic} Logic to move the hue one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToSaturationLogic} Logic to move the saturation to a defined value in a defined time
+ * * {@link ColorControlServerLogic.moveToSaturationLogic} Logic to move the saturation to a defined value in a defined
+ *   time
  * * {@link ColorControlServerLogic.moveSaturationLogic} Logic to move the saturation by a defined rate/second
  * * {@link ColorControlServerLogic.stepSaturationLogic} Logic to move the saturation one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToHueAndSaturationLogic} Logic to move the hue and saturation to a defined value in a defined time
+ * * {@link ColorControlServerLogic.moveToHueAndSaturationLogic} Logic to move the hue and saturation to a defined value
+ *   in a defined time
  * * {@link ColorControlServerLogic.moveToColorLogic} Logic to move the x/y color to a defined value in a defined time
  * * {@link ColorControlServerLogic.moveColorLogic} Logic to move the x/y color by a defined rate/second
  * * {@link ColorControlServerLogic.stepColorLogic} Logic to move the x/y color one defined step in a defined time
- * * {@link ColorControlServerLogic.moveToColorTemperatureLogic} Logic to move the color temperature to a defined value in a defined time
- * * {@link ColorControlServerLogic.moveToEnhancedHueAndSaturationLogic} Logic to move the enhanced hue and saturation to a defined value in a defined time
- * * {@link ColorControlServerLogic.moveColorTemperatureLogic} Logic to move the color temperature by a defined rate/second
- * * {@link ColorControlServerLogic.stepColorTemperatureLogic} Logic to move the color temperature one defined step in a defined time
+ * * {@link ColorControlServerLogic.moveToColorTemperatureLogic} Logic to move the color temperature to a defined value
+ *   in a defined time
+ * * {@link ColorControlServerLogic.moveToEnhancedHueAndSaturationLogic} Logic to move the enhanced hue and saturation
+ *   to a defined value in a defined time
+ * * {@link ColorControlServerLogic.moveColorTemperatureLogic} Logic to move the color temperature by a defined
+ *   rate/second
+ * * {@link ColorControlServerLogic.stepColorTemperatureLogic} Logic to move the color temperature one defined step in a
+ *   defined time
  * * {@link ColorControlServerLogic.stopHueAndSaturationMovement} Logic to stop any hue and saturation movements
  * * {@link ColorControlServerLogic.stopAllColorMovement} Logic to stop any color movements
  * * {@link ColorControlServerLogic.startColorLoopLogic} Logic to start the color loop (looping enhanced hue endlessly)
  * * {@link ColorControlServerLogic.stopColorLoopLogic} Logic to stop the color loop
  * * {@link ColorControlServerLogic.stopMoveStepLogic} Logic to stop all movements beside color loops
- * * {@link ColorControlServerLogic.switchColorMode} Logic to switch the color mode and to set the current attributes of the new mode
+ * * {@link ColorControlServerLogic.switchColorMode} Logic to switch the color mode and to set the current attributes of
+ *   the new mode
  *
  * All overridable methods can be implemented sync or async by returning a Promise.
  *
  * For own implementations you can use:
+ *
  * * {@link ColorControlServerLogic#setColorMode} to set the color mode
  * * {@link ColorControlServerLogic#setEnhancedColorMode} to set the enhanced color mode
  *
@@ -385,7 +374,13 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * {@link moveToHueLogic} with is also used for {@link enhancedMoveToHue}, {@link moveToHueAndSaturation} and
      * {@link enhancedMoveToHueAndSaturation}.
      */
-    override moveToHue({ optionsMask, optionsOverride, hue, direction, transitionTime }: MoveToHueRequest) {
+    override moveToHue({
+        optionsMask,
+        optionsOverride,
+        hue,
+        direction,
+        transitionTime,
+    }: ColorControl.MoveToHueRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -406,7 +401,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      */
     protected moveToHueLogic(
         targetHue: number,
-        direction: ColorControl.ColorControlDirection,
+        direction: ColorControl.Direction,
         transitionTime: number,
         isEnhancedHue = false,
     ): MaybePromise {
@@ -446,7 +441,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * increase only one rate directly if the managed transition is not used. Else the step logic is applied and the
      * level is increased or decreased by the step size every second.
      */
-    override moveHue({ optionsMask, optionsOverride, moveMode, rate }: MoveHueRequest) {
+    override moveHue({ optionsMask, optionsOverride, moveMode, rate }: ColorControl.MoveHueRequest) {
         this.#assertRate(moveMode, rate);
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
@@ -518,7 +513,13 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * possible, so we set to min/max directly. Else the step logic is applied and the hue is increased or decreased
      * by the step size every transition time interval.
      */
-    override stepHue({ optionsMask, optionsOverride, stepMode, stepSize, transitionTime }: StepHueRequest) {
+    override stepHue({
+        optionsMask,
+        optionsOverride,
+        stepMode,
+        stepSize,
+        transitionTime,
+    }: ColorControl.StepHueRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -586,7 +587,12 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * possible, so we set the target value directly. Else the step logic is applied and the saturation is increased or
      * decreased by the step size every transition time interval.
      */
-    override moveToSaturation({ optionsMask, optionsOverride, saturation, transitionTime }: MoveToSaturationRequest) {
+    override moveToSaturation({
+        optionsMask,
+        optionsOverride,
+        saturation,
+        transitionTime,
+    }: ColorControl.MoveToSaturationRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -631,7 +637,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * possible, so we set to min/max directly. Else the step logic is applied and the saturation is increased or
      * decreased by the step size every transition time interval.
      */
-    override moveSaturation({ optionsMask, optionsOverride, moveMode, rate }: MoveSaturationRequest) {
+    override moveSaturation({ optionsMask, optionsOverride, moveMode, rate }: ColorControl.MoveSaturationRequest) {
         this.#assertRate(moveMode, rate);
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
@@ -686,7 +692,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepMode,
         stepSize,
         transitionTime,
-    }: StepSaturationRequest) {
+    }: ColorControl.StepSaturationRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -749,7 +755,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         saturation,
         hue,
         transitionTime,
-    }: MoveToHueAndSaturationRequest) {
+    }: ColorControl.MoveToHueAndSaturationRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -776,7 +782,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         transitionTime: number,
     ): MaybePromise {
         return MaybePromise.then(
-            this.moveToHueLogic(targetHue, ColorControl.ColorControlDirection.ShortestDistance, transitionTime, false),
+            this.moveToHueLogic(targetHue, ColorControl.Direction.ShortestDistance, transitionTime, false),
             () => this.moveToSaturationLogic(targetSaturation, transitionTime),
         );
     }
@@ -842,7 +848,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * possible, so we set the target values directly. Else the step logic is applied and the x and y is
      * increased or decreased by the step size every transition time interval.
      */
-    override moveColor({ optionsOverride, optionsMask, rateX, rateY }: MoveColorRequest): MaybePromise {
+    override moveColor({ optionsOverride, optionsMask, rateX, rateY }: ColorControl.MoveColorRequest): MaybePromise {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -910,7 +916,13 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * possible, so we set the target values directly. Else the step logic is applied and the x and y is
      * increased or decreased by the step size every transition time interval.
      */
-    override stepColor({ optionsOverride, optionsMask, stepX, stepY, transitionTime }: StepColorRequest): MaybePromise {
+    override stepColor({
+        optionsOverride,
+        optionsMask,
+        stepX,
+        stepY,
+        transitionTime,
+    }: ColorControl.StepColorRequest): MaybePromise {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -965,7 +977,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         optionsMask,
         colorTemperatureMireds,
         transitionTime,
-    }: MoveToColorTemperatureRequest): MaybePromise {
+    }: ColorControl.MoveToColorTemperatureRequest): MaybePromise {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1017,7 +1029,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         enhancedHue,
         direction,
         transitionTime,
-    }: EnhancedMoveToHueRequest) {
+    }: ColorControl.EnhancedMoveToHueRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1036,7 +1048,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * increase only one rate directly if the managed transition is not used. Else the step logic is applied and the
      * level is increased or decreased by the step size every second.
      */
-    override enhancedMoveHue({ optionsMask, optionsOverride, moveMode, rate }: EnhancedMoveHueRequest) {
+    override enhancedMoveHue({ optionsMask, optionsOverride, moveMode, rate }: ColorControl.EnhancedMoveHueRequest) {
         this.#assertRate(moveMode, rate);
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
@@ -1068,7 +1080,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         stepMode,
         stepSize,
         transitionTime,
-    }: EnhancedStepHueRequest) {
+    }: ColorControl.EnhancedStepHueRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1093,7 +1105,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         enhancedHue,
         saturation,
         transitionTime,
-    }: EnhancedMoveToHueAndSaturationRequest): MaybePromise {
+    }: ColorControl.EnhancedMoveToHueAndSaturationRequest): MaybePromise {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1118,12 +1130,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         transitionTime: number,
     ): MaybePromise {
         return MaybePromise.then(
-            this.moveToHueLogic(
-                targetEnhancedHue,
-                ColorControl.ColorControlDirection.ShortestDistance,
-                transitionTime,
-                true,
-            ),
+            this.moveToHueLogic(targetEnhancedHue, ColorControl.Direction.ShortestDistance, transitionTime, true),
             () => this.moveToSaturationLogic(targetSaturation, transitionTime),
         );
     }
@@ -1145,7 +1152,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         direction,
         time,
         startHue,
-    }: ColorLoopSetRequest) {
+    }: ColorControl.ColorLoopSetRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1232,7 +1239,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
      * After the options checks it uses the {@link stopMoveStepLogic} method to stop any ongoing color movement.
      * If you want to implement own logic just override {@link stopMoveStepLogic}.
      */
-    override stopMoveStep({ optionsOverride, optionsMask }: StopMoveStepRequest) {
+    override stopMoveStep({ optionsOverride, optionsMask }: ColorControl.StopMoveStepRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1273,7 +1280,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         colorTemperatureMinimumMireds,
         colorTemperatureMaximumMireds,
         rate,
-    }: MoveColorTemperatureRequest): MaybePromise {
+    }: ColorControl.MoveColorTemperatureRequest): MaybePromise {
         this.#assertRate(moveMode, rate);
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
@@ -1361,7 +1368,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         transitionTime,
         colorTemperatureMinimumMireds,
         colorTemperatureMaximumMireds,
-    }: StepColorTemperatureRequest) {
+    }: ColorControl.StepColorTemperatureRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
@@ -1658,12 +1665,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
     }
 
     /** Calculate the hue distance depending on the direction and the current and target hue. */
-    #getHueDistanceByDirection(
-        currentHue: number,
-        targetHue: number,
-        direction: ColorControl.ColorControlDirection,
-        max: number,
-    ) {
+    #getHueDistanceByDirection(currentHue: number, targetHue: number, direction: ColorControl.Direction, max: number) {
         const distance = (targetHue > currentHue ? targetHue : max + targetHue) - currentHue;
         logger.info(
             `Distance: ${distance}, direction: ${direction}, max/2: ${max / 2}, max-distance: ${max - distance}`,
@@ -1671,18 +1673,18 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         if (distance === 0) {
             return 0;
         }
-        if (direction === ColorControl.ColorControlDirection.Up) {
+        if (direction === ColorControl.Direction.Up) {
             return distance;
-        } else if (direction === ColorControl.ColorControlDirection.Down) {
+        } else if (direction === ColorControl.Direction.Down) {
             return -(max - distance);
         }
-        if (direction === ColorControl.ColorControlDirection.ShortestDistance) {
+        if (direction === ColorControl.Direction.ShortestDistance) {
             if (Math.abs(distance) > max / 2) {
                 return -(max - distance);
             }
             return distance;
         }
-        if (direction === ColorControl.ColorControlDirection.LongestDistance) {
+        if (direction === ColorControl.Direction.LongestDistance) {
             if (Math.abs(distance) > max / 2) {
                 return distance;
             }
@@ -1781,8 +1783,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         let remainingTime = 0xffff; // Assume a looping for now, we adjust later
         if (transitionType === "enhancedHue" || transitionType === "hue") {
             if (targetValue !== undefined) {
-                const direction =
-                    changeRate > 0 ? ColorControl.ColorControlDirection.Up : ColorControl.ColorControlDirection.Down;
+                const direction = changeRate > 0 ? ColorControl.Direction.Up : ColorControl.Direction.Down;
                 hueDistanceLeft = this.#getHueDistanceByDirection(currentValue, targetValue, direction, maxValue);
                 remainingTime = Math.floor(Math.ceil(hueDistanceLeft / changeRate) * 10);
             }
@@ -2181,7 +2182,7 @@ export namespace ColorControlServerLogic {
     export declare const ExtensionInterface: {
         moveToHueLogic(
             targetHue: number,
-            direction: ColorControl.ColorControlDirection,
+            direction: ColorControl.Direction,
             transitionTime: number,
             isEnhancedHue: boolean,
         ): MaybePromise;

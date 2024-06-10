@@ -8,7 +8,6 @@
 
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { SwitchServer as BaseSwitchServer } from "../../../behavior/definitions/switch/SwitchServer.js";
-import { FixedLabelServer as BaseFixedLabelServer } from "../../../behavior/definitions/fixed-label/FixedLabelServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -19,7 +18,7 @@ import { Identity } from "../../../util/Type.js";
  * GenericSwitchDevice requires Switch cluster but Switch is not added by default because you must select the features
  * your device supports. You can add manually using GenericSwitchDevice.with().
  *
- * @see {@link MatterSpecification.v11.Device} § 6.6
+ * @see {@link MatterSpecification.v13.Device} § 6.6
  */
 export interface GenericSwitchDevice extends Identity<typeof GenericSwitchDeviceDefinition> {}
 
@@ -39,25 +38,15 @@ export namespace GenericSwitchRequirements {
     export const SwitchServer = BaseSwitchServer;
 
     /**
-     * The FixedLabel cluster is optional per the Matter specification
-     *
-     * We provide this alias to the default implementation {@link FixedLabelServer} for convenience.
-     */
-    export const FixedLabelServer = BaseFixedLabelServer;
-
-    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    export const server = {
-        mandatory: { Identify: IdentifyServer, Switch: SwitchServer },
-        optional: { FixedLabel: FixedLabelServer }
-    };
+    export const server = { mandatory: { Identify: IdentifyServer, Switch: SwitchServer } };
 }
 
 export const GenericSwitchDeviceDefinition = MutableEndpoint({
     name: "GenericSwitch",
     deviceType: 0xf,
-    deviceRevision: 1,
+    deviceRevision: 3,
     requirements: GenericSwitchRequirements,
     behaviors: SupportedBehaviors(GenericSwitchRequirements.server.mandatory.Identify)
 });

@@ -27,7 +27,7 @@ export abstract class Aspect<D> {
 
     get empty() {
         for (const [k, v] of Object.entries(this)) {
-            if (k !== "definition" && k !== "errors" && v !== undefined) {
+            if (k !== "definition" && v !== undefined) {
                 return false;
             }
         }

@@ -5,6 +5,7 @@
  */
 
 import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
+import { Quality } from "../aspects/Quality.js";
 import { ElementTag, FeatureSet } from "../definitions/index.js";
 import { AttributeElement } from "./AttributeElement.js";
 import { BaseElement } from "./BaseElement.js";
@@ -22,9 +23,17 @@ export interface ClusterElement extends BaseElement {
     tag: `${ClusterElement.Tag}`;
 
     /**
-     * Marks a cluster as a singleton per the Matter specification.
+     * The cluster's PICS code.
      */
-    singleton?: boolean;
+    pics?: string;
+
+    /**
+     * Other qualities.
+     *
+     * Quality flags allowed for clusters are "I" (singleton) and "K" (diagnostics).  The spec as of 1.3 does not appear
+     * to use the singleton flag, however.
+     */
+    quality?: Quality.Definition;
 
     /**
      * Encodes both classification and scope from the Matter specification.
@@ -41,6 +50,10 @@ export interface ClusterElement extends BaseElement {
 }
 
 export function ClusterElement(definition: ClusterElement.Properties) {
+    if (definition.quality === "") {
+        delete definition.quality;
+    }
+
     return BaseElement(ClusterElement.Tag, definition) as ClusterElement;
 }
 

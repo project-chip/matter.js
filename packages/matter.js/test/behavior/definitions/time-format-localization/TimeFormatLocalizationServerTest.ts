@@ -19,6 +19,8 @@ function createEndpoint() {
                     TimeFormatLocalization.CalendarType.Chinese,
                     TimeFormatLocalization.CalendarType.Coptic,
                 ],
+                hourFormat: TimeFormatLocalization.HourFormat["24Hr"],
+                activeCalendarType: TimeFormatLocalization.CalendarType.Coptic,
             }),
         ),
     );

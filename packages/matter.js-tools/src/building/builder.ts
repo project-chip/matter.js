@@ -24,8 +24,7 @@ export interface Options {
 /**
  * High-level build coordination.
  *
- * Warning: This class is intended for command line use and will process.exit
- * if things go wrong.
+ * Warning: This class is intended for command line use and will process.exit if things go wrong.
  */
 export class Builder {
     unconditional: boolean;

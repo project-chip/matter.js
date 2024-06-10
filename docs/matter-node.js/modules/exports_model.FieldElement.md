@@ -23,7 +23,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:25
+packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:26
 
 ___
 
@@ -33,9 +33,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:23
-
 packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:24
+
+packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:25
 
 ## Variables
 
@@ -45,6 +45,6 @@ packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:23
-
 packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:24
+
+packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:25

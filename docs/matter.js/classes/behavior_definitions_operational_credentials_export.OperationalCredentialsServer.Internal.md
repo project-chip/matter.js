@@ -33,7 +33,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:474](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L474)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:488](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L488)
 
 ___
 
@@ -43,4 +43,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:475](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L475)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:489](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L489)

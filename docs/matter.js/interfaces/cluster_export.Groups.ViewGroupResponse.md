@@ -36,7 +36,7 @@ TypeFromSchema.groupId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:92](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L92)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:92](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L92)
 
 ___
 
@@ -50,7 +50,7 @@ TypeFromSchema.groupName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:93](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L93)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:93](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L93)
 
 ___
 
@@ -64,4 +64,4 @@ TypeFromSchema.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:91](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L91)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:91](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L91)

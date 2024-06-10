@@ -44,7 +44,7 @@ Structure to store the data of the current managed transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:571](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L571)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:571](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L571)
 
 ___
 
@@ -56,4 +56,4 @@ Timer for the managed transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:568](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L568)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts:568](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts#L568)

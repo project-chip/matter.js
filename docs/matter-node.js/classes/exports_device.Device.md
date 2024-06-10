@@ -21,11 +21,14 @@ Base class for all devices. This class should be extended by all devices.
 ### Properties
 
 - [commandHandler](exports_device.Device.md#commandhandler)
-- [deviceType](exports_device.Device.md#devicetype)
 - [deviceTypes](exports_device.Device.md#devicetypes)
 - [name](exports_device.Device.md#name)
 - [number](exports_device.Device.md#number)
 - [uniqueStorageKey](exports_device.Device.md#uniquestoragekey)
+
+### Accessors
+
+- [deviceType](exports_device.Device.md#devicetype)
 
 ### Methods
 
@@ -86,7 +89,7 @@ Create a new Device instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:89
+packages/matter.js/dist/esm/device/Device.d.ts:86
 
 ## Properties
 
@@ -96,17 +99,7 @@ packages/matter.js/dist/esm/device/Device.d.ts:89
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:82
-
-___
-
-### deviceType
-
-• `Readonly` **deviceType**: `number`
-
-#### Defined in
-
-packages/matter.js/dist/esm/device/Device.d.ts:81
+packages/matter.js/dist/esm/device/Device.d.ts:79
 
 ___
 
@@ -120,7 +113,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:20
+packages/matter.js/dist/esm/device/Endpoint.d.ts:21
 
 ___
 
@@ -134,7 +127,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:26
+packages/matter.js/dist/esm/device/Endpoint.d.ts:27
 
 ___
 
@@ -148,7 +141,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:24
+packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ___
 
@@ -162,7 +155,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:25
+packages/matter.js/dist/esm/device/Endpoint.d.ts:26
+
+## Accessors
+
+### deviceType
+
+• `get` **deviceType**(): [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)
+
+#### Returns
+
+[`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)
+
+#### Inherited from
+
+Endpoint.deviceType
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ## Methods
 
@@ -186,7 +197,7 @@ because needed public for derived classes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:114
+packages/matter.js/dist/esm/device/Device.d.ts:111
 
 ___
 
@@ -210,7 +221,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:52
+packages/matter.js/dist/esm/device/Endpoint.d.ts:54
 
 ___
 
@@ -243,7 +254,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:43
+packages/matter.js/dist/esm/device/Endpoint.d.ts:45
 
 ___
 
@@ -274,7 +285,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:42
+packages/matter.js/dist/esm/device/Endpoint.d.ts:44
 
 ___
 
@@ -298,7 +309,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:97
+packages/matter.js/dist/esm/device/Device.d.ts:94
 
 ___
 
@@ -323,7 +334,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:40
+packages/matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -348,7 +359,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:41
+packages/matter.js/dist/esm/device/Endpoint.d.ts:43
 
 ___
 
@@ -366,7 +377,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:38
+packages/matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
@@ -396,7 +407,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:116
+packages/matter.js/dist/esm/device/Device.d.ts:113
 
 ___
 
@@ -426,7 +437,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:115
+packages/matter.js/dist/esm/device/Device.d.ts:112
 
 ___
 
@@ -444,7 +455,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:56
+packages/matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -462,7 +473,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:59
+packages/matter.js/dist/esm/device/Endpoint.d.ts:61
 
 ___
 
@@ -480,7 +491,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:58
+packages/matter.js/dist/esm/device/Endpoint.d.ts:60
 
 ___
 
@@ -504,7 +515,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:53
+packages/matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -522,7 +533,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:54
+packages/matter.js/dist/esm/device/Endpoint.d.ts:56
 
 ___
 
@@ -556,7 +567,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:118
+packages/matter.js/dist/esm/device/Device.d.ts:115
 
 ___
 
@@ -580,7 +591,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:47
+packages/matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -614,7 +625,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:117
+packages/matter.js/dist/esm/device/Device.d.ts:114
 
 ___
 
@@ -638,7 +649,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:46
+packages/matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -656,7 +667,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:50
+packages/matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -674,7 +685,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:39
+packages/matter.js/dist/esm/device/Endpoint.d.ts:41
 
 ___
 
@@ -708,7 +719,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:49
+packages/matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -742,7 +753,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:48
+packages/matter.js/dist/esm/device/Endpoint.d.ts:50
 
 ___
 
@@ -766,7 +777,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:55
+packages/matter.js/dist/esm/device/Endpoint.d.ts:57
 
 ___
 
@@ -790,7 +801,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:105
+packages/matter.js/dist/esm/device/Device.d.ts:102
 
 ___
 
@@ -808,7 +819,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:37
+packages/matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -831,7 +842,7 @@ reachability needs to be set there.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:125
+packages/matter.js/dist/esm/device/Device.d.ts:122
 
 ___
 
@@ -855,7 +866,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:51
+packages/matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -879,7 +890,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:36
+packages/matter.js/dist/esm/device/Endpoint.d.ts:38
 
 ___
 
@@ -897,7 +908,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:60
+packages/matter.js/dist/esm/device/Endpoint.d.ts:62
 
 ___
 
@@ -915,4 +926,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:57
+packages/matter.js/dist/esm/device/Endpoint.d.ts:59

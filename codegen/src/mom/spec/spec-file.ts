@@ -14,14 +14,15 @@ import { loadClusters } from "./load-clusters.js";
 import { loadDevices } from "./load-devices.js";
 import { translateCluster } from "./translate-cluster.js";
 import { translateDevice } from "./translate-device.js";
+import { translateGlobal } from "./translate-global.js";
 
-const logger = Logger.get("intermediate-model");
+const logger = Logger.get("spec-file");
 
 export interface LoadOptions {
+    document?: string;
     version?: string;
     path?: string;
 }
-
 export class SpecFile {
     #index: IndexDetail;
 
@@ -42,9 +43,15 @@ export class SpecFile {
             return;
         }
 
-        for (const clusterRef of loadClusters(this.#index.ref)) {
-            logger.info(`translate ${clusterRef.name} (${clusterRef.xref.document} § ${clusterRef.xref.section})`);
-            Logger.nest(() => target.add(...translateCluster(clusterRef)));
+        for (const ref of loadClusters(this.#index.ref)) {
+            logger.info(`translate ${ref.name} (${ref.xref.document} § ${ref.xref.section})`);
+            Logger.nest(() => {
+                if (ref.type === "cluster") {
+                    target.add(...translateCluster(ref));
+                } else {
+                    target.add(...translateGlobal(ref));
+                }
+            });
         }
     }
 
@@ -86,7 +93,10 @@ export class SpecFile {
         }
 
         for (const index of indices) {
-            yield new SpecFile(resolve(path, index));
+            const file = new SpecFile(resolve(path, index));
+            if (options.document === undefined || file.#index.ref.xref.document === options.document) {
+                yield file;
+            }
         }
     }
 }

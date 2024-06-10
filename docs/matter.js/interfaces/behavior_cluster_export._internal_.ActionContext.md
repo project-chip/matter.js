@@ -48,8 +48,8 @@ For the formal definition of an "action" see MatterSpecification.v12.Core § 8.2
 
 ### Methods
 
-- [accessLevelFor](behavior_cluster_export._internal_.ActionContext.md#accesslevelfor)
 - [agentFor](behavior_cluster_export._internal_.ActionContext.md#agentfor)
+- [authorizedFor](behavior_cluster_export._internal_.ActionContext.md#authorizedfor)
 
 ## Properties
 
@@ -66,7 +66,7 @@ deferred.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:86](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L86)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:86](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L86)
 
 ___
 
@@ -79,7 +79,7 @@ purposes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/ActionContext.ts:54](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/context/ActionContext.ts#L54)
+[packages/matter.js/src/behavior/context/ActionContext.ts:54](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/context/ActionContext.ts#L54)
 
 ___
 
@@ -96,7 +96,7 @@ active.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:159](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/AccessControl.ts#L159)
+[packages/matter.js/src/behavior/AccessControl.ts:165](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L165)
 
 ___
 
@@ -112,7 +112,7 @@ The fabric of the authorized client.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:137](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/AccessControl.ts#L137)
+[packages/matter.js/src/behavior/AccessControl.ts:143](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L143)
 
 ___
 
@@ -129,7 +129,7 @@ fabric.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:148](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/AccessControl.ts#L148)
+[packages/matter.js/src/behavior/AccessControl.ts:154](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L154)
 
 ___
 
@@ -141,7 +141,7 @@ The wire message that initiated invocation.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/ActionContext.ts:48](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/context/ActionContext.ts#L48)
+[packages/matter.js/src/behavior/context/ActionContext.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/context/ActionContext.ts#L48)
 
 ___
 
@@ -160,7 +160,7 @@ Tracks "offline" rather than "online" because this makes the safer mode (full en
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:167](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/AccessControl.ts#L167)
+[packages/matter.js/src/behavior/AccessControl.ts:173](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L173)
 
 ___
 
@@ -172,7 +172,7 @@ The Matter session in which an interaction occurs.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/ActionContext.ts:43](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/context/ActionContext.ts#L43)
+[packages/matter.js/src/behavior/context/ActionContext.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/context/ActionContext.ts#L43)
 
 ___
 
@@ -188,7 +188,7 @@ The authenticated [SubjectId](../modules/datatype_export.md#subjectid) for onlin
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:142](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/AccessControl.ts#L142)
+[packages/matter.js/src/behavior/AccessControl.ts:148](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L148)
 
 ___
 
@@ -204,7 +204,7 @@ If this is true a timed transaction is in effect.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:153](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/AccessControl.ts#L153)
+[packages/matter.js/src/behavior/AccessControl.ts:159](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L159)
 
 ___
 
@@ -221,7 +221,7 @@ information during the action.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:80](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L80)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:80](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L80)
 
 ___
 
@@ -237,35 +237,9 @@ The transaction used for isolating state changes associated with this session.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:74](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L74)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:74](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L74)
 
 ## Methods
-
-### accessLevelFor
-
-▸ **accessLevelFor**(`location?`): [`AccessLevel`](../enums/cluster_export.AccessLevel.md)
-
-The access level of the authorized client.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `location?` | [`Location`](behavior_export.AccessControl.Location.md) |
-
-#### Returns
-
-[`AccessLevel`](../enums/cluster_export.AccessLevel.md)
-
-#### Inherited from
-
-[Session](behavior_cluster_export._internal_.Session.md).[accessLevelFor](behavior_cluster_export._internal_.Session.md#accesslevelfor)
-
-#### Defined in
-
-[packages/matter.js/src/behavior/AccessControl.ts:132](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/AccessControl.ts#L132)
-
-___
 
 ### agentFor
 
@@ -291,4 +265,31 @@ Obtain an agent for interacting with an endpoint in this context.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/ActionContext.ts:59](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/behavior/context/ActionContext.ts#L59)
+[packages/matter.js/src/behavior/context/ActionContext.ts:59](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/context/ActionContext.ts#L59)
+
+___
+
+### authorizedFor
+
+▸ **authorizedFor**(`desiredAccessLevel`, `location?`): `boolean`
+
+Checks if the authorized client has a certain Access Privilege granted.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `desiredAccessLevel` | [`AccessLevel`](../enums/cluster_export.AccessLevel.md) |
+| `location?` | [`Location`](behavior_export.AccessControl.Location.md) |
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+[Session](behavior_cluster_export._internal_.Session.md).[authorizedFor](behavior_cluster_export._internal_.Session.md#authorizedfor)
+
+#### Defined in
+
+[packages/matter.js/src/behavior/AccessControl.ts:138](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L138)

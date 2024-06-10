@@ -8,7 +8,9 @@
 
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
-import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
+import {
+    ScenesManagementServer as BaseScenesManagementServer
+} from "../../../behavior/definitions/scenes-management/ScenesManagementServer.js";
 import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
 import {
     LevelControlServer as BaseLevelControlServer
@@ -16,6 +18,9 @@ import {
 import {
     ColorControlServer as BaseColorControlServer
 } from "../../../behavior/definitions/color-control/ColorControlServer.js";
+import {
+    OccupancySensingBehavior as BaseOccupancySensingBehavior
+} from "../../../behavior/definitions/occupancy-sensing/OccupancySensingBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -25,7 +30,7 @@ import { Identity } from "../../../util/Type.js";
  * light adjusted, and its color temperature adjusted by means of a bound controller device such as a Color Dimmer
  * Switch.
  *
- * @see {@link MatterSpecification.v11.Device} § 4.3
+ * @see {@link MatterSpecification.v13.Device} § 4.3
  */
 export interface ColorTemperatureLightDevice extends Identity<typeof ColorTemperatureLightDeviceDefinition> {}
 
@@ -45,25 +50,19 @@ export namespace ColorTemperatureLightRequirements {
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The Scenes cluster is required by the Matter specification
+     * The ScenesManagement cluster is required by the Matter specification
      *
-     * This version of {@link ScenesServer} is specialized per the specification.
+     * This version of {@link ScenesManagementServer} is specialized per the specification.
      */
-    export const ScenesServer = BaseScenesServer
-        .alter({
-            commands: {
-                enhancedAddScene: { optional: false },
-                enhancedViewScene: { optional: false },
-                copyScene: { optional: false }
-            }
-        });
+    export const ScenesManagementServer = BaseScenesManagementServer
+        .alter({ commands: { copyScene: { optional: false } } });
 
     /**
      * The OnOff cluster is required by the Matter specification
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
-    export const OnOffServer = BaseOnOffServer.with("LevelControlForLighting");
+    export const OnOffServer = BaseOnOffServer.with("Lighting");
 
     /**
      * The LevelControl cluster is required by the Matter specification
@@ -90,30 +89,42 @@ export namespace ColorTemperatureLightRequirements {
         .alter({ attributes: { remainingTime: { optional: false } } });
 
     /**
+     * The OccupancySensing cluster is optional per the Matter specification
+     *
+     * We provide this alias to the default implementation {@link OccupancySensingBehavior} for convenience.
+     */
+    export const OccupancySensingBehavior = BaseOccupancySensingBehavior;
+
+    /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
         mandatory: {
             Identify: IdentifyServer,
             Groups: GroupsServer,
-            Scenes: ScenesServer,
+            ScenesManagement: ScenesManagementServer,
             OnOff: OnOffServer,
             LevelControl: LevelControlServer,
             ColorControl: ColorControlServer
         }
     };
+
+    /**
+     * A definition for each client cluster supported by the endpoint per the Matter specification.
+     */
+    export const client = { optional: { OccupancySensing: OccupancySensingBehavior }, mandatory: {} };
 }
 
 export const ColorTemperatureLightDeviceDefinition = MutableEndpoint({
     name: "ColorTemperatureLight",
     deviceType: 0x10c,
-    deviceRevision: 2,
+    deviceRevision: 4,
     requirements: ColorTemperatureLightRequirements,
 
     behaviors: SupportedBehaviors(
         ColorTemperatureLightRequirements.server.mandatory.Identify,
         ColorTemperatureLightRequirements.server.mandatory.Groups,
-        ColorTemperatureLightRequirements.server.mandatory.Scenes,
+        ColorTemperatureLightRequirements.server.mandatory.ScenesManagement,
         ColorTemperatureLightRequirements.server.mandatory.OnOff,
         ColorTemperatureLightRequirements.server.mandatory.LevelControl,
         ColorTemperatureLightRequirements.server.mandatory.ColorControl

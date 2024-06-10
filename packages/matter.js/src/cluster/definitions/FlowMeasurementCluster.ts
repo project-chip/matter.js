@@ -6,12 +6,12 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { Attribute, OptionalAttribute } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { Attribute, OptionalAttribute } from "../Cluster.js";
 import { TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace FlowMeasurement {
     /**
@@ -24,12 +24,14 @@ export namespace FlowMeasurement {
 
         attributes: {
             /**
-             * MeasuredValue represents the flow in m/h as follows: MeasuredValue = 10 x Flow
+             * MeasuredValue represents the flow in m/h as follows:
+             *
+             * MeasuredValue = 10 x Flow
              *
              * The null value indicates that the flow measurement is unknown, otherwise the range shall be as described
              * in Measured Value.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.5.4.1
+             * @see {@link MatterSpecification.v13.Cluster} § 2.5.4.1
              */
             measuredValue: Attribute(0x0, TlvNullable(TlvUInt16), { default: null }),
 
@@ -39,7 +41,7 @@ export namespace FlowMeasurement {
              *
              * The null value indicates that the value is not available.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.5.4.2
+             * @see {@link MatterSpecification.v13.Cluster} § 2.5.4.2
              */
             minMeasuredValue: Attribute(0x1, TlvNullable(TlvUInt16)),
 
@@ -49,31 +51,28 @@ export namespace FlowMeasurement {
              *
              * The null value indicates that the value is not available.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.5.4.3
+             * @see {@link MatterSpecification.v13.Cluster} § 2.5.4.3
              */
             maxMeasuredValue: Attribute(0x2, TlvNullable(TlvUInt16.bound({ max: 65534 }))),
 
             /**
              * See Measured Value.
              *
-             * @see {@link MatterSpecification.v11.Cluster} § 2.5.4.4
+             * @see {@link MatterSpecification.v13.Cluster} § 2.5.4.4
              */
             tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 }), { default: 0 })
         }
     })
 
     /**
-     * Flow Measurement
-     *
      * This cluster provides an interface to flow measurement functionality, including configuration and provision of
      * notifications of flow measurements.
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 2.5
+     * @see {@link MatterSpecification.v13.Cluster} § 2.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
     export const Cluster: Cluster = ClusterInstance;
-
     export const Complete = Cluster;
 }
 

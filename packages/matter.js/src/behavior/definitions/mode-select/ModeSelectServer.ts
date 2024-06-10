@@ -39,10 +39,7 @@ export class ModeSelectServerLogic extends ModeSelectServerBase {
         if (this.features.onOff && this.state.onMode !== undefined && this.state.onMode !== null) {
             const onOffServer = this.agent.get(OnOffServer);
             if (onOffServer !== undefined) {
-                if (
-                    onOffServer.features.levelControlForLighting &&
-                    onOffServer.state.startUpOnOff === OnOff.StartUpOnOff.On
-                ) {
+                if (onOffServer.features.lighting && onOffServer.state.startUpOnOff === OnOff.StartUpOnOff.On) {
                     this.state.currentMode = this.state.onMode;
                     currentModeOverridden = true;
                 }

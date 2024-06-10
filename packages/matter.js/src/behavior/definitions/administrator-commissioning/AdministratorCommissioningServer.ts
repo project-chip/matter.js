@@ -23,10 +23,6 @@ import {
     MINIMUM_COMMISSIONING_TIMEOUT_S,
     PAKE_PASSCODE_VERIFIER_LENGTH,
 } from "./AdministratorCommissioningConstants.js";
-import {
-    OpenBasicCommissioningWindowRequest,
-    OpenCommissioningWindowRequest,
-} from "./AdministratorCommissioningInterface.js";
 
 /**
  * Monkey patching Tlv Structure of openCommissioningWindow command to prevent data validation of the fields to be
@@ -74,7 +70,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         iterations,
         salt,
         commissioningTimeout,
-    }: OpenCommissioningWindowRequest) {
+    }: AdministratorCommissioning.OpenCommissioningWindowRequest) {
         // We monkey patched the Tlv definition above, so take care about correct error handling
         if (pakePasscodeVerifier.length !== PAKE_PASSCODE_VERIFIER_LENGTH) {
             throw new StatusResponseError(
@@ -115,7 +111,9 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     }
 
     /** This method opens a Basic Commissioning Window. The default passcode is used. */
-    async openBasicCommissioningWindow({ commissioningTimeout }: OpenBasicCommissioningWindowRequest) {
+    async openBasicCommissioningWindow({
+        commissioningTimeout,
+    }: AdministratorCommissioning.OpenBasicCommissioningWindowRequest) {
         const device = this.session.context;
 
         this.#assertCommissioningWindowRequirements(commissioningTimeout, device);

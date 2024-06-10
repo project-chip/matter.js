@@ -15,7 +15,7 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 
 /**
- * @see {@link MatterSpecification.v11.Device} § 2.2
+ * @see {@link MatterSpecification.v13.Device} § 2.2
  */
 export interface PowerSourceEndpoint extends Identity<typeof PowerSourceEndpointDefinition> {}
 

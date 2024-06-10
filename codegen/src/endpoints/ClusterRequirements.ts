@@ -5,7 +5,13 @@
  */
 
 import { Logger } from "@project-chip/matter.js/log";
-import { ClusterModel, FieldValue, RequirementElement, RequirementModel } from "@project-chip/matter.js/model";
+import {
+    ClusterModel,
+    ElementTag,
+    FieldValue,
+    RequirementElement,
+    RequirementModel,
+} from "@project-chip/matter.js/model";
 import { camelize } from "@project-chip/matter.js/util";
 import { EndpointFile } from "./EndpointFile.js";
 
@@ -73,9 +79,9 @@ export class ClusterRequirements {
     private ingestElement(requirement: RequirementModel) {
         const alteration = {} as Record<string, any>;
 
-        const element = this.cluster.children.find(
-            c => c.tag === (requirement.element as string) && c.name === requirement.name,
-        );
+        // Not all RequirementElement.ElementType are ElementTags but the ones we care about here are
+        const element = this.cluster.member(requirement.name, [requirement.element as string as ElementTag]);
+
         if (!element) {
             logger.error(
                 `Skipping ${this.file.model.name} unknown ${requirement.element} ${requirement.name} for server cluster ${this.cluster.name}`,

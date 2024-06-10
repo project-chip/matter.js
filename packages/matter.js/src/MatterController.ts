@@ -245,9 +245,6 @@ export class MatterController {
                 }
             }
         }
-        if (discoveryCapabilities.softAccessPoint) {
-            logger.info("SoftAP is not supported yet");
-        }
         return scannersToUse;
     }
 

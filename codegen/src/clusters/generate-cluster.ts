@@ -4,18 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InternalError } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
 import {
+    AttributeModel,
     ClusterModel,
     ClusterVariance,
     CommandModel,
-    DatatypeModel,
+    Conformance,
     FeatureBitmap,
     ValueModel,
     conditionToBitmaps,
     translateBitmap,
 } from "@project-chip/matter.js/model";
-import { Block, Documentation } from "../util/TsFile.js";
+import { Block, Entry } from "../util/TsFile.js";
 import { camelize, serialize } from "../util/string.js";
 import { ClusterComponentGenerator } from "./ClusterComponentGenerator.js";
 import { ClusterFile } from "./ClusterFile.js";
@@ -26,7 +28,18 @@ const logger = Logger.get("generate-cluster");
 export function generateCluster(file: ClusterFile) {
     const cluster = file.cluster;
     logger.info(`${cluster.name} → ${file.name}.ts`);
-    file.addImport("cluster/mutation/MutableCluster.js", "MutableCluster");
+
+    file.addImport("#/cluster/mutation/MutableCluster.js", "MutableCluster");
+
+    if (cluster.type === undefined || cluster.children.length) {
+        generateDefinition(file);
+    } else {
+        generateAlias(file);
+    }
+}
+
+function generateDefinition(file: ClusterFile) {
+    const cluster = file.cluster;
 
     // Analyze variance
     const variance = ClusterVariance(cluster);
@@ -49,6 +62,8 @@ export function generateCluster(file: ClusterFile) {
             .document(
                 `${cluster.name} is a derived cluster, not to be used directly.  These elements are present in all clusters derived from ${cluster.name}.`,
             );
+        generateFeatures(file, base);
+        generateMetadata(base, cluster);
     } else if (!features.length) {
         // Non-extensible cluster
         base = file.ns
@@ -60,90 +75,161 @@ export function generateCluster(file: ClusterFile) {
     }
     gen.populateComponent(variance.base, base);
 
-    // Generate status codes even if they aren't referenced directly
-    const status = cluster.get(DatatypeModel, "StatusCode");
-    if (status) {
-        gen.tlv.reference(status);
+    // First generate all local compound datatypes
+    for (const datatype of cluster.datatypes) {
+        if (!datatype.definesFields || !datatype.children.length) {
+            continue;
+        }
+        gen.tlv.defineDatatype(datatype);
+    }
+
+    // Generate composition metadata
+    if (features.length) {
+        generateExtensions(file, variance, base);
     }
 
     // The rest of this code only applies to non-base componentized clusters
     if (cluster.id === undefined) {
+        generateComplete(file, variance);
         return;
     }
+
     if (!features.length) {
-        generateClusterInterface(file, cluster);
-        generateExhaustive(file, variance);
+        generateClusterInterface(file);
+        generateComplete(file, variance);
         generateClusterExport(file);
         return;
     }
 
-    // Generate composition metadata
-    generateExtensions(file, variance, base);
-
     // Create the default cluster instance
-    let documentation;
-    let extraDocumentation: string | undefined;
+    generateMutableCluster(variance, file, cluster.featureMap);
+
+    // Generate the complete cluster
+    generateComplete(file, variance);
+}
+
+/**
+ * Generate the actual "Foo.Cluster" object for a cluster with variance.
+ */
+function generateMutableCluster(
+    variance: ClusterVariance,
+    file: ClusterFile,
+    featureMap: AttributeModel,
+    docs?: string,
+) {
+    const extraDocumentation = [] as string[];
+    if (docs) {
+        extraDocumentation.push(docs);
+    }
     let instance;
     if (variance.requiresFeatures) {
         // The cluster requires some features to be present
-        instance = file.ns.expressions(`export const ClusterInstance = MutableCluster.ExtensibleOnly(`, ")");
-        documentation = cluster;
-        (extraDocumentation =
+        instance = file.ns.atom(`export const ClusterInstance = MutableCluster.ExtensibleOnly(Base)`);
+        extraDocumentation.push(
             `Per the Matter specification you cannot use {@link ${file.clusterName}} without enabling certain feature combinations.  ` +
-            `You must use the ${file.clusterName}.with() factory method to obtain a working cluster.`),
-            instance.atom("Base");
+                `You must use the {@link with} factory method to obtain a working cluster.`,
+        );
     } else {
         // The cluster has optional features but none are mandatory
-        instance = file.ns.expressions(`export const ClusterInstance = MutableCluster({`, "})");
-        documentation = cluster;
-        extraDocumentation = `${file.clusterName} supports optional features that you can enable with the ${file.clusterName}.with() factory method.`;
-        instance.atom("...Base");
+        extraDocumentation.push(
+            `${file.clusterName} supports optional features that you can enable with the ${file.clusterName}.with() factory method.`,
+        );
 
-        const supportedFeatures = cluster.featureMap.effectiveDefault;
+        // Identify features enabled by default.  This is controlled by the default value of supportedFeatures
+        const defaultFeatures = new Set<string>();
+        const supportedFeatures = featureMap.effectiveDefault;
         if (typeof supportedFeatures === "number" && supportedFeatures) {
-            // Override supportedFeatures as there are default supported
-            // features
-            const supportedFeatureBlock = instance.expressions(`supportedFeatures: {`, "}");
-            features.forEach(feature => {
+            // There are default supported features
+            featureMap.children.forEach(feature => {
                 if (typeof feature.constraint.value === "number") {
                     if (supportedFeatures & (1 << feature.constraint.value)) {
-                        const name = camelize(feature.description ?? feature.name);
-                        supportedFeatureBlock.atom(name, "true");
+                        defaultFeatures.add(camelize(feature.description ?? feature.name));
                     }
                 }
             });
         }
+
+        // Identify components that are enabled by default.  There could be components enabled even if no features are
+        // enabled (such as with On/Off cluster in 1.3)
+        const defaultComponents = new Set<string>();
+        nextComponent: for (const component of variance.components) {
+            // Not sure we ever generate components without a condition but if we do it's unconditional
+            if (!component.condition) {
+                defaultComponents.add(component.name);
+                continue;
+            }
+
+            // Determine whether this component applies given the default enabled features
+            const bitmaps = conditionToBitmaps(component.condition, variance.cluster);
+            nextBitmap: for (const bitmap of bitmaps) {
+                for (const k in bitmap) {
+                    if (!!bitmap[k] !== defaultFeatures.has(k)) {
+                        continue nextBitmap;
+                    }
+                }
+
+                // Component applies to default feature set
+                defaultComponents.add(component.name);
+                continue nextComponent;
+            }
+        }
+
+        // Add the instance
+        instance = file.ns.expressions("export const ClusterInstance = MutableCluster(", ")");
+        if (!defaultFeatures.size && !defaultComponents.size) {
+            // No default features or components means Base fully defines the default cluster instance
+            instance.atom("Base");
+        } else {
+            // Must extend base to include features and default components
+            const base = instance.expressions("{", "}");
+            base.atom("...Base");
+            if (defaultFeatures.size) {
+                // The default cluster has features enabled
+                const supportedFeatureBlock = base.expressions(`supportedFeatures: {`, "}");
+                for (const name of defaultFeatures) {
+                    supportedFeatureBlock.atom(name, true);
+                }
+            }
+
+            // Add any default components
+            if (defaultComponents.size) {
+                // Inform cluster composer that composed clusters should build off of base
+                file.addImport("#/cluster/ClusterType.js", "ClusterType");
+                base.atom("base: ClusterType(Base)");
+
+                // Add the components
+                for (let name of defaultComponents) {
+                    name += "Component";
+                    if (variance.cluster !== file.cluster) {
+                        name = `${file.scope.nameFor(variance.cluster)}.${name}`;
+                    }
+                    instance.atom(name);
+                }
+            }
+        }
     }
+
     instance.document("@see {@link Cluster}");
 
-    // Generate an interface for the cluster as interfaces are not inlined
-    // in declaration files
-    generateClusterInterface(file, documentation, extraDocumentation);
-
-    // Generate the "complete" cluster
-    generateExhaustive(file, variance);
-
-    // Export the cluster
+    generateClusterInterface(file, extraDocumentation.join("\n"));
     generateClusterExport(file);
 }
 
-function generateClusterInterface(file: ClusterFile, documentation: string | Documentation, extraDoc?: string) {
-    file.addImport("util/Type.js", "Identity");
-    file.ns
-        .atom("export interface Cluster extends Identity<typeof ClusterInstance> {}")
-        .document(documentation, extraDoc);
-    file.ns.undefine("Cluster");
-    file.ns.atom("export const Cluster: Cluster = ClusterInstance");
+function generateClusterInterface(file: ClusterFile, extraDoc?: string) {
+    generateExportableTypeAndObject(file.ns, "Cluster").document(file.cluster, extraDoc);
 }
 
 function generateClusterExport(file: ClusterFile) {
     file.atom(`export type ${file.clusterName} = ${file.cluster.name}.Cluster`);
     file.atom(`export const ${file.clusterName} = ${file.cluster.name}.Cluster`);
 
-    file.addImport("cluster/ClusterRegistry.js", "ClusterRegistry");
+    file.addImport("#/cluster/ClusterRegistry.js", "ClusterRegistry");
     file.atom(`ClusterRegistry.register(${file.cluster.name}.Complete)`);
 }
 
+/**
+ * Generate a component representing the "non-varying" elements in a cluster with variable shape.
+ */
 function generateExtensibleClusterBase(file: ClusterFile) {
     // Feature enum
     const featureEnum = file.ns.expressions(`export enum Feature {`, "}").document({
@@ -152,7 +238,11 @@ function generateExtensibleClusterBase(file: ClusterFile) {
     });
     for (const f of file.cluster.features) {
         const name = camelize(f.description ?? f.name, true);
-        featureEnum.atom(`${name} = ${serialize(name)}`).document(f);
+        featureEnum.atom(`${name} = ${serialize(name)}`).document({
+            description: f.description ? `${f.description} (${f.name})` : f.name,
+            details: f.details,
+            xref: f.xref,
+        });
     }
 
     // Base component
@@ -162,19 +252,26 @@ function generateExtensibleClusterBase(file: ClusterFile) {
     generateMetadata(base, file.cluster);
 
     // Features
+    generateFeatures(file, base);
+
+    return base;
+}
+
+function generateFeatures(file: ClusterFile, target: Block) {
     const features = file.cluster.features;
     if (features.length) {
-        const featureBlock = base.expressions("features: {", "}");
-        base.file.addImport("schema/BitmapSchema.js", "BitFlag");
+        const featureBlock = target.expressions("features: {", "}");
+        target.file.addImport("#/schema/BitmapSchema.js", "BitFlag");
         features.forEach(feature => {
             const name = camelize(feature.description ?? feature.name);
             featureBlock.atom(name, `BitFlag(${feature.constraint.value})`).document(feature);
         });
     }
-
-    return base;
 }
 
+/**
+ * Generate extension metadata that allows for composition of clusters from components + feature selection.
+ */
 function generateExtensions(file: ClusterFile, variance: ClusterVariance, base: Block) {
     const extensions = base
         .expressions("extensions: MutableCluster.Extensions(", ")")
@@ -208,20 +305,28 @@ function generateExtensions(file: ClusterFile, variance: ClusterVariance, base: 
 }
 
 function generateMetadata(base: Block, cluster: ClusterModel) {
+    generateIdentity(base, cluster);
+    base.atom("name", `${serialize(cluster.name)}`);
+    base.atom("revision", `${JSON.stringify(cluster.revision)}`);
+}
+
+function generateIdentity(target: Block, cluster: ClusterModel) {
     if (cluster.id === undefined) {
         return;
     }
 
-    base.atom("id", `0x${cluster.id.toString(16)}`);
-    base.atom("name", `${JSON.stringify(cluster.name)}`);
-    base.atom("revision", `${JSON.stringify(cluster.revision)}`);
+    target.atom("id", `0x${cluster.id.toString(16)}`);
 }
 
-function generateExhaustive(file: ClusterFile, variance: ClusterVariance) {
+/**
+ * Generate a cluster with all possible elements and basic metadata that allows for runtime validation in the "old" API.
+ */
+function generateComplete(file: ClusterFile, variance: ClusterVariance) {
+    const isAbstract = file.cluster.id === undefined;
+
     if (!variance.components.length) {
-        // If the cluster is not extensible, just alias "Complete" to the
-        // Cluster
-        file.ns.atom(`export const Complete = Cluster`);
+        // If the cluster is not extensible, just alias "Complete" to the Cluster
+        file.ns.atom(`export const Complete = ${file.cluster.id === undefined ? "Base" : "Cluster"}`);
         return;
     }
 
@@ -231,18 +336,26 @@ function generateExhaustive(file: ClusterFile, variance: ClusterVariance) {
     }
 
     let baseName: string;
-    if (variance.requiresFeatures) {
-        // The actual "Cluster" only has a "with" property
+    if (variance.requiresFeatures || isAbstract) {
+        // The actual "Cluster" only has a "with" property or isn't even defined
         baseName = "Base";
     } else {
         // Retrieve properties from Cluster
         baseName = "Cluster";
     }
+    let factory;
+    if (isAbstract) {
+        factory = "MutableCluster.Component";
+    } else {
+        factory = "MutableCluster";
+    }
     const complete = file.ns
-        .expressions(`export const CompleteInstance = MutableCluster({`, "})")
+        .expressions(`export const CompleteInstance = ${factory}({`, "})")
         .document("@see {@link Complete}");
 
-    complete.atom("id", `${baseName}.id`);
+    if (!isAbstract) {
+        complete.atom("id", `${baseName}.id`);
+    }
     complete.atom("name", `${baseName}.name`);
     complete.atom("revision", `${baseName}.revision`);
     if (file.cluster.features.length) {
@@ -293,6 +406,38 @@ function generateExhaustive(file: ClusterFile, variance: ClusterVariance) {
         // Order elements by ID so they appear roughly in spec order
         const ordered = [...elements.keys()].sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
 
+        // Elements that appear differently based on conformance but would conflict in the exhaustive cluster need to
+        // be merged and downgraded to be less restrictive.  This won't allow for full enforcement but happens only
+        // rarely and it's not clear if we'll maintain the conditional clusters going forward anyway
+        let prev = ordered[0];
+        for (let i = 1; i < ordered.length; i++) {
+            const current = ordered[i];
+
+            if (current.id === prev.id) {
+                if (prev.conformance.toString() !== current.conformance.toString()) {
+                    prev.conformance = { ast: { type: Conformance.Flag.Optional } };
+                }
+                if (prev.constraint.toString() !== current.constraint.toString()) {
+                    prev.constraint = {};
+                }
+                if (prev.quality.toString() !== current.quality.toString()) {
+                    if (prev.quality.nullable || current.quality.nullable) {
+                        prev.quality = { nullable: true };
+                    } else {
+                        prev.quality = {};
+                    }
+                }
+                if (prev.access.toString() !== current.access.toString()) {
+                    throw new InternalError("Need to implement safe merging of access control");
+                }
+
+                ordered.splice(i, 1);
+                i--;
+            }
+
+            prev = current;
+        }
+
         // Add the elements
         for (const model of ordered) {
             const elementBlock = block.expressions(`${camelize(model.name)}: MutableCluster.AsConditional(`, ")");
@@ -304,13 +449,60 @@ function generateExhaustive(file: ClusterFile, variance: ClusterVariance) {
     ["attribute", "command", "event"].forEach(addElements);
 
     // Generate an interface for Complete
-    file.addImport("util/Type.js", "Identity");
-    file.ns
-        .atom("export interface Complete extends Identity<typeof CompleteInstance> {}")
-        .document(
-            `This cluster supports all ${file.cluster.name} features.  It may support illegal feature combinations.\n` +
-                "If you use this cluster you must manually specify which features are active and ensure the set of active features is legal per the Matter specification.",
-        );
-    file.ns.undefine("Complete");
-    file.ns.atom("export const Complete: Complete = CompleteInstance");
+    file.addImport("#/util/Type.js", "Identity");
+    const definition = generateExportableTypeAndObject(file.ns, "Complete");
+    documentComplete(file.cluster.name, definition);
+}
+
+function documentComplete(name: string, complete: Entry) {
+    complete.document(
+        `This cluster supports all ${name} features.  It may support illegal feature combinations.\n` +
+            "If you use this cluster you must manually specify which features are active and ensure the set of active features is legal per the Matter specification.",
+    );
+}
+
+/**
+ * Generate a cluster that is just an alias to a base cluster without field modification.
+ */
+function generateAlias(file: ClusterFile) {
+    const { name, base } = file.cluster;
+    if (!(base instanceof ClusterModel)) {
+        throw new InternalError(`Cluster ${name} has no children or base type`);
+    }
+
+    file.addImport(`#clusters/${base.name}Cluster.js`, base.name);
+
+    const variance = ClusterVariance(base);
+
+    const baseBlock = file.ns.expressions(`export const Base = {`, "}");
+    baseBlock.atom(`...${base.name}.Base`);
+    generateIdentity(baseBlock, file.cluster);
+    baseBlock.atom("name", serialize(file.cluster.name));
+
+    generateMutableCluster(
+        variance,
+        file,
+        base.featureMap,
+        `This alias specializes the semantics of {@link ${base.name}.Cluster}.`,
+    );
+
+    const complete = file.ns.expressions("export const CompleteInstance = MutableCluster({", "})");
+    complete.atom(`...${base.name}.Complete`);
+    generateIdentity(complete, file.cluster);
+    documentComplete(name, complete);
+    generateExportableTypeAndObject(file.ns, "Complete");
+}
+
+/**
+ * Exporting our raw objects causes their type to be inlined *everywhere* which makes our build time slow and build size
+ * huge.  So instead we export an interface that extends the actual type + an object that is cast to this interface.
+ *
+ * If TS were to fix this at some point then we can stop doing this.
+ */
+export function generateExportableTypeAndObject(target: Block, name: string): Entry {
+    target.file.addImport("#/util/Type.js", "Identity");
+    const definition = target.atom(`export interface ${name} extends Identity<typeof ${name}Instance> {}`);
+    target.undefine(name);
+    target.atom(`export const ${name}: ${name} = ${name}Instance`);
+    return definition;
 }

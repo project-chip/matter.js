@@ -4,16 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    ClusterElement,
-    ClusterModel,
-    ClusterVariance,
-    Conformance,
-    Globals,
-    MatterModel,
-} from "../../../src/model/index.js";
+import { ClusterElement, ClusterModel, ClusterVariance, Conformance, MatterModel } from "../../../src/model/index.js";
 import { InferredComponent } from "../../../src/model/logic/cluster-variance/InferredComponents.js";
 import { VarianceCondition } from "../../../src/model/logic/cluster-variance/VarianceCondition.js";
+import { FeatureMap } from "../../../src/model/standard/elements/FeatureMap.js";
 
 describe("ClusterVariance", () => {
     describe("invariant", () => {
@@ -117,7 +111,7 @@ function attrs(...definitions: AttributeDefinition[]) {
         if (Array.isArray(attr)) {
             result = {
                 tag: "attribute",
-                id: Globals.FeatureMap.id,
+                id: FeatureMap.id,
                 name: "FeatureMap",
                 type: "FeatureMap",
                 children: attr.map(f => ({ tag: "datatype", name: f })),

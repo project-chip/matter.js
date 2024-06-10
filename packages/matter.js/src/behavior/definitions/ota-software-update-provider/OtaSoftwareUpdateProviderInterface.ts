@@ -7,36 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { OtaSoftwareUpdateProvider } from "../../../cluster/definitions/OtaSoftwareUpdateProviderCluster.js";
-
-/**
- * Upon receipt, this command shall trigger an attempt to find an updated Software Image by the OTA Provider to match
- * the OTA Requestor’s constraints provided in the payload fields.
- *
- * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.1
- */
-export type QueryImageRequest = TypeFromSchema<typeof OtaSoftwareUpdateProvider.TlvQueryImageRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.10
- */
-export type QueryImageResponse = TypeFromSchema<typeof OtaSoftwareUpdateProvider.TlvQueryImageResponse>;
-
-/**
- * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.19
- */
-export type ApplyUpdateRequest = TypeFromSchema<typeof OtaSoftwareUpdateProvider.TlvApplyUpdateRequest>;
-
-/**
- * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.22
- */
-export type ApplyUpdateResponse = TypeFromSchema<typeof OtaSoftwareUpdateProvider.TlvApplyUpdateResponse>;
-
-/**
- * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.25
- */
-export type NotifyUpdateAppliedRequest = TypeFromSchema<typeof OtaSoftwareUpdateProvider.TlvNotifyUpdateAppliedRequest>;
 
 export namespace OtaSoftwareUpdateProviderInterface {
     export interface Base {
@@ -44,19 +15,19 @@ export namespace OtaSoftwareUpdateProviderInterface {
          * Upon receipt, this command shall trigger an attempt to find an updated Software Image by the OTA Provider to
          * match the OTA Requestor’s constraints provided in the payload fields.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.1
+         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.1
          */
-        queryImage(request: QueryImageRequest): MaybePromise<QueryImageResponse>;
+        queryImage(request: OtaSoftwareUpdateProvider.QueryImageRequest): MaybePromise<OtaSoftwareUpdateProvider.QueryImageResponse>;
 
         /**
-         * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.19
+         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.3
          */
-        applyUpdateRequest(request: ApplyUpdateRequest): MaybePromise<ApplyUpdateResponse>;
+        applyUpdateRequest(request: OtaSoftwareUpdateProvider.ApplyUpdateRequest): MaybePromise<OtaSoftwareUpdateProvider.ApplyUpdateResponse>;
 
         /**
-         * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.25
+         * @see {@link MatterSpecification.v13.Core} § 11.20.6.5.5
          */
-        notifyUpdateApplied(request: NotifyUpdateAppliedRequest): MaybePromise;
+        notifyUpdateApplied(request: OtaSoftwareUpdateProvider.NotifyUpdateAppliedRequest): MaybePromise;
     }
 }
 

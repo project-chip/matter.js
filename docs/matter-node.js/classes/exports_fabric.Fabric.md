@@ -16,6 +16,7 @@
 - [caseAuthenticatedTags](exports_fabric.Fabric.md#caseauthenticatedtags)
 - [fabricId](exports_fabric.Fabric.md#fabricid)
 - [fabricIndex](exports_fabric.Fabric.md#fabricindex)
+- [getGroupSetForIpk](exports_fabric.Fabric.md#getgroupsetforipk)
 - [identityProtectionKey](exports_fabric.Fabric.md#identityprotectionkey)
 - [intermediateCACert](exports_fabric.Fabric.md#intermediatecacert)
 - [label](exports_fabric.Fabric.md#label)
@@ -41,7 +42,9 @@
 - [deleteRemoveCallback](exports_fabric.Fabric.md#deleteremovecallback)
 - [deleteScopedClusterData](exports_fabric.Fabric.md#deletescopedclusterdata)
 - [deleteScopedClusterDataValue](exports_fabric.Fabric.md#deletescopedclusterdatavalue)
+- [getAllGroupKeySets](exports_fabric.Fabric.md#getallgroupkeysets)
 - [getDestinationId](exports_fabric.Fabric.md#getdestinationid)
+- [getGroupKeySet](exports_fabric.Fabric.md#getgroupkeyset)
 - [getScopedClusterDataKeys](exports_fabric.Fabric.md#getscopedclusterdatakeys)
 - [getScopedClusterDataValue](exports_fabric.Fabric.md#getscopedclusterdatavalue)
 - [hasScopedClusterDataValue](exports_fabric.Fabric.md#hasscopedclusterdatavalue)
@@ -90,7 +93,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:62
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:63
 
 ## Properties
 
@@ -100,7 +103,7 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:62
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:47
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:48
 
 ___
 
@@ -110,7 +113,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:61
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:62
 
 ___
 
@@ -120,7 +123,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:49
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:50
 
 ___
 
@@ -130,7 +133,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:48
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:49
+
+___
+
+### getGroupSetForIpk
+
+• `Private` **getGroupSetForIpk**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:97
 
 ___
 
@@ -140,7 +153,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:56
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:57
 
 ___
 
@@ -150,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:58
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:59
 
 ___
 
@@ -160,7 +173,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:60
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:61
 
 ___
 
@@ -170,7 +183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:50
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:51
 
 ___
 
@@ -180,7 +193,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:59
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:60
 
 ___
 
@@ -190,7 +203,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:52
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:53
 
 ___
 
@@ -200,7 +213,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:57
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:58
 
 ___
 
@@ -210,7 +223,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:55
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:56
 
 ___
 
@@ -220,7 +233,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:51
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:52
 
 ___
 
@@ -230,7 +243,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:53
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:54
 
 ___
 
@@ -240,7 +253,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:54
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:55
 
 ## Accessors
 
@@ -254,7 +267,7 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:54
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:85
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:109
 
 ___
 
@@ -274,7 +287,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:76
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:77
 
 ___
 
@@ -288,7 +301,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:66
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:67
 
 ## Methods
 
@@ -308,7 +321,7 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:66
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:74
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:75
 
 ___
 
@@ -328,7 +341,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:72
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:73
 
 ___
 
@@ -348,7 +361,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:75
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:76
 
 ___
 
@@ -368,7 +381,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:83
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:84
 
 ___
 
@@ -389,7 +402,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:81
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:82
+
+___
+
+### getAllGroupKeySets
+
+▸ **getAllGroupKeySets**(): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `epochKey0`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochKey1`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochKey2`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochStartTime0`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `epochStartTime1`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `epochStartTime2`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `groupKeyMulticastPolicy`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`GroupKeyMulticastPolicy`](../enums/exports_cluster.GroupKeyManagement.GroupKeyMulticastPolicy.md)\> ; `groupKeySecurityPolicy`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`GroupKeySecurityPolicy`](../enums/exports_cluster.GroupKeyManagement.GroupKeySecurityPolicy.md)\> ; `groupKeySetId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\>[]
+
+#### Returns
+
+[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `epochKey0`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochKey1`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochKey2`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochStartTime0`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `epochStartTime1`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `epochStartTime2`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `groupKeyMulticastPolicy`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`GroupKeyMulticastPolicy`](../enums/exports_cluster.GroupKeyManagement.GroupKeyMulticastPolicy.md)\> ; `groupKeySecurityPolicy`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`GroupKeySecurityPolicy`](../enums/exports_cluster.GroupKeyManagement.GroupKeySecurityPolicy.md)\> ; `groupKeySetId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\>[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:98
 
 ___
 
@@ -410,7 +437,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:71
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:72
+
+___
+
+### getGroupKeySet
+
+▸ **getGroupKeySet**(`groupKeySetId`): `undefined` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `epochKey0`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochKey1`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochKey2`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochStartTime0`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `epochStartTime1`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `epochStartTime2`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `groupKeyMulticastPolicy`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`GroupKeyMulticastPolicy`](../enums/exports_cluster.GroupKeyManagement.GroupKeyMulticastPolicy.md)\> ; `groupKeySecurityPolicy`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`GroupKeySecurityPolicy`](../enums/exports_cluster.GroupKeyManagement.GroupKeySecurityPolicy.md)\> ; `groupKeySetId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `groupKeySetId` | `number` |
+
+#### Returns
+
+`undefined` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `epochKey0`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochKey1`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochKey2`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `Uint8Array`\> ; `epochStartTime0`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `epochStartTime1`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `epochStartTime2`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `groupKeyMulticastPolicy`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`GroupKeyMulticastPolicy`](../enums/exports_cluster.GroupKeyManagement.GroupKeyMulticastPolicy.md)\> ; `groupKeySecurityPolicy`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`GroupKeySecurityPolicy`](../enums/exports_cluster.GroupKeyManagement.GroupKeySecurityPolicy.md)\> ; `groupKeySetId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:86
 
 ___
 
@@ -430,7 +477,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:84
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:85
 
 ___
 
@@ -457,7 +504,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:79
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:80
 
 ___
 
@@ -478,7 +525,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:82
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:83
 
 ___
 
@@ -499,7 +546,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:69
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:70
 
 ___
 
@@ -519,7 +566,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:70
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:71
 
 ___
 
@@ -539,7 +586,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:78
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:79
 
 ___
 
@@ -559,7 +606,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:77
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:78
 
 ___
 
@@ -579,7 +626,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:73
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:74
 
 ___
 
@@ -599,7 +646,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:65
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:66
 
 ___
 
@@ -627,7 +674,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:80
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:81
 
 ___
 
@@ -647,7 +694,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:67
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:68
 
 ___
 
@@ -661,7 +708,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:63
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:64
 
 ___
 
@@ -682,7 +729,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:68
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:69
 
 ___
 
@@ -702,4 +749,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:64
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:65

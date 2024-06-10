@@ -83,7 +83,7 @@ describe("AdministratorCommissioningCluster", () => {
         ({}) as BaseOf satisfies Cluster;
 
         // Type: WithSelected (merges various element sources)
-        type WithSelected = ClusterComposer.WithSelected<Cluster, SelectedElements>;
+        type WithSelected = ClusterComposer.ExtendedElements<Cluster, SelectedElements>;
         ({}) as WithSelected satisfies { commands: Satisfactory["commands"] };
 
         // Type: WithFeatures (slightly lower-level than Of)

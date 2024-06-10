@@ -25,7 +25,7 @@ Read access.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:261](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Access.ts#L261)
+[packages/matter.js/src/model/aspects/Access.ts:270](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/aspects/Access.ts#L270)
 
 ___
 
@@ -37,7 +37,7 @@ Read and mandatory write acess.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:271](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Access.ts#L271)
+[packages/matter.js/src/model/aspects/Access.ts:280](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/aspects/Access.ts#L280)
 
 ___
 
@@ -49,7 +49,7 @@ Read and optional write access.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:276](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Access.ts#L276)
+[packages/matter.js/src/model/aspects/Access.ts:285](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/aspects/Access.ts#L285)
 
 ___
 
@@ -61,4 +61,4 @@ Write access.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:266](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/model/aspects/Access.ts#L266)
+[packages/matter.js/src/model/aspects/Access.ts:275](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/aspects/Access.ts#L275)

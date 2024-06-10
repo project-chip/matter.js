@@ -28,4 +28,4 @@ Cancellation have no effect if the object is cancelled or otherwise in a state w
 
 #### Defined in
 
-[packages/matter.js/src/common/Lifecycle.ts:95](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/common/Lifecycle.ts#L95)
+[packages/matter.js/src/common/Lifecycle.ts:95](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/common/Lifecycle.ts#L95)

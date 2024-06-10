@@ -15,9 +15,8 @@ import {
     DatatypeElement as Datatype
 } from "../../elements/index.js";
 
-Matter.children.push(Cluster({
-    name: "PumpConfigurationAndControl", id: 0x200, classification: "application",
-    description: "Pump Configuration and Control",
+export const PumpConfigurationAndControl = Cluster({
+    name: "PumpConfigurationAndControl", id: 0x200, classification: "application", pics: "PCC",
     details: "The Pump Configuration and Control cluster provides an interface for the setup and control of pump " +
         "devices, and the automatic reporting of pump status information. Note that control of pump speed is " +
         "not included – speed is controlled by the On/Off and Level Control clusters.",
@@ -63,126 +62,113 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "MaxPressure", id: 0x0, type: "int16", access: "R V", conformance: "M", constraint: "min 0",
-            default: null, quality: "X F",
+            name: "MaxPressure", id: 0x0, type: "int16", access: "R V", conformance: "M", default: null,
+            quality: "X F",
             details: "This attribute specifies the maximum pressure the pump can achieve. It is a physical limit, and " +
                 "does not apply to any specific control mode or operation mode." +
                 "\n" +
-                "Valid range is -3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is -3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.1" }
         }),
 
         Attribute({
-            name: "MaxSpeed", id: 0x1, type: "uint16", access: "R V", conformance: "M", constraint: "max 65534",
-            default: null, quality: "X F",
+            name: "MaxSpeed", id: 0x1, type: "uint16", access: "R V", conformance: "M", default: null,
+            quality: "X F",
             details: "This attribute specifies the maximum speed the pump can achieve. It is a physical limit, and does " +
                 "not apply to any specific control mode or operation mode." +
                 "\n" +
-                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is " +
-                "invalid.",
+                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.2" }
         }),
 
         Attribute({
-            name: "MaxFlow", id: 0x2, type: "uint16", access: "R V", conformance: "M", constraint: "max 65534",
-            default: null, quality: "X F",
+            name: "MaxFlow", id: 0x2, type: "uint16", access: "R V", conformance: "M", default: null,
+            quality: "X F",
             details: "This attribute specifies the maximum flow the pump can achieve. It is a physical limit, and does " +
                 "not apply to any specific control mode or operation mode." +
                 "\n" +
-                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value " +
-                "is invalid.",
+                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.3" }
         }),
 
         Attribute({
             name: "MinConstPressure", id: 0x3, type: "int16", access: "R V", conformance: "PRSCONST, [AUTO]",
-            constraint: "min 0", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the minimum pressure the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantPressure." +
                 "\n" +
-                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.4" }
         }),
 
         Attribute({
             name: "MaxConstPressure", id: 0x4, type: "int16", access: "R V", conformance: "PRSCONST, [AUTO]",
-            constraint: "min 0", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the maximum pressure the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantPressure." +
                 "\n" +
-                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.5" }
         }),
 
         Attribute({
             name: "MinCompPressure", id: 0x5, type: "int16", access: "R V", conformance: "PRSCOMP, [AUTO]",
-            constraint: "min 0", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the minimum compensated pressure the pump can achieve when it is working " +
                 "with the ControlMode attribute set to ProportionalPressure." +
                 "\n" +
-                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.6" }
         }),
 
         Attribute({
             name: "MaxCompPressure", id: 0x6, type: "int16", access: "R V", conformance: "PRSCOMP, [AUTO]",
-            constraint: "min 0", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the maximum compensated pressure the pump can achieve when it is working " +
                 "with the ControlMode attribute set to ProportionalPressure." +
                 "\n" +
-                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.7" }
         }),
 
         Attribute({
             name: "MinConstSpeed", id: 0x7, type: "uint16", access: "R V", conformance: "SPD, [AUTO]",
-            constraint: "max 65534", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the minimum speed the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantSpeed." +
                 "\n" +
-                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is " +
-                "invalid.",
+                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.8" }
         }),
 
         Attribute({
             name: "MaxConstSpeed", id: 0x8, type: "uint16", access: "R V", conformance: "SPD, [AUTO]",
-            constraint: "max 65534", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the maximum speed the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantSpeed." +
                 "\n" +
-                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is " +
-                "invalid.",
+                "Valid range is 0 to 65,534 RPM (steps of 1 RPM). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.9" }
         }),
 
         Attribute({
             name: "MinConstFlow", id: 0x9, type: "uint16", access: "R V", conformance: "FLW, [AUTO]",
-            constraint: "max 65534", default: null, quality: "X F",
-
+            default: null, quality: "X F",
             details: "This attribute specifies the minimum flow the pump can achieve when it is working with the Con" +
                 "\n" +
                 "trolMode attribute set to ConstantFlow." +
                 "\n" +
-                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value " +
-                "is invalid.",
-
+                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.10" }
         }),
 
         Attribute({
             name: "MaxConstFlow", id: 0xa, type: "uint16", access: "R V", conformance: "FLW, [AUTO]",
-            constraint: "max 65534", default: null, quality: "X F",
+            default: null, quality: "X F",
             details: "This attribute specifies the maximum flow the pump can achieve when it is working with the " +
                 "ControlMode attribute set to ConstantFlow." +
                 "\n" +
-                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value " +
-                "is invalid.",
+                "Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.11" }
         }),
 
@@ -192,8 +178,7 @@ Matter.children.push(Cluster({
             details: "This attribute specifies the minimum temperature the pump can maintain in the system when it is " +
                 "working with the ControlMode attribute set to ConstantTemperature." +
                 "\n" +
-                "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). Null if the value is invalid.",
             xref: { document: "cluster", section: "4.2.7.12" }
         }),
 
@@ -206,8 +191,7 @@ Matter.children.push(Cluster({
                 "\n" +
                 "MaxConstTemp shall be greater than or equal to MinConstTemp" +
                 "\n" +
-                "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the " +
-                "value is invalid.",
+                "Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). Null if the value is invalid.",
 
             xref: { document: "cluster", section: "4.2.7.13" }
         }),
@@ -270,8 +254,8 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "Capacity", id: 0x13, type: "int16", access: "R V", conformance: "M", constraint: "min 0",
-            default: null, quality: "X P",
+            name: "Capacity", id: 0x13, type: "int16", access: "R V", conformance: "M", default: null,
+            quality: "X P",
 
             details: "This attribute specifies the actual capacity of the pump as a percentage of the effective maximum " +
                 "setpoint value. It is updated dynamically as the speed of the pump changes." +
@@ -286,8 +270,8 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "Speed", id: 0x14, type: "uint16", access: "R V", conformance: "O", constraint: "max 65534",
-            default: null, quality: "X",
+            name: "Speed", id: 0x14, type: "uint16", access: "R V", conformance: "O", default: null,
+            quality: "X",
 
             details: "This attribute specifies the actual speed of the pump measured in RPM. It is updated dynamically as " +
                 "the speed of the pump changes." +
@@ -345,7 +329,7 @@ Matter.children.push(Cluster({
                 "\n" +
                 "Valid range is 0 kWh to 4,294,967,294 kWh." +
                 "\n" +
-                "This attribute shall be null if the value is unknown.",
+                "Null if the value is unknown.",
 
             xref: { document: "cluster", section: "4.2.7.21" }
         }),
@@ -494,7 +478,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "PumpStatusBitmap", type: "map16", conformance: "M",
+            name: "PumpStatusBitmap", type: "map16",
             xref: { document: "cluster", section: "4.2.6.1" },
 
             children: [
@@ -557,7 +541,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "OperationModeEnum", type: "enum8", conformance: "M",
+            name: "OperationModeEnum", type: "enum8",
             xref: { document: "cluster", section: "4.2.6.2" },
 
             children: [
@@ -585,7 +569,7 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
-            name: "ControlModeEnum", type: "enum8", conformance: "M",
+            name: "ControlModeEnum", type: "enum8",
             xref: { document: "cluster", section: "4.2.6.3" },
 
             children: [
@@ -647,4 +631,6 @@ Matter.children.push(Cluster({
             ]
         })
     ]
-}));
+});
+
+Matter.children.push(PumpConfigurationAndControl);

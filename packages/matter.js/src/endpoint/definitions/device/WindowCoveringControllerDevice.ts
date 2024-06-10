@@ -12,7 +12,9 @@ import {
 } from "../../../behavior/definitions/window-covering/WindowCoveringBehavior.js";
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
+import {
+    ScenesManagementBehavior as BaseScenesManagementBehavior
+} from "../../../behavior/definitions/scenes-management/ScenesManagementBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
@@ -20,7 +22,7 @@ import { Identity } from "../../../util/Type.js";
 /**
  * A Window Covering Controller is a device that controls an automatic window covering.
  *
- * @see {@link MatterSpecification.v11.Device} § 8.4
+ * @see {@link MatterSpecification.v13.Device} § 8.4
  */
 export interface WindowCoveringControllerDevice extends Identity<typeof WindowCoveringControllerDeviceDefinition> {}
 
@@ -54,11 +56,11 @@ export namespace WindowCoveringControllerRequirements {
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The Scenes cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification
      *
-     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
+     * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
      */
-    export const ScenesBehavior = BaseScenesBehavior;
+    export const ScenesManagementBehavior = BaseScenesManagementBehavior;
 
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
@@ -70,14 +72,14 @@ export namespace WindowCoveringControllerRequirements {
      */
     export const client = {
         mandatory: { WindowCovering: WindowCoveringBehavior },
-        optional: { Identify: IdentifyBehavior, Groups: GroupsBehavior, Scenes: ScenesBehavior }
+        optional: { Identify: IdentifyBehavior, Groups: GroupsBehavior, ScenesManagement: ScenesManagementBehavior }
     };
 }
 
 export const WindowCoveringControllerDeviceDefinition = MutableEndpoint({
     name: "WindowCoveringController",
     deviceType: 0x203,
-    deviceRevision: 2,
+    deviceRevision: 3,
     requirements: WindowCoveringControllerRequirements,
     behaviors: SupportedBehaviors()
 });

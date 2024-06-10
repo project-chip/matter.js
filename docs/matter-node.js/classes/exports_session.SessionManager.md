@@ -75,7 +75,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:25
+packages/matter.js/dist/esm/session/SessionManager.d.ts:27
 
 ## Properties
 
@@ -85,7 +85,7 @@ packages/matter.js/dist/esm/session/SessionManager.d.ts:25
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:23
+packages/matter.js/dist/esm/session/SessionManager.d.ts:25
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:24
+packages/matter.js/dist/esm/session/SessionManager.d.ts:26
 
 ## Accessors
 
@@ -109,7 +109,7 @@ packages/matter.js/dist/esm/session/SessionManager.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:28
+packages/matter.js/dist/esm/session/SessionManager.d.ts:30
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:27
+packages/matter.js/dist/esm/session/SessionManager.d.ts:29
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:26
+packages/matter.js/dist/esm/session/SessionManager.d.ts:28
 
 ## Methods
 
@@ -151,7 +151,7 @@ packages/matter.js/dist/esm/session/SessionManager.d.ts:26
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:72
+packages/matter.js/dist/esm/session/SessionManager.d.ts:75
 
 ___
 
@@ -164,6 +164,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `args` | `Object` |
+| `args.caseAuthenticatedTags?` | [`CaseAuthenticatedTag`](../modules/exports_datatype.md#caseauthenticatedtag)[] |
 | `args.fabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
 | `args.isInitiator` | `boolean` |
 | `args.isResumption` | `boolean` |
@@ -180,7 +181,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:34
+packages/matter.js/dist/esm/session/SessionManager.d.ts:36
 
 ___
 
@@ -203,7 +204,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:29
+packages/matter.js/dist/esm/session/SessionManager.d.ts:31
 
 ___
 
@@ -224,7 +225,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:54
+packages/matter.js/dist/esm/session/SessionManager.d.ts:57
 
 ___
 
@@ -238,7 +239,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:47
+packages/matter.js/dist/esm/session/SessionManager.d.ts:50
 
 ___
 
@@ -258,7 +259,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:55
+packages/matter.js/dist/esm/session/SessionManager.d.ts:58
 
 ___
 
@@ -278,7 +279,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:56
+packages/matter.js/dist/esm/session/SessionManager.d.ts:59
 
 ___
 
@@ -292,7 +293,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:61
+packages/matter.js/dist/esm/session/SessionManager.d.ts:64
 
 ___
 
@@ -306,7 +307,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:48
+packages/matter.js/dist/esm/session/SessionManager.d.ts:51
 
 ___
 
@@ -320,7 +321,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:50
+packages/matter.js/dist/esm/session/SessionManager.d.ts:53
 
 ___
 
@@ -340,7 +341,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:49
+packages/matter.js/dist/esm/session/SessionManager.d.ts:52
 
 ___
 
@@ -361,7 +362,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:51
+packages/matter.js/dist/esm/session/SessionManager.d.ts:54
 
 ___
 
@@ -381,7 +382,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:53
+packages/matter.js/dist/esm/session/SessionManager.d.ts:56
 
 ___
 
@@ -401,7 +402,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:60
+packages/matter.js/dist/esm/session/SessionManager.d.ts:63
 
 ___
 
@@ -422,7 +423,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:52
+packages/matter.js/dist/esm/session/SessionManager.d.ts:55
 
 ___
 
@@ -442,7 +443,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:46
+packages/matter.js/dist/esm/session/SessionManager.d.ts:49
 
 ___
 
@@ -462,7 +463,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:45
+packages/matter.js/dist/esm/session/SessionManager.d.ts:48
 
 ___
 
@@ -482,7 +483,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:57
+packages/matter.js/dist/esm/session/SessionManager.d.ts:60
 
 ___
 
@@ -496,7 +497,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:59
+packages/matter.js/dist/esm/session/SessionManager.d.ts:62
 
 ___
 
@@ -516,4 +517,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:58
+packages/matter.js/dist/esm/session/SessionManager.d.ts:61

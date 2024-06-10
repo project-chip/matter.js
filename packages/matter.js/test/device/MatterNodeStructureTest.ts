@@ -37,12 +37,14 @@ import { RootEndpoint } from "../../src/device/Device.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
 import { EndpointInterface } from "../../src/endpoint/EndpointInterface.js";
+import { ClusterModel, MatterModel, Specification } from "../../src/model/index.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
 import { attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageContext } from "../../src/storage/StorageContext.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
+import { serialize } from "../../src/util/String.js";
 import { DUMMY_KEY, PRIVATE_KEY } from "../crypto/test-util.js";
 
 function addRequiredRootClusters(
@@ -72,6 +74,8 @@ function addRequiredRootClusters(
                         subscriptionsPerFabric: 3,
                     },
                     serialNumber: `node-matter-0000`,
+                    specificationVersion: Specification.SPECIFICATION_VERSION,
+                    maxPathsPerInvoke: 1,
                 },
                 {},
                 {
@@ -191,6 +195,10 @@ function addRequiredRootClusters(
                 testEventTrigger: async () => {
                     /* ignore */
                 },
+                timeSnapshot: async () => ({
+                    systemTimeMs: 0,
+                    posixTimeMs: 0,
+                }),
             },
             {
                 bootReason: true,
@@ -210,6 +218,53 @@ function addRequiredRootClusters(
                 AdministratorCommissioningHandler(),
             ),
         );
+    }
+}
+
+export interface PathCounts {
+    attribute?: number;
+    command?: number;
+    event?: number;
+}
+
+export type PathSummary = Array<Record<string, PathCounts>>;
+
+const clusterNames = {} as Record<number, string>;
+function nameOfCluster(clusterId: number) {
+    let name = clusterNames[clusterId];
+    if (name === undefined) {
+        name = clusterNames[clusterId] =
+            MatterModel.standard.get(ClusterModel, clusterId)?.name ?? clusterId.toString();
+    }
+    return name;
+}
+
+function expectPaths(structure: InteractionEndpointStructure, ...expected: PathSummary) {
+    let result = [] as PathSummary;
+
+    function summarize(type: keyof PathCounts) {
+        const paths = structure[`${type}Paths`];
+
+        for (const path of paths) {
+            const forEndpoint = (result[path.endpointId] ??= {});
+            const forCluster = (forEndpoint[nameOfCluster(path.clusterId)] ??= {});
+            forCluster[type] = (forCluster[type] ?? 0) + 1;
+        }
+    }
+
+    summarize("attribute");
+    summarize("command");
+    summarize("event");
+
+    result = result.filter(entry => entry !== undefined);
+
+    try {
+        expect(result).deep.equals(expected);
+    } catch (e) {
+        // Change the message so the summary is easy to pull out and stick in the test
+        (e as Error).message = `Incorrect path result: ${result.map(serialize).join(", ")}`;
+
+        throw e;
     }
 }
 
@@ -292,7 +347,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-            const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
+            const { endpoints, attributes } = endpointStructure;
 
             const rootPartsListAttribute = attributes.get(
                 attributePathToId({
@@ -325,13 +380,21 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
 
-            expect(attributePaths.length).equal(110);
-            expect(commandPaths.length).equal(18);
-            expect(eventPaths.length).equal(6);
+            expectPaths(endpointStructure, {
+                Descriptor: { attribute: 10 },
+                BasicInformation: { attribute: 22, event: 3 },
+                OperationalCredentials: { attribute: 12, command: 8 },
+                GeneralCommissioning: { attribute: 11, command: 3 },
+                AccessControl: { attribute: 11, event: 2 },
+                GroupKeyManagement: { attribute: 10, command: 4 },
+                GeneralDiagnostics: { attribute: 15, command: 2, event: 1 },
+                AdministratorCommissioning: { attribute: 9, command: 2 },
+                NetworkCommissioning: { attribute: 12 },
+            });
 
             const basicInformationCluster = rootEndpoint.getClusterServer(BasicInformationCluster);
             expect(basicInformationCluster).exist;
-            expect((basicInformationCluster?.attributes as any).attributeList.get().length).equal(20);
+            expect((basicInformationCluster?.attributes as any).attributeList.get().length).equal(22);
             expect((basicInformationCluster?.attributes as any).eventList.get().length).equal(3);
             expect((basicInformationCluster?.attributes as any).generatedCommandList.get().length).equal(0);
             expect((basicInformationCluster?.attributes as any).acceptedCommandList.get().length).equal(0);
@@ -344,7 +407,7 @@ describe("Endpoint Structures", () => {
             expect((generalCommissioningCluster?.attributes as any).acceptedCommandList.get().length).equal(3);
         });
 
-        it("One device with one Light endpoints - no unique id, use index", async () => {
+        it("One device with one Light endpoint - no unique id, use index", async () => {
             const node = await commissioningServer();
 
             const onoffDevice = new OnOffPluginUnitDevice();
@@ -358,7 +421,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-            const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
+            const { endpoints, attributes } = endpointStructure;
 
             expect(endpointStorage.get("serial_node-matter-0000-index_0")).equal(1);
 
@@ -390,9 +453,27 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(1)]);
 
-            expect(attributePaths.length).equal(149);
-            expect(commandPaths.length).equal(28);
-            expect(eventPaths.length).equal(6);
+            expectPaths(
+                endpointStructure,
+                {
+                    Descriptor: { attribute: 10 },
+                    BasicInformation: { attribute: 22, event: 3 },
+                    OperationalCredentials: { attribute: 12, command: 8 },
+                    GeneralCommissioning: { attribute: 11, command: 3 },
+                    AccessControl: { attribute: 11, event: 2 },
+                    GroupKeyManagement: { attribute: 10, command: 4 },
+                    GeneralDiagnostics: { attribute: 15, command: 2, event: 1 },
+                    AdministratorCommissioning: { attribute: 9, command: 2 },
+                    NetworkCommissioning: { attribute: 12 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                },
+            );
         });
 
         it("One device with one Light endpoints - with uniqueid", async () => {
@@ -409,7 +490,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-            const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
+            const { endpoints, attributes } = endpointStructure;
 
             expect(endpointStorage.get("serial_node-matter-0000-custom_test-unique-id")).equal(1);
 
@@ -441,9 +522,27 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(1)]);
 
-            expect(attributePaths.length).equal(149);
-            expect(commandPaths.length).equal(28);
-            expect(eventPaths.length).equal(6);
+            expectPaths(
+                endpointStructure,
+                {
+                    Descriptor: { attribute: 10 },
+                    BasicInformation: { attribute: 22, event: 3 },
+                    OperationalCredentials: { attribute: 12, command: 8 },
+                    GeneralCommissioning: { attribute: 11, command: 3 },
+                    AccessControl: { attribute: 11, event: 2 },
+                    GroupKeyManagement: { attribute: 10, command: 4 },
+                    GeneralDiagnostics: { attribute: 15, command: 2, event: 1 },
+                    AdministratorCommissioning: { attribute: 9, command: 2 },
+                    NetworkCommissioning: { attribute: 12 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                },
+            );
         });
 
         it("One device with one Light endpoints - no uniqueid, use index, from storage", async () => {
@@ -462,7 +561,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-            const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
+            const { endpoints, attributes } = endpointStructure;
 
             expect(endpointStorage.get("serial_node-matter-0000-index_0")).equal(10);
 
@@ -494,9 +593,27 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(10)]);
 
-            expect(attributePaths.length).equal(149);
-            expect(commandPaths.length).equal(28);
-            expect(eventPaths.length).equal(6);
+            expectPaths(
+                endpointStructure,
+                {
+                    Descriptor: { attribute: 10 },
+                    BasicInformation: { attribute: 22, event: 3 },
+                    OperationalCredentials: { attribute: 12, command: 8 },
+                    GeneralCommissioning: { attribute: 11, command: 3 },
+                    AccessControl: { attribute: 11, event: 2 },
+                    GroupKeyManagement: { attribute: 10, command: 4 },
+                    GeneralDiagnostics: { attribute: 15, command: 2, event: 1 },
+                    AdministratorCommissioning: { attribute: 9, command: 2 },
+                    NetworkCommissioning: { attribute: 12 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                },
+            );
         });
 
         it("One device with one Light endpoints - with uniqueid, from storage", async () => {
@@ -515,7 +632,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-            const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
+            const { endpoints, attributes } = endpointStructure;
 
             expect(endpointStorage.get("serial_node-matter-0000-custom_test-unique-id")).equal(10);
 
@@ -547,9 +664,27 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(10)]);
 
-            expect(attributePaths.length).equal(149);
-            expect(commandPaths.length).equal(28);
-            expect(eventPaths.length).equal(6);
+            expectPaths(
+                endpointStructure,
+                {
+                    Descriptor: { attribute: 10 },
+                    BasicInformation: { attribute: 22, event: 3 },
+                    OperationalCredentials: { attribute: 12, command: 8 },
+                    GeneralCommissioning: { attribute: 11, command: 3 },
+                    AccessControl: { attribute: 11, event: 2 },
+                    GroupKeyManagement: { attribute: 10, command: 4 },
+                    GeneralDiagnostics: { attribute: 15, command: 2, event: 1 },
+                    AdministratorCommissioning: { attribute: 9, command: 2 },
+                    NetworkCommissioning: { attribute: 12 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                },
+            );
         });
     });
 
@@ -608,7 +743,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-            const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
+            const { endpoints, attributes } = endpointStructure;
 
             expect(endpoints.size).equal(3);
             expect(endpoints.get(EndpointNumber(0))?.getAllClusterServers().length).equal(9);
@@ -651,14 +786,14 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(aggregatorPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(11)]);
 
-            const aggregatorDeviceTypeListAttribute = attributes.get(
+            const AggregatorEndpointTypeListAttribute = attributes.get(
                 attributePathToId({
                     endpointId: EndpointNumber(1),
                     clusterId: DescriptorCluster.id,
                     attributeId: DescriptorCluster.attributes.deviceTypeList.id,
                 }),
             ) as AttributeServer<EndpointNumber[]>;
-            expect(aggregatorDeviceTypeListAttribute?.getLocal()).deep.equal([
+            expect(AggregatorEndpointTypeListAttribute?.getLocal()).deep.equal([
                 {
                     deviceType: DeviceTypeId(DeviceTypes.AGGREGATOR.code),
                     revision: 1,
@@ -692,9 +827,29 @@ describe("Endpoint Structures", () => {
                 },
             ]);
 
-            expect(attributePaths.length).equal(167);
-            expect(commandPaths.length).equal(28);
-            expect(eventPaths.length).equal(7);
+            expectPaths(
+                endpointStructure,
+                {
+                    Descriptor: { attribute: 10 },
+                    BasicInformation: { attribute: 22, event: 3 },
+                    OperationalCredentials: { attribute: 12, command: 8 },
+                    GeneralCommissioning: { attribute: 11, command: 3 },
+                    NetworkCommissioning: { attribute: 12 },
+                    AccessControl: { attribute: 11, event: 2 },
+                    GroupKeyManagement: { attribute: 10, command: 4 },
+                    GeneralDiagnostics: { attribute: 15, command: 2, event: 1 },
+                    AdministratorCommissioning: { attribute: 9, command: 2 },
+                },
+                { Descriptor: { attribute: 10 } },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+            );
         });
 
         it("Device Structure with one aggregator and two plug endpoints and defined endpoint IDs", () => {
@@ -719,7 +874,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-            const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
+            const { endpoints, attributes } = endpointStructure;
 
             expect(endpoints.size).equal(4);
             expect(endpoints.get(EndpointNumber(0))?.getAllClusterServers().length).equal(9);
@@ -774,14 +929,14 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(aggregatorPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(11), EndpointNumber(12)]);
 
-            const aggregatorDeviceTypeListAttribute = attributes.get(
+            const AggregatorEndpointTypeListAttribute = attributes.get(
                 attributePathToId({
                     endpointId: EndpointNumber(1),
                     clusterId: DescriptorCluster.id,
                     attributeId: DescriptorCluster.attributes.deviceTypeList.id,
                 }),
             ) as AttributeServer<EndpointNumber[]>;
-            expect(aggregatorDeviceTypeListAttribute?.getLocal()).deep.equal([
+            expect(AggregatorEndpointTypeListAttribute?.getLocal()).deep.equal([
                 {
                     deviceType: DeviceTypeId(DeviceTypes.AGGREGATOR.code),
                     revision: 1,
@@ -815,9 +970,37 @@ describe("Endpoint Structures", () => {
                 },
             ]);
 
-            expect(attributePaths.length).equal(214);
-            expect(commandPaths.length).equal(38);
-            expect(eventPaths.length).equal(8);
+            expectPaths(
+                endpointStructure,
+                {
+                    Descriptor: { attribute: 10 },
+                    BasicInformation: { attribute: 22, event: 3 },
+                    OperationalCredentials: { attribute: 12, command: 8 },
+                    GeneralCommissioning: { attribute: 11, command: 3 },
+                    NetworkCommissioning: { attribute: 12 },
+                    AccessControl: { attribute: 11, event: 2 },
+                    GroupKeyManagement: { attribute: 10, command: 4 },
+                    GeneralDiagnostics: { attribute: 15, command: 2, event: 1 },
+                    AdministratorCommissioning: { attribute: 9, command: 2 },
+                },
+                { Descriptor: { attribute: 10 } },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+            );
         });
 
         it("Device Structure with two aggregators and two OnOff endpoints and defined endpoint IDs", () => {
@@ -875,7 +1058,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-            const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
+            const { endpoints, attributes } = endpointStructure;
 
             expect(endpoints.size).equal(7);
             expect(endpoints.get(EndpointNumber(0))?.getAllClusterServers().length).equal(9);
@@ -963,9 +1146,54 @@ describe("Endpoint Structures", () => {
                 EndpointNumber(22),
             ]);
 
-            expect(attributePaths.length).equal(332);
-            expect(commandPaths.length).equal(58);
-            expect(eventPaths.length).equal(10);
+            expectPaths(
+                endpointStructure,
+                {
+                    Descriptor: { attribute: 10 },
+                    BasicInformation: { attribute: 22, event: 3 },
+                    OperationalCredentials: { attribute: 12, command: 8 },
+                    GeneralCommissioning: { attribute: 11, command: 3 },
+                    NetworkCommissioning: { attribute: 12 },
+                    AccessControl: { attribute: 11, event: 2 },
+                    GroupKeyManagement: { attribute: 10, command: 4 },
+                    GeneralDiagnostics: { attribute: 15, command: 2, event: 1 },
+                    AdministratorCommissioning: { attribute: 9, command: 2 },
+                },
+                { Descriptor: { attribute: 10 }, FixedLabel: { attribute: 7 } },
+                { Descriptor: { attribute: 10 }, FixedLabel: { attribute: 7 } },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+            );
         });
 
         it("Device Structure with two aggregators and two Light endpoints and all auto-assigned endpoint IDs", async () => {
@@ -1026,7 +1254,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-            const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
+            const { endpoints, attributes } = endpointStructure;
 
             expect(endpoints.size).equal(7);
             expect(endpoints.get(EndpointNumber(0))?.getAllClusterServers().length).equal(9);
@@ -1114,9 +1342,54 @@ describe("Endpoint Structures", () => {
                 EndpointNumber(6),
             ]);
 
-            expect(attributePaths.length).equal(332);
-            expect(commandPaths.length).equal(58);
-            expect(eventPaths.length).equal(10);
+            expectPaths(
+                endpointStructure,
+                {
+                    Descriptor: { attribute: 10 },
+                    BasicInformation: { attribute: 22, event: 3 },
+                    OperationalCredentials: { attribute: 12, command: 8 },
+                    GeneralCommissioning: { attribute: 11, command: 3 },
+                    AccessControl: { attribute: 11, event: 2 },
+                    GroupKeyManagement: { attribute: 10, command: 4 },
+                    GeneralDiagnostics: { attribute: 15, command: 2, event: 1 },
+                    AdministratorCommissioning: { attribute: 9, command: 2 },
+                    NetworkCommissioning: { attribute: 12 },
+                },
+                { Descriptor: { attribute: 10 }, FixedLabel: { attribute: 7 } },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                { Descriptor: { attribute: 10 }, FixedLabel: { attribute: 7 } },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+            );
         });
 
         it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs", async () => {
@@ -1189,7 +1462,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-            const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
+            const { endpoints, attributes } = endpointStructure;
 
             expect(endpoints.size).equal(10);
             expect(endpoints.get(EndpointNumber(0))?.getAllClusterServers().length).equal(9);
@@ -1319,9 +1592,69 @@ describe("Endpoint Structures", () => {
             );
             expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1")).equal(43);
 
-            expect(attributePaths.length).equal(430);
-            expect(commandPaths.length).equal(78);
-            expect(eventPaths.length).equal(11);
+            expectPaths(
+                endpointStructure,
+                {
+                    Descriptor: { attribute: 10 },
+                    BasicInformation: { attribute: 22, event: 3 },
+                    OperationalCredentials: { attribute: 12, command: 8 },
+                    GeneralCommissioning: { attribute: 11, command: 3 },
+                    AccessControl: { attribute: 11, event: 2 },
+                    GroupKeyManagement: { attribute: 10, command: 4 },
+                    GeneralDiagnostics: { attribute: 15, command: 2, event: 1 },
+                    AdministratorCommissioning: { attribute: 9, command: 2 },
+                    NetworkCommissioning: { attribute: 12 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                { Descriptor: { attribute: 10 }, FixedLabel: { attribute: 7 } },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                { Descriptor: { attribute: 10 }, FixedLabel: { attribute: 7 } },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 9, event: 1 },
+                },
+                { Descriptor: { attribute: 10 }, BridgedDeviceBasicInformation: { attribute: 9, event: 1 } },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                },
+            );
         });
 
         it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {
@@ -1396,7 +1729,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-            const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
+            const { endpoints, attributes } = endpointStructure;
 
             expect(endpoints.size).equal(10);
             expect(endpoints.get(EndpointNumber(0))?.getAllClusterServers().length).equal(9);
@@ -1526,9 +1859,69 @@ describe("Endpoint Structures", () => {
             );
             expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1")).equal(43);
 
-            expect(attributePaths.length).equal(430);
-            expect(commandPaths.length).equal(78);
-            expect(eventPaths.length).equal(11);
+            expectPaths(
+                endpointStructure,
+                {
+                    Descriptor: { attribute: 10 },
+                    BasicInformation: { attribute: 22, event: 3 },
+                    OperationalCredentials: { attribute: 12, command: 8 },
+                    GeneralCommissioning: { attribute: 11, command: 3 },
+                    AccessControl: { attribute: 11, event: 2 },
+                    GroupKeyManagement: { attribute: 10, command: 4 },
+                    GeneralDiagnostics: { attribute: 15, command: 2, event: 1 },
+                    AdministratorCommissioning: { attribute: 9, command: 2 },
+                    NetworkCommissioning: { attribute: 12 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                { Descriptor: { attribute: 10 }, FixedLabel: { attribute: 7 } },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 8, event: 1 },
+                },
+                { Descriptor: { attribute: 10 }, FixedLabel: { attribute: 7 } },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                    BridgedDeviceBasicInformation: { attribute: 9, event: 1 },
+                },
+                { Descriptor: { attribute: 10 }, BridgedDeviceBasicInformation: { attribute: 9, event: 1 } },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                },
+                {
+                    Descriptor: { attribute: 10 },
+                    Binding: { attribute: 7 },
+                    Identify: { attribute: 8, command: 1 },
+                    Groups: { attribute: 7, command: 6 },
+                    OnOff: { attribute: 7, command: 3 },
+                },
+            );
 
             let structureChangeCounter = 0;
             rootEndpoint.setStructureChangedCallback(() => {

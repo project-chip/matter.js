@@ -16,6 +16,7 @@
 - [MakeMandatory](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md#makemandatory)
 - [Merge](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md#merge)
 - [MergeAll](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md#mergeall)
+- [Mutable](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md#mutable)
 - [Pluck](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md#pluck)
 - [Properties](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md#properties)
 - [UnionToIntersection](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md#uniontointersection)
@@ -69,6 +70,12 @@ ___
 ### MergeAll
 
 Re-exports [MergeAll](util_export.md#mergeall-1)
+
+___
+
+### Mutable
+
+Re-exports [Mutable](util_export.md#mutable-1)
 
 ___
 

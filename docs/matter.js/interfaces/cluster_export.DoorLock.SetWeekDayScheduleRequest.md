@@ -40,7 +40,7 @@ TypeFromSchema.daysMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:626](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L626)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:626](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L626)
 
 ___
 
@@ -54,7 +54,7 @@ TypeFromSchema.endHour
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:629](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L629)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:629](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L629)
 
 ___
 
@@ -68,7 +68,7 @@ TypeFromSchema.endMinute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:630](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L630)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:630](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L630)
 
 ___
 
@@ -82,7 +82,7 @@ TypeFromSchema.startHour
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:627](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L627)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:627](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L627)
 
 ___
 
@@ -96,7 +96,7 @@ TypeFromSchema.startMinute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:628](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L628)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:628](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L628)
 
 ___
 
@@ -110,7 +110,7 @@ TypeFromSchema.userIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:625](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L625)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:625](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L625)
 
 ___
 
@@ -124,4 +124,4 @@ TypeFromSchema.weekDayIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:624](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L624)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:624](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L624)

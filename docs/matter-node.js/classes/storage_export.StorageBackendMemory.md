@@ -24,8 +24,12 @@ Matter.js uses this key/value API to manage persistent state.
 
 - [#private](storage_export.StorageBackendMemory.md##private)
 - [createContextKey](storage_export.StorageBackendMemory.md#createcontextkey)
-- [initialized](storage_export.StorageBackendMemory.md#initialized)
+- [isInitialized](storage_export.StorageBackendMemory.md#isinitialized)
 - [store](storage_export.StorageBackendMemory.md#store)
+
+### Accessors
+
+- [initialized](storage_export.StorageBackendMemory.md#initialized)
 
 ### Methods
 
@@ -83,13 +87,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:14
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:15
 
 ___
 
-### initialized
+### isInitialized
 
-• `Protected` **initialized**: `boolean`
+• `Protected` **isInitialized**: `boolean`
 
 #### Defined in
 
@@ -105,6 +109,24 @@ ___
 
 packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:10
 
+## Accessors
+
+### initialized
+
+• `get` **initialized**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Overrides
+
+SyncStorage.initialized
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:13
+
 ## Methods
 
 ### clear
@@ -117,7 +139,7 @@ packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:10
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:17
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:18
 
 ___
 
@@ -141,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:24
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:25
 
 ___
 
@@ -159,7 +181,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:16
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:17
 
 ___
 
@@ -183,7 +205,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:23
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:24
 
 ___
 
@@ -208,7 +230,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:20
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:21
 
 ___
 
@@ -239,7 +261,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:18
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:19
 
 ___
 
@@ -257,7 +279,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:15
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:16
 
 ___
 
@@ -281,7 +303,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:21
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:22
 
 ___
 
@@ -307,7 +329,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:19
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:20
 
 ___
 
@@ -331,7 +353,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:22
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:23
 
 ___
 
@@ -351,4 +373,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:13
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:14

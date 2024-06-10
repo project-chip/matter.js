@@ -14,6 +14,8 @@ Error base Class for all errors related to the status response messages.
 
   ↳↳ [`ValidationError`](exports_common.ValidationError.md)
 
+  ↳↳ [`NoAssociatedFabricError`](exports_session.NoAssociatedFabricError.md)
+
 ## Table of contents
 
 ### Constructors

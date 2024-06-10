@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MATTER_DATAMODEL_VERSION } from "../../../CommissioningServer.js";
 import { BasicInformation } from "../../../cluster/definitions/BasicInformationCluster.js";
 import { VendorId } from "../../../datatype/VendorId.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { FabricManager } from "../../../fabric/FabricManager.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
+import { Specification } from "../../../model/definitions/Specification.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { Observable } from "../../../util/Observable.js";
 import { ActionContext } from "../../context/ActionContext.js";
@@ -30,7 +30,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         const defaultsSet = {} as Record<string, any>;
 
         function setDefault<T extends keyof typeof state>(name: T, value: (typeof state)[T]) {
-            if (state[name] === undefined) {
+            if (state[name] === undefined || state[name] === 0) {
                 state[name] = value;
                 defaultsSet[name] = value;
             }
@@ -52,9 +52,10 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         // These defaults are appropriate for development or production so do not warn
         setDefault("productLabel", state.productName);
         setDefault("nodeLabel", state.productName);
-        setDefault("dataModelRevision", MATTER_DATAMODEL_VERSION);
+        setDefault("dataModelRevision", Specification.DATA_MODEL_REVISION);
         setDefault("hardwareVersionString", state.hardwareVersion.toString());
         setDefault("softwareVersionString", state.softwareVersion.toString());
+        setDefault("specificationVersion", Specification.SPECIFICATION_VERSION);
 
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
@@ -65,7 +66,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         if (this.state.reachable !== undefined && this.events.reachable$Changed !== undefined) {
             // Manually enable the reachableChanged event if not yet existing when reachable attribute exists
             if (this.events.reachableChanged === undefined) {
-                this.events.reachableChanged = new Observable<
+                this.events.reachableChanged = Observable<
                     [payload: BasicInformation.ReachableChangedEvent, context: ActionContext],
                     void
                 >();

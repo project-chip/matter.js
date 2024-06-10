@@ -6,10 +6,10 @@
 
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
+import { GroupKeyManagement } from "../../../cluster/definitions/GroupKeyManagementCluster.js";
 import { ImplementationError } from "../../../common/MatterError.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { GroupKeyManagementBehavior } from "./GroupKeyManagementBehavior.js";
-import { KeySetReadRequest, KeySetReadResponse, KeySetRemoveRequest } from "./GroupKeyManagementInterface.js";
 
 /**
  * This is the default server implementation of {@link GroupKeyManagementBehavior}.
@@ -32,7 +32,9 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
         );
     }
 
-    override keySetRead({ groupKeySetId }: KeySetReadRequest): KeySetReadResponse {
+    override keySetRead({
+        groupKeySetId,
+    }: GroupKeyManagement.KeySetReadRequest): GroupKeyManagement.KeySetReadResponse {
         if (this.context.session === undefined) {
             throw new ImplementationError("Session must be defined");
         }
@@ -53,7 +55,7 @@ export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
         };
     }
 
-    override keySetRemove({ groupKeySetId }: KeySetRemoveRequest) {
+    override keySetRemove({ groupKeySetId }: GroupKeyManagement.KeySetRemoveRequest) {
         if (groupKeySetId === 0) {
             throw new StatusResponseError(`GroupKeySet ${groupKeySetId} cannot be removed`, StatusCode.InvalidCommand);
         }

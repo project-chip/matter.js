@@ -59,6 +59,7 @@
 - [MaybePromiseLike](util_export.md#maybepromiselike)
 - [Merge](util_export.md#merge)
 - [MergeAll](util_export.md#mergeall)
+- [Mutable](util_export.md#mutable)
 - [ObserverErrorHandler](util_export.md#observererrorhandler)
 - [Pluck](util_export.md#pluck)
 - [Properties](util_export.md#properties)
@@ -91,6 +92,7 @@
 
 - [Merge](util_export.md#merge-1)
 - [MergeAll](util_export.md#mergeall-1)
+- [Mutable](util_export.md#mutable-1)
 - [Pluck](util_export.md#pluck-1)
 - [addValueWithOverflow](util_export.md#addvaluewithoverflow)
 - [anyPromise](util_export.md#anypromise)
@@ -315,13 +317,13 @@ we create an interface from the type then cast to the interface for export.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Type.d.ts:72
+packages/matter.js/dist/esm/util/Type.d.ts:76
 
 ___
 
 ### Immutable
 
-Ƭ **Immutable**\<`T`\>: `T` extends (...`args`: `any`[]) => `any` ? `T` : `T` extends `number` ? `T` : `T` extends `object` ? \{ readonly [K in keyof T]: Immutable\<T[K]\> } : `T`
+Ƭ **Immutable**\<`T`\>: `T` extends (...`args`: `any`[]) => `any` ? `T` : `T` extends `number` ? `T` : `T` extends `bigint` ? `T` : `T` extends `object` ? \{ readonly [K in keyof T]: Immutable\<T[K]\> } : `T`
 
 Make a type immutable.
 
@@ -440,6 +442,24 @@ packages/matter.js/dist/esm/util/Type.d.ts:19
 
 ___
 
+### Mutable
+
+Ƭ **Mutable**\<`T`\>: `T` extends (...`args`: `any`[]) => `any` ? `T` : `T` extends `number` ? `T` : `T` extends `bigint` ? `T` : `T` extends `object` ? \{ -readonly [K in keyof T]: Mutable\<T[K]\> } : `T`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Type.d.ts:48
+
+packages/matter.js/dist/esm/util/Type.d.ts:45
+
+___
+
 ### ObserverErrorHandler
 
 Ƭ **ObserverErrorHandler**: (`error`: `Error`, `observer`: [`Observer`](../interfaces/util_export.Observer.md)\<`any`[], `any`\>) => `void`
@@ -523,7 +543,7 @@ Convert a union to an interface.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Type.d.ts:50
+packages/matter.js/dist/esm/util/Type.d.ts:54
 
 ## Variables
 
@@ -891,6 +911,32 @@ packages/matter.js/dist/esm/util/Type.d.ts:20
 
 ___
 
+### Mutable
+
+▸ **Mutable**\<`T`\>(`value`): [`Mutable`](util_export.md#mutable)\<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | [`Immutable`](util_export.md#immutable)\<`T`\> |
+
+#### Returns
+
+[`Mutable`](util_export.md#mutable)\<`T`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Type.d.ts:48
+
+___
+
 ### Pluck
 
 ▸ **Pluck**\<`T`, `K`\>(`key`, `...objects`): [`Pluck`](util_export.md#pluck)\<`K`, `T`\>
@@ -1044,7 +1090,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:33](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/util/CommandLine.ts#L33)
+[packages/matter-node.js/src/util/CommandLine.ts:33](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/util/CommandLine.ts#L33)
 
 ___
 
@@ -1216,7 +1262,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:25](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/util/CommandLine.ts#L25)
+[packages/matter-node.js/src/util/CommandLine.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/util/CommandLine.ts#L25)
 
 ___
 
@@ -1236,7 +1282,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/util/CommandLine.ts#L12)
+[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/util/CommandLine.ts#L12)
 
 ___
 
@@ -1256,7 +1302,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:19](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/util/CommandLine.ts#L19)
+[packages/matter-node.js/src/util/CommandLine.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/util/CommandLine.ts#L19)
 
 ___
 
@@ -1468,7 +1514,7 @@ true if it is Record<string, any>
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Type.d.ts:78
+packages/matter.js/dist/esm/util/Type.d.ts:82
 
 ___
 
@@ -1564,7 +1610,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter-node.js/src/util/Node.ts#L11)
+[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter-node.js/src/util/Node.ts#L11)
 
 ___
 

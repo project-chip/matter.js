@@ -8,17 +8,17 @@
 
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
-import { PulseWidthModulation } from "../../../cluster/definitions/PulseWidthModulationCluster.js";
+import { LevelControl } from "../../../cluster/definitions/LevelControlCluster.js";
 
 /**
  * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.1
  */
-export type MoveToLevelRequest = TypeFromSchema<typeof PulseWidthModulation.TlvMoveToLevelRequest>;
+export type MoveToLevelRequest = TypeFromSchema<typeof LevelControl.TlvMoveToLevelRequest>;
 
 /**
  * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.2
  */
-export type MoveRequest = TypeFromSchema<typeof PulseWidthModulation.TlvMoveRequest>;
+export type MoveRequest = TypeFromSchema<typeof LevelControl.TlvMoveRequest>;
 
 /**
  * The StepMode field shall be one of the non-reserved values in Values of the StepMode Field.
@@ -31,17 +31,17 @@ export type MoveRequest = TypeFromSchema<typeof PulseWidthModulation.TlvMoveRequ
  *
  * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.3
  */
-export type StepRequest = TypeFromSchema<typeof PulseWidthModulation.TlvStepRequest>;
+export type StepRequest = TypeFromSchema<typeof LevelControl.TlvStepRequest>;
 
 /**
  * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.4
  */
-export type StopRequest = TypeFromSchema<typeof PulseWidthModulation.TlvStopRequest>;
+export type StopRequest = TypeFromSchema<typeof LevelControl.TlvStopRequest>;
 
 /**
  * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.5
  */
-export type MoveToClosestFrequencyRequest = TypeFromSchema<typeof PulseWidthModulation.TlvMoveToClosestFrequencyRequest>;
+export type MoveToClosestFrequencyRequest = TypeFromSchema<typeof LevelControl.TlvMoveToClosestFrequencyRequest>;
 
 export namespace PulseWidthModulationInterface {
     export interface Base {

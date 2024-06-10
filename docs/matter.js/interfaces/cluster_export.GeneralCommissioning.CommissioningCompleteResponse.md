@@ -39,7 +39,7 @@ TypeFromSchema.debugText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:216](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L216)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:216](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L216)
 
 ___
 
@@ -60,4 +60,4 @@ TypeFromSchema.errorCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:209](https://github.com/project-chip/matter.js/blob/558e12c94a201592c28c7bc0743705360b3e5ca6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L209)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:209](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L209)

@@ -6,7 +6,7 @@
 
 import { InternalError } from "../../common/MatterError.js";
 import { camelize } from "../../util/String.js";
-import { DefinitionError, ElementTag, Specification } from "../definitions/index.js";
+import { DefinitionError, ElementTag, Metatype, Specification } from "../definitions/index.js";
 import { AnyElement, BaseElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Children } from "./Children.js";
@@ -17,20 +17,18 @@ import { Children } from "./Children.js";
 export abstract class Model {
     abstract readonly tag: ElementTag;
     type?: string;
+    isSeed?: boolean;
     description?: string;
     details?: string;
     xref?: Model.CrossReference;
     errors?: DefinitionError[];
+    asOf?: Specification.Revision;
+    until?: Specification.Revision;
     declare id?: number;
     declare name: string;
 
     #id?: number = undefined;
     #name: string;
-
-    /**
-     * Flag set on elements loaded from Globals.
-     */
-    global?: boolean;
 
     /**
      * Indicates that an element may have type definitions as children.
@@ -66,20 +64,35 @@ export abstract class Model {
             if (this.parent.tag === ElementTag.Cluster) {
                 switch (this.tag) {
                     case ElementTag.Attribute:
-                        return `${this.parent.path}.state.${camelize(this.name)}`;
+                        return `${this.parent.path}.state.${camelize(this.name, false)}`;
 
                     case ElementTag.Command:
-                        return `${this.parent.path}.${camelize(this.name)}`;
+                        return `${this.parent.path}.${camelize(this.name, false)}`;
 
                     case ElementTag.Event:
-                        return `${this.parent.path}.events.${camelize(this.name)}`;
+                        return `${this.parent.path}.events.${camelize(this.name, false)}`;
                 }
             }
 
-            return `${this.parent.path}.${this.name}`;
+            const parent = this.parent;
+            if (parent.tag !== ElementTag.Cluster) {
+                const parentMetatype = (parent as { effectiveMetatype?: Metatype })?.effectiveMetatype;
+                if (parentMetatype === Metatype.object || parentMetatype === Metatype.array) {
+                    return `${parent.path}.${camelize(this.name, false)}`;
+                }
+            }
+
+            return `${parent.path}.${this.name}`;
         } else {
             return this.name;
         }
+    }
+
+    /**
+     * Determine if this model resides in the global namespace.
+     */
+    get isGlobal() {
+        return this.tag === "matter" || this.parent?.tag === "matter";
     }
 
     /**
@@ -243,6 +256,17 @@ export abstract class Model {
     }
 
     /**
+     * Determine whether this element applies to a specific revision.
+     */
+    appliesTo(revision: Specification.Revision) {
+        // Stick to simple string comparison for now as it is efficient; update if versioning ever gets more complex
+        // (or Matter reaches version 10)
+        return (
+            (this.asOf === undefined || revision >= this.asOf) && (this.until === undefined || revision < this.until)
+        );
+    }
+
+    /**
      * Add a child.  children.push works too but only accepts models.
      */
     add(...children: (Model | AnyElement)[]) {
@@ -268,9 +292,10 @@ export abstract class Model {
      * Retrieve all models of a specific element type from local scope.
      *
      * @param constructor model class or a predicate object
+     * @param key filters to models matching a specific type
      */
-    all<T extends Model>(constructor: Model.Type<T>) {
-        return this.children.filter(c => c instanceof constructor) as unknown[] as T[];
+    all<T extends Model>(constructor: Model.Type<T>, key?: number | string) {
+        return this.children.all(constructor, key);
     }
 
     /**
@@ -278,9 +303,6 @@ export abstract class Model {
      */
     get<T extends Model>(type: Model.Type<T>, key: number | string): T | undefined {
         return this.children.get(type, key);
-        // return this.children.find(c =>
-        //     c instanceof type && typeof key === "number" ? c.effectiveId === key : c.name === key,
-        // ) as T | undefined;
     }
 
     /**
@@ -382,11 +404,7 @@ export abstract class Model {
         // Copy all definition properties.  Types will be wrong for some of them but constructors correct this.
         // Properties for which type is correct are suffixed with "!" to indicate no further initialization is necessary
         for (const [k, v] of Object.entries(definition)) {
-            if (k === "id" || k === "name" || k === "parent") {
-                continue;
-            }
-
-            if (isClone && k === "children") {
+            if (k === "id" || k === "name" || k === "parent" || k === "isGlobal") {
                 continue;
             }
 
@@ -406,6 +424,10 @@ export abstract class Model {
         }
     }
 
+    toString() {
+        return `${this.tag}${this.type ? `<${this.type}>` : ""}#${this.path}`;
+    }
+
     static {
         // Obnoxious TS constraints prevent us from defining fields with accessors then overriding the type with simple
         // types.  So we just declare id and name then install accessors onto the prototype manually.  Should be
@@ -423,7 +445,7 @@ export abstract class Model {
                 set(this: Model, value: number | undefined) {
                     const oldId = this.effectiveId;
                     this.#id = value;
-                    this.children.updateId(this, oldId);
+                    this.#parent?.children.updateId(this, oldId);
                 },
 
                 enumerable: true,
@@ -437,7 +459,7 @@ export abstract class Model {
                 set(this: Model, value: string) {
                     const oldName = this.#name;
                     this.#name = value;
-                    this.children.updateName(this, oldName);
+                    this.#parent?.children.updateName(this, oldName);
                 },
 
                 enumerable: true,

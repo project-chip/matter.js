@@ -173,5 +173,5 @@ export class DescriptorServer extends DescriptorBehavior {
 }
 
 export namespace DescriptorServer {
-    export type DeviceType = TypeFromSchema<typeof Descriptor.TlvDeviceTypeStruct>;
+    export type DeviceType = TypeFromSchema<typeof Descriptor.TlvDeviceType>;
 }
