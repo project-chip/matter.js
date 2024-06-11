@@ -19,6 +19,7 @@ export * from "./FabricId.js";
 export * from "./FabricIndex.js";
 export * from "./FieldId.js";
 export * from "./GroupId.js";
+export * from "./ManufacturerExtensibleIdentifier.js";
 export * from "./NodeId.js";
 export * from "./SubjectId.js";
 export * from "./VendorId.js";
