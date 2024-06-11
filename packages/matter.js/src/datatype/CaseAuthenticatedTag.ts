@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
+import { ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -43,7 +43,7 @@ export namespace CaseAuthenticatedTag {
         // Get only the tags: upper 16 bits are identifier value, lower 16 bits are tag version
         const tagIdentifierValues = new Set<number>(tags.map(cat => CaseAuthenticatedTag.getIdentifyValue(cat)));
         if (tagIdentifierValues.size !== tags.length) {
-            throw new ValidationError("CASEAuthenticatedTags field contains duplicate identifier values.");
+            throw new ValidationOutOfBoundsError("CASEAuthenticatedTags field contains duplicate identifier values.");
         }
     };
 }
