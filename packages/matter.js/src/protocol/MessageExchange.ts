@@ -283,7 +283,7 @@ export class MessageExchange<ContextT> {
         let ackedMessageId = includeAcknowledgeMessageId;
         if (ackedMessageId === undefined) {
             ackedMessageId = this.#receivedMessageToAck?.packetHeader.messageId;
-            if (ackedMessageId !== undefined && messageType !== MessageType.StandaloneAck) {
+            if (ackedMessageId !== undefined) {
                 this.#receivedMessageAckTimer.stop();
                 this.#receivedMessageToAck = undefined;
             }

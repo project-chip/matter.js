@@ -28,6 +28,7 @@ import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { Time, Timer, TimerCallback } from "../../time/Time.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
+import { MessageType } from "../securechannel/SecureChannelMessages.js";
 import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
 import { DecodedEventData, DecodedEventReportValue, normalizeAndDecodeReadEventReport } from "./EventDataDecoder.js";
 import {
@@ -372,6 +373,8 @@ export class InteractionClient {
             }
             if (!response.suppressResponse) {
                 await messenger.sendStatus(StatusCode.Success);
+            } else {
+                await messenger.send(MessageType.StandaloneAck, new ByteArray(0));
             }
             if (!response.moreChunkedMessages) break;
             response = await messenger.readDataReport();
