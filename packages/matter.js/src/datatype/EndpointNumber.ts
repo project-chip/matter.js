@@ -5,7 +5,7 @@
  */
 
 import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -21,7 +21,7 @@ export function EndpointNumber(endpointId: number, validate = true): EndpointNum
     if (!validate || (endpointId >= 0 && endpointId <= 0xfffe)) {
         return endpointId as EndpointNumber;
     }
-    throw new ValidationError(`EndpointNumber must be between 0 and 0xFFFE, got ${endpointId}`);
+    throw new ValidationOutOfBoundsError(`EndpointNumber must be between 0 and 0xFFFE, got ${endpointId}`);
 }
 
 export namespace EndpointNumber {

@@ -5,7 +5,7 @@
  */
 
 import { InternalError } from "../common/MatterError.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationDatatypeMismatchError } from "../common/ValidationError.js";
 import { TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 
@@ -26,7 +26,7 @@ export class VoidSchema extends TlvSchema<void> {
     }
 
     override validate(data: void): void {
-        if (data !== undefined) throw new ValidationError(`Expected void, got ${typeof data}.`);
+        if (data !== undefined) throw new ValidationDatatypeMismatchError(`Expected void, got ${typeof data}.`);
     }
 }
 

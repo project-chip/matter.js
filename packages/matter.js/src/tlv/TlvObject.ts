@@ -6,7 +6,12 @@
 
 import { ImplementationError, UnexpectedDataError } from "../common/MatterError.js";
 import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import {
+    ValidationDatatypeMismatchError,
+    ValidationError,
+    ValidationMandatoryFieldMissingError,
+    ValidationOutOfBoundsError,
+} from "../common/ValidationError.js";
 import { FabricIndex } from "../model/standard/elements/FabricIndex.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Merge } from "../util/Type.js";
@@ -89,13 +94,13 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
                     // FabricIndex field should not be included in encoded data for write interactions
                     return;
                 }
-                throw new ValidationError(`Missing mandatory field ${name}`, name);
+                throw new ValidationMandatoryFieldMissingError(`Missing mandatory field ${name}`, name);
             }
             return;
         }
         if (isRepeated) {
             if (!Array.isArray(fieldValue)) {
-                throw new ValidationError(`Repeated field ${name} should be an array.`, name);
+                throw new ValidationDatatypeMismatchError(`Repeated field ${name} should be an array.`, name);
             }
             for (const element of fieldValue) {
                 schema.encodeTlvInternal(writer, element, { id }, forWriteInteraction);
@@ -202,20 +207,20 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
                 if (optional) {
                     continue;
                 }
-                throw new ValidationError(`Missing mandatory field ${name}`, name);
+                throw new ValidationMandatoryFieldMissingError(`Missing mandatory field ${name}`, name);
             }
             if (isRepeated) {
                 const { minLength = 2, maxLength = 65535 } = this.fieldDefinitions[name] as RepeatedFieldType<any>;
                 if (!Array.isArray(data)) {
-                    throw new ValidationError(`Repeated field ${name} should be an array.`, name);
+                    throw new ValidationDatatypeMismatchError(`Repeated field ${name} should be an array.`, name);
                 }
                 if (data.length > maxLength)
-                    throw new ValidationError(
+                    throw new ValidationOutOfBoundsError(
                         `Repeated field list for ${name} is too long: ${data.length}, max ${maxLength}.`,
                         name,
                     );
                 if (data.length < minLength)
-                    throw new ValidationError(
+                    throw new ValidationOutOfBoundsError(
                         `Repeated field list for ${name} is too short: ${data.length}, min ${minLength}.`,
                         name,
                     );

@@ -5,7 +5,7 @@
  */
 
 import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -26,7 +26,7 @@ export function CommandId(commandId: number, validate = true): CommandId {
     if (typeSuffix >= 0x00 && typeSuffix <= 0xff) {
         return commandId as CommandId;
     }
-    throw new ValidationError(`Invalid command ID: ${commandId}`);
+    throw new ValidationOutOfBoundsError(`Invalid command ID: ${commandId}`);
 }
 
 export namespace CommandId {

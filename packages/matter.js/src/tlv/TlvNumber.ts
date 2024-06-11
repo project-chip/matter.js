@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { UnexpectedDataError } from "../common/MatterError.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationDatatypeMismatchError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { BitSchema, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Schema } from "../schema/Schema.js";
 import {
@@ -59,15 +59,15 @@ export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
 
     override validate(value: T): void {
         if (typeof value !== "number" && typeof value !== "bigint")
-            throw new ValidationError(`Expected number, got ${typeof value}.`);
+            throw new ValidationDatatypeMismatchError(`Expected number, got ${typeof value}.`);
         this.validateBoundaries(value);
     }
 
     validateBoundaries(value: T): void {
         if (this.min !== undefined && value < this.min)
-            throw new ValidationError(`Invalid value: ${value} is below the minimum, ${this.min}.`);
+            throw new ValidationOutOfBoundsError(`Invalid value: ${value} is below the minimum, ${this.min}.`);
         if (this.max !== undefined && value > this.max)
-            throw new ValidationError(`Invalid value: ${value} is above the maximum, ${this.max}.`);
+            throw new ValidationOutOfBoundsError(`Invalid value: ${value} is above the maximum, ${this.max}.`);
     }
 
     /** Restrict value range. */
@@ -106,7 +106,8 @@ export class TlvNumberSchema extends TlvNumericSchema<number> {
     }
 
     override validate(value: number): void {
-        if (typeof value !== "number") throw new ValidationError(`Expected number, got ${typeof value}.`);
+        if (typeof value !== "number")
+            throw new ValidationDatatypeMismatchError(`Expected number, got ${typeof value}.`);
         this.validateBoundaries(value);
     }
 }

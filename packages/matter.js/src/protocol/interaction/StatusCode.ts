@@ -19,6 +19,6 @@ export class StatusResponseError extends MatterError {
     ) {
         super();
 
-        this.message = `(${code}) ${message}`;
+        this.message = `(${code}${clusterCode !== undefined ? `/${clusterCode}` : ""}) ${message}`;
     }
 }

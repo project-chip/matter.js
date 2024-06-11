@@ -5,7 +5,7 @@
  */
 
 import { UnexpectedDataError } from "../common/MatterError.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationDatatypeMismatchError } from "../common/ValidationError.js";
 import { Logger } from "../log/Logger.js";
 import { TlvCodec, TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvArrayReader, TlvElement, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
@@ -99,12 +99,15 @@ export class AnySchema extends TlvSchema<TlvStream> {
     }
 
     override validate(tlvStream: TlvStream): void {
-        if (!Array.isArray(tlvStream)) throw new ValidationError(`Expected TlvStream, got ${typeof tlvStream}.`);
+        if (!Array.isArray(tlvStream))
+            throw new ValidationDatatypeMismatchError(`Expected TlvStream, got ${typeof tlvStream}.`);
         tlvStream.forEach(({ typeLength }) => {
             if (!typeLength || typeof typeLength !== "object")
-                throw new ValidationError(`Expected typeLength properties in TlvStream, got ${typeof typeLength}.`);
+                throw new ValidationDatatypeMismatchError(
+                    `Expected typeLength properties in TlvStream, got ${typeof typeLength}.`,
+                );
             if (typeof typeLength.type !== "number")
-                throw new ValidationError(
+                throw new ValidationDatatypeMismatchError(
                     `Expected typeLength.type as number in TlvStream, got ${typeof typeLength.type}.`,
                 );
         });

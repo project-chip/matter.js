@@ -5,7 +5,7 @@
  */
 
 import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -31,7 +31,7 @@ export function ClusterId(clusterId: number, validate = true): ClusterId {
     ) {
         return clusterId as ClusterId;
     }
-    throw new ValidationError(`Invalid cluster ID: ${clusterId}`);
+    throw new ValidationOutOfBoundsError(`Invalid cluster ID: ${clusterId}`);
 }
 
 export namespace ClusterId {

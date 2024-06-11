@@ -5,7 +5,7 @@
  */
 
 import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -31,7 +31,7 @@ export function FieldId(fieldId: number, validate = true): FieldId {
     if (typeSuffix >= 0x00 && typeSuffix <= 0xdf) {
         return fieldId as FieldId;
     }
-    throw new ValidationError(`Invalid field ID: ${fieldId}`);
+    throw new ValidationOutOfBoundsError(`Invalid field ID: ${fieldId}`);
 }
 
 export namespace FieldId {
