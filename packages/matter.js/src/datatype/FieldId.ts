@@ -9,7 +9,7 @@ import { ValidationError, ValidationOutOfBoundsError } from "../common/Validatio
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
-import { fromMEI } from "./ManufacturerExtensibleIdentifier.js";
+import { Mei } from "./ManufacturerExtensibleIdentifier.js";
 
 /**
  * A "field ID" is an unsigned 32-bit integer that identifies a specific field
@@ -27,7 +27,7 @@ export function FieldId(fieldId: number, validate = true): FieldId {
         // Global
         return fieldId as FieldId;
     }
-    const { typeSuffix } = fromMEI(fieldId);
+    const { typeSuffix } = Mei.fromMei(fieldId);
     if (typeSuffix >= 0x00 && typeSuffix <= 0xdf) {
         return fieldId as FieldId;
     }

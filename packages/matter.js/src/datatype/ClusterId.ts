@@ -9,7 +9,7 @@ import { ValidationError, ValidationOutOfBoundsError } from "../common/Validatio
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
-import { asMEI, fromMEI } from "./ManufacturerExtensibleIdentifier.js";
+import { Mei } from "./ManufacturerExtensibleIdentifier.js";
 import { VendorId } from "./VendorId.js";
 
 /**
@@ -24,7 +24,7 @@ export function ClusterId(clusterId: number, validate = true): ClusterId {
     if (!validate) {
         return clusterId as ClusterId;
     }
-    const { vendorPrefix, typeSuffix } = fromMEI(clusterId);
+    const { vendorPrefix, typeSuffix } = Mei.fromMei(clusterId);
     if (
         (typeSuffix >= 0 && typeSuffix <= 0x7fff && vendorPrefix === 0) || // Standard cluster
         (typeSuffix >= 0xfc00 && typeSuffix <= 0xfffe && vendorPrefix !== 0) // Manufacturer specific cluster
@@ -38,7 +38,7 @@ export namespace ClusterId {
     export const isVendorSpecific = (clusterId: ClusterId): boolean => {
         return tryCatch(
             () => {
-                const { vendorPrefix } = fromMEI(clusterId);
+                const { vendorPrefix } = Mei.fromMei(clusterId);
                 return vendorPrefix !== 0;
             },
             ValidationError,
@@ -58,7 +58,7 @@ export namespace ClusterId {
     };
 
     export const buildVendorSpecific = (vendorPrefix: VendorId, clusterSuffix: number) => {
-        return ClusterId(asMEI(vendorPrefix, clusterSuffix));
+        return ClusterId(Mei.asMei(vendorPrefix, clusterSuffix));
     };
 }
 
