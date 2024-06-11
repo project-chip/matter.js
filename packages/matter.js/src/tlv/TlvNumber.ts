@@ -172,7 +172,9 @@ export const TlvUInt64 = new TlvLongNumberSchema(
     UINT64_MAX,
 );
 
+// We use internally 32bit here - in fact encoding is done by real value length anyway
 export const TlvEnum = <T>() => TlvUInt32 as TlvSchema<number> as TlvSchema<T>;
+
 export const TlvBitmap = <T extends BitSchema>(underlyingSchema: TlvNumberSchema, bitSchema: T) => {
     // BitmapSchema supports encoding partial bit schemas but specifies its
     // type as TypeFromBitSchema.  Changing to TypeFromPartialBitSchema there
