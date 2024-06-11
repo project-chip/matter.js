@@ -27,6 +27,7 @@ import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { Time, Timer, TimerCallback } from "../../time/Time.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { ByteArray } from "../../util/ByteArray.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
 import { MessageType } from "../securechannel/SecureChannelMessages.js";
 import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
@@ -447,7 +448,7 @@ export class InteractionClient {
             attributes,
             asTimedRequest,
             timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
-            suppressResponse = false,
+            suppressResponse = false, // TODO needs to be TRUE for Group writes
         } = options;
         return this.withMessenger<AttributeStatus[]>(async messenger => {
             logger.debug(
@@ -1014,6 +1015,8 @@ export class InteractionClient {
                 `Cannot register update timer for subscription ${subscriptionId} because it is not owned by this client.`,
             );
         }
+
+        // TODO: Add measurement of latency and also consider this in the timeout calculation
         maxInterval += 5; // Add 5 seconds to the maxInterval to allow at least one full resubmission cycle before assuming the subscription is lost
         const timer = Time.getTimer("Subscription retry", maxInterval * 1000, () => {
             logger.info(`Subscription ${subscriptionId} timed out ...`);
