@@ -18,6 +18,7 @@ import {
     ClusterServerObj,
     Events,
     OnOffCluster,
+    WiFiNetworkDiagnosticsCluster,
     WritableAttribute,
 } from "@project-chip/matter.js/cluster";
 import {
@@ -50,10 +51,12 @@ import {
     SubscribeRequest,
     TlvInvokeResponse,
     TlvStatusResponse,
+    WildcardPathFlagsBitmap,
     WriteRequest,
     WriteResponse,
 } from "@project-chip/matter.js/interaction";
 import { Specification } from "@project-chip/matter.js/model";
+import { TypeFromPartialBitSchema } from "@project-chip/matter.js/schema";
 import { StorageBackendMemory, StorageContext, StorageManager, SyncStorage } from "@project-chip/matter.js/storage";
 import {
     TlvArray,
@@ -790,6 +793,65 @@ const BasicInformationClusterWithTimedInteraction = {
     },
 };
 
+const wildcardTestCases: {
+    testCase: string;
+    clusterId: ClusterId;
+    wildcardPathFilter?: TypeFromPartialBitSchema<typeof WildcardPathFlagsBitmap>;
+    count: number;
+}[] = [
+    { testCase: "no", clusterId: ClusterId(0x28), wildcardPathFilter: undefined, count: 21 },
+    { testCase: "skipRootNode", clusterId: ClusterId(0x28), wildcardPathFilter: { skipRootNode: true }, count: 0 }, // all sorted out
+    {
+        testCase: "skipGlobalAttributes",
+        clusterId: ClusterId(0x28),
+        wildcardPathFilter: { skipGlobalAttributes: true },
+        count: 17,
+    }, // 4 less
+    {
+        testCase: "skipAttributeList",
+        clusterId: ClusterId(0x28),
+        wildcardPathFilter: { skipAttributeList: true },
+        count: 20,
+    }, // 1 less
+    { testCase: "skipEventList", clusterId: ClusterId(0x28), wildcardPathFilter: { skipEventList: true }, count: 20 }, // 1 less
+    {
+        testCase: "skipCommandLists",
+        clusterId: ClusterId(0x28),
+        wildcardPathFilter: { skipCommandLists: true },
+        count: 19,
+    }, // 2 less
+    {
+        testCase: "skipFixedAttributes",
+        clusterId: ClusterId(0x28),
+        wildcardPathFilter: { skipFixedAttributes: true },
+        count: 8,
+    }, // 13 less
+    {
+        testCase: "skipChangesOmittedAttributes",
+        clusterId: ClusterId(0x28),
+        wildcardPathFilter: { skipChangesOmittedAttributes: true },
+        count: 21,
+    }, // nothing filtered
+    {
+        testCase: "no for WiFiDiag",
+        clusterId: ClusterId(0x36),
+        wildcardPathFilter: {},
+        count: 11,
+    }, // nothing filtered
+    {
+        testCase: "skipChangesOmittedAttributes",
+        clusterId: ClusterId(0x36),
+        wildcardPathFilter: { skipChangesOmittedAttributes: true },
+        count: 10,
+    }, // 1 filtered
+    {
+        testCase: "skipDiagnosticsClusters",
+        clusterId: ClusterId(0x36),
+        wildcardPathFilter: { skipDiagnosticsClusters: true },
+        count: 0,
+    }, // all filtered
+];
+
 describe("InteractionProtocol", () => {
     let realGetRandomData = Crypto.get().getRandomData;
 
@@ -936,6 +998,45 @@ describe("InteractionProtocol", () => {
 
             assert.deepEqual(result, READ_RESPONSE_WITH_FILTER);
         });
+
+        for (const { testCase, clusterId, wildcardPathFilter, count } of wildcardTestCases) {
+            it(`replies with attributes with ${testCase} wildcard Filter`, async () => {
+                withClusters(
+                    basicInfoClusterServer,
+                    ClusterServer(
+                        WiFiNetworkDiagnosticsCluster,
+                        {
+                            bssid: null,
+                            securityType: null,
+                            wiFiVersion: null,
+                            channelNumber: null,
+                            rssi: 0,
+                        },
+                        {},
+                        {},
+                    ),
+                );
+
+                const result = await interactionProtocol.handleReadRequest(
+                    await createDummyMessageExchange(),
+                    {
+                        interactionModelRevision: INTERACTION_MODEL_REVISION,
+                        isFabricFiltered: true,
+                        attributeRequests: [
+                            {
+                                endpointId: undefined,
+                                clusterId,
+                                attributeId: undefined,
+                                wildcardPathFlags: wildcardPathFilter,
+                            },
+                        ],
+                    },
+                    DummyUnicastMessage,
+                );
+
+                assert.deepEqual(result.attributeReportsPayload?.length, count);
+            });
+        }
     });
 
     describe("handleSubscribeRequest", () => {
