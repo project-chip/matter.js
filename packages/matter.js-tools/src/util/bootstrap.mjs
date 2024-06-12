@@ -4,14 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// Bootstrap tooling code.  Libraries are unavailable here; we may only use 3rd
-// party modules.
+// Bootstrap tooling code.  Libraries are unavailable here; we may only use 3rd party modules.
 //
-// Also do not use TS as it would require the code invoking bootstrap to do a
-// meta-bootstrap. 🙄
+// Also do not use TS as it would require the code invoking bootstrap to do a meta-bootstrap. 🙄
 
 import { spawn } from "child_process";
-import { stat } from "fs/promises";
+import { cp, stat } from "fs/promises";
 import { platform } from "os";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -46,49 +44,60 @@ async function findFile(name) {
     }
 }
 
-try {
-    const pkg = await findFile("package.json");
-    if (pkg === undefined) {
-        fatal("the bootstrap script does not appear to be installed in a package");
-    }
+async function bootstrap() {
+    try {
+        const pkg = await findFile("package.json");
+        if (pkg === undefined) {
+            fatal("the bootstrap script does not appear to be installed in a package");
+        }
 
-    const options = {
-        stdio: "inherit",
-        cwd: dirname(pkg),
-    };
+        const path = dirname(pkg);
 
-    if (platform() === "win32") {
-        options.shell = true;
-    }
+        const options = {
+            stdio: "inherit",
+            cwd: path,
+        };
 
-    let esbuild = await findFile("node_modules/.bin/esbuild");
-    if (esbuild === undefined) {
-        // As a last resort, attempt to rely on the system PATH
-        esbuild = "esbuild";
-    }
+        if (platform() === "win32") {
+            options.shell = true;
+        }
 
-    await new Promise(resolve => {
-        const proc = spawn(
-            esbuild,
-            ["src/**/*.ts", "--outdir=dist/esm", "--format=esm", "--log-level=warning"],
-            options,
-        );
+        let esbuild = await findFile("node_modules/.bin/esbuild");
+        if (esbuild === undefined) {
+            // As a last resort, attempt to rely on the system PATH
+            esbuild = "esbuild";
+        }
 
-        proc.on("error", e => {
-            if (e.code === "ENOENT") {
-                fatal('esbuild is not found.\nYou probably need to run "npm install" in the root of the repository');
-            }
-            fatal("an unexpected error occurred running esbuild", e);
+        await new Promise(resolve => {
+            const proc = spawn(
+                esbuild,
+                ["src/**/*.ts", "--outdir=dist/esm", "--format=esm", "--log-level=warning"],
+                options,
+            );
+
+            proc.on("error", e => {
+                if (e.code === "ENOENT") {
+                    fatal('esbuild is not found.\nYou probably need to run "npm install" in the root of the repository');
+                }
+                fatal("an unexpected error occurred running esbuild", e);
+            });
+
+            proc.on("close", code => {
+                if (code === 0) {
+                    resolve();
+                } else {
+                    fatal(`esbuild existing with code ${code}`);
+                }
+            });
         });
 
-        proc.on("close", code => {
-            if (code === 0) {
-                resolve();
-            } else {
-                fatal(`esbuild existing with code ${code}`);
-            }
-        });
-    });
-} catch (e) {
-    fatal("an unexpected error occurred", e);
+        await cp(resolve(path, "src/util/tools-path.cjs"), resolve(path, "dist/esm/util/tools-path.cjs"));
+    } catch (e) {
+        fatal("an unexpected error occurred", e);
+    }
+}
+
+// If installed then we assume we're compiled and boostrap is a no-op
+if (!import.meta.url.match(/[\\/]node_modules[\\/]/)) {
+    await bootstrap();
 }

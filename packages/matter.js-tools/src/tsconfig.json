@@ -4,5 +4,5 @@
         "outDir": "../dist/esm",
         "types": ["node"]
     },
-    "include": ["**/*.ts", "testing/mocharc.cjs"]
+    "include": ["**/*.ts", "testing/mocharc.cjs", "util/tools-path.d.cts"]
 }
