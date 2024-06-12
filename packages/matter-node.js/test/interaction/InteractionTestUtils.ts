@@ -1,0 +1,129 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+import { Message, SessionType } from "@project-chip/matter.js/codec";
+import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
+import { Fabric } from "@project-chip/matter.js/fabric";
+import { ExchangeSendOptions, MessageExchange } from "@project-chip/matter.js/protocol";
+import { SecureSession } from "@project-chip/matter.js/session";
+import { ByteArray, Queue } from "@project-chip/matter.js/util";
+import { KEY } from "../cluster/ClusterServerTestingUtil.js";
+
+export function createTestFabric() {
+    return new Fabric(
+        FabricIndex(1),
+        FabricId(1),
+        NodeId(BigInt(1)),
+        NodeId(1),
+        ByteArray.fromHex("00"),
+        ByteArray.fromHex("00"),
+        KEY,
+        VendorId(1),
+        ByteArray.fromHex("00"),
+        ByteArray.fromHex("00"),
+        ByteArray.fromHex("00"),
+        ByteArray.fromHex("00"),
+        ByteArray.fromHex("00"),
+        "",
+    );
+}
+
+class DummyMessageExchange {
+    messagesQueue = new Queue<Message>();
+    channel = { name: "test" };
+
+    constructor(
+        public session: SecureSession<any>,
+        public hasTimedInteractionFlag = false,
+        public timedInteractionExpired = false,
+        public writeCallback?: (
+            messageType: number,
+            payload: ByteArray,
+            options?: ExchangeSendOptions,
+        ) => ByteArray | void,
+        public clearTimedInteractionCallback?: () => void,
+        public closeCallback?: () => void,
+    ) {}
+
+    async injectMessage(message: Message) {
+        return this.messagesQueue.write(message);
+    }
+
+    async send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
+        const response = this.writeCallback?.(messageType, payload, options);
+        if (response) {
+            return this.messagesQueue.write({
+                packetHeader: { sessionType: SessionType.Unicast },
+                payload: response,
+            } as Message);
+        }
+    }
+
+    nextMessage() {
+        return this.messagesQueue.read();
+    }
+
+    close() {
+        this.closeCallback?.();
+    }
+
+    clearTimedInteraction() {
+        return this.clearTimedInteractionCallback?.();
+    }
+
+    hasTimedInteraction() {
+        return this.hasTimedInteractionFlag;
+    }
+
+    hasActiveTimedInteraction() {
+        return this.hasTimedInteractionFlag && !this.timedInteractionExpired;
+    }
+
+    hasExpiredTimedInteraction() {
+        return this.hasTimedInteractionFlag && this.timedInteractionExpired;
+    }
+}
+
+export const testFabric = createTestFabric();
+
+export async function createDummyMessageExchange(
+    hasTimedInteraction = false,
+    timedInteractionExpired = false,
+    writeCallback?: (messageType: number, payload: ByteArray, options?: ExchangeSendOptions) => ByteArray | void,
+    clearTimedInteractionCallback?: () => void,
+    closeCallback?: () => void,
+) {
+    const session = await SecureSession.create({
+        context: { getFabrics: () => [] } as any,
+        id: 1,
+        fabric: testFabric,
+        peerNodeId: NodeId(BigInt(1)),
+        peerSessionId: 1,
+        sharedSecret: ByteArray.fromHex("00"),
+        salt: ByteArray.fromHex("00"),
+        isInitiator: false,
+        isResumption: false,
+        closeCallback: async () => {
+            /* */
+        },
+        sessionParameters: { idleIntervalMs: 1000, activeIntervalMs: 1000 },
+    });
+    return new DummyMessageExchange(
+        session,
+        hasTimedInteraction,
+        timedInteractionExpired,
+        writeCallback,
+        clearTimedInteractionCallback,
+        closeCallback,
+    ) as unknown as MessageExchange<any>;
+}
+
+export const DummyUnicastMessage = {
+    packetHeader: { sessionType: SessionType.Unicast },
+} as Message;
+
+export const DummyGroupcastMessage = {
+    packetHeader: { sessionType: SessionType.Group },
+} as Message;
