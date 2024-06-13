@@ -9,6 +9,7 @@ import { readdir, stat } from "fs/promises";
 import { dirname, relative, resolve } from "path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
 import { Progress } from "./progress.js";
+import { toolsPath } from "./tools-path.cjs";
 
 export class JsonNotFoundError extends Error {}
 
@@ -146,7 +147,7 @@ export class Package {
 
     static get tools() {
         if (!tools) {
-            tools = new Package({ path: this.workspace.resolve("packages/matter.js-tools") });
+            tools = new Package({ path: toolsPath });
         }
         return tools;
     }
