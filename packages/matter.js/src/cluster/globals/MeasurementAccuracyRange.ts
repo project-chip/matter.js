@@ -52,7 +52,7 @@ export const TlvMeasurementAccuracyRange = TlvObject({
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.1
      */
-    rangeMin: TlvField(0, TlvInt64.bound({ min: -262, max: 262 })),
+    rangeMin: TlvField(0, TlvInt64),
 
     /**
      * This field shall indicate the maximum measurement value for the specified level of accuracy. The value of this
@@ -66,7 +66,7 @@ export const TlvMeasurementAccuracyRange = TlvObject({
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.2
      */
-    rangeMax: TlvField(1, TlvInt64.bound({ min: -262, max: 262 })),
+    rangeMax: TlvField(1, TlvInt64),
 
     /**
      * This field shall indicate the maximum +/- percentage accuracy for the associated measurement.

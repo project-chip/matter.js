@@ -30,14 +30,8 @@ export const MeasurementAccuracyStruct = Datatype({
             xref: { document: "cluster", section: "2.1.4.4.2" }
         }),
 
-        Field({
-            name: "MinMeasuredValue", id: 0x2, type: "int64", conformance: "M", constraint: "-262 to 262",
-            quality: "F"
-        }),
-        Field({
-            name: "MaxMeasuredValue", id: 0x3, type: "int64", conformance: "M", constraint: "-262 to 262",
-            quality: "F"
-        }),
+        Field({ name: "MinMeasuredValue", id: 0x2, type: "int64", conformance: "M", quality: "F" }),
+        Field({ name: "MaxMeasuredValue", id: 0x3, type: "int64", conformance: "M", quality: "F" }),
 
         Field({
             name: "AccuracyRanges", id: 0x4, type: "list", conformance: "M", constraint: "min 1", quality: "F",

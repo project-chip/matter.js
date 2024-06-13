@@ -8,6 +8,7 @@ import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { DefinitionError } from "../definitions/index.js";
 import { Model } from "../models/index.js";
+import { ModelTraversal } from "./ModelTraversal.js";
 import { ModelValidator } from "./definition-validation/ModelValidator.js";
 
 const logger = Logger.get("ValidateModel");
@@ -74,7 +75,7 @@ export function ValidateModel(model: Model) {
     }
 
     logger.info("Validating matter model");
-    validate(model);
+    ModelTraversal.memoize(() => validate(model));
 
     return result;
 }

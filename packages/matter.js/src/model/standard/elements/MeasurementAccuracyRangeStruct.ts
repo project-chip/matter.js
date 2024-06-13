@@ -46,7 +46,7 @@ export const MeasurementAccuracyRangeStruct = Datatype({
 
     children: [
         Field({
-            name: "RangeMin", id: 0x0, type: "int64", conformance: "M", constraint: "-262 to 262", quality: "F",
+            name: "RangeMin", id: 0x0, type: "int64", conformance: "M", quality: "F",
 
             details: "This field shall indicate the minimum measurement value for the specified level of accuracy." +
                 "\n" +
@@ -60,7 +60,7 @@ export const MeasurementAccuracyRangeStruct = Datatype({
         }),
 
         Field({
-            name: "RangeMax", id: 0x1, type: "int64", conformance: "M", constraint: "-262 to 262", quality: "F",
+            name: "RangeMax", id: 0x1, type: "int64", conformance: "M", quality: "F",
 
             details: "This field shall indicate the maximum measurement value for the specified level of accuracy. The " +
                 "value of this field shall be greater than the value of the RangeMin field." +
@@ -95,8 +95,7 @@ export const MeasurementAccuracyRangeStruct = Datatype({
         }),
 
         Field({
-            name: "FixedMax", id: 0x5, type: "uint64", conformance: "O.a+", constraint: "max 262 - 1",
-            quality: "F",
+            name: "FixedMax", id: 0x5, type: "uint64", conformance: "O.a+", quality: "F",
             details: "This field shall indicate the maximum +/- fixed accuracy for the associated measurement, in the " +
                 "unit indicated by MeasurementType.",
             xref: { document: "cluster", section: "2.1.4.3.6" }
