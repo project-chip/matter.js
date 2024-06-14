@@ -88,7 +88,7 @@ export class ReactNativeBleClient {
                 this.handleDiscoveredDevice(peripheral);
             });
         } else {
-            logger.debug("noble state is not poweredOn ... delay scanning till poweredOn");
+            logger.debug("ble state is not poweredOn ... delay scanning till poweredOn");
         }
     }
 

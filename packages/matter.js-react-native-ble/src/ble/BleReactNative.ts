@@ -8,7 +8,7 @@ import { Ble } from "@project-chip/matter.js/ble";
 import { ImplementationError, InstanceBroadcaster, Scanner, TransportInterface } from "@project-chip/matter.js/common";
 import { NetInterface } from "@project-chip/matter.js/net";
 import { BleScanner } from "./BleScanner.js";
-import { NobleBleCentralInterface } from "./ReactNativeBleChannel.js";
+import { ReactNativeBleCentralInterface } from "./ReactNativeBleChannel.js";
 import { ReactNativeBleClient } from "./ReactNativeBleClient.js";
 
 export class BleReactNative extends Ble {
@@ -22,7 +22,7 @@ export class BleReactNative extends Ble {
         if (this.bleCentral === undefined) {
             this.bleCentral = new ReactNativeBleClient();
         }
-        return new NobleBleCentralInterface();
+        return new ReactNativeBleCentralInterface();
     }
 
     getBleScanner(): Scanner {

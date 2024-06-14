@@ -35,7 +35,7 @@ import { BleScanner } from "./BleScanner.js";
 
 const logger = Logger.get("BleChannel");
 
-export class NobleBleCentralInterface implements NetInterface {
+export class ReactNativeBleCentralInterface implements NetInterface {
     private openChannels: Map<ServerAddress, Device> = new Map();
     private onMatterMessageListener: ((socket: Channel<ByteArray>, data: ByteArray) => void) | undefined;
 
