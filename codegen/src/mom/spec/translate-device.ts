@@ -8,7 +8,7 @@ import { Diagnostic, Logger } from "@project-chip/matter.js/log";
 import { DeviceTypeElement, FieldElement, RequirementElement } from "@project-chip/matter.js/model";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
-import { Identifier, Integer, LowerIdentifier, Str } from "./html-translators.js";
+import { ConstraintStr, Identifier, Integer, LowerIdentifier, Str } from "./html-translators.js";
 import { DeviceReference } from "./spec-types.js";
 import { Alias, Constant, Optional, translateRecordsToMatter, translateTable } from "./translate-table.js";
 
@@ -212,7 +212,7 @@ function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
         cluster: ClusterName,
         element: Identifier,
         name: Identifier,
-        constraint: Optional(Str),
+        constraint: Optional(ConstraintStr),
         access: Optional(Str),
         conformance: Optional(Str),
     });
