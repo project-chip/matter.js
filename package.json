@@ -4,6 +4,7 @@
   "workspaces": [
     "packages/matter.js-tools",
     "packages/matter.js",
+    "packages/matter.js-jscrypto",
     "packages/matter-node.js",
     "packages/matter-node-ble.js",
     "packages/matter-node-shell.js",

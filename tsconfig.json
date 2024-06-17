@@ -3,6 +3,7 @@
     "references": [
         { "path": "packages/matter.js-tools" },
         { "path": "packages/matter.js" },
+        { "path": "packages/matter.js-jscrypto" },
         { "path": "packages/matter-node.js" },
         { "path": "packages/matter-node-ble.js" },
         { "path": "packages/matter-node-shell.js" },
