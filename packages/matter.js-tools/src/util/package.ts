@@ -6,7 +6,7 @@
 
 import { readFileSync, statSync } from "fs";
 import { readdir, stat } from "fs/promises";
-import { dirname, relative, resolve } from "path";
+import { dirname, join as pathJoin, relative, resolve } from "path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
 import { Progress } from "./progress.js";
 import { toolsPath } from "./tools-path.cjs";
@@ -156,7 +156,7 @@ export class Package {
         return this.workspace.findExport(name, type);
     }
 
-    resolveExport(name: string, type: "cjs" | "esm" = "esm") {
+    resolveExport(name: string, type: "cjs" | "esm" = "esm"): string {
         if (!name.startsWith(".")) {
             name = `./${name}`;
         }
@@ -175,10 +175,17 @@ export class Package {
             }
             if (this.json.main) {
                 return this.resolve(this.json.main);
+            } else {
+                // no main then index.js is "standard"
+                return this.resolve("index.js");
             }
+        } else {
+            // Ok not found, lets try relative to base export with export.js for matter.js ... hack for now but works
+            const packageBase = this.resolveExport(".", type);
+            return this.resolve(pathJoin(dirname(packageBase), name, "export.js"));
         }
 
-        throw new Error(`Cannot resolve export ${name} in package ${this.name}`);
+        //throw new Error(`Cannot resolve export ${name} in package ${this.name}`);
     }
 
     findExport(name: string, type: "cjs" | "esm" = "esm") {

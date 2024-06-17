@@ -21,9 +21,14 @@ const libraries = [
     "chai",
     "chai-as-promised",
     "ansi-colors",
+    "crypto-browserify",
+    "stream",
     "@noble/curves/abstract/modular",
     "@noble/curves/abstract/utils",
     "@noble/curves/p256",
+    "@project-chip/matter.js",
+    "@project-chip/matter.js/crypto",
+    "@project-chip/matter.js/util",
 ];
 
 export async function testWeb(runner: TestRunner, manual: boolean) {
