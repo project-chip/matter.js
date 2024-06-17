@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "composite": true,
+        "paths": {
+            "stream": ["../../node_modules/readable-stream"]
+        }
+    },
+    "files": [],
+    "references": [{ "path": "src" }, { "path": "test" }]
+}
