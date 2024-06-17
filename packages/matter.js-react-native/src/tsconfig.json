@@ -7,6 +7,6 @@
     "references": [{ "path": "../../matter.js/src" }],
     "typedocOptions": {
         "entryPoints": ["ble/export.ts"],
-        "out": "../../../docs/matter.js.react-native-ble"
+        "out": "../../../docs/matter.js.react-native"
     }
 }
