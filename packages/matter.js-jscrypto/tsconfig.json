@@ -1,9 +1,6 @@
 {
     "compilerOptions": {
-        "composite": true,
-        "paths": {
-            "stream": ["../../node_modules/readable-stream"]
-        }
+        "composite": true
     },
     "files": [],
     "references": [{ "path": "src" }, { "path": "test" }]
