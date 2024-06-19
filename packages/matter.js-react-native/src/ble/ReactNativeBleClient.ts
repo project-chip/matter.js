@@ -72,7 +72,7 @@ export class ReactNativeBleClient {
         if (this.bleState === BluetoothState.PoweredOn) {
             logger.debug("Start BLE scanning for Matter Services ...");
             this.isScanning = true;
-            this.bleManager.startDeviceScan([BLE_MATTER_SERVICE_UUID], {}, (error, peripheral) => {
+            await this.bleManager.startDeviceScan([BLE_MATTER_SERVICE_UUID], {}, async (error, peripheral) => {
                 if (error !== null || peripheral === null) {
                     this.isScanning = false;
                     logger.error("Error while scanning for BLE devices", error);
@@ -81,7 +81,9 @@ export class ReactNativeBleClient {
                             logger.error("Error while restarting scanning after error", error),
                         );
                     } else {
-                        this.stopScanning();
+                        this.stopScanning().catch(error =>
+                            logger.error("Error while stopping scanning after error", error),
+                        );
                     }
                     return;
                 }
@@ -95,7 +97,7 @@ export class ReactNativeBleClient {
     public async stopScanning() {
         this.shouldScan = false;
         logger.debug("Stop BLE scanning for Matter Services ...");
-        this.bleManager.stopDeviceScan();
+        await this.bleManager.stopDeviceScan();
         this.isScanning = false;
     }
 
