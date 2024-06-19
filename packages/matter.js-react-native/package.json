@@ -35,7 +35,10 @@
     },
     "dependencies": {
         "@project-chip/matter.js": "0.10.0-alpha.0-20240611-823c6da5",
-        "react-native-ble-plx": "^3.2.0"
+        "@project-chip/matter-node.js": "0.10.0-alpha.0-20240611-823c6da5",
+        "react-native-ble-plx": "^3.2.0",
+        "react-native-quick-crypto": "^0.7.0-rc.9",
+        "react-native-udp": "^4.1.7"
     },
     "files": [
         "dist/**/*",
@@ -45,21 +48,36 @@
         "README.md"
     ],
     "type": "module",
-    "main": "dist/cjs/ble/export.js",
-    "types": "dist/cjs/ble/export.d.ts",
+    "main": "dist/cjs/export.js",
+    "module": "dist/esm/export.js",
     "exports": {
+        ".": {
+            "import": {
+                "types": "./dist/esm/export.d.ts",
+                "default": "./dist/esm/export.js"
+            },
+            "require": {
+                "types": "./dist/cjs/export.d.ts",
+                "default": "./dist/cjs/export.js"
+            }
+        },
         "./package.json": "./package.json",
         "./*": {
             "import": {
                 "types": "./dist/esm/*/export.d.ts",
                 "default": "./dist/esm/*/export.js"
+            },
+            "require": {
+                "types": "./dist/cjs/*/export.d.ts",
+                "default": "./dist/cjs/*/export.js"
             }
         }
     },
+    "types": "dist/esm/export.d.ts",
     "typesVersions": {
         "*": {
             ".": [
-                "/dist/cjs/ble/export.d.ts"
+                "/dist/cjs/export.d.ts"
             ],
             "*": [
                 "/dist/cjs/*/export.d.ts"
