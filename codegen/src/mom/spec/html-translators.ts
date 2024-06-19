@@ -55,6 +55,34 @@ export const Str = (el: HTMLElement) => {
     );
 };
 
+/**
+ * String with special logic to handle common constraint bound 2**62 which is written with superscript.  When we have
+ * constraint expression support we can change to 2**62 or something of the like but for now we just remove as this
+ * effectively means "unbounded".
+ *
+ * Can also look for number<span>number</span> to generalize but unnecessary as of 1.3.
+ */
+export const ConstraintStr = (el: HTMLElement) => {
+    const str = Str(el);
+
+    switch (str) {
+        case "-262 to 262":
+            return "";
+
+        case "0 to 262":
+            return "min 0";
+
+        case "max 262 - 1":
+            return "";
+    }
+
+    if (str.indexOf("262") !== -1) {
+        throw new Error("Unrecognized constraint definition apparently referencing 2**62");
+    }
+
+    return str;
+};
+
 /** String with no space at all */
 export const NoSpace = (el: HTMLElement) => Str(el).replace(/\s/g, "");
 

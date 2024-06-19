@@ -202,8 +202,8 @@ export namespace Constraint {
 
     function parseValue(numOrName: string): FieldValue {
         let value;
-        if (numOrName.startsWith("0x") || numOrName.startsWith("0b")) {
-            value = Number.parseInt(numOrName);
+        if (numOrName.match(/^-?0[xb]/)) {
+            value = Number.parseInt(numOrName.replace(/[_ ]/g, ""));
         } else {
             value = Number.parseFloat(numOrName);
         }
