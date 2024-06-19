@@ -5,11 +5,7 @@ inputs:
   connectedhomeip-tag:
     description: 'Tag of the connectedhomeip repo to use'
     required: true
-    default: 'master' # 'master' # "v1.1-branch" is not containing our current status, so we use master till 1.2 comes out
-  connectedhomeip-commit:
-    description: 'Commit of the connectedhomeip repo to use'
-    required: false
-    default: 'ec8ee38a3b9960ed36e6c47812e82e3bc5c7dda8' # hardcode for now, we flexibilize later
+    default: 'master' # "v1.1-branch" is not containing our current status, so we use master till 1.2 comes out
   rebuild-chip-tool:
     description: 'Rebuild the chip-tool'
     required: true
@@ -59,9 +55,6 @@ runs:
       run: |
         git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=${{ inputs.connectedhomeip-tag }}
         cd connectedhomeip
-        if [ -n "${{ inputs.connectedhomeip-commit }}" ]; then
-          git checkout ${{ inputs.connectedhomeip-commit }}
-        fi
         scripts/checkout_submodules.py --shallow --platform linux
 
     - name: Cache Python Environments files

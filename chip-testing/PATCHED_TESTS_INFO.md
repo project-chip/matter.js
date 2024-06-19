@@ -5,6 +5,8 @@
 | Test                          | Reason                                                           |
 |-------------------------------|------------------------------------------------------------------|
 | TestAccessControlCluster.yaml | see https://github.com/project-chip/connectedhomeip/issues/33578 |
+| TestBasicInformation.yaml     | use test file from before adjustment to Matter 1.4 in chip       |
+| Test_TC_BINFO_2_1.yaml        | use test file from before adjustment to Matter 1.4 in chip       |
 
 # CI-PICS
 
