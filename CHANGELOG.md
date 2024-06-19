@@ -30,6 +30,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   Matter-Core functionality:
     -   Breaking: Removes the discovery capability "softAccessPoint" as it was removed from the Matter specification
     -   Feature: Increase Data Model revision to 17 (introduced by Matter 1.2)
+    -   Feature: Added Base64 encoding/decoding support to ByteArray
     -   Enhancement: Update Session parameters in PASE/CASE to match Matter 1.3 specification
     -   Enhancement: Removes TCP and ICD TXT records from MDNS responses because both currently not supported and optional to reduce the size of the MDNS responses
     -   Enhancement: Adds encoding and decoding of custom TlvData in QR-Codes including extensible Schema support for the defined Matter fields
