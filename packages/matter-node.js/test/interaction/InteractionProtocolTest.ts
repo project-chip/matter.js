@@ -941,11 +941,9 @@ describe("InteractionProtocol", () => {
             basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
             basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
 
-            const result = await interactionProtocol.handleReadRequest(
-                await getDummyMessageExchange(),
-                READ_REQUEST,
-                {} as Message,
-            );
+            const result = await interactionProtocol.handleReadRequest(await getDummyMessageExchange(), READ_REQUEST, {
+                packetHeader: { sessionType: SessionType.Unicast },
+            } as Message);
 
             assert.deepEqual(result, READ_RESPONSE);
         });
@@ -959,7 +957,9 @@ describe("InteractionProtocol", () => {
             const result = await interactionProtocol.handleReadRequest(
                 await getDummyMessageExchange(),
                 READ_REQUEST_WITH_UNUSED_FILTER,
-                {} as Message,
+                {
+                    packetHeader: { sessionType: SessionType.Unicast },
+                } as Message,
             );
 
             assert.deepEqual(result, READ_RESPONSE);
@@ -974,7 +974,9 @@ describe("InteractionProtocol", () => {
             const result = await interactionProtocol.handleReadRequest(
                 await getDummyMessageExchange(),
                 READ_REQUEST_WITH_FILTER,
-                {} as Message,
+                {
+                    packetHeader: { sessionType: SessionType.Unicast },
+                } as Message,
             );
 
             assert.deepEqual(result, READ_RESPONSE_WITH_FILTER);
@@ -1000,7 +1002,9 @@ describe("InteractionProtocol", () => {
                         closed = true;
                     },
                 } as InteractionServerMessenger,
-                {} as Message,
+                {
+                    packetHeader: { sessionType: SessionType.Unicast },
+                } as Message,
             );
             assert.equal(statusSent, 128);
             assert.equal(closed, true);
