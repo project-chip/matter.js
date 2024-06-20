@@ -60,7 +60,7 @@ SwitchServerBase.Events.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L25)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:25](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L25)
 
 ## Properties
 
@@ -94,7 +94,7 @@ SwitchServerBase.Events.eventNames
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:370](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L370)
+[packages/matter.js/src/util/Observable.ts:370](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L370)
 
 ___
 
@@ -108,7 +108,7 @@ SwitchServerBase.Events.initialPress
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:439](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L439)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:439](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L439)
 
 ___
 
@@ -122,7 +122,7 @@ SwitchServerBase.Events.longPress
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:443](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L443)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:443](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L443)
 
 ___
 
@@ -136,7 +136,7 @@ SwitchServerBase.Events.longRelease
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:451](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L451)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:451](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L451)
 
 ___
 
@@ -150,7 +150,7 @@ SwitchServerBase.Events.multiPressComplete
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:459](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L459)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:459](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L459)
 
 ___
 
@@ -184,7 +184,7 @@ SwitchServerBase.Events.multiPressOngoing
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:455](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L455)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:455](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L455)
 
 ___
 
@@ -214,7 +214,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:277](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L277)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:277](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L277)
 
 ___
 
@@ -224,7 +224,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:278](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L278)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:278](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L278)
 
 ___
 
@@ -238,7 +238,7 @@ SwitchServerBase.Events.shortRelease
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:447](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L447)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:447](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L447)
 
 ___
 
@@ -252,7 +252,7 @@ SwitchServerBase.Events.switchLatched
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:435](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L435)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:435](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L435)
 
 ## Methods
 
@@ -270,7 +270,7 @@ SwitchServerBase.Events.[dispose]
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:374](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L374)
+[packages/matter.js/src/util/Observable.ts:374](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L374)
 
 ___
 
@@ -303,7 +303,7 @@ SwitchServerBase.Events.addListener
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:354](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L354)
+[packages/matter.js/src/util/Observable.ts:354](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L354)
 
 ___
 
@@ -336,7 +336,7 @@ SwitchServerBase.Events.emit
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:350](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L350)
+[packages/matter.js/src/util/Observable.ts:350](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L350)
 
 ___
 
@@ -369,4 +369,4 @@ SwitchServerBase.Events.removeListener
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:362](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L362)
+[packages/matter.js/src/util/Observable.ts:362](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L362)

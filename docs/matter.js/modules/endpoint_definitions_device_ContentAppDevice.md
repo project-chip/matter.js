@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L43)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:43](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L43)
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:134](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L134)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:134](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L134)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:122](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L122)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:122](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L122)

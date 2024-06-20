@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-intermediate-models",
-    "version": "0.9.1",
+    "version": "0.9.2",
     "description": "Matter.js intermediate models",
     "private": true,
     "type": "module",
@@ -30,7 +30,7 @@
     },
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "devDependencies": {
-        "@project-chip/matter.js": "0.9.1",
-        "@project-chip/matter.js-tools": "0.9.1"
+        "@project-chip/matter.js": "0.9.2",
+        "@project-chip/matter.js-tools": "0.9.2"
     }
 }

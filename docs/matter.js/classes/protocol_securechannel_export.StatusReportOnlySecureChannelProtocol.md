@@ -53,7 +53,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:81](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L81)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:83](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L83)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:27](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L27)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:28](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L28)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:45](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L45)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:47](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L47)
 
 ___
 
@@ -117,4 +117,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L31)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:32](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L32)

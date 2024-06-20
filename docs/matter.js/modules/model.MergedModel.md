@@ -30,7 +30,7 @@ An element type or "*" to match all elements.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/MergedModel.ts:271](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/logic/MergedModel.ts#L271)
+[packages/matter.js/src/model/logic/MergedModel.ts:271](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/MergedModel.ts#L271)
 
 ## Variables
 
@@ -44,4 +44,4 @@ default at some point.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/MergedModel.ts:288](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/logic/MergedModel.ts#L288)
+[packages/matter.js/src/model/logic/MergedModel.ts:288](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/MergedModel.ts#L288)

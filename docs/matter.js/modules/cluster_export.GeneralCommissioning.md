@@ -41,9 +41,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:554](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L554)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:554](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L554)
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:556](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L556)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:556](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L556)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:227](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L227)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:227](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L227)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:557](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L557)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:557](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L557)
 
 ___
 
@@ -83,7 +83,7 @@ MatterSpecification.v11.Core § 11.9.6.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:85](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:85](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L85)
 
 ___
 
@@ -97,7 +97,7 @@ MatterSpecification.v11.Core § 11.9.6.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:134](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L134)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:134](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L134)
 
 ___
 
@@ -113,7 +113,7 @@ MatterSpecification.v11.Core § 11.9.4.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:26](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L26)
 
 ___
 
@@ -127,7 +127,7 @@ MatterSpecification.v11.Core § 11.9.6.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:202](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L202)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:202](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L202)
 
 ___
 
@@ -143,7 +143,7 @@ MatterSpecification.v11.Core § 11.9.6.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:161](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L161)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:161](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L161)
 
 ___
 
@@ -157,4 +157,4 @@ MatterSpecification.v11.Core § 11.9.6.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:177](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L177)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:177](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L177)

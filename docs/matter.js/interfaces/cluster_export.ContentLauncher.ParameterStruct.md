@@ -42,7 +42,7 @@ TypeFromSchema.externalIdList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:435](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L435)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:435](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L435)
 
 ___
 
@@ -62,7 +62,7 @@ TypeFromSchema.type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:421](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L421)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:421](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L421)
 
 ___
 
@@ -82,4 +82,4 @@ TypeFromSchema.value
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:428](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L428)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:428](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L428)

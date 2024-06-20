@@ -30,7 +30,7 @@ MatterSpecification.v11.Cluster § 1.5.7.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L38)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:38](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L38)
 
 ___
 
@@ -50,7 +50,7 @@ MatterSpecification.v11.Cluster § 1.5.7.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:45](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L45)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:45](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L45)
 
 ___
 
@@ -70,4 +70,4 @@ MatterSpecification.v11.Cluster § 1.5.7.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:52](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L52)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:52](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L52)

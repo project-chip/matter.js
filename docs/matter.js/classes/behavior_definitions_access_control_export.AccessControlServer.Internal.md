@@ -36,7 +36,7 @@ AccessControlManager instance that is used to manage the ACL checks for this dev
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts:457](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts#L457)
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts:457](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts#L457)
 
 ___
 
@@ -48,7 +48,7 @@ If set to true ACL updates are delayed while in a write transaction. More detail
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts:460](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts#L460)
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts:460](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts#L460)
 
 ___
 
@@ -60,4 +60,4 @@ Latest delayed data of acl
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts:463](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts#L463)
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts:463](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/access-control/AccessControlServer.ts#L463)

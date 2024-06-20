@@ -61,7 +61,7 @@ These elements and properties are present in all FanControl clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:269](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L269)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:269](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L269)
 
 ___
 
@@ -71,9 +71,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:369](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L369)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:369](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L369)
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:371](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L371)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:371](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L371)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:357](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L357)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:357](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L357)
 
 ___
 
@@ -97,9 +97,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:409](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L409)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:409](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L409)
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:411](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L411)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:411](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L411)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:379](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L379)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:379](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L379)
 
 ___
 
@@ -134,7 +134,7 @@ A FanControlCluster supports these elements if it supports feature MultiSpeed.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:135](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L135)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:135](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L135)
 
 ___
 
@@ -158,7 +158,7 @@ MatterSpecification.v11.Cluster § 4.4.6.9
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L30)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:30](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L30)
 
 ___
 
@@ -182,7 +182,7 @@ MatterSpecification.v11.Cluster § 4.4.6.8
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L23)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:23](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L23)
 
 ___
 
@@ -202,7 +202,7 @@ A FanControlCluster supports these elements if it supports feature Rocking.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:168](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L168)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:168](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L168)
 
 ___
 
@@ -222,7 +222,7 @@ A FanControlCluster supports these elements if it supports feature Wind.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:201](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L201)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:201](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L201)
 
 ___
 
@@ -245,7 +245,7 @@ MatterSpecification.v11.Cluster § 4.4.6.11
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:44](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L44)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:44](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L44)
 
 ___
 
@@ -268,4 +268,4 @@ MatterSpecification.v11.Cluster § 4.4.6.10
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:37](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L37)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:37](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L37)

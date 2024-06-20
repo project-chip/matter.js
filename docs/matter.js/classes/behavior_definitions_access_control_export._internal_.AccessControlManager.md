@@ -50,7 +50,7 @@ MatterSpecification.v12.Core § 6.6.5.2.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:69](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L69)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:69](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L69)
 
 ## Properties
 
@@ -60,7 +60,7 @@ MatterSpecification.v12.Core § 6.6.5.2.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:60](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L60)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:60](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L60)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:61](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L61)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:61](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L61)
 
 ## Methods
 
@@ -111,7 +111,7 @@ Add the new privilege to the granted privileges set and also add any privileges 
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:121](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L121)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:121](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L121)
 
 ___
 
@@ -133,7 +133,7 @@ Get the Access Control List for a given fabric.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:95](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L95)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:95](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L95)
 
 ___
 
@@ -155,7 +155,7 @@ Determines the Incoming Subject Descriptor (ISD) from the given session.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:302](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L302)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:302](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L302)
 
 ___
 
@@ -178,7 +178,7 @@ Subjects must match exactly, or both are CAT with matching CAT ID and acceptable
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:102](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L102)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:102](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L102)
 
 ___
 
@@ -203,7 +203,7 @@ Check if the given ACL entry is allowed to be used for the given subject descrip
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:148](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L148)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:148](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L148)
 
 ___
 
@@ -227,7 +227,7 @@ Determines the granted privileges for the given session, endpoint, and cluster I
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:172](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L172)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:172](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L172)
 
 ___
 
@@ -249,4 +249,4 @@ Public method used to update the Access Control List on changes.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:88](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L88)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:88](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L88)

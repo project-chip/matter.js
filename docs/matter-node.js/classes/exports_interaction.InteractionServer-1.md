@@ -58,7 +58,7 @@ Translates interactions from the Matter protocol to Matter.js APIs.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:70
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:76
 
 ## Properties
 
@@ -68,7 +68,7 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:70
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:69
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:75
 
 ## Accessors
 
@@ -82,7 +82,7 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:69
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:72
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:78
 
 ## Methods
 
@@ -100,7 +100,7 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:72
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:91
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:97
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:71
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:77
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:83
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:89
 
 ___
 
@@ -170,7 +170,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:74
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:80
 
 ___
 
@@ -197,7 +197,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:82
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:88
 
 ___
 
@@ -222,7 +222,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:90
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:96
 
 ___
 
@@ -248,7 +248,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:80
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:86
 
 ___
 
@@ -274,7 +274,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:84
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:90
 
 ___
 
@@ -298,7 +298,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:73
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:79
 
 ___
 
@@ -323,7 +323,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:75
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:81
 
 ___
 
@@ -349,7 +349,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:79
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:85
 
 ___
 
@@ -376,4 +376,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:81
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:87

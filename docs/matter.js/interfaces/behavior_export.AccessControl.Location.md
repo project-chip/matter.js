@@ -26,7 +26,7 @@ access levels without re-evaluating.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:128](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L128)
+[packages/matter.js/src/behavior/AccessControl.ts:128](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L128)
 
 ___
 
@@ -38,7 +38,7 @@ The owning behavior.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:116](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L116)
+[packages/matter.js/src/behavior/AccessControl.ts:116](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L116)
 
 ___
 
@@ -51,7 +51,7 @@ enforcement.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:122](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L122)
+[packages/matter.js/src/behavior/AccessControl.ts:122](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L122)
 
 ___
 
@@ -63,4 +63,4 @@ The diagnostic path to the location.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:111](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L111)
+[packages/matter.js/src/behavior/AccessControl.ts:111](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L111)

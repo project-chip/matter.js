@@ -34,7 +34,7 @@ Demand is generated for either Cooling or Heating, as required
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:229](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L229)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:229](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L229)
 
 ___
 
@@ -46,7 +46,7 @@ Demand is only generated for Cooling
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:234](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L234)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:234](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L234)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:252](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L252)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:252](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L252)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:244](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L244)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:244](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L244)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:251](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L251)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:251](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L251)
 
 ___
 
@@ -90,7 +90,7 @@ Demand is only generated for Heating
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:239](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L239)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:239](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L239)
 
 ___
 
@@ -102,7 +102,7 @@ The Thermostat does not generate demand for Cooling or Heating
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:224](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L224)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:224](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L224)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:249](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L249)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:249](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L249)
 
 ___
 
@@ -124,4 +124,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:253](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L253)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:253](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L253)

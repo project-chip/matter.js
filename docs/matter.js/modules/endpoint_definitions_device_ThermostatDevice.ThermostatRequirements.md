@@ -34,7 +34,7 @@ We provide this alias to the default implementation [FanControlBehavior](endpoin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:110](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L110)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:110](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L110)
 
 ___
 
@@ -48,7 +48,7 @@ We provide this alias to the default implementation [GroupsServer](endpoint_defi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:67](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L67)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:67](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L67)
 
 ___
 
@@ -62,7 +62,7 @@ We provide this alias to the default implementation [IdentifyServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L53)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:53](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L53)
 
 ___
 
@@ -76,7 +76,7 @@ We provide this alias to the default implementation [OccupancySensingBehavior](e
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:124](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L124)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:124](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L124)
 
 ___
 
@@ -90,7 +90,7 @@ We provide this alias to the default implementation [RelativeHumidityMeasurement
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:96](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L96)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:96](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L96)
 
 ___
 
@@ -104,7 +104,7 @@ We provide this alias to the default implementation [ScenesServer](endpoint_defi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:74](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L74)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:74](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L74)
 
 ___
 
@@ -118,7 +118,7 @@ We provide this alias to the default implementation [TemperatureMeasurementBehav
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:117](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L117)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:117](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L117)
 
 ___
 
@@ -132,7 +132,7 @@ We provide this alias to the default implementation [ThermostatServer](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:60](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L60)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:60](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L60)
 
 ___
 
@@ -147,7 +147,7 @@ convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:82](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L82)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:82](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L82)
 
 ___
 
@@ -161,7 +161,7 @@ We provide this alias to the default implementation [TimeSyncBehavior](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:103](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L103)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:103](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L103)
 
 ___
 
@@ -175,7 +175,7 @@ We provide this alias to the default implementation [TimeSyncServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:89](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L89)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:89](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L89)
 
 ___
 
@@ -199,7 +199,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:143](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L143)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:143](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L143)
 
 ___
 
@@ -224,4 +224,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:129](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L129)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:129](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L129)

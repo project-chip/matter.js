@@ -48,7 +48,7 @@ MatterSpecification.v11.Cluster § 6.4.4.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:132](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L132)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:132](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L132)
 
 ___
 
@@ -87,7 +87,7 @@ MatterSpecification.v11.Cluster § 6.4.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:95](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L95)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:95](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L95)
 
 ___
 
@@ -124,4 +124,4 @@ MatterSpecification.v11.Cluster § 6.4.4.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:113](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L113)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:113](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L113)

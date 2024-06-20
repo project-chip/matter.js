@@ -47,7 +47,7 @@ Service adapter for the Matter.js storage API.
 
 #### Defined in
 
-[packages/matter.js/src/environment/StorageService.ts:21](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/StorageService.ts#L21)
+[packages/matter.js/src/environment/StorageService.ts:21](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/StorageService.ts#L21)
 
 ## Properties
 
@@ -71,7 +71,7 @@ Service adapter for the Matter.js storage API.
 
 #### Defined in
 
-[packages/matter.js/src/environment/StorageService.ts:18](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/StorageService.ts#L18)
+[packages/matter.js/src/environment/StorageService.ts:18](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/StorageService.ts#L18)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/StorageService.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/StorageService.ts#L19)
+[packages/matter.js/src/environment/StorageService.ts:19](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/StorageService.ts#L19)
 
 ## Accessors
 
@@ -103,7 +103,7 @@ Install a factory for opening storage.  Without such a factory storage is unavai
 
 #### Defined in
 
-[packages/matter.js/src/environment/StorageService.ts:49](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/StorageService.ts#L49)
+[packages/matter.js/src/environment/StorageService.ts:49](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/StorageService.ts#L49)
 
 ___
 
@@ -119,7 +119,7 @@ The storage location.  Only used for diagnostic purposes.
 
 #### Defined in
 
-[packages/matter.js/src/environment/StorageService.ts:56](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/StorageService.ts#L56)
+[packages/matter.js/src/environment/StorageService.ts:56](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/StorageService.ts#L56)
 
 • `set` **location**(`location`): `void`
 
@@ -135,7 +135,7 @@ The storage location.  Only used for diagnostic purposes.
 
 #### Defined in
 
-[packages/matter.js/src/environment/StorageService.ts:60](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/StorageService.ts#L60)
+[packages/matter.js/src/environment/StorageService.ts:60](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/StorageService.ts#L60)
 
 ## Methods
 
@@ -149,7 +149,7 @@ The storage location.  Only used for diagnostic purposes.
 
 #### Defined in
 
-[packages/matter.js/src/environment/StorageService.ts:64](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/StorageService.ts#L64)
+[packages/matter.js/src/environment/StorageService.ts:64](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/StorageService.ts#L64)
 
 ___
 
@@ -171,7 +171,7 @@ Open storage.  The storage is initialized but the caller must take ownership.
 
 #### Defined in
 
-[packages/matter.js/src/environment/StorageService.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/StorageService.ts#L35)
+[packages/matter.js/src/environment/StorageService.ts:35](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/StorageService.ts#L35)
 
 ___
 
@@ -191,4 +191,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/StorageService.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/StorageService.ts#L26)
+[packages/matter.js/src/environment/StorageService.ts:26](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/StorageService.ts#L26)

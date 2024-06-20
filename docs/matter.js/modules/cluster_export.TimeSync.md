@@ -67,7 +67,7 @@ These elements and properties are present in all TimeSync clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:495](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L495)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:495](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L495)
 
 ___
 
@@ -77,9 +77,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:626](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L626)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:626](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L626)
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:628](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L628)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:628](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L628)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:607](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L607)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:607](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L607)
 
 ___
 
@@ -103,9 +103,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:676](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L676)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:676](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L676)
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:678](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L678)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:678](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L678)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:636](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L636)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:636](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L636)
 
 ___
 
@@ -138,7 +138,7 @@ A TimeSyncCluster supports these elements if it supports feature NtpClient.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:304](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L304)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:304](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L304)
 
 ___
 
@@ -157,7 +157,7 @@ A TimeSyncCluster supports these elements if it supports feature NtpServer.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:449](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L449)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:449](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L449)
 
 ___
 
@@ -183,7 +183,7 @@ A TimeSyncCluster supports these elements if it supports feature TimeZone.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:326](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L326)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:326](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L326)
 
 ___
 
@@ -197,7 +197,7 @@ MatterSpecification.v11.Core § 11.16.6.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:70](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L70)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:70](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L70)
 
 ___
 
@@ -213,7 +213,7 @@ MatterSpecification.v11.Core § 11.16.9.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:262](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L262)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:262](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L262)
 
 ___
 
@@ -229,7 +229,7 @@ MatterSpecification.v11.Core § 11.16.10.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:106](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:106](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L106)
 
 ___
 
@@ -243,4 +243,4 @@ MatterSpecification.v11.Core § 11.16.6.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:38](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L38)

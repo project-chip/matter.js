@@ -47,9 +47,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:39](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L39)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:39](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L39)
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:73](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L73)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:73](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L73)
 
 ___
 
@@ -66,7 +66,7 @@ MatterSpecification.v11.Cluster § 1.2.6.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:37](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L37)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:37](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L37)
 
 ___
 
@@ -82,7 +82,7 @@ MatterSpecification.v11.Cluster § 1.2.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:18](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L18)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:18](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L18)
 
 ___
 
@@ -102,7 +102,7 @@ MatterSpecification.v11.Cluster § 1.2.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:29](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L29)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:29](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L29)
 
 ## Variables
 
@@ -117,8 +117,8 @@ IdentifyBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts:19](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts:24](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts#L24)
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts#L26)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts:26](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts#L26)

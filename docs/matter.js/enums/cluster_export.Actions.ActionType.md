@@ -39,7 +39,7 @@ MatterSpecification.v11.Core § 9.14.4.2.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:110](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:110](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L110)
 
 ___
 
@@ -58,7 +58,7 @@ MatterSpecification.v11.Core § 9.14.4.2.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:74](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L74)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:74](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L74)
 
 ___
 
@@ -80,7 +80,7 @@ MatterSpecification.v11.Core § 9.14.4.2.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:87](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:87](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L87)
 
 ___
 
@@ -100,7 +100,7 @@ MatterSpecification.v11.Core § 9.14.4.2.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:98](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L98)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:98](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L98)
 
 ___
 
@@ -112,7 +112,7 @@ Use this only when none of the other values applies
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:36](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:36](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L36)
 
 ___
 
@@ -137,7 +137,7 @@ MatterSpecification.v11.Core § 9.14.4.2.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:52](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L52)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:52](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L52)
 
 ___
 
@@ -158,4 +158,4 @@ MatterSpecification.v11.Core § 9.14.4.2.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:64](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L64)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:64](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L64)

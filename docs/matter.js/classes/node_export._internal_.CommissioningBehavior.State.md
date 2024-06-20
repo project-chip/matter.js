@@ -54,7 +54,7 @@ Vendor-specific BLE advertisement data.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:289](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L289)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:289](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L289)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:284](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L284)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:284](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L284)
 
 ___
 
@@ -80,7 +80,7 @@ The discriminator used during initial commissioning.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:287](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L287)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:287](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L287)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:285](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L285)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:285](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L285)
 
 ___
 
@@ -106,7 +106,7 @@ The Flow type of commissioning used in announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:288](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L288)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:288](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L288)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:290](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L290)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:290](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L290)
 
 ___
 
@@ -132,7 +132,7 @@ The commissioning passcode/pin.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:286](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L286)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:286](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L286)
 
 ## Methods
 
@@ -156,4 +156,4 @@ The commissioning passcode/pin.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:292](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L292)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:292](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L292)

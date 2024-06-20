@@ -49,7 +49,7 @@ These elements and properties are present in all TimeFormatLocalization clusters
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:146](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L146)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:146](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L146)
 
 ___
 
@@ -69,7 +69,7 @@ A TimeFormatLocalizationCluster supports these elements if it supports feature C
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:102](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L102)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:102](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L102)
 
 ___
 
@@ -79,9 +79,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:203](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L203)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:203](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L203)
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:205](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L205)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:205](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L205)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:186](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L186)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:186](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L186)
 
 ___
 
@@ -105,9 +105,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:236](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L236)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:236](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L236)
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:238](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L238)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:238](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L238)
 
 ___
 
@@ -121,4 +121,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:211](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L211)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:211](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L211)

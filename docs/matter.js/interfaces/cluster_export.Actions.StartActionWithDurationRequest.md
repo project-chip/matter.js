@@ -36,7 +36,7 @@ TypeFromSchema.actionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:427](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L427)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:427](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L427)
 
 ___
 
@@ -56,7 +56,7 @@ TypeFromSchema.duration
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:435](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L435)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:435](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L435)
 
 ___
 
@@ -70,4 +70,4 @@ TypeFromSchema.invokeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:428](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L428)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:428](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L428)

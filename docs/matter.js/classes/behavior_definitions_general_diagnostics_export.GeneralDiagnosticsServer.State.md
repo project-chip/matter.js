@@ -49,7 +49,7 @@ GeneralDiagnosticsBehavior.State.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
 
 ## Properties
 
@@ -76,7 +76,7 @@ GeneralDiagnosticsBehavior.State.activeHardwareFaults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:559](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L559)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:559](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L559)
 
 ___
 
@@ -102,7 +102,7 @@ GeneralDiagnosticsBehavior.State.activeNetworkFaults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:593](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L593)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:593](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L593)
 
 ___
 
@@ -128,7 +128,7 @@ GeneralDiagnosticsBehavior.State.activeRadioFaults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:576](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L576)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:576](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L576)
 
 ___
 
@@ -148,7 +148,7 @@ GeneralDiagnosticsBehavior.State.bootReason
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:545](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L545)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:545](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L545)
 
 ___
 
@@ -169,7 +169,7 @@ GeneralDiagnosticsBehavior.State.networkInterfaces
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:503](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L503)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:503](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L503)
 
 ___
 
@@ -192,7 +192,7 @@ GeneralDiagnosticsBehavior.State.rebootCount
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:513](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L513)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:513](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L513)
 
 ___
 
@@ -217,7 +217,7 @@ GeneralDiagnosticsBehavior.State.testEventTriggersEnabled
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:609](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L609)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:609](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L609)
 
 ___
 
@@ -241,7 +241,7 @@ GeneralDiagnosticsBehavior.State.totalOperationalHours
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:534](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L534)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:534](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L534)
 
 ___
 
@@ -253,7 +253,7 @@ Internal counter of the total operational hours, counted in seconds, updated eve
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts:297](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts#L297)
+[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts:297](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts#L297)
 
 ___
 
@@ -276,7 +276,7 @@ GeneralDiagnosticsBehavior.State.upTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:523](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L523)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:523](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L523)
 
 ## Methods
 
@@ -302,4 +302,4 @@ GeneralDiagnosticsBehavior.State.upTime
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts:299](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts#L299)
+[packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts:299](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/general-diagnostics/GeneralDiagnosticsServer.ts#L299)

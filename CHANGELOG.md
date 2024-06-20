@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.9.2 (2024-06-20)
 * Matter-Core functionality:
   * Enhancement: Added some more certification relevant checks in Interaction server
 

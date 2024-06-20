@@ -93,7 +93,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:144](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L144)
+[packages/matter.js/src/protocol/MessageExchange.ts:144](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L144)
 
 ## Properties
 
@@ -103,7 +103,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:121](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L121)
+[packages/matter.js/src/protocol/MessageExchange.ts:121](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L121)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:123](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L123)
+[packages/matter.js/src/protocol/MessageExchange.ts:123](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L123)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:146](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L146)
+[packages/matter.js/src/protocol/MessageExchange.ts:146](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L146)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:153](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L153)
+[packages/matter.js/src/protocol/MessageExchange.ts:153](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L153)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:141](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L141)
+[packages/matter.js/src/protocol/MessageExchange.ts:141](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L141)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:151](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L151)
+[packages/matter.js/src/protocol/MessageExchange.ts:151](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L151)
 
 ___
 
@@ -171,7 +171,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:122](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L122)
+[packages/matter.js/src/protocol/MessageExchange.ts:122](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L122)
 
 ___
 
@@ -181,7 +181,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:147](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L147)
+[packages/matter.js/src/protocol/MessageExchange.ts:147](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L147)
 
 ___
 
@@ -191,7 +191,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:125](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L125)
+[packages/matter.js/src/protocol/MessageExchange.ts:125](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L125)
 
 ___
 
@@ -201,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:149](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L149)
+[packages/matter.js/src/protocol/MessageExchange.ts:149](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L149)
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:150](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L150)
+[packages/matter.js/src/protocol/MessageExchange.ts:150](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L150)
 
 ___
 
@@ -221,7 +221,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:148](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L148)
+[packages/matter.js/src/protocol/MessageExchange.ts:148](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L148)
 
 ___
 
@@ -231,7 +231,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:152](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L152)
+[packages/matter.js/src/protocol/MessageExchange.ts:152](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L152)
 
 ___
 
@@ -241,7 +241,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:127](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L127)
+[packages/matter.js/src/protocol/MessageExchange.ts:127](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L127)
 
 ___
 
@@ -251,7 +251,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:126](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L126)
+[packages/matter.js/src/protocol/MessageExchange.ts:126](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L126)
 
 ___
 
@@ -261,7 +261,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:124](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L124)
+[packages/matter.js/src/protocol/MessageExchange.ts:124](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L124)
 
 ___
 
@@ -271,7 +271,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:140](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L140)
+[packages/matter.js/src/protocol/MessageExchange.ts:140](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L140)
 
 ___
 
@@ -281,7 +281,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:139](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L139)
+[packages/matter.js/src/protocol/MessageExchange.ts:139](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L139)
 
 ___
 
@@ -291,7 +291,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:138](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L138)
+[packages/matter.js/src/protocol/MessageExchange.ts:138](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L138)
 
 ___
 
@@ -301,7 +301,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:137](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L137)
+[packages/matter.js/src/protocol/MessageExchange.ts:137](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L137)
 
 ___
 
@@ -311,7 +311,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:145](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L145)
+[packages/matter.js/src/protocol/MessageExchange.ts:145](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L145)
 
 ___
 
@@ -321,7 +321,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:142](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L142)
+[packages/matter.js/src/protocol/MessageExchange.ts:142](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L142)
 
 ## Methods
 
@@ -335,7 +335,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:445](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L445)
+[packages/matter.js/src/protocol/MessageExchange.ts:445](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L445)
 
 ___
 
@@ -349,7 +349,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:465](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L465)
+[packages/matter.js/src/protocol/MessageExchange.ts:465](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L465)
 
 ___
 
@@ -363,7 +363,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:491](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L491)
+[packages/matter.js/src/protocol/MessageExchange.ts:491](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L491)
 
 ___
 
@@ -377,7 +377,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:413](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L413)
+[packages/matter.js/src/protocol/MessageExchange.ts:413](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L413)
 
 ___
 
@@ -401,7 +401,7 @@ MatterSpecification.v10.Core, section 4.11.2.1
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:357](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L357)
+[packages/matter.js/src/protocol/MessageExchange.ts:357](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L357)
 
 ___
 
@@ -415,7 +415,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:457](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L457)
+[packages/matter.js/src/protocol/MessageExchange.ts:457](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L457)
 
 ___
 
@@ -429,7 +429,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:461](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L461)
+[packages/matter.js/src/protocol/MessageExchange.ts:461](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L461)
 
 ___
 
@@ -443,7 +443,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:453](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L453)
+[packages/matter.js/src/protocol/MessageExchange.ts:453](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L453)
 
 ___
 
@@ -457,7 +457,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:338](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L338)
+[packages/matter.js/src/protocol/MessageExchange.ts:338](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L338)
 
 ___
 
@@ -478,7 +478,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:185](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L185)
+[packages/matter.js/src/protocol/MessageExchange.ts:185](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L185)
 
 ___
 
@@ -500,7 +500,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:367](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L367)
+[packages/matter.js/src/protocol/MessageExchange.ts:367](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L367)
 
 ___
 
@@ -522,7 +522,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:256](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L256)
+[packages/matter.js/src/protocol/MessageExchange.ts:256](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L256)
 
 ___
 
@@ -542,7 +542,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:175](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L175)
+[packages/matter.js/src/protocol/MessageExchange.ts:175](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L175)
 
 ___
 
@@ -562,7 +562,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:427](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L427)
+[packages/matter.js/src/protocol/MessageExchange.ts:427](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L427)
 
 ___
 
@@ -583,7 +583,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:342](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L342)
+[packages/matter.js/src/protocol/MessageExchange.ts:342](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L342)
 
 ___
 
@@ -611,7 +611,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:82](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L82)
+[packages/matter.js/src/protocol/MessageExchange.ts:82](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L82)
 
 ___
 
@@ -640,4 +640,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:101](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/MessageExchange.ts#L101)
+[packages/matter.js/src/protocol/MessageExchange.ts:101](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageExchange.ts#L101)

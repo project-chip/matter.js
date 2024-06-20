@@ -32,7 +32,7 @@ of packets on the Thread interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:932](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L932)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:932](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L932)
 
 ___
 
@@ -46,7 +46,7 @@ Server supports the counts for various MAC layer happenings.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:946](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L946)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:946](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L946)
 
 ___
 
@@ -60,7 +60,7 @@ Server supports the counts for various MLE layer happenings.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:939](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L939)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:939](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L939)
 
 ___
 
@@ -74,4 +74,4 @@ Server supports the counts for the number of received and transmitted packets on
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:924](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L924)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:924](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L924)

@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:45](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L45)
+[packages/matter.js/src/session/pase/PaseServer.ts:45](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L45)
 
 ## Properties
 
@@ -62,7 +62,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:47](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L47)
+[packages/matter.js/src/session/pase/PaseServer.ts:47](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L47)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L32)
+[packages/matter.js/src/session/pase/PaseServer.ts:32](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L32)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L31)
+[packages/matter.js/src/session/pase/PaseServer.ts:31](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L31)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L48)
+[packages/matter.js/src/session/pase/PaseServer.ts:48](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L48)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:46](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L46)
+[packages/matter.js/src/session/pase/PaseServer.ts:46](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L46)
 
 ## Methods
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:158](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L158)
+[packages/matter.js/src/session/pase/PaseServer.ts:158](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L158)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:168](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L168)
+[packages/matter.js/src/session/pase/PaseServer.ts:168](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L168)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L51)
+[packages/matter.js/src/session/pase/PaseServer.ts:51](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L51)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:81](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L81)
+[packages/matter.js/src/session/pase/PaseServer.ts:81](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L81)
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:55](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L55)
+[packages/matter.js/src/session/pase/PaseServer.ts:55](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L55)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:34](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L34)
+[packages/matter.js/src/session/pase/PaseServer.ts:34](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L34)
 
 ___
 
@@ -246,4 +246,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:39](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/pase/PaseServer.ts#L39)
+[packages/matter.js/src/session/pase/PaseServer.ts:39](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/pase/PaseServer.ts#L39)

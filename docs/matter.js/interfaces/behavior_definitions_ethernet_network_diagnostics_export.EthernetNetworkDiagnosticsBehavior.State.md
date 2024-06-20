@@ -39,7 +39,7 @@ StateType.carrierDetect
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:231](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L231)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:231](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L231)
 
 ___
 
@@ -60,7 +60,7 @@ StateType.fullDuplex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:222](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L222)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:222](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L222)
 
 ___
 
@@ -82,7 +82,7 @@ StateType.phyRate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:214](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L214)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:214](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L214)
 
 ___
 
@@ -100,4 +100,4 @@ StateType.timeSinceReset
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:236](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L236)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:236](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L236)

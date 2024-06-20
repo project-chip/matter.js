@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:28](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L28)
+[packages/matter.js/src/protocol/ChannelManager.ts:28](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L28)
 
 ## Properties
 
@@ -57,7 +57,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L25)
+[packages/matter.js/src/protocol/ChannelManager.ts:25](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L25)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L23)
+[packages/matter.js/src/protocol/ChannelManager.ts:23](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L23)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L24)
+[packages/matter.js/src/protocol/ChannelManager.ts:24](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L24)
 
 ## Methods
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:36](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L36)
+[packages/matter.js/src/protocol/ChannelManager.ts:36](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L36)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L32)
+[packages/matter.js/src/protocol/ChannelManager.ts:32](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L32)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:145](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L145)
+[packages/matter.js/src/protocol/ChannelManager.ts:145](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L145)
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:71](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L71)
+[packages/matter.js/src/protocol/ChannelManager.ts:71](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L71)
 
 ___
 
@@ -176,7 +176,7 @@ Returns the last established session for a Fabric and Node
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:83](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L83)
+[packages/matter.js/src/protocol/ChannelManager.ts:83](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L83)
 
 ___
 
@@ -197,7 +197,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:111](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L111)
+[packages/matter.js/src/protocol/ChannelManager.ts:111](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L111)
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:121](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L121)
+[packages/matter.js/src/protocol/ChannelManager.ts:121](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L121)
 
 ___
 
@@ -239,7 +239,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:96](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L96)
+[packages/matter.js/src/protocol/ChannelManager.ts:96](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L96)
 
 ___
 
@@ -261,7 +261,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:104](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L104)
+[packages/matter.js/src/protocol/ChannelManager.ts:104](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L104)
 
 ___
 
@@ -283,4 +283,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:46](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/ChannelManager.ts#L46)
+[packages/matter.js/src/protocol/ChannelManager.ts:46](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/ChannelManager.ts#L46)

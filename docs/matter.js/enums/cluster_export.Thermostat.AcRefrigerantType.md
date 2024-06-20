@@ -29,7 +29,7 @@ R22 Refrigerant
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:416](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L416)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:416](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L416)
 
 ___
 
@@ -41,7 +41,7 @@ R407c Refrigerant
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:426](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L426)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:426](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L426)
 
 ___
 
@@ -53,7 +53,7 @@ R410a Refrigerant
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:421](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L421)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:421](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L421)
 
 ___
 
@@ -65,4 +65,4 @@ Unknown Refrigerant Type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:411](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L411)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:411](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L411)

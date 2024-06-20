@@ -43,7 +43,7 @@ TypeFromSchema.autoPlay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:487](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L487)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:487](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L487)
 
 ___
 
@@ -63,7 +63,7 @@ TypeFromSchema.data
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:494](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L494)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:494](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L494)
 
 ___
 
@@ -83,4 +83,4 @@ TypeFromSchema.search
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:479](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L479)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:479](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L479)

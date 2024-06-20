@@ -125,7 +125,7 @@ A cluster property description.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:18
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:19
 
 ## Properties
 
@@ -271,7 +271,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:12
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:13
 
 ___
 
@@ -356,7 +356,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:11
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:12
 
 ___
 
@@ -407,7 +407,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:19
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:20
 
 ___
 
@@ -957,7 +957,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:16
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:17
 
 ___
 
@@ -971,7 +971,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:17
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:18
 
 ___
 
@@ -1029,7 +1029,7 @@ PropertyModel.isGlobalAttribute
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:14
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:15
 
 ___
 
@@ -1379,7 +1379,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:15
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:16
 
 ## Methods
 
@@ -1778,4 +1778,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:13
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:14

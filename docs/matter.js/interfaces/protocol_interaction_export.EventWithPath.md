@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:108](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L108)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:115](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L115)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:107](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L107)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:114](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L114)

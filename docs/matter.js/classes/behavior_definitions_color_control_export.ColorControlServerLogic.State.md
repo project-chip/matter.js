@@ -88,7 +88,7 @@ ColorControlServerBase.State.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
 
 ## Properties
 
@@ -109,7 +109,7 @@ ColorControlServerBase.State.colorCapabilities
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1695](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1695)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1695](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1695)
 
 ___
 
@@ -132,7 +132,7 @@ ColorControlServerBase.State.colorLoopActive
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1193](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1193)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1193](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1193)
 
 ___
 
@@ -154,7 +154,7 @@ ColorControlServerBase.State.colorLoopDirection
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1206](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1206)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1206](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1206)
 
 ___
 
@@ -175,7 +175,7 @@ ColorControlServerBase.State.colorLoopStartEnhancedHue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1226](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1226)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1226](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1226)
 
 ___
 
@@ -197,7 +197,7 @@ ColorControlServerBase.State.colorLoopStoredEnhancedHue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1235](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1235)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1235](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1235)
 
 ___
 
@@ -218,7 +218,7 @@ ColorControlServerBase.State.colorLoopTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1218](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1218)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1218](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1218)
 
 ___
 
@@ -243,7 +243,7 @@ ColorControlServerBase.State.colorMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1390](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1390)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1390](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1390)
 
 ___
 
@@ -261,7 +261,7 @@ ColorControlServerBase.State.colorPointBIntensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1666](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1666)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1666](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1666)
 
 ___
 
@@ -279,7 +279,7 @@ ColorControlServerBase.State.colorPointBx
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1648](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1648)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1648](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1648)
 
 ___
 
@@ -297,7 +297,7 @@ ColorControlServerBase.State.colorPointBy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1657](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1657)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1657](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1657)
 
 ___
 
@@ -315,7 +315,7 @@ ColorControlServerBase.State.colorPointGIntensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1639](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1639)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1639](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1639)
 
 ___
 
@@ -333,7 +333,7 @@ ColorControlServerBase.State.colorPointGx
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1621](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1621)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1621](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1621)
 
 ___
 
@@ -351,7 +351,7 @@ ColorControlServerBase.State.colorPointGy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1630](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1630)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1630](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1630)
 
 ___
 
@@ -376,7 +376,7 @@ ColorControlServerBase.State.colorPointRIntensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1612](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1612)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1612](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1612)
 
 ___
 
@@ -400,7 +400,7 @@ ColorControlServerBase.State.colorPointRx
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1581](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1581)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1581](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1581)
 
 ___
 
@@ -424,7 +424,7 @@ ColorControlServerBase.State.colorPointRy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1596](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1596)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1596](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1596)
 
 ___
 
@@ -446,7 +446,7 @@ ColorControlServerBase.State.colorTempPhysicalMaxMireds
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1057](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1057)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1057](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1057)
 
 ___
 
@@ -468,7 +468,7 @@ ColorControlServerBase.State.colorTempPhysicalMinMireds
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1048](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1048)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1048](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1048)
 
 ___
 
@@ -499,7 +499,7 @@ ColorControlServerBase.State.colorTemperatureMireds
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1039](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1039)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1039](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1039)
 
 ___
 
@@ -521,7 +521,7 @@ ColorControlServerBase.State.compensationText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1378](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1378)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1378](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1378)
 
 ___
 
@@ -553,7 +553,7 @@ ColorControlServerBase.State.coupleColorTempToLevelMinMireds
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1076](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1076)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1076](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1076)
 
 ___
 
@@ -580,7 +580,7 @@ ColorControlServerBase.State.currentHue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:906](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L906)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:906](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L906)
 
 ___
 
@@ -606,7 +606,7 @@ ColorControlServerBase.State.currentSaturation
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:919](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L919)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:919](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L919)
 
 ___
 
@@ -630,7 +630,7 @@ ColorControlServerBase.State.currentX
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:978](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L978)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:978](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L978)
 
 ___
 
@@ -654,7 +654,7 @@ ColorControlServerBase.State.currentY
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:993](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L993)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:993](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L993)
 
 ___
 
@@ -676,7 +676,7 @@ ColorControlServerBase.State.driftCompensation
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1369](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1369)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1369](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1369)
 
 ___
 
@@ -702,7 +702,7 @@ ColorControlServerBase.State.enhancedColorMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1683](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1683)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1683](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1683)
 
 ___
 
@@ -730,7 +730,7 @@ ColorControlServerBase.State.enhancedCurrentHue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1137](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1137)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1137](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1137)
 
 ___
 
@@ -746,7 +746,7 @@ or target value and transition time.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2178](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2178)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2178](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2178)
 
 ___
 
@@ -772,7 +772,7 @@ ColorControlServerBase.State.numberOfPrimaries
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1432](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1432)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1432](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1432)
 
 ___
 
@@ -810,7 +810,7 @@ ColorControlServerBase.State.options
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1419](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1419)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1419](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1419)
 
 ___
 
@@ -834,7 +834,7 @@ ColorControlServerBase.State.primary1Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1465](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1465)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1465](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1465)
 
 ___
 
@@ -858,7 +858,7 @@ ColorControlServerBase.State.primary1X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1443](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1443)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1443](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1443)
 
 ___
 
@@ -882,7 +882,7 @@ ColorControlServerBase.State.primary1Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1454](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1454)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1454](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1454)
 
 ___
 
@@ -900,7 +900,7 @@ ColorControlServerBase.State.primary2Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1480](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1480)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1480](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1480)
 
 ___
 
@@ -918,7 +918,7 @@ ColorControlServerBase.State.primary2X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1470](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1470)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1470](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1470)
 
 ___
 
@@ -936,7 +936,7 @@ ColorControlServerBase.State.primary2Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1475](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1475)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1475](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1475)
 
 ___
 
@@ -954,7 +954,7 @@ ColorControlServerBase.State.primary3Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1495](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1495)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1495](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1495)
 
 ___
 
@@ -972,7 +972,7 @@ ColorControlServerBase.State.primary3X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1485](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1485)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1485](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1485)
 
 ___
 
@@ -990,7 +990,7 @@ ColorControlServerBase.State.primary3Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1490](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1490)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1490](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1490)
 
 ___
 
@@ -1008,7 +1008,7 @@ ColorControlServerBase.State.primary4Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1510](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1510)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1510](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1510)
 
 ___
 
@@ -1026,7 +1026,7 @@ ColorControlServerBase.State.primary4X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1500](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1500)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1500](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1500)
 
 ___
 
@@ -1044,7 +1044,7 @@ ColorControlServerBase.State.primary4Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1505](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1505)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1505](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1505)
 
 ___
 
@@ -1062,7 +1062,7 @@ ColorControlServerBase.State.primary5Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1525](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1525)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1525](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1525)
 
 ___
 
@@ -1080,7 +1080,7 @@ ColorControlServerBase.State.primary5X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1515](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1515)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1515](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1515)
 
 ___
 
@@ -1098,7 +1098,7 @@ ColorControlServerBase.State.primary5Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1520](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1520)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1520](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1520)
 
 ___
 
@@ -1116,7 +1116,7 @@ ColorControlServerBase.State.primary6Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1540](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1540)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1540](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1540)
 
 ___
 
@@ -1134,7 +1134,7 @@ ColorControlServerBase.State.primary6X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1530](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1530)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1530](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1530)
 
 ___
 
@@ -1152,7 +1152,7 @@ ColorControlServerBase.State.primary6Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1535](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1535)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1535](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1535)
 
 ___
 
@@ -1173,7 +1173,7 @@ ColorControlServerBase.State.remainingTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1360](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1360)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1360](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1360)
 
 ___
 
@@ -1199,7 +1199,7 @@ ColorControlServerBase.State.startUpColorTemperatureMireds
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1089](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1089)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1089](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1089)
 
 ___
 
@@ -1223,7 +1223,7 @@ ColorControlServerBase.State.whitePointX
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1551](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1551)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1551](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1551)
 
 ___
 
@@ -1247,4 +1247,4 @@ ColorControlServerBase.State.whitePointY
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1566](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1566)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1566](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1566)

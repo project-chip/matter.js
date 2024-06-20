@@ -44,7 +44,7 @@ StateType.accessControlEntriesPerFabric
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:455](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L455)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:455](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L455)
 
 ___
 
@@ -74,7 +74,7 @@ StateType.acl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:400](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L400)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:400](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L400)
 
 ___
 
@@ -97,7 +97,7 @@ StateType.extension
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:414](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L414)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:414](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L414)
 
 ___
 
@@ -122,7 +122,7 @@ StateType.subjectsPerAccessControlEntry
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:430](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L430)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:430](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L430)
 
 ___
 
@@ -147,4 +147,4 @@ StateType.targetsPerAccessControlEntry
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:442](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L442)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:442](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L442)

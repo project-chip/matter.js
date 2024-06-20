@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:33](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/SessionManager.ts#L33)
+[packages/matter.js/src/session/SessionManager.ts:33](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/SessionManager.ts#L33)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/SessionManager.ts#L30)
+[packages/matter.js/src/session/SessionManager.ts:30](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/SessionManager.ts#L30)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/SessionManager.ts#L31)
+[packages/matter.js/src/session/SessionManager.ts:31](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/SessionManager.ts#L31)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:29](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/SessionManager.ts#L29)
+[packages/matter.js/src/session/SessionManager.ts:29](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/SessionManager.ts#L29)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:32](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/SessionManager.ts#L32)
+[packages/matter.js/src/session/SessionManager.ts:32](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/SessionManager.ts#L32)
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:28](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/session/SessionManager.ts#L28)
+[packages/matter.js/src/session/SessionManager.ts:28](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/session/SessionManager.ts#L28)

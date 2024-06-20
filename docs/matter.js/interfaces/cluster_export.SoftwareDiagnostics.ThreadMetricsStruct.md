@@ -43,7 +43,7 @@ TypeFromSchema.id
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:40](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L40)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:40](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L40)
 
 ___
 
@@ -64,7 +64,7 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L48)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:48](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L48)
 
 ___
 
@@ -85,7 +85,7 @@ TypeFromSchema.stackFreeCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:56](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L56)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:56](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L56)
 
 ___
 
@@ -108,7 +108,7 @@ TypeFromSchema.stackFreeMinimum
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:66](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L66)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:66](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L66)
 
 ___
 
@@ -130,4 +130,4 @@ TypeFromSchema.stackSize
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:75](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L75)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:75](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L75)

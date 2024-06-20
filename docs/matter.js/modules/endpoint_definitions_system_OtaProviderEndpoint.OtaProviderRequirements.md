@@ -25,7 +25,7 @@ We provide this alias to the default implementation [OtaSoftwareUpdateProviderSe
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:33](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L33)
+[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:33](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L33)
 
 ___
 
@@ -39,7 +39,7 @@ We provide this alias to the default implementation [OtaSoftwareUpdateRequestorB
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:40](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L40)
+[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:40](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L40)
 
 ___
 
@@ -59,7 +59,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:50](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L50)
+[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:50](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L50)
 
 ___
 
@@ -78,4 +78,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:45](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L45)
+[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:45](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L45)

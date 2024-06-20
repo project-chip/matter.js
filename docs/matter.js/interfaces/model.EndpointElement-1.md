@@ -58,7 +58,7 @@ Child elements.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EndpointElement.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/EndpointElement.ts#L17)
+[packages/matter.js/src/model/elements/EndpointElement.ts:17](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/EndpointElement.ts#L17)
 
 ___
 
@@ -74,7 +74,7 @@ A short summary of the element.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:40](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/BaseElement.ts#L40)
+[packages/matter.js/src/model/elements/BaseElement.ts:40](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L40)
 
 ___
 
@@ -90,7 +90,7 @@ A paragraph summary of the element.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:45](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/BaseElement.ts#L45)
+[packages/matter.js/src/model/elements/BaseElement.ts:45](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L45)
 
 ___
 
@@ -107,7 +107,7 @@ and are available in-scope for every cluster.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:61](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/BaseElement.ts#L61)
+[packages/matter.js/src/model/elements/BaseElement.ts:61](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L61)
 
 ___
 
@@ -124,7 +124,7 @@ context-specific.  A "machine appropriate" semantic differentiator.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EndpointElement.ts:15](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/EndpointElement.ts#L15)
+[packages/matter.js/src/model/elements/EndpointElement.ts:15](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/EndpointElement.ts#L15)
 
 ___
 
@@ -141,7 +141,7 @@ differentiator.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:29](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/BaseElement.ts#L29)
+[packages/matter.js/src/model/elements/BaseElement.ts:29](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L29)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EndpointElement.ts:16](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/EndpointElement.ts#L16)
+[packages/matter.js/src/model/elements/EndpointElement.ts:16](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/EndpointElement.ts#L16)
 
 ___
 
@@ -168,7 +168,7 @@ element goes here.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:35](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/BaseElement.ts#L35)
+[packages/matter.js/src/model/elements/BaseElement.ts:35](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L35)
 
 ___
 
@@ -184,4 +184,4 @@ Reference to Matter specification document.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:50](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/elements/BaseElement.ts#L50)
+[packages/matter.js/src/model/elements/BaseElement.ts:50](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L50)

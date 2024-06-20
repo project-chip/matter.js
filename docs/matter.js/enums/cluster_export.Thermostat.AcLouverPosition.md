@@ -30,7 +30,7 @@ Fully Closed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:497](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L497)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:497](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L497)
 
 ___
 
@@ -42,7 +42,7 @@ Half Open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:512](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L512)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:512](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L512)
 
 ___
 
@@ -54,7 +54,7 @@ Fully Open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:502](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L502)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:502](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L502)
 
 ___
 
@@ -66,7 +66,7 @@ Quarter Open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:507](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L507)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:507](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L507)
 
 ___
 
@@ -78,4 +78,4 @@ Three Quarters Open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:517](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L517)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:517](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L517)

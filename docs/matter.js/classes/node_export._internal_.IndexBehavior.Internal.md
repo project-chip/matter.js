@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/index/IndexBehavior.ts:118](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/index/IndexBehavior.ts#L118)
+[packages/matter.js/src/behavior/system/index/IndexBehavior.ts:118](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/index/IndexBehavior.ts#L118)
 
 ___
 
@@ -46,7 +46,7 @@ Map of ID to [Endpoint](endpoint_export.Endpoint-1.md).
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/index/IndexBehavior.ts:123](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/index/IndexBehavior.ts#L123)
+[packages/matter.js/src/behavior/system/index/IndexBehavior.ts:123](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/index/IndexBehavior.ts#L123)
 
 ___
 
@@ -58,4 +58,4 @@ Map of number to [Endpoint](endpoint_export.Endpoint-1.md).
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/index/IndexBehavior.ts:128](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/index/IndexBehavior.ts#L128)
+[packages/matter.js/src/behavior/system/index/IndexBehavior.ts:128](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/index/IndexBehavior.ts#L128)

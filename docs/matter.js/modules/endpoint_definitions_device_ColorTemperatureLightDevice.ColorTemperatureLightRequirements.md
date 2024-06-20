@@ -28,7 +28,7 @@ This version of [ColorControlServer](endpoint_definitions_device_ColorTemperatur
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:88](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L88)
+[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:88](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L88)
 
 ___
 
@@ -42,7 +42,7 @@ We provide this alias to the default implementation [GroupsServer](endpoint_defi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:45](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L45)
+[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:45](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L45)
 
 ___
 
@@ -56,7 +56,7 @@ This version of [IdentifyServer](endpoint_definitions_device_ColorTemperatureLig
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L38)
+[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:38](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L38)
 
 ___
 
@@ -70,7 +70,7 @@ This version of [LevelControlServer](endpoint_definitions_device_ColorTemperatur
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:73](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L73)
+[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:73](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L73)
 
 ___
 
@@ -84,7 +84,7 @@ This version of [OnOffServer](endpoint_definitions_device_ColorTemperatureLightD
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:66](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L66)
+[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:66](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L66)
 
 ___
 
@@ -98,7 +98,7 @@ This version of [ScenesServer](endpoint_definitions_device_ColorTemperatureLight
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:52](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L52)
+[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:52](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L52)
 
 ___
 
@@ -122,4 +122,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:95](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L95)
+[packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts:95](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ColorTemperatureLightDevice.ts#L95)

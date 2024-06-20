@@ -83,7 +83,7 @@ Better name would be CommissioningServer but we already have one of those.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:147](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L147)
+[packages/matter.js/src/behavior/Behavior.ts:147](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L147)
 
 ## Properties
 
@@ -97,7 +97,7 @@ Better name would be CommissioningServer but we already have one of those.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L51)
+[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L51)
 
 ___
 
@@ -113,7 +113,7 @@ Access the behavior's events.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L51)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:51](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L51)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:52](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L52)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:52](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L52)
 
 ___
 
@@ -139,7 +139,7 @@ Access the behavior's state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:50](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L50)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:50](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L50)
 
 ___
 
@@ -158,7 +158,7 @@ automatically.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:272](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L272)
+[packages/matter.js/src/behavior/Behavior.ts:272](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L272)
 
 ___
 
@@ -175,7 +175,7 @@ immediately when the endpoint initializes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:54](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L54)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:54](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L54)
 
 ___
 
@@ -196,7 +196,7 @@ EndpointBuilder also uses the ID when replacing behaviors using the with() build
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L48)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:48](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L48)
 
 ___
 
@@ -212,7 +212,7 @@ Define logical schema to make passcode and discriminator persistent.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:245](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L245)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:245](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L245)
 
 ## Accessors
 
@@ -230,7 +230,7 @@ Behavior.[reference]
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L274)
 
 ___
 
@@ -250,7 +250,7 @@ Behavior.agent
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L80)
 
 ___
 
@@ -270,7 +270,7 @@ Behavior.context
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L94)
 
 ___
 
@@ -290,7 +290,7 @@ Behavior.endpoint
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L87)
 
 ___
 
@@ -310,7 +310,7 @@ Behavior.session
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L101)
 
 ___
 
@@ -330,7 +330,7 @@ Behavior.defaults
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:244](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L244)
+[packages/matter.js/src/behavior/Behavior.ts:244](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L244)
 
 ___
 
@@ -350,7 +350,7 @@ Behavior.supervisor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:161](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L161)
+[packages/matter.js/src/behavior/Behavior.ts:161](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L161)
 
 ## Methods
 
@@ -364,7 +364,7 @@ Behavior.supervisor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:146](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L146)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:146](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L146)
 
 ___
 
@@ -378,7 +378,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:267](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L267)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:267](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L267)
 
 ___
 
@@ -398,7 +398,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:160](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L160)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:160](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L160)
 
 ___
 
@@ -412,7 +412,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:254](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L254)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:254](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L254)
 
 ___
 
@@ -426,7 +426,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:154](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L154)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:154](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L154)
 
 ___
 
@@ -447,7 +447,7 @@ state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:72](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L72)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:72](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L72)
 
 ___
 
@@ -480,7 +480,7 @@ You should only elevate privileges for synchronous logic.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L125)
+[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L125)
 
 ___
 
@@ -529,7 +529,7 @@ Because of this: The reactor MUST be a real JS function - arrow functions will n
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L226)
+[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L226)
 
 ___
 
@@ -550,7 +550,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:76](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L76)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:76](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L76)
 
 ___
 
@@ -574,7 +574,7 @@ use until initialization completes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:56](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L56)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:56](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L56)
 
 ___
 
@@ -594,7 +594,7 @@ The default implementation logs the QR code and credentials.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:195](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L195)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:195](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L195)
 
 ___
 
@@ -630,7 +630,7 @@ Important: The reactor MUST be a real JS function - arrow functions will not wor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L212)
+[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L212)
 
 ___
 
@@ -650,7 +650,7 @@ Description used in diagnostic messages.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L203)
+[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L203)
 
 ___
 
@@ -677,7 +677,7 @@ Obtain pairing codes for a node.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:218](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L218)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts:218](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/commissioning/CommissioningBehavior.ts#L218)
 
 ___
 
@@ -710,7 +710,7 @@ Create a new behavior with different default state values.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:251](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L251)
+[packages/matter.js/src/behavior/Behavior.ts:251](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L251)
 
 ___
 
@@ -736,4 +736,4 @@ Does this behavior support functionality of a specific implementation?
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:237](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/Behavior.ts#L237)
+[packages/matter.js/src/behavior/Behavior.ts:237](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L237)

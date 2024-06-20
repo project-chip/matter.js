@@ -38,7 +38,7 @@ Assert invoke is authorized.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L53)
+[packages/matter.js/src/behavior/AccessControl.ts:53](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L53)
 
 ___
 
@@ -50,7 +50,7 @@ Assert read is authorized.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:33](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L33)
+[packages/matter.js/src/behavior/AccessControl.ts:33](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L33)
 
 ___
 
@@ -62,7 +62,7 @@ Assert write is authorized.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L43)
+[packages/matter.js/src/behavior/AccessControl.ts:43](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L43)
 
 ___
 
@@ -74,7 +74,7 @@ Operational access control metadata.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:28](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L28)
+[packages/matter.js/src/behavior/AccessControl.ts:28](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L28)
 
 ___
 
@@ -86,7 +86,7 @@ Determine if invoke is authorized.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:58](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L58)
+[packages/matter.js/src/behavior/AccessControl.ts:58](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L58)
 
 ___
 
@@ -98,7 +98,7 @@ Determine if read is authorized.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L38)
+[packages/matter.js/src/behavior/AccessControl.ts:38](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L38)
 
 ___
 
@@ -110,4 +110,4 @@ Determine if write is authorized.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L48)
+[packages/matter.js/src/behavior/AccessControl.ts:48](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L48)

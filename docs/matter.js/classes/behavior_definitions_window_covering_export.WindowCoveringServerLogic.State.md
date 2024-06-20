@@ -59,7 +59,7 @@ WindowCoveringServerBase.State.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
 
 ## Properties
 
@@ -81,7 +81,7 @@ WindowCoveringServerBase.State.configStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:777](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L777)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:777](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L777)
 
 ___
 
@@ -102,7 +102,7 @@ WindowCoveringServerBase.State.currentPositionLift
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:358](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L358)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:358](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L358)
 
 ___
 
@@ -123,7 +123,7 @@ WindowCoveringServerBase.State.currentPositionLiftPercent100ths
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:539](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L539)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:539](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L539)
 
 ___
 
@@ -145,7 +145,7 @@ WindowCoveringServerBase.State.currentPositionLiftPercentage
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:515](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L515)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:515](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L515)
 
 ___
 
@@ -166,7 +166,7 @@ WindowCoveringServerBase.State.currentPositionTilt
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:402](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L402)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:402](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L402)
 
 ___
 
@@ -187,7 +187,7 @@ WindowCoveringServerBase.State.currentPositionTiltPercent100ths
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:606](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L606)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:606](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L606)
 
 ___
 
@@ -209,7 +209,7 @@ WindowCoveringServerBase.State.currentPositionTiltPercentage
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:582](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L582)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:582](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L582)
 
 ___
 
@@ -230,7 +230,7 @@ WindowCoveringServerBase.State.endProductType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:800](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L800)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:800](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L800)
 
 ___
 
@@ -251,7 +251,7 @@ WindowCoveringServerBase.State.installedClosedLimitLift
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:374](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L374)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:374](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L374)
 
 ___
 
@@ -272,7 +272,7 @@ WindowCoveringServerBase.State.installedClosedLimitTilt
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:418](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L418)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:418](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L418)
 
 ___
 
@@ -293,7 +293,7 @@ WindowCoveringServerBase.State.installedOpenLimitLift
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:366](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L366)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:366](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L366)
 
 ___
 
@@ -314,7 +314,7 @@ WindowCoveringServerBase.State.installedOpenLimitTilt
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:410](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L410)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:410](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L410)
 
 ___
 
@@ -341,7 +341,7 @@ WindowCoveringServerBase.State.mode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:814](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L814)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:814](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L814)
 
 ___
 
@@ -362,7 +362,7 @@ WindowCoveringServerBase.State.numberOfActuationsLift
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:437](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L437)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:437](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L437)
 
 ___
 
@@ -383,7 +383,7 @@ WindowCoveringServerBase.State.numberOfActuationsTilt
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:475](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L475)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:475](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L475)
 
 ___
 
@@ -404,7 +404,7 @@ WindowCoveringServerBase.State.operationalStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:792](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L792)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:792](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L792)
 
 ___
 
@@ -425,7 +425,7 @@ WindowCoveringServerBase.State.physicalClosedLimitLift
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:350](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L350)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:350](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L350)
 
 ___
 
@@ -446,7 +446,7 @@ WindowCoveringServerBase.State.physicalClosedLimitTilt
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:394](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L394)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:394](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L394)
 
 ___
 
@@ -469,7 +469,7 @@ WindowCoveringServerBase.State.safetyStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:828](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L828)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:828](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L828)
 
 ___
 
@@ -481,7 +481,7 @@ Does the device supports calibration?
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:716](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L716)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:716](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L716)
 
 ___
 
@@ -493,7 +493,7 @@ Does the device supports maintenance mode?
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:719](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L719)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts:719](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts#L719)
 
 ___
 
@@ -514,7 +514,7 @@ WindowCoveringServerBase.State.targetPositionLiftPercent100ths
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:527](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L527)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:527](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L527)
 
 ___
 
@@ -535,7 +535,7 @@ WindowCoveringServerBase.State.targetPositionTiltPercent100ths
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:594](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L594)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:594](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L594)
 
 ___
 
@@ -556,4 +556,4 @@ WindowCoveringServerBase.State.type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:768](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L768)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:768](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L768)

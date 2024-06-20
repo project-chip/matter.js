@@ -68,7 +68,7 @@ MatterSpecification.v11.Cluster § 5.3.6.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:31](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L31)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:31](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L31)
 
 ___
 
@@ -88,7 +88,7 @@ MatterSpecification.v11.Cluster § 5.3.6.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:63](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L63)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:63](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L63)
 
 ___
 
@@ -118,7 +118,7 @@ MatterSpecification.v11.Cluster § 5.3.6.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:52](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L52)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:52](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L52)
 
 ___
 
@@ -138,7 +138,7 @@ MatterSpecification.v11.Cluster § 5.3.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:74](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L74)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:74](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L74)
 
 ___
 
@@ -154,9 +154,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:76](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L76)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:76](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L76)
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:278](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L278)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:278](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L278)
 
 ## Variables
 
@@ -170,8 +170,8 @@ WindowCovering.Cluster requires you to enable one or more optional features. You
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L20)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:20](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L20)
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:25](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L25)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:25](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L25)
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:27](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L27)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:27](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L27)
