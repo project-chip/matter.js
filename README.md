@@ -219,7 +219,7 @@ Table Legend:
 | **MDL  Section** | **Matter Device type and Class**                    | **Apple  <br>iOS 17.1**  |   **Google**  | **Amazon** | **SmartThings** | **LG ThinQ** | **Tuya** | **Home Assisitant <br>2024.5.2** |
 |------------------|-----------------------------------------------------|:------------------------:|:-------------:|:----------:|:---------------:|:------------:|:--------:|:---------------------------------:|
 |                  | **Bridge Support**                                  |            X             |       X       |      X     |        X        |       -      |     -    |                 X                 |
-|                  | **Composed Devices Support**                        |            X             |       X       |      -     |        -        |       -      |     -    |                 X                 |
+|                  | **Composed Devices Support**                        |            X             |       X       |      X(1)  |        -        |       -      |     -    |                 X                 |
 | 4                | **Lighting Device Types**                           |                          |               |            |                 |              |          |                                   |
 | 4.1              | On/Off Light  <br>(ID: 0x0100)                      |            X             |       X       |      X     |        X        |       X      |     X    |                 X                 |
 | 4.2              | Dimmable Light <br>(ID: 0x0101)                     |            X             |       X       |      X     |        X        |       -      |     X    |                 X                 |
@@ -233,17 +233,17 @@ Table Legend:
 | 6.1              | On/Off Light Switch <br>(ID: 0x0103)                |            x             |       x       |      ?     |        ?        |       ?      |     ?    |                 X                 |
 | 6.2              | Dimmer Switch <br>(ID: 0x0104)                      |            X             |       x       |      ?     |        ?        |       ?      |     ?    |                 X                 |
 | 6.3              | Color Dimmer Switch <br>(ID: 0x0105)                |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 X                 |
-| 6.4              | Control Bridge <br>(ID: 0x0840)                     |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
+| 6.4              | Control Bridge <br>(ID: 0x0840)                     |            ?             |       ?       |      X     |        ?        |       ?      |     ?    |                 ?                 |
 | 6.5              | Pump Controller <br>(ID: 0x0304)                    |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
 | 6.6              | Generic Switch <br>(ID: 0x000F)                     | X (Latching Switch only) |       -       |      ?     |        ?        |       ?      |     ?    |                 X                 |
 | 7                | **Sensor Device Types**                             |                          |               |            |                 |              |          |                                   |
 | 7.1              | Contact Sensor <br>(ID: 0x0015)                     |            X             |       X       |      X     |        X        |       ?      |     ?    |                 X                 |
 | 7.2              | Light Sensor  <br>(ID: 0x0106)                      |            X             |       X       |      -     |        X        |       ?      |     ?    |                 X                 |
-| 7.3              | Occupancy Sensor <br>(ID: 0x0107)                   |            X             |       X       |      -     |        ?        |       ?      |     ?    |                 X                 |
-| 7.4              | Temperature Sensor <br>(ID: 0x0302)                 |            X             |       X       |      -     |        X        |       ?      |     ?    |                 X                 |
-| 7.5              | Pressure Sensor <br>(ID: 0x0305)                    |            -             |       X       |      -     |        ?        |       ?      |     ?    |                 X                 |
+| 7.3              | Occupancy Sensor <br>(ID: 0x0107)                   |            X             |       X       |      X     |        ?        |       ?      |     ?    |                 X                 |
+| 7.4              | Temperature Sensor <br>(ID: 0x0302)                 |            X             |       X       |      X     |        X        |       ?      |     ?    |                 X                 |
+| 7.5              | Pressure Sensor <br>(ID: 0x0305)                    |            -             |       X       |      ?     |        ?        |       ?      |     ?    |                 X                 |
 | 7.6              | Flow Sensor  <br>(ID: 0x0306)                       |            -             |       X       |      -     |        X        |       ?      |     ?    |                 X                 |
-| 7.7              | Humidity Sensor <br>(ID: 0x0307)                    |            X             |       X       |      -     |        X        |       ?      |     ?    |                 X                 |
+| 7.7              | Humidity Sensor <br>(ID: 0x0307)                    |            X             |       X       |      X     |        X        |       ?      |     ?    |                 X                 |
 | 7.8              | On/Off Sensor <br>(ID: 0x0850)                      |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
 | 7.9              | Smoke CO Alarm <br>(ID: 0x0076)                     |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
 | 8                | **Closure Device Types**                            |                          |               |            |                 |              |          |                                   |
@@ -256,7 +256,7 @@ Table Legend:
 | 9.2              | Thermostat <br>(ID: 0x0301)                         |            X             |       X       |      X     |        ?        |       ?      |     ?    |                 X                 |
 | 9.3              | Fan <br>(ID: 0x002B)                                |            -             |       -       |      -     |        -        |       ?      |     ?    |                 ?                 |
 | 9.4              | Air Purifier <br>(ID: 0x002D)                       |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
-| 9.5              | Air Quality Sensor <br>(ID: 0x002C)                 |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
+| 9.5              | Air Quality Sensor <br>(ID: 0x002C)                 |            ?             |       ?       |      -     |        ?        |       ?      |     ?    |                 ?                 |
 | 10               | **Media Devices**                                   |                          |               |            |                 |              |          |                                   |
 | 10.1             | Video Player Architecture                           |            -             |       -       |      -     |        -        |       ?      |     -    |                 ?                 |
 | 10.2             | Basic Video Player <br>(ID: 0x0028)                 |            -             |       -       |      -     |        -        |       ?      |     -    |                 ?                 |
@@ -275,6 +275,8 @@ Table Legend:
 | 13.3             | Room Air Conditioner <br>(ID: 0x0072)               |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
 | 13.4             | Temperature Controlled Cabinet <br>(ID: 0x0071)     |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
 | 13.5             | Dishwasher <br>(ID: 0x0075)                         |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
+
+(1) See the section below on Composed devices and Alexa 
 
 ## Pairing and Usage Information
 
@@ -319,8 +321,9 @@ The [list of supported device types](https://developer.amazon.com/en-US/docs/ale
 Alexa currently has a few non-standard requirements:
 
 - Matter devices need to use port 5540 only, else they will not be discovered by Alexa at all
-- The device needs to have an Endpoint 1 beside the root endpoint. This needs to either be the main device endpoint 
-- composed devices not yet supported
+- The device needs to have an Endpoint 1 beside the root endpoint. This needs to either be the main device endpoint or an aggregator endpoint.
+
+Composed Devices: devices that are composed under a BridgedNodeEndpoint are recognised as separate devices by the Alexa ecosystem.  So a temperature and humidity sensor that is established under a BridgedNodeEndpoint is seen as three devices: (a) a "head" device and (b) the two sensors (not in the same UI).  However the ecosystem does not tolerate an end device with clusters that are not specified in the Matter specs as mandatory or optional. For example, a temperature sensor that has the cluster for RelativeHumidityMeasurementServer added will be recognised by Alexa only as a temperature device.  Idem for any power controller/source information added to an endpoint where that cluster is not specified as mandatory or optional.  If you want to add power source info then it needs to be at the BridgedNodeEndpoint level. Advice is to create these virtual devices as separate children of the aggregator endpoint or, if a composed device is necessary, use a BridgedNodeEndpoint as the parent of these endpoints.
 
 ### Tuya Smart (SmartLife) Ecosystem
 

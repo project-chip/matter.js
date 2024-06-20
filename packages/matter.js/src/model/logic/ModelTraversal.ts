@@ -14,6 +14,8 @@ import * as Elements from "../standard/elements/index.js";
 
 const OPERATION_DEPTH_LIMIT = 20;
 
+let memos: Memos | undefined;
+
 /**
  * This class performs lookups of models in the scope of a specific model.  We use a class so the lookup can maintain
  * state and guard against circular references.
@@ -24,34 +26,34 @@ const OPERATION_DEPTH_LIMIT = 20;
  * to address if it becomes too inefficient.
  */
 export class ModelTraversal {
-    private operationDepth = 0;
-    private dismissed?: Set<Model>;
+    #operationDepth = 0;
+    #dismissed?: Set<Model>;
 
     /**
      * Perform an operation with iteration tracking.  If iteration depth limit
      */
     operation<T>(operator: () => T, toDismiss?: Model): T {
-        if (this.operationDepth > OPERATION_DEPTH_LIMIT) {
+        if (this.#operationDepth > OPERATION_DEPTH_LIMIT) {
             throw new InternalError("Likely cycle detected (or OPERATION_DEPTH_LIMIT needs to be bumped)");
         }
 
-        if (toDismiss && this.dismissed?.has(toDismiss)) {
+        if (toDismiss && this.#dismissed?.has(toDismiss)) {
             toDismiss = undefined;
         }
 
         if (toDismiss) {
-            if (!this.dismissed) {
-                this.dismissed = new Set();
+            if (!this.#dismissed) {
+                this.#dismissed = new Set();
             }
-            this.dismissed.add(toDismiss);
+            this.#dismissed.add(toDismiss);
         }
-        this.operationDepth++;
+        this.#operationDepth++;
         try {
             return operator();
         } finally {
-            this.operationDepth--;
+            this.#operationDepth--;
             if (toDismiss) {
-                this.dismissed?.delete(toDismiss);
+                this.#dismissed?.delete(toDismiss);
             }
         }
     }
@@ -113,7 +115,7 @@ export class ModelTraversal {
                 }
 
                 // If I shadow a field my type is the same as the overridden field
-                const shadow = ancestor.children.select(name, [model.tag], this.dismissed);
+                const shadow = ancestor.children.select(name, [model.tag], this.#dismissed);
                 if (shadow?.type) {
                     // The shadow's name is the same as mine so this is actually my own name
                     result = shadow.name;
@@ -146,7 +148,11 @@ export class ModelTraversal {
             return;
         }
 
-        return this.operationWithDismissal(model, () => {
+        if (memos?.bases.has(model)) {
+            return memos.bases.get(model);
+        }
+
+        const base = this.operationWithDismissal(model, () => {
             // If I override another element (same identity and tag in parent's inheritance hierarchy) then I implicitly
             // inherit from the shadow.
             //
@@ -189,6 +195,10 @@ export class ModelTraversal {
                 }
             }
         });
+
+        memos?.bases.set(model, base);
+
+        return base;
     }
 
     /**
@@ -272,21 +282,29 @@ export class ModelTraversal {
             return undefined;
         }
 
+        if (memos?.shadows.has(model)) {
+            return memos.shadows.get(model);
+        }
+
         let shadow: Model | undefined;
+
         this.operationWithDismissal(model, () => {
             this.visitInheritance(this.findBase(parentOf(model)), parent => {
                 if (model.id !== undefined && model.tag !== ElementTag.Command) {
-                    shadow = parent.children.select(model.id, [model.tag], this.dismissed);
+                    shadow = parent.children.select(model.id, [model.tag], this.#dismissed);
                     if (shadow) {
                         return false;
                     }
                 }
-                shadow = parent.children.select(model.name, [model.tag], this.dismissed);
+                shadow = parent.children.select(model.name, [model.tag], this.#dismissed);
                 if (shadow) {
                     return false;
                 }
             });
         });
+
+        memos?.shadows.set(model, shadow);
+
         return shadow;
     }
 
@@ -408,7 +426,7 @@ export class ModelTraversal {
     findMember(scope: Model | undefined, key: Children.Selector, allowedTags: ElementTag[]): Model | undefined {
         return this.operation(() => {
             while (scope) {
-                const result = scope.children.select(key, allowedTags, this.dismissed);
+                const result = scope.children.select(key, allowedTags, this.#dismissed);
                 if (result) {
                     return result;
                 }
@@ -468,11 +486,17 @@ export class ModelTraversal {
             return;
         }
 
-        return this.operation(() => {
+        const memoKey = `${name} ${tag}`;
+        const memosForScope = memos?.types.get(scope);
+        if (memosForScope && memoKey in memosForScope) {
+            return memosForScope[memoKey];
+        }
+
+        const type = this.operation(() => {
             const queue = Array<Model>(scope as Model);
             for (scope = queue.shift(); scope; scope = queue.shift()) {
                 if (scope.isTypeScope) {
-                    const result = scope.children.select(name, tag, this.dismissed);
+                    const result = scope.children.select(name, tag, this.#dismissed);
                     if (result) {
                         return result;
                     }
@@ -491,6 +515,17 @@ export class ModelTraversal {
                 }
             }
         });
+
+        if (memos) {
+            const memosForScope = memos.types.get(scope);
+            if (memosForScope) {
+                memosForScope[memoKey] = type;
+            } else {
+                memos.types.set(scope, { [memoKey]: type });
+            }
+        }
+
+        return type;
     }
 
     /**
@@ -674,6 +709,25 @@ export class ModelTraversal {
      * around this.
      */
     static fallbackScope: Model | undefined;
+
+    /**
+     * This is a cheap hack to optimize analysis of large static models.  It temporarily memoizes key operations.
+     *
+     * It's not a huge win but does speed up model validation by approximately 50%
+     */
+    static memoize(fn: () => void) {
+        if (memos) {
+            fn();
+            return;
+        }
+
+        try {
+            memos = { bases: new Map(), shadows: new Map(), types: new Map() };
+            fn();
+        } finally {
+            memos = undefined;
+        }
+    }
 }
 
 function parentOf(model?: Model) {
@@ -681,4 +735,10 @@ function parentOf(model?: Model) {
         return ModelTraversal.fallbackScope;
     }
     return model?.parent;
+}
+
+interface Memos {
+    bases: Map<Model, Model | undefined>;
+    shadows: Map<Model, Model | undefined>;
+    types: Map<Model, Record<string, Model | undefined>>;
 }

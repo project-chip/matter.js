@@ -1,0 +1,12 @@
+{
+    "extends": "../../matter.js-tools/tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "../dist/esm",
+        "types": []
+    },
+    "references": [{ "path": "../../matter.js/src" }],
+    "typedocOptions": {
+        "entryPoints": ["ble/export.ts"],
+        "out": "../../../docs/matter.js.react-native"
+    }
+}
