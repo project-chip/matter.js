@@ -30,6 +30,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   Matter-Core functionality:
     -   Breaking: Removes the discovery capability "softAccessPoint" as it was removed from the Matter specification
     -   Feature: Increase Data Model revision to 17 (introduced by Matter 1.2)
+    -   Feature: Added Base64 encoding/decoding support to ByteArray
     -   Enhancement: Update Session parameters in PASE/CASE to match Matter 1.3 specification
     -   Enhancement: Removes TCP and ICD TXT records from MDNS responses because both currently not supported and optional to reduce the size of the MDNS responses
     -   Enhancement: Adds encoding and decoding of custom TlvData in QR-Codes including extensible Schema support for the defined Matter fields
@@ -42,6 +43,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   matter.js Legacy API:
     -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
     -   Removal: We removed old Scenes cluster implementation which was never fully implemented or used by any Matter controller
+-   matter.js-react-native:
+    -   Feature: Introduces new package that provides a React Native compatible platform Implementations for Matter.js. This package is still in development and should be considered experimental for now! Currently supports UDP, BLE and Crypto platform features. A In-memory storage is used for now because a react-native persisting Storage backend is missing currently.
 -   matter.js chip and python Testing:
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 
