@@ -8,8 +8,11 @@ import { UnexpectedDataError } from "../common/MatterError.js";
 
 declare global {
     interface Uint8Array {
-        /** Displays as an hex string. */
+        /** Displays as a hex string. */
         toHex(): string;
+
+        /** Displays as a hex string. */
+        toBase64(): string;
 
         /** Gets a {@link DataView} on this array. */
         getDataView(): DataView;
@@ -22,7 +25,10 @@ declare global {
         /** Gets an {@link ByteArray} from an hex string. */
         fromHex(hexString: string): ByteArray;
 
-        /** Gets an {@link ByteArray} from an hex string. */
+        /** Gets an {@link ByteArray} from a base64 string. */
+        fromBase64(hexString: string): ByteArray;
+
+        /** Gets an {@link ByteArray} from a UTF-8 string. */
         fromString(string: string): ByteArray;
 
         /** Concats {@link ByteArray}s. */
@@ -35,6 +41,12 @@ Uint8Array.prototype.toHex = function () {
     hexArray.length = this.length;
     this.forEach(byte => hexArray.push(byte.toString(16).padStart(2, "0")));
     return hexArray.join("");
+};
+
+Uint8Array.prototype.toBase64 = function () {
+    let result = "";
+    this.forEach(byte => (result += String.fromCharCode(byte)));
+    return btoa(result);
 };
 
 Uint8Array.prototype.getDataView = function () {
@@ -52,6 +64,16 @@ Uint8Array.fromHex = function (hexString: string) {
     const bytes = hexString.match(/.{1,2}/g)?.map(byteHex => parseInt(byteHex, 16));
     if (bytes === undefined) throw new UnexpectedDataError("Failed to parse the hex string.");
     return ByteArray.from(bytes);
+};
+
+Uint8Array.fromBase64 = function (base64String: string) {
+    const raw = atob(base64String);
+    let result = "";
+    for (let i = 0; i < raw.length; i++) {
+        const hex = raw.charCodeAt(i).toString(16);
+        result += hex.length === 2 ? hex : "0" + hex;
+    }
+    return this.fromHex(result);
 };
 
 Uint8Array.fromString = function (string: string) {
