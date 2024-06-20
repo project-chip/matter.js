@@ -48,6 +48,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   matter.js chip and python Testing:
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 
+### 0.9.2 (2026-06-20)
+- Matter-Core functionality:
+    - Enhancement: Added some more certification relevant checks in Interaction server
+
 ### 0.9.1 (2024-06-01)
 
 -   IMPORTANT: This version adds Access Control functionality and also tries to set missing ACL entries on startup on a best effort basis. If you encounter issues and have Access/Permission denied errors ain the logs then please delete and recommission the device to make sure all ACLs are set correctly. If this is not possible open GitHub issue or contact us in Discord to get help.
