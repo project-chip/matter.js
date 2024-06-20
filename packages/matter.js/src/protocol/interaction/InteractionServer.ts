@@ -28,6 +28,7 @@ import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
+import { GLOBAL_IDS } from "../../model/index.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
@@ -72,8 +73,14 @@ import { StatusCode, StatusResponseError } from "./StatusCode.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 import { SubscriptionOptions } from "./SubscriptionOptions.js";
 
+/** Protocol ID for the Interaction Protocol as per Matter specification. */
 export const INTERACTION_PROTOCOL_ID = 0x0001;
+
+/** Backward compatible re-export for Interaction Model version we support currently. */
 export const INTERACTION_MODEL_REVISION = 11;
+
+/** Number of Invoke Path setting from our Interaction model implementation. */
+export const MAX_PATHS_PER_INVOKE = 1;
 
 const logger = Logger.get("InteractionServer");
 
@@ -144,6 +151,34 @@ function isConcreteAttributePath(
     return endpointId !== undefined && clusterId !== undefined && attributeId !== undefined;
 }
 
+export function validateReadAttributesPath(path: TypeFromSchema<typeof TlvAttributePath>, isGroupSession = false) {
+    if (isGroupSession) {
+        throw new StatusResponseError("Illegal read request with group session", StatusCode.InvalidAction);
+    }
+    const { clusterId, attributeId } = path;
+    if (clusterId === undefined && attributeId !== undefined) {
+        if (!GLOBAL_IDS.has(attributeId)) {
+            throw new StatusResponseError(
+                `Illegal read request for wildcard cluster and non global attribute ${attributeId}`,
+                StatusCode.InvalidAction,
+            );
+        }
+    }
+}
+
+function validateWriteAttributesPath(path: TypeFromSchema<typeof TlvAttributePath>, isGroupSession = false) {
+    const { endpointId, clusterId, attributeId } = path;
+    if (clusterId === undefined || attributeId === undefined) {
+        throw new StatusResponseError(
+            "Illegal write request with wildcard cluster or attribute ID",
+            StatusCode.InvalidAction,
+        );
+    }
+    if (isGroupSession && endpointId !== undefined) {
+        throw new StatusResponseError("Illegal write request with group ID and endpoint ID", StatusCode.InvalidAction);
+    }
+}
+
 function isConcreteEventPath(
     path: TypeFromSchema<typeof TlvEventPath>,
 ): path is TypeFromSchema<typeof TlvEventPath> & EventPath {
@@ -151,11 +186,34 @@ function isConcreteEventPath(
     return endpointId !== undefined && clusterId !== undefined && eventId !== undefined;
 }
 
+export function validateReadEventPath(path: TypeFromSchema<typeof TlvEventPath>, isGroupSession = false) {
+    const { clusterId, eventId } = path;
+    if (clusterId === undefined && eventId !== undefined) {
+        throw new StatusResponseError("Illegal read request with wildcard cluster ID", StatusCode.InvalidAction);
+    }
+    if (isGroupSession) {
+        throw new StatusResponseError("Illegal read request with group session", StatusCode.InvalidAction);
+    }
+}
+
 function isConcreteCommandPath(
     path: TypeFromSchema<typeof TlvCommandPath>,
 ): path is TypeFromSchema<typeof TlvCommandPath> & CommandPath {
     const { endpointId, clusterId, commandId } = path;
     return endpointId !== undefined && clusterId !== undefined && commandId !== undefined;
+}
+
+function validateCommandPath(path: TypeFromSchema<typeof TlvCommandPath>, isGroupSession = false) {
+    const { endpointId, clusterId, commandId } = path;
+    if (clusterId === undefined || commandId === undefined) {
+        throw new StatusResponseError(
+            "Illegal write request with wildcard cluster or attribute ID",
+            StatusCode.InvalidAction,
+        );
+    }
+    if (isGroupSession && endpointId !== undefined) {
+        throw new StatusResponseError("Illegal write request with group ID and endpoint ID", StatusCode.InvalidAction);
+    }
 }
 
 /**
@@ -228,6 +286,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             );
         }
 
+        if (message.packetHeader.sessionType !== SessionType.Unicast) {
+            throw new StatusResponseError(
+                "Subscriptions are only allowed on unicast sessions",
+                StatusCode.InvalidAction,
+            );
+        }
+
         const dataVersionFilterMap = new Map<string, number>(
             dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
         );
@@ -241,6 +306,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
         const attributeReportsPayload = new Array<AttributeReportPayload>();
         for (const requestPath of attributeRequests ?? []) {
+            validateReadAttributesPath(requestPath);
+
             const attributes = this.#endpointStructure.getAttributes([requestPath]);
 
             // Requested attribute path not found in any cluster server on any endpoint
@@ -363,6 +430,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
         if (eventRequests) {
             eventReportsPayload = [];
             for (const requestPath of eventRequests) {
+                validateReadEventPath(requestPath);
+
                 const events = this.#endpointStructure.getEvents([requestPath]);
 
                 // Requested event path not found in any cluster server on any endpoint
@@ -577,21 +646,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
         for (const writeRequest of writeData) {
             const { path: writePath, dataVersion } = writeRequest;
-            const { clusterId, attributeId, listIndex } = writePath;
+            const { listIndex } = writePath;
 
-            if (clusterId === undefined) {
-                throw new StatusResponseError(
-                    "Illegal write request with wildcard cluster ID",
-                    StatusCode.InvalidAction,
-                );
-            }
-
-            if (attributeId === undefined) {
-                throw new StatusResponseError(
-                    "Illegal write request with wildcard attribute ID",
-                    StatusCode.InvalidAction,
-                );
-            }
+            validateWriteAttributesPath(writePath);
 
             const attributes = this.#endpointStructure.getAttributes([writePath], true);
 
@@ -606,7 +663,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         )}: ignore non-existing (wildcard) attribute`,
                     );
                 } else {
-                    const { endpointId } = writePath;
+                    const { endpointId, clusterId, attributeId } = writePath;
 
                     // was a concrete path
                     tryCatch(
@@ -643,10 +700,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
             // Concrete path and found and writable
             if (attributes.length === 1 && isConcreteAttributePath(writePath)) {
-                const { endpointId } = writePath;
+                const { endpointId, clusterId } = writePath;
                 const { attribute } = attributes[0];
-
-                // TODO Check ACL here
 
                 if (attribute.requiresTimedInteraction && !receivedWithinTimedInteraction) {
                     logger.debug(`This write requires a timed interaction which is not initialized.`);
@@ -877,6 +932,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             );
         }
 
+        if (message.packetHeader.sessionType !== SessionType.Unicast) {
+            throw new StatusResponseError(
+                "Subscriptions are only allowed on unicast sessions",
+                StatusCode.InvalidAction,
+            );
+        }
+
         assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
         const session = exchange.session;
         const fabric = session.fabric;
@@ -915,6 +977,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             logger.debug(
                 `Event filters: ${eventFilters.map(filter => `${filter.nodeId}/${filter.eventMin}`).join(", ")}`,
             );
+
+        // Validate of the paths before proceeding
+        attributeRequests?.forEach(path => validateReadAttributesPath(path));
+        eventRequests?.forEach(path => validateReadEventPath(path));
 
         if (minIntervalFloorSeconds < 0) {
             throw new StatusResponseError(
@@ -1039,9 +1105,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             );
         }
 
-        const {
-            packetHeader: { sessionType },
-        } = message;
         const receivedWithinTimedInteraction = exchange.hasActiveTimedInteraction();
         if (exchange.hasExpiredTimedInteraction()) {
             exchange.clearTimedInteraction(); // ??
@@ -1058,7 +1121,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
         if (receivedWithinTimedInteraction) {
             logger.debug(`Invoke request from ${exchange.channel.name} received while timed interaction is running.`);
             exchange.clearTimedInteraction();
-            if (sessionType !== SessionType.Unicast) {
+            if (message.packetHeader.sessionType !== SessionType.Unicast) {
                 throw new StatusResponseError(
                     "Invoke requests are only allowed on unicast sessions when a timed interaction is running.",
                     StatusCode.InvalidAction,
@@ -1069,6 +1132,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
         if (invokeRequests.length > 1) {
             throw new StatusResponseError("Multi-command invoke requests are not supported", StatusCode.InvalidAction);
         }
+
+        invokeRequests.forEach(({ commandPath }) => validateCommandPath(commandPath));
 
         const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];
 

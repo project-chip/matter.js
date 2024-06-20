@@ -10,6 +10,8 @@ import { AttributeElement, Globals } from "../elements/index.js";
 import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
 
+// Full set of global IDs per core spec 1.3
+export const GLOBAL_IDS = new Set([0xfffd, 0xfffc, 0xfffb, 0xfffa, 0xfff9, 0xfff8]);
 const globalIds = new Set<number>();
 for (const element of Object.values(Globals)) {
     if (element.tag === ElementTag.Attribute) {
