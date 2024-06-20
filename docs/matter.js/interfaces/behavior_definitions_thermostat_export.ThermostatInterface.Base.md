@@ -27,7 +27,7 @@ MatterSpecification.v11.Cluster § 4.3.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L43)
+[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:43](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L43)
 
 ___
 
@@ -51,4 +51,4 @@ MatterSpecification.v11.Cluster § 4.3.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L38)
+[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:38](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L38)

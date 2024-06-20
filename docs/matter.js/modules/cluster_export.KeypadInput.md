@@ -52,7 +52,7 @@ These elements and properties are present in all KeypadInput clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:201](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L201)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:201](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L201)
 
 ___
 
@@ -62,9 +62,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:265](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L265)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:265](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L265)
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:267](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L267)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:267](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L267)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:252](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L252)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:252](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L252)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:268](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L268)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:268](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L268)
 
 ___
 
@@ -104,7 +104,7 @@ MatterSpecification.v11.Cluster § 6.8.3.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:113](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L113)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:113](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L113)
 
 ___
 
@@ -120,4 +120,4 @@ MatterSpecification.v11.Cluster § 6.8.3.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:154](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L154)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:154](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L154)

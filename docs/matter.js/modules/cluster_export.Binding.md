@@ -26,9 +26,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:123](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L123)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:123](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L123)
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:125](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L125)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:125](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L125)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:70](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L70)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:70](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L70)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:126](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L126)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:126](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L126)
 
 ___
 
@@ -66,4 +66,4 @@ MatterSpecification.v11.Core § 9.6.5.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:26](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L26)

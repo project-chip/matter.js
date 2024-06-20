@@ -29,7 +29,7 @@ protocol such as PTP, or has built-in GNSS. UTC time is accurate to ± 10 μs.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:163](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L163)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:163](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L163)
 
 ___
 
@@ -43,7 +43,7 @@ is accurate to ± 50ms.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:157](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:157](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L157)
 
 ___
 
@@ -56,7 +56,7 @@ occurred such that the clock error is now > 5 seconds.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:144](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L144)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:144](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L144)
 
 ___
 
@@ -69,7 +69,7 @@ on the Last Known Good UTC Time only.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:138](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:138](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L138)
 
 ___
 
@@ -82,4 +82,4 @@ accurate to ± 5 seconds.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:150](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L150)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:150](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L150)

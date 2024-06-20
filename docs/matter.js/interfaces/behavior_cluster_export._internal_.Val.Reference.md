@@ -39,7 +39,7 @@ When true, the reference is no longer usable because the owning context has exit
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/Val.ts#L48)
+[packages/matter.js/src/behavior/state/Val.ts:48](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/Val.ts#L48)
 
 ___
 
@@ -51,7 +51,7 @@ Diagnostic path to the referenced value.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/Val.ts#L53)
+[packages/matter.js/src/behavior/state/Val.ts:53](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/Val.ts#L53)
 
 ___
 
@@ -63,7 +63,7 @@ The current canonical value of the referenced property.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/Val.ts#L43)
+[packages/matter.js/src/behavior/state/Val.ts:43](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/Val.ts#L43)
 
 ___
 
@@ -75,7 +75,7 @@ The managed value that owns the reference.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:78](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/Val.ts#L78)
+[packages/matter.js/src/behavior/state/Val.ts:78](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/Val.ts#L78)
 
 ___
 
@@ -87,7 +87,7 @@ The object that owns the root managed value.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:83](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/Val.ts#L83)
+[packages/matter.js/src/behavior/state/Val.ts:83](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/Val.ts#L83)
 
 ___
 
@@ -99,7 +99,7 @@ Active references to child properties.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:58](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/Val.ts#L58)
+[packages/matter.js/src/behavior/state/Val.ts:58](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/Val.ts#L58)
 
 ___
 
@@ -111,7 +111,7 @@ The current value of the referenced property.  Cleared when the reference is no 
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/Val.ts#L38)
+[packages/matter.js/src/behavior/state/Val.ts:38](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/Val.ts#L38)
 
 ## Methods
 
@@ -136,7 +136,7 @@ Then runs the specified mutator to make the actual changes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:68](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/Val.ts#L68)
+[packages/matter.js/src/behavior/state/Val.ts:68](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/Val.ts#L68)
 
 ___
 
@@ -152,4 +152,4 @@ Refresh any internal cache from the referenced container.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:73](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/Val.ts#L73)
+[packages/matter.js/src/behavior/state/Val.ts:73](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/Val.ts#L73)

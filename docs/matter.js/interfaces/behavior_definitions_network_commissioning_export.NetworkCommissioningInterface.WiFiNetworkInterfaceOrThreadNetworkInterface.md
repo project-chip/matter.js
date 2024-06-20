@@ -96,7 +96,7 @@ MatterSpecification.v11.Core § 11.8.7.9
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:325](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L325)
+[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:325](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L325)
 
 ___
 
@@ -134,7 +134,7 @@ MatterSpecification.v11.Core § 11.8.7.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:259](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L259)
+[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:259](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L259)
 
 ___
 
@@ -161,7 +161,7 @@ MatterSpecification.v11.Core § 11.8.7.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:333](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L333)
+[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:333](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L333)
 
 ___
 
@@ -211,4 +211,4 @@ MatterSpecification.v11.Core § 11.8.7.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:240](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L240)
+[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:240](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L240)

@@ -39,7 +39,7 @@ MatterSpecification.v11.Cluster § 3.3.6.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:30](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L30)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:30](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L30)
 
 ___
 
@@ -49,9 +49,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:242](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L242)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:242](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L242)
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:244](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L244)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:244](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L244)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:42](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L42)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:42](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L42)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:245](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L245)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:245](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L245)
 
 ___
 
@@ -97,4 +97,4 @@ MatterSpecification.v11.Cluster § 3.3.9.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:37](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L37)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:37](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L37)

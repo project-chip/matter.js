@@ -34,7 +34,7 @@ TypeFromSchema.cluster
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:104](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L104)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:104](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L104)
 
 ___
 
@@ -48,7 +48,7 @@ TypeFromSchema.deviceType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:106](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:106](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L106)
 
 ___
 
@@ -62,4 +62,4 @@ TypeFromSchema.endpoint
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:105](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:105](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L105)

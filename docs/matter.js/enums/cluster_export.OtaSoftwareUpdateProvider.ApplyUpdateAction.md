@@ -29,7 +29,7 @@ Wait at least the given delay time.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:152](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:152](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L152)
 
 ___
 
@@ -41,7 +41,7 @@ The OTA Provider is conveying a desire to rescind a previously provided Software
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:157](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:157](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L157)
 
 ___
 
@@ -53,4 +53,4 @@ Apply the update.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:147](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L147)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:147](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L147)

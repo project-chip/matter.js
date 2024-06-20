@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:232](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/VariableService.ts#L232)
+[packages/matter.js/src/environment/VariableService.ts:232](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/VariableService.ts#L232)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:233](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/VariableService.ts#L233)
+[packages/matter.js/src/environment/VariableService.ts:233](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/VariableService.ts#L233)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:231](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/environment/VariableService.ts#L231)
+[packages/matter.js/src/environment/VariableService.ts:231](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/environment/VariableService.ts#L231)

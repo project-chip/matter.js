@@ -46,7 +46,7 @@ MatterSpecification.v11.Core § 11.2.8.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:174](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L174)
+[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:174](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L174)
 
 ___
 
@@ -73,7 +73,7 @@ MatterSpecification.v11.Core § 11.2.8.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:212](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L212)
+[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:212](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L212)
 
 ___
 
@@ -116,7 +116,7 @@ MatterSpecification.v11.Core § 11.2.8.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:198](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L198)
+[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:198](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L198)
 
 ___
 
@@ -177,4 +177,4 @@ MatterSpecification.v11.Core § 11.2.8.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:158](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L158)
+[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:158](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L158)

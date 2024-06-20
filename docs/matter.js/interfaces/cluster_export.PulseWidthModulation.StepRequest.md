@@ -38,7 +38,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:124](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L124)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:124](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L124)
 
 ___
 
@@ -52,7 +52,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:125](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L125)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:125](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L125)
 
 ___
 
@@ -66,7 +66,7 @@ TypeFromSchema.stepMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:121](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L121)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:121](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L121)
 
 ___
 
@@ -80,7 +80,7 @@ TypeFromSchema.stepSize
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:122](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L122)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:122](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L122)
 
 ___
 
@@ -94,4 +94,4 @@ TypeFromSchema.transitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:123](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L123)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:123](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L123)

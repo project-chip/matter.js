@@ -38,7 +38,7 @@ active.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:165](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L165)
+[packages/matter.js/src/behavior/AccessControl.ts:165](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L165)
 
 ___
 
@@ -50,7 +50,7 @@ The fabric of the authorized client.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:143](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L143)
+[packages/matter.js/src/behavior/AccessControl.ts:143](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L143)
 
 ___
 
@@ -63,7 +63,7 @@ fabric.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:154](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L154)
+[packages/matter.js/src/behavior/AccessControl.ts:154](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L154)
 
 ___
 
@@ -78,7 +78,7 @@ Tracks "offline" rather than "online" because this makes the safer mode (full en
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:173](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L173)
+[packages/matter.js/src/behavior/AccessControl.ts:173](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L173)
 
 ___
 
@@ -90,7 +90,7 @@ The authenticated [SubjectId](../modules/datatype_export.md#subjectid) for onlin
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:148](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L148)
+[packages/matter.js/src/behavior/AccessControl.ts:148](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L148)
 
 ___
 
@@ -102,7 +102,7 @@ If this is true a timed transaction is in effect.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:159](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L159)
+[packages/matter.js/src/behavior/AccessControl.ts:159](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L159)
 
 ## Methods
 
@@ -125,4 +125,4 @@ Checks if the authorized client has a certain Access Privilege granted.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:138](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/AccessControl.ts#L138)
+[packages/matter.js/src/behavior/AccessControl.ts:138](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/AccessControl.ts#L138)

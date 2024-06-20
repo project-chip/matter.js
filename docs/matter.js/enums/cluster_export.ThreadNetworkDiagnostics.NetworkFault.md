@@ -27,7 +27,7 @@ Indicates there has been Thread hardware failure.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:420](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L420)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:420](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L420)
 
 ___
 
@@ -39,7 +39,7 @@ Indicates the Thread link is down.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:415](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L415)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:415](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L415)
 
 ___
 
@@ -51,7 +51,7 @@ Indicates the Thread network is jammed.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:425](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L425)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:425](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L425)
 
 ___
 
@@ -63,4 +63,4 @@ Indicates an unspecified fault.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:410](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L410)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:410](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L410)

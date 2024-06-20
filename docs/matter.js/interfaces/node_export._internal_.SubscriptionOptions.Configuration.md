@@ -30,7 +30,7 @@ ReturnType.maxIntervalSeconds
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:51](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L51)
+[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:51](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L51)
 
 ___
 
@@ -44,7 +44,7 @@ ReturnType.minIntervalSeconds
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:52](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L52)
+[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:52](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L52)
 
 ___
 
@@ -58,4 +58,4 @@ ReturnType.randomizationWindowSeconds
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L53)
+[packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts:53](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/SubscriptionOptions.ts#L53)

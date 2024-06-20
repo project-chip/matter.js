@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L24)
+[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:24](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L24)
 
-[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:65](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L65)
+[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:65](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L65)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:57](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L57)
+[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:57](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L57)

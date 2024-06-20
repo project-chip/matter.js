@@ -112,6 +112,7 @@
 - [Critical](exports_model.md#critical)
 - [Debug](exports_model.md#debug)
 - [ENUM8](exports_model.md#enum8)
+- [GLOBAL\_IDS](exports_model.md#global_ids)
 - [Globals](exports_model.md#globals)
 - [Info](exports_model.md#info)
 - [Matter](exports_model.md#matter)
@@ -492,6 +493,16 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/model/elements/Globals.d.ts:11
+
+___
+
+### GLOBAL\_IDS
+
+• `Const` **GLOBAL\_IDS**: `Set`\<`number`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:10
 
 ___
 

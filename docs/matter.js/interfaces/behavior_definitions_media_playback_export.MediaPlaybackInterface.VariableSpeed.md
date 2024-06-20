@@ -39,7 +39,7 @@ MatterSpecification.v11.Cluster § 6.10.4.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:148](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L148)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:148](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L148)
 
 ___
 
@@ -71,4 +71,4 @@ MatterSpecification.v11.Cluster § 6.10.4.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:131](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L131)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:131](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L131)

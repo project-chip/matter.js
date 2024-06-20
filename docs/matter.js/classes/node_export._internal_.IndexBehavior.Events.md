@@ -60,7 +60,7 @@ Emitted when the index changes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/index/IndexBehavior.ts:135](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/system/index/IndexBehavior.ts#L135)
+[packages/matter.js/src/behavior/system/index/IndexBehavior.ts:135](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/index/IndexBehavior.ts#L135)
 
 ## Accessors
 
@@ -78,7 +78,7 @@ EventEmitter.eventNames
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:370](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L370)
+[packages/matter.js/src/util/Observable.ts:370](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L370)
 
 ## Methods
 
@@ -96,7 +96,7 @@ EventEmitter.eventNames
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:374](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L374)
+[packages/matter.js/src/util/Observable.ts:374](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L374)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:354](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L354)
+[packages/matter.js/src/util/Observable.ts:354](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L354)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:350](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L350)
+[packages/matter.js/src/util/Observable.ts:350](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L350)
 
 ___
 
@@ -195,4 +195,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:362](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/util/Observable.ts#L362)
+[packages/matter.js/src/util/Observable.ts:362](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L362)

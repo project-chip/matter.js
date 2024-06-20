@@ -39,7 +39,7 @@ StateType.bssid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:363](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L363)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:363](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L363)
 
 ___
 
@@ -60,7 +60,7 @@ StateType.channelNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:386](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L386)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:386](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L386)
 
 ___
 
@@ -81,7 +81,7 @@ StateType.currentMaxRate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:405](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L405)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:405](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L405)
 
 ___
 
@@ -101,7 +101,7 @@ StateType.rssi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:393](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L393)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:393](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L393)
 
 ___
 
@@ -121,7 +121,7 @@ StateType.securityType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:370](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L370)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:370](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L370)
 
 ___
 
@@ -142,4 +142,4 @@ StateType.wiFiVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:378](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L378)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:378](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L378)

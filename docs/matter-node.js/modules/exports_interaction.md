@@ -67,6 +67,7 @@
 
 - [INTERACTION\_MODEL\_REVISION](exports_interaction.md#interaction_model_revision)
 - [INTERACTION\_PROTOCOL\_ID](exports_interaction.md#interaction_protocol_id)
+- [MAX\_PATHS\_PER\_INVOKE](exports_interaction.md#max_paths_per_invoke)
 - [TlvAttributeData](exports_interaction.md#tlvattributedata)
 - [TlvAttributePath](exports_interaction.md#tlvattributepath)
 - [TlvAttributeReport](exports_interaction.md#tlvattributereport)
@@ -121,6 +122,8 @@
 - [normalizeEventData](exports_interaction.md#normalizeeventdata)
 - [sortAttributeDataByPath](exports_interaction.md#sortattributedatabypath)
 - [structureReadAttributeDataToClusterObject](exports_interaction.md#structurereadattributedatatoclusterobject)
+- [validateReadAttributesPath](exports_interaction.md#validatereadattributespath)
+- [validateReadEventPath](exports_interaction.md#validatereadeventpath)
 
 ## Type Aliases
 
@@ -371,9 +374,11 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:36
 
 • `Const` **INTERACTION\_MODEL\_REVISION**: ``11``
 
+Backward compatible re-export for Interaction Model version we support currently.
+
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:29
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:31
 
 ___
 
@@ -381,9 +386,23 @@ ___
 
 • `Const` **INTERACTION\_PROTOCOL\_ID**: ``1``
 
+Protocol ID for the Interaction Protocol as per Matter specification.
+
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:28
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:29
+
+___
+
+### MAX\_PATHS\_PER\_INVOKE
+
+• `Const` **MAX\_PATHS\_PER\_INVOKE**: ``1``
+
+Number of Invoke Path setting from our Interaction model implementation.
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:33
 
 ___
 
@@ -789,7 +808,7 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:449
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:62
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:66
 
 ___
 
@@ -853,7 +872,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:64
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:68
 
 ___
 
@@ -873,7 +892,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:61
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:65
 
 ___
 
@@ -1059,7 +1078,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:63
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:67
 
 ___
 
@@ -1102,7 +1121,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:60
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:64
 
 ___
 
@@ -1279,3 +1298,45 @@ Structure the data of a received DataReport into an endpointId/clusterId/attribu
 #### Defined in
 
 packages/matter.js/dist/esm/protocol/interaction/AttributeDataDecoder.d.ts:50
+
+___
+
+### validateReadAttributesPath
+
+▸ **validateReadAttributesPath**(`path`, `isGroupSession?`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `path` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
+| `isGroupSession?` | `boolean` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:69
+
+___
+
+### validateReadEventPath
+
+▸ **validateReadEventPath**(`path`, `isGroupSession?`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `path` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
+| `isGroupSession?` | `boolean` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:70

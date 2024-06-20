@@ -27,7 +27,7 @@ We provide this alias to the default implementation [GroupsServer](endpoint_defi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L43)
+[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:43](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L43)
 
 ___
 
@@ -41,7 +41,7 @@ This version of [IdentifyServer](endpoint_definitions_device_OnOffPlugInUnitDevi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:36](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L36)
+[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:36](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L36)
 
 ___
 
@@ -55,7 +55,7 @@ This version of [LevelControlServer](endpoint_definitions_device_OnOffPlugInUnit
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:71](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L71)
+[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:71](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L71)
 
 ___
 
@@ -69,7 +69,7 @@ This version of [OnOffServer](endpoint_definitions_device_OnOffPlugInUnitDevice.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:64](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L64)
+[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:64](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L64)
 
 ___
 
@@ -83,7 +83,7 @@ This version of [ScenesServer](endpoint_definitions_device_OnOffPlugInUnitDevice
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:50](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L50)
+[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:50](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L50)
 
 ___
 
@@ -107,4 +107,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:84](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L84)
+[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:84](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L84)

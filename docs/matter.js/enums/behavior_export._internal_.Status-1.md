@@ -29,7 +29,7 @@ Transaction is in the process of committing, phase one.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Status.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Status.ts#L38)
+[packages/matter.js/src/behavior/state/transaction/Status.ts:38](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Status.ts#L38)
 
 ___
 
@@ -41,7 +41,7 @@ Transaction is in the process of committing, phase two.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Status.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Status.ts#L43)
+[packages/matter.js/src/behavior/state/transaction/Status.ts:43](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Status.ts#L43)
 
 ___
 
@@ -53,7 +53,7 @@ Transaction is destroyed, no further operations permitted.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Status.ts:53](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Status.ts#L53)
+[packages/matter.js/src/behavior/state/transaction/Status.ts:53](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Status.ts#L53)
 
 ___
 
@@ -66,7 +66,7 @@ and writes are allowed.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Status.ts:33](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Status.ts#L33)
+[packages/matter.js/src/behavior/state/transaction/Status.ts:33](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Status.ts#L33)
 
 ___
 
@@ -78,7 +78,7 @@ Transaction may be used only for read operations.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Status.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Status.ts#L17)
+[packages/matter.js/src/behavior/state/transaction/Status.ts:17](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Status.ts#L17)
 
 ___
 
@@ -90,7 +90,7 @@ Transaction is in the process of rolling back.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Status.ts:48](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Status.ts#L48)
+[packages/matter.js/src/behavior/state/transaction/Status.ts:48](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Status.ts#L48)
 
 ___
 
@@ -102,7 +102,7 @@ Transaction is registered but there are no ACID guarantees.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Status.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Status.ts#L22)
+[packages/matter.js/src/behavior/state/transaction/Status.ts:22](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Status.ts#L22)
 
 ___
 
@@ -114,4 +114,4 @@ Transaction is waiting to obtain exclusive access to resources.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Status.ts:27](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/state/transaction/Status.ts#L27)
+[packages/matter.js/src/behavior/state/transaction/Status.ts:27](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Status.ts#L27)

@@ -52,4 +52,4 @@ A fully typed [EndpointType](behavior_cluster_export._internal_.md#endpointtype)
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/type/EndpointType.ts:47](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/type/EndpointType.ts#L47)
+[packages/matter.js/src/endpoint/type/EndpointType.ts:47](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/type/EndpointType.ts#L47)

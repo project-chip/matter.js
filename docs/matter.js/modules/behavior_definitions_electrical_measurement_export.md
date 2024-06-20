@@ -44,9 +44,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts:15](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts#L15)
+[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts:15](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts#L15)
 
-[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts#L22)
+[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts:22](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts#L22)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts:13](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts#L13)
+[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts:13](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementInterface.ts#L13)
 
 ## Variables
 
@@ -68,8 +68,8 @@ ElectricalMeasurementBehavior is the base class for objects that support interac
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts#L17)
+[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts:17](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts#L17)
 
-[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts:22](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts#L22)
+[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts:22](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts#L22)
 
-[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts:24](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts:24](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/electrical-measurement/ElectricalMeasurementBehavior.ts#L24)

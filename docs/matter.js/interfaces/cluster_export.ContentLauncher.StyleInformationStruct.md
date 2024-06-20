@@ -49,7 +49,7 @@ TypeFromSchema.color
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:129](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L129)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:129](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L129)
 
 ___
 
@@ -70,7 +70,7 @@ TypeFromSchema.imageUrl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:116](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L116)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:116](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L116)
 
 ___
 
@@ -91,4 +91,4 @@ TypeFromSchema.size
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:137](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L137)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:137](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L137)

@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:17](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L17)
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:17](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L17)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:23](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L23)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:23](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L23)
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:26](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L26)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:26](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L26)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:43](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L43)
+[packages/matter.js/src/protocol/interaction/AccessControlManager.ts:43](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/interaction/AccessControlManager.ts#L43)
 
 ___
 
@@ -77,4 +77,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:19](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts:19](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/access-control/AccessControlBehavior.ts#L19)

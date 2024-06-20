@@ -54,7 +54,7 @@ selection.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L20)
+[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:20](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L20)
 
 ## Properties
 
@@ -64,7 +64,7 @@ selection.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:20](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L20)
+[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:20](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L20)
 
 ## Methods
 
@@ -92,7 +92,7 @@ named element.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:96](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L96)
+[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:96](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L96)
 
 ___
 
@@ -124,7 +124,7 @@ if the feature combination is disallowed by the Matter specification
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:28](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L28)
+[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:28](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L28)
 
 ___
 
@@ -148,7 +148,7 @@ specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:141](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L141)
+[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:141](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L141)
 
 ___
 
@@ -171,4 +171,4 @@ cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:82](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L82)
+[packages/matter.js/src/cluster/mutation/ClusterComposer.ts:82](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ClusterComposer.ts#L82)

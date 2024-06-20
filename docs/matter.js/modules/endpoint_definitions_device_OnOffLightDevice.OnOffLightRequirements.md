@@ -29,7 +29,7 @@ We provide this alias to the default implementation [GroupsServer](endpoint_defi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:45](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L45)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:45](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L45)
 
 ___
 
@@ -43,7 +43,7 @@ This version of [IdentifyServer](endpoint_definitions_device_OnOffLightDevice.On
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:38](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L38)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:38](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L38)
 
 ___
 
@@ -57,7 +57,7 @@ This version of [LevelControlServer](endpoint_definitions_device_OnOffLightDevic
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:73](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L73)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:73](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L73)
 
 ___
 
@@ -71,7 +71,7 @@ We provide this alias to the default implementation [OccupancySensingBehavior](e
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:88](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L88)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:88](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L88)
 
 ___
 
@@ -85,7 +85,7 @@ This version of [OnOffServer](endpoint_definitions_device_OnOffLightDevice.OnOff
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:66](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L66)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:66](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L66)
 
 ___
 
@@ -99,7 +99,7 @@ This version of [ScenesServer](endpoint_definitions_device_OnOffLightDevice.OnOf
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:52](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L52)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:52](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L52)
 
 ___
 
@@ -119,7 +119,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:101](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L101)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:101](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L101)
 
 ___
 
@@ -143,4 +143,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:93](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L93)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts:93](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/OnOffLightDevice.ts#L93)

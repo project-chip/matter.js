@@ -31,7 +31,7 @@ e.g., Light is turned on/off once.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:109](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:109](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L109)
 
 ___
 
@@ -43,7 +43,7 @@ e.g., Light is turned on/off over 1 second and repeated 15 times.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:114](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L114)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:114](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L114)
 
 ___
 
@@ -56,7 +56,7 @@ e.g., Colored light turns orange for 8 seconds; non-colored light switches to th
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:125](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L125)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:125](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L125)
 
 ___
 
@@ -69,7 +69,7 @@ above), first complete the current 1s breathe effect and then terminate the effe
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:131](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L131)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:131](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L131)
 
 ___
 
@@ -81,7 +81,7 @@ e.g., Colored light turns green for 1 second; non-colored light flashes twice.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:119](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L119)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:119](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L119)
 
 ___
 
@@ -93,4 +93,4 @@ Terminate the effect as soon as possible.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:136](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L136)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:136](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L136)

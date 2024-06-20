@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:79](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/tlv/TlvSchema.ts#L79)
+[packages/matter.js/src/tlv/TlvSchema.ts:79](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/tlv/TlvSchema.ts#L79)
 
 ## Properties
 
@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:77](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/tlv/TlvSchema.ts#L77)
+[packages/matter.js/src/tlv/TlvSchema.ts:77](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/tlv/TlvSchema.ts#L77)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:79](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/tlv/TlvSchema.ts#L79)
+[packages/matter.js/src/tlv/TlvSchema.ts:79](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/tlv/TlvSchema.ts#L79)
 
 ## Methods
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:86](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/tlv/TlvSchema.ts#L86)
+[packages/matter.js/src/tlv/TlvSchema.ts:86](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/tlv/TlvSchema.ts#L86)
 
 ___
 
@@ -111,4 +111,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:81](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/tlv/TlvSchema.ts#L81)
+[packages/matter.js/src/tlv/TlvSchema.ts:81](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/tlv/TlvSchema.ts#L81)

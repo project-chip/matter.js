@@ -41,7 +41,7 @@ TypeFromSchema.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:457](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L457)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:457](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L457)
 
 ___
 
@@ -62,4 +62,4 @@ TypeFromSchema.networkId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:450](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L450)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:450](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L450)

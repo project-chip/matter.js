@@ -26,7 +26,7 @@ All qualities designated as "other qualities" in the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:112](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/aspects/Quality.ts#L112)
+[packages/matter.js/src/model/aspects/Quality.ts:112](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Quality.ts#L112)
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:109](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/aspects/Quality.ts#L109)
+[packages/matter.js/src/model/aspects/Quality.ts:109](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Quality.ts#L109)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:108](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/aspects/Quality.ts#L108)
+[packages/matter.js/src/model/aspects/Quality.ts:108](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Quality.ts#L108)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:107](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/aspects/Quality.ts#L107)
+[packages/matter.js/src/model/aspects/Quality.ts:107](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Quality.ts#L107)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:111](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/aspects/Quality.ts#L111)
+[packages/matter.js/src/model/aspects/Quality.ts:111](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Quality.ts#L111)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:110](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/aspects/Quality.ts#L110)
+[packages/matter.js/src/model/aspects/Quality.ts:110](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Quality.ts#L110)
 
 ___
 
@@ -86,4 +86,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:113](https://github.com/project-chip/matter.js/blob/5f71eedebdb9fa54338bde320c311bb359b7455d/packages/matter.js/src/model/aspects/Quality.ts#L113)
+[packages/matter.js/src/model/aspects/Quality.ts:113](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Quality.ts#L113)
