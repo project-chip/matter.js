@@ -4089,7 +4089,7 @@ export const SpecMatter = Matter({
 
             children: [
                 Field({
-                    name: "RangeMin", id: 0x0, type: "int64", conformance: "M", constraint: "-262 to 262", quality: "F",
+                    name: "RangeMin", id: 0x0, type: "int64", conformance: "M", quality: "F",
 
                     details: "This field shall indicate the minimum measurement value for the specified level of accuracy." +
                         "\n" +
@@ -4103,7 +4103,7 @@ export const SpecMatter = Matter({
                 }),
 
                 Field({
-                    name: "RangeMax", id: 0x1, type: "int64", conformance: "M", constraint: "-262 to 262", quality: "F",
+                    name: "RangeMax", id: 0x1, type: "int64", conformance: "M", quality: "F",
 
                     details: "This field shall indicate the maximum measurement value for the specified level of accuracy. The " +
                         "value of this field shall be greater than the value of the RangeMin field." +
@@ -4138,8 +4138,7 @@ export const SpecMatter = Matter({
                 }),
 
                 Field({
-                    name: "FixedMax", id: 0x5, type: "uint64", conformance: "O.a+", constraint: "max 262 - 1",
-                    quality: "F",
+                    name: "FixedMax", id: 0x5, type: "uint64", conformance: "O.a+", quality: "F",
                     details: "This field shall indicate the maximum +/- fixed accuracy for the associated measurement, in the " +
                         "unit indicated by MeasurementType.",
                     xref: { document: "cluster", section: "2.1.4.3.6" }
@@ -4184,14 +4183,8 @@ export const SpecMatter = Matter({
                     xref: { document: "cluster", section: "2.1.4.4.2" }
                 }),
 
-                Field({
-                    name: "MinMeasuredValue", id: 0x2, type: "int64", conformance: "M", constraint: "-262 to 262",
-                    quality: "F"
-                }),
-                Field({
-                    name: "MaxMeasuredValue", id: 0x3, type: "int64", conformance: "M", constraint: "-262 to 262",
-                    quality: "F"
-                }),
+                Field({ name: "MinMeasuredValue", id: 0x2, type: "int64", conformance: "M", quality: "F" }),
+                Field({ name: "MaxMeasuredValue", id: 0x3, type: "int64", conformance: "M", quality: "F" }),
 
                 Field({
                     name: "AccuracyRanges", id: 0x4, type: "list", conformance: "M", constraint: "min 1", quality: "F",
@@ -5805,8 +5798,7 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "Energy", id: 0x0, type: "energy-mWh", access: "R V", conformance: "M",
-                            constraint: "0 to 262",
+                            name: "Energy", id: 0x0, type: "energy-mWh", access: "R V", conformance: "M", constraint: "min 0",
 
                             details: "This field shall be the reported energy." +
                                 "\n" +
@@ -6074,8 +6066,8 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "Voltage", id: 0x4, type: "voltage-mV", access: "R V", conformance: "O",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    name: "Voltage", id: 0x4, type: "voltage-mV", access: "R V", conformance: "O", default: null,
+                    quality: "X Q",
 
                     details: "This shall indicate the most recent Voltage reading in millivolts (mV)." +
                         "\n" +
@@ -6094,8 +6086,8 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "ActiveCurrent", id: 0x5, type: "amperage-mA", access: "R V", conformance: "O",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    name: "ActiveCurrent", id: 0x5, type: "amperage-mA", access: "R V", conformance: "O", default: null,
+                    quality: "X Q",
 
                     details: "This shall indicate the most recent ActiveCurrent reading in milliamps (mA)." +
                         "\n" +
@@ -6118,7 +6110,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "ReactiveCurrent", id: 0x6, type: "amperage-mA", access: "R V", conformance: "[ALTC]",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    default: null, quality: "X Q",
 
                     details: "This shall indicate the most recent ReactiveCurrent reading in milliamps (mA)." +
                         "\n" +
@@ -6141,7 +6133,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "ApparentCurrent", id: 0x7, type: "amperage-mA", access: "R V", conformance: "[ALTC]",
-                    constraint: "0 to 262", default: null, quality: "X Q",
+                    constraint: "min 0", default: null, quality: "X Q",
 
                     details: "This shall indicate the most recent ApparentCurrent (square root sum of the squares of active and " +
                         "reactive currents) reading in milliamps (mA)." +
@@ -6161,8 +6153,8 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "ActivePower", id: 0x8, type: "power-mW", access: "R V", conformance: "M",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    name: "ActivePower", id: 0x8, type: "power-mW", access: "R V", conformance: "M", default: null,
+                    quality: "X Q",
 
                     details: "This shall indicate the most recent ActivePower reading in milliwatts (mW). If the power cannot be " +
                         "measured, a value of null shall be returned." +
@@ -6186,7 +6178,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "ReactivePower", id: 0x9, type: "power-mW", access: "R V", conformance: "[ALTC]",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    default: null, quality: "X Q",
 
                     details: "This shall indicate the most recent ReactivePower reading in millivolt-amps reactive (mVAR). A " +
                         "positive value represents power imported, while a negative value represents power exported." +
@@ -6210,7 +6202,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "ApparentPower", id: 0xa, type: "power-mW", access: "R V", conformance: "[ALTC]",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    default: null, quality: "X Q",
 
                     details: "This shall indicate the most recent ApparentPower reading in millivolt-amps (mVA)." +
                         "\n" +
@@ -6232,7 +6224,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "RmsVoltage", id: 0xb, type: "voltage-mV", access: "R V", conformance: "[ALTC]",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    default: null, quality: "X Q",
 
                     details: "This shall indicate the most recent RMSVoltage reading in millivolts (mV)." +
                         "\n" +
@@ -6252,7 +6244,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "RmsCurrent", id: 0xc, type: "amperage-mA", access: "R V", conformance: "[ALTC]",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    default: null, quality: "X Q",
 
                     details: "This shall indicate the most recent RMSCurrent reading in milliamps (mA)." +
                         "\n" +
@@ -6274,8 +6266,8 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "RmsPower", id: 0xd, type: "power-mW", access: "R V", conformance: "[ALTC]",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    name: "RmsPower", id: 0xd, type: "power-mW", access: "R V", conformance: "[ALTC]", default: null,
+                    quality: "X Q",
 
                     details: "This shall indicate the most recent RMSPower reading in milliwatts (mW)." +
                         "\n" +
@@ -6377,7 +6369,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "NeutralCurrent", id: 0x12, type: "amperage-mA", access: "R V", conformance: "[POLY]",
-                    constraint: "-262 to 262", default: null, quality: "X Q",
+                    default: null, quality: "X Q",
 
                     details: "This shall indicate the most recent NeutralCurrent reading in milliamps (mA). Typically this is a " +
                         "derived value, taking the magnitude of the vector sum of phase currents." +
@@ -6452,7 +6444,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Min", id: 0x1, type: "int64", conformance: "M", constraint: "-262 to 262",
+                            name: "Min", id: 0x1, type: "int64", conformance: "M",
                             details: "This field shall be the smallest measured value for the associated measurement over either the " +
                                 "period between StartTimestamp and EndTimestamp, or the period between StartSystime and EndSystime, " +
                                 "or both.",
@@ -6460,7 +6452,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Max", id: 0x2, type: "int64", conformance: "M", constraint: "-262 to 262",
+                            name: "Max", id: 0x2, type: "int64", conformance: "M",
                             details: "This field shall be the largest measured value for the associated measurement over the period " +
                                 "between either StartTimestamp and EndTimestamp or the period between StartSystime and EndSystime, " +
                                 "or both.",
@@ -6557,8 +6549,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Measurement", id: 0x1, type: "int64", conformance: "M", constraint: "-262 to 262",
-                            default: null, quality: "X",
+                            name: "Measurement", id: 0x1, type: "int64", conformance: "M", default: null, quality: "X",
 
                             details: "This field shall be the measured value for the given harmonic order." +
                                 "\n" +

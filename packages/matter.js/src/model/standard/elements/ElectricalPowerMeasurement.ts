@@ -107,8 +107,8 @@ export const ElectricalPowerMeasurement = Cluster({
         }),
 
         Attribute({
-            name: "Voltage", id: 0x4, type: "voltage-mV", access: "R V", conformance: "O",
-            constraint: "-262 to 262", default: null, quality: "X Q",
+            name: "Voltage", id: 0x4, type: "voltage-mV", access: "R V", conformance: "O", default: null,
+            quality: "X Q",
 
             details: "This shall indicate the most recent Voltage reading in millivolts (mV)." +
                 "\n" +
@@ -127,8 +127,8 @@ export const ElectricalPowerMeasurement = Cluster({
         }),
 
         Attribute({
-            name: "ActiveCurrent", id: 0x5, type: "amperage-mA", access: "R V", conformance: "O",
-            constraint: "-262 to 262", default: null, quality: "X Q",
+            name: "ActiveCurrent", id: 0x5, type: "amperage-mA", access: "R V", conformance: "O", default: null,
+            quality: "X Q",
 
             details: "This shall indicate the most recent ActiveCurrent reading in milliamps (mA)." +
                 "\n" +
@@ -151,7 +151,7 @@ export const ElectricalPowerMeasurement = Cluster({
 
         Attribute({
             name: "ReactiveCurrent", id: 0x6, type: "amperage-mA", access: "R V", conformance: "[ALTC]",
-            constraint: "-262 to 262", default: null, quality: "X Q",
+            default: null, quality: "X Q",
 
             details: "This shall indicate the most recent ReactiveCurrent reading in milliamps (mA)." +
                 "\n" +
@@ -174,7 +174,7 @@ export const ElectricalPowerMeasurement = Cluster({
 
         Attribute({
             name: "ApparentCurrent", id: 0x7, type: "amperage-mA", access: "R V", conformance: "[ALTC]",
-            constraint: "0 to 262", default: null, quality: "X Q",
+            constraint: "min 0", default: null, quality: "X Q",
 
             details: "This shall indicate the most recent ApparentCurrent (square root sum of the squares of active and " +
                 "reactive currents) reading in milliamps (mA)." +
@@ -194,8 +194,8 @@ export const ElectricalPowerMeasurement = Cluster({
         }),
 
         Attribute({
-            name: "ActivePower", id: 0x8, type: "power-mW", access: "R V", conformance: "M",
-            constraint: "-262 to 262", default: null, quality: "X Q",
+            name: "ActivePower", id: 0x8, type: "power-mW", access: "R V", conformance: "M", default: null,
+            quality: "X Q",
 
             details: "This shall indicate the most recent ActivePower reading in milliwatts (mW). If the power cannot be " +
                 "measured, a value of null shall be returned." +
@@ -219,7 +219,7 @@ export const ElectricalPowerMeasurement = Cluster({
 
         Attribute({
             name: "ReactivePower", id: 0x9, type: "power-mW", access: "R V", conformance: "[ALTC]",
-            constraint: "-262 to 262", default: null, quality: "X Q",
+            default: null, quality: "X Q",
 
             details: "This shall indicate the most recent ReactivePower reading in millivolt-amps reactive (mVAR). A " +
                 "positive value represents power imported, while a negative value represents power exported." +
@@ -243,7 +243,7 @@ export const ElectricalPowerMeasurement = Cluster({
 
         Attribute({
             name: "ApparentPower", id: 0xa, type: "power-mW", access: "R V", conformance: "[ALTC]",
-            constraint: "-262 to 262", default: null, quality: "X Q",
+            default: null, quality: "X Q",
 
             details: "This shall indicate the most recent ApparentPower reading in millivolt-amps (mVA)." +
                 "\n" +
@@ -265,7 +265,7 @@ export const ElectricalPowerMeasurement = Cluster({
 
         Attribute({
             name: "RmsVoltage", id: 0xb, type: "voltage-mV", access: "R V", conformance: "[ALTC]",
-            constraint: "-262 to 262", default: null, quality: "X Q",
+            default: null, quality: "X Q",
 
             details: "This shall indicate the most recent RMSVoltage reading in millivolts (mV)." +
                 "\n" +
@@ -285,7 +285,7 @@ export const ElectricalPowerMeasurement = Cluster({
 
         Attribute({
             name: "RmsCurrent", id: 0xc, type: "amperage-mA", access: "R V", conformance: "[ALTC]",
-            constraint: "-262 to 262", default: null, quality: "X Q",
+            default: null, quality: "X Q",
 
             details: "This shall indicate the most recent RMSCurrent reading in milliamps (mA)." +
                 "\n" +
@@ -307,8 +307,8 @@ export const ElectricalPowerMeasurement = Cluster({
         }),
 
         Attribute({
-            name: "RmsPower", id: 0xd, type: "power-mW", access: "R V", conformance: "[ALTC]",
-            constraint: "-262 to 262", default: null, quality: "X Q",
+            name: "RmsPower", id: 0xd, type: "power-mW", access: "R V", conformance: "[ALTC]", default: null,
+            quality: "X Q",
 
             details: "This shall indicate the most recent RMSPower reading in milliwatts (mW)." +
                 "\n" +
@@ -410,7 +410,7 @@ export const ElectricalPowerMeasurement = Cluster({
 
         Attribute({
             name: "NeutralCurrent", id: 0x12, type: "amperage-mA", access: "R V", conformance: "[POLY]",
-            constraint: "-262 to 262", default: null, quality: "X Q",
+            default: null, quality: "X Q",
 
             details: "This shall indicate the most recent NeutralCurrent reading in milliamps (mA). Typically this is a " +
                 "derived value, taking the magnitude of the vector sum of phase currents." +
@@ -485,7 +485,7 @@ export const ElectricalPowerMeasurement = Cluster({
                 }),
 
                 Field({
-                    name: "Min", id: 0x1, type: "int64", conformance: "M", constraint: "-262 to 262",
+                    name: "Min", id: 0x1, type: "int64", conformance: "M",
                     details: "This field shall be the smallest measured value for the associated measurement over either the " +
                         "period between StartTimestamp and EndTimestamp, or the period between StartSystime and EndSystime, " +
                         "or both.",
@@ -493,7 +493,7 @@ export const ElectricalPowerMeasurement = Cluster({
                 }),
 
                 Field({
-                    name: "Max", id: 0x2, type: "int64", conformance: "M", constraint: "-262 to 262",
+                    name: "Max", id: 0x2, type: "int64", conformance: "M",
                     details: "This field shall be the largest measured value for the associated measurement over the period " +
                         "between either StartTimestamp and EndTimestamp or the period between StartSystime and EndSystime, " +
                         "or both.",
@@ -590,8 +590,7 @@ export const ElectricalPowerMeasurement = Cluster({
                 }),
 
                 Field({
-                    name: "Measurement", id: 0x1, type: "int64", conformance: "M", constraint: "-262 to 262",
-                    default: null, quality: "X",
+                    name: "Measurement", id: 0x1, type: "int64", conformance: "M", default: null, quality: "X",
 
                     details: "This field shall be the measured value for the given harmonic order." +
                         "\n" +

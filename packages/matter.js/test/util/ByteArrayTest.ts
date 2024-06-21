@@ -21,6 +21,26 @@ describe("ByteArray", () => {
         });
     });
 
+    describe("fromBase64", () => {
+        it("decodes the base64 string", () => {
+            const result = ByteArray.fromBase64("EjQ=");
+
+            expect(result).deep.equal(ByteArray.of(0x12, 0x34));
+        });
+
+        it("decodes the base64 string with trailing/leading 0", () => {
+            const result = ByteArray.fromBase64("ABI0AA==");
+
+            expect(result).deep.equal(ByteArray.of(0x00, 0x12, 0x34, 0x00));
+        });
+
+        it("decodes an empty array", () => {
+            const result = ByteArray.fromBase64("");
+
+            expect(result).deep.equal(new ByteArray(0));
+        });
+    });
+
     describe("fromString", () => {
         it("get the bytes of a string", () => {
             const result = ByteArray.fromString("0");
@@ -38,6 +58,26 @@ describe("ByteArray", () => {
 
         it("encodes an empty array", () => {
             const result = new ByteArray(0).toHex();
+
+            expect(result).equal("");
+        });
+    });
+
+    describe("toBase64", () => {
+        it("encodes the bytes as a base64 string", () => {
+            const result = ByteArray.of(0x12, 0x34).toBase64();
+
+            expect(result).equal("EjQ=");
+        });
+
+        it("encodes the bytes as a hex string with leading/trailing 0", () => {
+            const result = ByteArray.of(0x00, 0x12, 0x34, 0x00).toBase64();
+
+            expect(result).equal("ABI0AA==");
+        });
+
+        it("encodes an empty array", () => {
+            const result = new ByteArray(0).toBase64();
 
             expect(result).equal("");
         });

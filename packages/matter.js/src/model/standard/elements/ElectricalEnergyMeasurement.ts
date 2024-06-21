@@ -222,8 +222,7 @@ export const ElectricalEnergyMeasurement = Cluster({
 
             children: [
                 Field({
-                    name: "Energy", id: 0x0, type: "energy-mWh", access: "R V", conformance: "M",
-                    constraint: "0 to 262",
+                    name: "Energy", id: 0x0, type: "energy-mWh", access: "R V", conformance: "M", constraint: "min 0",
 
                     details: "This field shall be the reported energy." +
                         "\n" +

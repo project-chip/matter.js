@@ -12,7 +12,16 @@ import { Project } from "../building/project.js";
 import { executeNode } from "./execute.js";
 
 /**
- * Build and execute a matter.js script.
+ * Execute a script in a package that conforms to matter.js conventions.  This is primarily useful within a matter.js
+ * development environment but should also work when installed via NPM.
+ *
+ * First we translate source filenames to the transpiled *.js equivalent.
+ *
+ * If the target script is in a package not installed via NPM we build the package.  If the package is an NPM workspace
+ * under a top-level package we also build dependencies.
+ *
+ * We then run the script in a child process so we can enable source maps using node --source-maps.  You can disable
+ * this by setting the environment variable MATTER_DIRECT_EXEC.
  */
 export async function main(argv = process.argv) {
     let script = argv[2];
@@ -47,17 +56,21 @@ export async function main(argv = process.argv) {
         exit(2);
     }
 
-    // Currently we build package and dependencies unconditionally before running
-    const builder = new Builder();
-    const dependencies = await Graph.forProject(dir);
-    if (dependencies) {
-        // Project is in a workspace; build along with dependencies from the same workspace
-        await dependencies.build(builder, false);
-    } else {
-        // Project is not in a workspace; only build the project
-        await builder.build(project);
+    // In development we currently build package and dependencies unconditionally before running
+    const isDevelopment = !dir.match(/[\\/]node_modules[\\/]/);
+    if (isDevelopment) {
+        const builder = new Builder();
+        const dependencies = await Graph.forProject(dir);
+        if (dependencies) {
+            // Project is in a workspace; build along with dependencies from the same workspace
+            await dependencies.build(builder, false);
+        } else {
+            // Project is not in a workspace; only build the project
+            await builder.build(project);
+        }
     }
 
+    // Determine the actual script to run
     script = project.pkg.resolve(
         project.pkg
             .relative(script)

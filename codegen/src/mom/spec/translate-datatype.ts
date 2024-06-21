@@ -8,7 +8,16 @@ import { FabricIndex } from "@project-chip/matter.js/elements/FabricIndex";
 import { Logger } from "@project-chip/matter.js/log";
 import { AnyElement, DatatypeElement, FieldElement, Metatype } from "@project-chip/matter.js/model";
 import { addDocumentation } from "./add-documentation.js";
-import { Bits, ConformanceCode, Identifier, Integer, LowerIdentifier, NoSpace, Str } from "./html-translators.js";
+import {
+    Bits,
+    ConformanceCode,
+    ConstraintStr,
+    Identifier,
+    Integer,
+    LowerIdentifier,
+    NoSpace,
+    Str,
+} from "./html-translators.js";
 import { repairConstraint } from "./repairs/aspect-repairs.js";
 import { repairDefaultValue } from "./repairs/default-value-repairs.js";
 import { repairType, repairTypeIdentifier } from "./repairs/type-repairs.js";
@@ -131,7 +140,7 @@ const FieldSchema = {
     // Not really optional but we want to process rows even if missing
     type: Optional(NoSpace),
 
-    constraint: Optional(Str),
+    constraint: Optional(ConstraintStr),
     quality: Optional(Str),
     default: Optional(NoSpace),
     access: Optional(Str),

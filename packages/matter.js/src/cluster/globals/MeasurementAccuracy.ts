@@ -36,8 +36,8 @@ export const TlvMeasurementAccuracy = TlvObject({
      */
     measured: TlvField(1, TlvBoolean),
 
-    minMeasuredValue: TlvField(2, TlvInt64.bound({ min: -262, max: 262 })),
-    maxMeasuredValue: TlvField(3, TlvInt64.bound({ min: -262, max: 262 })),
+    minMeasuredValue: TlvField(2, TlvInt64),
+    maxMeasuredValue: TlvField(3, TlvInt64),
 
     /**
      * This field shall indicate a list of measurement ranges and their associated accuracies.
