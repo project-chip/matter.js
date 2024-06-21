@@ -429,6 +429,7 @@ export class Behaviors {
                 }
             }
         }
+
         // Set defaults from environmental configuration
         const varService = this.#endpoint.env.get(EndpointVariableService);
         const vars = varService.forBehaviorInstance(this.#endpoint, type);

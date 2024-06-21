@@ -75,24 +75,24 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
      * */
     readonly autoConnect?: boolean;
 
-    /** Admin Vendor ID used for all commissioning operations. Can not be changed afterward. Default: 0xFFF1 */
+    /** Admin Vendor ID used for all commissioning operations. Cannot be changed afterward. Default: 0xFFF1 */
     readonly adminVendorId?: VendorId;
 
     /**
      * Controller own Fabric ID used to initialize the Controller the first time and to generate the Root certificate.
-     * Can not be changed afterward.
+     * Cannot be changed afterward.
      * Default: 1
      */
     readonly adminFabricId?: FabricId;
 
     /**
-     * Fabric Index used to initialize the Controller the first time. Can not be changed afterward.
+     * Fabric Index used to initialize the Controller the first time. Cannot be changed afterward.
      * Default: 1
      */
     readonly adminFabricIndex?: FabricIndex;
 
     /**
-     * CASE Authenticated Tags used to initialize the Controller the first time. Can not be changed afterward.
+     * CASE Authenticated Tags used to initialize the Controller the first time. Cannot be changed afterward.
      * Maximum 3 tags are supported.
      */
     readonly caseAuthenticatedTags?: CaseAuthenticatedTag[];
@@ -583,7 +583,7 @@ export class CommissioningController extends MatterNode {
 
     async resetStorage() {
         this.assertControllerIsStarted(
-            "Storage can not be reset while the controller is operating! Please close the controller first.",
+            "Storage cannot be reset while the controller is operating! Please close the controller first.",
         );
         const { storage, environment } = this.assertIsAddedToMatterServer();
         if (environment !== undefined) {

@@ -299,7 +299,7 @@ export const DeviceEnergyManagement = Cluster({
         }),
 
         Attribute({
-            name: "EsaCanGenerate", id: 0x1, type: "bool", access: "R V", conformance: "M", default: true,
+            name: "EsaCanGenerate", id: 0x1, type: "bool", access: "R V", conformance: "M", default: false,
             quality: "F",
 
             details: "Indicates whether the ESA is classed as a generator or load. This allows an EMS to understand " +

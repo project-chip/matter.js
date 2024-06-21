@@ -51,7 +51,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Fix: Adjusted ValidationErrors to be more specific if they should return "InvalidAction" ot "ConstraintError".
     -   Fix: Adjusted some returned errors to be more specific and to the specification (e.g. InvalidAction instead of Failure)
     -   Fix: Fixed StandaloneAck handling to use an outstanding ack number as piggybacked ack number
-    -   Fix: Makes sure subscription maxInterval can not exceed the matter defined maximum of 60mins
+    -   Fix: Makes sure subscription maxInterval cannot exceed the matter defined maximum of 60mins
     -   Fix: Synced attMtu handling with chip to always use MTU-3 bytes for BLE connections
 -   matter.js API:
 -   -   Breaking: Node.start() is now asynchronous and returns when the node is online. This is only breaking in that lack of await will result in an unhandled rejection. Node.bringOnline() is deprecated.
@@ -484,7 +484,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Examples/Reference implementations:
         -   The reference implementations are moved to example directory and details moved into own [README.md](./packages/matter-node.js-examples/README.md) file
         -   the "npm run matter" command got renamed to "npm run matter-device" (same for binary usage
-        -   Add hints for all imports in the examples to show what the corresponding "matter-node.js" import would be (because they can not be used directly for build reasons)
+        -   Add hints for all imports in the examples to show what the corresponding "matter-node.js" import would be (because they cannot be used directly for build reasons)
         -   Added the "npm run matter-\*" commands also to the base package.json
         -   Added parameter -clearstorage to start with an empty storage
 

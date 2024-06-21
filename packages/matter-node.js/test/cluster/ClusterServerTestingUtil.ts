@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { asClusterServerInternal, Attributes, ClusterServerObj, Events } from "@project-chip/matter.js/cluster";
+import { asClusterServerInternal, ClusterServerObj, ClusterType } from "@project-chip/matter.js/cluster";
 import { Message } from "@project-chip/matter.js/codec";
 import { PrivateKey } from "@project-chip/matter.js/crypto";
 import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
@@ -20,15 +20,15 @@ PRIVATE_KEY[31] = 1; // EC doesn't like all-zero private key
 export const KEY = PrivateKey(PRIVATE_KEY);
 
 // TODO make that nicer
-export async function callCommandOnClusterServer<A extends Attributes, E extends Events>(
-    clusterServer: ClusterServerObj<A, E>,
+export async function callCommandOnClusterServer<T extends ClusterType>(
+    clusterServer: ClusterServerObj<T>,
     commandName: string,
     args: any,
     endpoint: Endpoint,
     session?: SecureSession<any>,
     message?: Message,
 ): Promise<{ code: StatusCode; responseId: number; response: any }> {
-    const command = (asClusterServerInternal(clusterServer)._commands as any)[commandName];
+    const command = (asClusterServerInternal(clusterServer).commands as any)[commandName];
     if (command === undefined) throw new Error(`Command ${commandName} not found`);
     const { code, responseId, response } = await command.invoke(
         session ?? ({} as SecureSession<any>),

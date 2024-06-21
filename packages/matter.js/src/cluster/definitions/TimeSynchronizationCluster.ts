@@ -576,7 +576,7 @@ export namespace TimeSynchronization {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.8.13
              */
-            supportsDnsResolve: FixedAttribute(0xc, TlvBoolean, { default: true })
+            supportsDnsResolve: FixedAttribute(0xc, TlvBoolean, { default: false })
         },
 
         commands: {
@@ -798,7 +798,7 @@ export namespace TimeSynchronization {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.8.10
              */
-            ntpServerAvailable: Attribute(0x9, TlvBoolean, { default: true })
+            ntpServerAvailable: Attribute(0x9, TlvBoolean, { default: false })
         }
     });
 

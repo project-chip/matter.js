@@ -734,9 +734,9 @@ export class SubscriptionHandler {
 
         const { attribute } = attributeListenerData;
         if (attribute instanceof FabricScopedAttributeServer) {
-            // We can not be sure what value we got for fabric filtered attributes (and from which fabric),
+            // We cannot be sure what value we got for fabric filtered attributes (and from which fabric),
             // so get it again for this relevant fabric. This also makes sure that fabric sensitive fields are filtered
-            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
+            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we cannot get the value?
             return this.readAttribute(path, attribute).then(({ value }) => {
                 this.outstandingAttributeUpdates.set(attributePathToId(path), {
                     attribute,

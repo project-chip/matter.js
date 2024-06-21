@@ -7,7 +7,7 @@
 import { TlvCertSigningRequest } from "../behavior/definitions/operational-credentials/OperationalCredentialsTypes.js";
 import { CertificateManager } from "../certificate/CertificateManager.js";
 import { RootCertificateManager } from "../certificate/RootCertificateManager.js";
-import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
+import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClient } from "../cluster/client/ClusterClient.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
@@ -24,7 +24,7 @@ import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Time } from "../time/Time.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -114,7 +114,7 @@ type CollectedCommissioningData = {
     successfullyConnectedToNetwork?: boolean;
 };
 
-/** Error that throws when Commissioning fails and process can not be continued. */
+/** Error that throws when Commissioning fails and process cannot be continued. */
 export class CommissioningError extends MatterError {}
 
 /** Error that throws when Commissioning fails but process can be continued. */
@@ -134,7 +134,7 @@ const DEFAULT_FAILSAFE_TIME_MS = 60_000; // 60 seconds
 export class ControllerCommissioner {
     private readonly commissioningSteps = new Array<CommissioningStep>();
     private readonly commissioningStepResults = new Map<string, CommissioningStepResult>();
-    private readonly clusterClients = new Map<ClusterId, ClusterClientObj<any, Attributes, Commands, Events>>();
+    private readonly clusterClients = new Map<ClusterId, ClusterClientObj>();
     private commissioningStartedTime: number | undefined;
     private commissioningExpiryTime: number | undefined;
     private lastFailSafeTime: number | undefined;
@@ -177,24 +177,18 @@ export class ControllerCommissioner {
     /**
      * Helper method to create ClusterClients. If not feature specific and for the Root Endpoint they are also reused.
      */
-    private getClusterClient<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(
-        cluster: Cluster<F, SF, A, C, E>,
+    private getClusterClient<const T extends ClusterType>(
+        cluster: T,
         endpointId = EndpointNumber(0),
         isFeatureSpecific = false,
-    ): ClusterClientObj<F, A, C, E> {
+    ): ClusterClientObj<T> {
         if (!isFeatureSpecific && endpointId === 0) {
             const clusterClient = this.clusterClients.get(cluster.id);
             if (clusterClient !== undefined) {
                 logger.debug(
                     `Returning existing cluster client for cluster ${cluster.name} (endpoint ${endpointId}, isFeatureSpecific ${isFeatureSpecific})`,
                 );
-                return clusterClient as ClusterClientObj<F, A, C, E>;
+                return clusterClient as ClusterClientObj<T>;
             }
         }
         logger.debug(

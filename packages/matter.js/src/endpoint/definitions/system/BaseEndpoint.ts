@@ -12,21 +12,21 @@ import { UserLabelServer as BaseUserLabelServer } from "../../../behavior/defini
 
 export namespace BaseRequirements {
     /**
-     * The Binding cluster is optional per the Matter specification
+     * The Binding cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link BindingServer} for convenience.
      */
     export const BindingServer = BaseBindingServer;
 
     /**
-     * The FixedLabel cluster is optional per the Matter specification
+     * The FixedLabel cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link FixedLabelServer} for convenience.
      */
     export const FixedLabelServer = BaseFixedLabelServer;
 
     /**
-     * The UserLabel cluster is optional per the Matter specification
+     * The UserLabel cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link UserLabelServer} for convenience.
      */

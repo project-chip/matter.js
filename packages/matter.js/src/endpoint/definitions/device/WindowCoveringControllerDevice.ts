@@ -28,35 +28,35 @@ export interface WindowCoveringControllerDevice extends Identity<typeof WindowCo
 
 export namespace WindowCoveringControllerRequirements {
     /**
-     * The Identify cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The WindowCovering cluster is required by the Matter specification
+     * The WindowCovering cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link WindowCoveringBehavior} for convenience.
      */
     export const WindowCoveringBehavior = BaseWindowCoveringBehavior;
 
     /**
-     * The Identify cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyBehavior} for convenience.
      */
     export const IdentifyBehavior = BaseIdentifyBehavior;
 
     /**
-     * The Groups cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsBehavior} for convenience.
      */
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The ScenesManagement cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
      */

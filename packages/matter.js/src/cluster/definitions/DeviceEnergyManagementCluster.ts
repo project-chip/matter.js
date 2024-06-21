@@ -1725,7 +1725,7 @@ export namespace DeviceEnergyManagement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.2.8.2
              */
-            esaCanGenerate: FixedAttribute(0x1, TlvBoolean, { default: true }),
+            esaCanGenerate: FixedAttribute(0x1, TlvBoolean, { default: false }),
 
             /**
              * Indicates the current state of the ESA.

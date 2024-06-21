@@ -200,7 +200,7 @@ export const MicrowaveOvenControl = Cluster({
                 }),
 
                 Field({
-                    name: "StartAfterSetting", id: 0x4, type: "bool", conformance: "O", default: true,
+                    name: "StartAfterSetting", id: 0x4, type: "bool", conformance: "O", default: false,
                     details: "This field shall indicate whether or not oven operation shall be started when the command is " +
                         "received.",
                     xref: { document: "cluster", section: "8.13.6.2.5" }

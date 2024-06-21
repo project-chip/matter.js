@@ -51,15 +51,13 @@ export function loadHtml(path: string) {
 
 // Read an index file to find the portions of the spec we care about
 export function identifyDocument(path: string): IndexDetail {
-    const result = {} as IndexDetail;
-
     const source = loadHtml(path);
     const titleEl = source.querySelector("h1");
     if (!titleEl || !titleEl.textContent) {
-        logger.error("cannot find specification title");
-        return result;
+        throw new Error(`Cannot find specification title in ${path}`);
     }
-    const title = titleEl.textContent;
+
+    let title = titleEl.textContent;
 
     let spec: Specification;
     let hasClusters = false;
@@ -76,15 +74,27 @@ export function identifyDocument(path: string): IndexDetail {
     } else if (title.match(/namespaces/i)) {
         spec = Specification.Namespace;
     } else {
-        throw new Error(`Matter specification name ${title} unrecognized`);
+        throw new Error(`Matter specification name ${title} unrecognized in ${path}`);
     }
 
-    const versionEl = titleEl.nextElementSibling;
-    if (!versionEl || !versionEl.textContent || !versionEl.textContent.match(/version (?:\d\.)+/i)) {
-        logger.error(`version element unrecognized`);
-        return result;
+    let version;
+    const titleAndVersion = title.split(/ version /i);
+    if (titleAndVersion.length === 2 && titleAndVersion[1].match(/(?:\d\.)+/i)) {
+        title = titleAndVersion[0];
+        version = titleAndVersion[1];
+    } else {
+        const versionEl = titleEl.nextElementSibling;
+        if (!versionEl || !versionEl.textContent || !versionEl.textContent.match(/version (?:\d\.)+/i)) {
+            throw new Error(`No version found for ${title} in ${path}`);
+        }
+        version = versionEl.textContent.replace(/.*version ([\d.]+).*/i, "$1");
     }
-    const version = versionEl.textContent.replace(/.*version ([\d.]+).*/i, "$1");
+
+    // Drop dotted elements except the first two.  To date these have represented trivial changes
+    const versionParts = version.split(".");
+    if (versionParts.length > 2) {
+        version = versionParts.slice(0, 2).join(".");
+    }
 
     logger.info("recognized", Diagnostic.dict({ doc: spec, version: version }));
 

@@ -13,7 +13,7 @@ export interface Listener {
 
 /**
  * A TransportInterface is a generic interface for sending and receiving data on an established incoming connection.
- * It can not open new connections.
+ * It cannot open new connections.
  */
 export interface TransportInterface {
     onData(listener: (socket: Channel<ByteArray>, data: ByteArray) => void): Listener;

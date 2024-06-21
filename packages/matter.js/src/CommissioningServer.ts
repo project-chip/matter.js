@@ -11,7 +11,7 @@ import { ProductDescription } from "./behavior/system/product-description/Produc
 import { Ble } from "./ble/Ble.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
-import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
+import { ClusterType } from "./cluster/ClusterType.js";
 import { ClusterClientObj } from "./cluster/client/ClusterClientTypes.js";
 import { AccessControl } from "./cluster/definitions/AccessControlCluster.js";
 import {
@@ -63,7 +63,7 @@ import { Network } from "./net/Network.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { EventHandler } from "./protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
-import { BitSchema, TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
+import { TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import {
     CommissioningFlowType,
     DiscoveryCapabilitiesBitmap,
@@ -413,7 +413,7 @@ export class CommissioningServer extends MatterNode {
             }
 
             for (const endpoint of this.endpointStructure.endpoints.values()) {
-                for (const cluster of endpoint.getAllClusterServers()) {
+                for (const cluster of (endpoint as Endpoint).getAllClusterServers()) {
                     new CommissioningServerClusterDatasource(endpoint, cluster, this.storage, this.eventHandler);
                 }
             }
@@ -425,13 +425,7 @@ export class CommissioningServer extends MatterNode {
      *
      * @param cluster ClusterServer to get or undefined if not existing
      */
-    getRootClusterServer<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    getRootClusterServer<const T extends ClusterType>(cluster: T): ClusterServerObj<T> | undefined {
         return this.rootEndpoint.getClusterServer(cluster);
     }
 
@@ -440,9 +434,7 @@ export class CommissioningServer extends MatterNode {
      *
      * @param cluster ClusterClient object to add
      */
-    addRootClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: ClusterClientObj<F, A, C, E>,
-    ) {
+    addRootClusterClient<const T extends ClusterType>(cluster: ClusterClientObj<T>) {
         this.rootEndpoint.addClusterClient(cluster);
     }
 
@@ -451,13 +443,7 @@ export class CommissioningServer extends MatterNode {
      *
      * @param cluster ClusterClient to get or undefined if not existing
      */
-    getRootClusterClient<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    getRootClusterClient<const T extends ClusterType>(cluster: T): ClusterClientObj<T> | undefined {
         return this.rootEndpoint.getClusterClient(cluster);
     }
 
@@ -490,20 +476,20 @@ export class CommissioningServer extends MatterNode {
 
     /**
      * Add a new cluster server to the root endpoint
-     * BasicInformationCluster and OperationalCredentialsCluster can not be added via this method because they are
+     * BasicInformationCluster and OperationalCredentialsCluster cannot be added via this method because they are
      * added in the constructor
      *
      * @param cluster
      */
-    addRootClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+    addRootClusterServer<const T extends ClusterType>(cluster: ClusterServerObj<T>) {
         if (cluster.id === BasicInformationCluster.id) {
             throw new ImplementationError(
-                "BasicInformationCluster can not be modified, provide all details in constructor options!",
+                "BasicInformationCluster cannot be modified, provide all details in constructor options!",
             );
         }
         if (cluster.id === OperationalCredentialsCluster.id) {
             throw new ImplementationError(
-                "OperationalCredentialsCluster can not be modified, provide the certificates in constructor options!",
+                "OperationalCredentialsCluster cannot be modified, provide the certificates in constructor options!",
             );
         }
         this.rootEndpoint.addClusterServer(cluster);
@@ -868,7 +854,7 @@ export class CommissioningServer extends MatterNode {
     setPort(port: number) {
         if (port === this.port) return;
         if (this.deviceInstance !== undefined || this.mdnsInstanceBroadcaster !== undefined) {
-            throw new ImplementationError("Port can not be changed after device is initialized!");
+            throw new ImplementationError("Port cannot be changed after device is initialized!");
         }
         this.port = port;
     }
@@ -1003,7 +989,7 @@ class CommissioningServerClusterDatasource implements ClusterDatasource<SyncStor
 
     constructor(
         endpoint: EndpointInterface,
-        cluster: ClusterServerObj<any, any>,
+        cluster: ClusterServerObj,
         storage: StorageContext<SyncStorage>,
         eventHandler: EventHandler<SyncStorage>,
     ) {

@@ -31,14 +31,14 @@ export interface AggregatorEndpoint extends Identity<typeof AggregatorEndpointDe
 
 export namespace AggregatorRequirements {
     /**
-     * The Actions cluster is optional per the Matter specification
+     * The Actions cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ActionsServer} for convenience.
      */
     export const ActionsServer = BaseActionsServer;
 
     /**
-     * The Identify cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */

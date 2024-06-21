@@ -16,11 +16,11 @@ import { Aspect } from "./Aspect.js";
  * or cluster element.
  */
 export class Access extends Aspect<Access.Definition> implements Access.Ast {
-    rw?: Access.Rw;
-    readPriv?: Access.Privilege;
-    writePriv?: Access.Privilege;
-    fabric?: Access.Fabric;
-    timed?: boolean;
+    declare rw?: Access.Rw;
+    declare readPriv?: Access.Privilege;
+    declare writePriv?: Access.Privilege;
+    declare fabric?: Access.Fabric;
+    declare timed?: boolean;
 
     get readable() {
         return !this.rw || this.rw !== Access.Rw.Write;

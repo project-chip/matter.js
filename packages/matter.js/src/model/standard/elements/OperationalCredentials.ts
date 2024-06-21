@@ -214,7 +214,7 @@ export const OperationalCredentials = Cluster({
             xref: { document: "core", section: "11.18.6.5" },
             children: [
                 Field({ name: "CsrNonce", id: 0x0, type: "octstr", conformance: "M", constraint: "32" }),
-                Field({ name: "IsForUpdateNoc", id: 0x1, type: "bool", conformance: "O", default: true })
+                Field({ name: "IsForUpdateNoc", id: 0x1, type: "bool", conformance: "O", default: false })
             ]
         }),
 

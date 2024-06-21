@@ -16,22 +16,12 @@ import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
 import { TlvEventFilter } from "../../protocol/interaction/InteractionProtocol.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { capitalize } from "../../util/String.js";
 import { Merge } from "../../util/Type.js";
-import {
-    Attribute,
-    Attributes,
-    Cluster,
-    Command,
-    Commands,
-    Event,
-    Events,
-    GlobalAttributes,
-    UnknownAttribute,
-    UnknownEvent,
-} from "../Cluster.js";
+import { Attribute, Command, Event, GlobalAttributes, UnknownAttribute, UnknownEvent } from "../Cluster.js";
+import { ClusterType } from "../ClusterType.js";
 import { AttributeServerValues } from "../server/ClusterServerTypes.js";
 import { createAttributeClient } from "./AttributeClient.js";
 import { AttributeClients, ClusterClientObj, EventClients, SignatureFromCommandSpec } from "./ClusterClientTypes.js";
@@ -39,12 +29,12 @@ import { createEventClient } from "./EventClient.js";
 
 const logger = Logger.get("ClusterClient");
 
-export function ClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-    clusterDef: Cluster<F, TypeFromPartialBitSchema<F>, A, C, E>,
+export function ClusterClient<const T extends ClusterType>(
+    clusterDef: T,
     endpointId: EndpointNumber,
     interactionClient: InteractionClient,
-    globalAttributeValues: Partial<AttributeServerValues<GlobalAttributes<F>>> = {},
-): ClusterClientObj<F, A, C, E> {
+    globalAttributeValues: Partial<AttributeServerValues<GlobalAttributes<T["features"]>>> = {},
+): ClusterClientObj<T> {
     function addAttributeToResult(attribute: Attribute<any, any>, attributeName: string) {
         (attributes as any)[attributeName] = createAttributeClient(
             attribute,
@@ -65,7 +55,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                     return await (attributes as any)[attributeName].get(isFabricFiltered, alwaysRequestFromRemote);
                 },
                 StatusResponseError,
-                e => {
+                (e: StatusResponseError) => {
                     const { code } = e;
                     if (code === StatusCode.UnsupportedAttribute) {
                         return undefined;
@@ -116,7 +106,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                     return await (events as any)[eventName].get(minimumEventNumber, isFabricFiltered);
                 },
                 StatusResponseError,
-                e => {
+                (e: StatusResponseError) => {
                     const { code } = e;
                     if (code === StatusCode.UnsupportedEvent) {
                         return undefined;
@@ -158,11 +148,11 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
         revision,
         unknown,
     } = clusterDef;
-    const attributes = <AttributeClients<F, A>>{};
-    const events = <EventClients<E>>{};
-    const commands = <{ [P in keyof C]: SignatureFromCommandSpec<C[P]> }>{};
+    const attributes = <AttributeClients<T["features"], T["attributes"]>>{};
+    const events = <EventClients<T["events"]>>{};
+    const commands = <{ [P in keyof T["commands"]]: SignatureFromCommandSpec<T["commands"][P]> }>{};
 
-    let reportedFeatures: TypeFromPartialBitSchema<F> | undefined = undefined;
+    let reportedFeatures: TypeFromPartialBitSchema<T["features"]> | undefined = undefined;
     // If we have global attribute values we use them to modify
     if (globalAttributeValues !== undefined) {
         if (globalAttributeValues.featureMap !== undefined) {
@@ -286,7 +276,10 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
 
     const attributeToId = <{ [key: AttributeId]: string }>{};
 
-    const allAttributeDefs = Merge<A, GlobalAttributes<F>>(attributeDef, GlobalAttributes(features));
+    const allAttributeDefs = Merge<T["attributes"], GlobalAttributes<T["features"]>>(
+        attributeDef,
+        GlobalAttributes(features),
+    );
 
     // Add accessors from definition
     for (const attributeName in allAttributeDefs) {
@@ -329,7 +322,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
         const { requestId } = commandDef[commandName];
 
         commandToId[requestId] = commandName;
-        commands[commandName] = async <RequestT, ResponseT>(
+        commands[commandName as keyof T["commands"]] = async <RequestT, ResponseT>(
             request: RequestT,
             options: {
                 asTimedRequest?: boolean;
@@ -358,5 +351,5 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
         }
     }
 
-    return result as ClusterClientObj<F, A, C, E>;
+    return result as ClusterClientObj<T>;
 }

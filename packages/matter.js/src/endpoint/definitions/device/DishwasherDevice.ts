@@ -35,42 +35,42 @@ export interface DishwasherDevice extends Identity<typeof DishwasherDeviceDefini
 
 export namespace DishwasherRequirements {
     /**
-     * The OperationalState cluster is required by the Matter specification
+     * The OperationalState cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link OperationalStateServer} for convenience.
      */
     export const OperationalStateServer = BaseOperationalStateServer;
 
     /**
-     * The Identify cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The OnOff cluster is optional per the Matter specification
+     * The OnOff cluster is optional per the Matter specification.
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
     export const OnOffServer = BaseOnOffServer.with("DeadFrontBehavior");
 
     /**
-     * The TemperatureControl cluster is optional per the Matter specification
+     * The TemperatureControl cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureControlServer} for convenience.
      */
     export const TemperatureControlServer = BaseTemperatureControlServer;
 
     /**
-     * The DishwasherMode cluster is optional per the Matter specification
+     * The DishwasherMode cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link DishwasherModeServer} for convenience.
      */
     export const DishwasherModeServer = BaseDishwasherModeServer;
 
     /**
-     * The DishwasherAlarm cluster is optional per the Matter specification
+     * The DishwasherAlarm cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link DishwasherAlarmServer} for convenience.
      */

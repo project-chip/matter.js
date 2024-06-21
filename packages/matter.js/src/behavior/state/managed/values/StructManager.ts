@@ -6,7 +6,7 @@
 
 import { ImplementationError } from "../../../../common/MatterError.js";
 import { FabricIndex } from "../../../../datatype/FabricIndex.js";
-import { Access, AttributeModel, ElementTag, Metatype, ValueModel } from "../../../../model/index.js";
+import { Access, ElementTag, Metatype, ValueModel } from "../../../../model/index.js";
 import { GeneratedClass } from "../../../../util/GeneratedClass.js";
 import { camelize } from "../../../../util/String.js";
 import { isObject } from "../../../../util/Type.js";
@@ -34,7 +34,7 @@ export function StructManager(owner: RootSupervisor, schema: Schema): ValueSuper
 
     // Scan the schema and configure each member (field or attribute) as a property
     for (const member of schema.members) {
-        if (AttributeModel.isGlobal(member) || member.isDeprecated) {
+        if (member.isDeprecated) {
             continue;
         }
 
@@ -216,10 +216,11 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
                 }
 
                 if (!this[SESSION].acceptInvalid && validate) {
-                    // Note: We validate fully for nested structs but *not* for the current struct.  This is because choice
-                    // conformance may be violated temporarily as individual fields change.
+                    // Note: We validate fully for nested structs but *not* for the current struct.  This is because
+                    // choice conformance may be violated temporarily as individual fields change.
                     //
-                    // Also, validating fully would require us to validate across all properties for every property write.
+                    // Also, validating fully would require us to validate across all properties for every property
+                    // write.
                     //
                     // I think this is OK for now.  If it becomes an issue we'll probably want to wire in a separate
                     // validation step that is performed on commit when choice conformance is in play.

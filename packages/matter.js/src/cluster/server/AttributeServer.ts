@@ -10,7 +10,7 @@ import { ImplementationError, InternalError, MatterError } from "../../common/Ma
 import { tryCatch } from "../../common/TryCatchHandler.js";
 import { ValidationError } from "../../common/ValidationError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
-import { Endpoint as EndpointInterface } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
 import { AttributeModel, ClusterModel, DatatypeModel, MatterModel } from "../../model/index.js";
@@ -174,7 +174,7 @@ export abstract class BaseAttributeServer<T> {
                 )}. Restore to default ${Logger.toJSON(defaultValue)}`,
             );
             if (defaultValue === undefined) {
-                throw new ImplementationError(`Attribute value to initialize for ${name} can not be undefined.`);
+                throw new ImplementationError(`Attribute value to initialize for ${name} cannot be undefined.`);
             }
             this.validateWithSchema(defaultValue);
             this.value = defaultValue;
@@ -322,7 +322,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
      */
     init(value: T | undefined) {
         if (value === undefined) {
-            throw new InternalError(`Can not initialize fixed attribute "${this.name}" with undefined value.`);
+            throw new InternalError(`Cannot initialize fixed attribute "${this.name}" with undefined value.`);
         }
         this.validateWithSchema(value);
         this.value = value;
@@ -484,7 +484,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
             value = this.getter(undefined, this.endpoint);
         }
         if (value === undefined) {
-            throw new InternalError(`Can not initialize attribute "${this.name}" with undefined value.`);
+            throw new InternalError(`Cannot initialize attribute "${this.name}" with undefined value.`);
         }
         this.validator(value, undefined, this.endpoint);
         this.value = value;
@@ -894,7 +894,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      */
     override init(value: T | undefined) {
         if (value !== undefined) {
-            throw new InternalError(`Can not initialize fabric scoped attribute "${this.name}" with a value.`);
+            throw new InternalError(`Cannot initialize fabric scoped attribute "${this.name}" with a value.`);
         }
     }
 
@@ -950,14 +950,14 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     /**
      * Set the value of the attribute locally for a fabric. This method should be used locally in the code and does not
      * include the ACL check.
-     * If a setter is defined this method can not be used!
+     * If a setter is defined this method cannot be used!
      * If a validator is defined the value is validated before it is stored.
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
     setLocalForFabric(value: T, fabric: Fabric) {
         if (this.isCustomSetter) {
             throw new FabricScopeError(
-                `Fabric scoped attribute "${this.name}" can not be set locally when a custom setter is defined.`,
+                `Fabric scoped attribute "${this.name}" cannot be set locally when a custom setter is defined.`,
             );
         }
         this.validator(value, undefined, this.endpoint);
@@ -999,7 +999,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     getLocalForFabric(fabric: Fabric): T {
         if (this.isCustomGetter) {
             throw new FabricScopeError(
-                `Fabric scoped attribute "${this.name}" can not be read locally when a custom getter is defined.`,
+                `Fabric scoped attribute "${this.name}" cannot be read locally when a custom getter is defined.`,
             );
         }
         return genericFabricScopedAttributeGetterFromFabric(fabric, this.cluster, this.name, this.defaultValue);

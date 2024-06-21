@@ -22,8 +22,6 @@ let memos: Memos | undefined;
  *
  * Any logic that requires traversal of a multi-model ownership or inheritance should use this class.
  *
- * Note that we don't currently utilize any kind of index when we perform search.  Not currently a problem but may need
- * to address if it becomes too inefficient.
  */
 export class ModelTraversal {
     #operationDepth = 0;
@@ -436,16 +434,48 @@ export class ModelTraversal {
     }
 
     /**
-     * Retrieve all children of a specific type, inherited, shadowed or otherwise.
+     * Retrieve all children of a specific type, including those inherited from the base or a shadow.  Does not include
+     * members overridden by a deeper member.
      */
     findMembers(scope: Model, allowedTags: ElementTag[]) {
         const members = Array<Model>();
 
+        // This is a map of identity (based on tag + id/name + discriminator) to a priority based on inheritance depth
+        const defined = {} as Record<string, number | undefined>;
+
+        let level = 0;
         this.visitInheritance(scope, model => {
+            level++;
             for (const child of model.children) {
-                if (allowedTags.indexOf(child.tag) !== -1) {
-                    members.push(child);
+                if (!allowedTags.includes(child.tag)) {
+                    continue;
                 }
+
+                // Identify and skip shadows based on ID
+                let numericIdentity;
+                if (child.id !== undefined) {
+                    numericIdentity = `i␜${child.tag}␜${child.id}␜${child.discriminator ?? ""}`;
+                    const numericLevel = defined[numericIdentity];
+                    if (numericLevel !== undefined && numericLevel < level) {
+                        continue;
+                    }
+                }
+
+                // Identify and skip shadows based on name
+                const nameIdentity = `s␜${child.tag}␜${child.name}␜${child.discriminator ?? ""}`;
+                const nameLevel = defined[nameIdentity];
+                if (nameLevel !== undefined && nameLevel < level) {
+                    continue;
+                }
+
+                // Mark the level in which we saw these members
+                if (numericIdentity) {
+                    defined[numericIdentity] = level;
+                }
+                defined[nameIdentity] = level;
+
+                // Found a member
+                members.push(child);
             }
         });
 

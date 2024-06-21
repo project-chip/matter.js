@@ -224,7 +224,7 @@ export const FanControl = Cluster({
                     xref: { document: "cluster", section: "4.4.7.1.1" }
                 }),
                 Field({
-                    name: "Wrap", id: 0x1, type: "bool", conformance: "O", default: true,
+                    name: "Wrap", id: 0x1, type: "bool", conformance: "O", default: false,
                     details: "This field shall indicate if the fan speed wraps between highest and lowest step value.",
                     xref: { document: "cluster", section: "4.4.7.1.2" }
                 }),

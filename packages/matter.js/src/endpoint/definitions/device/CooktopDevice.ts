@@ -23,14 +23,14 @@ export interface CooktopDevice extends Identity<typeof CooktopDeviceDefinition> 
 
 export namespace CooktopRequirements {
     /**
-     * The OnOff cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification.
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
     export const OnOffServer = BaseOnOffServer.with("OffOnly");
 
     /**
-     * The Identify cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */

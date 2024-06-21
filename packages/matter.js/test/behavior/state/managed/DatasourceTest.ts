@@ -454,12 +454,12 @@ describe("Datasource", () => {
                     {
                         type: "changing",
                         newValue: { subfield: 1, subfield2: undefined },
-                        oldValue: { subfield: 0 },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                     {
                         type: "changed",
-                        newValue: { subfield: 1 },
-                        oldValue: { subfield: 0 },
+                        newValue: { subfield: 1, subfield2: undefined },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                 ],
             });
@@ -486,12 +486,12 @@ describe("Datasource", () => {
                     {
                         type: "changing",
                         newValue: { subfield: 1, subfield2: undefined },
-                        oldValue: { subfield: 0 },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                     {
                         type: "changed",
-                        newValue: { subfield: 1 },
-                        oldValue: { subfield: 0 },
+                        newValue: { subfield: 1, subfield2: undefined },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                     {
                         type: "changed",
@@ -514,17 +514,17 @@ describe("Datasource", () => {
                     {
                         type: "changing",
                         newValue: { subfield: 1, subfield2: undefined },
-                        oldValue: { subfield: 0 },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                     {
                         type: "changing",
                         newValue: { subfield: 2, subfield2: undefined },
-                        oldValue: { subfield: 1 },
+                        oldValue: { subfield: 1, subfield2: undefined },
                     },
                     {
                         type: "changed",
-                        newValue: { subfield: 2 },
-                        oldValue: { subfield: 0 },
+                        newValue: { subfield: 2, subfield2: undefined },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                 ],
             });
@@ -542,17 +542,17 @@ describe("Datasource", () => {
                     {
                         type: "changing",
                         newValue: { subfield: 1, subfield2: undefined },
-                        oldValue: { subfield: 0 },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                     {
                         type: "changing",
                         newValue: { subfield: 1, subfield2: true },
-                        oldValue: { subfield: 1 },
+                        oldValue: { subfield: 1, subfield2: undefined },
                     },
                     {
                         type: "changed",
                         newValue: { subfield: 1, subfield2: true },
-                        oldValue: { subfield: 0 },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                 ],
             });

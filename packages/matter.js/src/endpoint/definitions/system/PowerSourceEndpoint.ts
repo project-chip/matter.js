@@ -21,7 +21,7 @@ export interface PowerSourceEndpoint extends Identity<typeof PowerSourceEndpoint
 
 export namespace PowerSourceRequirements {
     /**
-     * The PowerSource cluster is required by the Matter specification
+     * The PowerSource cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link PowerSourceServer} for convenience.
      */

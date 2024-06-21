@@ -71,10 +71,10 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
     // Create cluster
     const cluster = new ClusterModel({
         name: "Test",
-        supportedFeatures: new FeatureSet(supports),
 
         children: [features ?? new AttributeModel(FeatureMap), ...fields],
     });
+    cluster.supportedFeatures = supports;
 
     // Obtain a manager
     const root = new RootSupervisor(cluster);

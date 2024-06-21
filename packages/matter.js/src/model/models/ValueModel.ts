@@ -17,6 +17,7 @@ import { DefaultValue } from "../logic/index.js";
 import { Aspects } from "./Aspects.js";
 import { Children } from "./Children.js";
 import { type FieldModel } from "./FieldModel.js";
+import { PropertyModel } from "./PropertyModel.js";
 
 const CONSTRAINT: unique symbol = Symbol("constraint");
 const CONFORMANCE: unique symbol = Symbol("conformance");
@@ -27,9 +28,9 @@ const QUALITY: unique symbol = Symbol("quality");
  * Each ValueElement has a corresponding implementation that derives from this class.
  */
 export abstract class ValueModel extends Model implements ValueElement {
-    byteSize?: ValueElement.ByteSize;
-    default?: FieldValue;
-    metatype?: Metatype;
+    declare byteSize?: ValueElement.ByteSize;
+    declare default?: FieldValue;
+    declare metatype?: Metatype;
     override isType? = true;
 
     override get children(): Children<FieldModel, FieldElement> {
@@ -176,8 +177,8 @@ export abstract class ValueModel extends Model implements ValueElement {
     /**
      * Retrieve all datatype members.
      */
-    get members(): FieldModel[] {
-        return new ModelTraversal().findMembers(this, [ElementTag.Field]) as FieldModel[];
+    get members(): PropertyModel[] {
+        return new ModelTraversal().findMembers(this, [ElementTag.Field, ElementTag.Attribute]) as FieldModel[];
     }
 
     /**
@@ -228,7 +229,7 @@ export abstract class ValueModel extends Model implements ValueElement {
      * Is the model mandatory?
      */
     get mandatory() {
-        return this.effectiveConformance.mandatory;
+        return this.effectiveConformance.isMandatory;
     }
 
     /**

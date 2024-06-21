@@ -79,6 +79,11 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
         case undefined:
             const type = schema.effectiveType;
             if (type === undefined) {
+                if (schema.isDisallowed) {
+                    // We do not need to validate types for disallowed members and the specification may not include
+                    // them
+                    break;
+                }
                 throw new SchemaImplementationError(DataModelPath(schema.path), `No type defined`);
             }
             throw new SchemaImplementationError(

@@ -188,7 +188,7 @@ export const BasicInformation = Cluster({
 
         Attribute({
             name: "LocalConfigDisabled", id: 0x10, type: "bool", access: "RW VM", conformance: "O",
-            default: true, quality: "N",
+            default: false, quality: "N",
             details: "This attribute shall allow a local Node configuration to be disabled. When this attribute is set to " +
                 "True the Node shall disable the ability to configure the Node through an on-Node user interface. " +
                 "The value of the LocalConfigDisabled attribute shall NOT in any way modify, disable, or otherwise " +

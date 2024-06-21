@@ -33,42 +33,42 @@ export interface LaundryDryerDevice extends Identity<typeof LaundryDryerDeviceDe
 
 export namespace LaundryDryerRequirements {
     /**
-     * The OperationalState cluster is required by the Matter specification
+     * The OperationalState cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link OperationalStateServer} for convenience.
      */
     export const OperationalStateServer = BaseOperationalStateServer;
 
     /**
-     * The Identify cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The LaundryWasherMode cluster is optional per the Matter specification
+     * The LaundryWasherMode cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link LaundryWasherModeServer} for convenience.
      */
     export const LaundryWasherModeServer = BaseLaundryWasherModeServer;
 
     /**
-     * The OnOff cluster is optional per the Matter specification
+     * The OnOff cluster is optional per the Matter specification.
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
     export const OnOffServer = BaseOnOffServer.with("DeadFrontBehavior");
 
     /**
-     * The LaundryDryerControls cluster is optional per the Matter specification
+     * The LaundryDryerControls cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link LaundryDryerControlsServer} for convenience.
      */
     export const LaundryDryerControlsServer = BaseLaundryDryerControlsServer;
 
     /**
-     * The TemperatureControl cluster is optional per the Matter specification
+     * The TemperatureControl cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureControlServer} for convenience.
      */

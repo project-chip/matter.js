@@ -163,7 +163,7 @@ describe("ClusterBehavior", () => {
                     errorCount++;
                 }
                 expect(errorCount).equals(2);
-                expect(behavior.events.optAttr$Changed).instanceof(BasicObservable);
+                expect(behavior.events.optAttr$Changed).undefined;
                 expect(behavior.events.optEv).undefined;
             });
         });

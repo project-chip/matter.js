@@ -25,6 +25,7 @@ import { AttributePath, CommandPath, EventPath, InteractionServer } from "../pro
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { Endpoint } from "./Endpoint.js";
 
 const logger = Logger.get("LegacyInteractionServer");
 
@@ -46,7 +47,7 @@ export class LegacyInteractionServer extends InteractionServer {
         if (this.#aclManager !== undefined) {
             return this.#aclManager;
         }
-        const rootEndpoint = this.#endpointStructure.getEndpoint(EndpointNumber(0));
+        const rootEndpoint = this.#endpointStructure.getEndpoint(EndpointNumber(0)) as Endpoint;
         if (rootEndpoint === undefined) {
             throw new InternalError("Root endpoint must exist.");
         }

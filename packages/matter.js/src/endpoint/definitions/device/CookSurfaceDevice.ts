@@ -27,21 +27,21 @@ export interface CookSurfaceDevice extends Identity<typeof CookSurfaceDeviceDefi
 
 export namespace CookSurfaceRequirements {
     /**
-     * The TemperatureControl cluster is optional per the Matter specification
+     * The TemperatureControl cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureControlServer} for convenience.
      */
     export const TemperatureControlServer = BaseTemperatureControlServer;
 
     /**
-     * The TemperatureMeasurement cluster is optional per the Matter specification
+     * The TemperatureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureMeasurementServer} for convenience.
      */
     export const TemperatureMeasurementServer = BaseTemperatureMeasurementServer;
 
     /**
-     * The OnOff cluster is optional per the Matter specification
+     * The OnOff cluster is optional per the Matter specification.
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */

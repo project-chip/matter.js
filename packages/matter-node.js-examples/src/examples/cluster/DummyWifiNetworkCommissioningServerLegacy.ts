@@ -7,7 +7,7 @@
 import { getParameter } from "@project-chip/matter-node.js/util";
 import {
     ClusterServer,
-    ClusterServerObjForCluster,
+    ClusterServerObj,
     GeneralCommissioningCluster,
     NetworkCommissioning,
 } from "@project-chip/matter.js/cluster";
@@ -22,7 +22,7 @@ const WifiNetworkCluster = NetworkCommissioning.Cluster.with(NetworkCommissionin
  * returning some values provided as CLI parameters. This dummy implementation is only there for tests/as showcase for BLE
  * commissioning of a device.
  */
-const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterServer(
+const Server: ClusterServerObj<typeof WifiNetworkCluster> = ClusterServer(
     NetworkCommissioning.Cluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface),
     {
         maxNetworks: 1,

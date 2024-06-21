@@ -513,7 +513,7 @@ export const OperationalCredentialsClusterHandler: (
 
             if (failsafeContext.fabricIndex !== undefined) {
                 throw new StatusResponseError(
-                    `Can not add trusted root certificates after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
+                    `Cannot add trusted root certificates after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
                     StatusCode.ConstraintError,
                 );
             }

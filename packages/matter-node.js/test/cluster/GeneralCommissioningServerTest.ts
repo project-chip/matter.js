@@ -7,7 +7,7 @@
 import {
     BasicInformationCluster,
     ClusterServer,
-    ClusterServerObjForCluster,
+    ClusterServerObj,
     GeneralCommissioning,
     GeneralCommissioningCluster,
     GeneralCommissioningClusterHandler,
@@ -20,8 +20,8 @@ import * as assert from "assert";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil.js";
 
 describe("GeneralCommissioning Server test", () => {
-    let generalCommissioningServer: ClusterServerObjForCluster<typeof GeneralCommissioningCluster> | undefined;
-    let basicInformationServer: ClusterServerObjForCluster<typeof BasicInformationCluster> | undefined;
+    let generalCommissioningServer: ClusterServerObj<GeneralCommissioningCluster> | undefined;
+    let basicInformationServer: ClusterServerObj<BasicInformationCluster> | undefined;
     let testSession: SecureSession<any> | undefined;
     let endpoint: Endpoint | undefined;
 

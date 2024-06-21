@@ -22,21 +22,21 @@ export interface FanDevice extends Identity<typeof FanDeviceDefinition> {}
 
 export namespace FanRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The Groups cluster is required by the Matter specification
+     * The Groups cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The FanControl cluster is required by the Matter specification
+     * The FanControl cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link FanControlServer} for convenience.
      */

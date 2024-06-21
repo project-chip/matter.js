@@ -125,13 +125,13 @@ export function chunkAttributePayload(attributePayload: AttributeReportPayload):
     const { hasFabricSensitiveData, attributeData } = attributePayload;
     if (attributeData === undefined) {
         throw new MatterFlowError(
-            `Can not chunk an AttributePayload with just a attributeStatus: ${Logger.toJSON(attributePayload)}`,
+            `Cannot chunk an AttributePayload with just a attributeStatus: ${Logger.toJSON(attributePayload)}`,
         );
     }
     const { schema, path, dataVersion, payload } = attributeData;
     if (!(schema instanceof ArraySchema) || !Array.isArray(payload)) {
         throw new MatterFlowError(
-            `Can not chunk an AttributePayload with attributeData that is not an array: ${Logger.toJSON(
+            `Cannot chunk an AttributePayload with attributeData that is not an array: ${Logger.toJSON(
                 attributePayload,
             )}`,
         );

@@ -102,7 +102,7 @@ async function main() {
             id: "tempsensor",
             temperatureMeasurement: {
                 // Use this to initialize the measuredValue with the most uptodate value.
-                // If you do not know the value and also can not request it, best use "null" (if allowed by the cluster).
+                // If you do not know the value and also cannot request it, best use "null" (if allowed by the cluster).
                 measuredValue: getIntValueFromCommandOrRandom("value"),
             },
         });
@@ -111,7 +111,7 @@ async function main() {
             id: "humsensor",
             relativeHumidityMeasurement: {
                 // Use this to initialize the measuredValue with the most uptodate value.
-                // If you do not know the value and also can not request it, best use "null" (if allowed by the cluster).
+                // If you do not know the value and also cannot request it, best use "null" (if allowed by the cluster).
                 measuredValue: getIntValueFromCommandOrRandom("value", false),
             },
         });

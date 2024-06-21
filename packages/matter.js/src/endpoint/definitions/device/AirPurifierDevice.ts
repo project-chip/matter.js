@@ -31,35 +31,35 @@ export interface AirPurifierDevice extends Identity<typeof AirPurifierDeviceDefi
 
 export namespace AirPurifierRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The FanControl cluster is required by the Matter specification
+     * The FanControl cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link FanControlServer} for convenience.
      */
     export const FanControlServer = BaseFanControlServer;
 
     /**
-     * The Groups cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The HepaFilterMonitoring cluster is optional per the Matter specification
+     * The HepaFilterMonitoring cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link HepaFilterMonitoringServer} for convenience.
      */
     export const HepaFilterMonitoringServer = BaseHepaFilterMonitoringServer;
 
     /**
-     * The ActivatedCarbonFilterMonitoring cluster is optional per the Matter specification
+     * The ActivatedCarbonFilterMonitoring cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ActivatedCarbonFilterMonitoringServer} for
      * convenience.

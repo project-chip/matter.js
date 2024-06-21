@@ -22,7 +22,7 @@ export interface OvenDevice extends Identity<typeof OvenDeviceDefinition> {}
 
 export namespace OvenRequirements {
     /**
-     * The Identify cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */

@@ -90,7 +90,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
         const { forWriteInteraction = false, allowMissingFieldsForNonFabricFilteredRead = false } = options ?? {};
         if (forWriteInteraction && allowMissingFieldsForNonFabricFilteredRead) {
             throw new InternalError(
-                "Encode options can not indicate a write interaction and a fabric filtered read interaction at the same time.",
+                "Encode options cannot indicate a write interaction and a fabric filtered read interaction at the same time.",
             );
         }
         const fieldValue = (value as any)[name];

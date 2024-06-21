@@ -98,7 +98,7 @@ export const OnOff = Cluster({
         }),
 
         Attribute({
-            name: "OnOff", id: 0x0, type: "bool", access: "R V", conformance: "M", default: true,
+            name: "OnOff", id: 0x0, type: "bool", access: "R V", conformance: "M", default: false,
             quality: "N S",
             details: "This attribute indicates whether the device type implemented on the endpoint is turned off or " +
                 "turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively.",

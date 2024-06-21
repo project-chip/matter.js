@@ -55,35 +55,35 @@ export interface ThermostatDevice extends Identity<typeof ThermostatDeviceDefini
 
 export namespace ThermostatRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The Thermostat cluster is required by the Matter specification
+     * The Thermostat cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link ThermostatServer} for convenience.
      */
     export const ThermostatServer = BaseThermostatServer;
 
     /**
-     * The Groups cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The ScenesManagement cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ScenesManagementServer} for convenience.
      */
     export const ScenesManagementServer = BaseScenesManagementServer;
 
     /**
-     * The ThermostatUserInterfaceConfiguration cluster is optional per the Matter specification
+     * The ThermostatUserInterfaceConfiguration cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ThermostatUserInterfaceConfigurationServer} for
      * convenience.
@@ -91,49 +91,49 @@ export namespace ThermostatRequirements {
     export const ThermostatUserInterfaceConfigurationServer = BaseThermostatUserInterfaceConfigurationServer;
 
     /**
-     * The EnergyPreference cluster is optional per the Matter specification
+     * The EnergyPreference cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link EnergyPreferenceServer} for convenience.
      */
     export const EnergyPreferenceServer = BaseEnergyPreferenceServer;
 
     /**
-     * The TimeSynchronization cluster is optional per the Matter specification
+     * The TimeSynchronization cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TimeSynchronizationServer} for convenience.
      */
     export const TimeSynchronizationServer = BaseTimeSynchronizationServer;
 
     /**
-     * The RelativeHumidityMeasurement cluster is optional per the Matter specification
+     * The RelativeHumidityMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link RelativeHumidityMeasurementBehavior} for convenience.
      */
     export const RelativeHumidityMeasurementBehavior = BaseRelativeHumidityMeasurementBehavior;
 
     /**
-     * The TimeSynchronization cluster is optional per the Matter specification
+     * The TimeSynchronization cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TimeSynchronizationBehavior} for convenience.
      */
     export const TimeSynchronizationBehavior = BaseTimeSynchronizationBehavior;
 
     /**
-     * The FanControl cluster is optional per the Matter specification
+     * The FanControl cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link FanControlBehavior} for convenience.
      */
     export const FanControlBehavior = BaseFanControlBehavior;
 
     /**
-     * The TemperatureMeasurement cluster is optional per the Matter specification
+     * The TemperatureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureMeasurementBehavior} for convenience.
      */
     export const TemperatureMeasurementBehavior = BaseTemperatureMeasurementBehavior;
 
     /**
-     * The OccupancySensing cluster is optional per the Matter specification
+     * The OccupancySensing cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link OccupancySensingBehavior} for convenience.
      */

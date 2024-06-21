@@ -17,7 +17,6 @@ import {
     Attribute,
     AttributeJsType,
     Attributes,
-    Cluster,
     Command,
     Commands,
     EventType,
@@ -34,6 +33,7 @@ import {
     ResponseType,
     WritableAttribute,
 } from "../Cluster.js";
+import { ClusterType } from "../ClusterType.js";
 import { ClusterServerObj } from "../server/ClusterServerTypes.js";
 import { AttributeClient } from "./AttributeClient.js";
 import { EventClient } from "./EventClient.js";
@@ -130,15 +130,8 @@ type ClientEventListeners<E extends Events> = {
     ) => void;
 };
 
-export type ClusterClientObjForCluster<C extends Cluster<any, any, any, any, any>> = ClusterClientObj<
-    C["features"],
-    C["attributes"],
-    C["commands"],
-    C["events"]
->;
-
 /** Strongly typed interface of a cluster client */
-export type ClusterClientObj<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> = {
+export type ClusterClientObj<T extends ClusterType = ClusterType> = {
     /**
      * Cluster ID
      * @readonly
@@ -181,28 +174,28 @@ export type ClusterClientObj<F extends BitSchema, A extends Attributes, C extend
      * Supported Features of the cluster
      * @readonly
      */
-    readonly supportedFeatures: TypeFromPartialBitSchema<F>;
+    readonly supportedFeatures: TypeFromPartialBitSchema<T["features"]>;
 
     /**
      * Attributes of the cluster as object with named keys. This can be used to discover the attributes of the cluster
      * programmatically.
      * @readonly
      */
-    readonly attributes: AttributeClients<F, A>;
+    readonly attributes: AttributeClients<T["features"], T["attributes"]>;
 
     /**
      * Events of the cluster as object with named keys. This can be used to discover the events of the cluster
      * programmatically.
      * @readonly
      */
-    readonly events: EventClients<E>;
+    readonly events: EventClients<T["events"]>;
 
     /**
      * Commands of the cluster as object with named keys. This can be used to discover the commands of the cluster
      * programmatically.
      * @readonly
      */
-    readonly commands: CommandServers<C>;
+    readonly commands: CommandServers<T["commands"]>;
 
     /**
      * Subscribe to all attributes of the cluster. This will subscribe to all attributes of the cluster. Add listeners
@@ -234,22 +227,17 @@ export type ClusterClientObj<F extends BitSchema, A extends Attributes, C extend
 
     /** Returns if a given Command with provided name is present and supported at the connected cluster server. */
     isCommandSupportedByName: (commandName: string) => boolean;
-} & ClientAttributeGetters<A> &
-    ClientGlobalAttributeGetters<F> &
-    ClientAttributeSetters<A> &
-    ClientAttributeSubscribers<A> &
-    ClientAttributeListeners<A> &
-    CommandServers<C> &
-    ClientEventGetters<E> &
-    ClientEventSubscribers<E> &
-    ClientEventListeners<E>;
+} & ClientAttributeGetters<T["attributes"]> &
+    ClientGlobalAttributeGetters<T["features"]> &
+    ClientAttributeSetters<T["attributes"]> &
+    ClientAttributeSubscribers<T["attributes"]> &
+    ClientAttributeListeners<T["attributes"]> &
+    CommandServers<T["commands"]> &
+    ClientEventGetters<T["events"]> &
+    ClientEventSubscribers<T["events"]> &
+    ClientEventListeners<T["events"]>;
 
-export type ClusterClientObjInternal<
-    F extends BitSchema,
-    A extends Attributes,
-    C extends Commands,
-    E extends Events,
-> = ClusterClientObj<F, A, C, E> & {
+export type ClusterClientObjInternal<T extends ClusterType = ClusterType> = ClusterClientObj<T> & {
     /**
      * Trigger an attribute update. This is mainly used internally and not needed to be called by the user.
      * @private
@@ -263,27 +251,21 @@ export type ClusterClientObjInternal<
     readonly _triggerEventUpdate: (eventId: EventId, events: DecodedEventData<any>[]) => void;
 };
 
-export function isClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-    obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, E>,
-): obj is ClusterClientObj<F, A, C, E> {
+export function isClusterClient<const T extends ClusterType>(
+    obj: ClusterClientObj<T> | ClusterServerObj<T>,
+): obj is ClusterClientObj<T> {
     return obj._type === "ClusterClient";
 }
 
-export function isClusterClientInternal<
-    F extends BitSchema,
-    A extends Attributes,
-    C extends Commands,
-    E extends Events,
->(obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, E>): obj is ClusterClientObjInternal<F, A, C, E> {
+export function isClusterClientInternal<const T extends ClusterType>(
+    obj: ClusterClientObj<T> | ClusterServerObj<T>,
+): obj is ClusterClientObjInternal<T> {
     return obj._type === "ClusterClient";
 }
 
-export function asClusterClientInternal<
-    F extends BitSchema,
-    A extends Attributes,
-    C extends Commands,
-    E extends Events,
->(obj: ClusterClientObj<F, A, C, E>): ClusterClientObjInternal<F, A, C, E> {
+export function asClusterClientInternal<const T extends ClusterType>(
+    obj: ClusterClientObj<T>,
+): ClusterClientObjInternal<T> {
     if (!isClusterClientInternal(obj)) {
         throw new Error("Object is not a ClusterClientObj instance.");
     }

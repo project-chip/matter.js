@@ -6,6 +6,7 @@
 
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { getClusterNameById } from "../cluster/ClusterHelper.js";
+import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { BasicInformationCluster } from "../cluster/definitions/BasicInformationCluster.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
@@ -13,11 +14,7 @@ import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
 import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
 import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
-import {
-    ClusterServerObj,
-    ClusterServerObjForCluster,
-    asClusterServerInternal,
-} from "../cluster/server/ClusterServerTypes.js";
+import { ClusterServerObj, asClusterServerInternal } from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
@@ -33,8 +30,8 @@ export interface EndpointOptions {
 }
 
 export class Endpoint implements EndpointInterface {
-    private readonly clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>();
-    private readonly clusterClients = new Map<ClusterId, ClusterClientObj<any, Attributes, Commands, Events>>();
+    private readonly clusterServers = new Map<ClusterId, ClusterServerObj>();
+    private readonly clusterClients = new Map<ClusterId, ClusterClientObj>();
     private readonly childEndpoints: Endpoint[] = [];
     number: EndpointNumber | undefined;
     uniqueStorageKey: string | undefined;
@@ -43,7 +40,7 @@ export class Endpoint implements EndpointInterface {
         /** noop until officially set **/
     };
 
-    private descriptorCluster: ClusterServerObjForCluster<typeof DescriptorCluster>;
+    private descriptorCluster: ClusterServerObj<typeof DescriptorCluster>;
 
     /**
      * Create a new Endpoint instance.
@@ -149,14 +146,14 @@ export class Endpoint implements EndpointInterface {
         userLabelCluster?.setLabelListAttribute(labelList);
     }
 
-    addClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+    addClusterServer<const T extends ClusterType>(cluster: ClusterServerObj<T>) {
         const currentCluster = this.clusterServers.get(cluster.id);
         if (currentCluster !== undefined) {
             asClusterServerInternal(currentCluster)._close();
         }
         asClusterServerInternal(cluster)._assignToEndpoint(this);
         if (cluster.id === DescriptorCluster.id) {
-            this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
+            this.descriptorCluster = cluster as unknown as ClusterServerObj<typeof DescriptorCluster>;
         }
 
         // In ts4 the cast to "any" here was unnecessary.  In TS5 the fact that
@@ -176,9 +173,7 @@ export class Endpoint implements EndpointInterface {
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
-    addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: ClusterClientObj<F, A, C, E>,
-    ) {
+    addClusterClient(cluster: ClusterClientObj) {
         this.clusterClients.set(cluster.id, cluster);
         this.descriptorCluster.attributes.clientList.init(Array.from(this.clusterClients.keys()).sort((a, b) => a - b));
         this.structureChangedCallback(); // Inform parent about structure change
@@ -186,36 +181,24 @@ export class Endpoint implements EndpointInterface {
 
     // TODO cleanup with id number vs ClusterId
     // TODO add instance if optional and not existing, maybe get rid of undefined by throwing?
-    getClusterServer<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    getClusterServer<const T extends ClusterType>(cluster: T): ClusterServerObj<T> | undefined {
         const clusterServer = this.clusterServers.get(cluster.id);
         if (clusterServer !== undefined) {
             // See comment in addClusterServer, this is the inverse of that
             // issue
-            return clusterServer as unknown as ClusterServerObj<A, E>;
+            return clusterServer as unknown as ClusterServerObj<T>;
         }
     }
 
-    getClusterClient<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
-        return this.clusterClients.get(cluster.id) as ClusterClientObj<F, A, C, E>;
+    getClusterClient<const T extends ClusterType>(cluster: T): ClusterClientObj<T> | undefined {
+        return this.clusterClients.get(cluster.id) as ClusterClientObj<T>;
     }
 
-    getClusterServerById(clusterId: ClusterId): ClusterServerObj<Attributes, Events> | undefined {
+    getClusterServerById(clusterId: ClusterId): ClusterServerObj | undefined {
         return this.clusterServers.get(clusterId);
     }
 
-    getClusterClientById(clusterId: ClusterId): ClusterClientObj<any, Attributes, Commands, Events> | undefined {
+    getClusterClientById(clusterId: ClusterId): ClusterClientObj | undefined {
         return this.clusterClients.get(clusterId);
     }
 
@@ -349,11 +332,11 @@ export class Endpoint implements EndpointInterface {
         });
     }
 
-    getAllClusterServers(): ClusterServerObj<Attributes, Events>[] {
+    getAllClusterServers(): ClusterServerObj[] {
         return Array.from(this.clusterServers.values());
     }
 
-    getAllClusterClients(): ClusterClientObj<any, Attributes, Commands, Events>[] {
+    getAllClusterClients(): ClusterClientObj[] {
         return Array.from(this.clusterClients.values());
     }
 
@@ -364,7 +347,7 @@ export class Endpoint implements EndpointInterface {
             const childPartsList = child.updatePartsList();
 
             if (child.number === undefined) {
-                throw new InternalError(`Child endpoint has no id, can not add to parts list`);
+                throw new InternalError(`Child endpoint has no id, cannot add to parts list`);
             }
 
             newPartsList.push(EndpointNumber(child.number));

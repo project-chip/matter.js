@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// Note - we don't import mocha here because in the browser we load their
-// standard browser bundle which is different from the Node version
+// Note - we don't import mocha here because in the browser we load their standard browser bundle which is different
+// from the Node version
 
 import Chai from "chai";
 import ChaiAsPromised from "chai-as-promised";

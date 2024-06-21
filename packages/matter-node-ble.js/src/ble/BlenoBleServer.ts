@@ -261,7 +261,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
         }
         if (this.btpSession !== undefined) {
             throw new BtpFlowError(
-                `Subscription request received but BTP session already initialized. Can not handle two sessions!`,
+                `Subscription request received but BTP session already initialized. Cannot handle two sessions!`,
             );
         }
         this.btpHandshakeTimeout.stop();
@@ -395,7 +395,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
      */
     async send(data: ByteArray) {
         if (this.btpSession === undefined) {
-            throw new ChannelNotConnectedError(`Can not send data, no BTP session initialized`);
+            throw new ChannelNotConnectedError(`Cannot send data, no BTP session initialized`);
         }
         await this.btpSession.sendMatterMessage(data);
     }

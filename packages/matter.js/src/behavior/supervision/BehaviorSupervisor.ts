@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Access, ClusterModel, DatatypeModel, FeatureSet, FieldModel, type ValueModel } from "../../model/index.js";
+import { Access, ClusterModel, DatatypeModel, FieldModel, type ValueModel } from "../../model/index.js";
 import { camelize } from "../../util/String.js";
 import type { Behavior } from "../Behavior.js";
 import type { StateType } from "../state/StateType.js";
@@ -20,36 +20,16 @@ import { Schema } from "./Schema.js";
  * BehaviorSupervisor derives operational schema from a "logical" schema.  If the {@link Behavior} implementation has a
  * static schema property this defines the logical schema.  Otherwise the logical schema is {@link Schema.empty}.
  *
- * This function loads the logical schema and mutates as required:
- *
- *   - Filters schema elements to only those applicable for the supported features.  This improves validation
- *     performance and drops conflicting elements with multiple definitions for different feature selections.
- *
- *   - Adds fields for any programmatic extensions of state.  This allows schema-driven logic to process state fields
- *     added in pure JS.
+ * This function loads the logical schema and mutates as required.  This includes addition of fields for any
+ * programmatic extensions of state.  This allows schema-driven logic to process state fields added in pure JS.
  *
  * The {@link RootSupervisor} is then constructed from the mutated logical schema.
  */
 export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSupervisor {
-    let featuresAvailable: Set<string>, featuresSupported: FeatureSet;
-
     const logical = options.schema ?? Schema.empty;
 
-    // Extract features and supportedFeatures from the logical schema
-    if (logical instanceof ClusterModel) {
-        ({ featuresAvailable, featuresSupported } = FeatureSet.normalize(
-            logical.featureMap,
-            logical.supportedFeatures,
-        ));
-    } else {
-        featuresAvailable = new Set();
-        featuresSupported = new FeatureSet([]);
-    }
-
-    // Filter children based on feature conformance
-    const children = logical.children
-        .filter(child => child.effectiveConformance.isApplicable(featuresAvailable, featuresSupported))
-        .map(child => child.clone());
+    // Copy children for the
+    const children = logical.children.map(child => child.clone());
 
     // Add fields for programmatic extensions
     addExtensionFields(logical, new options.State(), children);
@@ -61,7 +41,6 @@ export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSup
             ...logical,
             name: `${camelize(options.id, true)}$State`,
             children,
-            supportedFeatures: featuresSupported,
         });
     } else {
         schema = new DatatypeModel({

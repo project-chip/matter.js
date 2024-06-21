@@ -430,7 +430,7 @@ export namespace OnOff {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 1.5.6.2
              */
-            onOff: Attribute(0x0, TlvBoolean, { scene: true, persistent: true, default: true })
+            onOff: Attribute(0x0, TlvBoolean, { scene: true, persistent: true, default: false })
         },
 
         commands: {
