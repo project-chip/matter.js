@@ -154,14 +154,22 @@ export interface InteractionRecipient {
 export class InteractionServerMessenger extends InteractionMessenger<MatterDevice> {
     async handleRequest(recipient: InteractionRecipient) {
         let continueExchange = true; // are more messages expected in this "transaction"?
+        let isGroupSession = false;
         try {
             while (continueExchange) {
                 const message = await this.exchange.nextMessage();
-                const isGroupSession = message.packetHeader.sessionType === SessionType.Group;
+                isGroupSession = message.packetHeader.sessionType === SessionType.Group;
                 continueExchange = false;
                 switch (message.payloadHeader.messageType) {
                     case MessageType.ReadRequest: {
+                        if (isGroupSession) {
+                            throw new StatusResponseError(
+                                `ReadRequest is not supported in group sessions`,
+                                Status.InvalidAction,
+                            );
+                        }
                         const readRequest = TlvReadRequest.decode(message.payload);
+                        // This potentially sends multiple DataReport Messages
                         await this.sendDataReport(
                             await recipient.handleReadRequest(this.exchange, readRequest, message),
                         );
@@ -207,16 +215,22 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         break;
                     }
                     default:
-                        throw new NotImplementedError(`Unsupported message type ${message.payloadHeader.messageType}`);
+                        throw new StatusResponseError(
+                            `Unsupported message type ${message.payloadHeader.messageType}`,
+                            Status.InvalidAction,
+                        );
                 }
             }
         } catch (error: any) {
+            let errorStatusCode = StatusCode.Failure;
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
-                await this.sendStatus(error.code);
+                errorStatusCode = error.code;
             } else {
                 logger.error(error);
-                await this.sendStatus(StatusCode.Failure);
+            }
+            if (!isGroupSession) {
+                await this.sendStatus(errorStatusCode);
             }
         } finally {
             await this.exchange.close();
@@ -235,6 +249,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
             suppressResponse,
             interactionModelRevision,
         } = dataReportPayload;
+
         const dataReport: TypeFromSchema<typeof TlvDataReportForSend> = {
             subscriptionId,
             suppressResponse,
@@ -244,6 +259,8 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
         };
 
         if (attributeReportsPayload !== undefined || eventReportsPayload !== undefined) {
+            // TODO Add tag compressing once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
+
             const attributeReportsToSend = [...(attributeReportsPayload ?? [])];
             const eventReportsToSend = [...(eventReportsPayload ?? [])];
 
