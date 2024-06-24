@@ -16,6 +16,10 @@ export class AttributeModel extends PropertyModel implements AttributeElement {
     override tag: AttributeElement.Tag = AttributeElement.Tag;
     override id!: Mei;
 
+    get readable() {
+        return this.effectiveAccess.readable;
+    }
+
     get writable() {
         return !this.fixed && this.effectiveAccess.writable;
     }
@@ -26,6 +30,10 @@ export class AttributeModel extends PropertyModel implements AttributeElement {
 
     get fixed() {
         return !!this.effectiveQuality.fixed;
+    }
+
+    get changesOmitted() {
+        return this.effectiveQuality.changesOmitted;
     }
 
     constructor(definition: AttributeElement.Properties) {

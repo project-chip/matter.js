@@ -1223,40 +1223,66 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                 if (invokeResponseMessage.invokeResponses.length > 0) {
                     if (invokeRequests.length > 1) {
                         logger.debug(
-                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
-                                commandPath,
-                            )} ignore non-existing attribute`,
-                        );
-                    } else {
-                        const { endpointId, clusterId, commandId } = commandPath;
-                        invokeResponses.push(
-                            tryCatch(
-                                () => {
-                                    this.#endpointStructure.validateConcreteCommandPath(
-                                        endpointId,
-                                        clusterId,
-                                        commandId,
-                                    );
-                                    throw new InternalError(
-                                        "validateConcreteCommandPath should throw StatusResponseError but did not.",
-                                    );
-                                },
-                                StatusResponseError,
-                                error => {
-                                    logger.debug(
-                                        `Invoke from ${
-                                            exchange.channel.name
-                                        }: ${this.#endpointStructure.resolveCommandName(
-                                            commandPath,
-                                        )} unsupported path: Status=${error.code}`,
-                                    );
-                                    return { status: { commandPath, status: { status: error.code } } };
-                                },
-                            ),
+                            `Send ${lastMessageProcessed ? "final " : ""}invoke response for ${invokeResponseMessage.invokeResponses} commands`,
                         );
                     }
-                    return;
+                    await messenger.send(
+                        MessageType.InvokeResponse,
+                        TlvInvokeResponseForSend.encode({
+                            ...invokeResponseMessage,
+                            moreChunkedMessages: invokeResultsProcessed < invokeRequests.length ? true : undefined,
+                        }),
+                    );
+                    invokeResponseMessage.invokeResponses = [];
+                    messageSize = emptyInvokeResponseBytes.length;
                 }
+                if (!lastMessageProcessed) {
+                    invokeResultsProcessed--; // Correct counter again because we recall the method
+                    return processResponseResult(invokeResponse);
+                }
+            } else {
+                invokeResponseMessage.invokeResponses.push(encodedInvokeResponse);
+                messageSize += invokeResponseBytes;
+            }
+        };
+
+        // We could do more fancy parallel command processing, but it makes no sense for now, so lets simply process
+        // invoked commands one by one sequentially
+        for (const { commandPath, commandFields, commandRef } of invokeRequests) {
+            const commands = this.#endpointStructure.getCommands([commandPath]);
+
+            if (commands.length === 0) {
+                if (isConcreteCommandPath(commandPath)) {
+                    const { endpointId, clusterId, commandId } = commandPath;
+                    await processResponseResult(
+                        tryCatch(
+                            () => {
+                                this.#endpointStructure.validateConcreteCommandPath(endpointId, clusterId, commandId);
+                                throw new InternalError(
+                                    "validateConcreteCommandPath should throw StatusResponseError but did not.",
+                                );
+                            },
+                            StatusResponseError,
+                            error => {
+                                logger.debug(
+                                    `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
+                                        commandPath,
+                                    )} unsupported path: Status=${error.code}`,
+                                );
+                                return { status: { commandPath, status: { status: error.code }, commandRef } };
+                            },
+                        ),
+                    );
+                } else {
+                    // Wildcard path: Just ignore
+                    logger.debug(
+                        `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
+                            commandPath,
+                        )} ignore non-existing command`,
+                    );
+                }
+                continue;
+            }
 
             const isConcretePath = isConcreteCommandPath(commandPath);
             for (const { command, path } of commands) {
