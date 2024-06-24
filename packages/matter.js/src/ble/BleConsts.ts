@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MAX_UDP_MESSAGE_SIZE } from "../net/UdpChannel.js";
+
 /** @see {@link MatterSpecification.v11.Core} § 4.17.3.2 */
 export const BLE_MATTER_SERVICE_UUID = "fff6";
 export const BLE_MATTER_C1_CHARACTERISTIC_UUID = "18EE2EF5-263D-4559-959F-4F9C429F9D11";
@@ -18,3 +20,10 @@ export const BTP_MAXIMUM_WINDOW_SIZE = 255; // Server maximum window size
 export const BTP_CONN_RSP_TIMEOUT_MS = 5000; // timer starts when receives handshake request & waits for a subscription request on c2
 export const BTP_ACK_TIMEOUT_MS = 15000; // timer in ms before ack should be sent for a segment
 export const BTP_SEND_ACK_TIMEOUT_MS = BTP_ACK_TIMEOUT_MS / 3; // timer starts when we receive a packet and stops when we sends its ack
+
+
+/**
+ * The maximum message size that can be transported in a Matter message via BTP.
+ * Seems the chip code in BTPEngine limits the size currently to "one pbuf" which should mean one UDP message.
+ */
+export const BLE_MAX_MATTER_PAYLOAD_SIZE = MAX_UDP_MESSAGE_SIZE;

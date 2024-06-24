@@ -10,6 +10,7 @@ import {
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID,
     BLE_MAXIMUM_BTP_MTU,
+    BLE_MAX_MATTER_PAYLOAD_SIZE,
     BTP_CONN_RSP_TIMEOUT_MS,
     BTP_MAXIMUM_WINDOW_SIZE,
     BTP_SUPPORTED_VERSIONS,
@@ -234,6 +235,7 @@ export class NobleBleChannel implements Channel<ByteArray> {
     }
 
     private connected = true;
+    maxPayloadSize = BLE_MAX_MATTER_PAYLOAD_SIZE;
 
     constructor(
         private readonly peripheral: Peripheral,

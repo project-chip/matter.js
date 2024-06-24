@@ -6,6 +6,7 @@
 
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { MatterError, MatterFlowError } from "../common/MatterError.js";
+import { CRYPTO_AEAD_MIC_LENGTH_BYTES } from "../crypto/CryptoConstants.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
@@ -79,6 +80,14 @@ const MRP_BACKOFF_THRESHOLD = 1;
 
 /** @see {@link MatterSpecification.v12.Core}, section 4.11.8 */
 const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
+
+/**
+ * Message size overhead of a Matter message:
+ * 26 (Matter Message Header) + 12 (Matter Payload Header) taken from https://github.com/project-chip/connectedhomeip/blob/2d97cda23024e72f36216900ca667bf1a0d9499f/src/system/SystemConfig.h#L327
+ * 16 byte MIC is then also needed to be excluded from the max payload size
+ * Secure Extensions and Message Extensions need to be handled by exchange additionally!
+ */
+export const MATTER_MESSAGE_OVERHEAD = 26 + 12 + CRYPTO_AEAD_MIC_LENGTH_BYTES;
 
 export class MessageExchange<ContextT> {
     static fromInitialMessage<ContextT>(channel: MessageChannel<ContextT>, initialMessage: Message) {
@@ -178,6 +187,16 @@ export class MessageExchange<ContextT> {
 
     get closed() {
         return this.#closed;
+    }
+
+    /**
+     * Max Payload size of the exchange which bases on the maximum payload size of the channel reduced by Matter
+     * protocol overhead.
+     */
+    get maxPayloadSize() {
+        // TODO: Whenever we add support for MessageExtensions or Secured Message extensions then these need to be also
+        //  considered here and their size needs to be subtracted from the maxPayloadSize of the channel.
+        return this.channel.maxPayloadSize - MATTER_MESSAGE_OVERHEAD;
     }
 
     async sendStandaloneAckForMessage(message: Message) {

@@ -5,6 +5,7 @@
  */
 
 export interface Channel<T> {
+    maxPayloadSize: number;
     name: string;
     send(data: T): Promise<void>;
     close(): Promise<void>;

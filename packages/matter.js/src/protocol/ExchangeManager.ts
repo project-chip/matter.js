@@ -5,7 +5,7 @@
  */
 
 import { MatterController } from "../MatterController.js";
-import { MAX_MESSAGE_SIZE, Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
+import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { Channel } from "../common/Channel.js";
 import { ImplementationError, MatterError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
 import { Listener, TransportInterface } from "../common/TransportInterface.js";
@@ -33,20 +33,28 @@ export class ChannelNotConnectedError extends MatterError {}
 
 export class MessageChannel<ContextT> implements Channel<Message> {
     public closed = false;
+
     constructor(
         readonly channel: Channel<ByteArray>,
         readonly session: Session<ContextT>,
         private readonly closeCallback?: () => Promise<void>,
     ) {}
 
+    /**
+     * Max Payload size of the exchange which bases on the maximum payload size of the channel. The full encoded matter
+     * message payload sent here can be as huge as allowed by the channel.
+     */
+    get maxPayloadSize() {
+        return this.channel.maxPayloadSize;
+    }
+
     send(message: Message): Promise<void> {
         logger.debug("Message »", MessageCodec.messageDiagnostics(message));
         const packet = this.session.encode(message);
         const bytes = MessageCodec.encodePacket(packet);
-        if (bytes.length > MAX_MESSAGE_SIZE) {
-            // TODO: With Matter 1.3 probably find out how to know what he other node can support
+        if (bytes.length > this.maxPayloadSize) {
             logger.warn(
-                `Matter message to send to ${this.channel.name} is ${bytes.length}bytes long, which is larger than the maximum allowed size of ${MAX_MESSAGE_SIZE}. This only works if both nodes support it.`,
+                `Matter message to send to ${this.name} is ${bytes.length}bytes long, which is larger than the maximum allowed size of ${this.maxPayloadSize}. This only works if both nodes support it.`,
             );
         }
 
@@ -83,9 +91,9 @@ export class ExchangeManager<ContextT> {
         const udpInterface = netInterface instanceof UdpInterface;
         this.transportListeners.push(
             netInterface.onData((socket, data) => {
-                if (udpInterface && data.length > MAX_MESSAGE_SIZE) {
+                if (udpInterface && data.length > socket.maxPayloadSize) {
                     logger.warn(
-                        `Ignoring UDP message with size ${data.length} from ${socket.name}, which is larger than the maximum allowed size of ${MAX_MESSAGE_SIZE}.`,
+                        `Ignoring UDP message with size ${data.length} from ${socket.name}, which is larger than the maximum allowed size of ${socket.maxPayloadSize}.`,
                     );
                     return;
                 }

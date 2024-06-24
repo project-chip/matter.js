@@ -10,6 +10,7 @@ import {
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID,
+    BLE_MAX_MATTER_PAYLOAD_SIZE,
     BTP_CONN_RSP_TIMEOUT_MS,
     BleError,
     BtpFlowError,
@@ -143,6 +144,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
     );
 
     private readonly matterBleService;
+    maxPayloadSize = BLE_MAX_MATTER_PAYLOAD_SIZE;
 
     constructor(options?: BleOptions) {
         this.matterBleService = initializeBleno(this, options?.hciId);

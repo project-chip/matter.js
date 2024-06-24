@@ -73,8 +73,6 @@ export type TimedRequest = TypeFromSchema<typeof TlvTimedRequest>;
 export type WriteRequest = TypeFromSchema<typeof TlvWriteRequest>;
 export type WriteResponse = TypeFromSchema<typeof TlvWriteResponse>;
 
-const MAX_SPDU_LENGTH = 1024;
-
 const logger = Logger.get("InteractionMessenger");
 
 class InteractionMessenger<ContextT> {
@@ -274,7 +272,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         }
                         const encodedAttribute = encodeAttributePayload(attributeReport);
                         const attributeReportBytes = TlvAny.getEncodedByteLength(encodedAttribute);
-                        if (messageSize + attributeReportBytes > MAX_SPDU_LENGTH) {
+                        if (messageSize + attributeReportBytes > this.exchange.maxPayloadSize) {
                             if (canAttributePayloadBeChunked(attributeReport)) {
                                 // Attribute is a non-empty array: chunk it and add the chunks to the beginning of the queue
                                 attributeReportsToSend.unshift(...chunkAttributePayload(attributeReport));
@@ -299,7 +297,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     const encodedEvent = encodeEventPayload(eventReport);
                     const eventReportBytes = TlvAny.getEncodedByteLength(encodedEvent);
-                    if (messageSize + eventReportBytes > MAX_SPDU_LENGTH) {
+                    if (messageSize + eventReportBytes > this.exchange.maxPayloadSize) {
                         await sendAndResetReport();
                     }
                     messageSize += eventReportBytes;
@@ -318,7 +316,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 
     async sendDataReportMessage(dataReport: TypeFromSchema<typeof TlvDataReportForSend>) {
         const encodedMessage = TlvDataReportForSend.encode(dataReport);
-        if (encodedMessage.length > MAX_SPDU_LENGTH) {
+        if (encodedMessage.length > this.exchange.maxPayloadSize) {
             throw new MatterFlowError(
                 `DataReport is too long to fit in a single chunk, This should not happen! Data: ${Logger.toJSON(
                     dataReport,

@@ -51,6 +51,10 @@ class UdpConnection implements Channel<ByteArray> {
         private readonly peerPort: number,
     ) {}
 
+    get maxPayloadSize() {
+        return this.server.maxPayloadSize;
+    }
+
     send(data: ByteArray) {
         return this.server.send(this.peerAddress, this.peerPort, data);
     }
