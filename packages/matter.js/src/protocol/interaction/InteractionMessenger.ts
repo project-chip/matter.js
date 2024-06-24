@@ -142,8 +142,9 @@ export interface InteractionRecipient {
     handleInvokeRequest(
         exchange: MessageExchange<MatterDevice>,
         request: InvokeRequest,
+        messenger: InteractionServerMessenger,
         message: Message,
-    ): Promise<InvokeResponse>;
+    ): Promise<void>;
     handleTimedRequest(exchange: MessageExchange<MatterDevice>, request: TimedRequest, message: Message): void;
 }
 
@@ -188,19 +189,8 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.InvokeRequest: {
                         const invokeRequest = TlvInvokeRequest.decode(message.payload);
-                        const { suppressResponse } = invokeRequest;
-                        const invokeResponse = await recipient.handleInvokeRequest(
-                            this.exchange,
-                            invokeRequest,
-                            message,
-                        );
-                        if (!suppressResponse && !isGroupSession) {
-                            await this.send(
-                                MessageType.InvokeCommandResponse,
-                                TlvInvokeResponse.encode(invokeResponse),
-                            );
-                        }
-                        // TODO Also invoke could need continueExchange depending on requirements
+                        await recipient.handleInvokeRequest(this.exchange, invokeRequest, this, message);
+                        // response is sent by the handler
                         break;
                     }
                     case MessageType.TimedRequest: {
