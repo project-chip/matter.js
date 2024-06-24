@@ -63,7 +63,7 @@
         "@types/debug": "^4.1.12",
         "@types/dockerode": "^3.3.29",
         "@types/glob": "^8.1.0",
-        "@types/mocha": "^10.0.6",
+        "@types/mocha": "^10.0.7",
         "@types/npmcli__map-workspaces": "^3.0.4",
         "@types/wtfnode": "^0.7.3",
         "@types/yargs": "^17.0.32",
