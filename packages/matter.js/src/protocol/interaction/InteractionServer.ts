@@ -68,6 +68,7 @@ import {
     TlvEventFilter,
     TlvEventPath,
     TlvInvokeResponseData,
+    TlvInvokeResponseForSend,
     TlvSubscribeResponse,
 } from "./InteractionProtocol.js";
 import { StatusCode, StatusResponseError } from "./StatusCode.js";
@@ -337,14 +338,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             // Requested attribute path not found in any cluster server on any endpoint
             if (attributes.length === 0) {
                 // TODO Add checks for nodeId -> UnknownNode
-                if (!isConcreteAttributePath(requestPath)) {
-                    // Wildcard path and we do not know any of the attributes: Ignore the error
-                    logger.debug(
-                        `Read from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                            requestPath,
-                        )}: ${this.#endpointStructure.resolveAttributeName(requestPath)}: ignore non-existing attribute`,
-                    );
-                } else {
+                if (isConcreteAttributePath(requestPath)) {
                     const { endpointId, clusterId, attributeId } = requestPath;
                     // Concrete path, but still unknown for us, so generate the right error status
                     tryCatch(
@@ -369,6 +363,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         },
                     );
                 }
+
+                // Wildcard path and we do not know any of the attributes: Ignore the error
+                logger.debug(
+                    `Read from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                        requestPath,
+                    )}: ${this.#endpointStructure.resolveAttributeName(requestPath)}: ignore non-existing attribute`,
+                );
                 continue;
             }
 
@@ -377,6 +378,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                 const { nodeId, endpointId, clusterId } = path;
 
                 try {
+                    // We accept attributes not in the model ans readable, because existence is checked already
+                    if (getMatterModelClusterAttribute(clusterId, attribute.id)?.readable === false) {
+                        throw new StatusResponseError(
+                            `Attribute ${attribute.id} is not readable.`,
+                            StatusCode.UnsupportedRead,
+                        );
+                    }
+
                     const { value, version } = await tryCatchAsync(
                         async () =>
                             this.readAttribute(
@@ -460,15 +469,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
                 // Requested event path not found in any cluster server on any endpoint
                 if (events.length === 0) {
-                    // TODO Add checks for nodeId
-                    if (!isConcreteEventPath(requestPath)) {
-                        // Wildcard path: Just leave out values
-                        logger.debug(
-                            `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
-                                requestPath,
-                            )}: ignore non-existing event`,
-                        );
-                    } else {
+                    if (isConcreteEventPath(requestPath)) {
                         const { endpointId, clusterId, eventId } = requestPath;
                         tryCatch(
                             () => {
@@ -492,6 +493,12 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                             },
                         );
                     }
+                    // Wildcard path: Just leave out values
+                    logger.debug(
+                        `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
+                            requestPath,
+                        )}: ignore non-existing event`,
+                    );
                     continue;
                 }
 
@@ -559,11 +566,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             }
         }
 
-        // TODO support suppressResponse for responses
         return {
             interactionModelRevision: INTERACTION_MODEL_REVISION,
-            suppressResponse: false,
-            attributeReportsPayload, // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
+            suppressResponse: true,
+            attributeReportsPayload,
             eventReportsPayload,
         };
     }
@@ -638,13 +644,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
         }
 
         if (receivedWithinTimedInteraction) {
-            logger.debug(`Write request from ${exchange.channel.name} received while timed interaction is running.`);
+            logger.debug(
+                `Write request from ${exchange.channel.name} successfully received while timed interaction is running.`,
+            );
             exchange.clearTimedInteraction();
             if (sessionType !== SessionType.Unicast) {
                 throw new StatusResponseError(
                     "Write requests are only allowed on unicast sessions when a timed interaction is running.",
                     StatusCode.InvalidAction,
-                ); // ???
+                );
             }
         }
 
@@ -652,7 +660,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             throw new StatusResponseError(
                 "Write requests are only allowed as group casts when suppressResponse=true.",
                 StatusCode.InvalidAction,
-            ); // ???
+            );
         }
 
         const writeData = expandPathsInAttributeData(writeRequests, true);
@@ -670,7 +678,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
         for (const writeRequest of writeData) {
             const { path: writePath, dataVersion } = writeRequest;
-            const { listIndex } = writePath;
 
             validateWriteAttributesPath(writePath);
 
@@ -678,34 +685,18 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
             // No existing attribute matches the given path and is writable
             if (attributes.length === 0) {
-                // TODO: Also check nodeId
-                if (!isConcreteAttributePath(writePath)) {
-                    // Wildcard path: Just ignore
-                    logger.debug(
-                        `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                            writePath,
-                        )}: ignore non-existing (wildcard) attribute`,
-                    );
-                } else {
+                if (isConcreteAttributePath(writePath)) {
                     const { endpointId, clusterId, attributeId } = writePath;
 
                     // was a concrete path
                     tryCatch(
                         () => {
-                            if (
-                                this.#endpointStructure.validateConcreteAttributePath(
-                                    endpointId,
-                                    clusterId,
-                                    attributeId,
-                                )
-                            ) {
-                                throw new StatusResponseError(
-                                    `Attribute ${attributeId} is not writable.`,
-                                    StatusCode.UnsupportedWrite,
-                                );
-                            }
-                            throw new InternalError(
-                                "validateConcreteAttributePath check should throw StatusResponseError but did not.",
+                            this.#endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
+
+                            // Ok it is a valid  concrete path, so it is not writable
+                            throw new StatusResponseError(
+                                `Attribute ${attributeId} is not writable.`,
+                                StatusCode.UnsupportedWrite,
                             );
                         },
                         StatusResponseError,
@@ -717,6 +708,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                             );
                             writeResults.push({ path: writePath, statusCode: error.code });
                         },
+                    );
+                } else {
+                    // Wildcard path: Just ignore
+                    logger.debug(
+                        `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                            writePath,
+                        )}: ignore non-existing (wildcard) attribute`,
                     );
                 }
                 continue;
@@ -785,6 +783,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                     }
 
                     const { endpointId } = path;
+                    const { listIndex } = writePath;
                     const value =
                         listIndex === undefined
                             ? decodeAttributeValueWithSchema(schema, [writeRequest], defaultValue)
@@ -1089,11 +1088,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             await session.clearSubscriptions(true);
         }
 
-        const maxInterval = subscriptionHandler.getMaxInterval();
+        const maxInterval = subscriptionHandler.maxInterval;
         logger.info(
             `Successfully created subscription ${subscriptionId} for Session ${
                 session.id
-            }. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.getSendInterval()} seconds)`,
+            }. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.sendInterval} seconds)`,
         );
         // Then send the subscription response
         await messenger.send(
@@ -1105,6 +1104,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             }),
         );
 
+        // When an error occurs while sending the response, the subscription is not yet active and will be cleaned up by GC
         this.#subscriptionMap.set(subscriptionId, subscriptionHandler);
         session.addSubscription(subscriptionHandler);
         subscriptionHandler.activateSendingUpdates();
