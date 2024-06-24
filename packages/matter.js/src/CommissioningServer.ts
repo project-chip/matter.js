@@ -551,6 +551,7 @@ export class CommissioningServer extends MatterNode {
                 minIntervalSeconds: this.options.subscriptionMinIntervalSeconds,
                 randomizationWindowSeconds: this.options.subscriptionRandomizationWindowSeconds,
             },
+            maxPathsPerInvoke: basicInformation.getMaxPathsPerInvokeAttribute(),
         });
 
         this.nextEndpointId = this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
@@ -598,6 +599,7 @@ export class CommissioningServer extends MatterNode {
                 }
             },
             (fabricIndex: FabricIndex) => this.options.activeSessionsChangedCallback?.(fabricIndex),
+            { maxPathsPerInvoke: this.interactionServer.maxPathsPerInvoke },
         );
         deviceInstance.addTransportInterface(
             await UdpInterface.create(Network.get(), "udp6", this.port, this.options.listeningAddressIpv6),

@@ -54,7 +54,6 @@ import {
     InteractionRecipient,
     InteractionServerMessenger,
     InvokeRequest,
-    InvokeResponse,
     MessageType,
     ReadRequest,
     SubscribeRequest,

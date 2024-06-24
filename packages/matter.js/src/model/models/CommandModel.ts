@@ -16,6 +16,10 @@ export class CommandModel extends ValueModel implements CommandElement {
     direction?: CommandElement.Direction;
     response?: string;
 
+    get fabricScoped() {
+        return !!this.effectiveAccess.fabric;
+    }
+
     get isRequest() {
         return this.direction === CommandElement.Direction.Request;
     }

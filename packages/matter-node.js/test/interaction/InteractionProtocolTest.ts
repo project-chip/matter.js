@@ -691,6 +691,40 @@ const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
     ],
 };
 
+const INVOKE_COMMAND_REQUEST_MULTI_SAME: InvokeRequest = {
+    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    suppressResponse: false,
+    timedRequest: false,
+    invokeRequests: [
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+        },
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+        },
+    ],
+};
+
+const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
+    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    suppressResponse: false,
+    timedRequest: false,
+    invokeRequests: [
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(0) },
+        },
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+        },
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(2) },
+        },
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(100) },
+        },
+    ],
+};
+
 const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
     suppressResponse: false,
@@ -741,44 +775,36 @@ const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
     ],
 };
 
-/*
 const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
             status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) },
-                status: { status: 129 },
-            },
-        },
-        {
-            status: {
-                commandPath: { clusterId: ClusterId(90), commandId: CommandId(1), endpointId: EndpointNumber(0) },
-                status: { status: 195 },
-            },
-        },
-        {
-            status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(99) },
-                status: { status: 127 },
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(0), endpointId: EndpointNumber(0) },
+                status: { status: 0 },
             },
         },
         {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
-                status: { clusterStatus: undefined, status: 0 },
+                status: { status: 0 },
             },
         },
         {
             status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(0), endpointId: EndpointNumber(0) },
-                status: { clusterStatus: undefined, status: 0 },
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(2), endpointId: EndpointNumber(0) },
+                status: { status: 0 },
+            },
+        },
+        {
+            status: {
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) },
+                status: { status: 129 },
             },
         },
     ],
 };
- */
 
 const BasicInformationClusterWithTimedInteraction = {
     ...BasicInformationCluster,
@@ -1443,7 +1469,29 @@ describe("InteractionProtocol", () => {
             assert.equal(onOffState, false);
         });
 
-        it("multi invoke commands", async () => {
+        it("throws on multi invoke commands with wildcards", async () => {
+            withClusters();
+
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result = TlvInvokeResponse.decode(payload);
+            });
+            let result = undefined;
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleInvokeRequest(
+                        exchange,
+                        INVOKE_COMMAND_REQUEST_MULTI_WILDCARD,
+                        new InteractionServerMessenger(exchange),
+                        DummyUnicastMessage,
+                    ),
+                {
+                    message: "(128) Wildcard paths are not supported in multi-command invoke requests",
+                },
+            );
+            assert.equal(result, undefined);
+        });
+
+        it("throws on multi invoke commands with one 1 allowed", async () => {
             onOffState = false;
             let triggeredOn = false;
             let triggeredOff = false;
@@ -1473,6 +1521,13 @@ describe("InteractionProtocol", () => {
                 result = TlvInvokeResponse.decode(payload);
             });
             let result = undefined;
+
+            interactionProtocol = new InteractionServer({
+                endpointStructure: endpointStructure,
+                eventHandler: (eventHandler = new EventHandler(storageContext.createContext("EventHandler"))),
+                maxPathsPerInvoke: 1,
+            });
+
             await assert.rejects(
                 async () =>
                     await interactionProtocol.handleInvokeRequest(
@@ -1482,7 +1537,7 @@ describe("InteractionProtocol", () => {
                         DummyUnicastMessage,
                     ),
                 {
-                    message: "(128) Only 1 invoke requests are supported in one message. This message contains 6",
+                    message: "(128) Only 1 invoke requests are supported in one message. This message contains 4",
                 },
             );
 
@@ -1490,6 +1545,142 @@ describe("InteractionProtocol", () => {
             assert.equal(triggeredOn, false);
             assert.equal(triggeredOff, false);
             assert.equal(onOffState, false);
+            assert.equal(result, undefined);
+        });
+
+        it("multi invoke commands are ok", async () => {
+            onOffState = false;
+            let triggeredOn = false;
+            let triggeredOff = false;
+            onOffCluster = ClusterServer(
+                OnOffCluster,
+                {
+                    onOff: onOffState,
+                },
+                {
+                    on: async () => {
+                        onOffState = true;
+                        triggeredOn = true;
+                    },
+                    off: async () => {
+                        onOffState = false;
+                        triggeredOff = true;
+                    },
+                    toggle: async () => {
+                        onOffState = !onOffState;
+                    },
+                },
+            );
+
+            withClusters(onOffCluster);
+
+            let result = undefined;
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result = TlvInvokeResponse.decode(payload);
+            });
+
+            await interactionProtocol.handleInvokeRequest(
+                exchange,
+                INVOKE_COMMAND_REQUEST_MULTI,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
+            );
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI); // TODO Add again later when we support it officially
+            assert.equal(triggeredOn, true);
+            assert.equal(triggeredOff, true);
+            assert.equal(onOffState, false);
+        });
+
+        it("multi invoke response is split into multiple messages if needed", async () => {
+            onOffState = false;
+            let triggeredOn = false;
+            let triggeredOff = false;
+            onOffCluster = ClusterServer(
+                OnOffCluster,
+                {
+                    onOff: onOffState,
+                },
+                {
+                    on: async () => {
+                        onOffState = true;
+                        triggeredOn = true;
+                    },
+                    off: async () => {
+                        onOffState = false;
+                        triggeredOff = true;
+                    },
+                    toggle: async () => {
+                        onOffState = !onOffState;
+                    },
+                },
+            );
+
+            withClusters(onOffCluster);
+
+            let result = Array();
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result.push(TlvInvokeResponse.decode(payload));
+            });
+
+            interactionProtocol = new InteractionServer({
+                endpointStructure: endpointStructure,
+                eventHandler: (eventHandler = new EventHandler(storageContext.createContext("EventHandler"))),
+                maxPathsPerInvoke: 1000,
+            });
+
+            const request = {
+                ...INVOKE_COMMAND_REQUEST_MULTI,
+            };
+            request.invokeRequests = [...request.invokeRequests];
+            for (let i = 1; i < 100; i++) {
+                request.invokeRequests.push({
+                    commandPath: {
+                        endpointId: EndpointNumber(0),
+                        clusterId: ClusterId(6),
+                        commandId: CommandId(100 + i),
+                    },
+                });
+            }
+
+            await interactionProtocol.handleInvokeRequest(
+                exchange,
+                request,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
+            );
+
+            assert.equal(result.length, 3);
+            assert.equal(
+                result[0].invokeResponses.length + result[1].invokeResponses.length + result[2].invokeResponses.length,
+                103,
+            );
+            assert.equal(result[0].moreChunkedMessages, true);
+            assert.equal(result[1].moreChunkedMessages, true);
+            assert.equal(result[2].moreChunkedMessages, undefined); // aka false
+            assert.equal(triggeredOn, true);
+            assert.equal(triggeredOff, true);
+            assert.equal(onOffState, false);
+        });
+
+        it("throws on multi invoke commands with one same commands", async () => {
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result = TlvInvokeResponse.decode(payload);
+            });
+            let result = undefined;
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleInvokeRequest(
+                        exchange,
+                        INVOKE_COMMAND_REQUEST_MULTI_SAME,
+                        new InteractionServerMessenger(exchange),
+                        DummyUnicastMessage,
+                    ),
+                {
+                    message: "(128) Duplicate command paths (0/6/1) are not allowed in multi-command invoke requests",
+                },
+            );
+
             assert.equal(result, undefined);
         });
 

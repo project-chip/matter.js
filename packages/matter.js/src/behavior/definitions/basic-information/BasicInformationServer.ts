@@ -12,6 +12,7 @@ import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { Specification } from "../../../model/definitions/Specification.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
+import { DEFAULT_MAX_PATHS_PER_INVOKE } from "../../../protocol/interaction/InteractionServer.js";
 import { Observable } from "../../../util/Observable.js";
 import { ActionContext } from "../../context/ActionContext.js";
 import { BasicInformationBehavior } from "./BasicInformationBehavior.js";
@@ -56,6 +57,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         setDefault("hardwareVersionString", state.hardwareVersion.toString());
         setDefault("softwareVersionString", state.softwareVersion.toString());
         setDefault("specificationVersion", Specification.SPECIFICATION_VERSION);
+        setDefault("maxPathsPerInvoke", DEFAULT_MAX_PATHS_PER_INVOKE);
 
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
