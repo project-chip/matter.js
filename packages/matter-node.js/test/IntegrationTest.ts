@@ -392,7 +392,7 @@ describe("Integration Test", () => {
                 const promise = adminCommissioningCluster.openCommissioningWindow(
                     {
                         salt: new ByteArray(32),
-                        commissioningTimeout: 10,
+                        commissioningTimeout: 180,
                         discriminator: 0,
                         iterations: 1000,
                         pakePasscodeVerifier: new ByteArray(97),

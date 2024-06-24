@@ -153,7 +153,7 @@ const READ_REQUEST_WITH_FILTER: ReadRequest = {
 
 const READ_RESPONSE: DataReportPayload = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     attributeReportsPayload: [
         {
             attributeData: {
@@ -268,7 +268,7 @@ const READ_RESPONSE: DataReportPayload = {
 
 const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     attributeReportsPayload: [
         {
             attributeStatus: {
@@ -665,7 +665,7 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
     ],
 };
 
-const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
+const INVOKE_COMMAND_REQUEST_MULTI_WILDCARD: InvokeRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
