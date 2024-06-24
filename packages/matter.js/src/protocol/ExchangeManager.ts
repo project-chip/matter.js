@@ -242,15 +242,15 @@ export class ExchangeManager<ContextT> {
                     throw new MatterFlowError(`Unsupported protocol ${message.payloadHeader.protocolId}`);
                 }
                 if (isDuplicate) {
-                    logger.warn(
+                    logger.info(
                         `Ignoring duplicate message ${messageId} (requires no ack) for protocol ${message.payloadHeader.protocolId}.`,
                     );
                     return;
                 } else {
-                    logger.warn(
+                    logger.info(
                         `Discarding unexpected message ${messageId} for protocol ${
                             message.payloadHeader.protocolId
-                        }: ${Logger.toJSON(message)}`,
+                        }, exchangeIndex ${exchangeIndex} and sessionId ${session.id} : ${Logger.toJSON(message)}`,
                     );
                 }
             }
