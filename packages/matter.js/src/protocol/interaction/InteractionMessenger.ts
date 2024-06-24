@@ -6,13 +6,9 @@
 
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
+import { Status } from "../../cluster/globals/index.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
-import {
-    ImplementationError,
-    MatterFlowError,
-    NotImplementedError,
-    UnexpectedDataError,
-} from "../../common/MatterError.js";
+import { ImplementationError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { Logger } from "../../log/Logger.js";
 import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
@@ -58,8 +54,8 @@ export enum MessageType {
     ReportData = 0x05,
     WriteRequest = 0x06,
     WriteResponse = 0x07,
-    InvokeCommandRequest = 0x08,
-    InvokeCommandResponse = 0x09,
+    InvokeRequest = 0x08,
+    InvokeResponse = 0x09,
     TimedRequest = 0x0a,
 }
 
@@ -190,7 +186,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         // response is sent by handler
                         break;
                     }
-                    case MessageType.InvokeCommandRequest: {
+                    case MessageType.InvokeRequest: {
                         const invokeRequest = TlvInvokeRequest.decode(message.payload);
                         const { suppressResponse } = invokeRequest;
                         const invokeResponse = await recipient.handleInvokeRequest(
@@ -467,16 +463,16 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     async sendInvokeCommand(invokeRequest: InvokeRequest, minimumResponseTimeoutMs?: number) {
         if (invokeRequest.suppressResponse) {
             await this.requestWithSuppressedResponse(
-                MessageType.InvokeCommandRequest,
+                MessageType.InvokeRequest,
                 TlvInvokeRequest,
                 invokeRequest,
                 minimumResponseTimeoutMs,
             );
         } else {
             return await this.request(
-                MessageType.InvokeCommandRequest,
+                MessageType.InvokeRequest,
                 TlvInvokeRequest,
-                MessageType.InvokeCommandResponse,
+                MessageType.InvokeResponse,
                 TlvInvokeResponse,
                 invokeRequest,
                 minimumResponseTimeoutMs,
