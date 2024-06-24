@@ -58,7 +58,7 @@ export class SecureSession<T> extends Session<T> {
         isResumption: boolean;
         closeCallback: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
-        sessionParameters?: SessionParameterOptions;
+        peerSessionParameters?: SessionParameterOptions;
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
     }) {
         const {
@@ -72,7 +72,7 @@ export class SecureSession<T> extends Session<T> {
             isInitiator,
             isResumption,
             closeCallback,
-            sessionParameters,
+            peerSessionParameters,
             caseAuthenticatedTags,
             subscriptionChangedCallback,
         } = args;
@@ -96,7 +96,7 @@ export class SecureSession<T> extends Session<T> {
             attestationKey,
             closeCallback,
             subscriptionChangedCallback,
-            sessionParameters,
+            sessionParameters: peerSessionParameters,
             isInitiator,
             caseAuthenticatedTags,
         });

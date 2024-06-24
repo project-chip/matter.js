@@ -40,8 +40,8 @@ export const FALLBACK_INTERACTIONMODEL_REVISION = 11;
 export const FALLBACK_SPECIFICATION_VERSION = 0;
 
 /**
- * Fallback value for Maximum Paths per Invoke when not provided in Session parameters. We assume only one Path is
- * supported per Invoke interaction.
+ * Fallback value for the maximum number of paths that can be included in a single invoke message when not provided in
+ * Session parameters.
  */
 export const FALLBACK_MAX_PATHS_PER_INVOKE = 1;
 

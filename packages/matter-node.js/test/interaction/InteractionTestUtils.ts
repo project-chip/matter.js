@@ -108,7 +108,7 @@ export async function createDummyMessageExchange(
         closeCallback: async () => {
             /* */
         },
-        sessionParameters: { idleIntervalMs: 1000, activeIntervalMs: 1000 },
+        peerSessionParameters: { idleIntervalMs: 1000, activeIntervalMs: 1000 },
     });
     return new DummyMessageExchange(
         session,

@@ -31,14 +31,22 @@ import { Fabric } from "./fabric/Fabric.js";
 import { FabricAction, FabricManager } from "./fabric/FabricManager.js";
 import { Diagnostic } from "./log/Diagnostic.js";
 import { Logger } from "./log/Logger.js";
+import { Specification } from "./model/index.js";
 import { NetInterface, isNetworkInterface } from "./net/NetInterface.js";
 import { NetworkError } from "./net/Network.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
 import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
+import { DEFAULT_MAX_PATHS_PER_INVOKE } from "./protocol/interaction/InteractionServer.js";
 import { StatusCode, StatusResponseError } from "./protocol/interaction/StatusCode.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
-import { Session } from "./session/Session.js";
+import {
+    SESSION_ACTIVE_INTERVAL_MS,
+    SESSION_ACTIVE_THRESHOLD_MS,
+    SESSION_IDLE_INTERVAL_MS,
+    Session,
+    SessionParameters,
+} from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
 import { StorageContext } from "./storage/StorageContext.js";
@@ -64,6 +72,7 @@ export class MatterDevice {
     readonly #fabricManager: FabricManager;
     readonly #sessionManager: SessionManager<MatterDevice>;
     #failsafeContext?: FailsafeContext;
+    readonly sessionParameters: SessionParameters;
 
     // Currently we do not put much effort into synchronizing announcements as it probably isn't really necessary.  But
     // this mutex prevents automated announcements from piling up and allows us to ensure announcements are complete
@@ -82,6 +91,7 @@ export class MatterDevice {
         minimumCaseSessionsPerFabricAndNode = 3,
         commissioningChangedCallback: (fabricIndex: FabricIndex, fabricAction: FabricAction) => void,
         sessionChangedCallback: (fabricIndex: FabricIndex) => void,
+        sessionParameters?: Partial<SessionParameters>,
     ) {
         return asyncNew(
             MatterDevice,
@@ -91,6 +101,7 @@ export class MatterDevice {
             minimumCaseSessionsPerFabricAndNode,
             commissioningChangedCallback,
             sessionChangedCallback,
+            sessionParameters,
         );
     }
 
@@ -101,7 +112,20 @@ export class MatterDevice {
         minimumCaseSessionsPerFabricAndNode: number,
         private readonly commissioningChangedCallback: (fabricIndex: FabricIndex, fabricAction: FabricAction) => void,
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
+        sessionParameters: Partial<SessionParameters> = {},
     ) {
+        // We use defaults and allow overriding them
+        this.sessionParameters = {
+            idleIntervalMs: SESSION_IDLE_INTERVAL_MS,
+            activeIntervalMs: SESSION_ACTIVE_INTERVAL_MS,
+            activeThresholdMs: SESSION_ACTIVE_THRESHOLD_MS,
+            dataModelRevision: Specification.DATA_MODEL_REVISION,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+            specificationVersion: Specification.SPECIFICATION_VERSION,
+            maxPathsPerInvoke: DEFAULT_MAX_PATHS_PER_INVOKE,
+            ...sessionParameters,
+        };
+
         this.channelManager = new ChannelManager(minimumCaseSessionsPerFabricAndNode);
 
         this.#fabricManager = new FabricManager(fabricStorage);

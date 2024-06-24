@@ -11,9 +11,7 @@ import { FabricId } from "../datatype/FabricId.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
-import { Specification } from "../model/definitions/Specification.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
-import { MAX_PATHS_PER_INVOKE } from "../protocol/interaction/InteractionServer.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { AsyncObservable, Observable } from "../util/Observable.js";
@@ -113,14 +111,7 @@ export class SessionManager<ContextT> {
                     this.#insecureSessions.delete(session.nodeId);
                 },
                 initiatorNodeId,
-                sessionParameters: {
-                    // We initiate the session, so we choose the parameters
-                    dataModelRevision: Specification.DATA_MODEL_REVISION,
-                    interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
-                    specificationVersion: Specification.SPECIFICATION_VERSION, // TODO: formally wrong?
-                    maxPathsPerInvoke: MAX_PATHS_PER_INVOKE,
-                    ...sessionParameters,
-                },
+                sessionParameters,
                 isInitiator: isInitiator ?? false,
             });
 
@@ -141,7 +132,7 @@ export class SessionManager<ContextT> {
         salt: ByteArray;
         isInitiator: boolean;
         isResumption: boolean;
-        sessionParameters?: SessionParameterOptions;
+        peerSessionParameters?: SessionParameterOptions;
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
     }) {
         const {
@@ -153,7 +144,7 @@ export class SessionManager<ContextT> {
             salt,
             isInitiator,
             isResumption,
-            sessionParameters,
+            peerSessionParameters,
             caseAuthenticatedTags,
         } = args;
         const session = await SecureSession.create({
@@ -171,7 +162,7 @@ export class SessionManager<ContextT> {
                 this.#sessions.delete(session);
                 await this.#sessionClosed.emit(session);
             },
-            sessionParameters,
+            peerSessionParameters: peerSessionParameters,
             caseAuthenticatedTags,
             subscriptionChangedCallback: () => {
                 this.#subscriptionsChanged.emit(session);
@@ -336,7 +327,7 @@ export class SessionManager<ContextT> {
                     interactionModelRevision,
                     specificationVersion,
                     maxPathsPerInvoke,
-                },
+                } = {},
                 caseAuthenticatedTags,
             }) => {
                 logger.info("restoring resumption record for node", nodeId);
@@ -392,5 +383,11 @@ export class SessionManager<ContextT> {
             await session?.end();
             this.#insecureSessions.delete(session.nodeId);
         }
+    }
+}
+
+namespace SessionManager {
+    export interface Options {
+        maxPathsPerInvoke?: number;
     }
 }

@@ -28,6 +28,7 @@ import { VendorId } from "./datatype/VendorId.js";
 import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric.js";
 import { Logger } from "./log/Logger.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
+import { Specification } from "./model/definitions/Specification.js";
 import { NetInterface } from "./net/NetInterface.js";
 import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
 import { CommissioningOptions, ControllerCommissioner } from "./protocol/ControllerCommissioner.js";
@@ -39,6 +40,12 @@ import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChann
 import { StatusReportOnlySecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
+import {
+    SESSION_ACTIVE_INTERVAL_MS,
+    SESSION_ACTIVE_THRESHOLD_MS,
+    SESSION_IDLE_INTERVAL_MS,
+    SessionParameters,
+} from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
@@ -75,7 +82,8 @@ const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xfff1);
 
 const RECONNECTION_POLLING_INTERVAL = 10 * 60 * 1000; // 10 minutes
 
-const CONNECTIONS_PER_FABRIC_AND_NODE = 3;
+const CONTROLLER_CONNECTIONS_PER_FABRIC_AND_NODE = 3;
+const CONTROLLER_MAX_PATHS_PER_INVOKE = 10;
 
 const logger = Logger.get("MatterController");
 
@@ -153,7 +161,7 @@ export class MatterController {
     }
 
     readonly sessionManager: SessionManager<MatterController>;
-    private readonly channelManager = new ChannelManager(CONNECTIONS_PER_FABRIC_AND_NODE);
+    private readonly channelManager = new ChannelManager(CONTROLLER_CONNECTIONS_PER_FABRIC_AND_NODE);
     private readonly exchangeManager: ExchangeManager<MatterController>;
     private readonly paseClient = new PaseClient();
     private readonly caseClient = new CaseClient();
@@ -211,6 +219,19 @@ export class MatterController {
 
     get nodeId() {
         return this.fabric.rootNodeId;
+    }
+
+    /** Returns our default session parameters for us as a controller. */
+    get sessionParameters(): SessionParameters {
+        return {
+            idleIntervalMs: SESSION_IDLE_INTERVAL_MS,
+            activeIntervalMs: SESSION_ACTIVE_INTERVAL_MS,
+            activeThresholdMs: SESSION_ACTIVE_THRESHOLD_MS,
+            dataModelRevision: Specification.DATA_MODEL_REVISION,
+            interactionModelRevision: Specification.INTERACTION_MODEL_REVISION,
+            specificationVersion: Specification.SPECIFICATION_VERSION,
+            maxPathsPerInvoke: CONTROLLER_MAX_PATHS_PER_INVOKE,
+        };
     }
 
     public addTransportInterface(netInterface: NetInterface) {
@@ -390,6 +411,7 @@ export class MatterController {
 
         // Do PASE paring
         const unsecureSession = this.sessionManager.createUnsecureSession({
+            // Use the session parameters from MDNS announcements when available and rest is assumed to be fallbacks
             sessionParameters: {
                 idleIntervalMs: device?.SII,
                 activeIntervalMs: device?.SAI,
@@ -647,6 +669,7 @@ export class MatterController {
         const operationalChannel = await operationalInterface.openChannel(operationalServerAddress);
         const { sessionParameters } = this.findResumptionRecordByNodeId(peerNodeId) ?? {};
         const unsecureSession = this.sessionManager.createUnsecureSession({
+            // Use the session parameters from MDNS announcements when available and rest is assumed to be fallbacks
             sessionParameters: {
                 idleIntervalMs: discoveryData?.SII ?? sessionParameters?.idleIntervalMs,
                 activeIntervalMs: discoveryData?.SAI ?? sessionParameters?.activeIntervalMs,

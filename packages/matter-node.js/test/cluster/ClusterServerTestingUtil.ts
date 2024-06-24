@@ -69,7 +69,7 @@ export async function createTestSessionWithFabric() {
         closeCallback: async () => {
             /* */
         },
-        sessionParameters: {
+        peerSessionParameters: {
             idleIntervalMs: 1,
             activeIntervalMs: 2,
         },
