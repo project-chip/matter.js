@@ -297,6 +297,7 @@ const server = await ServerNode.create(RootEndpoint, {
         networks: [{ networkId: networkId, connected: !wifiOrThreadAdded }],
         scanMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
         connectMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
+        supportedWifiBands: wifiOrThreadAdded ? [NetworkCommissioning.WiFiBand["2G4"]] : undefined,
     },
     myFancyFunctionality: {
         myFancyValue: 0,
