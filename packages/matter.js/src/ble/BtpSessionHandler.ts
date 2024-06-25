@@ -57,7 +57,12 @@ export class BtpSessionHandler {
         // Decode handshake request
         const handshakeRequest = BtpCodec.decodeBtpHandshakeRequest(handshakeRequestPayload);
 
-        const { versions, attMtu: handshakeMtu, clientWindowSize } = handshakeRequest;
+        const {
+            versions,
+            attMtu: handshakeMtu, // Number excluding 3 header bytes
+            clientWindowSize,
+        } = handshakeRequest;
+        logger.debug(`Received BTP handshake request:`, Diagnostic.dict({ maxDataSize, ...handshakeRequest }));
 
         // Verify handshake request and choose the highest supported version for both parties
         const version = BTP_SUPPORTED_VERSIONS.find(version => versions.includes(version));
@@ -68,7 +73,6 @@ export class BtpSessionHandler {
 
         let attMtu = BLE_MINIMUM_ATT_MTU;
         if (maxDataSize !== undefined) {
-            maxDataSize += 3; // This is without the 3 bytes GATT PDU header
             if (maxDataSize > BLE_MINIMUM_ATT_MTU) {
                 if (handshakeMtu <= BLE_MINIMUM_ATT_MTU) {
                     attMtu = Math.min(maxDataSize, BLE_MAXIMUM_BTP_MTU);
@@ -78,7 +82,7 @@ export class BtpSessionHandler {
             }
         }
 
-        const fragmentSize = attMtu - 3; // Each GATT PDU used by the BTP protocol introduces 3 byte header overhead.
+        const fragmentSize = attMtu; // Each GATT PDU used by the BTP protocol introduces 3 byte header overhead.
         const windowSize = Math.min(BTP_MAXIMUM_WINDOW_SIZE, clientWindowSize);
 
         // Generate and send out handshake response
@@ -88,13 +92,13 @@ export class BtpSessionHandler {
             windowSize,
         });
 
-        logger.debug(`Sending BTP handshake response: ${handshakeResponse.toHex()}`);
         logger.debug(
-            `Sending BTP packet: ${Diagnostic.dict({
+            `Sending BTP handshake response:`,
+            Diagnostic.dict({
                 version,
                 attMtu,
                 windowSize,
-            })}`,
+            }),
         );
 
         const btpSession = new BtpSessionHandler(
@@ -120,8 +124,10 @@ export class BtpSessionHandler {
     ) {
         const handshakeRequest = BtpCodec.decodeBtpHandshakeResponsePayload(handshakeResponsePayload);
 
+        logger.debug("Handshake request", Diagnostic.dict(handshakeRequest));
+
         const { version, attMtu: handshakeMtu, windowSize } = handshakeRequest;
-        const fragmentSize = handshakeMtu - 3; // Each GATT PDU used by the BTP protocol introduces 3 byte header overhead.
+        const fragmentSize = Math.min(handshakeMtu, BLE_MAXIMUM_BTP_MTU);
 
         return new BtpSessionHandler(
             "central",
