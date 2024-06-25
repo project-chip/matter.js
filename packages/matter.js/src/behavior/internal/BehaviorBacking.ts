@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CrashedDependencyError, Lifecycle } from "../../common/Lifecycle.js";
+import { Lifecycle } from "../../common/Lifecycle.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { type Agent } from "../../endpoint/Agent.js";
 import type { Endpoint } from "../../endpoint/Endpoint.js";
@@ -60,24 +60,43 @@ export abstract class BehaviorBacking {
      */
     initialize(agent: Agent) {
         const constructBacking = () => {
-            // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
-            // will throw if the behavior isn't initialized
-            const behavior = this.#lifecycleInstance(agent);
+            try {
+                // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
+                // will throw if the behavior isn't initialized
+                const behavior = this.#lifecycleInstance(agent);
 
-            // Perform actual initialization
-            return this.invokeInitializer(behavior, this.#options);
+                // Perform actual initialization
+                return this.invokeInitializer(behavior, this.#options);
+            } catch (e) {}
         };
 
-        const backingConstructionCrashed = (e: Error) => {
-            // This is the only error we should see here...
-            if (!(e instanceof CrashedDependencyError)) {
-                // ...but if not, log
-                logger.error("Unhandled error initializing behavior", e);
+        const backingConstructionCrashed = (e: unknown) => {
+            let detail;
+            if (this.#endpoint.behaviors.isInitialized) {
+                // The endpoint is initialized so report the full stack trace
+                detail = e;
+            } else {
+                // The endpoint is still initializing so we only log the message.  We include full details in the
+                // AggregateError thrown by Behaviors
+                if (e instanceof Error) {
+                    if (e.cause instanceof Error) {
+                        detail = `Error initializing ${this}: ${e.cause.message}`;
+                    } else {
+                        detail = e.message;
+                    }
+                } else {
+                    detail = `Error initializing ${this}: ${e}`;
+                }
             }
+            logger.error(detail);
         };
 
-        this.construction.start(constructBacking);
-        this.construction.onError(backingConstructionCrashed);
+        try {
+            this.construction.start(constructBacking);
+            this.construction.onError(backingConstructionCrashed);
+        } catch (e) {
+            backingConstructionCrashed(e);
+        }
     }
 
     /**

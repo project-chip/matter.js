@@ -6,6 +6,7 @@
 
 import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { AttributeModel, ClusterModel, Metatype, ValueModel } from "../../../model/index.js";
+import { FeatureMap } from "../../../model/standard/elements/FeatureMap.js";
 import { StatusCode } from "../../../protocol/interaction/StatusCode.js";
 import { camelize } from "../../../util/String.js";
 import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
@@ -76,12 +77,13 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
             break;
 
         case undefined:
-            if (schema.type === undefined) {
+            const type = schema.effectiveType;
+            if (type === undefined) {
                 throw new SchemaImplementationError(DataModelPath(schema.path), `No type defined`);
             }
             throw new SchemaImplementationError(
                 DataModelPath(schema.path),
-                `Cannot determine metatype for type ${schema.type}`,
+                `Cannot determine metatype for type "${type}"`,
             );
 
         default:
@@ -143,7 +145,13 @@ function createBitmapValidator(schema: ValueModel): ValueSupervisor.Validate | u
         } else {
             max = 1;
         }
-        fields[camelize(field.name)] = {
+        let name;
+        if (field?.parent?.id === FeatureMap.id) {
+            name = camelize(field.description ?? field.name);
+        } else {
+            name = camelize(field.name);
+        }
+        fields[name] = {
             schema: field,
             max,
         };

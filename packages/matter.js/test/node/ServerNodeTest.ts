@@ -11,14 +11,17 @@ import { CertificationDeclarationManager } from "../../src/certificate/Certifica
 import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
 import { PumpConfigurationAndControl } from "../../src/cluster/definitions/PumpConfigurationAndControlCluster.js";
 import { DnsCodec, DnsMessage, DnsRecordType } from "../../src/codec/DnsCodec.js";
+import { CrashedDependencyError } from "../../src/common/Lifecycle.js";
 import { Crypto } from "../../src/crypto/Crypto.js";
 import { Key, PrivateKey } from "../../src/crypto/Key.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
+import { LightSensorDevice } from "../../src/endpoint/definitions/device/LightSensorDevice.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { PumpDevice } from "../../src/endpoint/definitions/device/PumpDevice.js";
 import { AggregatorEndpoint } from "../../src/endpoint/definitions/system/AggregatorEndpoint.js";
+import { Environment } from "../../src/environment/Environment.js";
 import { FabricManager } from "../../src/fabric/FabricManager.js";
 import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
 import { ServerNode } from "../../src/node/ServerNode.js";
@@ -340,6 +343,63 @@ describe("ServerNode", () => {
         expect(pump.stateOf(DescriptorBehavior).serverList).deep.equals([6, 3, 512, 29]);
 
         await node.close();
+    });
+
+    describe("cashes gracefully", () => {
+        const badNodeEnv = new Environment("test");
+        badNodeEnv.vars.set("behaviors.basicInformation.revision", "not a number");
+
+        const badEndpointEnv = new Environment("test");
+        badEndpointEnv.vars.set("behaviors.illuminancemeasurement.diet", "duck food");
+
+        describe("during behavior error on creation", () => {
+            it("from root behavior error", async () => {
+                await expect(
+                    MockServerNode.create(MockServerNode.RootEndpoint, { environment: badNodeEnv }),
+                ).rejectedWith(CrashedDependencyError);
+            });
+
+            it("from behavior error on child during node create", async () => {
+                await expect(
+                    MockServerNode.create(MockServerNode.RootEndpoint, {
+                        environment: badEndpointEnv,
+                        parts: [new Endpoint(LightSensorDevice)],
+                    }),
+                ).rejectedWith(CrashedDependencyError);
+            });
+
+            it("from behavior on child after node create", async () => {
+                const node = await MockServerNode.create(MockServerNode.RootEndpoint, { environment: badEndpointEnv });
+                await expect(node.add(new Endpoint(LightSensorDevice))).rejectedWith(CrashedDependencyError);
+            });
+        });
+
+        describe("when coming online", () => {
+            it("from root behavior error", async () => {
+                await expect(
+                    MockServerNode.createOnline({
+                        config: { type: MockServerNode.RootEndpoint, environment: badNodeEnv },
+                    }),
+                ).rejectedWith(CrashedDependencyError);
+            });
+
+            it("from behavior error on child during startup", async () => {
+                await expect(
+                    MockServerNode.createOnline({
+                        config: { type: MockServerNode.RootEndpoint, environment: badEndpointEnv },
+                        device: undefined,
+                    }),
+                ).rejectedWith(CrashedDependencyError);
+            });
+
+            it("from behavior error on child added after startup", async () => {
+                const node = await MockServerNode.createOnline({
+                    config: { type: MockServerNode.RootEndpoint, environment: badEndpointEnv },
+                    device: undefined,
+                });
+                await node.add(OnOffLightDevice);
+            });
+        });
     });
 });
 

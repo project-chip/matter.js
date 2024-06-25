@@ -5,6 +5,7 @@
  */
 
 import type { Lifecycle } from "../common/Lifecycle.js";
+import { isObject } from "../util/Type.js";
 
 /**
  * Logged values may implement this interface to customize presentation.
@@ -51,6 +52,11 @@ export namespace Diagnostic {
          * A deemphasized diagnostic.  Rendered to draw less attention than default rendering.
          */
         Weak = "weak",
+
+        /**
+         * An error message diagnostic.
+         */
+        Error = "error",
 
         /**
          * A key/value diagnostic.  Rendered as a group of key/value pairs.
@@ -135,89 +141,50 @@ export namespace Diagnostic {
      * Create a Diagnostic for an error.
      */
     export function error(error: any) {
-        let message: string | undefined;
-        let stack: string | undefined;
-        if (error !== undefined && error !== null) {
-            if (error instanceof Error) {
-                message = error.message;
-                stack = error.stack;
-            } else if (error.message) {
-                message = typeof error.message === "string" ? message : error.toString();
-            }
+        const { message, stack } = messageAndStackFor(error);
+
+        let cause, errors;
+        if (isObject(error)) {
+            ({ cause, errors } = error);
         }
-        if (message === undefined || message === null || message === "") {
-            if (error instanceof Error) {
-                message = error.constructor.name;
-                if (message === "Error") {
-                    message = "(unknown error)";
-                }
-            } else {
-                message = "(unknown error)";
-            }
-        }
-        if (!stack) {
+
+        if (stack === undefined && cause === undefined && errors === undefined) {
             return message;
         }
 
-        stack = stack.toString();
-
-        // Strip extra node garbage off stack from node asserts
-        stack = stack.replace(/^.*?\n\nError: /gs, "Error: ");
-
-        // Strip off redundant error tag from v8
-        if (stack.startsWith("Error: ")) {
-            stack = stack.slice(7);
+        const list: Array<string | Diagnostic> = [message];
+        if (stack !== undefined) {
+            list.push(Diagnostic(Presentation.List, stack));
         }
 
-        // Strip off redundant message from v8
-        const pos = stack.indexOf(message);
-        if (pos !== -1) {
-            stack = stack.slice(pos + message.length).trim();
-        }
-
-        // Spiff up lines a bit
-        const lines = Array<unknown>();
-        for (let line of stack.split("\n")) {
-            line = line.trim();
-            if (line === "") {
-                continue;
+        // We render chained causes at the same level as the parent.  They are displayed atomically and there can be
+        // only one so this is not ambiguous.  If we did not do this we would end up with a lot of indent levels
+        for (; isObject(cause); cause = cause.cause) {
+            const { message, stack } = messageAndStackFor(cause);
+            list.push(message);
+            if (stack !== undefined) {
+                list.push(stack as Diagnostic);
             }
-
-            const match1 = line.match(/^at\s+(.+)\s+\(([^)]+)\)$/);
-            if (match1) {
-                lines.push(
-                    Diagnostic.squash(
-                        Diagnostic.weak("at "),
-                        match1[1],
-                        Diagnostic.weak(" ("),
-                        Diagnostic.weak(match1[2]),
-                        Diagnostic.weak(")"),
-                    ),
-                );
-                continue;
-            }
-
-            const match2 = line.match(/^at\s+(.+)(:\d+:\d+)$/);
-            if (match2) {
-                lines.push(Diagnostic.squash(Diagnostic.weak("at "), match2[1], Diagnostic.weak(match2[2])));
-                continue;
-            }
-
-            lines.push(line);
         }
 
-        // Node helpfully gives us this if there's no message.  It's not even the name of the error class, just "Error"
-        if (lines[0] === "Error") {
-            lines.shift();
+        // AggregateError support.  We render sub-errors as subordinate to the parent.  Otherwise the parent error would
+        // be ambiguous.  This means they get an extra indent level but since they do not tend to be nested as deeply as
+        // causes this is a good tradeoff
+        if (Array.isArray(errors)) {
+            list.push(
+                errors.map(e => {
+                    let diagnostic = Diagnostic.error(e);
+                    if (Array.isArray(diagnostic)) {
+                        diagnostic[0] = Diagnostic(Presentation.Error, ["Sub-error:", diagnostic[0]]);
+                    } else if (Array.isArray(diagnostic)) {
+                        diagnostic = Diagnostic(Presentation.Error, ["Sub-error:", diagnostic]);
+                    }
+                    return diagnostic;
+                }) as Diagnostic,
+            );
         }
 
-        return Diagnostic(Presentation.List, [message, ...lines]);
-    }
-
-    export function prefixError(prefix: string, cause: any) {
-        if (cause instanceof Error) {
-            cause.message = upgrade(`${prefix}: ${cause.message}`, Diagnostic.squash(prefix, " ", cause.message));
-        }
+        return Diagnostic(Presentation.List, list);
     }
 
     /**
@@ -322,4 +289,80 @@ export namespace Diagnostic {
     export function hex(value: number | bigint) {
         return `0x${value.toString(16)}`;
     }
+}
+
+function messageAndStackFor(error: any) {
+    let message: string | undefined;
+    let rawStack: string | undefined;
+    if (error !== undefined && error !== null) {
+        if (error instanceof Error) {
+            message = error.message;
+            rawStack = error.stack;
+        } else if (error.message) {
+            message = typeof error.message === "string" ? message : error.toString();
+        }
+    }
+    if (message === undefined || message === null || message === "") {
+        if (error instanceof Error) {
+            message = error.constructor.name;
+            if (message === "Error") {
+                message = "(unknown error)";
+            }
+        } else {
+            message = "(unknown error)";
+        }
+    }
+    if (!rawStack) {
+        return { message };
+    }
+
+    rawStack = rawStack.toString();
+
+    // Strip extra node garbage off stack from node asserts
+    rawStack = rawStack.replace(/^.*?\n\nError: /gs, "Error: ");
+
+    // Strip off redundant error tag from v8
+    if (rawStack.startsWith("Error: ")) {
+        rawStack = rawStack.slice(7);
+    }
+
+    // Strip off redundant message from v8
+    const pos = rawStack.indexOf(message);
+    if (pos !== -1) {
+        rawStack = rawStack.slice(pos + message.length).trim();
+    }
+
+    // Spiff up stack lines a bit
+    const stack = Array<unknown>();
+    for (let line of rawStack.split("\n")) {
+        line = line.trim();
+        if (line === "") {
+            continue;
+        }
+
+        const match1 = line.match(/^at\s+(?:(.+)\s+\(([^)]+)\)|(<anonymous>))$/);
+        if (match1) {
+            const value = [Diagnostic.weak("at "), match1[1] ?? match1[3]];
+            if (match1[2] !== undefined) {
+                value.push(Diagnostic.weak(" ("), Diagnostic.weak(match1[2]), Diagnostic.weak(")"));
+            }
+            stack.push(Diagnostic.squash(...value));
+            continue;
+        }
+
+        const match2 = line.match(/^at\s+(.+)(:\d+:\d+)$/);
+        if (match2) {
+            stack.push(Diagnostic.squash(Diagnostic.weak("at "), match2[1], Diagnostic.weak(match2[2])));
+            continue;
+        }
+
+        stack.push(line);
+    }
+
+    // Node helpfully gives us this if there's no message.  It's not even the name of the error class, just "Error"
+    if (stack[0] === "Error") {
+        stack.shift();
+    }
+
+    return { message, stack };
 }

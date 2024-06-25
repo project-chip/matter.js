@@ -29,7 +29,8 @@
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "dependencies": {
         "@project-chip/matter.js": "0.10.0-alpha.0-20240628-297f53d6",
-        "@project-chip/matter.js-intermediate-models": "0.10.0-alpha.0-20240628-297f53d6"
+        "@project-chip/matter.js-intermediate-models": "0.10.0-alpha.0-20240628-297f53d6",
+        "trace-unhandled": "^2.0.1"
     },
     "engines": {
         "node": ">=18.0.0"

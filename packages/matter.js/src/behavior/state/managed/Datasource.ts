@@ -165,8 +165,7 @@ export namespace Datasource {
     }
 
     /**
-     * The interface {@link Datasource} uses to read and write non-volatile
-     * values.
+     * The interface {@link Datasource} uses to read and write non-volatile values.
      */
     export interface Store {
         /**

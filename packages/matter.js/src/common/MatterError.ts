@@ -42,3 +42,15 @@ export class ReadOnlyError extends ImplementationError {
         super(message);
     }
 }
+
+/**
+ * Thrown for errors that have multiple underlying causes.
+ */
+export class MatterAggregateError extends AggregateError {
+    static [Symbol.hasInstance](instance: unknown) {
+        if (instance instanceof MatterError) {
+            return true;
+        }
+        return Error[Symbol.hasInstance](instance);
+    }
+}

@@ -9,7 +9,7 @@ import { ActionContext } from "../behavior/context/ActionContext.js";
 import { ActionTracer } from "../behavior/context/ActionTracer.js";
 import { NodeActivity } from "../behavior/context/NodeActivity.js";
 import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
-import { CrashedDependencyError, Lifecycle, UninitializedDependencyError } from "../common/Lifecycle.js";
+import { Lifecycle, UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Environment } from "../environment/Environment.js";
@@ -231,7 +231,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
                 throw new ImplementationError(`State values for ${type.id} must be an object, not ${typeof values}`);
             }
             if (Array.isArray(values)) {
-                throw new ImplementationError(`StateValue for ${type.id} must be an object, not an array`);
+                throw new ImplementationError(`State values for ${type.id} must be an object, not an array`);
             }
 
             patch(values, behavior.state, this.path);
@@ -426,12 +426,18 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     /**
      * Add a child endpoint.
      *
+     * If this endpoint is initialized, awaits child initialization.  If child initialization fails the child is
+     * removed.
+     *
      * @param endpoint the {@link Endpoint} or {@link Endpoint.Configuration}
      */
     async add<T extends EndpointType>(endpoint: Endpoint<T> | Endpoint.Configuration<T> | T): Promise<Endpoint<T>>;
 
     /**
      * Add a child endpoint.
+     *
+     * If this endpoint is initialized, awaits child initialization.  If child initialization fails the child is
+     * removed.
      *
      * @param type the {@link EndpointType} of the child endpoint
      * @param options settings for the new endpoint
@@ -455,7 +461,14 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
         this.parts.add(endpoint);
 
-        await endpoint.construction;
+        if (this.lifecycle.isReady) {
+            try {
+                await endpoint.construction.initialization;
+            } catch (e) {
+                this.parts.delete(endpoint);
+                throw e;
+            }
+        }
 
         return endpoint;
     }
@@ -635,28 +648,6 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         return this.behaviors.initialize(agent);
     }
 
-    /**
-     * Invoked if one or more behaviors crashed during initialization.
-     *
-     * The default implementation crashes the endpoint.
-     */
-    protected behaviorCrash() {
-        this.construction.onSuccess(() => {
-            logger.info(
-                "Endpoint",
-                Diagnostic.strong(this.toString()),
-                "initialization failed because of errors in behaviors",
-            );
-
-            this.#construction.crashed(
-                new CrashedDependencyError(this.toString(), "unavailable due to behavior initialization failure"),
-
-                // We do not want this error logged
-                false,
-            );
-        });
-    }
-
     #initialize() {
         const trace: ActionTracer.Action | undefined = this.env.has(ActionTracer)
             ? { type: ActionTracer.ActionType.Initialize }
@@ -668,25 +659,15 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             this.#activity = this.env.get(NodeActivity);
         }
 
-        const result = OfflineContext.act("initialize", this.#activity, initializeEndpoint, {
-            trace,
-        });
+        const result = OfflineContext.act("initialize", this.#activity, initializeEndpoint, { trace });
 
-        const afterEndpointInitialized = () => {
+        return MaybePromise.then(result, () => {
             this.lifecycle.change(EndpointLifecycle.Change.Ready);
             if (trace && this.env.has(ActionTracer)) {
                 trace.path = this.path;
                 this.env.get(ActionTracer).record(trace);
             }
-
-            if (this.behaviors.hasCrashed) {
-                this.behaviorCrash();
-            }
-        };
-
-        this.#construction.onSuccess(afterEndpointInitialized);
-
-        return result;
+        });
     }
 
     #logReady() {

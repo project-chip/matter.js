@@ -80,9 +80,18 @@ export class PromiseTimeoutError extends MatterError {
  * @param promise a promise that resolves or rejects when the timed task completes
  * @param cancel invoked on timeout (default implementation throws {@link PromiseTimeoutError})
  */
-export async function withTimeout<T>(timeoutMs: number, promise: Promise<T>, cancel?: () => void): Promise<T> {
-    if (!cancel) {
-        cancel = () => {
+export async function withTimeout<T>(
+    timeoutMs: number,
+    promise: Promise<T>,
+    cancel?: AbortController | (() => void),
+): Promise<T> {
+    let cancelFn;
+    if (typeof cancel === "function") {
+        cancelFn = cancel;
+    } else if (typeof cancel?.abort === "function") {
+        cancelFn = () => (cancel as AbortController).abort();
+    } else {
+        cancelFn = () => {
             throw new PromiseTimeoutError();
         };
     }

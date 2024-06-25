@@ -19,6 +19,7 @@ import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
+import { asyncNew } from "../util/AsyncConstruction.js";
 import { Mutex } from "../util/Mutex.js";
 import { Identity } from "../util/Type.js";
 import { Node } from "./Node.js";
@@ -87,7 +88,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         This extends typeof ServerNode<any>,
         T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint,
     >(this: This, definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
-        const node = new this(definition, options);
+        const node = await asyncNew(this, definition, options);
 
         if (!node.lifecycle.isTreeReady) {
             await node.lifecycle.treeReady;
@@ -235,8 +236,10 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     }
 
     #reportCrashTermination() {
-        logger.info("Aborting", Diagnostic.strong(this.toString()), "due to endpoint error");
-        this.construction.onSuccess(() => this.construction.crashed(new Error(`Aborted ${this} due to error`), false));
+        logger.info("Aborting", Diagnostic.strong(this.toString()), ": Endpoints have errors");
+        this.construction.onSuccess(() =>
+            this.construction.crashed(new Error(`Aborted ${this}: Endpoints have errors`), false),
+        );
     }
 }
 

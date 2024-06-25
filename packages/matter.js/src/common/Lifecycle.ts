@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic } from "../log/Diagnostic.js";
 import { MaybePromise } from "../util/Promises.js";
 import { ImplementationError } from "./MatterError.js";
 
@@ -65,9 +64,6 @@ export namespace Lifecycle {
 export class DependencyLifecycleError extends ImplementationError {
     constructor(what: string, why: string) {
         super(`${what} ${why}`);
-        this.message = Diagnostic.upgrade(this.message, () => {
-            Diagnostic.squash(Diagnostic.strong(what), " ", why);
-        });
     }
 }
 
