@@ -37,10 +37,13 @@ export class StatusReportOnlySecureChannelProtocol implements ProtocolHandler<an
                 await this.handleInitialStatusReport(exchange, message);
                 break;
             default:
-                throw new StatusResponseError(
-                    `Unexpected initial message on secure channel protocol: ${messageType.toString(16)}`,
-                    StatusCode.InvalidAction,
-                );
+                // We silently ignore incoming Standalone Ack messages that we do not expect here
+                if (messageType !== MessageType.StandaloneAck) {
+                    throw new StatusResponseError(
+                        `Unexpected initial message on secure channel protocol: ${messageType.toString(16)}`,
+                        StatusCode.InvalidAction,
+                    );
+                }
         }
     }
 
