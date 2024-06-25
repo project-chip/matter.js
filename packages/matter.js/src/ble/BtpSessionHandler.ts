@@ -15,6 +15,7 @@ import {
     BLE_MAXIMUM_BTP_MTU,
     BLE_MINIMUM_ATT_MTU,
     BTP_ACK_TIMEOUT_MS,
+    BTP_CONN_IDLE_TIMEOUT,
     BTP_MAXIMUM_WINDOW_SIZE,
     BTP_SEND_ACK_TIMEOUT_MS,
 } from "./BleConsts.js";
@@ -45,6 +46,10 @@ export class BtpSessionHandler {
         this.btpSendAckTimeoutTriggered(),
     );
     private isActive = true;
+    private idleTimeout = Time.getTimer("Central Device Idle Timer", BTP_CONN_IDLE_TIMEOUT, async () => {
+        logger.info("Central Device Connection Idle Timer expired, closing BTP session");
+        await this.close();
+    });
 
     /** Factory method to create a new BTPSessionHandler from a received handshake request */
     static async createFromHandshakeRequest(
@@ -152,7 +157,7 @@ export class BtpSessionHandler {
      * @param handleMatterMessagePayload Callback to handle a Matter message payload
      */
     constructor(
-        role: "central" | "peripheral",
+        private readonly role: "central" | "peripheral",
         btpVersion: number,
         private readonly fragmentSize: number,
         private readonly clientWindowSize: number,
@@ -392,6 +397,13 @@ export class BtpSessionHandler {
             if (!this.ackReceiveTimer.isRunning) {
                 this.ackReceiveTimer.start(); // starts the timer
             }
+            if (this.role === "central") {
+                // Restart idle timer when sending unique data
+                if (this.idleTimeout.isRunning) {
+                    this.idleTimeout.stop();
+                }
+                this.idleTimeout.start();
+            }
 
             // Remove the message from the queue if it is the last segment
             if (isEndingSegment) {
@@ -412,6 +424,7 @@ export class BtpSessionHandler {
     public async close() {
         this.sendAckTimer.stop();
         this.ackReceiveTimer.stop();
+        this.idleTimeout.stop();
         if (this.isActive) {
             logger.debug(`Closing BTP session`);
             this.isActive = false;
