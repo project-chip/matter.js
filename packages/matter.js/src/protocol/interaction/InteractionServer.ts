@@ -568,7 +568,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
         return {
             interactionModelRevision: INTERACTION_MODEL_REVISION,
-            suppressResponse: false,
+            suppressResponse: false, // should be true but then python tests fail, wait for clarification in https://github.com/project-chip/connectedhomeip/issues/34077
             attributeReportsPayload,
             eventReportsPayload,
         };
@@ -1189,7 +1189,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             suppressResponse: false, // Deprecated but must be present
             interactionModelRevision: INTERACTION_MODEL_REVISION,
             invokeResponses: [],
-            moreChunkedMessages: invokeRequests.length > 1, // Assume for now we have multiple responses when
+            moreChunkedMessages: invokeRequests.length > 1, // Assume for now we have multiple responses when having multiple invokes
         };
         const emptyInvokeResponseBytes = TlvInvokeResponseForSend.encode(invokeResponseMessage);
         let messageSize = emptyInvokeResponseBytes.length;

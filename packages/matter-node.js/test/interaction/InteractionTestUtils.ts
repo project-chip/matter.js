@@ -6,7 +6,8 @@
 import { Message, SessionType } from "@project-chip/matter.js/codec";
 import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
 import { Fabric } from "@project-chip/matter.js/fabric";
-import { ExchangeSendOptions, MessageExchange } from "@project-chip/matter.js/protocol";
+import { MAX_UDP_MESSAGE_SIZE } from "@project-chip/matter.js/net";
+import { ExchangeSendOptions, MATTER_MESSAGE_OVERHEAD, MessageExchange } from "@project-chip/matter.js/protocol";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { ByteArray, Queue } from "@project-chip/matter.js/util";
 import { KEY } from "../cluster/ClusterServerTestingUtil.js";
@@ -33,6 +34,7 @@ export function createTestFabric() {
 class DummyMessageExchange {
     messagesQueue = new Queue<Message>();
     channel = { name: "test" };
+    maxPayloadSize = MAX_UDP_MESSAGE_SIZE - MATTER_MESSAGE_OVERHEAD;
 
     constructor(
         public session: SecureSession<any>,

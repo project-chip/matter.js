@@ -153,7 +153,7 @@ const READ_REQUEST_WITH_FILTER: ReadRequest = {
 
 const READ_RESPONSE: DataReportPayload = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     attributeReportsPayload: [
         {
             attributeData: {
@@ -268,7 +268,7 @@ const READ_RESPONSE: DataReportPayload = {
 
 const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: true,
+    suppressResponse: false,
     attributeReportsPayload: [
         {
             attributeStatus: {
@@ -1657,7 +1657,7 @@ describe("InteractionProtocol", () => {
             );
             assert.equal(result[0].moreChunkedMessages, true);
             assert.equal(result[1].moreChunkedMessages, true);
-            assert.equal(result[2].moreChunkedMessages, undefined); // aka false
+            assert.equal(result[2].moreChunkedMessages, undefined);
             assert.equal(triggeredOn, true);
             assert.equal(triggeredOff, true);
             assert.equal(onOffState, false);
