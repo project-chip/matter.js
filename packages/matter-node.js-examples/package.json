@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter-node.js-examples",
-    "version": "0.10.0-alpha.0-20240615-fe1cf4ba",
+    "version": "0.10.0-alpha.0-20240621-4063364e",
     "description": "CLI/Reference implementation scripts for Matter protocol for node.js",
     "keywords": [
         "iot",
@@ -64,10 +64,10 @@
         "typescript": "~5.4.5"
     },
     "dependencies": {
-        "@project-chip/matter-node-ble.js": "0.10.0-alpha.0-20240615-fe1cf4ba",
-        "@project-chip/matter-node.js": "0.10.0-alpha.0-20240615-fe1cf4ba",
-        "@project-chip/matter.js": "0.10.0-alpha.0-20240615-fe1cf4ba",
-        "@project-chip/matter.js-tools": "0.10.0-alpha.0-20240615-fe1cf4ba"
+        "@project-chip/matter-node-ble.js": "0.10.0-alpha.0-20240621-4063364e",
+        "@project-chip/matter-node.js": "0.10.0-alpha.0-20240621-4063364e",
+        "@project-chip/matter.js": "0.10.0-alpha.0-20240621-4063364e",
+        "@project-chip/matter.js-tools": "0.10.0-alpha.0-20240621-4063364e"
     },
     "engines": {
         "_comment": "For Crypto.hkdf support",
