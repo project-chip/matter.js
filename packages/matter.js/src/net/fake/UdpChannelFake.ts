@@ -27,7 +27,7 @@ export class UdpChannelFake implements UdpChannel {
     private readonly netListeners = new Array<Listener>();
     private readonly simulatedNetwork = SimulatedNetwork.get();
     private readonly listeningPort: number;
-    maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
+    readonly maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
 
     constructor(
         private readonly localAddress: string,

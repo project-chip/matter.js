@@ -235,7 +235,8 @@ export class NobleBleChannel implements Channel<ByteArray> {
     }
 
     private connected = true;
-    maxPayloadSize = BLE_MAX_MATTER_PAYLOAD_SIZE;
+    readonly maxPayloadSize = BLE_MAX_MATTER_PAYLOAD_SIZE;
+    readonly isReliable = true; // BTP is reliable
 
     constructor(
         private readonly peripheral: Peripheral,

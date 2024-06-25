@@ -144,7 +144,8 @@ export class BlenoBleServer implements Channel<ByteArray> {
     );
 
     private readonly matterBleService;
-    maxPayloadSize = BLE_MAX_MATTER_PAYLOAD_SIZE;
+    readonly maxPayloadSize = BLE_MAX_MATTER_PAYLOAD_SIZE;
+    readonly isReliable = true; // BTP is reliable
 
     constructor(options?: BleOptions) {
         this.matterBleService = initializeBleno(this, options?.hciId);

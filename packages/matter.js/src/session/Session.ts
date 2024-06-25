@@ -159,6 +159,7 @@ export abstract class Session<T> {
     abstract nodeId: NodeId | undefined;
     abstract peerNodeId: NodeId | undefined;
     abstract associatedFabric: Fabric;
+    abstract supportsMRP: boolean; // TODO: always false for Group Sessions
 
     abstract decode(packet: DecodedPacket, aad?: ByteArray): DecodedMessage;
     abstract encode(message: Message): Packet;

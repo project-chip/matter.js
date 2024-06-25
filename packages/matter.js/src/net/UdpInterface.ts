@@ -45,6 +45,8 @@ export class UdpInterface implements NetInterface {
 }
 
 class UdpConnection implements Channel<ByteArray> {
+    readonly isReliable = false;
+
     constructor(
         private readonly server: UdpChannel,
         private readonly peerAddress: string,

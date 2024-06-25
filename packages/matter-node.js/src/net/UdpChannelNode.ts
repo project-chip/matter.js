@@ -98,7 +98,7 @@ export class UdpChannelNode implements UdpChannel {
         return new UdpChannelNode(socket, netInterfaceZone);
     }
 
-    maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
+    readonly maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
 
     constructor(
         private readonly socket: dgram.Socket,

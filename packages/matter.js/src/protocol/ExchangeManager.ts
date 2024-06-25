@@ -40,6 +40,11 @@ export class MessageChannel<ContextT> implements Channel<Message> {
         private readonly closeCallback?: () => Promise<void>,
     ) {}
 
+    /** Is the underlying transport reliable? */
+    get isReliable() {
+        return this.channel.isReliable;
+    }
+
     /**
      * Max Payload size of the exchange which bases on the maximum payload size of the channel. The full encoded matter
      * message payload sent here can be as huge as allowed by the channel.

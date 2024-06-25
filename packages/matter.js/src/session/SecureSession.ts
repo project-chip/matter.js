@@ -45,6 +45,7 @@ export class SecureSession<T> extends Session<T> {
     readonly #attestationKey: ByteArray;
     readonly #subscriptionChangedCallback: () => void;
     #caseAuthenticatedTags: CaseAuthenticatedTag[];
+    readonly supportsMRP = true;
 
     static async create<T>(args: {
         context: T;
