@@ -56,7 +56,7 @@ import {
     WriteResponse,
 } from "@project-chip/matter.js/interaction";
 import { Specification } from "@project-chip/matter.js/model";
-import { TypeFromPartialBitSchema } from "@project-chip/matter.js/schema";
+import { TypeFromBitmapSchema, TypeFromPartialBitSchema } from "@project-chip/matter.js/schema";
 import { StorageBackendMemory, StorageContext, StorageManager, SyncStorage } from "@project-chip/matter.js/storage";
 import {
     TlvArray,
@@ -1618,7 +1618,7 @@ describe("InteractionProtocol", () => {
 
             withClusters(onOffCluster);
 
-            let result = Array();
+            const result = Array<TypeFromBitmapSchema<typeof TlvInvokeResponse>>();
             const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
                 result.push(TlvInvokeResponse.decode(payload));
             });

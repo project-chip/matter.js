@@ -58,7 +58,7 @@ export class NobleBleCentralInterface implements NetInterface {
     private openChannels: Map<ServerAddress, Peripheral> = new Map();
     private onMatterMessageListener: ((socket: Channel<ByteArray>, data: ByteArray) => void) | undefined;
 
-    async openChannel(address: ServerAddress, tryCount = 1): Promise<Channel<ByteArray>> {
+    openChannel(address: ServerAddress, tryCount = 1): Promise<Channel<ByteArray>> {
         return new Promise((resolve, reject) => {
             if (this.onMatterMessageListener === undefined) {
                 reject(new InternalError(`Network Interface was not added to the system yet.`));
@@ -98,9 +98,11 @@ export class NobleBleCentralInterface implements NetInterface {
             }
             if (peripheral.state !== "disconnected") {
                 // Try to cleanup strange "in between" states
-                return peripheral.disconnectAsync().then(() => this.openChannel(address, tryCount), reject);
+                peripheral.disconnectAsync().then(() => this.openChannel(address, tryCount), reject);
+                return;
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
             peripheral.once("connect", async () => {
                 if (this.onMatterMessageListener === undefined) {
                     reject(new InternalError(`Network Interface was not added to the system yet.`));
@@ -185,6 +187,7 @@ export class NobleBleCentralInterface implements NetInterface {
                     .then(resolve)
                     .catch(reject);
             };
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
             peripheral.once("disconnect", reTryHandler);
             logger.debug(`Connect to Peripheral now (try ${tryCount})`);
             peripheral.connectAsync().catch(reTryHandler);
