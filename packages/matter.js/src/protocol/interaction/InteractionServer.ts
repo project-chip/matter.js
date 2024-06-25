@@ -568,7 +568,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
         return {
             interactionModelRevision: INTERACTION_MODEL_REVISION,
-            suppressResponse: true,
+            suppressResponse: false,
             attributeReportsPayload,
             eventReportsPayload,
         };

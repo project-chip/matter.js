@@ -291,7 +291,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     const eventReport = eventReportsToSend.shift();
                     if (eventReport === undefined) {
                         // No more chunks to send
-                        dataReport.moreChunkedMessages = undefined;
+                        delete dataReport.moreChunkedMessages;
                         break;
                     }
                     if (!firstEventAddedToReportMessage) {
@@ -308,7 +308,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     dataReport.eventReports.push(encodedEvent);
                 } else {
                     // No more chunks to send
-                    dataReport.moreChunkedMessages = undefined;
+                    delete dataReport.moreChunkedMessages;
                     break;
                 }
             }
@@ -329,7 +329,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
         logger.debug(
             `Sending DataReport chunk with ${dataReport.attributeReports?.length ?? 0} attributes and ${
                 dataReport.eventReports?.length ?? 0
-            } events: ${encodedMessage.length} bytes (more chunks: ${dataReport.moreChunkedMessages ?? false})`,
+            } events: ${encodedMessage.length} bytes (more chunks: ${dataReport.moreChunkedMessages ?? false}, suppress response: ${dataReport.suppressResponse})`,
         );
 
         if (dataReport.suppressResponse) {
