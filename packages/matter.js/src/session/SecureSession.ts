@@ -290,7 +290,8 @@ export class SecureSession<T> extends Session<T> {
     }
 
     async clearSubscriptions(flushSubscriptions = false) {
-        for (const subscription of this.#subscriptions) {
+        const subscriptions = [...this.#subscriptions]; // get all values because subscriptions will remove themselves when cancelled
+        for (const subscription of subscriptions) {
             await subscription.cancel(flushSubscriptions);
         }
         this.#subscriptions.length = 0;

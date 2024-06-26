@@ -343,6 +343,14 @@ export class SessionManager<ContextT> {
             }));
     }
 
+    async clearSubscriptionsForNode(nodeId: NodeId, flushSubscriptions?: boolean) {
+        for (const session of this.#sessions) {
+            if (session.peerNodeId === nodeId) {
+                await session.clearSubscriptions(flushSubscriptions);
+            }
+        }
+    }
+
     async close() {
         await this.storeResumptionRecords();
         for (const session of this.#sessions) {
