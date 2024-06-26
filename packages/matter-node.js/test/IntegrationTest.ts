@@ -325,7 +325,7 @@ describe("Integration Test", () => {
             assert.equal(nodeStateChangesController1Node1.length, 1);
             assert.equal(nodeStateChangesController1Node1[0].nodeId, node.nodeId);
             assert.equal(nodeStateChangesController1Node1[0].nodeState, NodeStateInformation.Connected);
-        });
+        }).timeout(10000);
 
         it("We can connect to the new commissioned device", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];

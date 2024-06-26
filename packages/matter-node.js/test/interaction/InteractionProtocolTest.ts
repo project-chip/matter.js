@@ -153,7 +153,7 @@ const READ_REQUEST_WITH_FILTER: ReadRequest = {
 
 const READ_RESPONSE: DataReportPayload = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     attributeReportsPayload: [
         {
             attributeData: {
@@ -268,7 +268,7 @@ const READ_RESPONSE: DataReportPayload = {
 
 const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     attributeReportsPayload: [
         {
             attributeStatus: {
@@ -358,7 +358,7 @@ const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
 
 const WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     timedRequest: false,
     writeRequests: [
         {
@@ -425,7 +425,7 @@ const WRITE_RESPONSE: WriteResponse = {
 
 const WRITE_REQUEST_TIMED_REQUIRED: WriteRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     timedRequest: false,
     writeRequests: [
         {
@@ -459,7 +459,7 @@ const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
 
 const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     timedRequest: false,
     writeRequests: [
         {
@@ -483,7 +483,7 @@ const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
 
 const MASS_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     timedRequest: false,
     writeRequests: [
         {
@@ -515,7 +515,7 @@ const TlvAclTestSchema = TlvObject({
 
 const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     timedRequest: false,
     writeRequests: [
         {

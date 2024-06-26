@@ -78,7 +78,7 @@ class InteractionMessenger<ContextT> {
         return this.exchange.send(messageType, payload, options);
     }
 
-    sendStatus(status: StatusCode) {
+    async sendStatus(status: StatusCode) {
         return this.send(
             MessageType.StatusResponse,
             TlvStatusResponse.encode({ status, interactionModelRevision: INTERACTION_MODEL_REVISION }),
@@ -318,21 +318,25 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
     }
 
     async sendDataReportMessage(dataReport: TypeFromSchema<typeof TlvDataReportForSend>) {
-        const encodedMessage = TlvDataReportForSend.encode(dataReport);
+        const dataReportToSend = {
+            ...dataReport,
+            suppressResponse: dataReport.moreChunkedMessages ? false : dataReport.suppressResponse, // always false when moreChunkedMessages is true
+        };
+        const encodedMessage = TlvDataReportForSend.encode(dataReportToSend);
         if (encodedMessage.length > this.exchange.maxPayloadSize) {
             throw new MatterFlowError(
                 `DataReport is too long to fit in a single chunk, This should not happen! Data: ${Logger.toJSON(
-                    dataReport,
+                    dataReportToSend,
                 )}`,
             );
         }
         logger.debug(
-            `Sending DataReport chunk with ${dataReport.attributeReports?.length ?? 0} attributes and ${
-                dataReport.eventReports?.length ?? 0
-            } events: ${encodedMessage.length} bytes (more chunks: ${dataReport.moreChunkedMessages ?? false}, suppress response: ${dataReport.suppressResponse})`,
+            `Sending DataReport chunk with ${dataReportToSend.attributeReports?.length ?? 0} attributes and ${
+                dataReportToSend.eventReports?.length ?? 0
+            } events: ${encodedMessage.length} bytes (moreChunkedMessages: ${dataReportToSend.moreChunkedMessages ?? false}, suppressResponse: ${dataReportToSend.suppressResponse})`,
         );
 
-        if (dataReport.suppressResponse) {
+        if (dataReportToSend.suppressResponse) {
             // We do not expect a response other than a Standalone Ack, so if we receive anything else, we throw an error
             await tryCatchAsync(
                 async () =>
@@ -353,7 +357,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 }
 
 export class IncomingInteractionClientMessenger extends InteractionMessenger<MatterController> {
-    async readDataReport(): Promise<DataReport> {
+    async readDataReports(sendFinalAckMessage = true): Promise<DataReport> {
         let subscriptionId: number | undefined;
         const attributeValues: TypeFromSchema<typeof TlvAttributeReport>[] = [];
         const eventValues: TypeFromSchema<typeof TlvEventReport>[] = [];
@@ -370,19 +374,26 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger<Mat
                 throw new UnexpectedDataError(`Invalid subscription ID ${report.subscriptionId} received`);
             }
 
+            logger.debug(
+                `Received DataReport chunk with ${report.attributeReports?.length ?? 0} attributes and ${report.eventReports?.length ?? 0} events, suppressResponse: ${report.suppressResponse}, moreChunkedMessages: ${report.moreChunkedMessages}`,
+            );
+
             if (Array.isArray(report.attributeReports) && report.attributeReports.length > 0) {
                 attributeValues.push(...report.attributeReports);
             }
             if (Array.isArray(report.eventReports) && report.eventReports.length > 0) {
                 eventValues.push(...report.eventReports);
             }
+
+            if (report.moreChunkedMessages || (sendFinalAckMessage && !report.suppressResponse)) {
+                await this.sendStatus(StatusCode.Success);
+            }
+
             if (!report.moreChunkedMessages) {
                 report.attributeReports = attributeValues;
                 report.eventReports = eventValues;
                 return report;
             }
-
-            await this.sendStatus(StatusCode.Success);
         }
     }
 }
@@ -413,27 +424,21 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         }
     }
 
-    sendReadRequest(readRequest: ReadRequest) {
-        return this.request(
-            MessageType.ReadRequest,
-            TlvReadRequest,
-            MessageType.ReportData,
-            TlvDataReport,
-            readRequest,
-        );
+    async sendReadRequest(readRequest: ReadRequest) {
+        await this.send(MessageType.ReadRequest, TlvReadRequest.encode(readRequest));
+
+        return this.readDataReports();
     }
 
     async sendSubscribeRequest(subscribeRequest: SubscribeRequest) {
         await this.send(MessageType.SubscribeRequest, TlvSubscribeRequest.encode(subscribeRequest));
 
-        const report = await this.readDataReport();
+        const report = await this.readDataReports();
         const { subscriptionId } = report;
 
         if (subscriptionId === undefined) {
             throw new UnexpectedDataError(`Subscription ID not provided in report`);
         }
-
-        await this.sendStatus(StatusCode.Success);
 
         const subscribeResponseMessage = await this.nextMessage(MessageType.SubscribeResponse);
         const subscribeResponse = TlvSubscribeResponse.decode(subscribeResponseMessage.payload);

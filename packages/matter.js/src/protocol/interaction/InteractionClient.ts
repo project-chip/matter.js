@@ -27,9 +27,7 @@ import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { Time, Timer, TimerCallback } from "../../time/Time.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { ByteArray } from "../../util/ByteArray.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
-import { MessageType } from "../securechannel/SecureChannelMessages.js";
 import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
 import { DecodedEventData, DecodedEventReportValue, normalizeAndDecodeReadEventReport } from "./EventDataDecoder.js";
 import {
@@ -38,7 +36,7 @@ import {
     InteractionClientMessenger,
     ReadRequest,
 } from "./InteractionMessenger.js";
-import { TlvAttributeReport, TlvEventFilter, TlvEventReport } from "./InteractionProtocol.js";
+import { TlvEventFilter } from "./InteractionProtocol.js";
 import {
     INTERACTION_MODEL_REVISION,
     INTERACTION_PROTOCOL_ID,
@@ -92,7 +90,7 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
 
     async onNewExchange(exchange: MessageExchange<MatterController>) {
         const messenger = new IncomingInteractionClientMessenger(exchange);
-        const dataReport = await messenger.readDataReport();
+        const dataReport = await messenger.readDataReports(false);
         const subscriptionId = dataReport.subscriptionId;
         if (subscriptionId === undefined) {
             await messenger.sendStatus(StatusCode.InvalidSubscription);
@@ -361,30 +359,12 @@ export class InteractionClient {
                 .join(", ")} and events ${eventRequests?.map(path => resolveEventName(path)).join(", ")}`,
         );
         // Send read request and combine all (potentially chunked) responses
-        let response = await messenger.sendReadRequest(request);
-        const attributeReports = new Array<TypeFromSchema<typeof TlvAttributeReport>>();
-        const eventReports = new Array<TypeFromSchema<typeof TlvEventReport>>();
-
-        while (true) {
-            if (response.attributeReports !== undefined) {
-                attributeReports.push(...response.attributeReports);
-            }
-            if (response.eventReports !== undefined) {
-                eventReports.push(...response.eventReports);
-            }
-            if (!response.suppressResponse) {
-                await messenger.sendStatus(StatusCode.Success);
-            } else {
-                await messenger.send(MessageType.StandaloneAck, new ByteArray(0));
-            }
-            if (!response.moreChunkedMessages) break;
-            response = await messenger.readDataReport();
-        }
+        const response = await messenger.sendReadRequest(request);
 
         // Normalize and decode the response
         const normalizedResult = {
-            attributeReports: normalizeAndDecodeReadAttributeReport(attributeReports),
-            eventReports: normalizeAndDecodeReadEventReport(eventReports),
+            attributeReports: normalizeAndDecodeReadAttributeReport(response.attributeReports ?? []),
+            eventReports: normalizeAndDecodeReadEventReport(response.eventReports ?? []),
         };
         logger.debug(
             `Received read response with attributes ${normalizedResult.attributeReports

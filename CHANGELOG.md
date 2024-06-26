@@ -37,6 +37,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: Update Session parameters in PASE/CASE to match Matter 1.3 specification
     -   Enhancement: Removes TCP and ICD TXT records from MDNS responses because both currently not supported and optional to reduce the size of the MDNS responses
     -   Enhancement: Adds encoding and decoding of custom TlvData in QR-Codes including extensible Schema support for the defined Matter fields
+    -   Enhancement: Optimizes Read and Subscribe handling for clients/controller to better match with specification
     -   Enhancement: Adds encoding/decoding support for multiple device information in one QR-Code
     -   Enhancement: Makes processing of manual Pairing codes more robust directly on decoding level
     -   Enhancement: Refactored Message size handling to dynamically calculate payload size based on transport capabilities

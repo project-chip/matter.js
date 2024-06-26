@@ -719,7 +719,7 @@ export class SubscriptionHandler {
                         });
                     } else {
                         await messenger.sendDataReport({
-                            suppressResponse: false,
+                            suppressResponse: false, // Non empty data reports always need to send response
                             subscriptionId: this.subscriptionId,
                             interactionModelRevision: INTERACTION_MODEL_REVISION,
                             attributeReportsPayload: attributes.map(({ path, schema, value, version }) => ({

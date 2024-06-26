@@ -568,7 +568,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
         return {
             interactionModelRevision: INTERACTION_MODEL_REVISION,
-            suppressResponse: false, // should be true but then python tests fail, wait for clarification in https://github.com/project-chip/connectedhomeip/issues/34077
+            suppressResponse: true,
             attributeReportsPayload,
             eventReportsPayload,
         };
