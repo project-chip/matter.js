@@ -49,6 +49,7 @@
 - [announce](exports_cluster._internal_.MatterDevice.md#announce)
 - [assertFailSafeArmed](exports_cluster._internal_.MatterDevice.md#assertfailsafearmed)
 - [beginTimed](exports_cluster._internal_.MatterDevice.md#begintimed)
+- [clearSubscriptionsForNode](exports_cluster._internal_.MatterDevice.md#clearsubscriptionsfornode)
 - [close](exports_cluster._internal_.MatterDevice.md#close)
 - [deleteBroadcaster](exports_cluster._internal_.MatterDevice.md#deletebroadcaster)
 - [deleteTransportInterface](exports_cluster._internal_.MatterDevice.md#deletetransportinterface)
@@ -527,6 +528,27 @@ packages/matter.js/dist/esm/MatterDevice.d.ts:49
 
 ___
 
+### clearSubscriptionsForNode
+
+▸ **clearSubscriptionsForNode**(`peerNodeId`, `flushSubscriptions?`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `flushSubscriptions?` | `boolean` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterDevice.d.ts:83
+
+___
+
 ### close
 
 ▸ **close**(): `Promise`\<`void`\>
@@ -537,7 +559,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:83
+packages/matter.js/dist/esm/MatterDevice.d.ts:84
 
 ___
 
@@ -696,7 +718,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:84
+packages/matter.js/dist/esm/MatterDevice.d.ts:85
 
 ___
 

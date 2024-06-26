@@ -48,7 +48,7 @@ TypeFromSchema.affiliateCallSign
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:69](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L69)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:69](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L69)
 
 ___
 
@@ -69,7 +69,7 @@ TypeFromSchema.callSign
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:61](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L61)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:61](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L61)
 
 ___
 
@@ -90,7 +90,7 @@ TypeFromSchema.majorNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:37](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L37)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:37](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L37)
 
 ___
 
@@ -111,7 +111,7 @@ TypeFromSchema.minorNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:45](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:45](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L45)
 
 ___
 
@@ -132,4 +132,4 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:53](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L53)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:53](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L53)

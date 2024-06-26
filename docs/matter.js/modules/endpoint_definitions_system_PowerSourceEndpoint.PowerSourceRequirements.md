@@ -23,7 +23,7 @@ We provide this alias to the default implementation [PowerSourceServer](endpoint
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts:28](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts#L28)
+[packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts:28](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts#L28)
 
 ___
 
@@ -42,4 +42,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts:33](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts#L33)
+[packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts:33](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts#L33)

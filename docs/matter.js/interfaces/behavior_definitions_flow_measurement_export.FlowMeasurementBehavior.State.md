@@ -40,7 +40,7 @@ StateType.maxMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:54](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:54](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L54)
 
 ___
 
@@ -63,7 +63,7 @@ StateType.measuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:34](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L34)
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:34](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L34)
 
 ___
 
@@ -86,7 +86,7 @@ StateType.minMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:44](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L44)
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:44](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L44)
 
 ___
 
@@ -106,4 +106,4 @@ StateType.tolerance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:61](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L61)
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:61](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L61)

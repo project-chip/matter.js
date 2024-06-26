@@ -44,9 +44,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/low-power/LowPowerInterface.ts:11](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/low-power/LowPowerInterface.ts#L11)
+[packages/matter.js/src/behavior/definitions/low-power/LowPowerInterface.ts:11](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/low-power/LowPowerInterface.ts#L11)
 
-[packages/matter.js/src/behavior/definitions/low-power/LowPowerInterface.ts:22](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/low-power/LowPowerInterface.ts#L22)
+[packages/matter.js/src/behavior/definitions/low-power/LowPowerInterface.ts:22](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/low-power/LowPowerInterface.ts#L22)
 
 ## Variables
 
@@ -58,8 +58,8 @@ LowPowerBehavior is the base class for objects that support interaction with [Lo
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts:16](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts:16](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts:21](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts:21](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts:23](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts:23](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/low-power/LowPowerBehavior.ts#L23)

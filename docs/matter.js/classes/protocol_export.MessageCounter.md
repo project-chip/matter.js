@@ -52,7 +52,7 @@ a number of messages before the rollover callback is called (Default 1000).
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:56](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageCounter.ts#L56)
+[packages/matter.js/src/protocol/MessageCounter.ts:56](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/MessageCounter.ts#L56)
 
 ## Properties
 
@@ -70,7 +70,7 @@ a number of messages before the rollover callback is called (Default 1000).
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:57](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageCounter.ts#L57)
+[packages/matter.js/src/protocol/MessageCounter.ts:57](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/MessageCounter.ts#L57)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:49](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageCounter.ts#L49)
+[packages/matter.js/src/protocol/MessageCounter.ts:49](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/MessageCounter.ts#L49)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:58](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageCounter.ts#L58)
+[packages/matter.js/src/protocol/MessageCounter.ts:58](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/MessageCounter.ts#L58)
 
 ## Methods
 
@@ -104,4 +104,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:61](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/protocol/MessageCounter.ts#L61)
+[packages/matter.js/src/protocol/MessageCounter.ts:61](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/MessageCounter.ts#L61)

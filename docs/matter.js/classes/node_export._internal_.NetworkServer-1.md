@@ -81,7 +81,7 @@ implementation.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:147](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L147)
+[packages/matter.js/src/behavior/Behavior.ts:147](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L147)
 
 ## Properties
 
@@ -95,7 +95,7 @@ implementation.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L51)
+[packages/matter.js/src/behavior/Behavior.ts:51](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L51)
 
 ___
 
@@ -111,7 +111,7 @@ Access the behavior's events.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L145)
+[packages/matter.js/src/behavior/Behavior.ts:145](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L145)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkServer.ts:27](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L27)
+[packages/matter.js/src/behavior/system/network/NetworkServer.ts:27](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L27)
 
 ___
 
@@ -141,7 +141,7 @@ Access the behavior's state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkServer.ts:26](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L26)
+[packages/matter.js/src/behavior/system/network/NetworkServer.ts:26](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L26)
 
 ___
 
@@ -157,7 +157,7 @@ Implementation of the events property.  Subclasses may override to extend.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:183](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L183)
+[packages/matter.js/src/behavior/Behavior.ts:183](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L183)
 
 ___
 
@@ -176,7 +176,7 @@ automatically.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:272](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L272)
+[packages/matter.js/src/behavior/Behavior.ts:272](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L272)
 
 ___
 
@@ -193,7 +193,7 @@ immediately when the endpoint initializes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkBehavior.ts:18](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/network/NetworkBehavior.ts#L18)
+[packages/matter.js/src/behavior/system/network/NetworkBehavior.ts:18](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/network/NetworkBehavior.ts#L18)
 
 ___
 
@@ -214,7 +214,7 @@ EndpointBuilder also uses the ID when replacing behaviors using the with() build
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkBehavior.ts:16](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/network/NetworkBehavior.ts#L16)
+[packages/matter.js/src/behavior/system/network/NetworkBehavior.ts:16](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/network/NetworkBehavior.ts#L16)
 
 ___
 
@@ -233,7 +233,7 @@ control.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:69](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L69)
+[packages/matter.js/src/behavior/Behavior.ts:69](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L69)
 
 ## Accessors
 
@@ -251,7 +251,7 @@ NetworkBehavior.[reference]
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L274)
+[packages/matter.js/src/behavior/Behavior.ts:274](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L274)
 
 ___
 
@@ -271,7 +271,7 @@ NetworkBehavior.agent
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L80)
+[packages/matter.js/src/behavior/Behavior.ts:80](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L80)
 
 ___
 
@@ -291,7 +291,7 @@ NetworkBehavior.context
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L94)
+[packages/matter.js/src/behavior/Behavior.ts:94](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L94)
 
 ___
 
@@ -311,7 +311,7 @@ NetworkBehavior.endpoint
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L87)
+[packages/matter.js/src/behavior/Behavior.ts:87](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L87)
 
 ___
 
@@ -331,7 +331,7 @@ NetworkBehavior.session
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L101)
+[packages/matter.js/src/behavior/Behavior.ts:101](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L101)
 
 ___
 
@@ -351,7 +351,7 @@ NetworkBehavior.defaults
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:244](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L244)
+[packages/matter.js/src/behavior/Behavior.ts:244](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L244)
 
 ___
 
@@ -371,7 +371,7 @@ NetworkBehavior.supervisor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:161](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L161)
+[packages/matter.js/src/behavior/Behavior.ts:161](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L161)
 
 ## Methods
 
@@ -385,7 +385,7 @@ NetworkBehavior.supervisor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkServer.ts:98](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L98)
+[packages/matter.js/src/behavior/system/network/NetworkServer.ts:98](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L98)
 
 ___
 
@@ -406,7 +406,7 @@ state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkBehavior.ts:23](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/network/NetworkBehavior.ts#L23)
+[packages/matter.js/src/behavior/system/network/NetworkBehavior.ts:23](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/network/NetworkBehavior.ts#L23)
 
 ___
 
@@ -422,7 +422,7 @@ Immediately broadcast presence to the network regardless of whether the advertis
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkServer.ts:85](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L85)
+[packages/matter.js/src/behavior/system/network/NetworkServer.ts:85](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L85)
 
 ___
 
@@ -455,7 +455,7 @@ You should only elevate privileges for synchronous logic.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L125)
+[packages/matter.js/src/behavior/Behavior.ts:125](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L125)
 
 ___
 
@@ -504,7 +504,7 @@ Because of this: The reactor MUST be a real JS function - arrow functions will n
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L226)
+[packages/matter.js/src/behavior/Behavior.ts:226](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L226)
 
 ___
 
@@ -518,7 +518,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkServer.ts:92](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L92)
+[packages/matter.js/src/behavior/system/network/NetworkServer.ts:92](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L92)
 
 ___
 
@@ -542,7 +542,7 @@ use until initialization completes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkServer.ts:29](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L29)
+[packages/matter.js/src/behavior/system/network/NetworkServer.ts:29](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L29)
 
 ___
 
@@ -564,7 +564,7 @@ Advertisement begins at startup.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkServer.ts:72](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L72)
+[packages/matter.js/src/behavior/system/network/NetworkServer.ts:72](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/network/NetworkServer.ts#L72)
 
 ___
 
@@ -600,7 +600,7 @@ Important: The reactor MUST be a real JS function - arrow functions will not wor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L212)
+[packages/matter.js/src/behavior/Behavior.ts:212](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L212)
 
 ___
 
@@ -620,7 +620,7 @@ Description used in diagnostic messages.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L203)
+[packages/matter.js/src/behavior/Behavior.ts:203](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L203)
 
 ___
 
@@ -653,7 +653,7 @@ Create a new behavior with different default state values.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:251](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L251)
+[packages/matter.js/src/behavior/Behavior.ts:251](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L251)
 
 ___
 
@@ -679,4 +679,4 @@ Does this behavior support functionality of a specific implementation?
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:237](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/Behavior.ts#L237)
+[packages/matter.js/src/behavior/Behavior.ts:237](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/Behavior.ts#L237)

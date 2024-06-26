@@ -34,7 +34,7 @@ MatterSpecification.v11.Cluster § 3.2.11.12
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts:179](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts#L179)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts:179](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts#L179)
 
 ___
 
@@ -58,7 +58,7 @@ MatterSpecification.v11.Cluster § 3.2.11.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts:174](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts#L174)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts:174](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts#L174)
 
 ___
 
@@ -82,4 +82,4 @@ MatterSpecification.v11.Cluster § 3.2.11.13
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts:184](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts#L184)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts:184](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlInterface.ts#L184)

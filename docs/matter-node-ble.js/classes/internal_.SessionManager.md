@@ -29,6 +29,7 @@
 
 ### Methods
 
+- [clearSubscriptionsForNode](internal_.SessionManager.md#clearsubscriptionsfornode)
 - [close](internal_.SessionManager.md#close)
 - [createSecureSession](internal_.SessionManager.md#createsecuresession)
 - [createUnsecureSession](internal_.SessionManager.md#createunsecuresession)
@@ -141,6 +142,27 @@ matter.js/dist/esm/session/SessionManager.d.ts:28
 
 ## Methods
 
+### clearSubscriptionsForNode
+
+▸ **clearSubscriptionsForNode**(`nodeId`, `flushSubscriptions?`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
+| `flushSubscriptions?` | `boolean` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+matter.js/dist/esm/session/SessionManager.d.ts:75
+
+___
+
 ### close
 
 ▸ **close**(): `Promise`\<`void`\>
@@ -151,7 +173,7 @@ matter.js/dist/esm/session/SessionManager.d.ts:28
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:75
+matter.js/dist/esm/session/SessionManager.d.ts:76
 
 ___
 

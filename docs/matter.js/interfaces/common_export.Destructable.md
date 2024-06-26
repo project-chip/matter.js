@@ -33,7 +33,7 @@ Standard interface for disposing of object resources.
 
 #### Defined in
 
-[packages/matter.js/src/common/Lifecycle.ts:106](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/common/Lifecycle.ts#L106)
+[packages/matter.js/src/common/Lifecycle.ts:106](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/Lifecycle.ts#L106)
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/Lifecycle.ts:104](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/common/Lifecycle.ts#L104)
+[packages/matter.js/src/common/Lifecycle.ts:104](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/Lifecycle.ts#L104)
 
 ## Methods
 
@@ -65,4 +65,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/Lifecycle.ts:102](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/common/Lifecycle.ts#L102)
+[packages/matter.js/src/common/Lifecycle.ts:102](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/Lifecycle.ts#L102)

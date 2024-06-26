@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:53](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L53)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:53](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L53)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:35](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L35)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:35](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L35)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:75](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L75)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:75](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L75)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:57](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L57)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:57](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L57)
 
 ___
 
@@ -96,7 +96,7 @@ Properties the cluster contributes to Events.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:31](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L31)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:31](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L31)
 
 ___
 
@@ -121,4 +121,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:24](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L24)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:24](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L24)

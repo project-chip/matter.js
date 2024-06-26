@@ -47,7 +47,7 @@ TypeFromSchema.background
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:168](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L168)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:168](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L168)
 
 ___
 
@@ -68,7 +68,7 @@ TypeFromSchema.logo
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:176](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L176)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:176](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L176)
 
 ___
 
@@ -88,7 +88,7 @@ TypeFromSchema.progressBar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:183](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L183)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:183](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L183)
 
 ___
 
@@ -108,7 +108,7 @@ TypeFromSchema.providerName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:160](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L160)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:160](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L160)
 
 ___
 
@@ -129,7 +129,7 @@ TypeFromSchema.splash
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:191](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L191)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:191](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L191)
 
 ___
 
@@ -149,4 +149,4 @@ TypeFromSchema.waterMark
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:198](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L198)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:198](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L198)

@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.9.3 (2024-06-26)
 * Matter-Core functionality:
   * Fix: Makes sure to clear all subscriptions from the subscriber noe and not only the current session when not keeping subscriptions
 

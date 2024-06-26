@@ -23,7 +23,7 @@ The device type for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:107](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L107)
+[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:107](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L107)
 
 ___
 
@@ -35,7 +35,7 @@ The device name for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:102](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L102)
+[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:102](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L102)
 
 ___
 
@@ -47,7 +47,7 @@ The product ID for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:117](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L117)
+[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:117](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L117)
 
 ___
 
@@ -59,4 +59,4 @@ The vendor ID for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:112](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L112)
+[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:112](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L112)

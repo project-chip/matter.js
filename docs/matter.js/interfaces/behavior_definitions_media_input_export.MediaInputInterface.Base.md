@@ -30,7 +30,7 @@ MatterSpecification.v11.Cluster § 6.9.4.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:50](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L50)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:50](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L50)
 
 ___
 
@@ -57,7 +57,7 @@ MatterSpecification.v11.Cluster § 6.9.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:36](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L36)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:36](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L36)
 
 ___
 
@@ -77,4 +77,4 @@ MatterSpecification.v11.Cluster § 6.9.4.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:43](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L43)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:43](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L43)

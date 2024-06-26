@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:94](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L94)
+[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:94](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L94)
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:95](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L95)
+[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:95](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L95)
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:97](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L97)
+[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:97](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L97)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:96](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L96)
+[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:96](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L96)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:91](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L91)
+[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:91](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L91)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:92](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L92)
+[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:92](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L92)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:98](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L98)
+[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:98](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L98)
 
 ___
 
@@ -95,4 +95,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:93](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L93)
+[packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts:93](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/sessions/SessionsBehavior.ts#L93)

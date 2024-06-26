@@ -46,7 +46,7 @@ TypeFromSchema.attestationElements
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:166](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L166)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:166](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L166)
 
 ___
 
@@ -67,4 +67,4 @@ TypeFromSchema.attestationSignature
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:174](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L174)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:174](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L174)

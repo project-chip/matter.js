@@ -27,7 +27,7 @@ The battery is at full charge
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:787](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L787)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:787](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L787)
 
 ___
 
@@ -39,7 +39,7 @@ The battery is charging
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:782](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L782)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:782](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L782)
 
 ___
 
@@ -51,7 +51,7 @@ The battery is not charging
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:792](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L792)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:792](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L792)
 
 ___
 
@@ -63,4 +63,4 @@ Unable to determine the charging state
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:777](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L777)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:777](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L777)

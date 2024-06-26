@@ -35,7 +35,7 @@ The cluster used for access control checks.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:154](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/managed/Datasource.ts#L154)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:154](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L154)
 
 ___
 
@@ -48,7 +48,7 @@ the store.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:144](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/managed/Datasource.ts#L144)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:144](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L144)
 
 ___
 
@@ -63,7 +63,7 @@ if present, emit after field changes commit.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:138](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/managed/Datasource.ts#L138)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:138](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L138)
 
 ___
 
@@ -75,7 +75,7 @@ The object that owns the datasource.  This is passed as the "owner" parameter to
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:159](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/managed/Datasource.ts#L159)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:159](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L159)
 
 ___
 
@@ -87,7 +87,7 @@ Path used in diagnostic messages.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:130](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/managed/Datasource.ts#L130)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:130](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L130)
 
 ___
 
@@ -99,7 +99,7 @@ Optional storage for non-volatile values.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:149](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/managed/Datasource.ts#L149)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:149](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L149)
 
 ___
 
@@ -111,7 +111,7 @@ The manager used to manage and validate values.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:125](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/managed/Datasource.ts#L125)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:125](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L125)
 
 ___
 
@@ -123,4 +123,4 @@ The JS class for the root value.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:120](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/managed/Datasource.ts#L120)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:120](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L120)

@@ -33,7 +33,7 @@ The device type for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/product-description/ProductDescription.ts:18](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/product-description/ProductDescription.ts#L18)
+[packages/matter.js/src/behavior/system/product-description/ProductDescription.ts:18](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/product-description/ProductDescription.ts#L18)
 
 ___
 
@@ -45,7 +45,7 @@ The device name for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/product-description/ProductDescription.ts:13](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/product-description/ProductDescription.ts#L13)
+[packages/matter.js/src/behavior/system/product-description/ProductDescription.ts:13](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/product-description/ProductDescription.ts#L13)
 
 ___
 
@@ -57,7 +57,7 @@ The product ID for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/product-description/ProductDescription.ts:28](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/product-description/ProductDescription.ts#L28)
+[packages/matter.js/src/behavior/system/product-description/ProductDescription.ts:28](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/product-description/ProductDescription.ts#L28)
 
 ___
 
@@ -69,4 +69,4 @@ The vendor ID for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/product-description/ProductDescription.ts:23](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/system/product-description/ProductDescription.ts#L23)
+[packages/matter.js/src/behavior/system/product-description/ProductDescription.ts:23](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/product-description/ProductDescription.ts#L23)

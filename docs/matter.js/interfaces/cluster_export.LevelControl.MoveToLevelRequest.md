@@ -37,7 +37,7 @@ TypeFromSchema.level
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:55](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L55)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:55](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L55)
 
 ___
 
@@ -51,7 +51,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:57](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L57)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:57](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L57)
 
 ___
 
@@ -65,7 +65,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:58](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L58)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:58](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L58)
 
 ___
 
@@ -79,4 +79,4 @@ TypeFromSchema.transitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:56](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L56)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:56](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L56)

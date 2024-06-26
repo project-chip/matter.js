@@ -25,7 +25,7 @@ Indicate the node is connected
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:191](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L191)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:191](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L191)
 
 ___
 
@@ -37,4 +37,4 @@ Indicate the node is not connected
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:196](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L196)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:196](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L196)

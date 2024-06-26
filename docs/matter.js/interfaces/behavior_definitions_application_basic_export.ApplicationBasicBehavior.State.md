@@ -41,7 +41,7 @@ StateType.allowedVendorList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:151](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L151)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:151](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L151)
 
 ___
 
@@ -61,7 +61,7 @@ StateType.application
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:129](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L129)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:129](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L129)
 
 ___
 
@@ -83,7 +83,7 @@ StateType.applicationName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:113](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L113)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:113](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L113)
 
 ___
 
@@ -104,7 +104,7 @@ StateType.applicationVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:144](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L144)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:144](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L144)
 
 ___
 
@@ -126,7 +126,7 @@ StateType.productId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:122](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L122)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:122](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L122)
 
 ___
 
@@ -146,7 +146,7 @@ StateType.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:136](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L136)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:136](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L136)
 
 ___
 
@@ -167,7 +167,7 @@ StateType.vendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:104](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L104)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:104](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L104)
 
 ___
 
@@ -187,4 +187,4 @@ StateType.vendorName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:96](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L96)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:96](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L96)

@@ -38,7 +38,7 @@ AdministratorCommissioningBehavior.State.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
 
 ## Properties
 
@@ -65,7 +65,7 @@ AdministratorCommissioningBehavior.State.adminFabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:265](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L265)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:265](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L265)
 
 ___
 
@@ -91,7 +91,7 @@ AdministratorCommissioningBehavior.State.adminVendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:278](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L278)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:278](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L278)
 
 ___
 
@@ -105,4 +105,4 @@ AdministratorCommissioningBehavior.State.windowStatus
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningServer.ts:284](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningServer.ts#L284)
+[packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningServer.ts:284](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/administrator-commissioning/AdministratorCommissioningServer.ts#L284)

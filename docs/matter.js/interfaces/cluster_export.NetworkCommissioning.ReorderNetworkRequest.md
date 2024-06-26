@@ -90,7 +90,7 @@ TypeFromSchema.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:628](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L628)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:628](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L628)
 
 ___
 
@@ -110,7 +110,7 @@ TypeFromSchema.networkId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:565](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L565)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:565](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L565)
 
 ___
 
@@ -131,4 +131,4 @@ TypeFromSchema.networkIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:573](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L573)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:573](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L573)

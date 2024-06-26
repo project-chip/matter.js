@@ -30,7 +30,7 @@ We provide this alias to the default implementation [FanControlServer](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:75](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L75)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:75](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L75)
 
 ___
 
@@ -44,7 +44,7 @@ We provide this alias to the default implementation [GroupsServer](endpoint_defi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:47](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L47)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:47](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L47)
 
 ___
 
@@ -58,7 +58,7 @@ We provide this alias to the default implementation [IdentifyServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:40](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L40)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:40](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L40)
 
 ___
 
@@ -72,7 +72,7 @@ We provide this alias to the default implementation [LevelControlServer](endpoin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:68](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L68)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:68](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L68)
 
 ___
 
@@ -86,7 +86,7 @@ We provide this alias to the default implementation [OnOffServer](endpoint_defin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:54](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L54)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:54](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L54)
 
 ___
 
@@ -100,7 +100,7 @@ We provide this alias to the default implementation [ScenesServer](endpoint_defi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:61](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L61)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:61](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L61)
 
 ___
 
@@ -114,7 +114,7 @@ We provide this alias to the default implementation [ThermostatBehavior](endpoin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:82](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L82)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:82](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L82)
 
 ___
 
@@ -133,7 +133,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:95](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L95)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:95](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L95)
 
 ___
 
@@ -158,4 +158,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:87](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L87)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:87](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L87)

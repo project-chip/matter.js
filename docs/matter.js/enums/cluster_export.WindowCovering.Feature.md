@@ -32,7 +32,7 @@ Absolute positioning is supported.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:706](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L706)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:706](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L706)
 
 ___
 
@@ -46,7 +46,7 @@ Lift Control and behavior for lifting/sliding window coverings
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:685](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L685)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:685](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L685)
 
 ___
 
@@ -60,7 +60,7 @@ Position Aware lift control is supported.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:699](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L699)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:699](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L699)
 
 ___
 
@@ -74,7 +74,7 @@ Position Aware tilt control is supported.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:713](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L713)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:713](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L713)
 
 ___
 
@@ -88,4 +88,4 @@ Tilt Control and behavior for tilting window coverings
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:692](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L692)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:692](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L692)

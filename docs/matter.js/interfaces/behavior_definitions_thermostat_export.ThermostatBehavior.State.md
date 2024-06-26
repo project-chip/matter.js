@@ -56,7 +56,7 @@ StateType.acCapacity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1417](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1417)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1417](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1417)
 
 ___
 
@@ -78,7 +78,7 @@ StateType.acCapacityFormat
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1491](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1491)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1491](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1491)
 
 ___
 
@@ -99,7 +99,7 @@ StateType.acCoilTemperature
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1482](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1482)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1482](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1482)
 
 ___
 
@@ -121,7 +121,7 @@ StateType.acCompressorType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1443](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1443)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1443](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1443)
 
 ___
 
@@ -144,7 +144,7 @@ StateType.acErrorCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1457](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1457)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1457](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1457)
 
 ___
 
@@ -166,7 +166,7 @@ StateType.acLouverPosition
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1470](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1470)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1470](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1470)
 
 ___
 
@@ -188,7 +188,7 @@ StateType.acRefrigerantType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1430](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1430)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1430](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1430)
 
 ___
 
@@ -211,7 +211,7 @@ StateType.acType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1405](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1405)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1405](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1405)
 
 ___
 
@@ -238,7 +238,7 @@ StateType.alarmMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1255](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1255)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1255](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1255)
 
 ___
 
@@ -272,7 +272,7 @@ StateType.controlSequenceOfOperation
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1217](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1217)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1217](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1217)
 
 ___
 
@@ -315,7 +315,7 @@ StateType.emergencyHeatDelta
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1391](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1391)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1391](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1391)
 
 ___
 
@@ -346,7 +346,7 @@ StateType.localTemperature
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1167](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1167)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1167](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1167)
 
 ___
 
@@ -366,7 +366,7 @@ StateType.outdoorTemperature
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1174](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1174)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1174](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1174)
 
 ___
 
@@ -397,7 +397,7 @@ StateType.remoteSensing
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1192](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1192)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1192](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1192)
 
 ___
 
@@ -422,7 +422,7 @@ StateType.setpointChangeAmount
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1353](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1353)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1353](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1353)
 
 ___
 
@@ -450,7 +450,7 @@ StateType.setpointChangeSource
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1337](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1337)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1337](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1337)
 
 ___
 
@@ -471,7 +471,7 @@ StateType.setpointChangeSourceTimestamp
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1361](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1361)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1361](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1361)
 
 ___
 
@@ -496,7 +496,7 @@ StateType.systemMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1237](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1237)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1237](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1237)
 
 ___
 
@@ -522,7 +522,7 @@ StateType.temperatureSetpointHold
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1268](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1268)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1268](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1268)
 
 ___
 
@@ -544,7 +544,7 @@ StateType.temperatureSetpointHoldDuration
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1281](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1281)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1281](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1281)
 
 ___
 
@@ -579,7 +579,7 @@ StateType.thermostatProgrammingOperationMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1307](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1307)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1307](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1307)
 
 ___
 
@@ -603,4 +603,4 @@ StateType.thermostatRunningState
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1322](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1322)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1322](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1322)

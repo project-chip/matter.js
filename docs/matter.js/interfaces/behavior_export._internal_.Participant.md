@@ -39,7 +39,7 @@ Post-commit logic.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:48](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Participant.ts#L48)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:48](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L48)
 
 ___
 
@@ -65,7 +65,7 @@ transaction.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:33](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Participant.ts#L33)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:33](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L33)
 
 ___
 
@@ -78,7 +78,7 @@ a participant from the transaction.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:22](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Participant.ts#L22)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:22](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L22)
 
 ## Methods
 
@@ -94,7 +94,7 @@ Commit phase one.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:38](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Participant.ts#L38)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:38](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L38)
 
 ___
 
@@ -110,7 +110,7 @@ Commit phase two.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:43](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Participant.ts#L43)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:43](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L43)
 
 ___
 
@@ -126,7 +126,7 @@ Drop isolated writes and revert to original canonical source.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:53](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Participant.ts#L53)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:53](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L53)
 
 ___
 
@@ -142,4 +142,4 @@ Description used in error messages.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:16](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/state/transaction/Participant.ts#L16)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:16](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L16)
