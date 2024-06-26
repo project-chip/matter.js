@@ -61,6 +61,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   matter.js chip and python Testing:
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 
+### 0.9.3 (2024-06-26)
+- Matter-Core functionality:
+    -   Fix: Makes sure to clear all subscriptions from the subscriber noe and not only the current session when not keeping subscriptions
+
 ### 0.9.2 (2026-06-20)
 - Matter-Core functionality:
     - Enhancement: Added some more certification relevant checks in Interaction server
