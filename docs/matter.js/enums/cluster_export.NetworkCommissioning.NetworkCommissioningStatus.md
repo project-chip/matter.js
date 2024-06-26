@@ -36,7 +36,7 @@ Cannot associate due to authentication failure
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:97](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L97)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:97](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L97)
 
 ___
 
@@ -48,7 +48,7 @@ A collection would exceed its size limit
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:72](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L72)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:72](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L72)
 
 ___
 
@@ -60,7 +60,7 @@ The NetworkID is already among the collection of added networks
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:82](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L82)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:82](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L82)
 
 ___
 
@@ -72,7 +72,7 @@ Failure to bind Wi-Fi <-> IP interfaces
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:117](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L117)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:117](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L117)
 
 ___
 
@@ -84,7 +84,7 @@ Failure to generate an IPv6 address
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:112](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L112)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:112](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L112)
 
 ___
 
@@ -96,7 +96,7 @@ The NetworkID is not among the collection of added networks
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:77](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L77)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:77](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L77)
 
 ___
 
@@ -108,7 +108,7 @@ Cannot find AP: SSID Not found
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:87](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:87](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L87)
 
 ___
 
@@ -120,7 +120,7 @@ Other association failure
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:107](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L107)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:107](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L107)
 
 ___
 
@@ -132,7 +132,7 @@ Value Outside Range
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:67](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L67)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:67](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L67)
 
 ___
 
@@ -144,7 +144,7 @@ Cannot find AP: Mismatch on band/channels/regulatory domain / 2.4GHz vs 5GHz
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:92](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L92)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:92](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L92)
 
 ___
 
@@ -156,7 +156,7 @@ OK, no error
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:62](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:62](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L62)
 
 ___
 
@@ -168,7 +168,7 @@ Unknown error
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:122](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L122)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:122](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L122)
 
 ___
 
@@ -180,4 +180,4 @@ Cannot associate due to unsupported security mode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:102](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L102)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:102](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L102)

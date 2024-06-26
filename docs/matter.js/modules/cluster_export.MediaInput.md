@@ -59,7 +59,7 @@ These elements and properties are present in all MediaInput clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:158](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L158)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:158](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L158)
 
 ___
 
@@ -69,9 +69,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:234](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L234)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:234](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L234)
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:236](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L236)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:236](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L236)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:222](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L222)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:222](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L222)
 
 ___
 
@@ -95,9 +95,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:260](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L260)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:260](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L260)
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:262](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L262)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:262](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L262)
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:242](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L242)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:242](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L242)
 
 ___
 
@@ -130,7 +130,7 @@ A MediaInputCluster supports these elements if it supports feature NameUpdates.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:129](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L129)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:129](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L129)
 
 ___
 
@@ -146,7 +146,7 @@ MatterSpecification.v11.Cluster § 6.9.5.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:65](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:65](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L65)
 
 ___
 
@@ -162,7 +162,7 @@ MatterSpecification.v11.Cluster § 6.9.4.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:27](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L27)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:27](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L27)
 
 ___
 
@@ -178,4 +178,4 @@ MatterSpecification.v11.Cluster § 6.9.4.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:109](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:109](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L109)

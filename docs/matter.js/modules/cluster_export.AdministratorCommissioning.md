@@ -58,7 +58,7 @@ These elements and properties are present in all AdministratorCommissioning clus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:225](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L225)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:225](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L225)
 
 ___
 
@@ -77,7 +77,7 @@ A AdministratorCommissioningCluster supports these elements if it supports featu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:175](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L175)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:175](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L175)
 
 ___
 
@@ -87,9 +87,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:369](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L369)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:369](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L369)
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:371](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L371)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:371](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L371)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:353](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L353)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:353](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L353)
 
 ___
 
@@ -113,9 +113,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:399](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L399)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:399](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L399)
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:401](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L401)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:401](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L401)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:377](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L377)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:377](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L377)
 
 ___
 
@@ -145,7 +145,7 @@ MatterSpecification.v11.Core § 11.18.8.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:29](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L29)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:29](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L29)
 
 ___
 
@@ -161,4 +161,4 @@ MatterSpecification.v11.Core § 11.18.8.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:79](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L79)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:79](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L79)

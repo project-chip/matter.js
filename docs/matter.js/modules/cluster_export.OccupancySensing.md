@@ -30,9 +30,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:239](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L239)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:239](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L239)
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:241](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L241)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:241](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L241)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:78](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L78)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:78](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L78)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:242](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L242)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:242](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L242)
 
 ___
 
@@ -78,7 +78,7 @@ MatterSpecification.v11.Cluster § 2.7.5.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:23](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L23)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:23](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L23)
 
 ___
 
@@ -100,4 +100,4 @@ MatterSpecification.v11.Cluster § 2.7.5.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:58](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L58)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:58](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L58)

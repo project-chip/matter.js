@@ -68,7 +68,7 @@ to address if it becomes too inefficient.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:27](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L27)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:27](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L27)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:26](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L26)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:26](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L26)
 
 ___
 
@@ -91,7 +91,7 @@ This model acts as a fallback to work around this.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:578](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L578)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:578](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L578)
 
 ## Methods
 
@@ -126,7 +126,7 @@ This method uses [findAspect](model._internal_.ModelTraversal.md#findaspect) for
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:352](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L352)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:352](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L352)
 
 ___
 
@@ -151,7 +151,7 @@ by direct type inheritance.  Aspects in shadowed elements take priority as they 
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:256](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L256)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:256](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L256)
 
 ___
 
@@ -173,7 +173,7 @@ Find the model a model derives from, if any.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:133](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L133)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:133](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L133)
 
 ___
 
@@ -196,7 +196,7 @@ Search inherited scope for a bit definition.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:407](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L407)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:407](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L407)
 
 ___
 
@@ -220,7 +220,7 @@ Constraint aspects are specialized because we infer constraint fields that are r
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:289](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L289)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:289](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L289)
 
 ___
 
@@ -242,7 +242,7 @@ Find the model this model derives from that has children, if any.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:211](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L211)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:211](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L211)
 
 ___
 
@@ -264,7 +264,7 @@ Find the first global model this model derives from, if any.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:155](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L155)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:155](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L155)
 
 ___
 
@@ -288,7 +288,7 @@ Search inherited scope for a named member.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:375](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L375)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:375](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L375)
 
 ___
 
@@ -311,7 +311,7 @@ Retrieve all children of a specific type, inherited or otherwise.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:390](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L390)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:390](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L390)
 
 ___
 
@@ -334,7 +334,7 @@ a metatype.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:121](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L121)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:121](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L121)
 
 ___
 
@@ -363,7 +363,7 @@ Find an owning model of a specific type.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:511](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L511)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:511](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L511)
 
 ___
 
@@ -386,7 +386,7 @@ Find all children of a node that reference a specific type.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:474](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L474)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:474](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L474)
 
 ___
 
@@ -408,7 +408,7 @@ Find the response model for a command.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:465](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L465)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:465](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L465)
 
 ___
 
@@ -430,7 +430,7 @@ Find the root model.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:526](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L526)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:526](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L526)
 
 ___
 
@@ -452,7 +452,7 @@ Find a child in the parent's inheritance hierarchy with the same tag and ID/name
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:228](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L228)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:228](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L228)
 
 ___
 
@@ -476,7 +476,7 @@ Search inherited and structural type scope for a named type.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:433](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L433)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:433](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L433)
 
 ___
 
@@ -498,7 +498,7 @@ Find an xref from this model or a parent.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:196](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L196)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:196](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L196)
 
 ___
 
@@ -521,7 +521,7 @@ field but we infer the type of some datatypes based on their parent's type.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:64](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L64)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:64](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L64)
 
 ___
 
@@ -544,7 +544,7 @@ Determine whether this model derives from another.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:174](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L174)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:174](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L174)
 
 ___
 
@@ -573,7 +573,7 @@ Perform an operation with iteration tracking.  If iteration depth limit
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:32](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L32)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:32](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L32)
 
 ___
 
@@ -602,7 +602,7 @@ Perform an operation with a model dismissed from consideration for type lookup.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:56](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L56)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:56](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L56)
 
 ___
 
@@ -625,7 +625,7 @@ Visit all nodes in the model tree.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:544](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L544)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:544](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L544)
 
 ___
 
@@ -648,4 +648,4 @@ Visit all nodes in the inheritance hierarchy until the visitor returns false.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:561](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/logic/ModelTraversal.ts#L561)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:561](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/logic/ModelTraversal.ts#L561)

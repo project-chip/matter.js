@@ -27,7 +27,7 @@ Media is not currently buffering and playback will start when buffer has been fi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:170](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:170](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L170)
 
 ___
 
@@ -39,7 +39,7 @@ Media is not currently playing
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:165](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L165)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:165](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L165)
 
 ___
 
@@ -51,7 +51,7 @@ Media is currently paused
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:160](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L160)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:160](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L160)
 
 ___
 
@@ -63,4 +63,4 @@ Media is currently playing (includes FF and REW)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:155](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L155)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:155](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L155)

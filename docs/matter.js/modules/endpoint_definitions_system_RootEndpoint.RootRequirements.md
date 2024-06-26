@@ -40,7 +40,7 @@ We provide this alias to the default implementation [AccessControlServer](endpoi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:95](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L95)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:95](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L95)
 
 ___
 
@@ -54,7 +54,7 @@ We provide this alias to the default implementation [AdministratorCommissioningS
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:116](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L116)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:116](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L116)
 
 ___
 
@@ -68,7 +68,7 @@ We provide this alias to the default implementation [BasicInformationServer](end
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:88](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L88)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:88](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L88)
 
 ___
 
@@ -82,7 +82,7 @@ We provide this alias to the default implementation [DiagnosticLogsServer](endpo
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:179](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L179)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:179](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L179)
 
 ___
 
@@ -96,7 +96,7 @@ We provide this alias to the default implementation [EthernetNetworkDiagnosticsS
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:193](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L193)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:193](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L193)
 
 ___
 
@@ -110,7 +110,7 @@ We provide this alias to the default implementation [GeneralCommissioningServer]
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:109](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L109)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:109](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L109)
 
 ___
 
@@ -124,7 +124,7 @@ We provide this alias to the default implementation [GeneralDiagnosticsServer](e
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:130](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L130)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:130](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L130)
 
 ___
 
@@ -138,7 +138,7 @@ We provide this alias to the default implementation [GroupKeyManagementServer](e
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:102](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L102)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:102](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L102)
 
 ___
 
@@ -152,7 +152,7 @@ We provide this alias to the default implementation [LocalizationConfigurationSe
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:158](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L158)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:158](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L158)
 
 ___
 
@@ -166,7 +166,7 @@ We provide this alias to the default implementation [NetworkCommissioningServer]
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:151](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L151)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:151](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L151)
 
 ___
 
@@ -180,7 +180,7 @@ We provide this alias to the default implementation [OperationalCredentialsServe
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:123](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L123)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:123](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L123)
 
 ___
 
@@ -194,7 +194,7 @@ We provide this alias to the default implementation [PowerSourceConfigurationSer
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:137](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L137)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:137](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L137)
 
 ___
 
@@ -208,7 +208,7 @@ We provide this alias to the default implementation [SoftwareDiagnosticsServer](
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:186](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L186)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:186](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L186)
 
 ___
 
@@ -222,7 +222,7 @@ We provide this alias to the default implementation [ThreadNetworkDiagnosticsSer
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:207](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L207)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:207](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L207)
 
 ___
 
@@ -236,7 +236,7 @@ We provide this alias to the default implementation [TimeFormatLocalizationServe
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:165](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L165)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:165](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L165)
 
 ___
 
@@ -250,7 +250,7 @@ We provide this alias to the default implementation [TimeSyncServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:144](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L144)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:144](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L144)
 
 ___
 
@@ -264,7 +264,7 @@ We provide this alias to the default implementation [UnitLocalizationServer](end
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:172](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L172)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:172](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L172)
 
 ___
 
@@ -278,7 +278,7 @@ We provide this alias to the default implementation [WiFiNetworkDiagnosticsServe
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:200](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L200)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:200](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L200)
 
 ___
 
@@ -317,4 +317,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:212](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L212)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:212](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L212)

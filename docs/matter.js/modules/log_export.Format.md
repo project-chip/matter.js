@@ -32,7 +32,7 @@ Log stylization support.
 
 #### Defined in
 
-[packages/matter.js/src/log/Format.ts:41](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/log/Format.ts#L41)
+[packages/matter.js/src/log/Format.ts:41](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/log/Format.ts#L41)
 
 ## Variables
 
@@ -44,7 +44,7 @@ Format log messages using ANSI escape codes
 
 #### Defined in
 
-[packages/matter.js/src/log/Format.ts:47](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/log/Format.ts#L47)
+[packages/matter.js/src/log/Format.ts:47](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/log/Format.ts#L47)
 
 ___
 
@@ -56,7 +56,7 @@ Format log messages using HTML tags
 
 #### Defined in
 
-[packages/matter.js/src/log/Format.ts:50](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/log/Format.ts#L50)
+[packages/matter.js/src/log/Format.ts:50](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/log/Format.ts#L50)
 
 ___
 
@@ -68,7 +68,7 @@ Generate text only
 
 #### Defined in
 
-[packages/matter.js/src/log/Format.ts:44](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/log/Format.ts#L44)
+[packages/matter.js/src/log/Format.ts:44](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/log/Format.ts#L44)
 
 ## Functions
 
@@ -92,7 +92,7 @@ Generate text only
 
 #### Defined in
 
-[packages/matter.js/src/log/Format.ts:53](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/log/Format.ts#L53)
+[packages/matter.js/src/log/Format.ts:53](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/log/Format.ts#L53)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Format.ts:54](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/log/Format.ts#L54)
+[packages/matter.js/src/log/Format.ts:54](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/log/Format.ts#L54)
 
 ___
 
@@ -140,4 +140,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Format.ts:52](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/log/Format.ts#L52)
+[packages/matter.js/src/log/Format.ts:52](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/log/Format.ts#L52)

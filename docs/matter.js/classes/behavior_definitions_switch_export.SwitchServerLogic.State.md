@@ -43,7 +43,7 @@ SwitchServerBase.State.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
 
 ## Properties
 
@@ -65,7 +65,7 @@ SwitchServerBase.State.currentPosition
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:360](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L360)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:360](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L360)
 
 ___
 
@@ -78,7 +78,7 @@ currentPosition attribue.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:263](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L263)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:263](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L263)
 
 ___
 
@@ -90,7 +90,7 @@ Time to wait until a value is considered "long" pressed
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:266](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L266)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:266](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L266)
 
 ___
 
@@ -102,7 +102,7 @@ Number of the position considered as the neutral position for the momentary swit
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:272](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L272)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:272](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L272)
 
 ___
 
@@ -114,7 +114,7 @@ Timeframe starting with a stable release to detect multi-presses.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:269](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L269)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:269](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L269)
 
 ___
 
@@ -128,7 +128,7 @@ SwitchServerBase.State.multiPressMax
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:428](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L428)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:428](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L428)
 
 ___
 
@@ -150,7 +150,7 @@ SwitchServerBase.State.numberOfPositions
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:351](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L351)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:351](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L351)
 
 ___
 
@@ -162,4 +162,4 @@ Raw position of the switch. Set this to debounce the value.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:257](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L257)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:257](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L257)

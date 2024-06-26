@@ -53,7 +53,7 @@ alterations described in the Matter device library.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:14](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L14)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:14](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L14)
 
 ## Properties
 
@@ -63,7 +63,7 @@ alterations described in the Matter device library.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:14](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L14)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:14](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L14)
 
 ## Methods
 
@@ -91,7 +91,7 @@ Create a new cluster with modified elements.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:19](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L19)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:19](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L19)
 
 ___
 
@@ -121,7 +121,7 @@ This informs matter.js that an application supports these elements.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:44](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L44)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:44](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L44)
 
 ___
 
@@ -152,4 +152,4 @@ for the first time with no persistent state.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:33](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L33)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:33](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L33)

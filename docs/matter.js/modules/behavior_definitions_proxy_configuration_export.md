@@ -34,8 +34,8 @@ ProxyConfigurationBehavior is the base class for objects that support interactio
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts:16](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts:16](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts:19](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts:19](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts:21](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts:21](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/proxy-configuration/ProxyConfigurationBehavior.ts#L21)

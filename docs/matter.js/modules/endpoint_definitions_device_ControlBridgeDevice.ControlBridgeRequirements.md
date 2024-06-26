@@ -32,7 +32,7 @@ We provide this alias to the default implementation [ColorControlBehavior](endpo
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:87](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L87)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:87](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L87)
 
 ___
 
@@ -46,7 +46,7 @@ We provide this alias to the default implementation [GroupsBehavior](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:59](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L59)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:59](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L59)
 
 ___
 
@@ -60,7 +60,7 @@ We provide this alias to the default implementation [IdentifyBehavior](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:52](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L52)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:52](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L52)
 
 ___
 
@@ -74,7 +74,7 @@ We provide this alias to the default implementation [IdentifyServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:45](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L45)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:45](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L45)
 
 ___
 
@@ -88,7 +88,7 @@ We provide this alias to the default implementation [IlluminanceMeasurementBehav
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:94](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L94)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:94](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L94)
 
 ___
 
@@ -102,7 +102,7 @@ We provide this alias to the default implementation [LevelControlBehavior](endpo
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:80](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L80)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:80](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L80)
 
 ___
 
@@ -116,7 +116,7 @@ We provide this alias to the default implementation [OccupancySensingBehavior](e
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:101](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L101)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:101](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L101)
 
 ___
 
@@ -130,7 +130,7 @@ We provide this alias to the default implementation [OnOffBehavior](endpoint_def
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:73](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L73)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:73](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L73)
 
 ___
 
@@ -144,7 +144,7 @@ We provide this alias to the default implementation [ScenesBehavior](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:66](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L66)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:66](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L66)
 
 ___
 
@@ -171,7 +171,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:111](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L111)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:111](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L111)
 
 ___
 
@@ -190,4 +190,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:106](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L106)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:106](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L106)

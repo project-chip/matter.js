@@ -40,7 +40,7 @@ StateType.currentGroup
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:508](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L508)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:508](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L508)
 
 ___
 
@@ -60,7 +60,7 @@ StateType.currentScene
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:500](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L500)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:500](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L500)
 
 ___
 
@@ -84,7 +84,7 @@ StateType.lastConfiguredBy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:541](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L541)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:541](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L541)
 
 ___
 
@@ -106,7 +106,7 @@ StateType.nameSupport
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:530](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L530)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:530](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L530)
 
 ___
 
@@ -126,7 +126,7 @@ StateType.sceneCount
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:493](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L493)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:493](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L493)
 
 ___
 
@@ -152,4 +152,4 @@ StateType.sceneValid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:521](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L521)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:521](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L521)

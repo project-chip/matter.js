@@ -70,7 +70,7 @@ Initialize from a Conformance.Definition or the conformance DSL defined by the M
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:32](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Conformance.ts#L32)
+[packages/matter.js/src/model/aspects/Conformance.ts:32](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Conformance.ts#L32)
 
 ## Properties
 
@@ -80,7 +80,7 @@ Initialize from a Conformance.Definition or the conformance DSL defined by the M
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:19](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Conformance.ts#L19)
+[packages/matter.js/src/model/aspects/Conformance.ts:19](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Conformance.ts#L19)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Aspect.ts#L17)
+[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Aspect.ts#L17)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Aspect.ts#L18)
+[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Aspect.ts#L18)
 
 ## Accessors
 
@@ -126,7 +126,7 @@ Aspect.empty
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:25](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Conformance.ts#L25)
+[packages/matter.js/src/model/aspects/Conformance.ts:25](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Conformance.ts#L25)
 
 ___
 
@@ -144,7 +144,7 @@ This supports a limited subset of conformance and is only appropriate for field 
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:70](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Conformance.ts#L70)
+[packages/matter.js/src/model/aspects/Conformance.ts:70](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Conformance.ts#L70)
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:21](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Conformance.ts#L21)
+[packages/matter.js/src/model/aspects/Conformance.ts:21](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Conformance.ts#L21)
 
 ___
 
@@ -176,7 +176,7 @@ Aspect.valid
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Aspect.ts#L20)
+[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Aspect.ts#L20)
 
 ## Methods
 
@@ -202,7 +202,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Aspect.ts#L40)
+[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Aspect.ts#L40)
 
 ___
 
@@ -227,7 +227,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Aspect.ts#L54)
+[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Aspect.ts#L54)
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Aspect.ts#L65)
+[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Aspect.ts#L65)
 
 ___
 
@@ -287,7 +287,7 @@ once field values are known.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:97](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Conformance.ts#L97)
+[packages/matter.js/src/model/aspects/Conformance.ts:97](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Conformance.ts#L97)
 
 ___
 
@@ -305,7 +305,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:104](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Conformance.ts#L104)
+[packages/matter.js/src/model/aspects/Conformance.ts:104](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Conformance.ts#L104)
 
 ___
 
@@ -325,7 +325,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:61](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Conformance.ts#L61)
+[packages/matter.js/src/model/aspects/Conformance.ts:61](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Conformance.ts#L61)
 
 ___
 
@@ -343,4 +343,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/aspects/Aspect.ts#L47)
+[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/aspects/Aspect.ts#L47)

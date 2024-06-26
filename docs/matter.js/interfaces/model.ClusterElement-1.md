@@ -57,7 +57,7 @@ Child elements.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:40](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/ClusterElement.ts#L40)
+[packages/matter.js/src/model/elements/ClusterElement.ts:40](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/ClusterElement.ts#L40)
 
 ___
 
@@ -69,7 +69,7 @@ Encodes both classification and scope from the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:32](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/ClusterElement.ts#L32)
+[packages/matter.js/src/model/elements/ClusterElement.ts:32](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/ClusterElement.ts#L32)
 
 ___
 
@@ -85,7 +85,7 @@ A short summary of the element.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:40](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L40)
+[packages/matter.js/src/model/elements/BaseElement.ts:40](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L40)
 
 ___
 
@@ -101,7 +101,7 @@ A paragraph summary of the element.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:45](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L45)
+[packages/matter.js/src/model/elements/BaseElement.ts:45](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L45)
 
 ___
 
@@ -118,7 +118,7 @@ and are available in-scope for every cluster.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:61](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L61)
+[packages/matter.js/src/model/elements/BaseElement.ts:61](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L61)
 
 ___
 
@@ -135,7 +135,7 @@ context-specific.  A "machine appropriate" semantic differentiator.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:20](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/ClusterElement.ts#L20)
+[packages/matter.js/src/model/elements/ClusterElement.ts:20](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/ClusterElement.ts#L20)
 
 ___
 
@@ -152,7 +152,7 @@ differentiator.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:29](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L29)
+[packages/matter.js/src/model/elements/BaseElement.ts:29](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L29)
 
 ___
 
@@ -164,7 +164,7 @@ Marks a cluster as a singleton per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:27](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/ClusterElement.ts#L27)
+[packages/matter.js/src/model/elements/ClusterElement.ts:27](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/ClusterElement.ts#L27)
 
 ___
 
@@ -177,7 +177,7 @@ and is not present in the static data model.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:38](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/ClusterElement.ts#L38)
+[packages/matter.js/src/model/elements/ClusterElement.ts:38](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/ClusterElement.ts#L38)
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:22](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/ClusterElement.ts#L22)
+[packages/matter.js/src/model/elements/ClusterElement.ts:22](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/ClusterElement.ts#L22)
 
 ___
 
@@ -204,7 +204,7 @@ element goes here.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:35](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L35)
+[packages/matter.js/src/model/elements/BaseElement.ts:35](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L35)
 
 ___
 
@@ -220,4 +220,4 @@ Reference to Matter specification document.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:50](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/BaseElement.ts#L50)
+[packages/matter.js/src/model/elements/BaseElement.ts:50](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L50)

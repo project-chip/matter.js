@@ -58,7 +58,7 @@ These elements and properties are present in all OnOff clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:242](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L242)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:242](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L242)
 
 ___
 
@@ -68,9 +68,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:311](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L311)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:311](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L311)
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:313](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L313)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:313](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L313)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:300](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L300)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:300](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L300)
 
 ___
 
@@ -94,9 +94,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:368](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L368)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:368](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L368)
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:370](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L370)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:370](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L370)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:319](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L319)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:319](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L319)
 
 ___
 
@@ -136,7 +136,7 @@ A OnOffCluster supports these elements if it supports feature LevelControlForLig
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:132](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L132)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:132](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L132)
 
 ___
 
@@ -159,7 +159,7 @@ MatterSpecification.v11.Cluster § 1.5.7.6.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:86](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L86)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:86](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L86)
 
 ___
 
@@ -175,7 +175,7 @@ MatterSpecification.v11.Cluster § 1.5.7.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:53](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L53)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:53](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L53)
 
 ___
 
@@ -191,4 +191,4 @@ MatterSpecification.v11.Cluster § 1.5.7.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:93](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L93)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:93](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L93)

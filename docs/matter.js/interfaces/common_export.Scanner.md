@@ -41,7 +41,7 @@ be over.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:153](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/common/Scanner.ts#L153)
+[packages/matter.js/src/common/Scanner.ts:153](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/Scanner.ts#L153)
 
 ___
 
@@ -57,7 +57,7 @@ Close the scanner server and free resources.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:156](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/common/Scanner.ts#L156)
+[packages/matter.js/src/common/Scanner.ts:156](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/Scanner.ts#L156)
 
 ___
 
@@ -82,7 +82,7 @@ vendorId, etc.) and returns as soon as minimum one was found or the timeout is o
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:129](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/common/Scanner.ts#L129)
+[packages/matter.js/src/common/Scanner.ts:129](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/Scanner.ts#L129)
 
 ___
 
@@ -108,7 +108,7 @@ called when it is discovered.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:140](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/common/Scanner.ts#L140)
+[packages/matter.js/src/common/Scanner.ts:140](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/Scanner.ts#L140)
 
 ___
 
@@ -134,7 +134,7 @@ and return them.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:112](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/common/Scanner.ts#L112)
+[packages/matter.js/src/common/Scanner.ts:112](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/Scanner.ts#L112)
 
 ___
 
@@ -156,7 +156,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:147](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/common/Scanner.ts#L147)
+[packages/matter.js/src/common/Scanner.ts:147](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/Scanner.ts#L147)
 
 ___
 
@@ -180,4 +180,4 @@ DNS-SD queries.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:123](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/common/Scanner.ts#L123)
+[packages/matter.js/src/common/Scanner.ts:123](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/Scanner.ts#L123)

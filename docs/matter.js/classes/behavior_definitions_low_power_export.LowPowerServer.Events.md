@@ -44,7 +44,7 @@ LowPowerBehavior.Events.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:25](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L25)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:25](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L25)
 
 ## Properties
 
@@ -54,7 +54,7 @@ LowPowerBehavior.Events.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/low-power/LowPowerServer.ts:23](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/behavior/definitions/low-power/LowPowerServer.ts#L23)
+[packages/matter.js/src/behavior/definitions/low-power/LowPowerServer.ts:23](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/low-power/LowPowerServer.ts#L23)
 
 ___
 
@@ -68,7 +68,7 @@ LowPowerBehavior.Events.eventNames
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:370](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L370)
+[packages/matter.js/src/util/Observable.ts:370](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Observable.ts#L370)
 
 ## Methods
 
@@ -86,7 +86,7 @@ LowPowerBehavior.Events.[dispose]
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:374](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L374)
+[packages/matter.js/src/util/Observable.ts:374](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Observable.ts#L374)
 
 ___
 
@@ -119,7 +119,7 @@ LowPowerBehavior.Events.addListener
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:354](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L354)
+[packages/matter.js/src/util/Observable.ts:354](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Observable.ts#L354)
 
 ___
 
@@ -152,7 +152,7 @@ LowPowerBehavior.Events.emit
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:350](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L350)
+[packages/matter.js/src/util/Observable.ts:350](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Observable.ts#L350)
 
 ___
 
@@ -185,4 +185,4 @@ LowPowerBehavior.Events.removeListener
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:362](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Observable.ts#L362)
+[packages/matter.js/src/util/Observable.ts:362](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Observable.ts#L362)

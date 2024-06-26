@@ -28,7 +28,7 @@ is not used for actual enums, just for bitmaps, which are used (somewhat inconsi
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:103](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/ValueElement.ts#L103)
+[packages/matter.js/src/model/elements/ValueElement.ts:103](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/ValueElement.ts#L103)
 
 ___
 
@@ -44,7 +44,7 @@ A pool of datatype definitions indexed by name.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:92](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/ValueElement.ts#L92)
+[packages/matter.js/src/model/elements/ValueElement.ts:92](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/ValueElement.ts#L92)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:79](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/ValueElement.ts#L79)
+[packages/matter.js/src/model/elements/ValueElement.ts:79](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/ValueElement.ts#L79)
 
 ___
 
@@ -66,4 +66,4 @@ Valid sizes for ints.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:97](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/model/elements/ValueElement.ts#L97)
+[packages/matter.js/src/model/elements/ValueElement.ts:97](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/ValueElement.ts#L97)

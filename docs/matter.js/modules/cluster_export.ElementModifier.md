@@ -53,7 +53,7 @@ triggers a bug in TS 5.2 declaration generation
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:79](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L79)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:79](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L79)
 
 ___
 
@@ -73,7 +73,7 @@ Alterations applied to a specific element set, element or element field.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:88](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L88)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:88](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L88)
 
 ___
 
@@ -97,7 +97,7 @@ Alterations implied by AttributeValues.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:127](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L127)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:127](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L127)
 
 ___
 
@@ -115,7 +115,7 @@ Alterations implied by ElementFlags.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:153](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L153)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:153](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L153)
 
 ___
 
@@ -141,7 +141,7 @@ Flags indicating elements to enable.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:140](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L140)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:140](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L140)
 
 ___
 
@@ -160,7 +160,7 @@ A set of modifications to cluster elements of a specific type.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:59](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L59)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:59](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L59)
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:146](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L146)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:146](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L146)
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:133](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L133)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:133](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L133)
 
 ___
 
@@ -219,7 +219,7 @@ features enabled.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:161](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L161)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:161](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L161)
 
 ___
 
@@ -238,7 +238,7 @@ A definition with alterations applied.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:99](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L99)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:99](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L99)
 
 ___
 
@@ -257,7 +257,7 @@ A definition with elements enabled.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:119](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L119)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:119](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L119)
 
 ___
 
@@ -276,4 +276,4 @@ A definition with attribute defaults updated.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/ElementModifier.ts:111](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L111)
+[packages/matter.js/src/cluster/mutation/ElementModifier.ts:111](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/mutation/ElementModifier.ts#L111)

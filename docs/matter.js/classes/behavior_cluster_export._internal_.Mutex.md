@@ -50,7 +50,7 @@ A mutex is a task queue where at most one task is active at a time.
 
 #### Defined in
 
-[packages/matter.js/src/util/Mutex.ts:21](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Mutex.ts#L21)
+[packages/matter.js/src/util/Mutex.ts:21](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Mutex.ts#L21)
 
 ## Properties
 
@@ -68,7 +68,7 @@ A mutex is a task queue where at most one task is active at a time.
 
 #### Defined in
 
-[packages/matter.js/src/util/Mutex.ts:17](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Mutex.ts#L17)
+[packages/matter.js/src/util/Mutex.ts:17](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Mutex.ts#L17)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Mutex.ts:18](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Mutex.ts#L18)
+[packages/matter.js/src/util/Mutex.ts:18](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Mutex.ts#L18)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Mutex.ts:16](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Mutex.ts#L16)
+[packages/matter.js/src/util/Mutex.ts:16](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Mutex.ts#L16)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Mutex.ts:19](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Mutex.ts#L19)
+[packages/matter.js/src/util/Mutex.ts:19](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Mutex.ts#L19)
 
 ## Methods
 
@@ -120,7 +120,7 @@ Default error handling crashes the component if it is AsyncConstructable.  Other
 
 #### Defined in
 
-[packages/matter.js/src/util/Mutex.ts:93](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Mutex.ts#L93)
+[packages/matter.js/src/util/Mutex.ts:93](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Mutex.ts#L93)
 
 ___
 
@@ -142,7 +142,7 @@ Execute a task immediately if it is a function.
 
 #### Defined in
 
-[packages/matter.js/src/util/Mutex.ts:105](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Mutex.ts#L105)
+[packages/matter.js/src/util/Mutex.ts:105](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Mutex.ts#L105)
 
 ___
 
@@ -168,7 +168,7 @@ not clear until task resolves.
 
 #### Defined in
 
-[packages/matter.js/src/util/Mutex.ts:46](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Mutex.ts#L46)
+[packages/matter.js/src/util/Mutex.ts:46](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Mutex.ts#L46)
 
 ___
 
@@ -190,7 +190,7 @@ Cancel remaining work and perform one last task with the Mutex held.
 
 #### Defined in
 
-[packages/matter.js/src/util/Mutex.ts:70](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Mutex.ts#L70)
+[packages/matter.js/src/util/Mutex.ts:70](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Mutex.ts#L70)
 
 ___
 
@@ -226,4 +226,4 @@ PromiseLike.then
 
 #### Defined in
 
-[packages/matter.js/src/util/Mutex.ts:33](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/util/Mutex.ts#L33)
+[packages/matter.js/src/util/Mutex.ts:33](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/util/Mutex.ts#L33)

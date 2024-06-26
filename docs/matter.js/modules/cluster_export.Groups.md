@@ -70,7 +70,7 @@ These elements and properties are present in all Groups clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:247](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L247)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:247](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L247)
 
 ___
 
@@ -80,9 +80,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:374](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L374)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:374](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L374)
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:376](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L376)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:376](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L376)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:348](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L348)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:348](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L348)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:377](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L377)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:377](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L377)
 
 ___
 
@@ -128,7 +128,7 @@ MatterSpecification.v11.Cluster § 1.3.6.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:30](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L30)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:30](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L30)
 
 ___
 
@@ -144,7 +144,7 @@ MatterSpecification.v11.Cluster § 1.3.7.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:218](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L218)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:218](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L218)
 
 ___
 
@@ -160,7 +160,7 @@ MatterSpecification.v11.Cluster § 1.3.7.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:42](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L42)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:42](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L42)
 
 ___
 
@@ -176,7 +176,7 @@ MatterSpecification.v11.Cluster § 1.3.7.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:59](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L59)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:59](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L59)
 
 ___
 
@@ -192,7 +192,7 @@ MatterSpecification.v11.Cluster § 1.3.7.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:108](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L108)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:108](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L108)
 
 ___
 
@@ -232,7 +232,7 @@ MatterSpecification.v11.Cluster § 1.3.7.9
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:146](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L146)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:146](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L146)
 
 ___
 
@@ -248,7 +248,7 @@ MatterSpecification.v11.Cluster § 1.3.7.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:187](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L187)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:187](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L187)
 
 ___
 
@@ -264,7 +264,7 @@ MatterSpecification.v11.Cluster § 1.3.7.10
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:201](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L201)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:201](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L201)
 
 ___
 
@@ -280,7 +280,7 @@ MatterSpecification.v11.Cluster § 1.3.7.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:76](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:76](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L76)
 
 ___
 
@@ -296,4 +296,4 @@ MatterSpecification.v11.Cluster § 1.3.7.8
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:90](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:90](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L90)

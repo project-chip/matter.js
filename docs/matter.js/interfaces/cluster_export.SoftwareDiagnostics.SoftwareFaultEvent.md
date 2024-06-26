@@ -44,7 +44,7 @@ TypeFromSchema.faultRecording
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:111](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L111)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:111](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L111)
 
 ___
 
@@ -64,7 +64,7 @@ TypeFromSchema.id
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:94](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L94)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:94](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L94)
 
 ___
 
@@ -85,4 +85,4 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:102](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L102)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:102](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L102)

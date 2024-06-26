@@ -79,7 +79,7 @@ These elements and properties are present in all PulseWidthModulation clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:255](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L255)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:255](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L255)
 
 ___
 
@@ -89,9 +89,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:452](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L452)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:452](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L452)
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:454](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L454)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:454](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L454)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:439](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L439)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:439](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L439)
 
 ___
 
@@ -115,9 +115,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:506](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L506)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:506](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L506)
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:508](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L508)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:508](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L508)
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:461](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L461)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:461](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L461)
 
 ___
 
@@ -154,7 +154,7 @@ A PulseWidthModulationCluster supports these elements if it supports feature Fre
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:188](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L188)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:188](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L188)
 
 ___
 
@@ -174,7 +174,7 @@ A PulseWidthModulationCluster supports these elements if it supports feature Lig
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:155](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L155)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:155](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L155)
 
 ___
 
@@ -197,7 +197,7 @@ MatterSpecification.v11.Cluster § 1.6.5.8
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:48](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L48)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:48](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L48)
 
 ___
 
@@ -213,7 +213,7 @@ MatterSpecification.v11.Cluster § 1.6.6.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:84](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L84)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:84](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L84)
 
 ___
 
@@ -229,7 +229,7 @@ MatterSpecification.v11.Cluster § 1.6.6.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:34](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L34)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:34](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L34)
 
 ___
 
@@ -245,7 +245,7 @@ MatterSpecification.v11.Cluster § 1.6.6.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:55](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L55)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:55](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L55)
 
 ___
 
@@ -261,7 +261,7 @@ MatterSpecification.v11.Cluster § 1.6.6.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:120](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L120)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:120](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L120)
 
 ___
 
@@ -277,4 +277,4 @@ MatterSpecification.v11.Cluster § 1.6.6.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:140](https://github.com/project-chip/matter.js/blob/6d3b6a5d957d88a9231d6ecab4bb41f8133112be/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L140)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:140](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L140)
