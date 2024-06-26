@@ -9,6 +9,10 @@ The main work (all changes without a GitHub username in brackets in the below li
 	### __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+* Matter-Core functionality:
+  * Fix: Makes sure to clear all subscriptions from the subscriber noe and not only the current session when not keeping subscriptions
+
 ### 0.9.2 (2024-06-20)
 * Matter-Core functionality:
   * Enhancement: Added some more certification relevant checks in Interaction server
