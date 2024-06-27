@@ -306,16 +306,14 @@ function generateExtensions(file: ClusterFile, variance: ClusterVariance, base: 
 
 function generateMetadata(base: Block, cluster: ClusterModel) {
     generateIdentity(base, cluster);
-    base.atom("name", `${serialize(cluster.name)}`);
     base.atom("revision", `${JSON.stringify(cluster.revision)}`);
 }
 
 function generateIdentity(target: Block, cluster: ClusterModel) {
-    if (cluster.id === undefined) {
-        return;
+    if (cluster.id !== undefined) {
+        target.atom("id", `0x${cluster.id.toString(16)}`);
     }
-
-    target.atom("id", `0x${cluster.id.toString(16)}`);
+    target.atom("name", `${serialize(cluster.name)}`);
 }
 
 /**
@@ -477,7 +475,6 @@ function generateAlias(file: ClusterFile) {
     const baseBlock = file.ns.expressions(`export const Base = {`, "}");
     baseBlock.atom(`...${base.name}.Base`);
     generateIdentity(baseBlock, file.cluster);
-    baseBlock.atom("name", serialize(file.cluster.name));
 
     generateMutableCluster(
         variance,

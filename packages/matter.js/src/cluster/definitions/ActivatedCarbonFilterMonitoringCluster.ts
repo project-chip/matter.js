@@ -35,7 +35,11 @@ export namespace ActivatedCarbonFilterMonitoring {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const CompleteInstance = MutableCluster({ ...ResourceMonitoring.Complete, id: 0x72 });
+    export const CompleteInstance = MutableCluster({
+        ...ResourceMonitoring.Complete,
+        id: 0x72,
+        name: "ActivatedCarbonFilterMonitoring"
+    });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}
     export const Complete: Complete = CompleteInstance;
