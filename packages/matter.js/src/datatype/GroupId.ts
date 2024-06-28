@@ -5,7 +5,7 @@
  */
 
 import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -28,7 +28,7 @@ export function GroupId(groupId: number | bigint, validate = true): GroupId {
     if (!validate || (groupId >= 0x0000 && groupId <= 0xffff)) {
         return Number(groupId) as GroupId;
     }
-    throw new ValidationError(`Invalid group ID: ${groupId}`);
+    throw new ValidationOutOfBoundsError(`Invalid group ID: ${groupId}`);
 }
 
 export namespace GroupId {

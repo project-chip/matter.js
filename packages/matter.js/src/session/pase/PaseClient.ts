@@ -40,26 +40,28 @@ export class PaseClient {
 
     async pair(client: MatterController, exchange: MessageExchange<MatterController>, setupPin: number) {
         const messenger = new PaseClientMessenger(exchange);
-        const random = Crypto.getRandom();
-        const sessionId = await client.getNextAvailableSessionId(); // Initiator Session Id
+        const initiatorRandom = Crypto.getRandom();
+        const initiatorSessionId = await client.getNextAvailableSessionId(); // Initiator Session Id
 
         // Send pbkdfRequest and Read pbkdfResponse
         const requestPayload = await messenger.sendPbkdfParamRequest({
-            random,
-            sessionId,
+            initiatorRandom,
+            initiatorSessionId,
             passcodeId: DEFAULT_PASSCODE_ID,
             hasPbkdfParameters: false,
+            initiatorSessionParams: client.sessionParameters,
         });
         const {
             responsePayload,
-            response: { pbkdfParameters, sessionId: peerSessionId, sessionParams: pbkdfSessionParams },
+            response: { pbkdfParameters, responderSessionId, responderSessionParams },
         } = await messenger.readPbkdfParamResponse();
         if (pbkdfParameters === undefined)
             throw new UnexpectedDataError("Missing requested PbkdfParameters in the response.");
 
+        // THis includes the Fallbacks for the session parameters overridden by what was sent by the device in PbkdfResponse
         const sessionParameters = {
             ...exchange.session.parameters,
-            ...(pbkdfSessionParams ?? {}),
+            ...(responderSessionParams ?? {}),
         };
 
         // Compute pake1 and read pake2
@@ -78,15 +80,15 @@ export class PaseClient {
         // All good! Creating the secure session
         await messenger.waitForSuccess("Success after PASE Pake3");
         const secureSession = await client.sessionManager.createSecureSession({
-            sessionId,
+            sessionId: initiatorSessionId,
             fabric: undefined,
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
-            peerSessionId,
+            peerSessionId: responderSessionId,
             sharedSecret: Ke,
             salt: new ByteArray(0),
             isInitiator: true,
             isResumption: false,
-            sessionParameters,
+            peerSessionParameters: sessionParameters,
         });
         await messenger.close();
         logger.info(`Pase client: Paired successfully with ${messenger.getChannelName()}.`);

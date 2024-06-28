@@ -11,6 +11,7 @@ import { Crypto } from "../../crypto/Crypto.js";
 import { PublicKey } from "../../crypto/Key.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ByteArray } from "../../util/ByteArray.js";
@@ -41,32 +42,38 @@ export class CaseClient {
         const messenger = new CaseClientMessenger(exchange);
 
         // Generate pairing info
-        const random = Crypto.getRandom();
-        const sessionId = await client.getNextAvailableSessionId(); // Initiator Session Id
+        const initiatorRandom = Crypto.getRandom();
+        const initiatorSessionId = await client.getNextAvailableSessionId(); // Initiator Session Id
         const { operationalIdentityProtectionKey, operationalCert: nodeOpCert, intermediateCACert } = fabric;
-        const { publicKey: ecdhPublicKey, ecdh } = Crypto.ecdhGeneratePublicKey();
+        const { publicKey: initiatorEcdhPublicKey, ecdh } = Crypto.ecdhGeneratePublicKey();
 
         // Send sigma1
         let sigma1Bytes;
         let resumptionRecord = client.findResumptionRecordByNodeId(peerNodeId);
         if (resumptionRecord !== undefined) {
             const { sharedSecret, resumptionId } = resumptionRecord;
-            const resumeKey = await Crypto.hkdf(sharedSecret, ByteArray.concat(random, resumptionId), KDFSR1_KEY_INFO);
-            const resumeMic = Crypto.encrypt(resumeKey, new ByteArray(0), RESUME1_MIC_NONCE);
+            const resumeKey = await Crypto.hkdf(
+                sharedSecret,
+                ByteArray.concat(initiatorRandom, resumptionId),
+                KDFSR1_KEY_INFO,
+            );
+            const initiatorResumeMic = Crypto.encrypt(resumeKey, new ByteArray(0), RESUME1_MIC_NONCE);
             sigma1Bytes = await messenger.sendSigma1({
-                sessionId,
-                destinationId: fabric.getDestinationId(peerNodeId, random),
-                ecdhPublicKey,
-                random,
+                initiatorSessionId,
+                destinationId: fabric.getDestinationId(peerNodeId, initiatorRandom),
+                initiatorEcdhPublicKey,
+                initiatorRandom,
                 resumptionId,
-                resumeMic,
+                initiatorResumeMic,
+                initiatorSessionParams: client.sessionParameters,
             });
         } else {
             sigma1Bytes = await messenger.sendSigma1({
-                sessionId,
-                destinationId: fabric.getDestinationId(peerNodeId, random),
-                ecdhPublicKey,
-                random,
+                initiatorSessionId,
+                destinationId: fabric.getDestinationId(peerNodeId, initiatorRandom),
+                initiatorEcdhPublicKey,
+                initiatorRandom,
+                initiatorSessionParams: client.sessionParameters,
             });
         }
 
@@ -76,20 +83,21 @@ export class CaseClient {
             // Process sigma2 resume
             if (resumptionRecord === undefined) throw new UnexpectedDataError("Received an unexpected sigma2Resume.");
             const { sharedSecret, fabric, sessionParameters: resumptionSessionParams } = resumptionRecord;
-            const { sessionId: peerSessionId, resumptionId, resumeMic } = sigma2Resume;
+            const { responderSessionId: peerSessionId, resumptionId, resumeMic } = sigma2Resume;
 
+            // We use the Fallbacks for the session parameters overridden by our stored ones from the resumption record
             const sessionParameters = {
                 ...exchange.session.parameters,
                 ...(resumptionSessionParams ?? {}),
             };
 
-            const resumeSalt = ByteArray.concat(random, resumptionId);
+            const resumeSalt = ByteArray.concat(initiatorRandom, resumptionId);
             const resumeKey = await Crypto.hkdf(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
             Crypto.decrypt(resumeKey, resumeMic, RESUME2_MIC_NONCE);
 
-            const secureSessionSalt = ByteArray.concat(random, resumptionRecord.resumptionId);
+            const secureSessionSalt = ByteArray.concat(initiatorRandom, resumptionRecord.resumptionId);
             secureSession = await client.sessionManager.createSecureSession({
-                sessionId,
+                sessionId: initiatorSessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
@@ -97,30 +105,34 @@ export class CaseClient {
                 salt: secureSessionSalt,
                 isInitiator: true,
                 isResumption: true,
-                sessionParameters,
+                peerSessionParameters: sessionParameters,
             });
             await messenger.sendSuccess();
-            logger.info(`Case client: session resumed with ${messenger.getChannelName()}`);
+            logger.info(
+                `Case client: session resumed with ${messenger.getChannelName()} and parameters`,
+                Diagnostic.dict(secureSession.parameters),
+            );
 
             resumptionRecord.resumptionId = resumptionId; /* update resumptionId */
             resumptionRecord.sessionParameters = secureSession.parameters; /* update mrpParams */
         } else {
             // Process sigma2
             const {
-                ecdhPublicKey: peerEcdhPublicKey,
+                responderEcdhPublicKey: peerEcdhPublicKey,
                 encrypted: peerEncrypted,
-                random: peerRandom,
-                sessionId: peerSessionId,
-                sessionParams: sigma2SessionParams,
+                responderRandom,
+                responderSessionId: peerSessionId,
+                responderSessionParams,
             } = sigma2;
+            // We use the Fallbacks for the session parameters overridden by what was sent by the device in Sigma2
             const sessionParameters = {
                 ...exchange.session.parameters,
-                ...(sigma2SessionParams ?? {}),
+                ...(responderSessionParams ?? {}),
             };
             const sharedSecret = Crypto.ecdhGenerateSecret(peerEcdhPublicKey, ecdh);
             const sigma2Salt = ByteArray.concat(
                 operationalIdentityProtectionKey,
-                peerRandom,
+                responderRandom,
                 peerEcdhPublicKey,
                 Crypto.hash(sigma1Bytes),
             );
@@ -136,7 +148,7 @@ export class CaseClient {
                 nodeOpCert: peerNewOpCert,
                 intermediateCACert: peerIntermediateCACert,
                 ecdhPublicKey: peerEcdhPublicKey,
-                peerEcdhPublicKey: ecdhPublicKey,
+                peerEcdhPublicKey: initiatorEcdhPublicKey,
             });
             const {
                 ellipticCurvePublicKey: peerPublicKey,
@@ -182,7 +194,7 @@ export class CaseClient {
             const signatureData = TlvSignedData.encode({
                 nodeOpCert,
                 intermediateCACert,
-                ecdhPublicKey,
+                ecdhPublicKey: initiatorEcdhPublicKey,
                 peerEcdhPublicKey,
             });
             const signature = fabric.sign(signatureData);
@@ -197,7 +209,7 @@ export class CaseClient {
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
             secureSession = await client.sessionManager.createSecureSession({
-                sessionId,
+                sessionId: initiatorSessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
@@ -205,9 +217,12 @@ export class CaseClient {
                 salt: secureSessionSalt,
                 isInitiator: true,
                 isResumption: false,
-                sessionParameters,
+                peerSessionParameters: sessionParameters,
             });
-            logger.info(`Case client: Paired successfully with ${messenger.getChannelName()}`);
+            logger.info(
+                `Case client: Paired successfully with ${messenger.getChannelName()} and parameters`,
+                Diagnostic.dict(secureSession.parameters),
+            );
             resumptionRecord = {
                 fabric,
                 peerNodeId,

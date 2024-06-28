@@ -5,7 +5,6 @@
  */
 
 import { Crypto } from "@project-chip/matter.js/crypto";
-import { KEY } from "../cluster/ClusterServerTestingUtil.js";
 
 import {
     AccessControlCluster,
@@ -19,9 +18,9 @@ import {
     ClusterServerObj,
     Events,
     OnOffCluster,
+    WiFiNetworkDiagnosticsCluster,
     WritableAttribute,
 } from "@project-chip/matter.js/cluster";
-import { Message, SessionType } from "@project-chip/matter.js/codec";
 import {
     AttributeId,
     ClusterId,
@@ -29,16 +28,13 @@ import {
     EndpointNumber,
     EventId,
     EventNumber,
-    FabricId,
     FabricIndex,
-    NodeId,
     TlvClusterId,
     TlvFabricIndex,
     TlvVendorId,
     VendorId,
 } from "@project-chip/matter.js/datatype";
 import { DeviceClasses, DeviceTypeDefinition, Endpoint } from "@project-chip/matter.js/device";
-import { Fabric } from "@project-chip/matter.js/fabric";
 import {
     DataReportPayload,
     EventHandler,
@@ -48,16 +44,19 @@ import {
     InteractionServerMessenger,
     InvokeRequest,
     InvokeResponse,
+    MessageType,
     ReadRequest,
     StatusCode,
     StatusResponseError,
     SubscribeRequest,
+    TlvInvokeResponse,
+    TlvStatusResponse,
+    WildcardPathFlagsBitmap,
     WriteRequest,
     WriteResponse,
 } from "@project-chip/matter.js/interaction";
 import { Specification } from "@project-chip/matter.js/model";
-import { MessageExchange } from "@project-chip/matter.js/protocol";
-import { SecureSession } from "@project-chip/matter.js/session";
+import { TypeFromBitmapSchema, TypeFromPartialBitSchema } from "@project-chip/matter.js/schema";
 import { StorageBackendMemory, StorageContext, StorageManager, SyncStorage } from "@project-chip/matter.js/storage";
 import {
     TlvArray,
@@ -70,8 +69,13 @@ import {
     TlvUInt16,
     TlvUInt8,
 } from "@project-chip/matter.js/tlv";
-import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
+import {
+    DummyGroupcastMessage,
+    DummyUnicastMessage,
+    createDummyMessageExchange,
+    testFabric,
+} from "./InteractionTestUtils.js";
 
 const DummyTestDevice = DeviceTypeDefinition({
     code: 0,
@@ -149,7 +153,7 @@ const READ_REQUEST_WITH_FILTER: ReadRequest = {
 
 const READ_RESPONSE: DataReportPayload = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     attributeReportsPayload: [
         {
             attributeData: {
@@ -264,7 +268,7 @@ const READ_RESPONSE: DataReportPayload = {
 
 const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     attributeReportsPayload: [
         {
             attributeStatus: {
@@ -354,7 +358,7 @@ const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
 
 const WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     timedRequest: false,
     writeRequests: [
         {
@@ -421,7 +425,7 @@ const WRITE_RESPONSE: WriteResponse = {
 
 const WRITE_REQUEST_TIMED_REQUIRED: WriteRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     timedRequest: false,
     writeRequests: [
         {
@@ -455,7 +459,7 @@ const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
 
 const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     timedRequest: false,
     writeRequests: [
         {
@@ -479,7 +483,7 @@ const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
 
 const MASS_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     timedRequest: false,
     writeRequests: [
         {
@@ -511,7 +515,7 @@ const TlvAclTestSchema = TlvObject({
 
 const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
+    suppressResponse: true,
     timedRequest: false,
     writeRequests: [
         {
@@ -644,7 +648,7 @@ const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS: InvokeResponse = {
         {
             status: {
                 commandPath: { clusterId: ClusterId(0x3c), commandId: CommandId(2), endpointId: EndpointNumber(0) },
-                status: { clusterStatus: undefined, status: 0 },
+                status: { status: 0 },
             },
         },
     ],
@@ -661,7 +665,7 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
     ],
 };
 
-const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
+const INVOKE_COMMAND_REQUEST_MULTI_WILDCARD: InvokeRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
@@ -687,6 +691,40 @@ const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
     ],
 };
 
+const INVOKE_COMMAND_REQUEST_MULTI_SAME: InvokeRequest = {
+    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    suppressResponse: false,
+    timedRequest: false,
+    invokeRequests: [
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+        },
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+        },
+    ],
+};
+
+const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
+    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    suppressResponse: false,
+    timedRequest: false,
+    invokeRequests: [
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(0) },
+        },
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
+        },
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(2) },
+        },
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(100) },
+        },
+    ],
+};
+
 const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
     suppressResponse: false,
@@ -705,7 +743,7 @@ const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
         {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
-                status: { clusterStatus: undefined, status: 0 },
+                status: { status: 0 },
             },
         },
     ],
@@ -718,7 +756,7 @@ const INVOKE_COMMAND_RESPONSE_BUSY: InvokeResponse = {
         {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
-                status: { clusterStatus: undefined, status: 0x9c },
+                status: { status: 0x9c },
             },
         },
     ],
@@ -737,44 +775,36 @@ const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
     ],
 };
 
-/*
 const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
             status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) },
-                status: { status: 129 },
-            },
-        },
-        {
-            status: {
-                commandPath: { clusterId: ClusterId(90), commandId: CommandId(1), endpointId: EndpointNumber(0) },
-                status: { status: 195 },
-            },
-        },
-        {
-            status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(99) },
-                status: { status: 127 },
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(0), endpointId: EndpointNumber(0) },
+                status: { status: 0 },
             },
         },
         {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
-                status: { clusterStatus: undefined, status: 0 },
+                status: { status: 0 },
             },
         },
         {
             status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(0), endpointId: EndpointNumber(0) },
-                status: { clusterStatus: undefined, status: 0 },
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(2), endpointId: EndpointNumber(0) },
+                status: { status: 0 },
+            },
+        },
+        {
+            status: {
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) },
+                status: { status: 129 },
             },
         },
     ],
 };
- */
 
 const BasicInformationClusterWithTimedInteraction = {
     ...BasicInformationCluster,
@@ -789,52 +819,64 @@ const BasicInformationClusterWithTimedInteraction = {
     },
 };
 
-const testFabric = new Fabric(
-    FabricIndex(1),
-    FabricId(1),
-    NodeId(BigInt(1)),
-    NodeId(1),
-    ByteArray.fromHex("00"),
-    ByteArray.fromHex("00"),
-    KEY,
-    VendorId(1),
-    ByteArray.fromHex("00"),
-    ByteArray.fromHex("00"),
-    ByteArray.fromHex("00"),
-    ByteArray.fromHex("00"),
-    ByteArray.fromHex("00"),
-    "",
-);
-
-async function getDummyMessageExchange(
-    hasTimedInteraction = false,
-    timedInteractionExpired = false,
-    clearTimedInteractionCallback?: () => void,
-) {
-    const session = await SecureSession.create({
-        context: { getFabrics: () => [] } as any,
-        id: 1,
-        fabric: testFabric,
-        peerNodeId: NodeId(BigInt(1)),
-        peerSessionId: 1,
-        sharedSecret: ByteArray.fromHex("00"),
-        salt: ByteArray.fromHex("00"),
-        isInitiator: false,
-        isResumption: false,
-        closeCallback: async () => {
-            /* */
-        },
-        sessionParameters: { idleIntervalMs: 1000, activeIntervalMs: 1000 },
-    });
-    return {
-        channel: { name: "test" },
-        clearTimedInteraction: () => clearTimedInteractionCallback?.(),
-        hasTimedInteraction: () => hasTimedInteraction,
-        hasActiveTimedInteraction: () => hasTimedInteraction && !timedInteractionExpired,
-        hasExpiredTimedInteraction: () => hasTimedInteraction && timedInteractionExpired,
-        session,
-    } as unknown as MessageExchange<any>;
-}
+const wildcardTestCases: {
+    testCase: string;
+    clusterId: ClusterId;
+    wildcardPathFilter?: TypeFromPartialBitSchema<typeof WildcardPathFlagsBitmap>;
+    count: number;
+}[] = [
+    { testCase: "no", clusterId: ClusterId(0x28), wildcardPathFilter: undefined, count: 21 },
+    { testCase: "skipRootNode", clusterId: ClusterId(0x28), wildcardPathFilter: { skipRootNode: true }, count: 0 }, // all sorted out
+    {
+        testCase: "skipGlobalAttributes",
+        clusterId: ClusterId(0x28),
+        wildcardPathFilter: { skipGlobalAttributes: true },
+        count: 17,
+    }, // 4 less
+    {
+        testCase: "skipAttributeList",
+        clusterId: ClusterId(0x28),
+        wildcardPathFilter: { skipAttributeList: true },
+        count: 20,
+    }, // 1 less
+    { testCase: "skipEventList", clusterId: ClusterId(0x28), wildcardPathFilter: { skipEventList: true }, count: 20 }, // 1 less
+    {
+        testCase: "skipCommandLists",
+        clusterId: ClusterId(0x28),
+        wildcardPathFilter: { skipCommandLists: true },
+        count: 19,
+    }, // 2 less
+    {
+        testCase: "skipFixedAttributes",
+        clusterId: ClusterId(0x28),
+        wildcardPathFilter: { skipFixedAttributes: true },
+        count: 8,
+    }, // 13 less
+    {
+        testCase: "skipChangesOmittedAttributes",
+        clusterId: ClusterId(0x28),
+        wildcardPathFilter: { skipChangesOmittedAttributes: true },
+        count: 21,
+    }, // nothing filtered
+    {
+        testCase: "no for WiFiDiag",
+        clusterId: ClusterId(0x36),
+        wildcardPathFilter: {},
+        count: 11,
+    }, // nothing filtered
+    {
+        testCase: "skipChangesOmittedAttributes",
+        clusterId: ClusterId(0x36),
+        wildcardPathFilter: { skipChangesOmittedAttributes: true },
+        count: 10,
+    }, // 1 filtered
+    {
+        testCase: "skipDiagnosticsClusters",
+        clusterId: ClusterId(0x36),
+        wildcardPathFilter: { skipDiagnosticsClusters: true },
+        count: 0,
+    }, // all filtered
+];
 
 describe("InteractionProtocol", () => {
     let realGetRandomData = Crypto.get().getRandomData;
@@ -944,9 +986,11 @@ describe("InteractionProtocol", () => {
             basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
             basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
 
-            const result = await interactionProtocol.handleReadRequest(await getDummyMessageExchange(), READ_REQUEST, {
-                packetHeader: { sessionType: SessionType.Unicast },
-            } as Message);
+            const result = await interactionProtocol.handleReadRequest(
+                await createDummyMessageExchange(),
+                READ_REQUEST,
+                DummyUnicastMessage,
+            );
 
             assert.deepEqual(result, READ_RESPONSE);
         });
@@ -958,11 +1002,9 @@ describe("InteractionProtocol", () => {
             basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
 
             const result = await interactionProtocol.handleReadRequest(
-                await getDummyMessageExchange(),
+                await createDummyMessageExchange(),
                 READ_REQUEST_WITH_UNUSED_FILTER,
-                {
-                    packetHeader: { sessionType: SessionType.Unicast },
-                } as Message,
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, READ_RESPONSE);
@@ -975,15 +1017,52 @@ describe("InteractionProtocol", () => {
             basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
 
             const result = await interactionProtocol.handleReadRequest(
-                await getDummyMessageExchange(),
+                await createDummyMessageExchange(),
                 READ_REQUEST_WITH_FILTER,
-                {
-                    packetHeader: { sessionType: SessionType.Unicast },
-                } as Message,
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, READ_RESPONSE_WITH_FILTER);
         });
+
+        for (const { testCase, clusterId, wildcardPathFilter, count } of wildcardTestCases) {
+            it(`replies with attributes with ${testCase} wildcard Filter`, async () => {
+                withClusters(
+                    basicInfoClusterServer,
+                    ClusterServer(
+                        WiFiNetworkDiagnosticsCluster,
+                        {
+                            bssid: null,
+                            securityType: null,
+                            wiFiVersion: null,
+                            channelNumber: null,
+                            rssi: 0,
+                        },
+                        {},
+                        {},
+                    ),
+                );
+
+                const result = await interactionProtocol.handleReadRequest(
+                    await createDummyMessageExchange(),
+                    {
+                        interactionModelRevision: INTERACTION_MODEL_REVISION,
+                        isFabricFiltered: true,
+                        attributeRequests: [
+                            {
+                                endpointId: undefined,
+                                clusterId,
+                                attributeId: undefined,
+                                wildcardPathFlags: wildcardPathFilter,
+                            },
+                        ],
+                    },
+                    DummyUnicastMessage,
+                );
+
+                assert.deepEqual(result.attributeReportsPayload?.length, count);
+            });
+        }
     });
 
     describe("handleSubscribeRequest", () => {
@@ -993,21 +1072,23 @@ describe("InteractionProtocol", () => {
 
             let statusSent = -1;
             let closed = false;
+            const exchange = await createDummyMessageExchange(
+                false,
+                false,
+                (messageType, payload) => {
+                    expect(messageType).to.equal(MessageType.StatusResponse);
+                    statusSent = TlvStatusResponse.decode(payload).status;
+                },
+                undefined,
+                () => {
+                    closed = true;
+                },
+            );
             await interactionProtocol.handleSubscribeRequest(
-                await getDummyMessageExchange(),
+                exchange,
                 INVALID_SUBSCRIBE_REQUEST,
-                {
-                    sendStatus: code => {
-                        statusSent = code;
-                    },
-
-                    close: async () => {
-                        closed = true;
-                    },
-                } as InteractionServerMessenger,
-                {
-                    packetHeader: { sessionType: SessionType.Unicast },
-                } as Message,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
             );
             assert.equal(statusSent, 128);
             assert.equal(closed, true);
@@ -1019,11 +1100,9 @@ describe("InteractionProtocol", () => {
             withClusters();
 
             const result = await interactionProtocol.handleWriteRequest(
-                await getDummyMessageExchange(),
+                await createDummyMessageExchange(),
                 WRITE_REQUEST,
-                {
-                    packetHeader: { sessionType: SessionType.Unicast },
-                } as Message,
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, WRITE_RESPONSE);
@@ -1050,9 +1129,9 @@ describe("InteractionProtocol", () => {
             withClusters(accessControlCluster);
 
             const result = await interactionProtocol.handleWriteRequest(
-                await getDummyMessageExchange(),
+                await createDummyMessageExchange(),
                 CHUNKED_ARRAY_WRITE_REQUEST,
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, CHUNKED_ARRAY_WRITE_RESPONSE);
@@ -1085,9 +1164,11 @@ describe("InteractionProtocol", () => {
             withClusters();
 
             await assert.rejects(
-                interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), ILLEGAL_MASS_WRITE_REQUEST, {
-                    packetHeader: { sessionType: SessionType.Unicast },
-                } as Message),
+                interactionProtocol.handleWriteRequest(
+                    await createDummyMessageExchange(),
+                    ILLEGAL_MASS_WRITE_REQUEST,
+                    DummyUnicastMessage,
+                ),
             );
         });
 
@@ -1095,11 +1176,9 @@ describe("InteractionProtocol", () => {
             withClusters();
 
             const result = await interactionProtocol.handleWriteRequest(
-                await getDummyMessageExchange(),
+                await createDummyMessageExchange(),
                 MASS_WRITE_REQUEST,
-                {
-                    packetHeader: { sessionType: SessionType.Unicast },
-                } as Message,
+                DummyUnicastMessage,
             );
 
             expect(result).deep.equals(MASS_WRITE_RESPONSE);
@@ -1110,7 +1189,7 @@ describe("InteractionProtocol", () => {
         it("write values and return errors on invalid values timed interaction mismatch request", async () => {
             let timedInteractionCleared = false;
             withClusters();
-            const messageExchange = await getDummyMessageExchange(false, false, () => {
+            const messageExchange = await createDummyMessageExchange(false, false, undefined, () => {
                 timedInteractionCleared = true;
             });
             await assert.rejects(
@@ -1118,9 +1197,7 @@ describe("InteractionProtocol", () => {
                     await interactionProtocol.handleWriteRequest(
                         messageExchange,
                         { ...WRITE_REQUEST, timedRequest: true },
-                        {
-                            packetHeader: { sessionType: SessionType.Unicast },
-                        } as Message,
+                        DummyUnicastMessage,
                     ),
                 {
                     message:
@@ -1135,14 +1212,12 @@ describe("InteractionProtocol", () => {
         it("write values and return errors on invalid values timed interaction mismatch timed expected", async () => {
             let timedInteractionCleared = false;
             withClusters();
-            const messageExchange = await getDummyMessageExchange(true, false, () => {
+            const messageExchange = await createDummyMessageExchange(true, false, undefined, () => {
                 timedInteractionCleared = true;
             });
             await assert.rejects(
                 async () =>
-                    await interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, {
-                        packetHeader: { sessionType: SessionType.Unicast },
-                    } as Message),
+                    await interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, DummyUnicastMessage),
                 {
                     message:
                         "(201) timedRequest flag of write interaction (false) mismatch with expected timed interaction (true).",
@@ -1184,12 +1259,14 @@ describe("InteractionProtocol", () => {
             );
 
             withClusters(basicCluster);
-            const messageExchange = await getDummyMessageExchange(false, false, () => {
+            const messageExchange = await createDummyMessageExchange(false, false, undefined, () => {
                 timedInteractionCleared = true;
             });
-            const result = await interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST_TIMED_REQUIRED, {
-                packetHeader: { sessionType: SessionType.Unicast },
-            } as Message);
+            const result = await interactionProtocol.handleWriteRequest(
+                messageExchange,
+                WRITE_REQUEST_TIMED_REQUIRED,
+                DummyUnicastMessage,
+            );
 
             assert.deepEqual(result, WRITE_RESPONSE_TIMED_ERROR);
             assert.equal(timedInteractionCleared, false);
@@ -1227,15 +1304,13 @@ describe("InteractionProtocol", () => {
             );
 
             withClusters(basicCluster);
-            const messageExchange = await getDummyMessageExchange(true, false, () => {
+            const messageExchange = await createDummyMessageExchange(true, false, undefined, () => {
                 timedInteractionCleared = true;
             });
             const result = await interactionProtocol.handleWriteRequest(
                 messageExchange,
                 { ...WRITE_REQUEST_TIMED_REQUIRED, timedRequest: true },
-                {
-                    packetHeader: { sessionType: SessionType.Unicast },
-                } as Message,
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, WRITE_RESPONSE_TIMED_REQUIRED);
@@ -1246,7 +1321,7 @@ describe("InteractionProtocol", () => {
         it("write values and return errors on invalid values timed interaction expired", async () => {
             let timedInteractionCleared = false;
             withClusters();
-            const messageExchange = await getDummyMessageExchange(true, true, () => {
+            const messageExchange = await createDummyMessageExchange(true, true, undefined, () => {
                 timedInteractionCleared = true;
             });
             await assert.rejects(
@@ -1254,9 +1329,7 @@ describe("InteractionProtocol", () => {
                     await interactionProtocol.handleWriteRequest(
                         messageExchange,
                         { ...WRITE_REQUEST, timedRequest: true },
-                        {
-                            packetHeader: { sessionType: SessionType.Unicast },
-                        } as Message,
+                        DummyUnicastMessage,
                     ),
                 {
                     message: "(148) Timed request window expired. Decline write request.",
@@ -1270,7 +1343,7 @@ describe("InteractionProtocol", () => {
         it("write values and return errors on invalid values timed interaction in group message", async () => {
             let timedInteractionCleared = false;
             withClusters();
-            const messageExchange = await getDummyMessageExchange(true, false, () => {
+            const messageExchange = await createDummyMessageExchange(true, false, undefined, () => {
                 timedInteractionCleared = true;
             });
             await assert.rejects(
@@ -1278,9 +1351,7 @@ describe("InteractionProtocol", () => {
                     await interactionProtocol.handleWriteRequest(
                         messageExchange,
                         { ...WRITE_REQUEST, timedRequest: true },
-                        {
-                            packetHeader: { sessionType: SessionType.Group },
-                        } as Message,
+                        DummyGroupcastMessage,
                     ),
                 {
                     message:
@@ -1295,15 +1366,13 @@ describe("InteractionProtocol", () => {
         it("write values and return errors on invalid values in timed interaction", async () => {
             let timedInteractionCleared = false;
             withClusters();
-            const messageExchange = await getDummyMessageExchange(true, false, () => {
+            const messageExchange = await createDummyMessageExchange(true, false, undefined, () => {
                 timedInteractionCleared = true;
             });
             const result = await interactionProtocol.handleWriteRequest(
                 messageExchange,
                 { ...WRITE_REQUEST, timedRequest: true },
-                {
-                    packetHeader: { sessionType: SessionType.Unicast },
-                } as Message,
+                DummyUnicastMessage,
             );
 
             assert.equal(timedInteractionCleared, true);
@@ -1353,10 +1422,15 @@ describe("InteractionProtocol", () => {
         });
 
         it("invoke command with empty args", async () => {
-            const result = await interactionProtocol.handleInvokeRequest(
-                await getDummyMessageExchange(),
+            let result;
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result = TlvInvokeResponse.decode(payload);
+            });
+            await interactionProtocol.handleInvokeRequest(
+                exchange,
                 INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS,
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
@@ -1364,10 +1438,15 @@ describe("InteractionProtocol", () => {
         });
 
         it("invoke command with no args", async () => {
-            const result = await interactionProtocol.handleInvokeRequest(
-                await getDummyMessageExchange(),
+            let result;
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result = TlvInvokeResponse.decode(payload);
+            });
+            await interactionProtocol.handleInvokeRequest(
+                exchange,
                 INVOKE_COMMAND_REQUEST_WITH_NO_ARGS,
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
@@ -1375,17 +1454,44 @@ describe("InteractionProtocol", () => {
         });
 
         it("invalid invoke command", async () => {
-            const result = await interactionProtocol.handleInvokeRequest(
-                await getDummyMessageExchange(),
+            let result;
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result = TlvInvokeResponse.decode(payload);
+            });
+            await interactionProtocol.handleInvokeRequest(
+                exchange,
                 INVOKE_COMMAND_REQUEST_INVALID,
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_INVALID);
             assert.equal(onOffState, false);
         });
 
-        it("multi invoke commands", async () => {
+        it("throws on multi invoke commands with wildcards", async () => {
+            withClusters();
+
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result = TlvInvokeResponse.decode(payload);
+            });
+            let result = undefined;
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleInvokeRequest(
+                        exchange,
+                        INVOKE_COMMAND_REQUEST_MULTI_WILDCARD,
+                        new InteractionServerMessenger(exchange),
+                        DummyUnicastMessage,
+                    ),
+                {
+                    message: "(128) Wildcard paths are not supported in multi-command invoke requests",
+                },
+            );
+            assert.equal(result, undefined);
+        });
+
+        it("throws on multi invoke commands with one 1 allowed", async () => {
             onOffState = false;
             let triggeredOn = false;
             let triggeredOff = false;
@@ -1411,17 +1517,27 @@ describe("InteractionProtocol", () => {
 
             withClusters(onOffCluster);
 
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result = TlvInvokeResponse.decode(payload);
+            });
+            let result = undefined;
+
+            interactionProtocol = new InteractionServer({
+                endpointStructure: endpointStructure,
+                eventHandler: (eventHandler = new EventHandler(storageContext.createContext("EventHandler"))),
+                maxPathsPerInvoke: 1,
+            });
+
             await assert.rejects(
                 async () =>
                     await interactionProtocol.handleInvokeRequest(
-                        await getDummyMessageExchange(),
+                        exchange,
                         INVOKE_COMMAND_REQUEST_MULTI,
-                        {
-                            packetHeader: { sessionType: SessionType.Unicast },
-                        } as Message,
+                        new InteractionServerMessenger(exchange),
+                        DummyUnicastMessage,
                     ),
                 {
-                    message: "(128) Only 1 invoke requests are supported in one message. This message contains 6",
+                    message: "(128) Only 1 invoke requests are supported in one message. This message contains 4",
                 },
             );
 
@@ -1429,6 +1545,143 @@ describe("InteractionProtocol", () => {
             assert.equal(triggeredOn, false);
             assert.equal(triggeredOff, false);
             assert.equal(onOffState, false);
+            assert.equal(result, undefined);
+        });
+
+        it("multi invoke commands are ok", async () => {
+            onOffState = false;
+            let triggeredOn = false;
+            let triggeredOff = false;
+            onOffCluster = ClusterServer(
+                OnOffCluster,
+                {
+                    onOff: onOffState,
+                },
+                {
+                    on: async () => {
+                        onOffState = true;
+                        triggeredOn = true;
+                    },
+                    off: async () => {
+                        onOffState = false;
+                        triggeredOff = true;
+                    },
+                    toggle: async () => {
+                        onOffState = !onOffState;
+                    },
+                },
+            );
+
+            withClusters(onOffCluster);
+
+            let result = undefined;
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result = TlvInvokeResponse.decode(payload);
+            });
+
+            await interactionProtocol.handleInvokeRequest(
+                exchange,
+                INVOKE_COMMAND_REQUEST_MULTI,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
+            );
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI); // TODO Add again later when we support it officially
+            assert.equal(triggeredOn, true);
+            assert.equal(triggeredOff, true);
+            assert.equal(onOffState, false);
+        });
+
+        it("multi invoke response is split into multiple messages if needed", async () => {
+            onOffState = false;
+            let triggeredOn = false;
+            let triggeredOff = false;
+            onOffCluster = ClusterServer(
+                OnOffCluster,
+                {
+                    onOff: onOffState,
+                },
+                {
+                    on: async () => {
+                        onOffState = true;
+                        triggeredOn = true;
+                    },
+                    off: async () => {
+                        onOffState = false;
+                        triggeredOff = true;
+                    },
+                    toggle: async () => {
+                        onOffState = !onOffState;
+                    },
+                },
+            );
+
+            withClusters(onOffCluster);
+
+            const result = Array<TypeFromBitmapSchema<typeof TlvInvokeResponse>>();
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result.push(TlvInvokeResponse.decode(payload));
+            });
+
+            interactionProtocol = new InteractionServer({
+                endpointStructure: endpointStructure,
+                eventHandler: (eventHandler = new EventHandler(storageContext.createContext("EventHandler"))),
+                maxPathsPerInvoke: 1000,
+            });
+
+            const request = {
+                ...INVOKE_COMMAND_REQUEST_MULTI,
+            };
+            request.invokeRequests = [...request.invokeRequests];
+            for (let i = 1; i < 100; i++) {
+                request.invokeRequests.push({
+                    commandPath: {
+                        endpointId: EndpointNumber(0),
+                        clusterId: ClusterId(6),
+                        commandId: CommandId(100 + i),
+                    },
+                });
+            }
+
+            await interactionProtocol.handleInvokeRequest(
+                exchange,
+                request,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
+            );
+
+            assert.equal(result.length, 3);
+            assert.equal(
+                result[0].invokeResponses.length + result[1].invokeResponses.length + result[2].invokeResponses.length,
+                103,
+            );
+            assert.equal(result[0].moreChunkedMessages, true);
+            assert.equal(result[1].moreChunkedMessages, true);
+            assert.equal(result[2].moreChunkedMessages, undefined);
+            assert.equal(triggeredOn, true);
+            assert.equal(triggeredOff, true);
+            assert.equal(onOffState, false);
+        });
+
+        it("throws on multi invoke commands with one same commands", async () => {
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result = TlvInvokeResponse.decode(payload);
+            });
+            let result = undefined;
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleInvokeRequest(
+                        exchange,
+                        INVOKE_COMMAND_REQUEST_MULTI_SAME,
+                        new InteractionServerMessenger(exchange),
+                        DummyUnicastMessage,
+                    ),
+                {
+                    message: "(128) Duplicate command paths (0/6/1) are not allowed in multi-command invoke requests",
+                },
+            );
+
+            assert.equal(result, undefined);
         });
 
         it("handles StatusResponseError gracefully", async () => {
@@ -1448,10 +1701,15 @@ describe("InteractionProtocol", () => {
 
             withClusters(onOffCluster);
 
-            const result = await interactionProtocol.handleInvokeRequest(
-                await getDummyMessageExchange(),
+            let result;
+            const exchange = await createDummyMessageExchange(false, false, (_messageType, payload) => {
+                result = TlvInvokeResponse.decode(payload);
+            });
+            await interactionProtocol.handleInvokeRequest(
+                exchange,
                 { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS },
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_BUSY);
@@ -1459,14 +1717,24 @@ describe("InteractionProtocol", () => {
 
         it("invoke command with timed interaction mismatch request", async () => {
             let timedInteractionCleared = false;
+            const exchange = await createDummyMessageExchange(
+                false,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
+                },
+                () => {
+                    timedInteractionCleared = true;
+                },
+            );
+            let result = undefined;
             await assert.rejects(
                 async () =>
                     await interactionProtocol.handleInvokeRequest(
-                        await getDummyMessageExchange(false, false, () => {
-                            timedInteractionCleared = true;
-                        }),
+                        exchange,
                         { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
-                        { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                        new InteractionServerMessenger(exchange),
+                        DummyUnicastMessage,
                     ),
                 {
                     message:
@@ -1476,18 +1744,31 @@ describe("InteractionProtocol", () => {
 
             assert.equal(timedInteractionCleared, false);
             assert.equal(onOffState, false);
+            assert.equal(result, undefined);
         });
 
         it("invoke command with timed interaction mismatch timed expected", async () => {
             let timedInteractionCleared = false;
+            const exchange = await createDummyMessageExchange(
+                true,
+                false,
+                (messageType, payload) => {
+                    expect(messageType).to.equal(MessageType.StatusResponse);
+                    result = TlvStatusResponse.decode(payload);
+                    console.log(result);
+                },
+                () => {
+                    timedInteractionCleared = true;
+                },
+            );
+            let result = undefined;
             await assert.rejects(
                 async () =>
                     await interactionProtocol.handleInvokeRequest(
-                        await getDummyMessageExchange(true, false, () => {
-                            timedInteractionCleared = true;
-                        }),
+                        exchange,
                         INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS,
-                        { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                        new InteractionServerMessenger(exchange),
+                        DummyUnicastMessage,
                     ),
                 {
                     message:
@@ -1497,18 +1778,29 @@ describe("InteractionProtocol", () => {
 
             assert.equal(timedInteractionCleared, false);
             assert.equal(onOffState, false);
+            assert.equal(result, undefined);
         });
 
         it("invoke command with timed interaction expired", async () => {
             let timedInteractionCleared = false;
+            let result = undefined;
+            const exchange = await createDummyMessageExchange(
+                true,
+                true,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
+                },
+                () => {
+                    timedInteractionCleared = true;
+                },
+            );
             await assert.rejects(
                 async () =>
                     await interactionProtocol.handleInvokeRequest(
-                        await getDummyMessageExchange(true, true, () => {
-                            timedInteractionCleared = true;
-                        }),
+                        exchange,
                         { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
-                        { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                        new InteractionServerMessenger(exchange),
+                        DummyUnicastMessage,
                     ),
                 {
                     message: "(148) Timed request window expired. Decline invoke request.",
@@ -1517,18 +1809,29 @@ describe("InteractionProtocol", () => {
 
             assert.equal(timedInteractionCleared, true);
             assert.equal(onOffState, false);
+            assert.equal(result, undefined);
         });
 
         it("invoke command with timed interaction as group message", async () => {
             let timedInteractionCleared = false;
+            const exchange = await createDummyMessageExchange(
+                true,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
+                },
+                () => {
+                    timedInteractionCleared = true;
+                },
+            );
+            let result = undefined;
             await assert.rejects(
                 async () =>
                     await interactionProtocol.handleInvokeRequest(
-                        await getDummyMessageExchange(true, false, () => {
-                            timedInteractionCleared = true;
-                        }),
+                        exchange,
                         { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
-                        { packetHeader: { sessionType: SessionType.Group } } as Message,
+                        new InteractionServerMessenger(exchange),
+                        DummyGroupcastMessage,
                     ),
                 {
                     message:
@@ -1538,16 +1841,27 @@ describe("InteractionProtocol", () => {
 
             assert.equal(timedInteractionCleared, true);
             assert.equal(onOffState, false);
+            assert.equal(result, undefined);
         });
 
         it("invoke command with with timed interaction success", async () => {
             let timedInteractionCleared = false;
-            const result = await interactionProtocol.handleInvokeRequest(
-                await getDummyMessageExchange(true, false, () => {
+            const exchange = await createDummyMessageExchange(
+                true,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
+                },
+                () => {
                     timedInteractionCleared = true;
-                }),
+                },
+            );
+            let result;
+            await interactionProtocol.handleInvokeRequest(
+                exchange,
                 { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
@@ -1557,12 +1871,22 @@ describe("InteractionProtocol", () => {
 
         it("invoke command with with timed interaction required by command errors when not send as timed request", async () => {
             let timedInteractionCleared = false;
-            const result = await interactionProtocol.handleInvokeRequest(
-                await getDummyMessageExchange(false, false, () => {
+            const exchange = await createDummyMessageExchange(
+                false,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
+                },
+                () => {
                     timedInteractionCleared = true;
-                }),
+                },
+            );
+            let result;
+            await interactionProtocol.handleInvokeRequest(
+                exchange,
                 INVOKE_COMMAND_REQUEST_TIMED_REQUIRED,
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED);
@@ -1571,12 +1895,23 @@ describe("InteractionProtocol", () => {
 
         it("invoke command with with timed interaction required by command success", async () => {
             let timedInteractionCleared = false;
-            const result = await interactionProtocol.handleInvokeRequest(
-                await getDummyMessageExchange(true, false, () => {
+            let result;
+            const exchange = await createDummyMessageExchange(
+                true,
+                false,
+                (_messageType, payload) => {
+                    result = TlvInvokeResponse.decode(payload);
+                },
+
+                () => {
                     timedInteractionCleared = true;
-                }),
+                },
+            );
+            await interactionProtocol.handleInvokeRequest(
+                exchange,
                 { ...INVOKE_COMMAND_REQUEST_TIMED_REQUIRED, timedRequest: true },
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                new InteractionServerMessenger(exchange),
+                DummyUnicastMessage,
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS);

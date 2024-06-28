@@ -31,6 +31,10 @@ export class ClusterModel extends Model implements ClusterElement {
     override isTypeScope = true;
     supportedFeatures?: FeatureSet;
 
+    get diagnostics() {
+        return this.effectiveQuality.diagnostics;
+    }
+
     get quality(): Quality {
         return Aspects.getAspect(this, QUALITY, Quality);
     }

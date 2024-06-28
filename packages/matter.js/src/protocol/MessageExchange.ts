@@ -5,7 +5,8 @@
  */
 
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
-import { MatterError, MatterFlowError } from "../common/MatterError.js";
+import { InternalError, MatterError, MatterFlowError } from "../common/MatterError.js";
+import { CRYPTO_AEAD_MIC_LENGTH_BYTES } from "../crypto/CryptoConstants.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
@@ -80,6 +81,14 @@ const MRP_BACKOFF_THRESHOLD = 1;
 /** @see {@link MatterSpecification.v12.Core}, section 4.11.8 */
 const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
 
+/**
+ * Message size overhead of a Matter message:
+ * 26 (Matter Message Header) + 12 (Matter Payload Header) taken from https://github.com/project-chip/connectedhomeip/blob/2d97cda23024e72f36216900ca667bf1a0d9499f/src/system/SystemConfig.h#L327
+ * 16 byte MIC is then also needed to be excluded from the max payload size
+ * Secure Extensions and Message Extensions need to be handled by exchange additionally!
+ */
+export const MATTER_MESSAGE_OVERHEAD = 26 + 12 + CRYPTO_AEAD_MIC_LENGTH_BYTES;
+
 export class MessageExchange<ContextT> {
     static fromInitialMessage<ContextT>(channel: MessageChannel<ContextT>, initialMessage: Message) {
         const { session } = channel;
@@ -139,6 +148,7 @@ export class MessageExchange<ContextT> {
     readonly #exchangeId: number;
     readonly #protocolId: number;
     readonly #closed = AsyncObservable<[]>();
+    readonly #useMRP: boolean;
 
     constructor(
         readonly session: Session<ContextT>,
@@ -161,9 +171,14 @@ export class MessageExchange<ContextT> {
         this.#idleIntervalMs = idleIntervalMs ?? SESSION_IDLE_INTERVAL_MS;
         this.#activeThresholdMs = activeThresholdMs ?? SESSION_ACTIVE_THRESHOLD_MS;
         this.#maxTransmissions = MRP_MAX_TRANSMISSIONS;
+
+        // When the session is supporting MRP and the channel is not reliable, use MRP handling
+        this.#useMRP = session.supportsMRP && !channel.isReliable;
+
         logger.debug(
             "New exchange",
             Diagnostic.dict({
+                channel: channel.name,
                 protocol: this.#protocolId,
                 id: this.#exchangeId,
                 session: session.name,
@@ -172,6 +187,7 @@ export class MessageExchange<ContextT> {
                 "active interval ms": this.#activeIntervalMs,
                 "idle interval ms": this.#idleIntervalMs,
                 maxTransmissions: this.#maxTransmissions,
+                useMrp: this.#useMRP,
             }),
         );
     }
@@ -180,23 +196,39 @@ export class MessageExchange<ContextT> {
         return this.#closed;
     }
 
+    /**
+     * Max Payload size of the exchange which bases on the maximum payload size of the channel reduced by Matter
+     * protocol overhead.
+     */
+    get maxPayloadSize() {
+        // TODO: Whenever we add support for MessageExtensions or Secured Message extensions then these need to be also
+        //  considered here and their size needs to be subtracted from the maxPayloadSize of the channel.
+        return this.channel.maxPayloadSize - MATTER_MESSAGE_OVERHEAD;
+    }
+
     async sendStandaloneAckForMessage(message: Message) {
         const {
             packetHeader: { messageId },
             payloadHeader: { requiresAck },
         } = message;
-        if (!requiresAck) return;
+        if (!requiresAck || !this.#useMRP) return;
 
         await this.send(MessageType.StandaloneAck, new ByteArray(0), { includeAcknowledgeMessageId: messageId });
     }
 
     async onMessageReceived(message: Message, isDuplicate = false) {
+        logger.debug("Message «", MessageCodec.messageDiagnostics(message, isDuplicate));
+
+        // Adjust the incoming message when ack was required but this exchange do not use it to skip all relevant logic
+        if (message.payloadHeader.requiresAck && !this.#useMRP) {
+            logger.debug("Ignoring ack-required flag because MRP is not used for this exchange");
+            message.payloadHeader.requiresAck = false;
+        }
+
         const {
             packetHeader: { messageId },
             payloadHeader: { requiresAck, ackedMessageId, protocolId, messageType },
         } = message;
-
-        logger.debug("Message «", MessageCodec.messageDiagnostics(message, isDuplicate));
 
         const isStandaloneAck = SecureChannelProtocol.isStandaloneAck(protocolId, messageType);
         if (protocolId !== this.#protocolId && !isStandaloneAck) {
@@ -266,14 +298,26 @@ export class MessageExchange<ContextT> {
     }
 
     async send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
+        if (options?.requiresAck && !this.#useMRP) {
+            options.requiresAck = false;
+        }
+
         const {
             expectAckOnly = false,
             minimumResponseTimeoutMs,
             requiresAck,
             includeAcknowledgeMessageId,
         } = options ?? {};
-        if (messageType === MessageType.StandaloneAck && requiresAck) {
-            throw new MatterFlowError("A standalone ack may not require acknowledgement.");
+        if (!this.#useMRP && includeAcknowledgeMessageId !== undefined) {
+            throw new InternalError("Cannot include an acknowledge message ID when MRP is not used");
+        }
+        if (messageType === MessageType.StandaloneAck) {
+            if (!this.#useMRP) {
+                return;
+            }
+            if (requiresAck) {
+                throw new MatterFlowError("A standalone ack may not require acknowledgement.");
+            }
         }
         if (this.#sentMessageToAck !== undefined && messageType !== MessageType.StandaloneAck)
             throw new MatterFlowError("The previous message has not been acked yet, cannot send a new message.");
@@ -281,9 +325,9 @@ export class MessageExchange<ContextT> {
         this.session.notifyActivity(false);
 
         let ackedMessageId = includeAcknowledgeMessageId;
-        if (ackedMessageId === undefined) {
+        if (ackedMessageId === undefined && this.#useMRP) {
             ackedMessageId = this.#receivedMessageToAck?.packetHeader.messageId;
-            if (ackedMessageId !== undefined && messageType !== MessageType.StandaloneAck) {
+            if (ackedMessageId !== undefined) {
                 this.#receivedMessageAckTimer.stop();
                 this.#receivedMessageToAck = undefined;
             }
@@ -306,7 +350,7 @@ export class MessageExchange<ContextT> {
                 protocolId: messageType === MessageType.StandaloneAck ? SECURE_CHANNEL_PROTOCOL_ID : this.#protocolId,
                 messageType,
                 isInitiatorMessage: this.isInitiator,
-                requiresAck: requiresAck ?? messageType !== MessageType.StandaloneAck,
+                requiresAck: requiresAck ?? (this.#useMRP && messageType !== MessageType.StandaloneAck),
                 ackedMessageId,
                 hasSecuredExtension: false,
             },
@@ -314,7 +358,7 @@ export class MessageExchange<ContextT> {
         };
 
         let ackPromise: Promise<Message> | undefined;
-        if (message.payloadHeader.requiresAck) {
+        if (this.#useMRP && message.payloadHeader.requiresAck) {
             this.#sentMessageToAck = message;
             this.#retransmissionTimer = Time.getTimer(
                 "Message retransmission",

@@ -252,7 +252,9 @@ describe("TlvObject tests", () => {
                     hasThrown = true;
                     expect(error instanceof ValidationError).true;
                     if (error instanceof ValidationError) {
-                        expect(error.message).equal("(Validation/135) Expected string, got number.");
+                        expect(error.message).equal(
+                            "(ValidationDatatypeMismatchError/128) Expected string, got number.",
+                        );
                         expect(error.fieldName).equal("optionalField");
                     }
                 }
@@ -415,7 +417,7 @@ describe("TlvObject tests", () => {
         it("throws error on missing required fields", () => {
             // @ts-expect-error test case
             expect(() => schemaListRepeatedLimited.encode({ requiredField: "test" })).throw(
-                "(Validation/135) Missing mandatory field repeatedField",
+                "(ValidationMandatoryFieldMissingError/128) Missing mandatory field repeatedField",
             );
         });
 

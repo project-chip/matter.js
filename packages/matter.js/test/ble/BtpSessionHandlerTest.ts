@@ -32,7 +32,7 @@ describe("BtpSessionHandler", () => {
 
             const result = await writeBlePromise;
 
-            expect(result).deep.equal(ByteArray.fromHex("656c04670006"));
+            expect(result).deep.equal(ByteArray.fromHex("656c04640006"));
 
             allowClose = true;
             await btpSession.close();
@@ -59,7 +59,7 @@ describe("BtpSessionHandler", () => {
 
             const result = await writeBlePromise;
 
-            expect(result).deep.equal(ByteArray.fromHex("656c04670006"));
+            expect(result).deep.equal(ByteArray.fromHex("656c04640006"));
 
             allowClose = true;
             await btpSession.close();
@@ -86,7 +86,7 @@ describe("BtpSessionHandler", () => {
 
             const result = await writeBlePromise;
 
-            expect(result).deep.equal(ByteArray.fromHex("656c04170006"));
+            expect(result).deep.equal(ByteArray.fromHex("656c04140006"));
 
             allowClose = true;
             await btpSession.close();
@@ -163,7 +163,7 @@ describe("BtpSessionHandler", () => {
             );
 
             const result = await localWriteBlePromise;
-            expect(result).deep.equal(ByteArray.fromHex("656c04170006"));
+            expect(result).deep.equal(ByteArray.fromHex("656c04140006"));
         });
 
         afterEach(async () => {

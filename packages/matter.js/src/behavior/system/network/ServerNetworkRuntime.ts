@@ -22,6 +22,7 @@ import { ServerStore } from "../../../node/server/storage/ServerStore.js";
 import { ExchangeManager } from "../../../protocol/ExchangeManager.js";
 import { SessionManager } from "../../../session/SessionManager.js";
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
+import { ProductDescriptionServer } from "../product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
 
@@ -265,8 +266,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
     protected override async start() {
         const mdnsScanner = (await this.owner.env.load(MdnsService)).scanner;
+        await this.owner.act(agent => agent.load(ProductDescriptionServer));
 
-        this.#interactionServer = new TransactionalInteractionServer(this.owner);
+        this.#interactionServer = await TransactionalInteractionServer.create(this.owner);
 
         const { sessionStorage, fabricStorage } = this.owner.env.get(ServerStore);
 
@@ -285,6 +287,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             (_fabricIndex: FabricIndex) => {
                 // Wired differently using SessionBehavior
             },
+            { maxPathsPerInvoke: this.#interactionServer.maxPathsPerInvoke },
         );
         this.#matterDevice = matterDevice;
         matterDevice.addProtocolHandler(this.#interactionServer);

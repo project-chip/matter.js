@@ -325,7 +325,7 @@ describe("Integration Test", () => {
             assert.equal(nodeStateChangesController1Node1.length, 1);
             assert.equal(nodeStateChangesController1Node1[0].nodeId, node.nodeId);
             assert.equal(nodeStateChangesController1Node1[0].nodeState, NodeStateInformation.Connected);
-        });
+        }).timeout(10000);
 
         it("We can connect to the new commissioned device", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
@@ -392,7 +392,7 @@ describe("Integration Test", () => {
                 const promise = adminCommissioningCluster.openCommissioningWindow(
                     {
                         salt: new ByteArray(32),
-                        commissioningTimeout: 10,
+                        commissioningTimeout: 180,
                         discriminator: 0,
                         iterations: 1000,
                         pakePasscodeVerifier: new ByteArray(97),
@@ -724,7 +724,7 @@ describe("Integration Test", () => {
             assert.ok(basicInfoCluster);
 
             await assert.rejects(async () => await basicInfoCluster.attributes.location.set("XXX"), {
-                message: '(Validation/135) String "XXX" is too long: 3, max 2.',
+                message: '(ValidationOutOfBoundsError/135) String "XXX" is too long: 3, max 2.',
             });
         });
 

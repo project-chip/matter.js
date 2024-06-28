@@ -14,11 +14,19 @@ import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
+import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
+import { AttributeModel } from "../../model/index.js";
+import { ClusterModel } from "../../model/models/ClusterModel.js";
+import { MatterModel } from "../../model/models/MatterModel.js";
+import { AttributeList } from "../../model/standard/elements/AttributeList.js";
+import { EventList } from "../../model/standard/elements/EventList.js";
+import { AcceptedCommandList, GeneratedCommandList } from "../../model/standard/elements/index.js";
+import { TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Observable } from "../../util/Observable.js";
-import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "./InteractionProtocol.js";
+import { TlvAttributePath, TlvCommandPath, TlvEventPath, WildcardPathFlagsBitmap } from "./InteractionProtocol.js";
 import {
     AttributePath,
     AttributeWithPath,
@@ -32,6 +40,19 @@ import {
     genericElementPathToId,
 } from "./InteractionServer.js";
 import { StatusCode, StatusResponseError } from "./StatusCode.js";
+
+/**
+ * List of global attributes to skip when the WildcardSkipGlobalAttributes bit is set in an Wildcard Path Flags
+ * @see {@link MatterSpecification.v13.Core} §8.2.1.7
+ */
+const GLOBAL_COMMANDLIST_IDS = [GeneratedCommandList.id, AcceptedCommandList.id];
+const GLOBAL_ATTRIBUTES_LIST = [...GLOBAL_COMMANDLIST_IDS, EventList.id, AttributeList.id];
+
+// Build a list of cluster IDs that are used for diagnostics to not always filter through model
+// TODO Find a way to also incorporate custom clusters here
+const DIAGNOSTICS_CLUSTER_IDS = MatterModel.standard.clusters
+    .filter(cluster => cluster.diagnostics && cluster.id !== undefined)
+    .map(cluster => cluster.id as ClusterId);
 
 export class InteractionEndpointStructure {
     endpoints = new Map<EndpointNumber, EndpointInterface>();
@@ -209,7 +230,6 @@ export class InteractionEndpointStructure {
     }
 
     validateConcreteAttributePath(endpointId: EndpointNumber, clusterId: ClusterId, attributeId: AttributeId) {
-        // TODO: Also hande the InvalidAction cases depending on the action for the check
         if (!this.hasEndpoint(endpointId)) {
             throw new StatusResponseError(`Endpoint ${endpointId} does not exist.`, StatusCode.UnsupportedEndpoint);
         }
@@ -229,7 +249,6 @@ export class InteractionEndpointStructure {
     }
 
     validateConcreteEventPath(endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId) {
-        // TODO: Also hande the InvalidAction cases depending on the action for the check
         if (!this.hasEndpoint(endpointId)) {
             throw new StatusResponseError(`Endpoint ${endpointId} does not exist.`, StatusCode.UnsupportedEndpoint);
         }
@@ -263,16 +282,68 @@ export class InteractionEndpointStructure {
         throw new StatusResponseError(`Command ${commandId} does not exist`, StatusCode.UnsupportedCommand);
     }
 
+    /** Checks if the given attribute matches the wildcard path flags */
+    attributePathMatchesWildcardPathFlags(
+        { endpointId, clusterId, attributeId }: AttributePath,
+        wildcardPathFlags?: TypeFromPartialBitSchema<typeof WildcardPathFlagsBitmap>,
+    ) {
+        if (wildcardPathFlags === undefined) return false;
+        if (wildcardPathFlags.skipRootNode && endpointId === 0) {
+            return true;
+        }
+
+        // Only check if the attribute ID is a global attribute ID
+        if (attributeId >= 0xfff8 && attributeId <= 0xfffb) {
+            if (wildcardPathFlags.skipGlobalAttributes && GLOBAL_ATTRIBUTES_LIST.includes(attributeId)) {
+                return true;
+            }
+            if (wildcardPathFlags.skipAttributeList && attributeId === AttributeList.id) {
+                return true;
+            }
+            if (wildcardPathFlags.skipEventList && attributeId === EventList.id) {
+                return true;
+            }
+            if (wildcardPathFlags.skipCommandLists && GLOBAL_COMMANDLIST_IDS.includes(attributeId)) {
+                return true;
+            }
+        }
+
+        if (
+            wildcardPathFlags.skipCustomElements &&
+            (Mei.hasCustomMeiPrefix(clusterId) || Mei.hasCustomMeiPrefix(attributeId))
+        ) {
+            return true;
+        }
+
+        const cluster = MatterModel.standard.get(ClusterModel, clusterId);
+        if (cluster !== undefined) {
+            const attribute = cluster.get(AttributeModel, attributeId);
+            if (attribute !== undefined) {
+                if (wildcardPathFlags.skipFixedAttributes && attribute.fixed) {
+                    return true;
+                }
+                if (wildcardPathFlags.skipChangesOmittedAttributes && attribute.changesOmitted) {
+                    return true;
+                }
+            }
+            if (wildcardPathFlags.skipDiagnosticsClusters && DIAGNOSTICS_CLUSTER_IDS.includes(clusterId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     getAttributes(filters: TypeFromSchema<typeof TlvAttributePath>[], onlyWritable = false): AttributeWithPath[] {
         const result = new Array<AttributeWithPath>();
 
-        filters.forEach(({ endpointId, clusterId, attributeId }) => {
+        filters.forEach(({ endpointId, clusterId, attributeId, wildcardPathFlags }) => {
             this.validateAnyPathDataTypes({ endpointId, clusterId, attributeId });
             if (endpointId !== undefined && clusterId !== undefined && attributeId !== undefined) {
                 const path = { endpointId, clusterId, attributeId };
                 const attribute = this.attributes.get(attributePathToId(path));
                 if (attribute === undefined) return;
                 if (onlyWritable && !attribute.isWritable) return;
+                if (this.attributePathMatchesWildcardPathFlags(path)) return;
                 result.push({ path, attribute });
             } else {
                 this.attributePaths
@@ -286,6 +357,7 @@ export class InteractionEndpointStructure {
                         const attribute = this.attributes.get(attributePathToId(path));
                         if (attribute === undefined) return;
                         if (onlyWritable && !attribute.isWritable) return;
+                        if (this.attributePathMatchesWildcardPathFlags(path, wildcardPathFlags)) return;
                         result.push({ path, attribute });
                     });
             }

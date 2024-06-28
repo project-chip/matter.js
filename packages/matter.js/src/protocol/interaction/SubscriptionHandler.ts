@@ -42,7 +42,7 @@ import {
     eventPathToId,
 } from "./InteractionServer.js";
 import { StatusCode, StatusResponseError } from "./StatusCode.js";
-import { SubscriptionOptions } from "./SubscriptionOptions.js";
+import { MAX_INTERVAL_PUBLISHER_LIMIT_S, SubscriptionOptions } from "./SubscriptionOptions.js";
 
 const logger = Logger.get("SubscriptionHandler");
 
@@ -80,8 +80,8 @@ export class SubscriptionHandler {
         }
     >();
     private sendUpdatesActivated = false;
-    readonly maxInterval: number;
-    readonly sendInterval: number;
+    readonly #maxIntervalMs: number;
+    readonly #sendIntervalMs: number;
     private readonly minIntervalFloorMs: number;
     private readonly maxIntervalCeilingMs: number;
     private readonly server: MatterDevice;
@@ -118,10 +118,10 @@ export class SubscriptionHandler {
             subscriptionOptions.maxIntervalSeconds * 1000,
             subscriptionOptions.randomizationWindowSeconds * 1000,
         );
-        this.maxInterval = maxInterval;
-        this.sendInterval = sendInterval;
+        this.#maxIntervalMs = maxInterval;
+        this.#sendIntervalMs = sendInterval;
 
-        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () => this.prepareDataUpdate()); // will be started later
+        this.updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () => this.prepareDataUpdate()); // will be started later
         this.sendDelayTimer = Time.getTimer("Subscription delay", 50, () => this.sendUpdate()); // will be started later
     }
 
@@ -134,12 +134,14 @@ export class SubscriptionHandler {
         // is lower. In that case we use the configured one. But we make sure to not be smaller than the requested
         // controller minimum. But in general never faster than minimum interval configured or 2 seconds
         // (SUBSCRIPTION_MIN_INTERVAL_S). Additionally, we add a randomization window to the max interval to avoid all
-        // devices sending at the same time.
-        const maxInterval =
+        // devices sending at the same time. But we make sure not to exceed the global max interval.
+        const maxInterval = Math.min(
             Math.max(
                 subscriptionMinIntervalMs,
                 Math.max(this.minIntervalFloorMs, Math.min(subscriptionMaxIntervalMs, this.maxIntervalCeilingMs)),
-            ) + Math.floor(subscriptionRandomizationWindowMs * Math.random());
+            ) + Math.floor(subscriptionRandomizationWindowMs * Math.random()),
+            MAX_INTERVAL_PUBLISHER_LIMIT_S * 1000,
+        );
         let sendInterval = Math.floor(maxInterval / 2); // Ideally we send at half the max interval
         if (sendInterval < 60_000) {
             // But if we have no chance of at least one full resubmission process we do like chip-tool.
@@ -181,18 +183,11 @@ export class SubscriptionHandler {
                         attributeErrors.push(
                             tryCatch(
                                 () => {
-                                    if (
-                                        this.endpointStructure.validateConcreteAttributePath(
-                                            endpointId,
-                                            clusterId,
-                                            attributeId,
-                                        )
-                                    ) {
-                                        throw new StatusResponseError(
-                                            `Attribute ${attributeId} is not writable.`,
-                                            StatusCode.UnsupportedWrite,
-                                        );
-                                    }
+                                    this.endpointStructure.validateConcreteAttributePath(
+                                        endpointId,
+                                        clusterId,
+                                        attributeId,
+                                    );
                                     throw new InternalError(
                                         "validateConcreteAttributePath check should throw StatusResponseError but did not.",
                                     );
@@ -393,12 +388,12 @@ export class SubscriptionHandler {
         this.prepareDataUpdate();
     }
 
-    getMaxInterval(): number {
-        return Math.ceil(this.maxInterval / 1000);
+    get maxInterval(): number {
+        return Math.ceil(this.#maxIntervalMs / 1000);
     }
 
-    getSendInterval(): number {
-        return Math.ceil(this.sendInterval / 1000);
+    get sendInterval(): number {
+        return Math.ceil(this.#sendIntervalMs / 1000);
     }
 
     activateSendingUpdates() {
@@ -410,7 +405,7 @@ export class SubscriptionHandler {
         if (this.outstandingAttributeUpdates.size > 0 || this.outstandingEventUpdates.size > 0) {
             void this.sendUpdate();
         }
-        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () =>
+        this.updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () =>
             this.prepareDataUpdate(),
         ).start();
     }
@@ -443,7 +438,7 @@ export class SubscriptionHandler {
         }
 
         this.sendDelayTimer.start();
-        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () =>
+        this.updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () =>
             this.prepareDataUpdate(),
         ).start();
     }
@@ -478,7 +473,19 @@ export class SubscriptionHandler {
                 `Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`,
                 error,
             );
-            if (this.sendUpdateErrorCounter > 2) {
+            if (this.sendUpdateErrorCounter <= 2) {
+                // fill the data back in the queue to resend with next try
+                const newAttributeUpdatesToSend = Array.from(this.outstandingAttributeUpdates.values());
+                this.outstandingAttributeUpdates.clear();
+                const newEventUpdatesToSend = Array.from(this.outstandingEventUpdates.values());
+                this.outstandingEventUpdates.clear();
+                [...attributeUpdatesToSend, ...newAttributeUpdatesToSend].forEach(update =>
+                    this.outstandingAttributeUpdates.set(attributePathToId(update.path), update),
+                );
+                [...eventUpdatesToSend, ...newEventUpdatesToSend].forEach(update =>
+                    this.outstandingEventUpdates.add(update),
+                );
+            } else {
                 logger.error(
                     `Sending update failed 3 times in a row, canceling subscription ${this.subscriptionId} and let controller subscribe again.`,
                 );
@@ -617,10 +624,10 @@ export class SubscriptionHandler {
         this.lastUpdateTimeMs = Time.nowMs();
 
         await messenger.sendDataReport({
-            suppressResponse: false,
+            suppressResponse: false, // we always need proper response for initial report
             subscriptionId: this.subscriptionId,
             interactionModelRevision: INTERACTION_MODEL_REVISION,
-            attributeReportsPayload, // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
+            attributeReportsPayload,
             eventReportsPayload,
         });
     }
@@ -706,16 +713,15 @@ export class SubscriptionHandler {
                 async () => {
                     if (attributes.length === 0 && events.length === 0) {
                         await messenger.sendDataReport({
-                            suppressResponse: true, // suppressResponse ok for empty DataReports
+                            suppressResponse: true, // suppressResponse true for empty DataReports
                             subscriptionId: this.subscriptionId,
                             interactionModelRevision: INTERACTION_MODEL_REVISION,
                         });
                     } else {
                         await messenger.sendDataReport({
-                            suppressResponse: false,
+                            suppressResponse: false, // Non empty data reports always need to send response
                             subscriptionId: this.subscriptionId,
                             interactionModelRevision: INTERACTION_MODEL_REVISION,
-                            // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
                             attributeReportsPayload: attributes.map(({ path, schema, value, version }) => ({
                                 attributeData: {
                                     path,

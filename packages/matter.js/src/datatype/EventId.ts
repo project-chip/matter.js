@@ -5,11 +5,11 @@
  */
 
 import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
-import { fromMEI } from "./ManufacturerExtensibleIdentifier.js";
+import { Mei } from "./ManufacturerExtensibleIdentifier.js";
 
 /**
  * An EVent ID is a 32 bit number and indicates an event defined in a cluster specification.
@@ -22,11 +22,11 @@ export function EventId(eventId: number, validate = true): EventId {
     if (!validate) {
         return eventId as EventId;
     }
-    const { typeSuffix } = fromMEI(eventId);
+    const { typeSuffix } = Mei.fromMei(eventId);
     if (typeSuffix >= 0x00 && typeSuffix <= 0xff) {
         return eventId as EventId;
     }
-    throw new ValidationError(`Invalid event ID: ${eventId}`);
+    throw new ValidationOutOfBoundsError(`Invalid event ID: ${eventId}`);
 }
 
 export namespace EventId {

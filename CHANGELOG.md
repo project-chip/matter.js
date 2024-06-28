@@ -31,12 +31,25 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Breaking: Removes the discovery capability "softAccessPoint" as it was removed from the Matter specification
     -   Feature: Increase Data Model revision to 17 (introduced by Matter 1.2)
     -   Feature: Added Base64 encoding/decoding support to ByteArray
+    -   Feature: Added WildcardPathFlagsBitmap to Attribute expansion for read/subscribe Interactions
+    -   Feature: Added Matter 1.3 session params
+    -   Feature: Added support for Multi-Invokes for Matter 1.3 (default for now are 10 invokes till we have a better value)
     -   Enhancement: Update Session parameters in PASE/CASE to match Matter 1.3 specification
     -   Enhancement: Removes TCP and ICD TXT records from MDNS responses because both currently not supported and optional to reduce the size of the MDNS responses
     -   Enhancement: Adds encoding and decoding of custom TlvData in QR-Codes including extensible Schema support for the defined Matter fields
+    -   Enhancement: Optimizes Read and Subscribe handling for clients/controller to better match with specification
     -   Enhancement: Adds encoding/decoding support for multiple device information in one QR-Code
     -   Enhancement: Makes processing of manual Pairing codes more robust directly on decoding level
+    -   Enhancement: Refactored Message size handling to dynamically calculate payload size based on transport capabilities
+    -   Enhancement: Refactored and cleanup CASE and PASE and corrected handling in some places
+    -   Enhancement: Added BTP Idle timeout as defined in Matter specification
     -   Enhancement/Fix: Several fixes and optimizations in Session and Message Exchange handling
+    -   Enhancement/Fix: Adjusted MRP behavior with chip and only use/expect MRP ion unreliable channels (UDP). Fixes BLE commissioning
+    -   Fix: Adjusted ValidationErrors to be more specific if they should return "InvalidAction" ot "ConstraintError".
+    -   Fix: Adjusted some returned errors to be more specific and to the specification (e.g. InvalidAction instead of Failure)
+    -   Fix: Fixed StandaloneAck handling to use an outstanding ack number as piggybacked ack number
+    -   Fix: Makes sure subscription maxInterval can not exceed the matter defined maximum of 60mins
+    -   Fix: Synced attMtu handling with chip to always use MTU-3 bytes for BLE connections
 -   matter.js API:
     -   Feature: Adds default implementations for i18n clusters including Localization, Time Format Localization and Unit Localization.
     -   Feature: Adds interactionBegin and interactionEnd events for ClusterBehaviors to demarcate online interactions that mutate state.
@@ -47,6 +60,10 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: Introduces new package that provides a React Native compatible platform Implementations for Matter.js. This package is still in development and should be considered experimental for now! Currently supports UDP, BLE and Crypto platform features. A In-memory storage is used for now because a react-native persisting Storage backend is missing currently.
 -   matter.js chip and python Testing:
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
+
+### 0.9.3 (2024-06-26)
+- Matter-Core functionality:
+    -   Fix: Makes sure to clear all subscriptions from the subscriber noe and not only the current session when not keeping subscriptions
 
 ### 0.9.2 (2026-06-20)
 - Matter-Core functionality:

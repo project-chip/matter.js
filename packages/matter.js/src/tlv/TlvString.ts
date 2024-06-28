@@ -5,7 +5,7 @@
  */
 
 import { InternalError, UnexpectedDataError } from "../common/MatterError.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationDatatypeMismatchError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { maxValue, minValue } from "../util/Number.js";
 import { serialize } from "../util/String.js";
@@ -47,15 +47,15 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
 
     override validate(value: TlvToPrimitive[T]): void {
         if (this.type === TlvType.Utf8String && typeof value !== "string")
-            throw new ValidationError(`Expected string, got ${typeof value}.`);
+            throw new ValidationDatatypeMismatchError(`Expected string, got ${typeof value}.`);
         if (this.type === TlvType.ByteString && !(value instanceof ByteArray))
-            throw new ValidationError(`Expected ByteArray, got ${typeof value}.`);
+            throw new ValidationDatatypeMismatchError(`Expected ByteArray, got ${typeof value}.`);
         if (value.length > this.maxLength)
-            throw new ValidationError(
+            throw new ValidationOutOfBoundsError(
                 `String ${serialize(value)} is too long: ${value.length}, max ${this.maxLength}.`,
             );
         if (value.length < this.minLength)
-            throw new ValidationError(
+            throw new ValidationOutOfBoundsError(
                 `String ${serialize(value)} is too short: ${value.length}, min ${this.minLength}.`,
             );
     }

@@ -12,7 +12,7 @@ import {
     Identify,
 } from "@project-chip/matter.js/cluster";
 import { Message, SessionType } from "@project-chip/matter.js/codec";
-import { ValidationError } from "@project-chip/matter.js/common";
+import { ValidationOutOfBoundsError } from "@project-chip/matter.js/common";
 import { EndpointNumber, GroupId } from "@project-chip/matter.js/datatype";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
@@ -354,7 +354,7 @@ describe("Groups Server test", () => {
                         testSession,
                         { packetHeader: { sessionType: SessionType.Unicast } } as Message,
                     ),
-                new ValidationError('String "12345678901234567" is too long: 17, max 16.', "groupName"),
+                new ValidationOutOfBoundsError('String "12345678901234567" is too long: 17, max 16.', "groupName"),
             );
         });
     });

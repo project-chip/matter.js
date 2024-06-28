@@ -5,7 +5,7 @@
  */
 
 import { UnexpectedDataError } from "../common/MatterError.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationDatatypeMismatchError } from "../common/ValidationError.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
@@ -25,7 +25,8 @@ export class BooleanSchema extends TlvSchema<boolean> {
     }
 
     override validate(value: boolean): void {
-        if (typeof value !== "boolean") throw new ValidationError(`Expected boolean, got ${typeof value}.`);
+        if (typeof value !== "boolean")
+            throw new ValidationDatatypeMismatchError(`Expected boolean, got ${typeof value}.`);
     }
 }
 

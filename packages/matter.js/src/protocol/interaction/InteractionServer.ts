@@ -29,11 +29,12 @@ import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { Specification } from "../../model/definitions/Specification.js";
-import { GLOBAL_IDS } from "../../model/index.js";
+import { AttributeModel, ClusterModel, CommandModel, GLOBAL_IDS, MatterModel } from "../../model/index.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
+import { TlvAny } from "../../tlv/TlvAny.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -53,7 +54,6 @@ import {
     InteractionRecipient,
     InteractionServerMessenger,
     InvokeRequest,
-    InvokeResponse,
     MessageType,
     ReadRequest,
     SubscribeRequest,
@@ -68,6 +68,7 @@ import {
     TlvEventFilter,
     TlvEventPath,
     TlvInvokeResponseData,
+    TlvInvokeResponseForSend,
     TlvSubscribeResponse,
 } from "./InteractionProtocol.js";
 import { StatusCode, StatusResponseError } from "./StatusCode.js";
@@ -80,8 +81,8 @@ export const INTERACTION_PROTOCOL_ID = 0x0001;
 /** Backward compatible re-export for Interaction Model version we support currently. */
 export const INTERACTION_MODEL_REVISION = Specification.INTERACTION_MODEL_REVISION;
 
-/** Number of Invoke Path setting from our Interaction model implementation. */
-export const MAX_PATHS_PER_INVOKE = 1;
+/** We use 10 as max to show that we support more then 1. Once we get a better real-world maximum we can change that. */
+export const DEFAULT_MAX_PATHS_PER_INVOKE = 10;
 
 const logger = Logger.get("InteractionServer");
 
@@ -217,21 +218,40 @@ function validateCommandPath(path: TypeFromSchema<typeof TlvCommandPath>, isGrou
     }
 }
 
+function getMatterModelCluster(clusterId: ClusterId) {
+    return MatterModel.standard.get(ClusterModel, clusterId);
+}
+
+function getMatterModelClusterAttribute(clusterId: ClusterId, attributeId: AttributeId) {
+    return getMatterModelCluster(clusterId)?.get(AttributeModel, attributeId);
+}
+
+function getMatterModelClusterCommand(clusterId: ClusterId, commandId: CommandId) {
+    return getMatterModelCluster(clusterId)?.get(CommandModel, commandId);
+}
+
 /**
  * Translates interactions from the Matter protocol to Matter.js APIs.
  */
 export class InteractionServer implements ProtocolHandler<MatterDevice>, InteractionRecipient {
-    #endpointStructure;
+    readonly #endpointStructure;
     #nextSubscriptionId = Crypto.getRandomUInt32();
     readonly #subscriptionMap = new Map<number, SubscriptionHandler>();
     #isClosing = false;
-    #subscriptionConfig: SubscriptionOptions.Configuration;
-    #eventHandler: EventHandler;
+    readonly #subscriptionConfig: SubscriptionOptions.Configuration;
+    readonly #eventHandler: EventHandler;
+    readonly #maxPathsPerInvoke;
 
-    constructor({ subscriptionOptions, eventHandler, endpointStructure }: InteractionServer.Configuration) {
+    constructor({
+        subscriptionOptions,
+        eventHandler,
+        endpointStructure,
+        maxPathsPerInvoke = DEFAULT_MAX_PATHS_PER_INVOKE,
+    }: InteractionServer.Configuration) {
         this.#subscriptionConfig = SubscriptionOptions.configurationFor(subscriptionOptions);
         this.#eventHandler = eventHandler;
         this.#endpointStructure = endpointStructure;
+        this.#maxPathsPerInvoke = maxPathsPerInvoke;
 
         this.#endpointStructure.change.on(() => {
             for (const subscription of this.#subscriptionMap.values()) {
@@ -246,6 +266,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
     protected get isClosing() {
         return this.#isClosing;
+    }
+
+    get maxPathsPerInvoke() {
+        return this.#maxPathsPerInvoke;
     }
 
     async onNewExchange(exchange: MessageExchange<MatterDevice>) {
@@ -314,14 +338,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             // Requested attribute path not found in any cluster server on any endpoint
             if (attributes.length === 0) {
                 // TODO Add checks for nodeId -> UnknownNode
-                if (!isConcreteAttributePath(requestPath)) {
-                    // Wildcard path and we do not know any of the attributes: Ignore the error
-                    logger.debug(
-                        `Read from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                            requestPath,
-                        )}: ${this.#endpointStructure.resolveAttributeName(requestPath)}: ignore non-existing attribute`,
-                    );
-                } else {
+                if (isConcreteAttributePath(requestPath)) {
                     const { endpointId, clusterId, attributeId } = requestPath;
                     // Concrete path, but still unknown for us, so generate the right error status
                     tryCatch(
@@ -346,6 +363,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         },
                     );
                 }
+
+                // Wildcard path and we do not know any of the attributes: Ignore the error
+                logger.debug(
+                    `Read from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                        requestPath,
+                    )}: ${this.#endpointStructure.resolveAttributeName(requestPath)}: ignore non-existing attribute`,
+                );
                 continue;
             }
 
@@ -354,6 +378,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                 const { nodeId, endpointId, clusterId } = path;
 
                 try {
+                    // We accept attributes not in the model ans readable, because existence is checked already
+                    if (getMatterModelClusterAttribute(clusterId, attribute.id)?.readable === false) {
+                        throw new StatusResponseError(
+                            `Attribute ${attribute.id} is not readable.`,
+                            StatusCode.UnsupportedRead,
+                        );
+                    }
+
                     const { value, version } = await tryCatchAsync(
                         async () =>
                             this.readAttribute(
@@ -437,15 +469,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
                 // Requested event path not found in any cluster server on any endpoint
                 if (events.length === 0) {
-                    // TODO Add checks for nodeId
-                    if (!isConcreteEventPath(requestPath)) {
-                        // Wildcard path: Just leave out values
-                        logger.debug(
-                            `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
-                                requestPath,
-                            )}: ignore non-existing event`,
-                        );
-                    } else {
+                    if (isConcreteEventPath(requestPath)) {
                         const { endpointId, clusterId, eventId } = requestPath;
                         tryCatch(
                             () => {
@@ -469,6 +493,12 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                             },
                         );
                     }
+                    // Wildcard path: Just leave out values
+                    logger.debug(
+                        `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
+                            requestPath,
+                        )}: ignore non-existing event`,
+                    );
                     continue;
                 }
 
@@ -536,11 +566,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             }
         }
 
-        // TODO support suppressResponse for responses
         return {
             interactionModelRevision: INTERACTION_MODEL_REVISION,
-            suppressResponse: false,
-            attributeReportsPayload, // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
+            suppressResponse: true,
+            attributeReportsPayload,
             eventReportsPayload,
         };
     }
@@ -615,13 +644,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
         }
 
         if (receivedWithinTimedInteraction) {
-            logger.debug(`Write request from ${exchange.channel.name} received while timed interaction is running.`);
+            logger.debug(
+                `Write request from ${exchange.channel.name} successfully received while timed interaction is running.`,
+            );
             exchange.clearTimedInteraction();
             if (sessionType !== SessionType.Unicast) {
                 throw new StatusResponseError(
                     "Write requests are only allowed on unicast sessions when a timed interaction is running.",
                     StatusCode.InvalidAction,
-                ); // ???
+                );
             }
         }
 
@@ -629,7 +660,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             throw new StatusResponseError(
                 "Write requests are only allowed as group casts when suppressResponse=true.",
                 StatusCode.InvalidAction,
-            ); // ???
+            );
         }
 
         const writeData = expandPathsInAttributeData(writeRequests, true);
@@ -647,7 +678,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
         for (const writeRequest of writeData) {
             const { path: writePath, dataVersion } = writeRequest;
-            const { listIndex } = writePath;
 
             validateWriteAttributesPath(writePath);
 
@@ -655,34 +685,18 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
             // No existing attribute matches the given path and is writable
             if (attributes.length === 0) {
-                // TODO: Also check nodeId
-                if (!isConcreteAttributePath(writePath)) {
-                    // Wildcard path: Just ignore
-                    logger.debug(
-                        `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                            writePath,
-                        )}: ignore non-existing (wildcard) attribute`,
-                    );
-                } else {
+                if (isConcreteAttributePath(writePath)) {
                     const { endpointId, clusterId, attributeId } = writePath;
 
                     // was a concrete path
                     tryCatch(
                         () => {
-                            if (
-                                this.#endpointStructure.validateConcreteAttributePath(
-                                    endpointId,
-                                    clusterId,
-                                    attributeId,
-                                )
-                            ) {
-                                throw new StatusResponseError(
-                                    `Attribute ${attributeId} is not writable.`,
-                                    StatusCode.UnsupportedWrite,
-                                );
-                            }
-                            throw new InternalError(
-                                "validateConcreteAttributePath check should throw StatusResponseError but did not.",
+                            this.#endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
+
+                            // Ok it is a valid  concrete path, so it is not writable
+                            throw new StatusResponseError(
+                                `Attribute ${attributeId} is not writable.`,
+                                StatusCode.UnsupportedWrite,
                             );
                         },
                         StatusResponseError,
@@ -694,6 +708,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                             );
                             writeResults.push({ path: writePath, statusCode: error.code });
                         },
+                    );
+                } else {
+                    // Wildcard path: Just ignore
+                    logger.debug(
+                        `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                            writePath,
+                        )}: ignore non-existing (wildcard) attribute`,
                     );
                 }
                 continue;
@@ -762,6 +783,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                     }
 
                     const { endpointId } = path;
+                    const { listIndex } = writePath;
                     const value =
                         listIndex === undefined
                             ? decodeAttributeValueWithSchema(schema, [writeRequest], defaultValue)
@@ -1068,11 +1090,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             await session.context.clearSubscriptionsForNode(session.peerNodeId, true);
         }
 
-        const maxInterval = subscriptionHandler.getMaxInterval();
+        const maxInterval = subscriptionHandler.maxInterval;
         logger.info(
             `Successfully created subscription ${subscriptionId} for Session ${
                 session.id
-            }. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.getSendInterval()} seconds)`,
+            }. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.sendInterval} seconds)`,
         );
         // Then send the subscription response
         await messenger.send(
@@ -1084,6 +1106,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             }),
         );
 
+        // When an error occurs while sending the response, the subscription is not yet active and will be cleaned up by GC
         this.#subscriptionMap.set(subscriptionId, subscriptionHandler);
         session.addSubscription(subscriptionHandler);
         subscriptionHandler.activateSendingUpdates();
@@ -1092,10 +1115,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
     async handleInvokeRequest(
         exchange: MessageExchange<MatterDevice>,
         { invokeRequests, timedRequest, suppressResponse, interactionModelRevision }: InvokeRequest,
+        messenger: InteractionServerMessenger,
         message: Message,
-    ): Promise<InvokeResponse> {
+    ): Promise<void> {
         logger.debug(
-            `Received invoke request from ${exchange.channel.name}: ${invokeRequests
+            `Received invoke request from ${exchange.channel.name}${invokeRequests.length > 0 ? ` with ${invokeRequests.length} commands` : ""}: ${invokeRequests
                 .map(({ commandPath: { endpointId, clusterId, commandId } }) =>
                     this.#endpointStructure.resolveCommandName({ endpointId, clusterId, commandId }),
                 )
@@ -1128,156 +1152,257 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                 throw new StatusResponseError(
                     "Invoke requests are only allowed on unicast sessions when a timed interaction is running.",
                     StatusCode.InvalidAction,
-                ); // ???
+                );
             }
         }
 
-        if (invokeRequests.length > MAX_PATHS_PER_INVOKE) {
+        if (invokeRequests.length > this.#maxPathsPerInvoke) {
             throw new StatusResponseError(
-                `Only ${MAX_PATHS_PER_INVOKE} invoke requests are supported in one message. This message contains ${invokeRequests.length}`,
+                `Only ${this.#maxPathsPerInvoke} invoke requests are supported in one message. This message contains ${invokeRequests.length}`,
                 StatusCode.InvalidAction,
             );
         }
 
+        // Validate all commandPaths before proceeding to make sure not to have executed partial commands
         invokeRequests.forEach(({ commandPath }) => validateCommandPath(commandPath));
 
-        const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];
-
-        await Promise.all(
-            invokeRequests.flatMap(async ({ commandPath, commandFields }) => {
-                const commands = this.#endpointStructure.getCommands([commandPath]);
-
-                // TODO also check ACL and Timed, Fabric scoping constrains
-
-                if (commands.length === 0) {
-                    // TODO Also check nodeId
-                    if (!isConcreteCommandPath(commandPath)) {
-                        // Wildcard path: Just ignore
-                        logger.debug(
-                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
-                                commandPath,
-                            )} ignore non-existing attribute`,
-                        );
-                    } else {
-                        const { endpointId, clusterId, commandId } = commandPath;
-                        invokeResponses.push(
-                            tryCatch(
-                                () => {
-                                    this.#endpointStructure.validateConcreteCommandPath(
-                                        endpointId,
-                                        clusterId,
-                                        commandId,
-                                    );
-                                    throw new InternalError(
-                                        "validateConcreteCommandPath should throw StatusResponseError but did not.",
-                                    );
-                                },
-                                StatusResponseError,
-                                error => {
-                                    logger.debug(
-                                        `Invoke from ${
-                                            exchange.channel.name
-                                        }: ${this.#endpointStructure.resolveCommandName(
-                                            commandPath,
-                                        )} unsupported path: Status=${error.code}`,
-                                    );
-                                    return { status: { commandPath, status: { status: error.code } } };
-                                },
-                            ),
-                        );
-                    }
-                    return;
-                }
-
-                for (const { command, path } of commands) {
-                    const { endpointId } = path;
-                    if (endpointId === undefined) {
-                        // Should never happen
-                        logger.error(
-                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
-                                path,
-                            )} invalid path because empty endpoint!`,
-                        );
-                        invokeResponses.push({
-                            status: { commandPath: path, status: { status: StatusCode.UnsupportedEndpoint } },
-                        });
-                        continue;
-                    }
-                    const endpoint = this.#endpointStructure.getEndpoint(endpointId);
-                    if (endpoint === undefined) {
-                        // Should never happen
-                        logger.error(
-                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
-                                path,
-                            )} invalid path because endpoint not found!`,
-                        );
-                        invokeResponses.push({
-                            status: { commandPath: path, status: { status: StatusCode.UnsupportedEndpoint } },
-                        });
-                        continue;
-                    }
-                    if (command.requiresTimedInteraction && !receivedWithinTimedInteraction) {
-                        logger.debug(`This invoke requires a timed interaction which is not initialized.`);
-                        invokeResponses.push({
-                            status: { commandPath: path, status: { status: StatusCode.NeedsTimedInteraction } },
-                        });
-                        continue;
-                    }
-
-                    const result = await tryCatchAsync(
-                        async () =>
-                            await this.invokeCommand(
-                                path,
-                                command,
-                                exchange,
-                                commandFields ?? TlvNoArguments.encodeTlv(commandFields),
-                                message,
-                                endpoint,
-                                receivedWithinTimedInteraction,
-                            ),
-                        StatusResponseError,
-                        async error => {
-                            const errorLogText = `Error ${Diagnostic.hex(error.code)}${
-                                error.clusterCode !== undefined ? `/${Diagnostic.hex(error.clusterCode)}` : ""
-                            } while invoking command: ${error.message}`;
-                            if (error instanceof ValidationError) {
-                                logger.info(
-                                    `Validation-${errorLogText}${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}`,
-                                );
-                            } else {
-                                logger.info(errorLogText);
-                            }
-                            return {
-                                code: error.code,
-                                clusterCode: error.clusterCode,
-                                responseId: command.responseId,
-                                response: TlvNoResponse.encodeTlv(),
-                            };
-                        },
+        if (invokeRequests.length > 1) {
+            const invokeUniqueSet = new Set<string>();
+            invokeRequests.forEach(({ commandPath }) => {
+                if (!isConcreteCommandPath(commandPath)) {
+                    throw new StatusResponseError(
+                        "Wildcard paths are not supported in multi-command invoke requests",
+                        StatusCode.InvalidAction,
                     );
-                    const { code, clusterCode, responseId, response } = result;
-                    if (response.length === 0) {
-                        invokeResponses.push({
-                            status: { commandPath: path, status: { status: code, clusterStatus: clusterCode } },
-                        });
-                    } else {
-                        invokeResponses.push({
-                            command: {
-                                commandPath: { ...path, commandId: responseId },
-                                commandFields: response,
+                }
+                const commandPathId = commandPathToId(commandPath);
+                if (invokeUniqueSet.has(commandPathId)) {
+                    throw new StatusResponseError(
+                        `Duplicate command paths (${commandPathId}) are not allowed in multi-command invoke requests`,
+                        StatusCode.InvalidAction,
+                    );
+                }
+                invokeUniqueSet.add(commandPathId);
+            });
+        }
+
+        const isGroupSession = message.packetHeader.sessionType === SessionType.Group;
+        const invokeResponseMessage: TypeFromSchema<typeof TlvInvokeResponseForSend> = {
+            suppressResponse: false, // Deprecated but must be present
+            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            invokeResponses: [],
+            moreChunkedMessages: invokeRequests.length > 1, // Assume for now we have multiple responses when having multiple invokes
+        };
+        const emptyInvokeResponseBytes = TlvInvokeResponseForSend.encode(invokeResponseMessage);
+        let messageSize = emptyInvokeResponseBytes.length;
+        let invokeResultsProcessed = 0;
+
+        // To lower potential latency when we would process all invoke messages and just send responses at the end we
+        // assemble response on the fly locally here and send when message becomes too big
+        const processResponseResult = async (
+            invokeResponse: TypeFromSchema<typeof TlvInvokeResponseData>,
+        ): Promise<void> => {
+            invokeResultsProcessed++;
+
+            if (isGroupSession) {
+                // We send no responses at all for group sessions
+                return;
+            }
+            const encodedInvokeResponse = TlvInvokeResponseData.encodeTlv(invokeResponse);
+            const invokeResponseBytes = TlvAny.getEncodedByteLength(encodedInvokeResponse);
+
+            if (
+                messageSize + invokeResponseBytes > exchange.maxPayloadSize ||
+                invokeResultsProcessed === invokeRequests.length
+            ) {
+                let lastMessageProcessed = false;
+                if (messageSize + invokeResponseBytes <= exchange.maxPayloadSize) {
+                    // last invoke response and matches in the message
+                    invokeResponseMessage.invokeResponses.push(encodedInvokeResponse);
+                    lastMessageProcessed = true;
+                }
+                // Send the response when the message is full or when all responses are processed
+                if (invokeResponseMessage.invokeResponses.length > 0) {
+                    if (invokeRequests.length > 1) {
+                        logger.debug(
+                            `Send ${lastMessageProcessed ? "final " : ""}invoke response for ${invokeResponseMessage.invokeResponses} commands`,
+                        );
+                    }
+                    await messenger.send(
+                        MessageType.InvokeResponse,
+                        TlvInvokeResponseForSend.encode({
+                            ...invokeResponseMessage,
+                            moreChunkedMessages: invokeResultsProcessed < invokeRequests.length ? true : undefined,
+                        }),
+                    );
+                    invokeResponseMessage.invokeResponses = [];
+                    messageSize = emptyInvokeResponseBytes.length;
+                }
+                if (!lastMessageProcessed) {
+                    invokeResultsProcessed--; // Correct counter again because we recall the method
+                    return processResponseResult(invokeResponse);
+                }
+            } else {
+                invokeResponseMessage.invokeResponses.push(encodedInvokeResponse);
+                messageSize += invokeResponseBytes;
+            }
+        };
+
+        // We could do more fancy parallel command processing, but it makes no sense for now, so lets simply process
+        // invoked commands one by one sequentially
+        for (const { commandPath, commandFields, commandRef } of invokeRequests) {
+            const commands = this.#endpointStructure.getCommands([commandPath]);
+
+            if (commands.length === 0) {
+                if (isConcreteCommandPath(commandPath)) {
+                    const { endpointId, clusterId, commandId } = commandPath;
+                    await processResponseResult(
+                        tryCatch(
+                            () => {
+                                this.#endpointStructure.validateConcreteCommandPath(endpointId, clusterId, commandId);
+                                throw new InternalError(
+                                    "validateConcreteCommandPath should throw StatusResponseError but did not.",
+                                );
+                            },
+                            StatusResponseError,
+                            error => {
+                                logger.debug(
+                                    `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
+                                        commandPath,
+                                    )} unsupported path: Status=${error.code}`,
+                                );
+                                return { status: { commandPath, status: { status: error.code }, commandRef } };
+                            },
+                        ),
+                    );
+                } else {
+                    // Wildcard path: Just ignore
+                    logger.debug(
+                        `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
+                            commandPath,
+                        )} ignore non-existing command`,
+                    );
+                }
+                continue;
+            }
+
+            const isConcretePath = isConcreteCommandPath(commandPath);
+            for (const { command, path } of commands) {
+                const { endpointId, clusterId, commandId } = path;
+                if (endpointId === undefined) {
+                    // Should never happen
+                    logger.error(
+                        `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
+                            path,
+                        )} invalid path because empty endpoint!`,
+                    );
+                    if (isConcretePath) {
+                        await processResponseResult({
+                            status: {
+                                commandPath: path,
+                                status: { status: StatusCode.UnsupportedEndpoint },
+                                commandRef,
                             },
                         });
                     }
+                    continue;
                 }
-            }),
-        );
+                const endpoint = this.#endpointStructure.getEndpoint(endpointId);
+                if (endpoint === undefined) {
+                    // Should never happen
+                    logger.error(
+                        `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
+                            path,
+                        )} invalid path because endpoint not found!`,
+                    );
+                    if (isConcretePath) {
+                        await processResponseResult({
+                            status: {
+                                commandPath: path,
+                                status: { status: StatusCode.UnsupportedEndpoint },
+                                commandRef,
+                            },
+                        });
+                    }
+                    continue;
+                }
+                if (command.requiresTimedInteraction && !receivedWithinTimedInteraction) {
+                    logger.debug(`This invoke requires a timed interaction which is not initialized.`);
+                    if (isConcretePath) {
+                        await processResponseResult({
+                            status: {
+                                commandPath: path,
+                                status: { status: StatusCode.NeedsTimedInteraction },
+                                commandRef,
+                            },
+                        });
+                    }
+                    continue;
+                }
+                if (
+                    getMatterModelClusterCommand(clusterId, commandId)?.fabricScoped &&
+                    (!exchange.session.isSecure || !(exchange.session as SecureSession<MatterDevice>).fabric)
+                ) {
+                    logger.debug(`This invoke requires a secure session with a fabric assigned which is missing.`);
+                    if (isConcretePath) {
+                        await processResponseResult({
+                            status: { commandPath: path, status: { status: StatusCode.UnsupportedAccess }, commandRef },
+                        });
+                    }
+                    continue;
+                }
 
-        // TODO support suppressResponse for responses
-        return {
-            suppressResponse: false,
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
-            invokeResponses,
-        };
+                const result = await tryCatchAsync(
+                    async () =>
+                        await this.invokeCommand(
+                            path,
+                            command,
+                            exchange,
+                            commandFields ?? TlvNoArguments.encodeTlv(commandFields),
+                            message,
+                            endpoint,
+                            receivedWithinTimedInteraction,
+                        ),
+                    StatusResponseError,
+                    async error => {
+                        let errorCode = error.code;
+                        const errorLogText = `Error ${Diagnostic.hex(errorCode)}${
+                            error.clusterCode !== undefined ? `/${Diagnostic.hex(error.clusterCode)}` : ""
+                        } while invoking command: ${error.message}`;
+                        if (error instanceof ValidationError) {
+                            logger.info(
+                                `Validation-${errorLogText}${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}`,
+                            );
+                            if (errorCode === StatusCode.InvalidAction) {
+                                errorCode = StatusCode.InvalidCommand;
+                            }
+                        } else {
+                            logger.info(errorLogText);
+                        }
+                        return {
+                            code: errorCode,
+                            clusterCode: error.clusterCode,
+                            responseId: command.responseId,
+                            response: TlvNoResponse.encodeTlv(),
+                        };
+                    },
+                );
+                const { code, clusterCode, responseId, response } = result;
+                if (response.length === 0) {
+                    await processResponseResult({
+                        status: { commandPath: path, status: { status: code, clusterStatus: clusterCode }, commandRef },
+                    });
+                } else {
+                    await processResponseResult({
+                        command: {
+                            commandPath: { ...path, commandId: responseId },
+                            commandFields: response,
+                            commandRef,
+                        },
+                    });
+                }
+            }
+        }
     }
 
     protected async invokeCommand(
@@ -1317,5 +1442,6 @@ export namespace InteractionServer {
         readonly subscriptionOptions?: SubscriptionOptions;
         readonly eventHandler: EventHandler;
         readonly endpointStructure: InteractionEndpointStructure;
+        readonly maxPathsPerInvoke?: number;
     }
 }

@@ -6,12 +6,16 @@
 
 // We use 3 minutes as global max interval because with 60 min as defined by spec the timeframe until the controller
 // establishes a new subscription after e.g a reboot can be up to 60 min and the controller would assume that the value
-// is unchanged. this is too long.
+// is unchanged. This is too long.
 //
-// chip-tool is not respecting the 60 min at all and only respects the max sent by the controller which can lead to
-// spamming the network with unneeded packages. So I decided for 3 minutes for now as a compromise until we have
-// something better.
-const MAX_INTERVAL_PUBLISHER_LIMIT_S = 3 * 60; /** 3 min */ // Officially: 1000 * 60 * 60; /** 1 hour */
+// chip-tool is not using the option to choose an appropriate interval and respect the 60 min for that and only uses the
+// max sent by the controller which can lead to spamming the network with unneeded packages. So I decided for 3 minutes
+// for now as a compromise until we have something better. This value is fine for non-battery devices and might be
+// overridden for otherwise.
+//
+// To officially match the specs the developer needs to set these 60Minutes in the Subscription options!
+export const MAX_INTERVAL_PUBLISHER_LIMIT_S = 60 * 60; /** 1 hour */
+const INTERNAL_INTERVAL_PUBLISHER_LIMIT_S = 3 * 60; /** 3 min */
 const MIN_INTERVAL_S = 2; // We do not send faster than 2 seconds
 const DEFAULT_RANDOMIZATION_WINDOW_S = 10; // 10 seconds
 
@@ -48,7 +52,7 @@ export namespace SubscriptionOptions {
      */
     export function configurationFor(options?: SubscriptionOptions) {
         return {
-            maxIntervalSeconds: options?.maxIntervalSeconds ?? MAX_INTERVAL_PUBLISHER_LIMIT_S,
+            maxIntervalSeconds: options?.maxIntervalSeconds ?? INTERNAL_INTERVAL_PUBLISHER_LIMIT_S,
             minIntervalSeconds: Math.max(options?.minIntervalSeconds ?? MIN_INTERVAL_S, MIN_INTERVAL_S),
             randomizationWindowSeconds: options?.randomizationWindowSeconds ?? DEFAULT_RANDOMIZATION_WINDOW_S,
         };

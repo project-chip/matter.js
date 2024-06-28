@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationError } from "@project-chip/matter.js/common";
+import { ValidationDatatypeMismatchError } from "@project-chip/matter.js/common";
 import { ValueModel } from "@project-chip/matter.js/model";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { camelize } from "./String";
@@ -14,12 +14,12 @@ export function convertJsonDataWithModel(model: ValueModel, data: any): any {
     switch (definingModel.effectiveMetatype) {
         case "array":
             if (!Array.isArray(data)) {
-                throw new ValidationError(`Expected array, got ${typeof data}`);
+                throw new ValidationDatatypeMismatchError(`Expected array, got ${typeof data}`);
             }
             return data.map(item => convertJsonDataWithModel(definingModel.children[0], item));
         case "object":
             if (typeof data !== "object") {
-                throw new ValidationError(`Expected object, got ${typeof data}`);
+                throw new ValidationDatatypeMismatchError(`Expected object, got ${typeof data}`);
             }
             for (const child of definingModel.children) {
                 const childKeyName = camelize(child.name);

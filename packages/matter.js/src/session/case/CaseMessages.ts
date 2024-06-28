@@ -26,34 +26,35 @@ export const KDFSR3_INFO = ByteArray.fromString("Sigma3");
 export const TBE_DATA2_NONCE = ByteArray.fromString("NCASE_Sigma2N");
 export const TBE_DATA3_NONCE = ByteArray.fromString("NCASE_Sigma3N");
 
-/** @see {@link MatterSpecification.v10.Core} § 4.13.2.3 */
+/** @see {@link MatterSpecification.v13.Core} § 4.14.2.3 */
 export const TlvCaseSigma1 = TlvObject({
-    random: TlvField(1, TlvByteString.bound({ length: 32 })),
-    sessionId: TlvField(2, TlvUInt16),
+    initiatorRandom: TlvField(1, TlvByteString.bound({ length: 32 })),
+    initiatorSessionId: TlvField(2, TlvUInt16),
     destinationId: TlvField(3, TlvByteString.bound({ length: CRYPTO_HASH_LEN_BYTES })),
-    ecdhPublicKey: TlvField(4, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
-    sessionParams: TlvOptionalField(5, TlvSessionParameters),
+    initiatorEcdhPublicKey: TlvField(4, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
+    initiatorSessionParams: TlvOptionalField(5, TlvSessionParameters),
     resumptionId: TlvOptionalField(6, TlvByteString.bound({ length: 16 })),
-    resumeMic: TlvOptionalField(7, TlvByteString.bound({ length: CRYPTO_AEAD_MIC_LENGTH_BYTES })),
+    initiatorResumeMic: TlvOptionalField(7, TlvByteString.bound({ length: CRYPTO_AEAD_MIC_LENGTH_BYTES })),
 });
 
-/** @see {@link MatterSpecification.v10.Core} § 4.13.2.3 */
+/** @see {@link MatterSpecification.v13.Core} § 4.14.2.3 */
 export const TlvCaseSigma2 = TlvObject({
-    random: TlvField(1, TlvByteString.bound({ length: 32 })),
-    sessionId: TlvField(2, TlvUInt16),
-    ecdhPublicKey: TlvField(3, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
+    responderRandom: TlvField(1, TlvByteString.bound({ length: 32 })),
+    responderSessionId: TlvField(2, TlvUInt16),
+    responderEcdhPublicKey: TlvField(3, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
     encrypted: TlvField(4, TlvByteString),
-    sessionParams: TlvOptionalField(5, TlvSessionParameters),
+    responderSessionParams: TlvOptionalField(5, TlvSessionParameters),
 });
 
-/** @see {@link MatterSpecification.v10.Core} § 4.13.2.3 */
+/** @see {@link MatterSpecification.v13.Core} § 4.14.2.3 */
 export const TlvCaseSigma2Resume = TlvObject({
     resumptionId: TlvField(1, TlvByteString.bound({ length: 16 })),
     resumeMic: TlvField(2, TlvByteString.bound({ length: 16 })),
-    sessionId: TlvField(3, TlvUInt16),
+    responderSessionId: TlvField(3, TlvUInt16),
+    responderSessionParams: TlvOptionalField(4, TlvSessionParameters),
 });
 
-/** @see {@link MatterSpecification.v10.Core} § 4.13.2.3 */
+/** @see {@link MatterSpecification.v13.Core} § 4.14.2.3 */
 export const TlvCaseSigma3 = TlvObject({
     encrypted: TlvField(1, TlvByteString),
 });

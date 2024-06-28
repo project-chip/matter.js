@@ -408,7 +408,7 @@ describe("AttributeServerTest", () => {
 
         it("should throw an error if init value and default value is invalid", () => {
             expect(() => create({ schema: TlvUInt8.bound({ min: 0, max: 2 }) })).throws(
-                'Validation error for attribute "test": (Validation/135) Invalid value: 4 is above the maximum, 2.',
+                'Validation error for attribute "test": (ValidationOutOfBoundsError/135) Invalid value: 4 is above the maximum, 2.',
             );
         });
 
@@ -418,7 +418,7 @@ describe("AttributeServerTest", () => {
                 setter: () => true,
             });
             expect(() => server.setLocal(11)).throw(
-                'Validation error for attribute "test": (Validation/135) Invalid value: 11 is above the maximum, 3.',
+                'Validation error for attribute "test": (ValidationOutOfBoundsError/135) Invalid value: 11 is above the maximum, 3.',
             );
         });
 

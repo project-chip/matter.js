@@ -11,6 +11,7 @@ import { ActionTracer } from "../../behavior/context/ActionTracer.js";
 import { NodeActivity } from "../../behavior/context/NodeActivity.js";
 import { OnlineContext } from "../../behavior/context/server/OnlineContext.js";
 import { AccessControlServer } from "../../behavior/definitions/access-control/AccessControlServer.js";
+import { BasicInformationServer } from "../../behavior/definitions/basic-information/BasicInformationServer.js";
 import { AccessControlCluster } from "../../cluster/definitions/AccessControlCluster.js";
 import { AnyAttributeServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
@@ -73,19 +74,30 @@ export class TransactionalInteractionServer extends InteractionServer {
     #aclServer?: AccessControlServer;
     #aclUpdateIsDelayed = false;
 
-    constructor(endpoint: Endpoint<ServerNode.RootEndpoint>) {
-        const structure = new InteractionEndpointStructure();
+    static async create(endpoint: Endpoint<ServerNode.RootEndpoint>) {
+        const endpointStructure = new InteractionEndpointStructure();
 
-        super({
+        const maxPathsPerInvoke = await endpoint.act(
+            agent => agent.get(BasicInformationServer).state.maxPathsPerInvoke,
+        );
+
+        return new TransactionalInteractionServer(endpoint, {
             eventHandler: endpoint.env.get(ServerStore).eventHandler,
-            endpointStructure: structure,
+            endpointStructure,
             subscriptionOptions: endpoint.state.network.subscriptionOptions,
+            maxPathsPerInvoke,
         });
+    }
+
+    constructor(endpoint: Endpoint<ServerNode.RootEndpoint>, config: InteractionServer.Configuration) {
+        super(config);
+
+        const { endpointStructure } = config;
 
         this.#activity = endpoint.env.get(NodeActivity);
 
         this.#endpoint = endpoint;
-        this.#endpointStructure = structure;
+        this.#endpointStructure = endpointStructure;
 
         // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
         this.#updateStructure();

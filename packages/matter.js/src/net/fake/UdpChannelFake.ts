@@ -7,7 +7,7 @@
 import { Listener } from "../../common/TransportInterface.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { NetworkError } from "../Network.js";
-import { UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
+import { MAX_UDP_MESSAGE_SIZE, UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
 import { NetworkFake } from "./NetworkFake.js";
 import { FAKE_INTERFACE_NAME, SimulatedNetwork } from "./SimulatedNetwork.js";
 
@@ -27,6 +27,7 @@ export class UdpChannelFake implements UdpChannel {
     private readonly netListeners = new Array<Listener>();
     private readonly simulatedNetwork = SimulatedNetwork.get();
     private readonly listeningPort: number;
+    readonly maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
 
     constructor(
         private readonly localAddress: string,

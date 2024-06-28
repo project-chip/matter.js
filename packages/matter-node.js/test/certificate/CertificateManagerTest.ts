@@ -12,7 +12,7 @@ import {
     X962,
 } from "@project-chip/matter.js/certificate";
 import { BYTES_KEY, DerCodec, DerNode, ELEMENTS_KEY } from "@project-chip/matter.js/codec";
-import { ValidationError } from "@project-chip/matter.js/common";
+import { ValidationOutOfBoundsError } from "@project-chip/matter.js/common";
 import { Crypto, PrivateKey, PublicKey } from "@project-chip/matter.js/crypto";
 import { CaseAuthenticatedTag, FabricId, NodeId } from "@project-chip/matter.js/datatype";
 import { ByteArray } from "@project-chip/matter.js/util";
@@ -216,7 +216,7 @@ describe("CertificateManager", () => {
             };
             assert.throws(
                 () => CertificateManager.nodeOperationalCertToAsn1(nocWithCat),
-                new ValidationError("Too many CaseAuthenticatedTags (4)."),
+                new ValidationOutOfBoundsError("Too many CaseAuthenticatedTags (4)."),
             );
         });
 
@@ -237,7 +237,7 @@ describe("CertificateManager", () => {
             };
             assert.throws(
                 () => CertificateManager.nodeOperationalCertToAsn1(nocWithCat),
-                new ValidationError("CASEAuthenticatedTags field contains duplicate identifier values."),
+                new ValidationOutOfBoundsError("CASEAuthenticatedTags field contains duplicate identifier values."),
             );
         });
     });

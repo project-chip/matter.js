@@ -10,6 +10,7 @@ import {
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID,
     BLE_MAXIMUM_BTP_MTU,
+    BLE_MAX_MATTER_PAYLOAD_SIZE,
     BTP_CONN_RSP_TIMEOUT_MS,
     BTP_MAXIMUM_WINDOW_SIZE,
     BTP_SUPPORTED_VERSIONS,
@@ -57,92 +58,140 @@ export class NobleBleCentralInterface implements NetInterface {
     private openChannels: Map<ServerAddress, Peripheral> = new Map();
     private onMatterMessageListener: ((socket: Channel<ByteArray>, data: ByteArray) => void) | undefined;
 
-    async openChannel(address: ServerAddress): Promise<Channel<ByteArray>> {
-        if (address.type !== "ble") {
-            throw new InternalError(`Unsupported address type ${address.type}.`);
-        }
-        if (this.onMatterMessageListener === undefined) {
-            throw new InternalError(`Network Interface was not added to the system yet.`);
-        }
+    openChannel(address: ServerAddress, tryCount = 1): Promise<Channel<ByteArray>> {
+        return new Promise((resolve, reject) => {
+            if (this.onMatterMessageListener === undefined) {
+                reject(new InternalError(`Network Interface was not added to the system yet.`));
+                return;
+            }
+            if (address.type !== "ble") {
+                reject(new InternalError(`Unsupported address type ${address.type}.`));
+                return;
+            }
 
-        // Get the peripheral by address and connect to it.
-        const { peripheral, hasAdditionalAdvertisementData } = (
-            Ble.get().getBleScanner() as BleScanner
-        ).getDiscoveredDevice(address.peripheralAddress);
-        logger.debug("BLE peripheral state", peripheral.state);
-        if (peripheral.state === "connected" || peripheral.state === "connecting") {
-            throw new BleError(
-                `Peripheral ${address.peripheralAddress} is already connected or connecting. Only one connection supported right now.`,
-            );
-        }
-        if (this.openChannels.has(address)) {
-            throw new BleError(
-                `Peripheral ${address.peripheralAddress} is already connected. Only one connection supported right now.`,
-            );
-        }
-        if (peripheral.state !== "disconnected") {
-            // Try to cleanup strange "in between" states
-            await peripheral.disconnectAsync();
-        }
-        logger.debug(`Connect to Peripheral now`);
-        await peripheral.connectAsync();
-        logger.debug(`Peripheral connected successfully`);
+            // Get the peripheral by address and connect to it.
+            const { peripheral, hasAdditionalAdvertisementData } = (
+                Ble.get().getBleScanner() as BleScanner
+            ).getDiscoveredDevice(address.peripheralAddress);
 
-        // Once the peripheral has been connected, then discover the services and characteristics of interest.
-        const services = await peripheral.discoverServicesAsync([BLE_MATTER_SERVICE_UUID]);
+            if (tryCount > 3) {
+                reject(new BleError(`Failed to connect to peripheral ${peripheral.address}`));
+                return;
+            }
 
-        for (const service of services) {
-            logger.debug(`found service: ${service.uuid}`);
-            if (service.uuid !== BLE_MATTER_SERVICE_UUID) continue;
+            logger.debug("BLE peripheral state", peripheral.state);
+            if (peripheral.state === "connected" || peripheral.state === "connecting") {
+                reject(
+                    new BleError(
+                        `Peripheral ${address.peripheralAddress} is already connected or connecting. Only one connection supported right now.`,
+                    ),
+                );
+                return;
+            }
+            if (this.openChannels.has(address)) {
+                reject(
+                    new BleError(
+                        `Peripheral ${address.peripheralAddress} is already connected. Only one connection supported right now.`,
+                    ),
+                );
+                return;
+            }
+            if (peripheral.state !== "disconnected") {
+                // Try to cleanup strange "in between" states
+                peripheral.disconnectAsync().then(() => this.openChannel(address, tryCount), reject);
+                return;
+            }
 
-            // So, discover its characteristics.
-            const characteristics = await service.discoverCharacteristicsAsync();
-
-            let characteristicC1ForWrite: Characteristic | undefined;
-            let characteristicC2ForSubscribe: Characteristic | undefined;
-            let additionalCommissioningRelatedData: ByteArray | undefined;
-
-            for (const characteristic of characteristics) {
-                // Loop through each characteristic and match them to the UUIDs that we know about.
-                logger.debug("found characteristic:", characteristic.uuid, characteristic.properties);
-
-                switch (nobleUuidToUuid(characteristic.uuid)) {
-                    case BLE_MATTER_C1_CHARACTERISTIC_UUID:
-                        logger.debug("found C1 characteristic");
-                        characteristicC1ForWrite = characteristic;
-                        break;
-
-                    case BLE_MATTER_C2_CHARACTERISTIC_UUID:
-                        logger.debug("found C2 characteristic");
-                        characteristicC2ForSubscribe = characteristic;
-                        break;
-
-                    case BLE_MATTER_C3_CHARACTERISTIC_UUID:
-                        logger.debug("found C3 characteristic");
-                        if (hasAdditionalAdvertisementData) {
-                            logger.debug("reading additional commissioning related data");
-                            const data = await characteristic.readAsync();
-                            additionalCommissioningRelatedData = new ByteArray(data);
-                        }
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            peripheral.once("connect", async () => {
+                if (this.onMatterMessageListener === undefined) {
+                    reject(new InternalError(`Network Interface was not added to the system yet.`));
+                    return;
                 }
-            }
 
-            if (!characteristicC1ForWrite || !characteristicC2ForSubscribe) {
-                logger.debug("missing characteristics");
-                continue;
-            }
+                const services = await peripheral.discoverServicesAsync([BLE_MATTER_SERVICE_UUID]);
+                logger.debug(`Found services: ${services.map(s => s.uuid).join(", ")}`);
 
-            this.openChannels.set(address, peripheral);
-            return await NobleBleChannel.create(
-                peripheral,
-                characteristicC1ForWrite,
-                characteristicC2ForSubscribe,
-                this.onMatterMessageListener,
-                additionalCommissioningRelatedData,
-            );
-        }
+                for (const service of services) {
+                    logger.debug(`found service: ${service.uuid}`);
+                    if (service.uuid !== BLE_MATTER_SERVICE_UUID) continue;
 
-        throw new BleError(`No Matter service found on peripheral ${peripheral.address}`);
+                    // So, discover its characteristics.
+                    const characteristics = await service.discoverCharacteristicsAsync();
+
+                    let characteristicC1ForWrite: Characteristic | undefined;
+                    let characteristicC2ForSubscribe: Characteristic | undefined;
+                    let additionalCommissioningRelatedData: ByteArray | undefined;
+
+                    for (const characteristic of characteristics) {
+                        // Loop through each characteristic and match them to the UUIDs that we know about.
+                        logger.debug("found characteristic:", characteristic.uuid, characteristic.properties);
+
+                        switch (nobleUuidToUuid(characteristic.uuid)) {
+                            case BLE_MATTER_C1_CHARACTERISTIC_UUID:
+                                logger.debug("found C1 characteristic");
+                                characteristicC1ForWrite = characteristic;
+                                break;
+
+                            case BLE_MATTER_C2_CHARACTERISTIC_UUID:
+                                logger.debug("found C2 characteristic");
+                                characteristicC2ForSubscribe = characteristic;
+                                break;
+
+                            case BLE_MATTER_C3_CHARACTERISTIC_UUID:
+                                logger.debug("found C3 characteristic");
+                                if (hasAdditionalAdvertisementData) {
+                                    logger.debug("reading additional commissioning related data");
+                                    const data = await characteristic.readAsync();
+                                    additionalCommissioningRelatedData = new ByteArray(data);
+                                    logger.debug("additional data", data);
+                                }
+                        }
+                    }
+
+                    if (!characteristicC1ForWrite || !characteristicC2ForSubscribe) {
+                        logger.debug("missing characteristics");
+                        continue;
+                    }
+
+                    peripheral.removeAllListeners("disconnect");
+                    this.openChannels.set(address, peripheral);
+                    resolve(
+                        await NobleBleChannel.create(
+                            peripheral,
+                            characteristicC1ForWrite,
+                            characteristicC2ForSubscribe,
+                            this.onMatterMessageListener,
+                            additionalCommissioningRelatedData,
+                        ),
+                    );
+                    return;
+                }
+
+                peripheral.removeAllListeners("disconnect");
+                reject(new BleError(`Peripheral ${peripheral.address} does not have the required characteristics`));
+            });
+            const reTryHandler = async (error?: any) => {
+                if (error) {
+                    logger.error(
+                        `Peripheral ${peripheral.address} disconnected while trying to connect, try again`,
+                        error,
+                    );
+                } else {
+                    logger.info(`Peripheral ${peripheral.address} disconnected while trying to connect, try gain`);
+                }
+                // Cleanup listeners and try again
+                peripheral.removeAllListeners("disconnect");
+                peripheral.removeAllListeners("connect");
+                this.openChannel(address, tryCount + 1)
+                    .then(resolve)
+                    .catch(reject);
+            };
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            peripheral.once("disconnect", reTryHandler);
+            logger.debug(`Connect to Peripheral now (try ${tryCount})`);
+            peripheral.connectAsync().catch(reTryHandler);
+        });
     }
 
     onData(listener: (socket: Channel<ByteArray>, data: ByteArray) => void): Listener {
@@ -171,7 +220,7 @@ export class NobleBleChannel implements Channel<ByteArray> {
         if (mtu > BLE_MAXIMUM_BTP_MTU) {
             mtu = BLE_MAXIMUM_BTP_MTU;
         }
-        logger.debug(`Using MTU=${mtu} (Peripheral MTU=${peripheral.mtu})`); // TODO Fix noble types
+        logger.debug(`Using MTU=${mtu} (Peripheral MTU=${peripheral.mtu})`);
         const btpHandshakeRequest = BtpCodec.encodeBtpHandshakeRequest({
             versions: BTP_SUPPORTED_VERSIONS,
             attMtu: mtu,
@@ -234,6 +283,8 @@ export class NobleBleChannel implements Channel<ByteArray> {
     }
 
     private connected = true;
+    readonly maxPayloadSize = BLE_MAX_MATTER_PAYLOAD_SIZE;
+    readonly isReliable = true; // BTP is reliable
 
     constructor(
         private readonly peripheral: Peripheral,
