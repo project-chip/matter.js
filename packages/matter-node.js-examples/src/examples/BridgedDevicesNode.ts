@@ -105,7 +105,7 @@ for (let idx = 0; idx < isSocket.length; idx++) {
         {
             id: `onoff-${i}`,
             bridgedDeviceBasicInformation: {
-                nodeLabel: name,
+                nodeLabel: name, // Main end user name for the device
                 productName: name,
                 productLabel: name,
                 serialNumber: `node-matter-${uniqueId}-${i}`,
