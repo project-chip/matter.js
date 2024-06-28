@@ -45,6 +45,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: Added BTP Idle timeout as defined in Matter specification
     -   Enhancement/Fix: Several fixes and optimizations in Session and Message Exchange handling
     -   Enhancement/Fix: Adjusted MRP behavior with chip and only use/expect MRP ion unreliable channels (UDP). Fixes BLE commissioning
+    -   Enhancement: Many more protocol and functionality syncs with matter specification 1.3
     -   Fix: Adjusted ValidationErrors to be more specific if they should return "InvalidAction" ot "ConstraintError".
     -   Fix: Adjusted some returned errors to be more specific and to the specification (e.g. InvalidAction instead of Failure)
     -   Fix: Fixed StandaloneAck handling to use an outstanding ack number as piggybacked ack number
