@@ -87,7 +87,7 @@ export class BtpSessionHandler {
             }
         }
 
-        const fragmentSize = attMtu; // Each GATT PDU used by the BTP protocol introduces 3 byte header overhead.
+        const fragmentSize = attMtu; // The attMtu is the maximum size of a single ATT packet, so use as fragmentSize
         const windowSize = Math.min(BTP_MAXIMUM_WINDOW_SIZE, clientWindowSize);
 
         // Generate and send out handshake response

@@ -20,7 +20,7 @@ export class ValidationError extends StatusResponseError {
     ) {
         super(message, errorCode);
 
-        this.message = `(Validation/${this.code}) ${message}`;
+        this.message = `(${this.constructor.name}/${this.code}) ${message}`;
     }
 }
 

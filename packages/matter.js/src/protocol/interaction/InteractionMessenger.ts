@@ -74,11 +74,11 @@ const logger = Logger.get("InteractionMessenger");
 class InteractionMessenger<ContextT> {
     constructor(protected exchange: MessageExchange<ContextT>) {}
 
-    async send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
+    send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
         return this.exchange.send(messageType, payload, options);
     }
 
-    async sendStatus(status: StatusCode) {
+    sendStatus(status: StatusCode) {
         return this.send(
             MessageType.StatusResponse,
             TlvStatusResponse.encode({ status, interactionModelRevision: INTERACTION_MODEL_REVISION }),

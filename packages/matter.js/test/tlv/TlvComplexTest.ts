@@ -89,21 +89,21 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
     // "as any" used to bypass TS compiler checks to properly test validation logic
     "an object with no fields": {
         structure: {} as any,
-        expectedError: "(Validation/128) Missing mandatory field arrayField",
+        expectedError: "(ValidationMandatoryFieldMissingError/128) Missing mandatory field arrayField",
         errorFieldName: "arrayField",
     },
     "an object with empty array": {
         structure: {
             arrayField: [],
         } as any,
-        expectedError: "(Validation/135) Array [] is too short: 0, min 1.",
+        expectedError: "(ValidationOutOfBoundsError/135) Array [] is too short: 0, min 1.",
         errorFieldName: "arrayField",
     },
     "an object with missing nullable value": {
         structure: {
             arrayField: [{ mandatoryNumber: 1 }],
         } as any,
-        expectedError: "(Validation/128) Missing mandatory field nullableBoolean",
+        expectedError: "(ValidationMandatoryFieldMissingError/128) Missing mandatory field nullableBoolean",
         errorFieldName: "nullableBoolean",
     },
     "an object with invalid datatype in array": {
@@ -114,7 +114,7 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
                 },
             ],
         } as any,
-        expectedError: "(Validation/128) Expected number, got string.",
+        expectedError: "(ValidationDatatypeMismatchError/128) Expected number, got string.",
         errorFieldName: "arrayField.[0].mandatoryNumber",
     },
     "an object with invalid datatype in array #2": {
@@ -129,7 +129,7 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
                 },
             ],
         } as any,
-        expectedError: "(Validation/128) Expected number, got object.",
+        expectedError: "(ValidationDatatypeMismatchError/128) Expected number, got object.",
         errorFieldName: "arrayField.[0].mandatoryNumber",
     },
     "an object with invalid number wrapper value": {
@@ -142,7 +142,7 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
             nullableBoolean: null,
             optionalWrapperNumber: FabricIndex(0x12345678),
         },
-        expectedError: "(Validation/135) Invalid value: 305419896 is above the maximum, 254.",
+        expectedError: "(ValidationOutOfBoundsError/135) Invalid value: 305419896 is above the maximum, 254.",
         errorFieldName: "optionalWrapperNumber",
     },
 };

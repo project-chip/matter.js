@@ -20,6 +20,9 @@ import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { AttributeModel } from "../../model/index.js";
 import { ClusterModel } from "../../model/models/ClusterModel.js";
 import { MatterModel } from "../../model/models/MatterModel.js";
+import { AttributeList } from "../../model/standard/elements/AttributeList.js";
+import { EventList } from "../../model/standard/elements/EventList.js";
+import { AcceptedCommandList, GeneratedCommandList } from "../../model/standard/elements/index.js";
 import { TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Observable } from "../../util/Observable.js";
@@ -42,15 +45,11 @@ import { StatusCode, StatusResponseError } from "./StatusCode.js";
  * List of global attributes to skip when the WildcardSkipGlobalAttributes bit is set in an Wildcard Path Flags
  * @see {@link MatterSpecification.v13.Core} §8.2.1.7
  */
-const GLOBAL_ATTRIBUTELIST_ID = 0xfffb;
-const GLOBAL_EVENTLIST_ID = 0xfffa;
-const GLOBAL_COMMANDLIST_IDS = [
-    0xfff8, // GeneratedCommandList
-    0xfff9, // AcceptedCommandList
-];
-const GLOBAL_ATTRIBUTES_LIST = [...GLOBAL_COMMANDLIST_IDS, GLOBAL_EVENTLIST_ID, GLOBAL_ATTRIBUTELIST_ID];
+const GLOBAL_COMMANDLIST_IDS = [GeneratedCommandList.id, AcceptedCommandList.id];
+const GLOBAL_ATTRIBUTES_LIST = [...GLOBAL_COMMANDLIST_IDS, EventList.id, AttributeList.id];
 
 // Build a list of cluster IDs that are used for diagnostics to not always filter through model
+// TODO Find a way to also incorporate custom clusters here
 const DIAGNOSTICS_CLUSTER_IDS = MatterModel.standard.clusters
     .filter(cluster => cluster.diagnostics && cluster.id !== undefined)
     .map(cluster => cluster.id as ClusterId);
@@ -298,10 +297,10 @@ export class InteractionEndpointStructure {
             if (wildcardPathFlags.skipGlobalAttributes && GLOBAL_ATTRIBUTES_LIST.includes(attributeId)) {
                 return true;
             }
-            if (wildcardPathFlags.skipAttributeList && attributeId === GLOBAL_ATTRIBUTELIST_ID) {
+            if (wildcardPathFlags.skipAttributeList && attributeId === AttributeList.id) {
                 return true;
             }
-            if (wildcardPathFlags.skipEventList && attributeId === GLOBAL_EVENTLIST_ID) {
+            if (wildcardPathFlags.skipEventList && attributeId === EventList.id) {
                 return true;
             }
             if (wildcardPathFlags.skipCommandLists && GLOBAL_COMMANDLIST_IDS.includes(attributeId)) {
