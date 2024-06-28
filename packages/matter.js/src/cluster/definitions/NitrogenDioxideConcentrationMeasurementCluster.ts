@@ -40,7 +40,11 @@ export namespace NitrogenDioxideConcentrationMeasurement {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const CompleteInstance = MutableCluster({ ...ConcentrationMeasurement.Complete, id: 0x413 });
+    export const CompleteInstance = MutableCluster({
+        ...ConcentrationMeasurement.Complete,
+        id: 0x413,
+        name: "NitrogenDioxideConcentrationMeasurement"
+    });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}
     export const Complete: Complete = CompleteInstance;

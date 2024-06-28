@@ -35,7 +35,7 @@ export namespace Pm2 {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const CompleteInstance = MutableCluster({ ...ConcentrationMeasurement.Complete, id: 0x42a });
+    export const CompleteInstance = MutableCluster({ ...ConcentrationMeasurement.Complete, id: 0x42a, name: "Pm2" });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}
     export const Complete: Complete = CompleteInstance;

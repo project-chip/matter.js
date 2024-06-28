@@ -528,6 +528,10 @@ export class MatterDevice {
         return { session, channel: await networkInterface.openChannel(device.addresses[0]) };
     }
 
+    async clearSubscriptionsForNode(peerNodeId: NodeId, flushSubscriptions?: boolean) {
+        await this.#sessionManager.clearSubscriptionsForNode(peerNodeId, flushSubscriptions);
+    }
+
     async close() {
         this.#isClosing = true;
         await this.endCommissioning();
