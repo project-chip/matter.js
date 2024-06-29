@@ -24,3 +24,9 @@ export class LocalizationConfigurationServer extends LocalizationConfigurationBe
         return Intl.DateTimeFormat().resolvedOptions().locale;
     }
 }
+
+export namespace LocalizationConfigurationServer {
+    export declare const ExtensionInterface: {
+        detectedLocale: string;
+    };
+}
