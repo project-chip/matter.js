@@ -9,7 +9,7 @@ import { GlobalAttributes } from "./cluster/Cluster.js";
 import { SupportedAttributeClient } from "./cluster/client/AttributeClient.js";
 import { BasicInformation } from "./cluster/definitions/BasicInformationCluster.js";
 import { ImplementationError, InternalError } from "./common/MatterError.js";
-import { CommissionableDevice, CommissionableDeviceIdentifiers } from "./common/Scanner.js";
+import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData } from "./common/Scanner.js";
 import { ServerAddress } from "./common/ServerAddress.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
@@ -143,6 +143,13 @@ export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
 
     /** Passcode to use for commissioning. */
     passcode: number;
+
+    /**
+     * Provide this callback to implement an own logic to do the operative device discovery and to complete the
+     * commissioning process.
+     * Return true when the commissioning process is completed successfully, false on error.
+     */
+    completeCommissioningCallback?: (peerNodeId: NodeId, discoveryData?: DiscoveryData) => Promise<boolean>;
 };
 
 /** Controller class to commission and connect multiple nodes into one fabric. */
@@ -243,23 +250,26 @@ export class CommissioningController extends MatterNode {
     }
 
     /**
-     * Commissions/Pairs a new device into the controller fabric. The method returns a PairedNode instance of the
-     * paired node on success.
+     * Commissions/Pairs a new device into the controller fabric. The method returns the NodeId of the commissioned node.
      */
-    async commissionNode(nodeOptions: NodeCommissioningOptions) {
+    async commissionNode(nodeOptions: NodeCommissioningOptions, connectNodeAfterCommissioning = true) {
         this.assertIsAddedToMatterServer();
         const controller = this.assertControllerIsStarted();
 
         const nodeId = await controller.commission(nodeOptions);
 
-        return this.connectNode(nodeId, {
-            ...nodeOptions,
-            autoSubscribe: nodeOptions.autoSubscribe ?? this.options.autoSubscribe,
-            subscribeMinIntervalFloorSeconds:
-                nodeOptions.subscribeMinIntervalFloorSeconds ?? this.options.subscribeMinIntervalFloorSeconds,
-            subscribeMaxIntervalCeilingSeconds:
-                nodeOptions.subscribeMaxIntervalCeilingSeconds ?? this.options.subscribeMaxIntervalCeilingSeconds,
-        });
+        if (connectNodeAfterCommissioning) {
+            await this.connectNode(nodeId, {
+                ...nodeOptions,
+                autoSubscribe: nodeOptions.autoSubscribe ?? this.options.autoSubscribe,
+                subscribeMinIntervalFloorSeconds:
+                    nodeOptions.subscribeMinIntervalFloorSeconds ?? this.options.subscribeMinIntervalFloorSeconds,
+                subscribeMaxIntervalCeilingSeconds:
+                    nodeOptions.subscribeMaxIntervalCeilingSeconds ?? this.options.subscribeMaxIntervalCeilingSeconds,
+            });
+        }
+
+        return nodeId;
     }
 
     /** Check if a given node id is commissioned on this controller. */
