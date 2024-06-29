@@ -73,7 +73,7 @@ export class RootCertificateManager {
         });
     }
 
-    getRootCert() {
+    get rootCert() {
         return this.rootCertBytes;
     }
 

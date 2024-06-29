@@ -130,7 +130,7 @@ export class MatterController {
             const rootNodeId = NodeId.randomOperationalNodeId();
             const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
             const fabricBuilder = new FabricBuilder()
-                .setRootCert(certificateManager.getRootCert())
+                .setRootCert(certificateManager.rootCert)
                 .setRootNodeId(rootNodeId)
                 .setIdentityProtectionKey(ipkValue)
                 .setRootVendorId(adminVendorId);

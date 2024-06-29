@@ -675,7 +675,7 @@ export class ControllerCommissioner {
 
         await operationalCredentialsClusterClient.addTrustedRootCertificate(
             {
-                rootCaCertificate: this.certificateManager.getRootCert(),
+                rootCaCertificate: this.certificateManager.rootCert,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -752,7 +752,7 @@ export class ControllerCommissioner {
             const anyInterfaceConnected =
                 this.collectedCommissioningData.networkStatus.length === 0 ||
                 this.collectedCommissioningData.networkStatus.some(({ value }) =>
-                    value.some(({ connected }) => connected === true),
+                    value.some(({ connected }) => connected),
                 );
             if (!anyEthernetInterface && !anyInterfaceConnected) {
                 throw new CommissioningError(
@@ -797,11 +797,7 @@ export class ControllerCommissioner {
                     breadcrumb: this.lastBreadcrumb,
                 };
             }
-            if (
-                rootNetworkStatus !== undefined &&
-                rootNetworkStatus.length > 0 &&
-                rootNetworkStatus[0].connected !== false
-            ) {
+            if (rootNetworkStatus !== undefined && rootNetworkStatus.length > 0 && rootNetworkStatus[0].connected) {
                 logger.debug("Commissionee is already connected to the WiFi network");
                 this.collectedCommissioningData.successfullyConnectedToNetwork = true;
                 return {
@@ -863,7 +859,7 @@ export class ControllerCommissioner {
             throw new CommissioningError(`Commissionee did not return network with index ${networkIndex}`);
         }
         const { networkId, connected } = updatedNetworks[networkIndex];
-        if (connected === true) {
+        if (connected) {
             this.collectedCommissioningData.successfullyConnectedToNetwork = true;
             logger.debug(
                 `Commissionee is already connected to WiFi network ${
@@ -937,11 +933,7 @@ export class ControllerCommissioner {
                     breadcrumb: this.lastBreadcrumb,
                 };
             }
-            if (
-                rootNetworkStatus !== undefined &&
-                rootNetworkStatus.length > 0 &&
-                rootNetworkStatus[0].connected !== false
-            ) {
+            if (rootNetworkStatus !== undefined && rootNetworkStatus.length > 0 && rootNetworkStatus[0].connected) {
                 logger.debug("Commissionee is already connected to the Thread network");
                 return {
                     code: CommissioningStepResultCode.Skipped,
@@ -1011,7 +1003,7 @@ export class ControllerCommissioner {
             throw new CommissioningError(`Commissionee did not return network with index ${networkIndex}`);
         }
         const { networkId, connected } = updatedNetworks[networkIndex];
-        if (connected === true) {
+        if (connected) {
             logger.debug(
                 `Commissionee is already connected to Thread network ${
                     this.commissioningOptions.threadNetwork.networkName
