@@ -47,6 +47,7 @@ import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
+import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsServer.js";
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
 import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
@@ -130,6 +131,9 @@ export class AllClustersTestInstance implements TestInstance {
                 //BasicInformationServer.enable({ events: { shutDown: true, leave: true } }),
                 // We upgrade the AdminCommissioningCluster to also allow Basic Commissioning, so we can use for more testcases
                 AdministratorCommissioningServer.with("Basic"),
+                TestGeneralDiagnosticsServer.enable({
+                    events: { hardwareFaultChange: true, radioFaultChange: true, networkFaultChange: true },
+                }),
                 LocalizationConfigurationServer,
 
                 NetworkCommissioningServer.with("EthernetNetworkInterface"), // Set the correct Ethernet network Commissioning cluster
@@ -175,6 +179,14 @@ export class AllClustersTestInstance implements TestInstance {
                         primaryColor: BasicInformation.Color.Purple,
                     },
                     reachable: true,
+                },
+                generalDiagnostics: {
+                    totalOperationalHours: 0, // set to enable it
+                    activeHardwareFaults: [], // set to enable it
+                    activeRadioFaults: [], // set to enable it
+                    activeNetworkFaults: [], // set to enable it
+                    testEventTriggersEnabled: true, // Enable Test events
+                    deviceTestEnableKey: ByteArray.fromHex("00112233445566778899aabbccddeeff"),
                 },
                 localizationConfiguration: {
                     activeLocale: "en-US",
