@@ -95,14 +95,6 @@ export abstract class Behavior {
         return this.#agent.context;
     }
 
-    get exchange() {
-        const exchange = this.#agent.context.exchange;
-        if (exchange === undefined) {
-            throw new ImplementationError(`Illegal operation outside exchange context`);
-        }
-        return exchange;
-    }
-
     /**
      * The session in which the behavior has been invoked.
      */

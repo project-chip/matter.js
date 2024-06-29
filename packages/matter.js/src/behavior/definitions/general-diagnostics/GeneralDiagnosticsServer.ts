@@ -155,7 +155,12 @@ export class GeneralDiagnosticsServer extends Base {
             ],
         }).length;
 
-        if (responseSize > this.exchange.maxPayloadSize) {
+        const exchange = this.context.exchange;
+        if (exchange === undefined) {
+            throw new ImplementationError(`Illegal operation outside exchange context`);
+        }
+
+        if (responseSize > exchange.maxPayloadSize) {
             throw new StatusResponseError("Response too large", StatusCode.ResourceExhausted);
         }
 
