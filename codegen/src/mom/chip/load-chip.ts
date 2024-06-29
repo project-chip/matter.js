@@ -131,7 +131,7 @@ function installDatatypes(elements: AnyElement[]) {
         });
     }
 
-    const clusters = elements.filter(e => e.tag === ClusterElement.Tag) as ClusterElement[];
+    const clusters = elements.filter(e => e.tag === ClusterElement.Tag);
     clusters.forEach(c => install(c, c, new Set<string>()));
 
     return clusters;
