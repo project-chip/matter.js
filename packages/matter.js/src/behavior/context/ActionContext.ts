@@ -10,6 +10,7 @@ import type { Message } from "../../codec/MessageCodec.js";
 import type { Agent } from "../../endpoint/Agent.js";
 import type { Endpoint } from "../../endpoint/Endpoint.js";
 import type { EndpointType } from "../../endpoint/type/EndpointType.js";
+import { MessageExchange } from "../../protocol/MessageExchange.js";
 import type { SecureSession } from "../../session/SecureSession.js";
 import type { ValueSupervisor } from "../supervision/ValueSupervisor.js";
 import { NodeActivity } from "./NodeActivity.js";
@@ -41,6 +42,11 @@ export interface ActionContext extends ValueSupervisor.Session {
      * The Matter session in which an interaction occurs.
      */
     session?: SecureSession<MatterDevice>;
+
+    /**
+     * The Matter exchange in which an interaction occurs.
+     */
+    exchange?: MessageExchange<MatterDevice>;
 
     /**
      * The wire message that initiated invocation.

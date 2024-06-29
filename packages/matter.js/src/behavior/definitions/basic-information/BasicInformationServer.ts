@@ -75,6 +75,14 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
             }
             this.reactTo(this.events.reachable$Changed, this.#emitReachableChange);
         }
+
+        if (
+            this.state.uniqueId !== undefined &&
+            this.state.serialNumber !== undefined &&
+            this.state.uniqueId === this.state.serialNumber
+        ) {
+            logger.warn("uniqueId and serialNumber shall not be the same.");
+        }
     }
 
     [Symbol.asyncDispose]() {

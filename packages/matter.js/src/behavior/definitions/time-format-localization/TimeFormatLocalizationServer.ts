@@ -82,3 +82,10 @@ export class TimeFormatLocalizationServer extends TimeFormatLocalizationBehavior
         }
     }
 }
+
+export namespace TimeFormatLocalizationServer {
+    export declare const ExtensionInterface: {
+        detectedHourFormat: string;
+        detectedCalendarType: string;
+    };
+}
