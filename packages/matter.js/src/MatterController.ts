@@ -251,7 +251,9 @@ export class MatterController {
         if (netInterfaceIpv4 !== undefined) {
             this.addTransportInterface(netInterfaceIpv4);
         }
-        this.addTransportInterface(netInterfaceIpv6);
+        if (netInterfaceIpv6 !== undefined) {
+            this.addTransportInterface(netInterfaceIpv6);
+        }
 
         this.#construction = AsyncConstruction(this, async () => {
             // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
@@ -294,7 +296,9 @@ export class MatterController {
     ) {
         const scannersToUse = new Array<Scanner>();
 
-        scannersToUse.push(this.mdnsScanner); // Scan always on IP Network
+        if (this.mdnsScanner !== undefined) {
+            scannersToUse.push(this.mdnsScanner); // Scan always on IP Network if available
+        }
 
         if (discoveryCapabilities.ble) {
             if (this.bleScanner === undefined) {
@@ -343,12 +347,14 @@ export class MatterController {
         } = options;
         let identifierData = "identifierData" in options.discovery ? options.discovery.identifierData : {};
 
-        discoveryCapabilities.onIpNetwork = true; // We always discover on network as defined by specs
+        if (this.mdnsScanner !== undefined && this.netInterfaceIpv6 !== undefined) {
+            discoveryCapabilities.onIpNetwork = true; // We always discover on network as defined by specs
+        }
         if (commissionableDevice !== undefined) {
             let { addresses } = commissionableDevice;
             if (discoveryCapabilities.ble === true) {
                 discoveryCapabilities = { onIpNetwork: true, ble: addresses.some(address => address.type === "ble") };
-            } else {
+            } else if (discoveryCapabilities.onIpNetwork === true) {
                 // do not use BLE if not specified, even if existing
                 addresses = addresses.filter(address => address.type !== "ble");
             }
@@ -562,7 +568,7 @@ export class MatterController {
             throw error;
         }
 
-        await this.fabricStorage.set("fabric", this.fabric.toStorageObject());
+        await this.fabricStorage?.set("fabric", this.fabric.toStorageObject());
 
         return peerNodeId;
     }
@@ -597,6 +603,11 @@ export class MatterController {
         timeoutSeconds?: number,
         discoveryData?: DiscoveryData,
     ) {
+        if (this.mdnsScanner === undefined) {
+            throw new ImplementationError("Cannot discover device without mDNS scanner.");
+        }
+        const mdnsScanner = this.mdnsScanner;
+
         const discoveryPromises = new Array<() => Promise<MessageChannel<MatterController>>>();
 
         // Additionally to general discovery we also try to poll the formerly known operational address
@@ -647,7 +658,7 @@ export class MatterController {
             const scanResult = await ControllerDiscovery.discoverOperationalDevice(
                 this.fabric,
                 peerNodeId,
-                this.mdnsScanner,
+                mdnsScanner,
                 timeoutSeconds,
                 timeoutSeconds === undefined,
             );
@@ -659,7 +670,7 @@ export class MatterController {
                 [scanResult],
                 PairRetransmissionLimitReachedError,
                 async () => {
-                    const device = this.mdnsScanner.getDiscoveredOperationalDevice(this.fabric, peerNodeId);
+                    const device = mdnsScanner.getDiscoveredOperationalDevice(this.fabric, peerNodeId);
                     return device !== undefined ? [device] : [];
                 },
                 async (address, device) => {
@@ -814,7 +825,7 @@ export class MatterController {
     }
 
     private async storeCommissionedNodes() {
-        await this.nodesStore.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
+        await this.nodesStorage.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
     }
 
     /**
@@ -872,7 +883,7 @@ export class MatterController {
         await this.channelManager.close();
         await this.netInterfaceBle?.close();
         await this.netInterfaceIpv4?.close();
-        await this.netInterfaceIpv6.close();
+        await this.netInterfaceIpv6?.close();
     }
 
     getActiveSessionInformation() {
