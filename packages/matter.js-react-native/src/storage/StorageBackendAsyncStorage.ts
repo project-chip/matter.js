@@ -39,7 +39,8 @@ export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
     }
 
     clear() {
-        return AsyncStorage.default.clear();
+        // @ts-expect-error AsyncStorage types are not correct
+        return AsyncStorage.clear();
     }
 
     getContextBaseKey(contexts: string[], allowEmptyContext = false) {
@@ -63,7 +64,8 @@ export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
     }
 
     async get<T extends SupportedStorageTypes>(contexts: string[], key: string): Promise<T | undefined> {
-        const value = await AsyncStorage.default.getItem(this.buildStorageKey(contexts, key));
+        // @ts-expect-error AsyncStorage types are not correct
+        const value = await AsyncStorage.getItem(this.buildStorageKey(contexts, key));
         if (value === null) return undefined;
         return fromJson(value) as T;
     }
@@ -76,16 +78,19 @@ export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
         value?: SupportedStorageTypes,
     ) {
         if (typeof keyOrValues === "string") {
-            await AsyncStorage.default.setItem(this.buildStorageKey(contexts, keyOrValues), toJson(value));
+            // @ts-expect-error AsyncStorage types are not correct
+            await AsyncStorage.setItem(this.buildStorageKey(contexts, keyOrValues), toJson(value));
         } else {
             for (const [key, value] of Object.entries(keyOrValues)) {
-                await AsyncStorage.default.setItem(this.buildStorageKey(contexts, key), toJson(value));
+                // @ts-expect-error AsyncStorage types are not correct
+                await AsyncStorage.setItem(this.buildStorageKey(contexts, key), toJson(value));
             }
         }
     }
 
     delete(contexts: string[], key: string) {
-        return AsyncStorage.default.removeItem(this.buildStorageKey(contexts, key));
+        // @ts-expect-error AsyncStorage types are not correct
+        return AsyncStorage.removeItem(this.buildStorageKey(contexts, key));
     }
 
     /** Returns all keys of a storage context without keys of sub-contexts */
@@ -93,7 +98,8 @@ export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
         const contextKey = this.getContextBaseKey(contexts);
         const keys = [];
         const contextKeyStart = `${contextKey}.`;
-        const allKeys = await AsyncStorage.default.getAllKeys();
+        // @ts-expect-error AsyncStorage types are not correct
+        const allKeys = await AsyncStorage.getAllKeys();
         for (const key of allKeys) {
             if (key.startsWith(contextKeyStart) && key.indexOf(".", contextKeyStart.length) === -1) {
                 keys.push(key.substring(contextKeyStart.length));
@@ -115,7 +121,8 @@ export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
         const contextKey = this.getContextBaseKey(contexts, true);
         const startContextKey = contextKey.length ? `${contextKey}.` : "";
         const foundContexts = new Array<string>();
-        const allKeys = await AsyncStorage.default.getAllKeys();
+        // @ts-expect-error AsyncStorage types are not correct
+        const allKeys = await AsyncStorage.getAllKeys();
         for (const key of allKeys) {
             if (key.startsWith(startContextKey)) {
                 const subKeys = key.substring(startContextKey.length).split(".");
@@ -132,10 +139,12 @@ export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
     async clearAll(contexts: string[]) {
         const contextKey = this.getContextBaseKey(contexts, true);
         const startContextKey = contextKey.length ? `${contextKey}.` : "";
-        const allKeys = await AsyncStorage.default.getAllKeys();
+        // @ts-expect-error AsyncStorage types are not correct
+        const allKeys = await AsyncStorage.getAllKeys();
         for (const key of allKeys) {
             if (key.startsWith(startContextKey)) {
-                await AsyncStorage.default.removeItem(key);
+                // @ts-expect-error AsyncStorage types are not correct
+                await AsyncStorage.removeItem(key);
             }
         }
     }
