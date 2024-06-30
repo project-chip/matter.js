@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-react-native",
-    "version": "0.10.0-alpha.0-20240629-e3ed5979",
+    "version": "0.10.0-alpha.0-20240630-77b4749e",
     "description": "Matter BLE support for node.js",
     "keywords": [
         "iot",
@@ -29,13 +29,13 @@
         "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.10.0-alpha.0-20240629-e3ed5979",
+        "@project-chip/matter.js-tools": "0.10.0-alpha.0-20240630-77b4749e",
         "ts-node": "^10.9.2",
         "typescript": "~5.5.2"
     },
     "dependencies": {
-        "@project-chip/matter-node.js": "0.10.0-alpha.0-20240629-e3ed5979",
-        "@project-chip/matter.js": "0.10.0-alpha.0-20240629-e3ed5979",
+        "@project-chip/matter-node.js": "0.10.0-alpha.0-20240630-77b4749e",
+        "@project-chip/matter.js": "0.10.0-alpha.0-20240630-77b4749e",
         "react-native-ble-plx": "^3.2.0",
         "react-native-quick-crypto": "^0.7.0-rc.9",
         "react-native-udp": "^4.1.7"
