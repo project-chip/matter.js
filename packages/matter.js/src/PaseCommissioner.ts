@@ -24,9 +24,9 @@ import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
 
-const logger = new Logger("StubCommissioner");
+const logger = new Logger("PaseCommissioner");
 
-type StubCommissionerOptions = Omit<CommissioningControllerOptions, "environment"> & {
+type PaseCommissionerOptions = Omit<CommissioningControllerOptions, "environment"> & {
     /** The environment for the controller. */
     environment: ControllerEnvironmentOptions;
 
@@ -38,11 +38,11 @@ type StubCommissionerOptions = Omit<CommissioningControllerOptions, "environment
 };
 
 /**
- * This represents a lightweight "Stub" commissioner that can be used to start the commissioning process to commission
+ * This represents a lightweight commissioner that can be used to start the commissioning process to commission
  * devices into an existing controller fabric. Once the initial commissioning process is completed, it uses a callback
  * to all to complete the commissioning process.
  */
-export class StubCommissioner {
+export class PaseCommissioner {
     private readonly environment: Environment;
     private controllerInstance?: MatterController;
 
@@ -51,7 +51,7 @@ export class StubCommissioner {
      *
      * @param options The options for the CommissioningController
      */
-    constructor(private readonly options: StubCommissionerOptions) {
+    constructor(private readonly options: PaseCommissionerOptions) {
         if (options.environment === undefined) {
             throw new ImplementationError("You need to prove an environment for the commissioner.");
         }
@@ -97,7 +97,7 @@ export class StubCommissioner {
             logger.debug("No networking available, using only BLE");
         }
 
-        return await MatterController.createAsStubCommissioner({
+        return await MatterController.createAsPaseCommissioner({
             rootCertificateData,
             fabricData,
             netInterfaceIpv4,

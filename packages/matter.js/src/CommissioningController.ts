@@ -268,7 +268,7 @@ export class CommissioningController extends MatterNode {
     }
 
     /**
-     * Completes the commissioning process for a node when the initial commissioning process was done by an stub
+     * Completes the commissioning process for a node when the initial commissioning process was done by a PASE
      * commissioner. This method should be called to discover the device operational and complete the commissioning
      * process.
      */

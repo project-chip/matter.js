@@ -55,7 +55,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   matter.js API:
     -   Feature: Adds default implementations for i18n clusters including Localization, Time Format Localization and Unit Localization.
     -   Feature: Adds interactionBegin and interactionEnd events for ClusterBehaviors to demarcate online interactions that mutate state.
--   matter.js Legacy API:
+- matter.js Controller API:
+    -   Feature: Adds PaseCommissioner to allow to execute the initial (PASE based) commissioning process separately from the operational completion of the commissioning process, also allowed to be BLE only.   
+- matter.js Legacy API:
     -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
     -   Removal: We removed old Scenes cluster implementation which was never fully implemented or used by any Matter controller
 -   matter.js-react-native:

@@ -185,7 +185,7 @@ export class MatterController {
         return controller;
     }
 
-    public static async createAsStubCommissioner(options: {
+    public static async createAsPaseCommissioner(options: {
         rootCertificateData: RootCertificateManager.Data;
         fabricData: FabricJsonObject;
         mdnsScanner?: MdnsScanner;

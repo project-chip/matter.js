@@ -8,4 +8,4 @@ export * from "./CommissioningController.js";
 export * from "./CommissioningServer.js";
 export * from "./MatterNode.js";
 export * from "./MatterServer.js";
-export * from "./StubCommissioner.js";
+export * from "./PaseCommissioner.js";
