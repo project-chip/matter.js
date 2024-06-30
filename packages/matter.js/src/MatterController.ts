@@ -341,6 +341,14 @@ export class MatterController {
         return this.fabric.rootNodeId;
     }
 
+    get rootCertificateData() {
+        return this.certificateManager.data;
+    }
+
+    get fabricData() {
+        return this.fabric.toStorageObject();
+    }
+
     /** Returns our default session parameters for us as a controller. */
     get sessionParameters(): SessionParameters {
         return {

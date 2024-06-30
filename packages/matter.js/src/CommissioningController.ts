@@ -176,6 +176,16 @@ export class CommissioningController extends MatterNode {
         return this.controllerInstance?.nodeId;
     }
 
+    get paseCommissionerData() {
+        const controller = this.assertControllerIsStarted(
+            "The CommissioningController needs to be started to get the PASE commissioner data.",
+        );
+        return {
+            rootCertificateData: controller.rootCertificateData,
+            fabricData: controller.fabricData,
+        };
+    }
+
     assertIsAddedToMatterServer() {
         if (this.mdnsScanner === undefined || (this.storage === undefined && this.environment === undefined)) {
             throw new ImplementationError("Add the node to the Matter instance before.");

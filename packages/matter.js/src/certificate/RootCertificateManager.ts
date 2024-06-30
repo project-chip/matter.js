@@ -79,6 +79,16 @@ export class RootCertificateManager {
         return this.rootCertBytes;
     }
 
+    get data(): RootCertificateManager.Data {
+        return {
+            rootCertId: this.rootCertId,
+            rootKeyPair: this.rootKeyPair.keyPair,
+            rootKeyIdentifier: this.rootKeyIdentifier,
+            rootCertBytes: this.rootCertBytes,
+            nextCertificateId: this.nextCertificateId,
+        };
+    }
+
     private generateRootCert() {
         const now = Time.get().now();
         const unsignedCertificate: Unsigned<RootCertificate> = {
