@@ -41,6 +41,18 @@ const logger = new Logger("CommissioningController");
 // TODO decline using setRoot*Cluster
 // TODO Decline cluster access after announced/paired
 
+export type ControllerEnvironmentOptions = {
+    /**
+     * Environment to register the node with on start()
+     */
+    readonly environment: Environment;
+
+    /**
+     * Unique id to register to node.
+     */
+    readonly id: string;
+};
+
 /**
  * Constructor options for the CommissioningController class
  */
@@ -89,17 +101,7 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
      * When used with the new API Environment set the environment here and the CommissioningServer will self-register
      * on the environment when you call start().
      */
-    readonly environment?: {
-        /**
-         * Environment to register the node with on start()
-         */
-        readonly environment: Environment;
-
-        /**
-         * Unique id to register to node.
-         */
-        readonly id: string;
-    };
+    readonly environment?: ControllerEnvironmentOptions;
 };
 
 /** Options needed to commission a new node */
