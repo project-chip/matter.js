@@ -673,8 +673,14 @@ export class MatterController {
         const { errorCode, debugText } = await generalCommissioningClusterClient.commissioningComplete(undefined, {
             useExtendedFailSafeMessageResponseTimeout: true,
         });
-        if (errorCode === GeneralCommissioning.CommissioningError.Ok) return;
-        throw new CommissioningError(`Commission error on commissioningComplete: ${errorCode}, ${debugText}`);
+        if (errorCode !== GeneralCommissioning.CommissioningError.Ok) {
+            if (this.commissionedNodes.has(peerNodeId)) {
+                // We might have added data for an operational address that we need to cleanup
+                this.commissionedNodes.delete(peerNodeId);
+            }
+            throw new CommissioningError(`Commission error on commissioningComplete: ${errorCode}, ${debugText}`);
+        }
+        await this.fabricStorage?.set("fabric", this.fabric.toStorageObject());
     }
 
     private async reconnectLastKnownAddress(

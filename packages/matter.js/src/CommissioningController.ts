@@ -9,7 +9,7 @@ import { GlobalAttributes } from "./cluster/Cluster.js";
 import { SupportedAttributeClient } from "./cluster/client/AttributeClient.js";
 import { BasicInformation } from "./cluster/definitions/BasicInformationCluster.js";
 import { ImplementationError, InternalError } from "./common/MatterError.js";
-import { CommissionableDevice, CommissionableDeviceIdentifiers } from "./common/Scanner.js";
+import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData } from "./common/Scanner.js";
 import { ServerAddress } from "./common/ServerAddress.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
@@ -265,6 +265,17 @@ export class CommissioningController extends MatterNode {
         }
 
         return nodeId;
+    }
+
+    /**
+     * Completes the commissioning process for a node when the initial commissioning process was done by an stub
+     * commissioner. This method should be called to discover the device operational and complete the commissioning
+     * process.
+     */
+    completeCommissioningForNode(peerNodeId: NodeId, discoveryData?: DiscoveryData) {
+        this.assertIsAddedToMatterServer();
+        const controller = this.assertControllerIsStarted();
+        return controller.completeCommissioning(peerNodeId, discoveryData);
     }
 
     /** Check if a given node id is commissioned on this controller. */
