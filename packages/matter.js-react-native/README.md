@@ -10,6 +10,7 @@ This package uses the following react-native libraries to provide the needed fun
 - react-native-quick-crypto
 - react-native-ble-plx
 - react-native-udp
+- @react-native-async-storage/async-storage
   Please check these projects if special preparations need to be done for your developed app.
 
 
