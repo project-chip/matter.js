@@ -227,17 +227,17 @@ export class CommissioningController extends MatterNode {
             throw new InternalError("Storage not initialized correctly."); // Should not happen
         }
 
-        return await MatterController.create(
+        return await MatterController.create({
             sessionStorage,
             rootCertificateStorage,
             fabricStorage,
             nodesStorage,
             mdnsScanner,
-            this.ipv4Disabled
+            netInterfaceIpv4: this.ipv4Disabled
                 ? undefined
                 : await UdpInterface.create(Network.get(), "udp4", localPort, this.listeningAddressIpv4),
-            await UdpInterface.create(Network.get(), "udp6", localPort, this.listeningAddressIpv6),
-            peerNodeId => {
+            netInterfaceIpv6: await UdpInterface.create(Network.get(), "udp6", localPort, this.listeningAddressIpv6),
+            sessionClosedCallback: peerNodeId => {
                 logger.info(`Session for peer node ${peerNodeId} disconnected ...`);
                 const handler = this.sessionDisconnectedHandler.get(peerNodeId);
                 if (handler !== undefined) {
@@ -248,7 +248,7 @@ export class CommissioningController extends MatterNode {
             adminFabricId,
             adminFabricIndex,
             caseAuthenticatedTags,
-        );
+        });
     }
 
     /**

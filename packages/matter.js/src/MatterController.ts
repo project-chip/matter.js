@@ -94,38 +94,53 @@ const logger = Logger.get("MatterController");
 export class PairRetransmissionLimitReachedError extends RetransmissionLimitReachedError {}
 
 export class MatterController {
-    public static async create(
-        sessionStorage: StorageContext,
-        rootCertificateStorage: StorageContext,
-        fabricStorage: StorageContext,
-        nodesStorage: StorageContext,
-        scanner: MdnsScanner,
-        netInterfaceIpv4: NetInterface | undefined,
-        netInterfaceIpv6: NetInterface,
-        sessionClosedCallback?: (peerNodeId: NodeId) => void,
-        adminVendorId: VendorId = VendorId(DEFAULT_ADMIN_VENDOR_ID),
-        adminFabricId: FabricId = FabricId(DEFAULT_FABRIC_ID),
-        adminFabricIndex: FabricIndex = FabricIndex(DEFAULT_FABRIC_INDEX),
-        caseAuthenticatedTags?: CaseAuthenticatedTag[],
-    ): Promise<MatterController> {
+    public static async create(options: {
+        sessionStorage: StorageContext;
+        rootCertificateStorage: StorageContext;
+        fabricStorage: StorageContext;
+        nodesStorage: StorageContext;
+        mdnsScanner: MdnsScanner;
+        netInterfaceIpv4: NetInterface | undefined;
+        netInterfaceIpv6: NetInterface;
+        sessionClosedCallback?: (peerNodeId: NodeId) => void;
+        adminVendorId?: VendorId;
+        adminFabricId?: FabricId;
+        adminFabricIndex?: FabricIndex;
+        caseAuthenticatedTags?: CaseAuthenticatedTag[];
+    }): Promise<MatterController> {
+        const {
+            sessionStorage,
+            rootCertificateStorage,
+            fabricStorage,
+            nodesStorage,
+            mdnsScanner,
+            netInterfaceIpv4,
+            netInterfaceIpv6,
+            sessionClosedCallback,
+            adminVendorId = VendorId(DEFAULT_ADMIN_VENDOR_ID),
+            adminFabricId = FabricId(DEFAULT_FABRIC_ID),
+            adminFabricIndex = FabricIndex(DEFAULT_FABRIC_INDEX),
+            caseAuthenticatedTags,
+        } = options;
+
         const certificateManager = await RootCertificateManager.create(rootCertificateStorage);
 
         let controller: MatterController;
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         if (fabricStorage.has("fabric")) {
-            const storedFabric = Fabric.createFromStorageObject(await fabricStorage.get<FabricJsonObject>("fabric"));
-            controller = new MatterController(
+            const fabric = Fabric.createFromStorageObject(await fabricStorage.get<FabricJsonObject>("fabric"));
+            controller = new MatterController({
                 sessionStorage,
                 fabricStorage,
                 nodesStorage,
-                scanner,
+                mdnsScanner,
                 netInterfaceIpv4,
                 netInterfaceIpv6,
                 certificateManager,
-                storedFabric,
-                storedFabric.rootVendorId,
+                fabric,
+                adminVendorId: fabric.rootVendorId,
                 sessionClosedCallback,
-            );
+            });
         } else {
             const rootNodeId = NodeId.randomOperationalNodeId();
             const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
@@ -142,19 +157,20 @@ export class MatterController {
                     caseAuthenticatedTags,
                 ),
             );
+            const fabric = await fabricBuilder.build(adminFabricIndex);
 
-            controller = new MatterController(
+            controller = new MatterController({
                 sessionStorage,
                 fabricStorage,
                 nodesStorage,
-                scanner,
+                mdnsScanner,
                 netInterfaceIpv4,
                 netInterfaceIpv6,
                 certificateManager,
-                await fabricBuilder.build(adminFabricIndex),
+                fabric,
                 adminVendorId,
                 sessionClosedCallback,
-            );
+            });
         }
         await controller.construction;
         return controller;
@@ -170,22 +186,56 @@ export class MatterController {
     private readonly commissionedNodes = new Map<NodeId, CommissionedNodeDetails>();
     #construction: AsyncConstruction<MatterController>;
 
+    readonly sessionStorage: StorageContext;
+    readonly fabricStorage?: StorageContext;
+    readonly nodesStorage: StorageContext;
+    private readonly mdnsScanner: MdnsScanner | undefined;
+    private readonly netInterfaceIpv4: NetInterface | undefined;
+    private readonly netInterfaceIpv6: NetInterface | undefined;
+    private readonly certificateManager: RootCertificateManager;
+    private readonly fabric: Fabric;
+    private readonly adminVendorId: VendorId;
+    private readonly sessionClosedCallback?: (peerNodeId: NodeId) => void;
+
     get construction() {
         return this.#construction;
     }
 
-    constructor(
-        readonly sessionStorage: StorageContext,
-        readonly fabricStorage: StorageContext,
-        readonly nodesStore: StorageContext,
-        private readonly mdnsScanner: MdnsScanner,
-        private readonly netInterfaceIpv4: NetInterface | undefined,
-        private readonly netInterfaceIpv6: NetInterface,
-        private readonly certificateManager: RootCertificateManager,
-        private readonly fabric: Fabric,
-        private readonly adminVendorId: VendorId,
-        private readonly sessionClosedCallback?: (peerNodeId: NodeId) => void,
-    ) {
+    constructor(options: {
+        sessionStorage: StorageContext;
+        fabricStorage?: StorageContext;
+        nodesStorage: StorageContext;
+        mdnsScanner?: MdnsScanner;
+        netInterfaceIpv4?: NetInterface;
+        netInterfaceIpv6?: NetInterface;
+        certificateManager: RootCertificateManager;
+        fabric: Fabric;
+        adminVendorId: VendorId;
+        sessionClosedCallback?: (peerNodeId: NodeId) => void;
+    }) {
+        const {
+            sessionStorage,
+            fabricStorage,
+            nodesStorage,
+            mdnsScanner,
+            netInterfaceIpv4,
+            netInterfaceIpv6,
+            certificateManager,
+            fabric,
+            sessionClosedCallback,
+            adminVendorId,
+        } = options;
+        this.sessionStorage = sessionStorage;
+        this.fabricStorage = fabricStorage;
+        this.nodesStorage = nodesStorage;
+        this.mdnsScanner = mdnsScanner;
+        this.netInterfaceIpv4 = netInterfaceIpv4;
+        this.netInterfaceIpv6 = netInterfaceIpv6;
+        this.certificateManager = certificateManager;
+        this.fabric = fabric;
+        this.sessionClosedCallback = sessionClosedCallback;
+        this.adminVendorId = adminVendorId;
+
         this.sessionManager = new SessionManager(this, sessionStorage);
         this.sessionManager.sessionClosed.on(async session => {
             if (!session.closingAfterExchangeFinished) {
@@ -197,6 +247,7 @@ export class MatterController {
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
         this.exchangeManager.addProtocolHandler(new StatusReportOnlySecureChannelProtocol());
+
         if (netInterfaceIpv4 !== undefined) {
             this.addTransportInterface(netInterfaceIpv4);
         }
@@ -204,9 +255,9 @@ export class MatterController {
 
         this.#construction = AsyncConstruction(this, async () => {
             // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
-            if (await this.nodesStore.has("commissionedNodes")) {
+            if (await this.nodesStorage.has("commissionedNodes")) {
                 const commissionedNodes =
-                    await this.nodesStore.get<[NodeId, CommissionedNodeDetails][]>("commissionedNodes");
+                    await this.nodesStorage.get<[NodeId, CommissionedNodeDetails][]>("commissionedNodes");
                 this.commissionedNodes.clear();
                 for (const [nodeId, details] of commissionedNodes) {
                     this.commissionedNodes.set(nodeId, details);
