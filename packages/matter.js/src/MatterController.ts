@@ -13,14 +13,16 @@
 import { NodeCommissioningOptions } from "./CommissioningController.js";
 import { Ble } from "./ble/Ble.js";
 import { RootCertificateManager } from "./certificate/RootCertificateManager.js";
+import { ClusterClient } from "./cluster/client/ClusterClient.js";
 import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
 import { Channel } from "./common/Channel.js";
-import { NoProviderError } from "./common/MatterError.js";
+import { ImplementationError, NoProviderError } from "./common/MatterError.js";
 import { CommissionableDevice, DiscoveryData, Scanner } from "./common/Scanner.js";
 import { ServerAddress, ServerAddressIp, serverAddressToString } from "./common/ServerAddress.js";
 import { tryCatchAsync } from "./common/TryCatchHandler.js";
 import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "./crypto/Crypto.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
+import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { FabricId } from "./datatype/FabricId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
@@ -31,7 +33,12 @@ import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { Specification } from "./model/definitions/Specification.js";
 import { NetInterface } from "./net/NetInterface.js";
 import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
-import { CommissioningOptions, ControllerCommissioner } from "./protocol/ControllerCommissioner.js";
+import {
+    CommissioningError,
+    CommissioningOptions,
+    CommissioningSuccessfullyFinished,
+    ControllerCommissioner,
+} from "./protocol/ControllerCommissioner.js";
 import { ControllerDiscovery, DiscoveryError } from "./protocol/ControllerDiscovery.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "./protocol/ExchangeManager.js";
 import { RetransmissionLimitReachedError } from "./protocol/MessageExchange.js";
@@ -49,7 +56,9 @@ import {
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
+import { StorageBackendMemory } from "./storage/StorageBackendMemory.js";
 import { StorageContext } from "./storage/StorageContext.js";
+import { StorageManager } from "./storage/StorageManager.js";
 import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 import { Time, Timer } from "./time/Time.js";
 import { TlvEnum } from "./tlv/TlvNumber.js";
@@ -172,6 +181,64 @@ export class MatterController {
                 sessionClosedCallback,
             });
         }
+        await controller.construction;
+        return controller;
+    }
+
+    public static async createAsStubCommissioner(options: {
+        rootCertificateData: RootCertificateManager.Data;
+        fabricData: FabricJsonObject;
+        mdnsScanner?: MdnsScanner;
+        netInterfaceIpv4?: NetInterface | undefined;
+        netInterfaceIpv6?: NetInterface;
+        sessionClosedCallback?: (peerNodeId: NodeId) => void;
+    }): Promise<MatterController> {
+        const {
+            rootCertificateData,
+            fabricData,
+            mdnsScanner,
+            netInterfaceIpv4,
+            netInterfaceIpv6,
+            sessionClosedCallback,
+        } = options;
+
+        // Verify BLE initialization
+        try {
+            Ble.get();
+        } catch (error) {
+            if (error instanceof NoProviderError) {
+                if (!mdnsScanner || !netInterfaceIpv6) {
+                    throw new ImplementationError(
+                        "Ble must be initialized to create a Sub Commissioner without an IP network!",
+                    );
+                }
+                logger.info("BLE is not enabled. Using only IP network for commissioning.");
+            } else {
+                throw error;
+            }
+        }
+
+        const certificateManager = await RootCertificateManager.create(rootCertificateData);
+
+        // Stored data are temporary anyway and no node will be connected, so just use an in-memory storage
+        const storageManager = new StorageManager(new StorageBackendMemory());
+        storageManager.initialize();
+        const sessionStorage = storageManager.createContext("sessions");
+        const nodesStorage = storageManager.createContext("nodes");
+
+        const fabric = Fabric.createFromStorageObject(fabricData);
+        // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
+        const controller = new MatterController({
+            sessionStorage,
+            nodesStorage,
+            mdnsScanner,
+            netInterfaceIpv4,
+            netInterfaceIpv6,
+            certificateManager,
+            fabric,
+            adminVendorId: fabric.rootVendorId,
+            sessionClosedCallback,
+        });
         await controller.construction;
         return controller;
     }
@@ -330,8 +397,15 @@ export class MatterController {
      * each other. It returns the NodeId of the commissioned device.
      * If it throws an PairRetransmissionLimitReachedError that means that no found device responded to the pairing
      * request or the passode did not match to any discovered device/address.
+     *
+     * Use the connectNodeAfterCommissioning callback to implement an own logic to do the operative device discovery and
+     * to complete the commissioning process.
+     * Return true when the commissioning process is completed successfully, false on error.
      */
-    async commission(options: NodeCommissioningOptions): Promise<NodeId> {
+    async commission(
+        options: NodeCommissioningOptions,
+        completeCommissioningCallback?: (peerNodeId: NodeId, discoveryData?: DiscoveryData) => Promise<boolean>,
+    ): Promise<NodeId> {
         const {
             commissioning: commissioningOptions = {
                 regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
@@ -413,7 +487,12 @@ export class MatterController {
             paseSecureChannel = result;
         }
 
-        return await this.commissionDevice(paseSecureChannel, commissioningOptions, discoveryData);
+        return await this.commissionDevice(
+            paseSecureChannel,
+            commissioningOptions,
+            discoveryData,
+            completeCommissioningCallback,
+        );
     }
 
     async disconnect(nodeId: NodeId) {
@@ -503,6 +582,7 @@ export class MatterController {
         paseSecureMessageChannel: MessageChannel<MatterController>,
         commissioningOptions: CommissioningOptions,
         discoveryData?: DiscoveryData,
+        completeCommissioningCallback?: (peerNodeId: NodeId, discoveryData?: DiscoveryData) => Promise<boolean>,
     ): Promise<NodeId> {
         // TODO: Create the fabric only when needed before commissioning (to do when refactoring MatterController away)
         // TODO also move certificateManager and other parts into that class to get rid of them here
@@ -553,6 +633,12 @@ export class MatterController {
                  */
                 await paseSecureMessageChannel.close(); // We reconnect using Case, so close PASE connection
 
+                if (completeCommissioningCallback !== undefined) {
+                    if (!(await completeCommissioningCallback(peerNodeId, discoveryData))) {
+                        throw new RetransmissionLimitReachedError("Device could not be discovered");
+                    }
+                    throw new CommissioningSuccessfullyFinished();
+                }
                 // Look for the device broadcast over MDNS and do CASE pairing
                 return await this.connect(peerNodeId, 120, discoveryData); // Wait maximum 120s to find the operational device for commissioning process
             },
@@ -571,6 +657,24 @@ export class MatterController {
         await this.fabricStorage?.set("fabric", this.fabric.toStorageObject());
 
         return peerNodeId;
+    }
+
+    /**
+     * Method to complete the commissioning process to a node which was initialized with a PASE secure channel.
+     */
+    async completeCommissioning(peerNodeId: NodeId, discoveryData?: DiscoveryData) {
+        // Look for the device broadcast over MDNS and do CASE pairing
+        const interactionClient = await this.connect(peerNodeId, 120, discoveryData); // Wait maximum 120s to find the operational device for commissioning process
+        const generalCommissioningClusterClient = ClusterClient(
+            GeneralCommissioning.Cluster,
+            EndpointNumber(0),
+            interactionClient,
+        );
+        const { errorCode, debugText } = await generalCommissioningClusterClient.commissioningComplete(undefined, {
+            useExtendedFailSafeMessageResponseTimeout: true,
+        });
+        if (errorCode === GeneralCommissioning.CommissioningError.Ok) return;
+        throw new CommissioningError(`Commission error on commissioningComplete: ${errorCode}, ${debugText}`);
     }
 
     private async reconnectLastKnownAddress(
