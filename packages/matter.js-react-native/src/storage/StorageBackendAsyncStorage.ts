@@ -14,11 +14,16 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
+    #namespace: string;
     protected isInitialized = false;
 
-    constructor(clear = false) {
+    /**
+     * Creates a new instance of the AsyncStorage storage backend. In a "namespace" is provided then the keys will be
+     * prefixed with the namespace (separated with a # which is normally not used in matter.js keys).
+     */
+    constructor(namespace?: string) {
         super();
-        if (clear) this.clear();
+        this.#namespace = namespace ?? "";
     }
 
     get initialized() {
@@ -46,7 +51,7 @@ export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
             contextKey.endsWith(".")
         )
             throw new StorageError("Context must not be an empty and not contain dots.");
-        return contextKey;
+        return `${this.#namespace.length ? `${this.#namespace}#` : ""}${contextKey}`;
     }
 
     buildStorageKey(contexts: string[], key: string) {
@@ -107,7 +112,7 @@ export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
     }
 
     async contexts(contexts: string[]) {
-        const contextKey = contexts.length ? this.getContextBaseKey(contexts) : "";
+        const contextKey = this.getContextBaseKey(contexts, true);
         const startContextKey = contextKey.length ? `${contextKey}.` : "";
         const foundContexts = new Array<string>();
         const allKeys = await AsyncStorage.default.getAllKeys();

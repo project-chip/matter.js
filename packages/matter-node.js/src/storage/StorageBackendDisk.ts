@@ -102,7 +102,7 @@ export class StorageBackendDisk extends SyncStorage {
     }
 
     contexts(contexts: string[]) {
-        const contextKey = contexts.length ? this.getContextBaseKey(contexts) : "";
+        const contextKey = this.getContextBaseKey(contexts, true);
         const startContextKey = contextKey.length ? `${contextKey}.` : "";
         const foundContexts = new Array<string>();
         for (const key of Object.keys(this.localStorage)) {
