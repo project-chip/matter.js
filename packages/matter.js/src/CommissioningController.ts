@@ -9,7 +9,7 @@ import { GlobalAttributes } from "./cluster/Cluster.js";
 import { SupportedAttributeClient } from "./cluster/client/AttributeClient.js";
 import { BasicInformation } from "./cluster/definitions/BasicInformationCluster.js";
 import { ImplementationError, InternalError } from "./common/MatterError.js";
-import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData } from "./common/Scanner.js";
+import { CommissionableDevice, CommissionableDeviceIdentifiers } from "./common/Scanner.js";
 import { ServerAddress } from "./common/ServerAddress.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
@@ -145,13 +145,6 @@ export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
 
     /** Passcode to use for commissioning. */
     passcode: number;
-
-    /**
-     * Provide this callback to implement an own logic to do the operative device discovery and to complete the
-     * commissioning process.
-     * Return true when the commissioning process is completed successfully, false on error.
-     */
-    completeCommissioningCallback?: (peerNodeId: NodeId, discoveryData?: DiscoveryData) => Promise<boolean>;
 };
 
 /** Controller class to commission and connect multiple nodes into one fabric. */
@@ -524,7 +517,6 @@ export class CommissioningController extends MatterNode {
 
             const mdnsService = await environment.load(MdnsService);
             this.ipv4Disabled = !mdnsService.enableIpv4;
-            console.log("Init ipv4: ", this.ipv4Disabled);
             this.setMdnsBroadcaster(mdnsService.broadcaster);
             this.setMdnsScanner(mdnsService.scanner);
 
