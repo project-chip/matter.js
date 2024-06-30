@@ -222,7 +222,7 @@ export class MatterController {
 
         // Stored data are temporary anyway and no node will be connected, so just use an in-memory storage
         const storageManager = new StorageManager(new StorageBackendMemory());
-        storageManager.initialize();
+        await storageManager.initialize();
         const sessionStorage = storageManager.createContext("sessions");
         const nodesStorage = storageManager.createContext("nodes");
 
