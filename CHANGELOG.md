@@ -64,7 +64,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
     -   Removal: We removed old Scenes cluster implementation which was never fully implemented or used by any Matter controller
 -   matter.js-react-native:
-    -   Feature: Introduces new package that provides a React Native compatible platform Implementations for Matter.js. This package is still in development and should be considered experimental for now! Currently supports UDP, BLE and Crypto platform features. A In-memory storage is used for now because a react-native persisting Storage backend is missing currently.
+    -   Feature: Introduces new package that provides a React Native compatible platform Implementations for Matter.js. This package is still in development and should be considered experimental for now! Currently supports UDP, BLE, AsyncStorage and Crypto platform features.
 -   matter.js chip and python Testing:
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 
