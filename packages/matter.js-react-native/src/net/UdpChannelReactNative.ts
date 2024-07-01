@@ -66,9 +66,6 @@ export class UdpChannelReactNative implements UdpChannel {
                     throw new NetworkError(`No IPv4 addresses on interface: ${netInterface}`);
                 }
             } else {
-                if (netInterfaceZone === undefined) {
-                    throw new NetworkError(`No IPv6 addresses on interface: ${netInterface}`);
-                }
                 multicastInterface = `::%${netInterfaceZone}`;
             }
             logger.debug(
