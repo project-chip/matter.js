@@ -77,6 +77,8 @@ describe("MdnsServer", () => {
                 FAKE_INTERFACE_NAME,
             );
 
+            await MockTime.yield3();
+
             expect(responses).deep.equal([
                 {
                     message: {
@@ -117,6 +119,8 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 FAKE_INTERFACE_NAME,
             );
+
+            await MockTime.yield3();
 
             expect(responses).deep.equal([
                 {
@@ -159,6 +163,8 @@ describe("MdnsServer", () => {
                 FAKE_INTERFACE_NAME,
             );
 
+            await MockTime.yield3();
+
             expect(responses).deep.equal([
                 {
                     message: {
@@ -195,6 +201,8 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 FAKE_INTERFACE_NAME,
             );
+
+            await MockTime.yield3();
 
             expect(responses).deep.equal([
                 {
@@ -236,6 +244,8 @@ describe("MdnsServer", () => {
                 FAKE_INTERFACE_NAME,
             );
 
+            await MockTime.yield3();
+
             expect(responses).deep.equal([
                 {
                     message: {
@@ -276,6 +286,8 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 FAKE_INTERFACE_NAME,
             );
+
+            await MockTime.yield3();
 
             expect(responses).deep.equal([
                 {
@@ -371,6 +383,8 @@ describe("MdnsServer", () => {
                 FAKE_INTERFACE_NAME,
             );
 
+            await MockTime.yield3();
+
             expect(responses).deep.equal([
                 {
                     message: {
@@ -430,6 +444,8 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 FAKE_INTERFACE_NAME,
             );
+
+            await MockTime.yield3();
 
             expect(responses).deep.equal([
                 {
@@ -511,6 +527,8 @@ describe("MdnsServer", () => {
                 },
             ];
 
+            await MockTime.yield3();
+
             expect(responses).deep.equal(EXPEECTED_RESPONSE);
 
             responses.length = 0;
@@ -530,6 +548,8 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 FAKE_INTERFACE_NAME,
             );
+
+            await MockTime.yield3();
 
             expect(responses).deep.equal(EXPEECTED_RESPONSE);
         });
@@ -554,6 +574,8 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 FAKE_INTERFACE_NAME,
             );
+
+            await MockTime.yield3();
 
             expect(responses).deep.equal([
                 {
@@ -615,6 +637,8 @@ describe("MdnsServer", () => {
                 FAKE_INTERFACE_NAME,
             );
 
+            await MockTime.yield3();
+
             expect(responses).deep.equal([
                 {
                     message: {
@@ -646,6 +670,8 @@ describe("MdnsServer", () => {
                 DUMMY_IP,
                 FAKE_INTERFACE_NAME,
             );
+
+            await MockTime.yield3();
 
             expect(responses).deep.equal([
                 {
@@ -705,6 +731,8 @@ describe("MdnsServer", () => {
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, FAKE_INTERFACE_NAME);
 
+            await MockTime.yield3();
+
             expect(responses).deep.equal([{ ...RESPONSE, uniCastTarget: undefined }]);
         });
 
@@ -716,9 +744,12 @@ describe("MdnsServer", () => {
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, FAKE_INTERFACE_NAME);
 
+            await MockTime.yield3();
             await MockTime.advance(29_000); // less than 1/4 of ttl
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, FAKE_INTERFACE_NAME);
+
+            await MockTime.yield3();
 
             expect(responses).deep.equal([
                 { ...RESPONSE, uniCastTarget: undefined }, // multicast
@@ -734,9 +765,12 @@ describe("MdnsServer", () => {
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, FAKE_INTERFACE_NAME);
 
+            await MockTime.yield3();
             await MockTime.advance(31_000); // less than 1/4 of ttl
 
             send(DnsCodec.encode(QUERY), DUMMY_IP, FAKE_INTERFACE_NAME);
+
+            await MockTime.yield3();
 
             expect(responses).deep.equal([
                 { ...RESPONSE, uniCastTarget: undefined }, // multicast
@@ -789,6 +823,8 @@ describe("MdnsServer", () => {
                 FAKE_INTERFACE_NAME,
             );
 
+            await MockTime.yield3();
+
             expect(responses).deep.equal([
                 {
                     message: {
@@ -805,7 +841,7 @@ describe("MdnsServer", () => {
             ]);
         });
 
-        it("split answers into m,ultiple responses and add additional records in last one", async () => {
+        it("split answers into multiple responses and add additional records in last one", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
             onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
@@ -848,9 +884,7 @@ describe("MdnsServer", () => {
                 FAKE_INTERFACE_NAME,
             );
 
-            expect(responses.length).equal(1); // one packet directly
-
-            await MockTime.advance(150); // wait for next packet
+            await MockTime.yield3();
 
             expect(responses).deep.equal([
                 {
