@@ -390,9 +390,6 @@ export class CommissioningServer extends MatterNode {
             ),
         );
 
-        // TODO Get the defaults from the cluster meta details
-        this.rootEndpoint.addClusterServer(createDefaultGeneralDiagnosticsClusterServer(this.commandHandler));
-
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 AdministratorCommissioningCluster,
@@ -537,6 +534,8 @@ export class CommissioningServer extends MatterNode {
         }
 
         this.mdnsInstanceBroadcaster = this.mdnsBroadcaster.createInstanceBroadcaster(this.port);
+
+        this.rootEndpoint.addClusterServer(await createDefaultGeneralDiagnosticsClusterServer(this.commandHandler));
 
         const basicInformation = this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {

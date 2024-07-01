@@ -182,54 +182,58 @@ export class MdnsBroadcaster {
         const commissionModeQname = getCommissioningModeQname();
         const deviceQname = getDeviceInstanceQname(instanceId);
 
-        await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
-            const ipMac = this.#network.getIpMac(netInterface);
-            if (ipMac === undefined) return [];
-            const { mac, ipV4, ipV6 } = ipMac;
-            const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
+        await this.#mdnsServer.setRecordsGenerator(
+            announcedNetPort,
+            AnnouncementType.Commissionable,
+            async netInterface => {
+                const ipMac = await this.#network.getIpMac(netInterface);
+                if (ipMac === undefined) return [];
+                const { mac, ipV4, ipV6 } = ipMac;
+                const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
 
-            logger.debug(
-                "Announcement Generator: Commission mode ",
-                Diagnostic.dict({
-                    mode,
-                    qname: deviceQname,
-                    port: announcedNetPort,
-                    interface: netInterface,
-                }),
-            );
+                logger.debug(
+                    "Announcement Generator: Commission mode ",
+                    Diagnostic.dict({
+                        mode,
+                        qname: deviceQname,
+                        port: announcedNetPort,
+                        interface: netInterface,
+                    }),
+                );
 
-            const records = [
-                PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_COMMISSION_SERVICE_QNAME),
-                PtrRecord(SERVICE_DISCOVERY_QNAME, vendorQname),
-                PtrRecord(SERVICE_DISCOVERY_QNAME, deviceTypeQname),
-                PtrRecord(SERVICE_DISCOVERY_QNAME, shortDiscriminatorQname),
-                PtrRecord(SERVICE_DISCOVERY_QNAME, longDiscriminatorQname),
-                PtrRecord(SERVICE_DISCOVERY_QNAME, commissionModeQname),
-                PtrRecord(MATTER_COMMISSION_SERVICE_QNAME, deviceQname),
-                PtrRecord(vendorQname, deviceQname),
-                PtrRecord(deviceTypeQname, deviceQname),
-                PtrRecord(shortDiscriminatorQname, deviceQname),
-                PtrRecord(longDiscriminatorQname, deviceQname),
-                PtrRecord(commissionModeQname, deviceQname),
-                SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
-                TxtRecord(deviceQname, [
-                    `VP=${vendorId}+${productId}` /* Vendor / Product */,
-                    `DT=${deviceType}` /* Device Type */,
-                    `DN=${deviceName}` /* Device Name */,
-                    `SII=${sessionIdleInterval}` /* Session Idle Interval */,
-                    `SAI=${sessionActiveInterval}` /* Session Active Interval */,
-                    `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
-                    //`T=${TCP_SUPPORTED}` /* TCP not supported */,
-                    `D=${discriminator}` /* Discriminator */,
-                    `CM=${mode}` /* Commission Mode */,
-                    `PH=${PairingHintBitmapSchema.encode(pairingHint)}` /* Pairing Hint */,
-                    `PI=${pairingInstructions}` /* Pairing Instruction */,
-                    //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
-                ]),
-            ];
-            records.push(...this.#getIpRecords(hostname, [...ipV6, ...ipV4]));
-            return records;
-        });
+                const records = [
+                    PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_COMMISSION_SERVICE_QNAME),
+                    PtrRecord(SERVICE_DISCOVERY_QNAME, vendorQname),
+                    PtrRecord(SERVICE_DISCOVERY_QNAME, deviceTypeQname),
+                    PtrRecord(SERVICE_DISCOVERY_QNAME, shortDiscriminatorQname),
+                    PtrRecord(SERVICE_DISCOVERY_QNAME, longDiscriminatorQname),
+                    PtrRecord(SERVICE_DISCOVERY_QNAME, commissionModeQname),
+                    PtrRecord(MATTER_COMMISSION_SERVICE_QNAME, deviceQname),
+                    PtrRecord(vendorQname, deviceQname),
+                    PtrRecord(deviceTypeQname, deviceQname),
+                    PtrRecord(shortDiscriminatorQname, deviceQname),
+                    PtrRecord(longDiscriminatorQname, deviceQname),
+                    PtrRecord(commissionModeQname, deviceQname),
+                    SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
+                    TxtRecord(deviceQname, [
+                        `VP=${vendorId}+${productId}` /* Vendor / Product */,
+                        `DT=${deviceType}` /* Device Type */,
+                        `DN=${deviceName}` /* Device Name */,
+                        `SII=${sessionIdleInterval}` /* Session Idle Interval */,
+                        `SAI=${sessionActiveInterval}` /* Session Active Interval */,
+                        `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
+                        //`T=${TCP_SUPPORTED}` /* TCP not supported */,
+                        `D=${discriminator}` /* Discriminator */,
+                        `CM=${mode}` /* Commission Mode */,
+                        `PH=${PairingHintBitmapSchema.encode(pairingHint)}` /* Pairing Hint */,
+                        `PI=${pairingInstructions}` /* Pairing Instruction */,
+                        //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
+                    ]),
+                ];
+                records.push(...this.#getIpRecords(hostname, [...ipV6, ...ipV4]));
+                return records;
+            },
+        );
     }
 
     /** Set the Broadcaster Data to announce a device for operative discovery (aka "already paired") */
@@ -257,8 +261,8 @@ export class MdnsBroadcaster {
             fabrics.map(f => f.fabricIndex),
         );
 
-        await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Operative, netInterface => {
-            const ipMac = this.#network.getIpMac(netInterface);
+        await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Operative, async netInterface => {
+            const ipMac = await this.#network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ipV4, ipV6 } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
@@ -327,35 +331,39 @@ export class MdnsBroadcaster {
 
         this.#activeCommissioningAnnouncements.add(announcedNetPort);
 
-        await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
-            const ipMac = this.#network.getIpMac(netInterface);
-            if (ipMac === undefined) return [];
-            const { mac, ipV4, ipV6 } = ipMac;
-            const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
-            const records = [
-                PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_COMMISSIONER_SERVICE_QNAME),
-                PtrRecord(MATTER_COMMISSIONER_SERVICE_QNAME, vendorQname),
-                PtrRecord(vendorQname, deviceQname),
-                SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
-                TxtRecord(deviceQname, [
-                    `VP=${vendorId}+${productId}` /* Vendor / Product */,
-                    `DT=${deviceType}` /* Device Type */,
-                    `DN=${deviceName}` /* Device Name */,
-                    `SII=${sessionIdleInterval}` /* Session Idle Interval */,
-                    `SAI=${sessionActiveInterval}` /* Session Active Interval */,
-                    `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
-                    //`T=${TCP_SUPPORTED}` /* TCP not supported */,
-                    //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
-                ]),
-            ];
-            if (deviceType !== undefined) {
-                records.push(PtrRecord(SERVICE_DISCOVERY_QNAME, deviceTypeQname));
-                records.push(PtrRecord(deviceTypeQname, deviceQname));
-            }
+        await this.#mdnsServer.setRecordsGenerator(
+            announcedNetPort,
+            AnnouncementType.Commissionable,
+            async netInterface => {
+                const ipMac = await this.#network.getIpMac(netInterface);
+                if (ipMac === undefined) return [];
+                const { mac, ipV4, ipV6 } = ipMac;
+                const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
+                const records = [
+                    PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_COMMISSIONER_SERVICE_QNAME),
+                    PtrRecord(MATTER_COMMISSIONER_SERVICE_QNAME, vendorQname),
+                    PtrRecord(vendorQname, deviceQname),
+                    SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
+                    TxtRecord(deviceQname, [
+                        `VP=${vendorId}+${productId}` /* Vendor / Product */,
+                        `DT=${deviceType}` /* Device Type */,
+                        `DN=${deviceName}` /* Device Name */,
+                        `SII=${sessionIdleInterval}` /* Session Idle Interval */,
+                        `SAI=${sessionActiveInterval}` /* Session Active Interval */,
+                        `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
+                        //`T=${TCP_SUPPORTED}` /* TCP not supported */,
+                        //`ICD=${ICD_SUPPORTED}` /* ICD not supported */,
+                    ]),
+                ];
+                if (deviceType !== undefined) {
+                    records.push(PtrRecord(SERVICE_DISCOVERY_QNAME, deviceTypeQname));
+                    records.push(PtrRecord(deviceTypeQname, deviceQname));
+                }
 
-            records.push(...this.#getIpRecords(hostname, [...ipV6, ...ipV4]));
-            return records;
-        });
+                records.push(...this.#getIpRecords(hostname, [...ipV6, ...ipV4]));
+                return records;
+            },
+        );
     }
 
     async announce(announcementPort: number) {

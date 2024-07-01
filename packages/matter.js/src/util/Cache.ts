@@ -9,15 +9,14 @@
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Time, Timer } from "../time/Time.js";
 
-export class Cache<T> {
-    private readonly knownKeys = new Set<string>();
-    private readonly values = new Map<string, T>();
-    private readonly timestamps = new Map<string, number>();
+class GenericCache<T> {
+    protected readonly knownKeys = new Set<string>();
+    protected readonly values = new Map<string, T>();
+    protected readonly timestamps = new Map<string, number>();
     private readonly periodicTimer: Timer;
 
     constructor(
         name: string,
-        private readonly generator: (...params: any[]) => T,
         private readonly expirationMs: number,
         private readonly expireCallback?: (key: string, value: T) => Promise<void>,
     ) {
@@ -27,18 +26,6 @@ export class Cache<T> {
             () => this.expire(),
         ).start();
         this.periodicTimer.utility = true;
-    }
-
-    get(...params: any[]) {
-        const key = params.join(",");
-        let value = this.values.get(key);
-        if (value === undefined) {
-            value = this.generator(...params);
-            this.values.set(key, value);
-            this.knownKeys.add(key);
-        }
-        this.timestamps.set(key, Time.nowMs());
-        return value;
     }
 
     keys() {
@@ -74,5 +61,51 @@ export class Cache<T> {
             if (now - timestamp < this.expirationMs) continue;
             await this.deleteEntry(key);
         }
+    }
+}
+
+export class Cache<T> extends GenericCache<T> {
+    constructor(
+        name: string,
+        private readonly generator: (...params: any[]) => T,
+        expirationMs: number,
+        expireCallback?: (key: string, value: T) => Promise<void>,
+    ) {
+        super(name, expirationMs, expireCallback);
+    }
+
+    get(...params: any[]) {
+        const key = params.join(",");
+        let value = this.values.get(key);
+        if (value === undefined) {
+            value = this.generator(...params);
+            this.values.set(key, value);
+            this.knownKeys.add(key);
+        }
+        this.timestamps.set(key, Time.nowMs());
+        return value;
+    }
+}
+
+export class AsyncCache<T> extends GenericCache<T> {
+    constructor(
+        name: string,
+        private readonly generator: (...params: any[]) => Promise<T>,
+        expirationMs: number,
+        expireCallback?: (key: string, value: T) => Promise<void>,
+    ) {
+        super(name, expirationMs, expireCallback);
+    }
+
+    async get(...params: any[]) {
+        const key = params.join(",");
+        let value = this.values.get(key);
+        if (value === undefined) {
+            value = await this.generator(...params);
+            this.values.set(key, value);
+            this.knownKeys.add(key);
+        }
+        this.timestamps.set(key, Time.nowMs());
+        return value;
     }
 }

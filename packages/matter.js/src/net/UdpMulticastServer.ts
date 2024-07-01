@@ -92,10 +92,14 @@ export class UdpMulticastServer {
             }
         } else {
             const netInterfaces =
-                netInterface !== undefined ? [{ name: netInterface }] : this.network.getNetInterfaces();
+                netInterface !== undefined ? [{ name: netInterface }] : await this.network.getNetInterfaces();
             await Promise.all(
                 netInterfaces.map(async ({ name: netInterface }) => {
-                    const { ipV4, ipV6 } = this.network.getIpMac(netInterface) ?? { mac: "", ipV4: [], ipV6: [] };
+                    const { ipV4, ipV6 } = (await this.network.getIpMac(netInterface)) ?? {
+                        mac: "",
+                        ipV4: [],
+                        ipV6: [],
+                    };
                     const ips = [...ipV4, ...ipV6];
                     await Promise.all(
                         ips.map(async ip => {

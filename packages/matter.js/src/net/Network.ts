@@ -5,6 +5,7 @@
  */
 
 import { MatterError, NoProviderError } from "../common/MatterError.js";
+import { MaybePromise } from "../util/Promises.js";
 import { UdpChannel, UdpChannelOptions } from "./UdpChannel.js";
 
 export class NetworkError extends MatterError {}
@@ -59,8 +60,8 @@ export abstract class Network {
         throw new NoProviderError("No provider configured");
     };
 
-    abstract getNetInterfaces(configuration?: NetworkInterface[]): NetworkInterface[];
-    abstract getIpMac(netInterface: string): NetworkInterfaceDetails | undefined;
+    abstract getNetInterfaces(configuration?: NetworkInterface[]): MaybePromise<NetworkInterface[]>;
+    abstract getIpMac(netInterface: string): MaybePromise<NetworkInterfaceDetails | undefined>;
     abstract createUdpChannel(options: UdpChannelOptions): Promise<UdpChannel>;
 
     async close() {
