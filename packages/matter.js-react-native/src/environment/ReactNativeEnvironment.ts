@@ -6,13 +6,13 @@
 
 import { Environment, StorageService, VariableService } from "@project-chip/matter.js/environment";
 import { Network } from "@project-chip/matter.js/net";
-import { StorageBackendMemory } from "@project-chip/matter.js/storage";
 import { NetworkReactNative } from "../net/NetworkReactNative.js";
+import { StorageBackendAsyncStorage } from "../storage/StorageBackendAsyncStorage.js";
 
 /**
  * This is the default environment implementation for React-native:
  *
- * - Uses memory storage for now, so nothing is persisted!
+ * - Uses AsyncStorage for storage
  */
 export function ReactNativeEnvironment() {
     const env = new Environment("default");
@@ -38,7 +38,7 @@ function configureStorage(env: Environment) {
         service.location = "Memory";
     });
 
-    service.factory = _namespace => new StorageBackendMemory(); // TODO implement real persistence
+    service.factory = namespace => new StorageBackendAsyncStorage(namespace);
 }
 
 function configureNetwork(env: Environment) {

@@ -4,17 +4,26 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { fromJson, StorageError, SupportedStorageTypes, SyncStorage, toJson } from "@project-chip/matter.js/storage";
-import { LocalStorage } from "node-localstorage";
+import {
+    MaybeAsyncStorage,
+    StorageError,
+    SupportedStorageTypes,
+    fromJson,
+    toJson,
+} from "@project-chip/matter.js/storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export class StorageBackendDisk extends SyncStorage {
-    private readonly localStorage;
+export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
+    #namespace: string;
     protected isInitialized = false;
 
-    constructor(path: string, clear = false) {
+    /**
+     * Creates a new instance of the AsyncStorage storage backend. In a "namespace" is provided then the keys will be
+     * prefixed with the namespace (separated with a # which is normally not used in matter.js keys).
+     */
+    constructor(namespace?: string) {
         super();
-        this.localStorage = new LocalStorage(path);
-        if (clear) this.clear();
+        this.#namespace = namespace ?? "";
     }
 
     get initialized() {
@@ -30,7 +39,8 @@ export class StorageBackendDisk extends SyncStorage {
     }
 
     clear() {
-        this.localStorage.clear();
+        // @ts-expect-error AsyncStorage types are not correct
+        return AsyncStorage.clear();
     }
 
     getContextBaseKey(contexts: string[], allowEmptyContext = false) {
@@ -42,7 +52,7 @@ export class StorageBackendDisk extends SyncStorage {
             contextKey.endsWith(".")
         )
             throw new StorageError("Context must not be an empty and not contain dots.");
-        return contextKey;
+        return `${this.#namespace.length ? `${this.#namespace}#` : ""}${contextKey}`;
     }
 
     buildStorageKey(contexts: string[], key: string) {
@@ -53,38 +63,44 @@ export class StorageBackendDisk extends SyncStorage {
         return `${contextKey}.${key}`;
     }
 
-    get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined {
-        const value = this.localStorage.getItem(this.buildStorageKey(contexts, key));
+    async get<T extends SupportedStorageTypes>(contexts: string[], key: string): Promise<T | undefined> {
+        // @ts-expect-error AsyncStorage types are not correct
+        const value = await AsyncStorage.getItem(this.buildStorageKey(contexts, key));
         if (value === null) return undefined;
         return fromJson(value) as T;
     }
 
-    set(contexts: string[], key: string, value: SupportedStorageTypes): void;
-    set(contexts: string[], values: Record<string, SupportedStorageTypes>): void;
-    set(
+    set(contexts: string[], key: string, value: SupportedStorageTypes): Promise<void>;
+    set(contexts: string[], values: Record<string, SupportedStorageTypes>): Promise<void>;
+    async set(
         contexts: string[],
         keyOrValues: string | Record<string, SupportedStorageTypes>,
         value?: SupportedStorageTypes,
     ) {
         if (typeof keyOrValues === "string") {
-            this.localStorage.setItem(this.buildStorageKey(contexts, keyOrValues), toJson(value));
+            // @ts-expect-error AsyncStorage types are not correct
+            await AsyncStorage.setItem(this.buildStorageKey(contexts, keyOrValues), toJson(value));
         } else {
             for (const [key, value] of Object.entries(keyOrValues)) {
-                this.localStorage.setItem(this.buildStorageKey(contexts, key), toJson(value));
+                // @ts-expect-error AsyncStorage types are not correct
+                await AsyncStorage.setItem(this.buildStorageKey(contexts, key), toJson(value));
             }
         }
     }
 
     delete(contexts: string[], key: string) {
-        this.localStorage.removeItem(this.buildStorageKey(contexts, key));
+        // @ts-expect-error AsyncStorage types are not correct
+        return AsyncStorage.removeItem(this.buildStorageKey(contexts, key));
     }
 
     /** Returns all keys of a storage context without keys of sub-contexts */
-    keys(contexts: string[]) {
+    async keys(contexts: string[]) {
         const contextKey = this.getContextBaseKey(contexts);
         const keys = [];
         const contextKeyStart = `${contextKey}.`;
-        for (const key of Object.keys(this.localStorage)) {
+        // @ts-expect-error AsyncStorage types are not correct
+        const allKeys = await AsyncStorage.getAllKeys();
+        for (const key of allKeys) {
             if (key.startsWith(contextKeyStart) && key.indexOf(".", contextKeyStart.length) === -1) {
                 keys.push(key.substring(contextKeyStart.length));
             }
@@ -92,20 +108,22 @@ export class StorageBackendDisk extends SyncStorage {
         return keys;
     }
 
-    values(contexts: string[]) {
+    async values(contexts: string[]) {
         // Initialize and context checks are done by keys method
         const values = {} as Record<string, SupportedStorageTypes>;
-        for (const key of this.keys(contexts)) {
-            values[key] = this.get(contexts, key);
+        for (const key of await this.keys(contexts)) {
+            values[key] = await this.get(contexts, key);
         }
         return values;
     }
 
-    contexts(contexts: string[]) {
+    async contexts(contexts: string[]) {
         const contextKey = this.getContextBaseKey(contexts, true);
         const startContextKey = contextKey.length ? `${contextKey}.` : "";
         const foundContexts = new Array<string>();
-        for (const key of Object.keys(this.localStorage)) {
+        // @ts-expect-error AsyncStorage types are not correct
+        const allKeys = await AsyncStorage.getAllKeys();
+        for (const key of allKeys) {
             if (key.startsWith(startContextKey)) {
                 const subKeys = key.substring(startContextKey.length).split(".");
                 if (subKeys.length === 1) continue; // found leaf key
@@ -118,12 +136,15 @@ export class StorageBackendDisk extends SyncStorage {
         return foundContexts;
     }
 
-    clearAll(contexts: string[]) {
+    async clearAll(contexts: string[]) {
         const contextKey = this.getContextBaseKey(contexts, true);
         const startContextKey = contextKey.length ? `${contextKey}.` : "";
-        for (const key of Object.keys(this.localStorage)) {
+        // @ts-expect-error AsyncStorage types are not correct
+        const allKeys = await AsyncStorage.getAllKeys();
+        for (const key of allKeys) {
             if (key.startsWith(startContextKey)) {
-                this.localStorage.removeItem(key);
+                // @ts-expect-error AsyncStorage types are not correct
+                await AsyncStorage.removeItem(key);
             }
         }
     }
