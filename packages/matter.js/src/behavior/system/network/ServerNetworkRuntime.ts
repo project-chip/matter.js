@@ -86,17 +86,17 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         }));
     }
 
-    get networkInterfaces(): NetworkInterfaceDetailed[] {
+    async getNetworkInterfaces(): Promise<NetworkInterfaceDetailed[]> {
         const network = this.owner.env.get(Network);
 
-        const interfaces = network.getNetInterfaces(this.networkInterfaceConfiguration);
+        const interfaces = await network.getNetInterfaces(this.networkInterfaceConfiguration);
         const interfaceDetails = new Array<NetworkInterfaceDetailed>();
-        interfaces.forEach(({ name, type }) => {
-            const details = network.getIpMac(name);
+        for (const { name, type } of interfaces) {
+            const details = await network.getIpMac(name);
             if (details !== undefined) {
                 interfaceDetails.push({ name, type, ...details });
             }
-        });
+        }
         return interfaceDetails;
     }
 

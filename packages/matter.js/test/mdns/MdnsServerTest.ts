@@ -47,7 +47,7 @@ describe("MdnsServer", () => {
         await MockTime.advance(130_000); // More then 2 minutes in the future for the difference calculation vs 120s ttl
         mdnsServer = new MdnsServer(clientNetwork, udpServerSimulator, "fakeInterface");
 
-        await mdnsServer.setRecordsGenerator(PORT, AnnouncementType.Commissionable, () => [
+        await mdnsServer.setRecordsGenerator(PORT, AnnouncementType.Commissionable, async () => [
             PtrRecord(DUMMY_QNAME, "abcd"),
             SrvRecord(DUMMY_QNAME, { priority: 0, weight: 0, port: 1234, target: "abcd.local" }),
             TxtRecord(DUMMY_QNAME, [`A=1`, `B=2`]),
@@ -772,7 +772,7 @@ describe("MdnsServer", () => {
                 recordsAdditional.push(ARecord("abcd.local", DUMMY_IP));
             }
 
-            await mdnsServer.setRecordsGenerator(PORT, AnnouncementType.Commissionable, () => recordsRequest);
+            await mdnsServer.setRecordsGenerator(PORT, AnnouncementType.Commissionable, async () => recordsRequest);
 
             send(
                 DnsCodec.encode({
@@ -831,7 +831,7 @@ describe("MdnsServer", () => {
                 recordsAdditional.push(ARecord("abcd.local", DUMMY_IP));
             }
 
-            await mdnsServer.setRecordsGenerator(PORT, AnnouncementType.Commissionable, () => recordsRequest);
+            await mdnsServer.setRecordsGenerator(PORT, AnnouncementType.Commissionable, async () => recordsRequest);
 
             send(
                 DnsCodec.encode({
