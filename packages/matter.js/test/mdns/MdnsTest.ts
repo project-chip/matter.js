@@ -115,13 +115,14 @@ const NODE_ID = NodeId(BigInt(1));
         const processRecordExpiry = async (port: number) => {
             const promise = broadcaster.expireAllAnnouncements(port);
 
-            await MockTime.yield();
-            await MockTime.yield();
-            await MockTime.yield();
-            await MockTime.yield();
+            await MockTime.yield3();
+            await MockTime.yield3();
             await MockTime.advance(150);
+            await MockTime.yield3();
+            await MockTime.yield3();
             await MockTime.advance(150);
-            await MockTime.yield();
+            await MockTime.yield3();
+            await MockTime.yield3();
             await promise;
         };
 
@@ -936,6 +937,8 @@ const NODE_ID = NodeId(BigInt(1));
 
                 await MockTime.yield3(); // make sure responding promise is created
                 await MockTime.advance(1); // Trigger timer to send query (0ms timer)
+                await MockTime.yield3(); // Make sure data were queried async
+                await MockTime.yield3(); // Make sure data were queried async
                 await MockTime.yield3(); // Make sure data were queried async
 
                 expect(netData.length).equal(2);
