@@ -113,7 +113,7 @@ export class NetworkReactNative extends Network {
         } else {
             const interfaces = await networkInterfaces();
             for (const name in interfaces) {
-                const netInterfaces = interfaces[name] as NetworkInterfaceInfo[];
+                const netInterfaces = interfaces[name];
                 for (const { address, netmask } of netInterfaces) {
                     if (onSameNetwork(ip, address, netmask)) {
                         return name;
@@ -141,7 +141,7 @@ export class NetworkReactNative extends Network {
         const result = new Array<NetworkInterface>();
         const interfaces = await networkInterfaces();
         for (const name in interfaces) {
-            const netInterfaces = interfaces[name] as NetworkInterfaceInfo[];
+            const netInterfaces = interfaces[name];
             if (netInterfaces.length === 0) continue;
             if (netInterfaces[0].internal) continue;
             let type = InterfaceType.Ethernet;
