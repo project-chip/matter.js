@@ -7,9 +7,9 @@
 import { TlvCertSigningRequest } from "../behavior/definitions/operational-credentials/OperationalCredentialsTypes.js";
 import { CertificateManager } from "../certificate/CertificateManager.js";
 import { RootCertificateManager } from "../certificate/RootCertificateManager.js";
+import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterClient } from "../cluster/client/ClusterClient.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
 import { Descriptor } from "../cluster/definitions/DescriptorCluster.js";
 import { GeneralCommissioning } from "../cluster/definitions/GeneralCommissioningCluster.js";
@@ -120,6 +120,12 @@ export class CommissioningError extends MatterError {}
 /** Error that throws when Commissioning fails but process can be continued. */
 class RecoverableCommissioningError extends CommissioningError {}
 
+/**
+ * Special Error instance used to detect if the commissioning was successfully finished externally and the device is
+ * now operational.
+ */
+export class CommissioningSuccessfullyFinished extends MatterError {}
+
 const DEFAULT_FAILSAFE_TIME_MS = 60_000; // 60 seconds
 
 /**
@@ -137,13 +143,32 @@ export class ControllerCommissioner {
     private failSafeTimeMs = DEFAULT_FAILSAFE_TIME_MS;
 
     constructor(
+        /** InteractionClient for the initiated PASE session */
         private interactionClient: InteractionClient,
+
+        /** CertificateManager of the controller. */
         private readonly certificateManager: RootCertificateManager,
+
+        /** Fabric of the controller. */
         private readonly fabric: Fabric,
+
+        /** Commissioning options for the commissioning process. */
         private readonly commissioningOptions: CommissioningOptions,
+
+        /** NodeId to assign to the device to commission. */
         private readonly nodeId: NodeId,
+
+        /** Administrator/Controller VendorId */
         private readonly adminVendorId: VendorId,
-        private readonly reconnectWithDeviceCallback: () => Promise<InteractionClient>,
+
+        /**
+         * Callback to operative discover and connect to the device and establish a CASE session with the device.
+         * The callback should return an InteractionClient to use to finish the commissioning process, or throw one of the following errors:
+         * * CommissioningSuccessfullyFinished: This special error can be used to notify that the commissioning completion was done by own logic and the device is now operational. The commissioner will not do any further steps.
+         * * CommissioningError: This error will stop the commissioning process in an error state.
+         * * other errors: Any other error will be logged and the commissioning process should be restarted.
+         */
+        private readonly doOperativeDeviceConnectionCallback: () => Promise<InteractionClient>,
     ) {
         logger.debug(`Commissioning options: ${Logger.toJSON(commissioningOptions)}`);
         this.initializeCommissioningSteps();
@@ -341,6 +366,9 @@ export class ControllerCommissioner {
                         throw commError;
                     }
                     throw error;
+                }
+                if (error instanceof CommissioningSuccessfullyFinished) {
+                    break;
                 } else {
                     throw error;
                 }
@@ -675,7 +703,7 @@ export class ControllerCommissioner {
 
         await operationalCredentialsClusterClient.addTrustedRootCertificate(
             {
-                rootCaCertificate: this.certificateManager.getRootCert(),
+                rootCaCertificate: this.certificateManager.rootCert,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
@@ -752,7 +780,7 @@ export class ControllerCommissioner {
             const anyInterfaceConnected =
                 this.collectedCommissioningData.networkStatus.length === 0 ||
                 this.collectedCommissioningData.networkStatus.some(({ value }) =>
-                    value.some(({ connected }) => connected === true),
+                    value.some(({ connected }) => connected),
                 );
             if (!anyEthernetInterface && !anyInterfaceConnected) {
                 throw new CommissioningError(
@@ -797,11 +825,7 @@ export class ControllerCommissioner {
                     breadcrumb: this.lastBreadcrumb,
                 };
             }
-            if (
-                rootNetworkStatus !== undefined &&
-                rootNetworkStatus.length > 0 &&
-                rootNetworkStatus[0].connected !== false
-            ) {
+            if (rootNetworkStatus !== undefined && rootNetworkStatus.length > 0 && rootNetworkStatus[0].connected) {
                 logger.debug("Commissionee is already connected to the WiFi network");
                 this.collectedCommissioningData.successfullyConnectedToNetwork = true;
                 return {
@@ -863,7 +887,7 @@ export class ControllerCommissioner {
             throw new CommissioningError(`Commissionee did not return network with index ${networkIndex}`);
         }
         const { networkId, connected } = updatedNetworks[networkIndex];
-        if (connected === true) {
+        if (connected) {
             this.collectedCommissioningData.successfullyConnectedToNetwork = true;
             logger.debug(
                 `Commissionee is already connected to WiFi network ${
@@ -937,11 +961,7 @@ export class ControllerCommissioner {
                     breadcrumb: this.lastBreadcrumb,
                 };
             }
-            if (
-                rootNetworkStatus !== undefined &&
-                rootNetworkStatus.length > 0 &&
-                rootNetworkStatus[0].connected !== false
-            ) {
+            if (rootNetworkStatus !== undefined && rootNetworkStatus.length > 0 && rootNetworkStatus[0].connected) {
                 logger.debug("Commissionee is already connected to the Thread network");
                 return {
                     code: CommissioningStepResultCode.Skipped,
@@ -1011,7 +1031,7 @@ export class ControllerCommissioner {
             throw new CommissioningError(`Commissionee did not return network with index ${networkIndex}`);
         }
         const { networkId, connected } = updatedNetworks[networkIndex];
-        if (connected === true) {
+        if (connected) {
             logger.debug(
                 `Commissionee is already connected to Thread network ${
                     this.commissioningOptions.threadNetwork.networkName
@@ -1059,7 +1079,7 @@ export class ControllerCommissioner {
      */
     private async reconnectWithDevice() {
         logger.debug("Reconnecting with device ...");
-        this.interactionClient = await this.reconnectWithDeviceCallback();
+        this.interactionClient = await this.doOperativeDeviceConnectionCallback();
         logger.debug("Successfully reconnected with device ...");
 
         this.clusterClients.clear();
