@@ -13,14 +13,16 @@
 import { NodeCommissioningOptions } from "./CommissioningController.js";
 import { Ble } from "./ble/Ble.js";
 import { RootCertificateManager } from "./certificate/RootCertificateManager.js";
+import { ClusterClient } from "./cluster/client/ClusterClient.js";
 import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
 import { Channel } from "./common/Channel.js";
-import { NoProviderError } from "./common/MatterError.js";
+import { ImplementationError, NoProviderError } from "./common/MatterError.js";
 import { CommissionableDevice, DiscoveryData, Scanner } from "./common/Scanner.js";
 import { ServerAddress, ServerAddressIp, serverAddressToString } from "./common/ServerAddress.js";
 import { tryCatchAsync } from "./common/TryCatchHandler.js";
 import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "./crypto/Crypto.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
+import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { FabricId } from "./datatype/FabricId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
@@ -31,7 +33,12 @@ import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { Specification } from "./model/definitions/Specification.js";
 import { NetInterface } from "./net/NetInterface.js";
 import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
-import { CommissioningOptions, ControllerCommissioner } from "./protocol/ControllerCommissioner.js";
+import {
+    CommissioningError,
+    CommissioningOptions,
+    CommissioningSuccessfullyFinished,
+    ControllerCommissioner,
+} from "./protocol/ControllerCommissioner.js";
 import { ControllerDiscovery, DiscoveryError } from "./protocol/ControllerDiscovery.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "./protocol/ExchangeManager.js";
 import { RetransmissionLimitReachedError } from "./protocol/MessageExchange.js";
@@ -49,7 +56,9 @@ import {
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
+import { StorageBackendMemory } from "./storage/StorageBackendMemory.js";
 import { StorageContext } from "./storage/StorageContext.js";
+import { StorageManager } from "./storage/StorageManager.js";
 import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 import { Time, Timer } from "./time/Time.js";
 import { TlvEnum } from "./tlv/TlvNumber.js";
@@ -94,43 +103,58 @@ const logger = Logger.get("MatterController");
 export class PairRetransmissionLimitReachedError extends RetransmissionLimitReachedError {}
 
 export class MatterController {
-    public static async create(
-        sessionStorage: StorageContext,
-        rootCertificateStorage: StorageContext,
-        fabricStorage: StorageContext,
-        nodesStorage: StorageContext,
-        scanner: MdnsScanner,
-        netInterfaceIpv4: NetInterface | undefined,
-        netInterfaceIpv6: NetInterface,
-        sessionClosedCallback?: (peerNodeId: NodeId) => void,
-        adminVendorId: VendorId = VendorId(DEFAULT_ADMIN_VENDOR_ID),
-        adminFabricId: FabricId = FabricId(DEFAULT_FABRIC_ID),
-        adminFabricIndex: FabricIndex = FabricIndex(DEFAULT_FABRIC_INDEX),
-        caseAuthenticatedTags?: CaseAuthenticatedTag[],
-    ): Promise<MatterController> {
+    public static async create(options: {
+        sessionStorage: StorageContext;
+        rootCertificateStorage: StorageContext;
+        fabricStorage: StorageContext;
+        nodesStorage: StorageContext;
+        mdnsScanner: MdnsScanner;
+        netInterfaceIpv4: NetInterface | undefined;
+        netInterfaceIpv6: NetInterface;
+        sessionClosedCallback?: (peerNodeId: NodeId) => void;
+        adminVendorId?: VendorId;
+        adminFabricId?: FabricId;
+        adminFabricIndex?: FabricIndex;
+        caseAuthenticatedTags?: CaseAuthenticatedTag[];
+    }): Promise<MatterController> {
+        const {
+            sessionStorage,
+            rootCertificateStorage,
+            fabricStorage,
+            nodesStorage,
+            mdnsScanner,
+            netInterfaceIpv4,
+            netInterfaceIpv6,
+            sessionClosedCallback,
+            adminVendorId = VendorId(DEFAULT_ADMIN_VENDOR_ID),
+            adminFabricId = FabricId(DEFAULT_FABRIC_ID),
+            adminFabricIndex = FabricIndex(DEFAULT_FABRIC_INDEX),
+            caseAuthenticatedTags,
+        } = options;
+
         const certificateManager = await RootCertificateManager.create(rootCertificateStorage);
 
         let controller: MatterController;
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         if (fabricStorage.has("fabric")) {
-            const storedFabric = Fabric.createFromStorageObject(await fabricStorage.get<FabricJsonObject>("fabric"));
-            controller = new MatterController(
+            const fabric = Fabric.createFromStorageObject(await fabricStorage.get<FabricJsonObject>("fabric"));
+            controller = new MatterController({
                 sessionStorage,
                 fabricStorage,
                 nodesStorage,
-                scanner,
+                mdnsScanner,
                 netInterfaceIpv4,
                 netInterfaceIpv6,
                 certificateManager,
-                storedFabric,
-                storedFabric.rootVendorId,
+                fabric,
+                adminVendorId: fabric.rootVendorId,
                 sessionClosedCallback,
-            );
+            });
         } else {
             const rootNodeId = NodeId.randomOperationalNodeId();
             const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
             const fabricBuilder = new FabricBuilder()
-                .setRootCert(certificateManager.getRootCert())
+                .setRootCert(certificateManager.rootCert)
                 .setRootNodeId(rootNodeId)
                 .setIdentityProtectionKey(ipkValue)
                 .setRootVendorId(adminVendorId);
@@ -142,20 +166,79 @@ export class MatterController {
                     caseAuthenticatedTags,
                 ),
             );
+            const fabric = await fabricBuilder.build(adminFabricIndex);
 
-            controller = new MatterController(
+            controller = new MatterController({
                 sessionStorage,
                 fabricStorage,
                 nodesStorage,
-                scanner,
+                mdnsScanner,
                 netInterfaceIpv4,
                 netInterfaceIpv6,
                 certificateManager,
-                await fabricBuilder.build(adminFabricIndex),
+                fabric,
                 adminVendorId,
                 sessionClosedCallback,
-            );
+            });
         }
+        await controller.construction;
+        return controller;
+    }
+
+    public static async createAsPaseCommissioner(options: {
+        rootCertificateData: RootCertificateManager.Data;
+        fabricData: FabricJsonObject;
+        mdnsScanner?: MdnsScanner;
+        netInterfaceIpv4?: NetInterface | undefined;
+        netInterfaceIpv6?: NetInterface;
+        sessionClosedCallback?: (peerNodeId: NodeId) => void;
+    }): Promise<MatterController> {
+        const {
+            rootCertificateData,
+            fabricData,
+            mdnsScanner,
+            netInterfaceIpv4,
+            netInterfaceIpv6,
+            sessionClosedCallback,
+        } = options;
+
+        // Verify BLE initialization
+        try {
+            Ble.get();
+        } catch (error) {
+            if (error instanceof NoProviderError) {
+                if (!mdnsScanner || !netInterfaceIpv6) {
+                    throw new ImplementationError(
+                        "Ble must be initialized to create a Sub Commissioner without an IP network!",
+                    );
+                }
+                logger.info("BLE is not enabled. Using only IP network for commissioning.");
+            } else {
+                throw error;
+            }
+        }
+
+        const certificateManager = await RootCertificateManager.create(rootCertificateData);
+
+        // Stored data are temporary anyway and no node will be connected, so just use an in-memory storage
+        const storageManager = new StorageManager(new StorageBackendMemory());
+        await storageManager.initialize();
+        const sessionStorage = storageManager.createContext("sessions");
+        const nodesStorage = storageManager.createContext("nodes");
+
+        const fabric = Fabric.createFromStorageObject(fabricData);
+        // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
+        const controller = new MatterController({
+            sessionStorage,
+            nodesStorage,
+            mdnsScanner,
+            netInterfaceIpv4,
+            netInterfaceIpv6,
+            certificateManager,
+            fabric,
+            adminVendorId: fabric.rootVendorId,
+            sessionClosedCallback,
+        });
         await controller.construction;
         return controller;
     }
@@ -170,22 +253,56 @@ export class MatterController {
     private readonly commissionedNodes = new Map<NodeId, CommissionedNodeDetails>();
     #construction: AsyncConstruction<MatterController>;
 
+    readonly sessionStorage: StorageContext;
+    readonly fabricStorage?: StorageContext;
+    readonly nodesStorage: StorageContext;
+    private readonly mdnsScanner: MdnsScanner | undefined;
+    private readonly netInterfaceIpv4: NetInterface | undefined;
+    private readonly netInterfaceIpv6: NetInterface | undefined;
+    private readonly certificateManager: RootCertificateManager;
+    private readonly fabric: Fabric;
+    private readonly adminVendorId: VendorId;
+    private readonly sessionClosedCallback?: (peerNodeId: NodeId) => void;
+
     get construction() {
         return this.#construction;
     }
 
-    constructor(
-        readonly sessionStorage: StorageContext,
-        readonly fabricStorage: StorageContext,
-        readonly nodesStore: StorageContext,
-        private readonly mdnsScanner: MdnsScanner,
-        private readonly netInterfaceIpv4: NetInterface | undefined,
-        private readonly netInterfaceIpv6: NetInterface,
-        private readonly certificateManager: RootCertificateManager,
-        private readonly fabric: Fabric,
-        private readonly adminVendorId: VendorId,
-        private readonly sessionClosedCallback?: (peerNodeId: NodeId) => void,
-    ) {
+    constructor(options: {
+        sessionStorage: StorageContext;
+        fabricStorage?: StorageContext;
+        nodesStorage: StorageContext;
+        mdnsScanner?: MdnsScanner;
+        netInterfaceIpv4?: NetInterface;
+        netInterfaceIpv6?: NetInterface;
+        certificateManager: RootCertificateManager;
+        fabric: Fabric;
+        adminVendorId: VendorId;
+        sessionClosedCallback?: (peerNodeId: NodeId) => void;
+    }) {
+        const {
+            sessionStorage,
+            fabricStorage,
+            nodesStorage,
+            mdnsScanner,
+            netInterfaceIpv4,
+            netInterfaceIpv6,
+            certificateManager,
+            fabric,
+            sessionClosedCallback,
+            adminVendorId,
+        } = options;
+        this.sessionStorage = sessionStorage;
+        this.fabricStorage = fabricStorage;
+        this.nodesStorage = nodesStorage;
+        this.mdnsScanner = mdnsScanner;
+        this.netInterfaceIpv4 = netInterfaceIpv4;
+        this.netInterfaceIpv6 = netInterfaceIpv6;
+        this.certificateManager = certificateManager;
+        this.fabric = fabric;
+        this.sessionClosedCallback = sessionClosedCallback;
+        this.adminVendorId = adminVendorId;
+
         this.sessionManager = new SessionManager(this, sessionStorage);
         this.sessionManager.sessionClosed.on(async session => {
             if (!session.closingAfterExchangeFinished) {
@@ -197,16 +314,19 @@ export class MatterController {
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
         this.exchangeManager.addProtocolHandler(new StatusReportOnlySecureChannelProtocol());
+
         if (netInterfaceIpv4 !== undefined) {
             this.addTransportInterface(netInterfaceIpv4);
         }
-        this.addTransportInterface(netInterfaceIpv6);
+        if (netInterfaceIpv6 !== undefined) {
+            this.addTransportInterface(netInterfaceIpv6);
+        }
 
         this.#construction = AsyncConstruction(this, async () => {
             // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
-            if (await this.nodesStore.has("commissionedNodes")) {
+            if (await this.nodesStorage.has("commissionedNodes")) {
                 const commissionedNodes =
-                    await this.nodesStore.get<[NodeId, CommissionedNodeDetails][]>("commissionedNodes");
+                    await this.nodesStorage.get<[NodeId, CommissionedNodeDetails][]>("commissionedNodes");
                 this.commissionedNodes.clear();
                 for (const [nodeId, details] of commissionedNodes) {
                     this.commissionedNodes.set(nodeId, details);
@@ -219,6 +339,14 @@ export class MatterController {
 
     get nodeId() {
         return this.fabric.rootNodeId;
+    }
+
+    get rootCertificateData() {
+        return this.certificateManager.data;
+    }
+
+    get fabricData() {
+        return this.fabric.toStorageObject();
     }
 
     /** Returns our default session parameters for us as a controller. */
@@ -243,7 +371,9 @@ export class MatterController {
     ) {
         const scannersToUse = new Array<Scanner>();
 
-        scannersToUse.push(this.mdnsScanner); // Scan always on IP Network
+        if (this.mdnsScanner !== undefined) {
+            scannersToUse.push(this.mdnsScanner); // Scan always on IP Network if available
+        }
 
         if (discoveryCapabilities.ble) {
             if (this.bleScanner === undefined) {
@@ -275,8 +405,15 @@ export class MatterController {
      * each other. It returns the NodeId of the commissioned device.
      * If it throws an PairRetransmissionLimitReachedError that means that no found device responded to the pairing
      * request or the passode did not match to any discovered device/address.
+     *
+     * Use the connectNodeAfterCommissioning callback to implement an own logic to do the operative device discovery and
+     * to complete the commissioning process.
+     * Return true when the commissioning process is completed successfully, false on error.
      */
-    async commission(options: NodeCommissioningOptions): Promise<NodeId> {
+    async commission(
+        options: NodeCommissioningOptions,
+        completeCommissioningCallback?: (peerNodeId: NodeId, discoveryData?: DiscoveryData) => Promise<boolean>,
+    ): Promise<NodeId> {
         const {
             commissioning: commissioningOptions = {
                 regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
@@ -292,12 +429,14 @@ export class MatterController {
         } = options;
         let identifierData = "identifierData" in options.discovery ? options.discovery.identifierData : {};
 
-        discoveryCapabilities.onIpNetwork = true; // We always discover on network as defined by specs
+        if (this.mdnsScanner !== undefined && this.netInterfaceIpv6 !== undefined) {
+            discoveryCapabilities.onIpNetwork = true; // We always discover on network as defined by specs
+        }
         if (commissionableDevice !== undefined) {
             let { addresses } = commissionableDevice;
             if (discoveryCapabilities.ble === true) {
                 discoveryCapabilities = { onIpNetwork: true, ble: addresses.some(address => address.type === "ble") };
-            } else {
+            } else if (discoveryCapabilities.onIpNetwork === true) {
                 // do not use BLE if not specified, even if existing
                 addresses = addresses.filter(address => address.type !== "ble");
             }
@@ -356,7 +495,12 @@ export class MatterController {
             paseSecureChannel = result;
         }
 
-        return await this.commissionDevice(paseSecureChannel, commissioningOptions, discoveryData);
+        return await this.commissionDevice(
+            paseSecureChannel,
+            commissioningOptions,
+            discoveryData,
+            completeCommissioningCallback,
+        );
     }
 
     async disconnect(nodeId: NodeId) {
@@ -446,6 +590,7 @@ export class MatterController {
         paseSecureMessageChannel: MessageChannel<MatterController>,
         commissioningOptions: CommissioningOptions,
         discoveryData?: DiscoveryData,
+        completeCommissioningCallback?: (peerNodeId: NodeId, discoveryData?: DiscoveryData) => Promise<boolean>,
     ): Promise<NodeId> {
         // TODO: Create the fabric only when needed before commissioning (to do when refactoring MatterController away)
         // TODO also move certificateManager and other parts into that class to get rid of them here
@@ -496,6 +641,12 @@ export class MatterController {
                  */
                 await paseSecureMessageChannel.close(); // We reconnect using Case, so close PASE connection
 
+                if (completeCommissioningCallback !== undefined) {
+                    if (!(await completeCommissioningCallback(peerNodeId, discoveryData))) {
+                        throw new RetransmissionLimitReachedError("Device could not be discovered");
+                    }
+                    throw new CommissioningSuccessfullyFinished();
+                }
                 // Look for the device broadcast over MDNS and do CASE pairing
                 return await this.connect(peerNodeId, 120, discoveryData); // Wait maximum 120s to find the operational device for commissioning process
             },
@@ -511,9 +662,33 @@ export class MatterController {
             throw error;
         }
 
-        await this.fabricStorage.set("fabric", this.fabric.toStorageObject());
+        await this.fabricStorage?.set("fabric", this.fabric.toStorageObject());
 
         return peerNodeId;
+    }
+
+    /**
+     * Method to complete the commissioning process to a node which was initialized with a PASE secure channel.
+     */
+    async completeCommissioning(peerNodeId: NodeId, discoveryData?: DiscoveryData) {
+        // Look for the device broadcast over MDNS and do CASE pairing
+        const interactionClient = await this.connect(peerNodeId, 120, discoveryData); // Wait maximum 120s to find the operational device for commissioning process
+        const generalCommissioningClusterClient = ClusterClient(
+            GeneralCommissioning.Cluster,
+            EndpointNumber(0),
+            interactionClient,
+        );
+        const { errorCode, debugText } = await generalCommissioningClusterClient.commissioningComplete(undefined, {
+            useExtendedFailSafeMessageResponseTimeout: true,
+        });
+        if (errorCode !== GeneralCommissioning.CommissioningError.Ok) {
+            if (this.commissionedNodes.has(peerNodeId)) {
+                // We might have added data for an operational address that we need to cleanup
+                this.commissionedNodes.delete(peerNodeId);
+            }
+            throw new CommissioningError(`Commission error on commissioningComplete: ${errorCode}, ${debugText}`);
+        }
+        await this.fabricStorage?.set("fabric", this.fabric.toStorageObject());
     }
 
     private async reconnectLastKnownAddress(
@@ -546,6 +721,11 @@ export class MatterController {
         timeoutSeconds?: number,
         discoveryData?: DiscoveryData,
     ) {
+        if (this.mdnsScanner === undefined) {
+            throw new ImplementationError("Cannot discover device without mDNS scanner.");
+        }
+        const mdnsScanner = this.mdnsScanner;
+
         const discoveryPromises = new Array<() => Promise<MessageChannel<MatterController>>>();
 
         // Additionally to general discovery we also try to poll the formerly known operational address
@@ -596,7 +776,7 @@ export class MatterController {
             const scanResult = await ControllerDiscovery.discoverOperationalDevice(
                 this.fabric,
                 peerNodeId,
-                this.mdnsScanner,
+                mdnsScanner,
                 timeoutSeconds,
                 timeoutSeconds === undefined,
             );
@@ -608,7 +788,7 @@ export class MatterController {
                 [scanResult],
                 PairRetransmissionLimitReachedError,
                 async () => {
-                    const device = this.mdnsScanner.getDiscoveredOperationalDevice(this.fabric, peerNodeId);
+                    const device = mdnsScanner.getDiscoveredOperationalDevice(this.fabric, peerNodeId);
                     return device !== undefined ? [device] : [];
                 },
                 async (address, device) => {
@@ -763,7 +943,7 @@ export class MatterController {
     }
 
     private async storeCommissionedNodes() {
-        await this.nodesStore.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
+        await this.nodesStorage.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
     }
 
     /**
@@ -821,7 +1001,7 @@ export class MatterController {
         await this.channelManager.close();
         await this.netInterfaceBle?.close();
         await this.netInterfaceIpv4?.close();
-        await this.netInterfaceIpv6.close();
+        await this.netInterfaceIpv6?.close();
     }
 
     getActiveSessionInformation() {

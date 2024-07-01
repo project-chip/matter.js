@@ -6,6 +6,7 @@
 
 import { NodeCommissioningOptions } from "@project-chip/matter.js";
 import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter.js/cluster";
+import { MatterError } from "@project-chip/matter.js/common";
 import { NodeId } from "@project-chip/matter.js/datatype";
 import { Logger } from "@project-chip/matter.js/log";
 import { ManualPairingCodeCodec, QrCode } from "@project-chip/matter.js/schema";
@@ -122,9 +123,16 @@ export default function commands(theNode: MatterNode) {
                                         };
                                     }
 
-                                    const node = await theNode.commissioningController.commissionNode(options);
+                                    const commissionedNodeId =
+                                        await theNode.commissioningController.commissionNode(options);
 
-                                    console.log("Commissioned Node:", node.nodeId);
+                                    console.log("Commissioned Node:", commissionedNodeId);
+
+                                    const node = theNode.commissioningController.getConnectedNode(commissionedNodeId);
+                                    if (node === undefined) {
+                                        // Should not happen
+                                        throw new MatterError("Node not found after commissioning.");
+                                    }
 
                                     // Important: This is a temporary API to proof the methods working and this will change soon and is NOT stable!
                                     // It is provided to proof the concept

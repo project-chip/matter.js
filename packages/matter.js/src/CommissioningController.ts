@@ -9,7 +9,7 @@ import { GlobalAttributes } from "./cluster/Cluster.js";
 import { SupportedAttributeClient } from "./cluster/client/AttributeClient.js";
 import { BasicInformation } from "./cluster/definitions/BasicInformationCluster.js";
 import { ImplementationError, InternalError } from "./common/MatterError.js";
-import { CommissionableDevice, CommissionableDeviceIdentifiers } from "./common/Scanner.js";
+import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData } from "./common/Scanner.js";
 import { ServerAddress } from "./common/ServerAddress.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
@@ -40,6 +40,18 @@ const logger = new Logger("CommissioningController");
 // TODO how to enhance "getting devices" as API? Or is getDevices() enough?
 // TODO decline using setRoot*Cluster
 // TODO Decline cluster access after announced/paired
+
+export type ControllerEnvironmentOptions = {
+    /**
+     * Environment to register the node with on start()
+     */
+    readonly environment: Environment;
+
+    /**
+     * Unique id to register to node.
+     */
+    readonly id: string;
+};
 
 /**
  * Constructor options for the CommissioningController class
@@ -89,17 +101,7 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
      * When used with the new API Environment set the environment here and the CommissioningServer will self-register
      * on the environment when you call start().
      */
-    readonly environment?: {
-        /**
-         * Environment to register the node with on start()
-         */
-        readonly environment: Environment;
-
-        /**
-         * Unique id to register to node.
-         */
-        readonly id: string;
-    };
+    readonly environment?: ControllerEnvironmentOptions;
 };
 
 /** Options needed to commission a new node */
@@ -174,6 +176,16 @@ export class CommissioningController extends MatterNode {
         return this.controllerInstance?.nodeId;
     }
 
+    get paseCommissionerData() {
+        const controller = this.assertControllerIsStarted(
+            "The CommissioningController needs to be started to get the PASE commissioner data.",
+        );
+        return {
+            rootCertificateData: controller.rootCertificateData,
+            fabricData: controller.fabricData,
+        };
+    }
+
     assertIsAddedToMatterServer() {
         if (this.mdnsScanner === undefined || (this.storage === undefined && this.environment === undefined)) {
             throw new ImplementationError("Add the node to the Matter instance before.");
@@ -218,17 +230,17 @@ export class CommissioningController extends MatterNode {
             throw new InternalError("Storage not initialized correctly."); // Should not happen
         }
 
-        return await MatterController.create(
+        return await MatterController.create({
             sessionStorage,
             rootCertificateStorage,
             fabricStorage,
             nodesStorage,
             mdnsScanner,
-            this.ipv4Disabled
+            netInterfaceIpv4: this.ipv4Disabled
                 ? undefined
                 : await UdpInterface.create(Network.get(), "udp4", localPort, this.listeningAddressIpv4),
-            await UdpInterface.create(Network.get(), "udp6", localPort, this.listeningAddressIpv6),
-            peerNodeId => {
+            netInterfaceIpv6: await UdpInterface.create(Network.get(), "udp6", localPort, this.listeningAddressIpv6),
+            sessionClosedCallback: peerNodeId => {
                 logger.info(`Session for peer node ${peerNodeId} disconnected ...`);
                 const handler = this.sessionDisconnectedHandler.get(peerNodeId);
                 if (handler !== undefined) {
@@ -239,27 +251,41 @@ export class CommissioningController extends MatterNode {
             adminFabricId,
             adminFabricIndex,
             caseAuthenticatedTags,
-        );
+        });
     }
 
     /**
-     * Commissions/Pairs a new device into the controller fabric. The method returns a PairedNode instance of the
-     * paired node on success.
+     * Commissions/Pairs a new device into the controller fabric. The method returns the NodeId of the commissioned node.
      */
-    async commissionNode(nodeOptions: NodeCommissioningOptions) {
+    async commissionNode(nodeOptions: NodeCommissioningOptions, connectNodeAfterCommissioning = true) {
         this.assertIsAddedToMatterServer();
         const controller = this.assertControllerIsStarted();
 
         const nodeId = await controller.commission(nodeOptions);
 
-        return this.connectNode(nodeId, {
-            ...nodeOptions,
-            autoSubscribe: nodeOptions.autoSubscribe ?? this.options.autoSubscribe,
-            subscribeMinIntervalFloorSeconds:
-                nodeOptions.subscribeMinIntervalFloorSeconds ?? this.options.subscribeMinIntervalFloorSeconds,
-            subscribeMaxIntervalCeilingSeconds:
-                nodeOptions.subscribeMaxIntervalCeilingSeconds ?? this.options.subscribeMaxIntervalCeilingSeconds,
-        });
+        if (connectNodeAfterCommissioning) {
+            await this.connectNode(nodeId, {
+                ...nodeOptions,
+                autoSubscribe: nodeOptions.autoSubscribe ?? this.options.autoSubscribe,
+                subscribeMinIntervalFloorSeconds:
+                    nodeOptions.subscribeMinIntervalFloorSeconds ?? this.options.subscribeMinIntervalFloorSeconds,
+                subscribeMaxIntervalCeilingSeconds:
+                    nodeOptions.subscribeMaxIntervalCeilingSeconds ?? this.options.subscribeMaxIntervalCeilingSeconds,
+            });
+        }
+
+        return nodeId;
+    }
+
+    /**
+     * Completes the commissioning process for a node when the initial commissioning process was done by a PASE
+     * commissioner. This method should be called to discover the device operational and complete the commissioning
+     * process.
+     */
+    completeCommissioningForNode(peerNodeId: NodeId, discoveryData?: DiscoveryData) {
+        this.assertIsAddedToMatterServer();
+        const controller = this.assertControllerIsStarted();
+        return controller.completeCommissioning(peerNodeId, discoveryData);
     }
 
     /** Check if a given node id is commissioned on this controller. */
@@ -512,7 +538,6 @@ export class CommissioningController extends MatterNode {
 
             const mdnsService = await environment.load(MdnsService);
             this.ipv4Disabled = !mdnsService.enableIpv4;
-            console.log("Init ipv4: ", this.ipv4Disabled);
             this.setMdnsBroadcaster(mdnsService.broadcaster);
             this.setMdnsScanner(mdnsService.scanner);
 

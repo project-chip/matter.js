@@ -34,7 +34,7 @@ import {
     NodeId,
     VendorId,
 } from "@project-chip/matter.js/datatype";
-import { NodeStateInformation, OnOffLightDevice } from "@project-chip/matter.js/device";
+import { NodeStateInformation, OnOffLightDevice, PairedNode } from "@project-chip/matter.js/device";
 import { FabricBuilder, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
     DecodedEventData,
@@ -291,7 +291,7 @@ describe("Integration Test", () => {
             });
 
             await commissioningController.start();
-            const node = await commissioningController.commissionNode({
+            const nodeId = await commissioningController.commissionNode({
                 discovery: {
                     knownAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
                     identifierData: { longDiscriminator },
@@ -304,6 +304,8 @@ describe("Integration Test", () => {
                 stateInformationCallback: (nodeId: NodeId, nodeState: NodeStateInformation) =>
                     nodeStateChangesController1Node1.push({ nodeId, nodeState, time: MockTime.nowMs() }),
             });
+            const node = commissioningController.getConnectedNode(nodeId);
+            expect(node).to.be.an.instanceOf(PairedNode);
 
             Time.get = () => mockTimeInstance;
 
@@ -311,7 +313,7 @@ describe("Integration Test", () => {
                 throw new Error("Network should not be requested post starting");
             };
 
-            assert.deepEqual(commissioningController.getCommissionedNodes(), [node.nodeId]);
+            assert.deepEqual(commissioningController.getCommissionedNodes(), [nodeId]);
             assert.equal(commissioningChangedCallsServer.length, 1);
             assert.equal(commissioningChangedCallsServer[0].fabricIndex, FabricIndex(1));
             assert.equal(sessionChangedCallsServer.length, 1);
@@ -320,10 +322,10 @@ describe("Integration Test", () => {
             assert.equal(sessionInfo.length, 1);
             assert.ok(sessionInfo[0].fabric);
             assert.equal(sessionInfo[0].fabric.fabricIndex, FabricIndex(1));
-            assert.equal(sessionInfo[0].nodeId, node.nodeId);
+            assert.equal(sessionInfo[0].nodeId, nodeId);
 
             assert.equal(nodeStateChangesController1Node1.length, 1);
-            assert.equal(nodeStateChangesController1Node1[0].nodeId, node.nodeId);
+            assert.equal(nodeStateChangesController1Node1[0].nodeId, nodeId);
             assert.equal(nodeStateChangesController1Node1[0].nodeState, NodeStateInformation.Connected);
         }).timeout(10000);
 
@@ -1332,7 +1334,7 @@ describe("Integration Test", () => {
 
             const existingNodes = commissioningController.getCommissionedNodes();
 
-            const node = await commissioningController.commissionNode({
+            const nodeId = await commissioningController.commissionNode({
                 discovery: {
                     knownAddress: { ip: SERVER_IPv6, port: matterPort2, type: "udp" },
                     identifierData: { longDiscriminator },
@@ -1345,10 +1347,12 @@ describe("Integration Test", () => {
                 stateInformationCallback: (nodeId: NodeId, nodeState: NodeStateInformation) =>
                     nodeStateChangesController1Node2.push({ nodeId, nodeState, time: MockTime.nowMs() }),
             });
+            const node = commissioningController.getConnectedNode(nodeId);
+            expect(node).to.be.an.instanceOf(PairedNode);
 
             Time.get = () => mockTimeInstance;
 
-            assert.deepEqual(commissioningController.getCommissionedNodes(), [...existingNodes, node.nodeId]);
+            assert.deepEqual(commissioningController.getCommissionedNodes(), [...existingNodes, nodeId]);
 
             assert.equal(commissioningServer2CertificateProviderCalled, true);
             assert.equal(commissioningChangedCallsServer2.length, 1);
@@ -1360,7 +1364,7 @@ describe("Integration Test", () => {
             assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 0);
 
             assert.equal(nodeStateChangesController1Node2.length, 1);
-            assert.equal(nodeStateChangesController1Node2[0].nodeId, node.nodeId);
+            assert.equal(nodeStateChangesController1Node2[0].nodeId, nodeId);
             assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.Connected);
         });
 
