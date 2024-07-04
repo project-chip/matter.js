@@ -100,7 +100,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return interfaceDetails;
     }
 
-    async openAdvertisementWindow() {
+    openAdvertisementWindow() {
         if (!this.#matterDevice) {
             throw new InternalError("Server runtime device instance is missing");
         }
@@ -108,13 +108,13 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#matterDevice.startAnnouncement();
     }
 
-    async announceNow() {
+    announceNow() {
         if (!this.#matterDevice) {
             throw new InternalError("Server runtime device instance is missing");
         }
 
         // TODO - see comment in startAdvertising
-        await this.#matterDevice.announce(true);
+        return this.#matterDevice.announce(true);
     }
 
     /**
@@ -258,7 +258,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#primaryNetInterface?.port ?? 0;
     }
 
-    async endCommissioning() {
+    endCommissioning() {
         if (this.#matterDevice !== undefined) {
             return this.#matterDevice.endCommissioning();
         }
