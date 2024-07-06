@@ -136,7 +136,7 @@ export class MatterController {
 
         let controller: MatterController;
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
-        if (fabricStorage.has("fabric")) {
+        if (await fabricStorage.has("fabric")) {
             const fabric = Fabric.createFromStorageObject(await fabricStorage.get<FabricJsonObject>("fabric"));
             controller = new MatterController({
                 sessionStorage,
