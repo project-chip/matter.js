@@ -84,9 +84,10 @@ export class StorageBackendDisk extends SyncStorage {
         const contextKey = this.getContextBaseKey(contexts);
         const keys = [];
         const contextKeyStart = `${contextKey}.`;
+        const len = contextKeyStart.length;
         for (const key of Object.keys(this.localStorage)) {
-            if (key.startsWith(contextKeyStart) && key.indexOf(".", contextKeyStart.length) === -1) {
-                keys.push(key.substring(contextKeyStart.length));
+            if (key.startsWith(contextKeyStart) && key.indexOf(".", len) === -1) {
+                keys.push(key.substring(len));
             }
         }
         return keys;
@@ -104,10 +105,11 @@ export class StorageBackendDisk extends SyncStorage {
     contexts(contexts: string[]) {
         const contextKey = this.getContextBaseKey(contexts, true);
         const startContextKey = contextKey.length ? `${contextKey}.` : "";
+        const len = startContextKey.length;
         const foundContexts = new Array<string>();
         for (const key of Object.keys(this.localStorage)) {
             if (key.startsWith(startContextKey)) {
-                const subKeys = key.substring(startContextKey.length).split(".");
+                const subKeys = key.substring(len).split(".");
                 if (subKeys.length === 1) continue; // found leaf key
                 const context = subKeys[0];
                 if (!foundContexts.includes(context)) {
