@@ -50,8 +50,13 @@ export function StructManager(owner: RootSupervisor, schema: Schema): ValueSuper
         }
     }
 
+    let name = schema.name;
+    if (schema.tag === ElementTag.Cluster && !name.endsWith("$State")) {
+        name = `${name}$State`;
+    }
+
     const Wrapper = GeneratedClass({
-        name: schema.tag === ElementTag.Cluster ? `${schema.name}$State` : `${schema.name}`,
+        name,
 
         initialize(this: Wrapper, ref: Val.Reference, session: ValueSupervisor.Session) {
             // Only objects are acceptable

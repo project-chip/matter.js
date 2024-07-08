@@ -75,7 +75,7 @@ export class GeneralDiagnosticsServer extends Base {
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
         if (lifecycle.online !== undefined) {
-            this.reactTo(lifecycle.online, this.#online);
+            this.reactTo(lifecycle.online, this.#online, { lock: true });
         }
 
         if (this.events.activeHardwareFaults$Changed !== undefined) {

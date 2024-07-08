@@ -266,7 +266,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
     protected override async start() {
         const mdnsScanner = (await this.owner.env.load(MdnsService)).scanner;
-        await this.owner.act(agent => agent.load(ProductDescriptionServer));
+        await this.owner.act("start-network", agent => agent.load(ProductDescriptionServer));
 
         this.#interactionServer = await TransactionalInteractionServer.create(this.owner);
 
@@ -305,7 +305,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         this.owner.env.set(FabricManager, matterDevice.fabricManager);
         this.owner.env.set(ExchangeManager, this.#matterDevice.exchangeManager);
 
-        await this.owner.act(agent => agent.load(SessionsBehavior));
+        await this.owner.act("load-sessions", agent => agent.load(SessionsBehavior));
         this.owner.eventsOf(CommissioningBehavior).commissioned.on(() => this.endUncommissionedMode());
 
         await this.addTransports(matterDevice);
