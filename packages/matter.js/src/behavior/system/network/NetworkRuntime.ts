@@ -42,7 +42,9 @@ export abstract class NetworkRuntime {
         try {
             await this.start();
 
-            await this.#owner.act(agent => this.owner.lifecycle.online.emit(agent.context));
+            await this.#owner.act(`emit-online<${this.#owner}>`, agent =>
+                this.owner.lifecycle.online.emit(agent.context),
+            );
         } catch (e) {
             await this.#stop();
             throw e;
@@ -59,7 +61,9 @@ export abstract class NetworkRuntime {
         try {
             await this.#stop();
         } finally {
-            await this.#owner.act(agent => this.owner.lifecycle.offline.emit(agent.context));
+            await this.#owner.act(`emit-offline<${this.#owner}>`, agent =>
+                this.owner.lifecycle.offline.emit(agent.context),
+            );
         }
 
         this.#resolveClosed();
@@ -74,7 +78,10 @@ export abstract class NetworkRuntime {
         try {
             await this.stop();
         } finally {
-            await this.#owner.act(agent => (agent.get(NetworkBehavior).internal.runtime = undefined));
+            await this.#owner.act(
+                "clear-network-runtime",
+                agent => (agent.get(NetworkBehavior).internal.runtime = undefined),
+            );
         }
     }
 

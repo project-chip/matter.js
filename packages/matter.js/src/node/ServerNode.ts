@@ -193,7 +193,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     }
 
     async advertiseNow() {
-        await this.act(agent => agent.get(NetworkServer).advertiseNow());
+        await this.act(`advertiseNow<${this}>`, agent => agent.get(NetworkServer).advertiseNow());
     }
 
     protected override async initialize(agent: Agent.Instance<T>) {

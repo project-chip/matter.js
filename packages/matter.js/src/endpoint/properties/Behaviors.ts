@@ -425,7 +425,7 @@ export class Behaviors {
     async reset() {
         for (const backing of Object.values(this.#backings)) {
             try {
-                await this.#endpoint.act(async agent => {
+                await this.#endpoint.act(`close<${this}>`, async agent => {
                     await backing.close(agent);
                 });
             } catch (e) {
