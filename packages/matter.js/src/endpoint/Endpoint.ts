@@ -175,7 +175,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * @param values the values to change
      */
     async set(values: SupportedBehaviors.StatePatchOf<T["behaviors"]>) {
-        await this.act(async agent => {
+        await this.act(`set<${this}>`, async agent => {
             const tx = agent.context.transaction;
 
             await tx.begin();
@@ -218,7 +218,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * @param values the values to change
      */
     async setStateOf<T extends Behavior.Type>(type: T, values: Behavior.PatchStateOf<T>) {
-        await this.act(async agent => {
+        await this.act(`setStateOf<${this}>`, async agent => {
             const behavior = agent.get(type);
 
             const tx = agent.context.transaction;
@@ -521,15 +521,40 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      *
      * {@link actor} may be async.  If so, the acting context will remain open until the returned {@link Promise}
      * resolves.
+     *
+     * @param purpose textual description of operation used for diagnostics
+     * @param actor the function that performs the action
      */
-    act<R>(actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
+    act<R>(purpose: string, actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R>;
+
+    /**
+     * Version of {@link act} without explicit diagnostic purpose.
+     */
+    act<R>(actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R>;
+
+    act<R>(
+        actorOrPurpose: string | ((agent: Agent.Instance<T>) => MaybePromise<R>),
+        actor?: (agent: Agent.Instance<T>) => MaybePromise<R>,
+    ): MaybePromise<R> {
+        let purpose;
+        if (typeof actorOrPurpose === "string") {
+            purpose = actorOrPurpose;
+        } else {
+            actor = actorOrPurpose;
+            purpose = "offline";
+        }
+
+        if (typeof actor !== "function") {
+            throw new ImplementationError("Actor must be a function");
+        }
+
         this.construction.assert(this.toString());
 
         if (!this.#activity) {
             this.#activity = this.env.get(NodeActivity);
         }
 
-        return OfflineContext.act("offline", this.#activity, context => {
+        return OfflineContext.act(purpose, this.#activity, context => {
             return actor(context.agentFor(this));
         });
     }
@@ -668,7 +693,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             this.#activity = this.env.get(NodeActivity);
         }
 
-        const result = OfflineContext.act("initialize", this.#activity, initializeEndpoint, {
+        const result = OfflineContext.act(`initialize<${this}>`, this.#activity, initializeEndpoint, {
             trace,
         });
 

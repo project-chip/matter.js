@@ -75,11 +75,11 @@ export class ServerPartStore implements PartStore {
             const behaviorStorage = this.#storage.createContext(behaviorId);
 
             for (const key of await behaviorStorage.keys()) {
-                behaviorValues[key] = behaviorStorage.get(key);
+                behaviorValues[key] = await behaviorStorage.get(key);
             }
         }
 
-        const number = this.#storage.get(NUMBER_KEY, -1) as number | undefined;
+        const number = await this.#storage.get(NUMBER_KEY, -1);
         if (number !== -1) {
             this.#number = number;
         }

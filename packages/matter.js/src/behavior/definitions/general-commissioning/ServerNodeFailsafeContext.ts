@@ -77,7 +77,7 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
     }
 
     override async restoreNetworkState() {
-        await this.#node.act(async agent => {
+        await this.#node.act(this.restoreNetworkState.name, async agent => {
             const context = agent.context;
 
             await this.#node.visit(async endpoint => {
@@ -96,7 +96,7 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
     }
 
     override async restoreBreadcrumb() {
-        await this.#node.act(agent => {
+        await this.#node.act(this.restoreBreadcrumb.name, agent => {
             agent.generalCommissioning.state.breadcrumb = 0;
         });
     }

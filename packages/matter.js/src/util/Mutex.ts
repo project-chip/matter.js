@@ -59,7 +59,9 @@ export class Mutex implements PromiseLike<unknown> {
                 }
 
                 this.#cancel = cancel;
-                return this.initiateTask(task).finally((this.#cancel = undefined));
+                return this.initiateTask(task).finally(() => {
+                    this.#cancel = undefined;
+                });
             });
         }
     }

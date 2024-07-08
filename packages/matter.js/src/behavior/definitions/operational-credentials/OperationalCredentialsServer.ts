@@ -471,9 +471,9 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
     async #nodeOnline() {
         const fabricManager = this.endpoint.env.get(FabricManager);
-        this.reactTo(fabricManager.events.added, this.#handleAddedFabric);
-        this.reactTo(fabricManager.events.updated, this.#handleUpdatedFabric);
-        this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric);
+        this.reactTo(fabricManager.events.added, this.#handleAddedFabric, { lock: true });
+        this.reactTo(fabricManager.events.updated, this.#handleUpdatedFabric, { lock: true });
+        this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric, { lock: true });
         await this.#updateFabrics();
     }
 }
