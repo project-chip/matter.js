@@ -8,10 +8,48 @@ import dgram from "react-native-udp";
 import { Diagnostic, Logger } from "@project-chip/matter.js/log";
 import { MAX_UDP_MESSAGE_SIZE, NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
 import { ByteArray } from "@project-chip/matter.js/util";
-import type { RemoteInfo, Socket, SocketOptions } from "dgram";
 import { NetworkReactNative } from "./NetworkReactNative.js";
 
 const logger = Logger.get("UdpChannelNode");
+
+// Move out some dram types not available in react-native-udp
+// TODO find a way to clean that up once anything is working
+interface RemoteInfo {
+    address: string;
+    family: "IPv4" | "IPv6";
+    port: number;
+    size: number;
+}
+type SocketType = "udp4" | "udp6";
+interface SocketOptions {
+    type: SocketType;
+    reuseAddr?: boolean | undefined;
+    /**
+     * @default false
+     */
+    ipv6Only?: boolean | undefined;
+    recvBufferSize?: number | undefined;
+    sendBufferSize?: number | undefined;
+    lookup?:
+        | ((
+              hostname: string,
+              options: any,
+              callback: (err: Error | null, address: string, family: number) => void,
+          ) => void)
+        | undefined;
+}
+interface Socket {
+    setBroadcast(flag: boolean): void;
+    setMulticastInterface(interfaceAddress: string): void;
+    addMembership(multicastAddress: string, multicastInterface?: string): void;
+    on(event: "message", listener: (msg: ByteArray, rinfo: RemoteInfo) => void): void;
+    on(event: "error", listener: (error: Error) => void): void;
+    removeListener(event: "message", listener: (msg: ByteArray, rinfo: RemoteInfo) => void): void;
+    removeListener(event: "error", listener: (error: Error) => void): void;
+    send(msg: ByteArray, port: number, address: string, callback: (error: Error | null) => void): void;
+    close(): void;
+    address(): { address: string; port: number };
+}
 
 function createDgramSocket(host: string | undefined, port: number | undefined, options: SocketOptions) {
     // @ts-expect-error default types are strange

@@ -37,9 +37,10 @@
         "@project-chip/matter-node.js": "0.10.0-alpha.0-20240709-9d45732c",
         "@project-chip/matter.js": "0.10.0-alpha.0-20240709-9d45732c",
         "@react-native-async-storage/async-storage": "^1.23.1",
-        "react-native-ble-plx": "^3.2.0",
         "@react-native-community/netinfo": "^11.3.2",
-        "react-native-quick-crypto": "^0.7.0-rc.9",
+        "@types/node": "^20.14.10",
+        "react-native-ble-plx": "^3.2.0",
+        "react-native-quick-crypto": "^0.7.1",
         "react-native-udp": "^4.1.7"
     },
     "files": [
