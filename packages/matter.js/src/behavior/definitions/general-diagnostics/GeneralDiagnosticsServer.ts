@@ -283,7 +283,7 @@ export class GeneralDiagnosticsServer extends Base {
         );
     }
 
-    #online() {
+    async #online() {
         this.events.bootReason.emit(
             { bootReason: this.state.bootReason ?? GeneralDiagnostics.BootReason.Unspecified },
             this.context,
@@ -299,7 +299,7 @@ export class GeneralDiagnosticsServer extends Base {
             this.callback(this.#updateTotalOperationalHoursCounter),
         ).start();
 
-        this.#updateNetworkList();
+        await this.#updateNetworkList();
     }
 
     #updateTotalOperationalHoursCounter() {
@@ -309,12 +309,12 @@ export class GeneralDiagnosticsServer extends Base {
         this.internal.lastTotalOperationalHoursCounterUpdateTime = now;
     }
 
-    #updateNetworkList() {
+    async #updateNetworkList() {
         const mdnsService = this.endpoint.env.get(MdnsService);
         const mdnsLimitedToNetworkInterfaces = mdnsService.limitedToNetInterface;
 
         const networkRuntime = this.endpoint.behaviors.internalsOf(NetworkServer).runtime;
-        const systemNetworkInterfaces = networkRuntime.networkInterfaces;
+        const systemNetworkInterfaces = await networkRuntime.getNetworkInterfaces();
 
         // Determine the network type for all interfaces based on the Network Commissioning Server on the root endpoint
         // TODO: Find a way if needed to handle devices connected with multiple technologies and report that correctly

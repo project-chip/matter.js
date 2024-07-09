@@ -16,7 +16,9 @@ import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
-export const GeneralDiagnosticsClusterHandler: () => ClusterServerHandlers<typeof GeneralDiagnosticsCluster> = () => {
+export const GeneralDiagnosticsClusterHandler: () => Promise<
+    ClusterServerHandlers<typeof GeneralDiagnosticsCluster>
+> = async () => {
     let bootUpTime = 0;
 
     // We update the totalOperationalHours attribute every hour
@@ -30,6 +32,16 @@ export const GeneralDiagnosticsClusterHandler: () => ClusterServerHandlers<typeo
         },
     );
 
+    const network = Network.get();
+    const interfaces = await network.getNetInterfaces();
+    const interfaceDetails = new Array<NetworkInterfaceDetailed>();
+    for (const { name, type } of interfaces) {
+        const details = await network.getIpMac(name);
+        if (details !== undefined) {
+            interfaceDetails.push({ name, type, ...details });
+        }
+    }
+
     return {
         initializeClusterServer: ({ attributes: { totalOperationalHours, networkInterfaces } }) => {
             bootUpTime = Time.nowMs();
@@ -37,16 +49,6 @@ export const GeneralDiagnosticsClusterHandler: () => ClusterServerHandlers<typeo
                 totalOperationalHoursAttribute = totalOperationalHours;
                 totalOperationalHoursUpdateTimer.start();
             }
-
-            const network = Network.get();
-            const interfaces = network.getNetInterfaces();
-            const interfaceDetails = new Array<NetworkInterfaceDetailed>();
-            interfaces.forEach(({ name, type }) => {
-                const details = network.getIpMac(name);
-                if (details !== undefined) {
-                    interfaceDetails.push({ name, type, ...details });
-                }
-            });
 
             // Filter all unassigned MACs out, sort operational on top, limit to 8 entries and map to the required format.
             networkInterfaces.setLocal(
@@ -81,7 +83,7 @@ export const GeneralDiagnosticsClusterHandler: () => ClusterServerHandlers<typeo
     };
 };
 
-export const createDefaultGeneralDiagnosticsClusterServer = (commandHandler: NamedHandler<any>) =>
+export const createDefaultGeneralDiagnosticsClusterServer = async (commandHandler: NamedHandler<any>) =>
     ClusterServer(
         GeneralDiagnosticsCluster,
         {
@@ -95,7 +97,7 @@ export const createDefaultGeneralDiagnosticsClusterServer = (commandHandler: Nam
             activeNetworkFaults: [],
             testEventTriggersEnabled: false,
         },
-        WrapCommandHandler(GeneralDiagnosticsClusterHandler(), commandHandler),
+        WrapCommandHandler(await GeneralDiagnosticsClusterHandler(), commandHandler),
         {
             bootReason: true,
         },

@@ -446,7 +446,7 @@ function inferCurve(key: Key, bytes: number) {
                 break;
 
             default:
-                throw new KeyError("Cannot infer named curve from key length");
+                throw new KeyError(`Cannot infer named curve from key length ${bytes}`);
         }
     }
 }

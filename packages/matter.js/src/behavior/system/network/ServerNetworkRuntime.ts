@@ -86,21 +86,21 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         }));
     }
 
-    get networkInterfaces(): NetworkInterfaceDetailed[] {
+    async getNetworkInterfaces(): Promise<NetworkInterfaceDetailed[]> {
         const network = this.owner.env.get(Network);
 
-        const interfaces = network.getNetInterfaces(this.networkInterfaceConfiguration);
+        const interfaces = await network.getNetInterfaces(this.networkInterfaceConfiguration);
         const interfaceDetails = new Array<NetworkInterfaceDetailed>();
-        interfaces.forEach(({ name, type }) => {
-            const details = network.getIpMac(name);
+        for (const { name, type } of interfaces) {
+            const details = await network.getIpMac(name);
             if (details !== undefined) {
                 interfaceDetails.push({ name, type, ...details });
             }
-        });
+        }
         return interfaceDetails;
     }
 
-    async openAdvertisementWindow() {
+    openAdvertisementWindow() {
         if (!this.#matterDevice) {
             throw new InternalError("Server runtime device instance is missing");
         }
@@ -108,13 +108,13 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#matterDevice.startAnnouncement();
     }
 
-    async announceNow() {
+    announceNow() {
         if (!this.#matterDevice) {
             throw new InternalError("Server runtime device instance is missing");
         }
 
         // TODO - see comment in startAdvertising
-        await this.#matterDevice.announce(true);
+        return this.#matterDevice.announce(true);
     }
 
     /**
@@ -258,7 +258,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#primaryNetInterface?.port ?? 0;
     }
 
-    async endCommissioning() {
+    endCommissioning() {
         if (this.#matterDevice !== undefined) {
             return this.#matterDevice.endCommissioning();
         }

@@ -19,7 +19,7 @@ import { Network } from "../net/Network.js";
 import { UdpMulticastServer } from "../net/UdpMulticastServer.js";
 import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { Cache } from "../util/Cache.js";
+import { AsyncCache } from "../util/Cache.js";
 import { isDeepEqual } from "../util/DeepEqual.js";
 
 const logger = Logger.get("MdnsServer");
@@ -49,13 +49,13 @@ export class MdnsServer {
         );
     }
 
-    #recordsGenerator = new Map<string, (netInterface: string) => DnsRecord<any>[]>();
-    readonly #records = new Cache<Map<string, DnsRecord<any>[]>>(
+    #recordsGenerator = new Map<string, (netInterface: string) => Promise<DnsRecord<any>[]>>();
+    readonly #records = new AsyncCache<Map<string, DnsRecord<any>[]>>(
         "MDNS discovery",
-        (multicastInterface: string) => {
+        async (multicastInterface: string) => {
             const portTypeMap = new Map<string, DnsRecord<any>[]>();
             for (const [announceTypePort, generator] of this.#recordsGenerator) {
-                portTypeMap.set(announceTypePort, generator(multicastInterface));
+                portTypeMap.set(announceTypePort, await generator(multicastInterface));
             }
             return portTypeMap;
         },
@@ -91,7 +91,7 @@ export class MdnsServer {
     async #handleDnsMessage(messageBytes: ByteArray, remoteIp: string, netInterface: string) {
         // This message was on a subnet not supported by this device
         if (netInterface === undefined) return;
-        const records = this.#records.get(netInterface);
+        const records = await this.#records.get(netInterface);
 
         // No need to process the DNS message if there are no records to serve
         if (records.size === 0) return;
@@ -241,8 +241,8 @@ export class MdnsServer {
 
     async announce(announcedNetPort?: number) {
         await Promise.all(
-            this.#getMulticastInterfacesForAnnounce().map(async ({ name: netInterface }) => {
-                const records = this.#records.get(netInterface);
+            (await this.#getMulticastInterfacesForAnnounce()).map(async ({ name: netInterface }) => {
+                const records = await this.#records.get(netInterface);
                 for (const [portType, portTypeRecords] of records) {
                     if (announcedNetPort !== undefined && !this.isKeyForPort(portType, announcedNetPort)) continue;
 
@@ -257,7 +257,7 @@ export class MdnsServer {
     async expireAnnouncements(announcedNetPort?: number, type?: AnnouncementType) {
         await Promise.all(
             this.#records.keys().map(async netInterface => {
-                const records = this.#records.get(netInterface);
+                const records = await this.#records.get(netInterface);
                 for (const [portType, portTypeRecords] of records) {
                     if (announcedNetPort !== undefined && !this.isKeyForPort(portType, announcedNetPort)) continue;
                     if (
@@ -296,7 +296,7 @@ export class MdnsServer {
     async setRecordsGenerator(
         hostPort: number,
         type: AnnouncementType,
-        generator: (netInterface: string) => DnsRecord<any>[],
+        generator: (netInterface: string) => Promise<DnsRecord<any>[]>,
     ) {
         await this.#records.clear();
         this.#recordLastSentAsMulticastAnswer.clear();

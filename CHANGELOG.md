@@ -45,6 +45,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: Added BTP Idle timeout as defined in Matter specification
     -   Enhancement: Enhanced default implementation of GeneralDiagnostics cluster with new convenience methods 
     -   Enhancement: Many more protocol and functionality syncs with matter specification 1.3
+    -   Enhancement: The Network methods that handles NetworkInterfaces are now "MaybePromise" to allow async implementations
     -   Enhancement/Fix: Several fixes and optimizations in Session and Message Exchange handling
     -   Enhancement/Fix: Adjusted MRP behavior with chip and only use/expect MRP ion unreliable channels (UDP). Fixes BLE commissioning
     -   Fix: Adjusted ValidationErrors to be more specific if they should return "InvalidAction" ot "ConstraintError".
@@ -64,7 +65,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
     -   Removal: We removed old Scenes cluster implementation which was never fully implemented or used by any Matter controller
 -   matter.js-react-native:
-    -   Feature: Introduces new package that provides a React Native compatible platform Implementations for Matter.js. This package is still in development and should be considered experimental for now! Currently supports UDP, BLE, AsyncStorage and Crypto platform features.
+    -   Feature: Introduces new package that provides a React Native compatible platform Implementations for Matter.js. This package is still in development and should be considered experimental for now! Currently it supports UDP, BLE, AsyncStorage and Crypto platform features.
 -   matter.js chip and python Testing:
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 
