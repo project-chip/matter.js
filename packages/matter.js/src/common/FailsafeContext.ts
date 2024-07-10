@@ -18,6 +18,7 @@ import { ByteArray } from "../util/ByteArray.js";
 import { AsyncObservable } from "../util/Observable.js";
 import { FailsafeTimer, MatterFabricConflictError } from "./FailsafeTimer.js";
 import { MatterFlowError } from "./MatterError.js";
+import { ValidationError } from "./ValidationError.js";
 
 const logger = Logger.get("FailsafeContext");
 
@@ -219,12 +220,19 @@ export abstract class FailsafeContext {
         const { nocValue, icacValue, adminVendorId, ipkValue, caseAdminSubject } = nocData;
 
         // Handle error if the CaseAdminSubject field is not a valid ACL subject in the context of AuthMode set to CASE
-        if (
-            !NodeId.isOperationalNodeId(caseAdminSubject) &&
-            !NodeId.isCaseAuthenticatedTag(caseAdminSubject) &&
-            CaseAuthenticatedTag.getVersion(NodeId.extractAsCaseAuthenticatedTag(caseAdminSubject)) === 0
-        ) {
-            throw new MatterFabricInvalidAdminSubjectError();
+        if (!NodeId.isOperationalNodeId(caseAdminSubject) && !NodeId.isCaseAuthenticatedTag(caseAdminSubject)) {
+            try {
+                if (CaseAuthenticatedTag.getVersion(NodeId.extractAsCaseAuthenticatedTag(caseAdminSubject)) === 0) {
+                    throw new MatterFabricInvalidAdminSubjectError();
+                }
+            } catch (error) {
+                // Validation error can happen when parsing the CaseAuthenticatedTag, then it is invalid too
+                if (error instanceof ValidationError) {
+                    throw new MatterFabricInvalidAdminSubjectError();
+                } else {
+                    throw error;
+                }
+            }
         }
 
         builder.setOperationalCert(nocValue, icacValue);
