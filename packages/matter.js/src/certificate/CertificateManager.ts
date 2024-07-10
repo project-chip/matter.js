@@ -835,8 +835,7 @@ export class CertificateManager {
             );
         }
 
-        // Root cert is self signed anyway, so we do not need to verify it with itself
-        //Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), this.rootCertToAsn1(rootCert), rootCert.signature);
+        Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), this.rootCertToAsn1(rootCert), rootCert.signature);
     }
 
     /**
