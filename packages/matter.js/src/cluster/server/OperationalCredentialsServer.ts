@@ -495,7 +495,13 @@ export const OperationalCredentialsClusterHandler: (
             };
         },
 
-        addTrustedRootCertificate: async ({ request: { rootCaCertificate }, session }) => {
+        addTrustedRootCertificate: async ({
+            request: { rootCaCertificate },
+            attributes: { trustedRootCertificates },
+            session,
+        }) => {
+            assertSecureSession(session);
+
             const failsafeContext = session.context.failsafeContext;
 
             if (failsafeContext.hasRootCert) {
@@ -526,6 +532,8 @@ export const OperationalCredentialsClusterHandler: (
                 }
                 throw error;
             }
+
+            trustedRootCertificates.updated(session);
         },
     };
 };
