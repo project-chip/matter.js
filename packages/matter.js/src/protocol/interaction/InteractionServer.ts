@@ -1064,7 +1064,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             logger.debug(
                 `Clear subscriptions for Subscriber node ${session.peerNodeId} because keepSubscriptions=false`,
             );
-            await session.context.clearSubscriptionsForNode(session.peerNodeId, true);
+            await session.context.clearSubscriptionsForNode(fabric.fabricIndex, session.peerNodeId, true);
         }
 
         const maxInterval = subscriptionHandler.getMaxInterval();
