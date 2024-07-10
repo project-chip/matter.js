@@ -12,6 +12,7 @@ import { MatterFabricInvalidAdminSubjectError } from "../../../common/FailsafeCo
 import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
 import { MatterFlowError, UnexpectedDataError } from "../../../common/MatterError.js";
 import { ValidationError } from "../../../common/ValidationError.js";
+import { CryptoVerifyError } from "../../../crypto/Crypto.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { Fabric, PublicKeyError } from "../../../fabric/Fabric.js";
@@ -158,6 +159,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 debugText: error.message,
             };
         } else if (
+            error instanceof CryptoVerifyError ||
             error instanceof CertificateError ||
             error instanceof ValidationError ||
             error instanceof UnexpectedDataError
@@ -406,6 +408,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         } catch (error) {
             logger.info("setting root certificate failed", error);
             if (
+                error instanceof CryptoVerifyError ||
                 error instanceof CertificateError ||
                 error instanceof ValidationError ||
                 error instanceof UnexpectedDataError

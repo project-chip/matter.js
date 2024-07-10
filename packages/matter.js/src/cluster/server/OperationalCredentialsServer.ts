@@ -18,6 +18,7 @@ import { MatterFabricConflictError } from "../../common/FailsafeTimer.js";
 import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
 import { ValidationError } from "../../common/ValidationError.js";
+import { CryptoVerifyError } from "../../crypto/Crypto.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { PublicKeyError } from "../../fabric/Fabric.js";
 import { FabricTableFullError } from "../../fabric/FabricManager.js";
@@ -209,6 +210,7 @@ export const OperationalCredentialsClusterHandler: (
                         debugText: error.message,
                     };
                 } else if (
+                    error instanceof CryptoVerifyError ||
                     error instanceof CertificateError ||
                     error instanceof ValidationError ||
                     error instanceof UnexpectedDataError
@@ -394,6 +396,7 @@ export const OperationalCredentialsClusterHandler: (
             } catch (error) {
                 logger.info("building fabric for update failed", error);
                 if (
+                    error instanceof CryptoVerifyError ||
                     error instanceof CertificateError ||
                     error instanceof ValidationError ||
                     error instanceof UnexpectedDataError
@@ -498,6 +501,7 @@ export const OperationalCredentialsClusterHandler: (
             } catch (error) {
                 logger.info("setting root certificate failed", error);
                 if (
+                    error instanceof CryptoVerifyError ||
                     error instanceof CertificateError ||
                     error instanceof ValidationError ||
                     error instanceof UnexpectedDataError
