@@ -332,7 +332,10 @@ export const OperationalCredentialsClusterHandler: (
                 const failsafeContext = device.failsafeContext;
                 const temporaryRootCert = failsafeContext.rootCert;
                 if (temporaryRootCert !== undefined) {
+                    logger.debug(`Add temporary trusted root certificate to the list.`);
                     rootCerts.push(temporaryRootCert);
+                } else {
+                    logger.debug(`No temporary trusted root certificate to be added.`);
                 }
             }
             return rootCerts;
