@@ -17,7 +17,7 @@ import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { AsyncObservable } from "../util/Observable.js";
 import { FailsafeTimer, MatterFabricConflictError } from "./FailsafeTimer.js";
-import { MatterFlowError } from "./MatterError.js";
+import { MatterFlowError, UnexpectedDataError } from "./MatterError.js";
 import { ValidationError } from "./ValidationError.js";
 
 const logger = Logger.get("FailsafeContext");
@@ -227,7 +227,7 @@ export abstract class FailsafeContext {
                 }
             } catch (error) {
                 // Validation error can happen when parsing the CaseAuthenticatedTag, then it is invalid too
-                if (error instanceof ValidationError) {
+                if (error instanceof ValidationError || error instanceof UnexpectedDataError) {
                     throw new MatterFabricInvalidAdminSubjectError();
                 } else {
                     throw error;
