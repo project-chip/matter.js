@@ -32,7 +32,7 @@
         "matter-shell": "./dist/cjs/app.js"
     },
     "devDependencies": {
-        "typescript": "~5.5.2"
+        "typescript": "~5.5.3"
     },
     "dependencies": {
         "@project-chip/matter-node-ble.js": "0.10.0-alpha.0-20240709-9d45732c",
