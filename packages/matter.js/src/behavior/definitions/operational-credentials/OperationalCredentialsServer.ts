@@ -417,6 +417,11 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             }
             throw error;
         }
+
+        const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
+        const trustedRootCertificates = fabrics.map(fabric => fabric.rootCert);
+        trustedRootCertificates.push(rootCaCertificate);
+        this.state.trustedRootCertificates = trustedRootCertificates;
     }
 
     async #updateFabrics() {
@@ -472,11 +477,16 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         this.agent.get(CommissioningBehavior).handleFabricChange(fabricIndex, FabricAction.Removed);
     }
 
+    async #handleFailsafeClosed() {
+        await this.#updateFabrics();
+    }
+
     async #nodeOnline() {
         const fabricManager = this.endpoint.env.get(FabricManager);
         this.reactTo(fabricManager.events.added, this.#handleAddedFabric, { lock: true });
         this.reactTo(fabricManager.events.updated, this.#handleUpdatedFabric, { lock: true });
         this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric, { lock: true });
+        this.reactTo(fabricManager.events.failsafeClosed, this.#handleFailsafeClosed, { lock: true });
         await this.#updateFabrics();
     }
 }

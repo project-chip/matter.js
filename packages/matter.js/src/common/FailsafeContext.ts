@@ -105,6 +105,10 @@ export abstract class FailsafeContext {
         return this.#fabricBuilder.hasRootCert();
     }
 
+    get rootCert() {
+        return this.#fabricBuilder.rootCert;
+    }
+
     async completeCommission() {
         // 1. The Fail-Safe timer associated with the current Fail-Safe context SHALL be disarmed.
         if (this.#failsafe === undefined) {

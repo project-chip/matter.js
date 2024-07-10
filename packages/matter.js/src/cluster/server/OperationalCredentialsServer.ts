@@ -321,8 +321,21 @@ export const OperationalCredentialsClusterHandler: (
 
         trustedRootCertificatesAttributeGetter: ({ session, isFabricFiltered }) => {
             if (session === undefined || !session.isSecure) return []; // ???
+            if (!session.isSecure)
+                throw new MatterFlowError("addOperationalCert should be called on a secure session.");
+
             const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
-            return fabrics.map(fabric => fabric.rootCert);
+            const rootCerts = fabrics.map(fabric => fabric.rootCert);
+
+            const device = session.context;
+            if (device.isFailsafeArmed()) {
+                const failsafeContext = device.failsafeContext;
+                const temporaryRootCert = failsafeContext.rootCert;
+                if (temporaryRootCert !== undefined) {
+                    rootCerts.push(temporaryRootCert);
+                }
+            }
+            return rootCerts;
         },
 
         currentFabricIndexAttributeGetter: ({ session }) => {
