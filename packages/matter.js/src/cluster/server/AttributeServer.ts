@@ -13,6 +13,10 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 import { Endpoint as EndpointInterface } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
+import { AttributeModel } from "../../model/models/AttributeModel.js";
+import { ClusterModel } from "../../model/models/ClusterModel.js";
+import { DatatypeModel } from "../../model/models/DatatypeModel.js";
+import { MatterModel } from "../../model/models/MatterModel.js";
 import { FabricIndex } from "../../model/standard/elements/FabricIndex.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
@@ -21,10 +25,13 @@ import { Session } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
 import { MaybePromise } from "../../util/Promises.js";
+import { camelize } from "../../util/String.js";
 import { AccessLevel, Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
 import { ClusterDatasource } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("AttributeServer");
+
+const FabricIndexName = camelize(FabricIndex.name);
 
 /**
  * Thrown when an operation cannot complete because fabric information is
@@ -727,6 +734,7 @@ export function genericFabricScopedAttributeSetter<T>(
 export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     private readonly isCustomGetter: boolean;
     private readonly isCustomSetter: boolean;
+    private readonly fabricSensitiveElementsToRemove = new Array<string>();
 
     constructor(
         id: AttributeId,
@@ -814,6 +822,44 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         );
         this.isCustomGetter = isCustomGetter;
         this.isCustomSetter = isCustomSetter;
+
+        this.#determineSensitiveFieldsToRemove();
+    }
+
+    #determineSensitiveFieldsToRemove() {
+        const clusterFromModel = MatterModel.standard.get(ClusterModel, this.cluster.id);
+        if (clusterFromModel === undefined) {
+            logger.debug(`${this.cluster.name}: Cluster for Fabric scoped element not found in Model, ignore`);
+            return;
+        }
+        const attributeFromModel = clusterFromModel.get(AttributeModel, this.id);
+        if (attributeFromModel === undefined) {
+            logger.debug(
+                `${this.cluster.name}.${this.id}: Attribute for Fabric scoped element not found in Model, ignore`,
+            );
+            return;
+        }
+        if (!attributeFromModel.fabricScoped) {
+            logger.debug(`${this.cluster.name}.${this.id}: Attribute is not Fabric scoped in model, ignore`);
+            return;
+        }
+        if (attributeFromModel.children.length !== 1) {
+            logger.debug(`${this.cluster.name}.${this.id}: Attribute has not exactly one child, ignore`);
+            return;
+        }
+        const type = attributeFromModel.children[0].type;
+        if (type === undefined) {
+            logger.debug(`${this.cluster.name}.${this.id}: Attribute field has no type, ignore`);
+            return;
+        }
+        const dataType = clusterFromModel.get(DatatypeModel, type);
+        if (dataType === undefined) {
+            logger.debug(`${this.cluster.name}.${this.id}: DataType ${type} not found in model, ignore`);
+            return;
+        }
+        dataType.children
+            .filter(field => field.fabricSensitive)
+            .forEach(field => this.fabricSensitiveElementsToRemove.push(camelize(field.name)));
     }
 
     /**
@@ -824,6 +870,23 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         if (value !== undefined) {
             throw new InternalError(`Can not initialize fabric scoped attribute "${this.name}" with a value.`);
         }
+    }
+
+    override get(session: Session<MatterDevice>, isFabricFiltered: boolean, message?: Message): T {
+        const value = super.get(session, isFabricFiltered, message);
+        if (this.fabricSensitiveElementsToRemove.length && Array.isArray(value)) {
+            // Get the associated Fabric Index or uses -1 when no Fabric is associated because this value will
+            // never be in the struct
+            const associatedFabricIndex = (session as SecureSession<any>).fabric?.fabricIndex ?? -1;
+            logger.debug(`Remove fabric sensitive fields from attribute ${this.name}. Before:`, value);
+            value.forEach(data => {
+                if (data[FabricIndexName] !== associatedFabricIndex) {
+                    this.fabricSensitiveElementsToRemove.forEach(fieldName => delete data[fieldName]);
+                }
+            });
+            logger.debug(`Removed fabric sensitive fields from attribute ${this.name}. After:`, value);
+        }
+        return value;
     }
 
     /**
