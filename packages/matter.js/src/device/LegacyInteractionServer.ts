@@ -7,7 +7,7 @@
 import { MatterDevice } from "../MatterDevice.js";
 import { AccessLevel } from "../cluster/Cluster.js";
 import { AccessControlCluster } from "../cluster/definitions/index.js";
-import { AnyAttributeServer, AttributeServer } from "../cluster/server/AttributeServer.js";
+import { AnyAttributeServer, AttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
 import { CommandServer } from "../cluster/server/CommandServer.js";
 import { EventServer } from "../cluster/server/EventServer.js";
 import { Message } from "../codec/MessageCodec.js";
@@ -92,7 +92,14 @@ export class LegacyInteractionServer extends InteractionServer {
         endpoint: EndpointInterface,
     ) {
         this.#assertAccess(path, exchange, attribute.readAcl);
-        return super.readAttribute(path, attribute, exchange, isFabricFiltered, message, endpoint);
+        const value = await super.readAttribute(path, attribute, exchange, isFabricFiltered, message, endpoint);
+        if (attribute instanceof FabricScopedAttributeServer) {
+            return attribute.sanitizeFabricSensitiveFields(
+                value,
+                (exchange.session as SecureSession<MatterDevice>).fabric,
+            );
+        }
+        return value;
     }
 
     protected override async readEvent(

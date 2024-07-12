@@ -860,21 +860,14 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     }
 
     /**
-     * Initialize the attribute with a value. Because the value is stored on fabric level this method only initializes
-     * the version number.
+     * Sanitize the value of the attribute by removing fabric sensitive fields that do not belong to the
+     * associated fabric
      */
-    override init(value: T | undefined) {
-        if (value !== undefined) {
-            throw new InternalError(`Can not initialize fabric scoped attribute "${this.name}" with a value.`);
-        }
-    }
-
-    override get(session: Session<MatterDevice>, isFabricFiltered: boolean, message?: Message): T {
-        const value = super.get(session, isFabricFiltered, message);
+    sanitizeFabricSensitiveFields(value: T, associatedFabric?: Fabric) {
         if (this.fabricSensitiveElementsToRemove.length && Array.isArray(value)) {
             // Get the associated Fabric Index or uses -1 when no Fabric is associated because this value will
             // never be in the struct
-            const associatedFabricIndex = (session as SecureSession<any>).fabric?.fabricIndex ?? -1;
+            const associatedFabricIndex = associatedFabric?.fabricIndex ?? -1;
             logger.debug(`Remove fabric sensitive fields from attribute ${this.name}. Before:`, value);
             value.forEach(data => {
                 if (data[FabricIndexName] !== associatedFabricIndex) {
@@ -884,6 +877,16 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             logger.debug(`Removed fabric sensitive fields from attribute ${this.name}. After:`, value);
         }
         return value;
+    }
+
+    /**
+     * Initialize the attribute with a value. Because the value is stored on fabric level this method only initializes
+     * the version number.
+     */
+    override init(value: T | undefined) {
+        if (value !== undefined) {
+            throw new InternalError(`Can not initialize fabric scoped attribute "${this.name}" with a value.`);
+        }
     }
 
     /**
