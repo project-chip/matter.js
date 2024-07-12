@@ -92,14 +92,18 @@ export class LegacyInteractionServer extends InteractionServer {
         endpoint: EndpointInterface,
     ) {
         this.#assertAccess(path, exchange, attribute.readAcl);
-        const value = await super.readAttribute(path, attribute, exchange, isFabricFiltered, message, endpoint);
+        const data = await super.readAttribute(path, attribute, exchange, isFabricFiltered, message, endpoint);
         if (attribute instanceof FabricScopedAttributeServer) {
-            return attribute.sanitizeFabricSensitiveFields(
-                value,
-                (exchange.session as SecureSession<MatterDevice>).fabric,
-            );
+            const { value, version } = data;
+            return {
+                value: attribute.sanitizeFabricSensitiveFields(
+                    value,
+                    (exchange.session as SecureSession<MatterDevice>).fabric,
+                ),
+                version,
+            };
         }
-        return value;
+        return data;
     }
 
     protected override async readEvent(
