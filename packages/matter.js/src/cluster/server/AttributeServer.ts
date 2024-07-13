@@ -868,13 +868,14 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             // Get the associated Fabric Index or uses -1 when no Fabric is associated because this value will
             // never be in the struct
             const associatedFabricIndex = associatedFabric?.fabricIndex ?? -1;
-            logger.debug(`Remove fabric sensitive fields from attribute ${this.name}. Before:`, value);
-            value.forEach(data => {
+            return value.map(data => {
                 if (data[FabricIndexName] !== associatedFabricIndex) {
-                    this.fabricSensitiveElementsToRemove.forEach(fieldName => delete data[fieldName]);
+                    const result = { ...data };
+                    this.fabricSensitiveElementsToRemove.forEach(fieldName => delete result[fieldName]);
+                    return result;
                 }
+                return data;
             });
-            logger.debug(`Removed fabric sensitive fields from attribute ${this.name}. After:`, value);
         }
         return value;
     }
