@@ -55,7 +55,7 @@ import {
     WriteRequest,
     WriteResponse,
 } from "@project-chip/matter.js/interaction";
-import { MatterModel, Specification } from "@project-chip/matter.js/model";
+import { Specification } from "@project-chip/matter.js/model";
 import { TypeFromBitmapSchema, TypeFromPartialBitSchema } from "@project-chip/matter.js/schema";
 import { StorageBackendMemory, StorageContext, StorageManager, SyncStorage } from "@project-chip/matter.js/storage";
 import {
@@ -83,8 +83,6 @@ const DummyTestDevice = DeviceTypeDefinition({
     deviceClass: DeviceClasses.Simple,
     revision: 1,
 });
-
-MatterModel;
 
 const READ_REQUEST: ReadRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,

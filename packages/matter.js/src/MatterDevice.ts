@@ -64,6 +64,7 @@ export class MatterDevice {
     private readonly channelManager: ChannelManager;
     private readonly secureChannelProtocol = new SecureChannelProtocol(() => this.endCommissioning());
     private activeCommissioningMode = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
+    private activeCommissioningDiscriminator?: number;
     private activeCommissioningEndCallback?: () => void;
     private announceInterval: Timer;
     private announcementStartedTime: number | null = null;
@@ -139,6 +140,8 @@ export class MatterDevice {
                 // Last fabric got removed, so expire all announcements
                 await this.expireAllFabricAnnouncements();
             }
+            // If a commissioning window is open then we reannounce this because it was ended as fabric got added
+            this.reAnnounceAsCommissionable();
         });
         this.#fabricManager.events.updated.on(({ fabricIndex }) =>
             this.commissioningChangedCallback(fabricIndex, FabricAction.Updated),
@@ -167,19 +170,24 @@ export class MatterDevice {
                 // Delayed closing is executed when exchange is closed
                 await this.exchangeManager.closeSession(session);
             }
+
             const currentFabricIndex = session.fabric?.fabricIndex;
-            const existingSessionFabric =
-                currentFabricIndex === undefined ? undefined : this.getFabricByIndex(currentFabricIndex)?.fabricIndex;
-            if (existingSessionFabric !== undefined) {
-                this.sessionChangedCallback(existingSessionFabric);
+            if (currentFabricIndex !== undefined) {
+                this.sessionChangedCallback(currentFabricIndex);
             }
+
             if (this.isClosing) {
                 return;
             }
+
+            // Verify if the session associated fabric still exists
+            const existingSessionFabric =
+                currentFabricIndex === undefined ? undefined : this.getFabricByIndex(currentFabricIndex)?.fabricIndex;
+
             // When a session closes, announce existing fabrics again so that controller can detect the device again.
             // When session was closed and no fabric exist anymore then this is triggering a factory reset in upper layer
             // and it would be not good to announce a commissionable device and then reset that again with the factory reset
-            if (this.#fabricManager.getFabrics().length > 0 || !existingSessionFabric) {
+            if (this.#fabricManager.getFabrics().length > 0 || session.isPase || !existingSessionFabric) {
                 await this.startAnnouncement();
             }
         });
@@ -354,7 +362,10 @@ export class MatterDevice {
             }
             for (const broadcaster of this.broadcasters) {
                 await broadcaster.setFabrics(fabrics);
-                if (fabricsWithoutSessions > 0) {
+                if (
+                    fabricsWithoutSessions > 0 ||
+                    this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen
+                ) {
                     await broadcaster.announce();
                 }
             }
@@ -380,6 +391,7 @@ export class MatterDevice {
             throw new InternalError("Commissioning window already open with different callback!");
         }
         this.activeCommissioningMode = mode;
+        this.activeCommissioningDiscriminator = discriminator;
         if (activeCommissioningEndCallback !== undefined) {
             this.activeCommissioningEndCallback = activeCommissioningEndCallback;
         }
@@ -387,6 +399,15 @@ export class MatterDevice {
         // TODO - untracked promise
         this.sendCommissionableAnnouncement(mode, discriminator).catch(error =>
             logger.warn("Error sending announcement", error),
+        );
+    }
+
+    reAnnounceAsCommissionable() {
+        if (this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
+            return;
+        }
+        this.sendCommissionableAnnouncement(this.activeCommissioningMode, this.activeCommissioningDiscriminator).catch(
+            error => logger.warn("Error sending announcement", error),
         );
     }
 
