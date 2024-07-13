@@ -6,7 +6,7 @@
 
 import { MatterDevice } from "../../MatterDevice.js";
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
-import { EventServer } from "../../cluster/server/EventServer.js";
+import { AnyEventServer } from "../../cluster/server/EventServer.js";
 import { InternalError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { EventNumber } from "../../datatype/EventNumber.js";
@@ -512,7 +512,7 @@ export class SubscriptionHandler {
         readAttribute: (path: AttributePath, attribute: AnyAttributeServer<any>) => Promise<any>,
         readEvent: (
             path: EventPath,
-            event: EventServer<any, any>,
+            event: AnyEventServer<any, any>,
             eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
         ) => Promise<EventStorageData<any>[]>,
     ) {

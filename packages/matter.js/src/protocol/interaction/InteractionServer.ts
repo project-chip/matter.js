@@ -12,7 +12,7 @@ import {
     FabricScopedAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
-import { EventServer } from "../../cluster/server/EventServer.js";
+import { AnyEventServer, FabricSensitiveEventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { InternalError, MatterFlowError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
@@ -114,7 +114,7 @@ export interface AttributeWithPath {
 
 export interface EventWithPath {
     path: EventPath;
-    event: EventServer<any, any>;
+    event: AnyEventServer<any, any>;
 }
 
 export interface CommandWithPath {
@@ -588,7 +588,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
     protected async readEvent(
         _path: EventPath,
         eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
-        event: EventServer<any, any>,
+        event: AnyEventServer<any, any>,
         exchange: MessageExchange<MatterDevice>,
         isFabricFiltered: boolean,
         message: Message,

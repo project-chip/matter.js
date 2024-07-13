@@ -9,7 +9,7 @@ import { AccessLevel } from "../cluster/Cluster.js";
 import { AccessControlCluster } from "../cluster/definitions/index.js";
 import { AnyAttributeServer, AttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
 import { CommandServer } from "../cluster/server/CommandServer.js";
-import { EventServer } from "../cluster/server/EventServer.js";
+import { AnyEventServer } from "../cluster/server/EventServer.js";
 import { Message } from "../codec/MessageCodec.js";
 import { InternalError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
@@ -109,7 +109,7 @@ export class LegacyInteractionServer extends InteractionServer {
     protected override async readEvent(
         path: EventPath,
         eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
-        event: EventServer<any, any>,
+        event: AnyEventServer<any, any>,
         exchange: MessageExchange<MatterDevice>,
         isFabricFiltered: boolean,
         message: Message,
