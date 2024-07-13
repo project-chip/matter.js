@@ -55,7 +55,7 @@ import {
     WriteRequest,
     WriteResponse,
 } from "@project-chip/matter.js/interaction";
-import { Specification } from "@project-chip/matter.js/model";
+import { MatterModel, Specification } from "@project-chip/matter.js/model";
 import { TypeFromBitmapSchema, TypeFromPartialBitSchema } from "@project-chip/matter.js/schema";
 import { StorageBackendMemory, StorageContext, StorageManager, SyncStorage } from "@project-chip/matter.js/storage";
 import {
@@ -83,6 +83,8 @@ const DummyTestDevice = DeviceTypeDefinition({
     deviceClass: DeviceClasses.Simple,
     revision: 1,
 });
+
+MatterModel;
 
 const READ_REQUEST: ReadRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
@@ -156,6 +158,7 @@ const READ_RESPONSE: DataReportPayload = {
     suppressResponse: true,
     attributeReportsPayload: [
         {
+            hasFabricSensitiveData: false,
             attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
                 schema: TlvVendorId,
@@ -164,6 +167,7 @@ const READ_RESPONSE: DataReportPayload = {
             },
         },
         {
+            hasFabricSensitiveData: false,
             attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
                 schema: TlvUInt16,
@@ -172,24 +176,28 @@ const READ_RESPONSE: DataReportPayload = {
             },
         },
         {
+            hasFabricSensitiveData: false,
             attributeStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(400) },
                 status: { status: 134 },
             },
         },
         {
+            hasFabricSensitiveData: false,
             attributeStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) },
                 status: { status: 195 },
             },
         },
         {
+            hasFabricSensitiveData: false,
             attributeStatus: {
                 path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) },
                 status: { status: 127 },
             },
         },
         {
+            hasFabricSensitiveData: false,
             attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
                 schema: TlvString.bound({ maxLength: 32 }),
@@ -198,6 +206,7 @@ const READ_RESPONSE: DataReportPayload = {
             },
         },
         {
+            hasFabricSensitiveData: false,
             attributeData: {
                 path: {
                     endpointId: EndpointNumber(0),
@@ -212,6 +221,7 @@ const READ_RESPONSE: DataReportPayload = {
     ],
     eventReportsPayload: [
         {
+            hasFabricSensitiveData: false,
             eventData: {
                 path: {
                     endpointId: EndpointNumber(0),
@@ -229,6 +239,7 @@ const READ_RESPONSE: DataReportPayload = {
             },
         },
         {
+            hasFabricSensitiveData: false,
             eventData: {
                 path: {
                     endpointId: EndpointNumber(0),
@@ -246,18 +257,21 @@ const READ_RESPONSE: DataReportPayload = {
             },
         },
         {
+            hasFabricSensitiveData: false,
             eventStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(254) },
                 status: { status: 199 },
             },
         },
         {
+            hasFabricSensitiveData: false,
             eventStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) },
                 status: { status: 195 },
             },
         },
         {
+            hasFabricSensitiveData: false,
             eventStatus: {
                 path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) },
                 status: { status: 127 },
@@ -271,24 +285,28 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
     suppressResponse: true,
     attributeReportsPayload: [
         {
+            hasFabricSensitiveData: false,
             attributeStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(400) },
                 status: { status: 134 },
             },
         },
         {
+            hasFabricSensitiveData: false,
             attributeStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) },
                 status: { status: 195 },
             },
         },
         {
+            hasFabricSensitiveData: false,
             attributeStatus: {
                 path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) },
                 status: { status: 127 },
             },
         },
         {
+            hasFabricSensitiveData: false,
             attributeData: {
                 path: {
                     endpointId: EndpointNumber(0),
@@ -303,6 +321,7 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
     ],
     eventReportsPayload: [
         {
+            hasFabricSensitiveData: false,
             eventData: {
                 path: {
                     endpointId: EndpointNumber(0),
@@ -320,18 +339,21 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
             },
         },
         {
+            hasFabricSensitiveData: false,
             eventStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(254) },
                 status: { status: 199 },
             },
         },
         {
+            hasFabricSensitiveData: false,
             eventStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) },
                 status: { status: 195 },
             },
         },
         {
+            hasFabricSensitiveData: false,
             eventStatus: {
                 path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) },
                 status: { status: 127 },

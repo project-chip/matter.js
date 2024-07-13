@@ -43,12 +43,7 @@ import {
     decodeListAttributeValueWithSchema,
     expandPathsInAttributeData,
 } from "./AttributeDataDecoder.js";
-import {
-    AttributeReportPayload,
-    DataReportPayload,
-    EventDataPayload,
-    EventReportPayload,
-} from "./AttributeDataEncoder.js";
+import { AttributeReportPayload, DataReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import {
     InteractionRecipient,
@@ -358,6 +353,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                                 }`,
                             );
                             attributeReportsPayload.push({
+                                hasFabricSensitiveData: false,
                                 attributeStatus: { path: requestPath, status: { status: error.code } },
                             });
                         },
@@ -438,7 +434,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
                     const { schema } = attribute;
                     attributeReportsPayload.push({
-                        attribute,
+                        hasFabricSensitiveData: attribute.hasFabricSensitiveData,
                         attributeData: { path, dataVersion: version, payload: value, schema },
                     });
                 } catch (error) {
@@ -452,6 +448,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
                         if (isConcreteAttributePath(requestPath)) {
                             attributeReportsPayload.push({
+                                hasFabricSensitiveData: false,
                                 attributeStatus: { path, status: { status: error.code } },
                             });
                         }
@@ -491,6 +488,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                                     }`,
                                 );
                                 eventReportsPayload?.push({
+                                    hasFabricSensitiveData: false,
                                     eventStatus: { path: requestPath, status: { status: error.code } },
                                 });
                             },
@@ -505,7 +503,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                     continue;
                 }
 
-                const reportsForPath = new Array<{ eventData: EventDataPayload }>();
+                const reportsForPath = new Array<EventReportPayload>();
                 for (const { path, event } of events) {
                     try {
                         const { endpointId } = path;
@@ -526,7 +524,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         const { schema } = event;
                         reportsForPath.push(
                             ...matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
-                                event,
+                                hasFabricSensitiveData: event.hasFabricSensitiveData,
                                 eventData: {
                                     path,
                                     eventNumber,
@@ -548,6 +546,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                             // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
                             if (isConcreteEventPath(requestPath)) {
                                 eventReportsPayload?.push({
+                                    hasFabricSensitiveData: false,
                                     eventStatus: { path, status: { status: error.code } },
                                 });
                             }

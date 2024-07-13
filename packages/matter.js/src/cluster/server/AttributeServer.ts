@@ -182,6 +182,10 @@ export abstract class BaseAttributeServer<T> {
         this.defaultValue = this.value;
     }
 
+    get hasFabricSensitiveData() {
+        return false;
+    }
+
     validateWithSchema(value: T) {
         try {
             this.schema.validate(value);
@@ -857,6 +861,10 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         dataType.children
             .filter(field => field.fabricSensitive)
             .forEach(field => this.fabricSensitiveElementsToRemove.push(camelize(field.name)));
+    }
+
+    override get hasFabricSensitiveData() {
+        return this.fabricSensitiveElementsToRemove.length > 0;
     }
 
     /**

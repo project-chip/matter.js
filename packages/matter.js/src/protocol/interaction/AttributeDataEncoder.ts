@@ -3,8 +3,6 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { AnyAttributeServer } from "../../cluster/server/AttributeServer.js";
-import { AnyEventServer } from "../../cluster/server/EventServer.js";
 import { MatterFlowError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -33,7 +31,7 @@ type FullAttributePath = {
 /** Type for TlvAttributeReport where the real data are represented with the schema and the JS value. */
 export type AttributeReportPayload = Omit<TypeFromSchema<typeof TlvAttributeReport>, "attributeData"> & {
     attributeData?: AttributeDataPayload;
-    attribute?: AnyAttributeServer<any>;
+    hasFabricSensitiveData: boolean;
 };
 
 /** Type for TlvAttributeReportData where the real data are represented with the schema and the JS value. */
@@ -45,7 +43,7 @@ type AttributeDataPayload = Omit<TypeFromSchema<typeof TlvAttributeReportData>, 
 /** Type for TlvEventReport where the real data are represented with the schema and the JS value. */
 export type EventReportPayload = Omit<TypeFromSchema<typeof TlvEventReport>, "eventData"> & {
     eventData?: EventDataPayload;
-    event?: AnyEventServer<any, any>;
+    hasFabricSensitiveData: boolean;
 };
 
 /** Type for TlvEventData where the real data are represented with the schema and the JS value. */
@@ -121,7 +119,7 @@ export function canAttributePayloadBeChunked(attributePayload: AttributeReportPa
 
 /** Chunk an AttributeReportPayload into multiple AttributeReportPayloads. */
 export function chunkAttributePayload(attributePayload: AttributeReportPayload): AttributeReportPayload[] {
-    const { attribute, attributeData } = attributePayload;
+    const { hasFabricSensitiveData, attributeData } = attributePayload;
     if (attributeData === undefined) {
         throw new MatterFlowError(
             `Can not chunk an AttributePayload with just a attributeStatus: ${Logger.toJSON(attributePayload)}`,
@@ -137,12 +135,12 @@ export function chunkAttributePayload(attributePayload: AttributeReportPayload):
     }
     const chunks = new Array<AttributeReportPayload>();
     chunks.push({
-        attribute,
+        hasFabricSensitiveData: hasFabricSensitiveData,
         attributeData: { schema, path: { ...path, listIndex: undefined }, payload: [], dataVersion },
     });
     payload.forEach(element => {
         chunks.push({
-            attribute,
+            hasFabricSensitiveData: hasFabricSensitiveData,
             attributeData: {
                 schema: schema.elementSchema,
                 path: { ...path, listIndex: null },
@@ -193,7 +191,7 @@ export function sortAttributeDataByPath(data1: AttributeReportPayload, data2: At
 export function compressAttributeDataReportTags(data: AttributeReportPayload[]) {
     let lastFullPath: FullAttributePath | undefined;
 
-    return data.sort(sortAttributeDataByPath).map(({ attributeData, attributeStatus }) => {
+    return data.sort(sortAttributeDataByPath).map(({ hasFabricSensitiveData, attributeData, attributeStatus }) => {
         if (attributeData !== undefined) {
             const { path, dataVersion } = attributeData;
             const compressedPath = compressPath(path, dataVersion, lastFullPath);
@@ -211,7 +209,7 @@ export function compressAttributeDataReportTags(data: AttributeReportPayload[]) 
             attributeStatus = { ...attributeStatus, path: compressedPath.path };
             lastFullPath = compressedPath.lastFullPath;
         }
-        return { attributeData, attributeStatus };
+        return { hasFabricSensitiveData, attributeData, attributeStatus };
     });
 }
 

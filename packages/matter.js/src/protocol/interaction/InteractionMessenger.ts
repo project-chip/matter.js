@@ -7,8 +7,6 @@
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { Status } from "../../cluster/globals/index.js";
-import { FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
-import { FabricSensitiveEventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { ImplementationError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
@@ -277,9 +275,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                             messageSize += 3; // Array element is added now which needs 3 bytes
                         }
                         const allowMissingFieldsForNonFabricFilteredRead =
-                            !forFabricFilteredRead &&
-                            attributeReport.attribute !== undefined &&
-                            attributeReport.attribute instanceof FabricScopedAttributeServer;
+                            !forFabricFilteredRead && attributeReport.hasFabricSensitiveData;
                         const encodedAttribute = encodeAttributePayload(attributeReport, {
                             allowMissingFieldsForNonFabricFilteredRead,
                         });
@@ -308,9 +304,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         messageSize += 3; // Array element is added now which needs 3 bytes
                     }
                     const allowMissingFieldsForNonFabricFilteredRead =
-                        !forFabricFilteredRead &&
-                        eventReport.event !== undefined &&
-                        eventReport.event instanceof FabricSensitiveEventServer;
+                        !forFabricFilteredRead && eventReport.hasFabricSensitiveData;
                     const encodedEvent = encodeEventPayload(eventReport, {
                         allowMissingFieldsForNonFabricFilteredRead,
                     });

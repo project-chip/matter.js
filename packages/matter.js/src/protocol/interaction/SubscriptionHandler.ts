@@ -560,7 +560,7 @@ export class SubscriptionHandler {
         }
         const attributeReportsPayload: AttributeReportPayload[] = attributes.map(
             ({ path, schema, value, version, attribute }) => ({
-                attribute,
+                hasFabricSensitiveData: attribute.hasFabricSensitiveData,
                 attributeData: {
                     path,
                     dataVersion: version,
@@ -569,7 +569,12 @@ export class SubscriptionHandler {
                 },
             }),
         );
-        attributeErrors.forEach(attributeStatus => attributeReportsPayload.push({ attributeStatus }));
+        attributeErrors.forEach(attributeStatus =>
+            attributeReportsPayload.push({
+                hasFabricSensitiveData: false,
+                attributeStatus,
+            }),
+        );
 
         const { newEvents, eventErrors } = this.registerNewEvents();
 
@@ -584,7 +589,7 @@ export class SubscriptionHandler {
                 } else {
                     matchingEvents.forEach(({ eventNumber, priority, epochTimestamp, data }) => {
                         eventReportsPayload.push({
-                            event,
+                            hasFabricSensitiveData: event.hasFabricSensitiveData,
                             eventData: {
                                 path,
                                 eventNumber,
@@ -624,7 +629,12 @@ export class SubscriptionHandler {
             );
         }
 
-        eventErrors.forEach(eventStatus => eventReportsPayload.push({ eventStatus }));
+        eventErrors.forEach(eventStatus =>
+            eventReportsPayload.push({
+                hasFabricSensitiveData: false,
+                eventStatus,
+            }),
+        );
 
         logger.debug(
             `Initialize Subscription with ${attributes.length} attributes and ${eventReportsPayload.length} events.`,
@@ -743,7 +753,7 @@ export class SubscriptionHandler {
                                 interactionModelRevision: INTERACTION_MODEL_REVISION,
                                 attributeReportsPayload: attributes.map(
                                     ({ path, schema, value, version, attribute }) => ({
-                                        attribute,
+                                        hasFabricSensitiveData: attribute.hasFabricSensitiveData,
                                         attributeData: {
                                             path,
                                             dataVersion: version,
@@ -755,7 +765,7 @@ export class SubscriptionHandler {
                                 eventReportsPayload: events.map(({ path, schema, event, data }) => {
                                     const { eventNumber, priority, epochTimestamp, data: payload } = data;
                                     return {
-                                        event,
+                                        hasFabricSensitiveData: event.hasFabricSensitiveData,
                                         eventData: {
                                             path,
                                             eventNumber,

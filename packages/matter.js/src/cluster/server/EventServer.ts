@@ -63,6 +63,7 @@ export class EventServer<T, S extends Storage> {
     protected endpoint?: Endpoint;
     protected eventHandler?: EventHandler;
     #readAcl: AccessLevel | undefined;
+    hasFabricSensitiveData = false;
 
     constructor(
         readonly id: EventId,
@@ -162,6 +163,8 @@ export class EventServer<T, S extends Storage> {
 }
 
 export class FabricSensitiveEventServer<T, S extends Storage> extends EventServer<T, S> {
+    override hasFabricSensitiveData = true;
+
     override get(
         session: Session<MatterDevice>,
         _isFabricFiltered: boolean,

@@ -240,11 +240,11 @@ describe("ClusterServerBacking", () => {
         const fabric2Acls = await readAcls(node, fabric2, true);
         expect(fabric2Acls).deep.equals([{ privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 2 }]);
 
-        const allAcls = await readAcls(node, fabric1, false);
+        const allAclsReadAsFabric1 = await readAcls(node, fabric1, false);
 
-        expect(allAcls).deep.equals([
+        expect(allAclsReadAsFabric1).deep.equals([
             { privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 1 },
-            { privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 2 },
+            { privilege: undefined, authMode: undefined, subjects: undefined, targets: undefined, fabricIndex: 2 },
         ]);
 
         await node.close();
