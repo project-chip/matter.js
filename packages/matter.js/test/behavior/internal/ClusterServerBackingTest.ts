@@ -157,7 +157,7 @@ async function performSubscribe(
         request,
         {
             sendStatus: _code => {},
-            sendDataReport: async _report => {},
+            sendDataReport: async (_report, _forFabricFilteredRead) => {},
             send: async (_type, _message) => {},
             close: async () => {},
         } as InteractionServerMessenger,

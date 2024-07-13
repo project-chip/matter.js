@@ -212,6 +212,7 @@ describe("AttributeDataEncoder", () => {
 
             expect(chunkedData).deep.equal([
                 {
+                    attribute: undefined,
                     attributeData: {
                         path: {
                             endpointId: EndpointNumber(0),
@@ -225,6 +226,7 @@ describe("AttributeDataEncoder", () => {
                     },
                 },
                 {
+                    attribute: undefined,
                     attributeData: {
                         path: {
                             endpointId: EndpointNumber(0),
@@ -238,6 +240,7 @@ describe("AttributeDataEncoder", () => {
                     },
                 },
                 {
+                    attribute: undefined,
                     attributeData: {
                         path: {
                             endpointId: EndpointNumber(0),
