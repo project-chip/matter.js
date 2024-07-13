@@ -271,7 +271,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                 }
 
                 if (location?.owningFabric && location.owningFabric !== session.fabric) {
-                    throw new WriteError(
+                    throw new ReadError(
                         location,
                         "Permission denied: Owning/accessing fabric mismatch",
                         StatusCode.UnsupportedAccess,
