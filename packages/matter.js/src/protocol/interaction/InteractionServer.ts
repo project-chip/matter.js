@@ -12,7 +12,7 @@ import {
     FabricScopedAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
-import { AnyEventServer, FabricSensitiveEventServer } from "../../cluster/server/EventServer.js";
+import { AnyEventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { InternalError, MatterFlowError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";

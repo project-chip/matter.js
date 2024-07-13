@@ -9,6 +9,7 @@ import { Message } from "../../codec/MessageCodec.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EventId } from "../../datatype/EventId.js";
+import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { ClusterModel, EventModel, MatterModel } from "../../model/index.js";
 import { EventData, EventHandler, EventStorageData } from "../../protocol/interaction/EventHandler.js";
@@ -22,6 +23,7 @@ import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { isObject } from "../../util/Type.js";
 import { AccessLevel, Attributes, Cluster, Commands, Event, EventPriority, Events } from "../Cluster.js";
+import NO_FABRIC = FabricIndex.NO_FABRIC;
 
 export type AnyEventServer<T, S extends Storage> = EventServer<T, S> | FabricSensitiveEventServer<T, S>;
 
@@ -149,18 +151,27 @@ export class EventServer<T, S extends Storage> {
         if (this.endpoint === undefined) {
             throw new InternalError("EventServer not bound to Endpoint");
         }
+
         return this.eventHandler.getEvents(
             { endpointId: this.endpoint.number, clusterId: this.clusterId, eventId: this.id },
             filters,
-            // TODO When not fabricscoped event later then only pass isFabricFiltered through for fabric filtered variant
-            isFabricFiltered && (session as SecureSession<any>).fabric
-                ? session.associatedFabric.fabricIndex
-                : undefined,
+            // When request is fabric filtered or the event is Fabric sensitive then filter the events for the fabrics
+            isFabricFiltered ? (session as SecureSession<any>).fabric?.fabricIndex ?? NO_FABRIC : undefined,
         );
     }
 }
 
 export class FabricSensitiveEventServer<T, S extends Storage> extends EventServer<T, S> {
+    override get(
+        session: Session<MatterDevice>,
+        _isFabricFiltered: boolean,
+        message?: Message,
+        filters?: TypeFromSchema<typeof TlvEventFilter>[],
+    ) {
+        // because the event is fabric sensitive it is always filtered out when another fabric tries to access it
+        return super.get(session, true, message, filters);
+    }
+
     override triggerEvent(data: T) {
         if (!isObject(data) || data === null) {
             throw new ImplementationError("FabricSensitive events need to have an object as data.");
