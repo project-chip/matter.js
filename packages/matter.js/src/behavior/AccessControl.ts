@@ -291,7 +291,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                 return false;
             }
 
-            if (session.fabricFiltered && location?.owningFabric && location.owningFabric !== session.fabric) {
+            if (location?.owningFabric && location.owningFabric !== session.fabric) {
                 return false;
             }
 
