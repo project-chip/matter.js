@@ -10,6 +10,20 @@ import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvTypeLength } from "./TlvCodec.js";
 
+export type EncodingOptions = {
+    /**
+     * When true, the fabricIndex field will be excluded from the TLV encoding for list entries.
+     * This flag must not be set together with the following flag.
+     */
+    forWriteInteraction?: boolean;
+
+    /**
+     * When true, mandatory field validation is skipped when encoding TLV for list entries.
+     * This flag must not be set together with the former flag.
+     */
+    allowMissingFieldsForNonFabricFilteredRead?: boolean;
+};
+
 export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSchema<T> {
     override decodeInternal(encoded: ByteArray): T {
         return this.decodeTlvInternal(new TlvByteArrayReader(encoded)).value;
@@ -21,9 +35,9 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
         return writer.toByteArray();
     }
 
-    encodeTlv(value: T, forWriteInteraction = false): TlvStream {
+    encodeTlv(value: T, options?: EncodingOptions): TlvStream {
         const writer = new TlvArrayWriter();
-        this.encodeTlvInternal(writer, value, undefined, forWriteInteraction);
+        this.encodeTlvInternal(writer, value, undefined, options);
         return writer.toTlvArray();
     }
 
@@ -38,7 +52,7 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
 
     abstract decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): T;
 
-    abstract encodeTlvInternal(writer: TlvWriter, value: T, tag?: TlvTag, forWriteInteraction?: boolean): void;
+    abstract encodeTlvInternal(writer: TlvWriter, value: T, tag?: TlvTag, options?: EncodingOptions): void;
 
     injectField(value: T, _fieldId: number, _fieldValue: any, _injectChecker: (fieldValue: any) => boolean): T {
         return value;

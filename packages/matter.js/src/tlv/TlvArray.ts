@@ -14,7 +14,7 @@ import {
 import { deepCopy } from "../util/DeepCopy.js";
 import { serialize } from "../util/String.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
+import { EncodingOptions, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 
 export type LengthConstraints = {
     minLength?: number;
@@ -42,9 +42,9 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
         super();
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: T[], tag?: TlvTag, forWriteInteraction?: boolean): void {
+    override encodeTlvInternal(writer: TlvWriter, value: T[], tag?: TlvTag, options?: EncodingOptions): void {
         writer.writeTag({ type: TlvType.Array }, tag);
-        value.forEach(element => this.elementSchema.encodeTlvInternal(writer, element, undefined, forWriteInteraction));
+        value.forEach(element => this.elementSchema.encodeTlvInternal(writer, element, undefined, options));
         writer.writeTag({ type: TlvType.EndOfContainer });
     }
 
