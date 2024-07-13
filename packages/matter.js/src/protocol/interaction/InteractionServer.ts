@@ -438,6 +438,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
                     const { schema } = attribute;
                     attributeReportsPayload.push({
+                        attribute,
                         attributeData: { path, dataVersion: version, payload: value, schema },
                     });
                 } catch (error) {
@@ -450,7 +451,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                     if (error instanceof StatusResponseError) {
                         // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
                         if (isConcreteAttributePath(requestPath)) {
-                            attributeReportsPayload.push({ attributeStatus: { path, status: { status: error.code } } });
+                            attributeReportsPayload.push({
+                                attributeStatus: { path, status: { status: error.code } },
+                            });
                         }
                     } else {
                         throw error;
@@ -523,6 +526,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         const { schema } = event;
                         reportsForPath.push(
                             ...matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
+                                event,
                                 eventData: {
                                     path,
                                     eventNumber,
@@ -543,7 +547,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         if (error instanceof StatusResponseError) {
                             // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
                             if (isConcreteEventPath(requestPath)) {
-                                eventReportsPayload?.push({ eventStatus: { path, status: { status: error.code } } });
+                                eventReportsPayload?.push({
+                                    eventStatus: { path, status: { status: error.code } },
+                                });
                             }
                         } else {
                             throw error;

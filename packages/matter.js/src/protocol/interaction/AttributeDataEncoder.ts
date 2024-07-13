@@ -3,6 +3,8 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { AnyAttributeServer } from "../../cluster/server/AttributeServer.js";
+import { AnyEventServer } from "../../cluster/server/EventServer.js";
 import { MatterFlowError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -10,7 +12,7 @@ import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
-import { TlvSchema, TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { EncodingOptions, TlvSchema, TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {
     TlvAttributePath,
     TlvAttributeReport,
@@ -31,6 +33,7 @@ type FullAttributePath = {
 /** Type for TlvAttributeReport where the real data are represented with the schema and the JS value. */
 export type AttributeReportPayload = Omit<TypeFromSchema<typeof TlvAttributeReport>, "attributeData"> & {
     attributeData?: AttributeDataPayload;
+    attribute?: AnyAttributeServer<any>;
 };
 
 /** Type for TlvAttributeReportData where the real data are represented with the schema and the JS value. */
@@ -42,6 +45,7 @@ type AttributeDataPayload = Omit<TypeFromSchema<typeof TlvAttributeReportData>, 
 /** Type for TlvEventReport where the real data are represented with the schema and the JS value. */
 export type EventReportPayload = Omit<TypeFromSchema<typeof TlvEventReport>, "eventData"> & {
     eventData?: EventDataPayload;
+    event?: AnyEventServer<any, any>;
 };
 
 /** Type for TlvEventData where the real data are represented with the schema and the JS value. */
@@ -57,18 +61,20 @@ export type DataReportPayload = Omit<TypeFromSchema<typeof TlvDataReport>, "attr
 };
 
 /** Encodes an AttributeReportPayload into a TlvStream (used for TlvAny type). */
-export function encodeAttributePayload(attributePayload: AttributeReportPayload): TlvStream {
+export function encodeAttributePayload(attributePayload: AttributeReportPayload, options?: EncodingOptions): TlvStream {
     const { attributeData, attributeStatus } = attributePayload;
     if (attributeData === undefined) {
         return TlvAttributeReport.encodeTlv({ attributeStatus });
     }
 
     const { path, schema, payload, dataVersion } = attributeData;
-    return TlvAttributeReport.encodeTlv({ attributeData: { path, data: schema.encodeTlv(payload), dataVersion } });
+    return TlvAttributeReport.encodeTlv({
+        attributeData: { path, data: schema.encodeTlv(payload, options), dataVersion },
+    });
 }
 
 /** Encodes an EventReportPayload into a TlvStream (used for TlvAny type). */
-export function encodeEventPayload(eventPayload: EventReportPayload): TlvStream {
+export function encodeEventPayload(eventPayload: EventReportPayload, options?: EncodingOptions): TlvStream {
     const { eventData, eventStatus } = eventPayload;
     if (eventData === undefined) {
         return TlvEventReport.encodeTlv({ eventStatus });
@@ -88,7 +94,7 @@ export function encodeEventPayload(eventPayload: EventReportPayload): TlvStream 
     return TlvEventReport.encodeTlv({
         eventData: {
             path,
-            data: schema.encodeTlv(payload),
+            data: schema.encodeTlv(payload, options),
             priority,
             systemTimestamp,
             deltaSystemTimestamp,
@@ -115,7 +121,7 @@ export function canAttributePayloadBeChunked(attributePayload: AttributeReportPa
 
 /** Chunk an AttributeReportPayload into multiple AttributeReportPayloads. */
 export function chunkAttributePayload(attributePayload: AttributeReportPayload): AttributeReportPayload[] {
-    const { attributeData } = attributePayload;
+    const { attribute, attributeData } = attributePayload;
     if (attributeData === undefined) {
         throw new MatterFlowError(
             `Can not chunk an AttributePayload with just a attributeStatus: ${Logger.toJSON(attributePayload)}`,
@@ -130,9 +136,13 @@ export function chunkAttributePayload(attributePayload: AttributeReportPayload):
         );
     }
     const chunks = new Array<AttributeReportPayload>();
-    chunks.push({ attributeData: { schema, path: { ...path, listIndex: undefined }, payload: [], dataVersion } });
+    chunks.push({
+        attribute,
+        attributeData: { schema, path: { ...path, listIndex: undefined }, payload: [], dataVersion },
+    });
     payload.forEach(element => {
         chunks.push({
+            attribute,
             attributeData: {
                 schema: schema.elementSchema,
                 path: { ...path, listIndex: null },

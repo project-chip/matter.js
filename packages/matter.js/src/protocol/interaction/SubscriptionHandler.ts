@@ -48,6 +48,7 @@ const logger = Logger.get("SubscriptionHandler");
 
 interface AttributePathWithValueVersion<T> {
     path: TypeFromSchema<typeof TlvAttributePath>;
+    attribute: AnyAttributeServer<T>;
     schema: TlvSchema<T>;
     value: T;
     version: number;
@@ -55,8 +56,9 @@ interface AttributePathWithValueVersion<T> {
 
 interface EventPathWithEventData<T> {
     path: TypeFromSchema<typeof TlvEventPath>;
+    event: AnyEventServer<any, any>;
     schema: TlvSchema<T>;
-    event: EventStorageData<T>;
+    data: EventStorageData<T>;
 }
 
 export class SubscriptionHandler {
@@ -75,7 +77,7 @@ export class SubscriptionHandler {
     private readonly eventListeners = new Map<
         string,
         {
-            event: EventServer<any, any>;
+            event: AnyEventServer<any, any>;
             listener?: (newEvent: EventStorageData<any>) => void;
         }
     >();
@@ -354,6 +356,7 @@ export class SubscriptionHandler {
             // most current state
 
             this.outstandingAttributeUpdates.set(attributePathToId(path), {
+                attribute,
                 path,
                 schema: attribute.schema,
                 version,
@@ -363,18 +366,20 @@ export class SubscriptionHandler {
 
         const { newEvents } = this.registerNewEvents();
         newEvents
-            .flatMap(({ path, event: { schema } }): EventPathWithEventData<any>[] => {
+            .flatMap(({ path, event }): EventPathWithEventData<any>[] => {
                 // But we use eventFilters because we do not want to send all events to the controller
+                const { schema } = event;
                 const matchingEvents = this.eventHandler.getEvents(path, this.eventFilters) ?? [];
-                return matchingEvents.map(event => ({
+                return matchingEvents.map(data => ({
+                    event,
                     schema,
                     path,
-                    event,
+                    data,
                 }));
             })
             .sort((a, b) => {
-                const eventNumberA = a.event?.eventNumber ?? EventNumber(0);
-                const eventNumberB = b.event?.eventNumber ?? EventNumber(0);
+                const eventNumberA = a.data?.eventNumber ?? EventNumber(0);
+                const eventNumberB = b.data?.eventNumber ?? EventNumber(0);
                 if (eventNumberA > eventNumberB) {
                     return 1;
                 } else if (eventNumberA < eventNumberB) {
@@ -530,6 +535,7 @@ export class SubscriptionHandler {
             value: any;
             version: number;
             schema: TlvSchema<any>;
+            attribute: AnyAttributeServer<any>;
         }>();
         for (const { path, attribute } of newAttributes) {
             try {
@@ -547,13 +553,14 @@ export class SubscriptionHandler {
                     continue;
                 }
 
-                attributes.push({ path, value, version, schema: attribute.schema });
+                attributes.push({ path, value, version, schema: attribute.schema, attribute });
             } catch (error) {
                 logger.error(`Error reading attribute ${this.endpointStructure.resolveAttributeName(path)}:`, error);
             }
         }
         const attributeReportsPayload: AttributeReportPayload[] = attributes.map(
-            ({ path, schema, value, version }) => ({
+            ({ path, schema, value, version, attribute }) => ({
+                attribute,
                 attributeData: {
                     path,
                     dataVersion: version,
@@ -577,6 +584,7 @@ export class SubscriptionHandler {
                 } else {
                     matchingEvents.forEach(({ eventNumber, priority, epochTimestamp, data }) => {
                         eventReportsPayload.push({
+                            event,
                             eventData: {
                                 path,
                                 eventNumber,
@@ -623,13 +631,16 @@ export class SubscriptionHandler {
         );
         this.lastUpdateTimeMs = Time.nowMs();
 
-        await messenger.sendDataReport({
-            suppressResponse: false, // we always need proper response for initial report
-            subscriptionId: this.subscriptionId,
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
-            attributeReportsPayload,
-            eventReportsPayload,
-        });
+        await messenger.sendDataReport(
+            {
+                suppressResponse: false, // we always need proper response for initial report
+                subscriptionId: this.subscriptionId,
+                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                attributeReportsPayload,
+                eventReportsPayload,
+            },
+            this.isFabricFiltered,
+        );
     }
 
     attributeChangeListener<T>(
@@ -648,7 +659,7 @@ export class SubscriptionHandler {
             // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
             value = attribute.get(this.session, this.isFabricFiltered);
         }
-        this.outstandingAttributeUpdates.set(attributePathToId(path), { path, schema, version, value });
+        this.outstandingAttributeUpdates.set(attributePathToId(path), { attribute, path, schema, version, value });
         this.prepareDataUpdate();
     }
 
@@ -657,7 +668,11 @@ export class SubscriptionHandler {
         schema: TlvSchema<T>,
         newEvent: EventStorageData<T>,
     ) {
-        this.outstandingEventUpdates.add({ path, schema, event: newEvent });
+        const eventListenerData = this.eventListeners.get(eventPathToId(path));
+        if (eventListenerData === undefined) return; // Ignore changes to attributes that are not subscribed to
+
+        const { event } = eventListenerData;
+        this.outstandingEventUpdates.add({ event, path, schema, data: newEvent });
         if (path.isUrgent) {
             this.prepareDataUpdate();
         }
@@ -712,37 +727,48 @@ export class SubscriptionHandler {
             await tryCatchAsync(
                 async () => {
                     if (attributes.length === 0 && events.length === 0) {
-                        await messenger.sendDataReport({
-                            suppressResponse: true, // suppressResponse true for empty DataReports
-                            subscriptionId: this.subscriptionId,
-                            interactionModelRevision: INTERACTION_MODEL_REVISION,
-                        });
+                        await messenger.sendDataReport(
+                            {
+                                suppressResponse: true, // suppressResponse true for empty DataReports
+                                subscriptionId: this.subscriptionId,
+                                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                            },
+                            this.isFabricFiltered,
+                        );
                     } else {
-                        await messenger.sendDataReport({
-                            suppressResponse: false, // Non empty data reports always need to send response
-                            subscriptionId: this.subscriptionId,
-                            interactionModelRevision: INTERACTION_MODEL_REVISION,
-                            attributeReportsPayload: attributes.map(({ path, schema, value, version }) => ({
-                                attributeData: {
-                                    path,
-                                    dataVersion: version,
-                                    schema,
-                                    payload: value,
-                                },
-                            })),
-                            eventReportsPayload: events.map(
-                                ({ path, schema, event: { eventNumber, priority, epochTimestamp, data } }) => ({
-                                    eventData: {
-                                        path,
-                                        eventNumber,
-                                        priority,
-                                        epochTimestamp,
-                                        schema,
-                                        payload: data,
-                                    },
+                        await messenger.sendDataReport(
+                            {
+                                suppressResponse: false, // Non empty data reports always need to send response
+                                subscriptionId: this.subscriptionId,
+                                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                                attributeReportsPayload: attributes.map(
+                                    ({ path, schema, value, version, attribute }) => ({
+                                        attribute,
+                                        attributeData: {
+                                            path,
+                                            dataVersion: version,
+                                            schema,
+                                            payload: value,
+                                        },
+                                    }),
+                                ),
+                                eventReportsPayload: events.map(({ path, schema, event, data }) => {
+                                    const { eventNumber, priority, epochTimestamp, data: payload } = data;
+                                    return {
+                                        event,
+                                        eventData: {
+                                            path,
+                                            eventNumber,
+                                            priority,
+                                            epochTimestamp,
+                                            schema,
+                                            payload,
+                                        },
+                                    };
                                 }),
-                            ),
-                        });
+                            },
+                            this.isFabricFiltered,
+                        );
                     }
                 },
                 StatusResponseError,
