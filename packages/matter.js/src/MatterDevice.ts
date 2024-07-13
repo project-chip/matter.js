@@ -167,9 +167,11 @@ export class MatterDevice {
                 // Delayed closing is executed when exchange is closed
                 await this.exchangeManager.closeSession(session);
             }
-            const currentFabric = session.fabric;
-            if (currentFabric !== undefined) {
-                this.sessionChangedCallback(currentFabric.fabricIndex);
+            const currentFabricIndex = session.fabric?.fabricIndex;
+            const existingSessionFabric =
+                currentFabricIndex === undefined ? undefined : this.getFabricByIndex(currentFabricIndex)?.fabricIndex;
+            if (existingSessionFabric !== undefined) {
+                this.sessionChangedCallback(existingSessionFabric);
             }
             if (this.isClosing) {
                 return;
@@ -177,7 +179,7 @@ export class MatterDevice {
             // When a session closes, announce existing fabrics again so that controller can detect the device again.
             // When session was closed and no fabric exist anymore then this is triggering a factory reset in upper layer
             // and it would be not good to announce a commissionable device and then reset that again with the factory reset
-            if (this.#fabricManager.getFabrics().length > 0 || !currentFabric) {
+            if (this.#fabricManager.getFabrics().length > 0 || !existingSessionFabric) {
                 await this.startAnnouncement();
             }
         });
@@ -317,7 +319,7 @@ export class MatterDevice {
 
     async expireAllFabricAnnouncements() {
         for (const broadcaster of this.broadcasters) {
-            await broadcaster.expireAllAnnouncements();
+            await broadcaster.expireFabricAnnouncement();
         }
     }
 
