@@ -13,7 +13,7 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 import { Endpoint as EndpointInterface } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
-import { AttributeModel, ClusterModel, DatatypeModel, MatterModel } from "../../model/models/index.js";
+import { AttributeModel, ClusterModel, DatatypeModel, MatterModel } from "../../model/index.js";
 import { FabricIndex } from "../../model/standard/elements/FabricIndex.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";

@@ -5,7 +5,7 @@
  */
 
 import { TlvTag, TlvTypeLength } from "./TlvCodec.js";
-import { EncodingOptions, TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
+import { TlvEncodingOptions, TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 export class TlvWrapper<O, T> extends TlvSchema<O> {
     constructor(
@@ -20,7 +20,7 @@ export class TlvWrapper<O, T> extends TlvSchema<O> {
         return this.unwrap(this.underlyingSchema.decodeTlvInternalValue(reader, typeLength));
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: O, tag?: TlvTag, options?: EncodingOptions): void {
+    override encodeTlvInternal(writer: TlvWriter, value: O, tag?: TlvTag, options?: TlvEncodingOptions): void {
         this.underlyingSchema.encodeTlvInternal(writer, this.wrap(value), tag, options);
     }
 

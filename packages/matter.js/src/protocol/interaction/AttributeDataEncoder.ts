@@ -10,7 +10,7 @@ import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
-import { EncodingOptions, TlvSchema, TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvEncodingOptions, TlvSchema, TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {
     TlvAttributePath,
     TlvAttributeReport,
@@ -59,7 +59,10 @@ export type DataReportPayload = Omit<TypeFromSchema<typeof TlvDataReport>, "attr
 };
 
 /** Encodes an AttributeReportPayload into a TlvStream (used for TlvAny type). */
-export function encodeAttributePayload(attributePayload: AttributeReportPayload, options?: EncodingOptions): TlvStream {
+export function encodeAttributePayload(
+    attributePayload: AttributeReportPayload,
+    options?: TlvEncodingOptions,
+): TlvStream {
     const { attributeData, attributeStatus } = attributePayload;
     if (attributeData === undefined) {
         return TlvAttributeReport.encodeTlv({ attributeStatus });
@@ -72,7 +75,7 @@ export function encodeAttributePayload(attributePayload: AttributeReportPayload,
 }
 
 /** Encodes an EventReportPayload into a TlvStream (used for TlvAny type). */
-export function encodeEventPayload(eventPayload: EventReportPayload, options?: EncodingOptions): TlvStream {
+export function encodeEventPayload(eventPayload: EventReportPayload, options?: TlvEncodingOptions): TlvStream {
     const { eventData, eventStatus } = eventPayload;
     if (eventData === undefined) {
         return TlvEventReport.encodeTlv({ eventStatus });

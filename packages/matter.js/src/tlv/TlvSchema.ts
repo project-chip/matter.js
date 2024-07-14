@@ -10,7 +10,7 @@ import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvTypeLength } from "./TlvCodec.js";
 
-export type EncodingOptions = {
+export type TlvEncodingOptions = {
     /**
      * When true, the fabricIndex field will be excluded from the TLV encoding for list entries.
      * This flag must not be set together with the following flag.
@@ -35,7 +35,7 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
         return writer.toByteArray();
     }
 
-    encodeTlv(value: T, options?: EncodingOptions): TlvStream {
+    encodeTlv(value: T, options?: TlvEncodingOptions): TlvStream {
         const writer = new TlvArrayWriter();
         this.encodeTlvInternal(writer, value, undefined, options);
         return writer.toTlvArray();
@@ -52,7 +52,7 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
 
     abstract decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): T;
 
-    abstract encodeTlvInternal(writer: TlvWriter, value: T, tag?: TlvTag, options?: EncodingOptions): void;
+    abstract encodeTlvInternal(writer: TlvWriter, value: T, tag?: TlvTag, options?: TlvEncodingOptions): void;
 
     injectField(value: T, _fieldId: number, _fieldValue: any, _injectChecker: (fieldValue: any) => boolean): T {
         return value;

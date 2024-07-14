@@ -18,7 +18,7 @@ import { Merge } from "../util/Type.js";
 import { TlvAny } from "./TlvAny.js";
 import { LengthConstraints } from "./TlvArray.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
-import { EncodingOptions, TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
+import { TlvEncodingOptions, TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 export interface FieldType<T> {
     id: number;
@@ -85,7 +85,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
         }
     }
 
-    #encodeEntryToTlv(writer: TlvWriter, name: string, value: TypeFromFields<F>, options?: EncodingOptions) {
+    #encodeEntryToTlv(writer: TlvWriter, name: string, value: TypeFromFields<F>, options?: TlvEncodingOptions) {
         const { id, schema, optional: isOptional, repeated: isRepeated } = this.fieldDefinitions[name];
         const { forWriteInteraction = false, allowMissingFieldsForNonFabricFilteredRead = false } = options ?? {};
         if (forWriteInteraction && allowMissingFieldsForNonFabricFilteredRead) {
@@ -119,7 +119,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
     /**
      * Encode the object as Structure, by the order of field definitions.
      */
-    #encodeStructure(writer: TlvWriter, value: TypeFromFields<F>, options?: EncodingOptions) {
+    #encodeStructure(writer: TlvWriter, value: TypeFromFields<F>, options?: TlvEncodingOptions) {
         for (const name in this.fieldDefinitions) {
             this.#encodeEntryToTlv(writer, name, value, options);
         }
@@ -128,7 +128,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
     /**
      * Encode the object as List, by the order of the fields in the object.
      */
-    #encodeList(writer: TlvWriter, value: TypeFromFields<F>, options?: EncodingOptions) {
+    #encodeList(writer: TlvWriter, value: TypeFromFields<F>, options?: TlvEncodingOptions) {
         const encodedFields = new Set<string>();
         // Encode object fields
         for (const name of Object.keys(value)) {
@@ -146,7 +146,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
         writer: TlvWriter,
         value: TypeFromFields<F>,
         tag?: TlvTag,
-        options?: EncodingOptions,
+        options?: TlvEncodingOptions,
     ): void {
         writer.writeTag({ type: this.type }, tag);
 

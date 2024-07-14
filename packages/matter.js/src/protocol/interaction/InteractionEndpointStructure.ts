@@ -17,9 +17,7 @@ import { EventId } from "../../datatype/EventId.js";
 import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { AttributeModel } from "../../model/index.js";
-import { ClusterModel } from "../../model/models/ClusterModel.js";
-import { MatterModel } from "../../model/models/MatterModel.js";
+import { AttributeModel, ClusterModel, MatterModel } from "../../model/index.js";
 import { AttributeList } from "../../model/standard/elements/AttributeList.js";
 import { EventList } from "../../model/standard/elements/EventList.js";
 import { AcceptedCommandList, GeneratedCommandList } from "../../model/standard/elements/index.js";
@@ -50,7 +48,7 @@ const GLOBAL_ATTRIBUTES_LIST = [...GLOBAL_COMMANDLIST_IDS, EventList.id, Attribu
 
 // Build a list of cluster IDs that are used for diagnostics to not always filter through model
 // TODO Find a way to also incorporate custom clusters here
-const DIAGNOSTICS_CLUSTER_IDS = MatterModel.standard.clusters
+let DIAGNOSTICS_CLUSTER_IDS = MatterModel.standard.clusters
     .filter(cluster => cluster.diagnostics && cluster.id !== undefined)
     .map(cluster => cluster.id as ClusterId);
 

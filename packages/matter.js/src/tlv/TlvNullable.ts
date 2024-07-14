@@ -6,7 +6,7 @@
 
 import { ArraySchema } from "./TlvArray.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
-import { EncodingOptions, TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
+import { TlvEncodingOptions, TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { StringSchema } from "./TlvString.js";
 
 /**
@@ -19,7 +19,7 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
         super();
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: T | null, tag?: TlvTag, options?: EncodingOptions): void {
+    override encodeTlvInternal(writer: TlvWriter, value: T | null, tag?: TlvTag, options?: TlvEncodingOptions): void {
         if (value === null) {
             writer.writeTag({ type: TlvType.Null }, tag);
         } else {

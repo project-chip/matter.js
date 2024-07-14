@@ -23,7 +23,6 @@ import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { isObject } from "../../util/Type.js";
 import { AccessLevel, Attributes, Cluster, Commands, Event, EventPriority, Events } from "../Cluster.js";
-import NO_FABRIC = FabricIndex.NO_FABRIC;
 
 export type AnyEventServer<T, S extends Storage> = EventServer<T, S> | FabricSensitiveEventServer<T, S>;
 
@@ -157,7 +156,7 @@ export class EventServer<T, S extends Storage> {
             { endpointId: this.endpoint.number, clusterId: this.clusterId, eventId: this.id },
             filters,
             // When request is fabric filtered or the event is Fabric sensitive then filter the events for the fabrics
-            isFabricFiltered ? (session as SecureSession<any>).fabric?.fabricIndex ?? NO_FABRIC : undefined,
+            isFabricFiltered ? (session as SecureSession<any>).fabric?.fabricIndex ?? FabricIndex.NO_FABRIC : undefined,
         );
     }
 }

@@ -188,7 +188,7 @@ export class MatterDevice {
             // When session was closed and no fabric exist anymore then this is triggering a factory reset in upper layer
             // and it would be not good to announce a commissionable device and then reset that again with the factory reset
             if (this.#fabricManager.getFabrics().length > 0 || session.isPase || !existingSessionFabric) {
-                await this.startAnnouncement();
+                this.startAnnouncement().catch(error => logger.warn(`Error while announcing`, error));
             }
         });
 
