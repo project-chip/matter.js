@@ -48,7 +48,7 @@ const GLOBAL_ATTRIBUTES_LIST = [...GLOBAL_COMMANDLIST_IDS, EventList.id, Attribu
 
 // Build a list of cluster IDs that are used for diagnostics to not always filter through model
 // TODO Find a way to also incorporate custom clusters here
-let DIAGNOSTICS_CLUSTER_IDS = MatterModel.standard.clusters
+const DIAGNOSTICS_CLUSTER_IDS = MatterModel.standard.clusters
     .filter(cluster => cluster.diagnostics && cluster.id !== undefined)
     .map(cluster => cluster.id as ClusterId);
 
