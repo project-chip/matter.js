@@ -12,7 +12,7 @@ import {
     FabricScopedAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
-import { EventServer } from "../../cluster/server/EventServer.js";
+import { AnyEventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { InternalError, MatterFlowError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
@@ -32,7 +32,6 @@ import { Specification } from "../../model/definitions/Specification.js";
 import { AttributeModel, ClusterModel, CommandModel, GLOBAL_IDS, MatterModel } from "../../model/index.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
-import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
@@ -43,12 +42,7 @@ import {
     decodeListAttributeValueWithSchema,
     expandPathsInAttributeData,
 } from "./AttributeDataDecoder.js";
-import {
-    AttributeReportPayload,
-    DataReportPayload,
-    EventDataPayload,
-    EventReportPayload,
-} from "./AttributeDataEncoder.js";
+import { AttributeReportPayload, DataReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import {
     InteractionRecipient,
@@ -105,6 +99,7 @@ export interface EventPath {
     endpointId: EndpointNumber;
     clusterId: ClusterId;
     eventId: EventId;
+    isUrgent?: boolean;
 }
 
 export interface AttributeWithPath {
@@ -114,7 +109,7 @@ export interface AttributeWithPath {
 
 export interface EventWithPath {
     path: EventPath;
-    event: EventServer<any, any>;
+    event: AnyEventServer<any, any>;
 }
 
 export interface CommandWithPath {
@@ -239,23 +234,20 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
     readonly #subscriptionMap = new Map<number, SubscriptionHandler>();
     #isClosing = false;
     readonly #subscriptionConfig: SubscriptionOptions.Configuration;
-    readonly #eventHandler: EventHandler;
     readonly #maxPathsPerInvoke;
 
     constructor({
         subscriptionOptions,
-        eventHandler,
         endpointStructure,
         maxPathsPerInvoke = DEFAULT_MAX_PATHS_PER_INVOKE,
     }: InteractionServer.Configuration) {
         this.#subscriptionConfig = SubscriptionOptions.configurationFor(subscriptionOptions);
-        this.#eventHandler = eventHandler;
         this.#endpointStructure = endpointStructure;
         this.#maxPathsPerInvoke = maxPathsPerInvoke;
 
-        this.#endpointStructure.change.on(() => {
+        this.#endpointStructure.change.on(async () => {
             for (const subscription of this.#subscriptionMap.values()) {
-                subscription.updateSubscription();
+                await subscription.updateSubscription();
             }
         });
     }
@@ -358,6 +350,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                                 }`,
                             );
                             attributeReportsPayload.push({
+                                hasFabricSensitiveData: false,
                                 attributeStatus: { path: requestPath, status: { status: error.code } },
                             });
                         },
@@ -438,6 +431,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
                     const { schema } = attribute;
                     attributeReportsPayload.push({
+                        hasFabricSensitiveData: attribute.hasFabricSensitiveData,
                         attributeData: { path, dataVersion: version, payload: value, schema },
                     });
                 } catch (error) {
@@ -450,7 +444,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                     if (error instanceof StatusResponseError) {
                         // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
                         if (isConcreteAttributePath(requestPath)) {
-                            attributeReportsPayload.push({ attributeStatus: { path, status: { status: error.code } } });
+                            attributeReportsPayload.push({
+                                hasFabricSensitiveData: false,
+                                attributeStatus: { path, status: { status: error.code } },
+                            });
                         }
                     } else {
                         throw error;
@@ -488,6 +485,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                                     }`,
                                 );
                                 eventReportsPayload?.push({
+                                    hasFabricSensitiveData: false,
                                     eventStatus: { path: requestPath, status: { status: error.code } },
                                 });
                             },
@@ -502,7 +500,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                     continue;
                 }
 
-                const reportsForPath = new Array<{ eventData: EventDataPayload }>();
+                const reportsForPath = new Array<EventReportPayload>();
                 for (const { path, event } of events) {
                     try {
                         const { endpointId } = path;
@@ -523,6 +521,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         const { schema } = event;
                         reportsForPath.push(
                             ...matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
+                                hasFabricSensitiveData: event.hasFabricSensitiveData,
                                 eventData: {
                                     path,
                                     eventNumber,
@@ -543,7 +542,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         if (error instanceof StatusResponseError) {
                             // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
                             if (isConcreteEventPath(requestPath)) {
-                                eventReportsPayload?.push({ eventStatus: { path, status: { status: error.code } } });
+                                eventReportsPayload?.push({
+                                    hasFabricSensitiveData: false,
+                                    eventStatus: { path, status: { status: error.code } },
+                                });
                             }
                         } else {
                             throw error;
@@ -588,7 +590,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
     protected async readEvent(
         _path: EventPath,
         eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
-        event: EventServer<any, any>,
+        event: AnyEventServer<any, any>,
         exchange: MessageExchange<MatterDevice>,
         isFabricFiltered: boolean,
         message: Message,
@@ -1029,46 +1031,43 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
         if (this.#nextSubscriptionId === 0xffffffff) this.#nextSubscriptionId = 0;
         const subscriptionId = this.#nextSubscriptionId++;
-        const subscriptionHandler = new SubscriptionHandler(
+        const subscriptionHandler = new SubscriptionHandler({
             subscriptionId,
             session,
-            this.#endpointStructure,
+            endpointStructure: this.#endpointStructure,
             attributeRequests,
             dataVersionFilters,
             eventRequests,
             eventFilters,
-            this.#eventHandler,
             isFabricFiltered,
-            minIntervalFloorSeconds,
-            maxIntervalCeilingSeconds,
-            () => this.#subscriptionMap.delete(subscriptionId),
-            this.#subscriptionConfig,
-        );
+            minIntervalFloor: minIntervalFloorSeconds,
+            maxIntervalCeiling: maxIntervalCeilingSeconds,
+            cancelCallback: () => this.#subscriptionMap.delete(subscriptionId),
+            subscriptionOptions: this.#subscriptionConfig,
+            readAttribute: (path, attribute) =>
+                this.readAttribute(
+                    path,
+                    attribute,
+                    exchange,
+                    isFabricFiltered,
+                    message,
+                    this.#endpointStructure.getEndpoint(path.endpointId)!,
+                ),
+            readEvent: (path, event, eventFilters) =>
+                this.readEvent(
+                    path,
+                    eventFilters,
+                    event,
+                    exchange,
+                    isFabricFiltered,
+                    message,
+                    this.#endpointStructure.getEndpoint(path.endpointId)!,
+                ),
+        });
 
         try {
             // Send initial data report to prime the subscription with initial data
-            await subscriptionHandler.sendInitialReport(
-                messenger,
-                (path, attribute) =>
-                    this.readAttribute(
-                        path,
-                        attribute,
-                        exchange,
-                        isFabricFiltered,
-                        message,
-                        this.#endpointStructure.getEndpoint(path.endpointId)!,
-                    ),
-                (path, event, eventFilters) =>
-                    this.readEvent(
-                        path,
-                        eventFilters,
-                        event,
-                        exchange,
-                        isFabricFiltered,
-                        message,
-                        this.#endpointStructure.getEndpoint(path.endpointId)!,
-                    ),
-            );
+            await subscriptionHandler.sendInitialReport(messenger);
         } catch (error: any) {
             logger.error(
                 `Subscription ${subscriptionId} for Session ${session.id}: Error while sending initial data reports`,
@@ -1440,7 +1439,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 export namespace InteractionServer {
     export interface Configuration {
         readonly subscriptionOptions?: SubscriptionOptions;
-        readonly eventHandler: EventHandler;
         readonly endpointStructure: InteractionEndpointStructure;
         readonly maxPathsPerInvoke?: number;
     }

@@ -7,7 +7,7 @@
 import { AnyAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServerObj, asClusterServerInternal } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
-import { EventServer } from "../../cluster/server/EventServer.js";
+import { AnyEventServer } from "../../cluster/server/EventServer.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -17,9 +17,7 @@ import { EventId } from "../../datatype/EventId.js";
 import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { AttributeModel } from "../../model/index.js";
-import { ClusterModel } from "../../model/models/ClusterModel.js";
-import { MatterModel } from "../../model/models/MatterModel.js";
+import { AttributeModel, ClusterModel, MatterModel } from "../../model/index.js";
 import { AttributeList } from "../../model/standard/elements/AttributeList.js";
 import { EventList } from "../../model/standard/elements/EventList.js";
 import { AcceptedCommandList, GeneratedCommandList } from "../../model/standard/elements/index.js";
@@ -58,11 +56,11 @@ export class InteractionEndpointStructure {
     endpoints = new Map<EndpointNumber, EndpointInterface>();
     attributes = new Map<string, AnyAttributeServer<any>>();
     attributePaths = new Array<AttributePath>();
-    events = new Map<string, EventServer<any, any>>();
+    events = new Map<string, AnyEventServer<any, any>>();
     eventPaths = new Array<EventPath>();
     commands = new Map<string, CommandServer<any, any>>();
     commandPaths = new Array<CommandPath>();
-    change = Observable();
+    change = Observable(); // TODO adjust to AsyncObservable when we remove legacy API
 
     public clear() {
         this.endpoints.clear();
@@ -240,7 +238,7 @@ export class InteractionEndpointStructure {
         throw new StatusResponseError(`Attribute ${attributeId} does not exist`, StatusCode.UnsupportedAttribute);
     }
 
-    getEvent(endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId): EventServer<any, any> | undefined {
+    getEvent(endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId): AnyEventServer<any, any> | undefined {
         return this.events.get(eventPathToId({ endpointId, clusterId, eventId }));
     }
 

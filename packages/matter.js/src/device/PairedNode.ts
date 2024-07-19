@@ -140,7 +140,7 @@ export class PairedNode {
     );
     private readonly updateEndpointStructureTimer = Time.getTimer(
         "Endpoint structure update",
-        5_000,
+        STRUCTURE_UPDATE_TIMEOUT_MS,
         async () => await this.updateEndpointStructure(),
     );
     private connectionState: NodeStateInformation = NodeStateInformation.Disconnected;
@@ -201,17 +201,18 @@ export class PairedNode {
 
     /**
      * Force a reconnection to the device. This method is mainly used internally to reconnect after the active session
-     * was closed or the device wen offline and was detected as being online again.
+     * was closed or the device went offline and was detected as being online again.
      */
     async reconnect() {
+        this.setConnectionState(NodeStateInformation.Reconnecting);
         while (true) {
             if (this.interactionClient !== undefined) {
                 this.interactionClient.close();
                 this.interactionClient = undefined;
             }
-            this.setConnectionState(NodeStateInformation.Reconnecting);
             try {
                 await this.initialize();
+                return;
             } catch (error) {
                 if (error instanceof MatterError) {
                     // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others

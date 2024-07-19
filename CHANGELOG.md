@@ -61,6 +61,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: (Experimental!) Adds PaseCommissioner to allow to execute the initial (PASE based) commissioning process separately from the operational completion of the commissioning process, also allowed to be BLE only.
     -   Feature: Allows to complete the commissioning process for a node where this process was started by a PASE commissioner
     -   Feature: Allows to commission a node without directly connecting to it
+    -   Fix: Fixes Node reconnection when disconnected before
+    -   Fix: Makes sure to always use the BLE scanner when required
 - matter.js Legacy API:
     -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
     -   Removal: We removed old Scenes cluster implementation which was never fully implemented or used by any Matter controller
@@ -68,6 +70,14 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: Introduces new package that provides a React Native compatible platform Implementations for Matter.js. This package is still in development and should be considered experimental for now! Currently it supports UDP, BLE, AsyncStorage and Crypto platform features.
 -   matter.js chip and python Testing:
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
+
+### 0.9.4 (2024-07-19)
+- Matter-Core functionality:
+    -   Feature: Allows to generate Certification declarations flagged as provisional for certification purposes
+    -   Feature: Allows to disable mandatory field checks on TLV encoding when handling fabric sensitive structs
+    -   Fix: Makes sure to remove fabric sensitive fields and events when they are not allowed to be read or subscribed
+    -   Fix: Makes sure to handle commissioning related cases with PASE sessions correctly regarding temporarily added fabrics and certificates
+    -   Fix: Verifies provided trusted root certificates completely
 
 ### 0.9.3 (2024-06-26)
 - Matter-Core functionality:

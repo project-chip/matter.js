@@ -19,6 +19,10 @@ export class FieldModel extends PropertyModel implements FieldElement {
         super(definition);
     }
 
+    get fabricSensitive() {
+        return this.effectiveAccess.fabricSensitive;
+    }
+
     /**
      * Fields may omit their ID.  In this case we use their index within the parent as the ID.
      */
