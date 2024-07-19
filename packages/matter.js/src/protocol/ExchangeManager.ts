@@ -33,12 +33,19 @@ export class ChannelNotConnectedError extends MatterError {}
 
 export class MessageChannel<ContextT> implements Channel<Message> {
     public closed = false;
+    #closeCallback?: () => Promise<void>;
 
     constructor(
         readonly channel: Channel<ByteArray>,
         readonly session: Session<ContextT>,
-        private readonly closeCallback?: () => Promise<void>,
-    ) {}
+        closeCallback?: () => Promise<void>,
+    ) {
+        this.#closeCallback = closeCallback;
+    }
+
+    set closeCallback(callback: () => Promise<void>) {
+        this.#closeCallback = callback;
+    }
 
     /** Is the underlying transport reliable? */
     get isReliable() {
@@ -75,7 +82,7 @@ export class MessageChannel<ContextT> implements Channel<Message> {
         this.closed = true;
         await this.channel.close();
         if (!wasAlreadyClosed) {
-            await this.closeCallback?.();
+            await this.#closeCallback?.();
         }
     }
 }
