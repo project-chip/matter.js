@@ -43,7 +43,7 @@ export function createEventServer<
     readAcl: AccessLevel | undefined,
 ): EventServer<T, S> {
     let fabricSensitive = false;
-    const clusterFromModel = MatterModel.standard.get(ClusterModel, clusterDef.id);
+    const clusterFromModel = new MatterModel().get(ClusterModel, clusterDef.id);
     if (clusterFromModel !== undefined) {
         const eventModel = clusterFromModel.get(EventModel, eventDef.id);
         if (eventModel !== undefined) {

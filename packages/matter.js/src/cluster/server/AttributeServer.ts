@@ -13,8 +13,13 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 import { Endpoint as EndpointInterface } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
-import { AttributeModel, ClusterModel, DatatypeModel, MatterModel } from "../../model/index.js";
-import { Globals } from "../../model/index.js";
+import {
+    AttributeModel,
+    ClusterModel,
+    DatatypeModel,
+    Globals,
+    MatterModel as MatterModelObj,
+} from "../../model/index.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
@@ -28,7 +33,8 @@ import { ClusterDatasource } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("AttributeServer");
 
-const FabricIndexName = camelize(FabricIndex.name);
+const FabricIndexName = "fabricIndex";
+const MatterModel = new MatterModelObj();
 
 /**
  * Thrown when an operation cannot complete because fabric information is
@@ -828,7 +834,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     }
 
     #determineSensitiveFieldsToRemove() {
-        const clusterFromModel = MatterModel.standard.get(ClusterModel, this.cluster.id);
+        const clusterFromModel = MatterModel.get(ClusterModel, this.cluster.id);
         if (clusterFromModel === undefined) {
             logger.debug(`${this.cluster.name}: Cluster for Fabric scoped element not found in Model, ignore`);
             return;
