@@ -221,7 +221,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
     #isClosing = false;
     readonly #subscriptionConfig: SubscriptionOptions.Configuration;
 
-    constructor({ subscriptionOptions,  endpointStructure }: InteractionServer.Configuration) {
+    constructor({ subscriptionOptions, endpointStructure }: InteractionServer.Configuration) {
         this.#subscriptionConfig = SubscriptionOptions.configurationFor(subscriptionOptions);
         this.#endpointStructure = endpointStructure;
 

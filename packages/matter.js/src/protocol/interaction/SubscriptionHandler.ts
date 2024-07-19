@@ -803,7 +803,7 @@ export class SubscriptionHandler {
                                 suppressResponse: false,
                                 subscriptionId: this.subscriptionId,
                                 interactionModelRevision: INTERACTION_MODEL_REVISION,
-                            // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
+                                // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
                                 attributeReportsPayload: attributes.map(
                                     ({ path, schema, value, version, attribute }) => ({
                                         hasFabricSensitiveData: attribute.hasFabricSensitiveData,
