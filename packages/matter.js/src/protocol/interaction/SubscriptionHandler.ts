@@ -111,7 +111,7 @@ export class SubscriptionHandler {
     private sendingUpdateInProgress = false;
     private sendNextUpdateImmediately = false;
     private sendUpdateErrorCounter = 0;
-    private attributeUpdatePromises = new Array<PromiseLike<void>>();
+    private attributeUpdatePromises = new Set<PromiseLike<void>>();
 
     constructor(options: {
         subscriptionId: number;
@@ -716,14 +716,10 @@ export class SubscriptionHandler {
     attributeChangeListener<T>(path: AttributePath, schema: TlvSchema<T>, version: number, value: T) {
         const changeResult = this.attributeChangeHandler(path, schema, version, value);
         if (MaybePromise.is(changeResult)) {
-            this.attributeUpdatePromises.push(
-                changeResult.then(() => {
-                    const promiseIndex = this.attributeUpdatePromises.indexOf(changeResult);
-                    if (promiseIndex !== -1) {
-                        this.attributeUpdatePromises.splice(promiseIndex, 1);
-                    }
-                }),
-            );
+            const resolver = Promise.resolve(changeResult)
+                .catch(error => logger.error(`Error handling attribute change:`, error))
+                .finally(() => this.attributeUpdatePromises.delete(resolver));
+            this.attributeUpdatePromises.add(resolver);
         }
     }
 
@@ -786,8 +782,10 @@ export class SubscriptionHandler {
 
     async cancel(flush = false, cancelledByPeer = false) {
         this.sendUpdatesActivated = false;
-        if (this.attributeUpdatePromises.length) {
-            await Promise.all(this.attributeUpdatePromises);
+        if (this.attributeUpdatePromises.size) {
+            const resolvers = [...this.attributeUpdatePromises.values()];
+            this.attributeUpdatePromises.clear();
+            await Promise.all(resolvers);
         }
         this.updateTimer.stop();
         this.sendDelayTimer.stop();
