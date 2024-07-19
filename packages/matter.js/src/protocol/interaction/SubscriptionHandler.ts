@@ -17,6 +17,7 @@ import { NetworkError } from "../../net/Network.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Time, Timer } from "../../time/Time.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { isObject } from "../../util/Type.js";
 import { RetransmissionLimitReachedError } from "../MessageExchange.js";
 import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
@@ -110,6 +111,7 @@ export class SubscriptionHandler {
     private sendingUpdateInProgress = false;
     private sendNextUpdateImmediately = false;
     private sendUpdateErrorCounter = 0;
+    private attributeUpdatePromises = new Array<PromiseLike<void>>();
 
     constructor(options: {
         subscriptionId: number;
@@ -276,9 +278,7 @@ export class SubscriptionHandler {
                         // If subscribable register listener
                         // TODO: Move to state change listeners from behaviors to remove the dangling promise here
                         const listener = (value: any, version: number) =>
-                            void this.attributeChangeListener(path, attribute.schema, version, value).catch(error =>
-                                logger.error("Ignored error on attribute update", error),
-                            );
+                            this.attributeChangeListener(path, attribute.schema, version, value);
                         attribute.addValueChangeListener(listener);
                         this.attributeListeners.set(attributePathToId(path), { attribute, listener });
                     } else {
@@ -713,7 +713,26 @@ export class SubscriptionHandler {
         );
     }
 
-    async attributeChangeListener<T>(path: AttributePath, schema: TlvSchema<T>, version: number, value: T) {
+    attributeChangeListener<T>(path: AttributePath, schema: TlvSchema<T>, version: number, value: T) {
+        const changeResult = this.attributeChangeHandler(path, schema, version, value);
+        if (MaybePromise.is(changeResult)) {
+            this.attributeUpdatePromises.push(
+                changeResult.then(() => {
+                    const promiseIndex = this.attributeUpdatePromises.indexOf(changeResult);
+                    if (promiseIndex !== -1) {
+                        this.attributeUpdatePromises.splice(promiseIndex, 1);
+                    }
+                }),
+            );
+        }
+    }
+
+    attributeChangeHandler<T>(
+        path: AttributePath,
+        schema: TlvSchema<T>,
+        version: number,
+        value: T,
+    ): MaybePromise<void> {
         const attributeListenerData = this.attributeListeners.get(attributePathToId(path));
         if (attributeListenerData === undefined) return; // Ignore changes to attributes that are not subscribed to
 
@@ -722,8 +741,16 @@ export class SubscriptionHandler {
             // We can not be sure what value we got for fabric filtered attributes (and from which fabric),
             // so get it again for this relevant fabric. This also makes sure that fabric sensitive fields are filtered
             // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
-            const { value: readValue } = await this.readAttribute(path, attribute);
-            value = readValue;
+            return this.readAttribute(path, attribute).then(({ value }) => {
+                this.outstandingAttributeUpdates.set(attributePathToId(path), {
+                    attribute,
+                    path,
+                    schema,
+                    version,
+                    value,
+                });
+                this.prepareDataUpdate();
+            });
         }
         this.outstandingAttributeUpdates.set(attributePathToId(path), { attribute, path, schema, version, value });
         this.prepareDataUpdate();
@@ -759,6 +786,9 @@ export class SubscriptionHandler {
 
     async cancel(flush = false, cancelledByPeer = false) {
         this.sendUpdatesActivated = false;
+        if (this.attributeUpdatePromises.length) {
+            await Promise.all(this.attributeUpdatePromises);
+        }
         this.updateTimer.stop();
         this.sendDelayTimer.stop();
         this.unregisterAttributeListeners(Array.from(this.attributeListeners.keys()));
