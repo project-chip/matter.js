@@ -384,7 +384,6 @@ export class MatterController {
                     this.addTransportInterface(this.netInterfaceBle);
 
                     this.bleScanner = ble.getBleScanner();
-                    scannersToUse.push(this.bleScanner);
                 } catch (error) {
                     if (error instanceof NoProviderError) {
                         logger.warn(
@@ -394,6 +393,10 @@ export class MatterController {
                         throw error;
                     }
                 }
+            }
+            // If we have an BLE Scanner then we use it
+            if (this.bleScanner !== undefined) {
+                scannersToUse.push(this.bleScanner);
             }
         }
         return scannersToUse;
