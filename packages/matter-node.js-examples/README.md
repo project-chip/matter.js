@@ -19,19 +19,7 @@ The examples provided by this repository show different use cases demonstrating 
 > With matter.js 0.8 we introduced a new API that is not compatible with the old API. The new API is more flexible and allows for more complex use cases. The old API is still supported but will be removed in a future release. The examples are provided for both APIs. The new API examples are named without "Legacy" in the filename and the npm run script is named without "-legacy". The old API examples are named with "Legacy" in the filename and the npm run script is named with "-legacy".
 > If you used the old Example scripts and want to just switch to use the new scripts you need to convert the device storage once. Please see below in the section about the ["Legacy Storage Converter"](#legacy-storage-converter).
 
-
-### Legacy Device Examples
-These examples use the matter.js API up to 0.7, which is considered "Legacy" now because it will be replaced by a new API starting with 0.8. The functionality is still working, but should be considered deprecated and will be removed with a later release!
-The filenames of these examples were adjusted in 0.8 and a "Legacy" was added to the end of the filename and "-legacy" to the npm run script name (exception: DeviceNode is now called DeviceNodeFullLegacy). Other than that they are fully compatible with the pre-0.7 versions also regarding storage location and structure and can be directly used as before.
-
-All examples create a MatterServer instance to add Matter nodes to be announced on a definable port number (default 5540).
-
-* **BridgedDevicesNodeLegacy**: This example shows how to build a Matter-Bridge that offers multiple OnOff lights and/or sockets as a bridge. It can be configured via command line and allows for the specification of shell commands that will be executed for on and off commands on the numbered devices. For more details, see below.
-* **ComposedDeviceNodeLegacy**: This example shows how to build a "simple" composed device where multiple OnOff lights and sockets are combined as one composed device. The devices are all added on the root level, so no bridge is used. The composed device can be configured via command line and allows for the specification of shell commands that will be executed for on and off commands, on the numbered devices. For more details, see below.
-* **DeviceNodeFullLegacy**: This example shows how to build a simple Device node with just one socket or light endpoint. The shell commands to be executed by on/off commands can be configured via CLI. Additionally, this example also shows how to enable BLE for a device node and tweaks the announcement so that only BLE is announced in the beginning. This example also includes a dummy WifiNetworkCommissioning implementation that simulates Wi-Fi logic for the commissioner. Furthermore it also shows how to handle testEventTrigger calls on the GeneralDiagnostics cluster which might be needed for official device testing cases. It also implements the callbacks where implementers can get information on commissioning changes and session/connection changes to better know the status of the node.
-* **MultiDeviceNodeLegacy**: This example shows how to start multiple Matter nodes on one MatterServer where each node is run on its own Port, but share a single MDNS broadcaster and scanner in order to optimize resources. Each node can be configured via CLI to be an onoff socket or a light. CLI. Options also allow specification of shell commands to be executed for on and off commands.
-
-## New API Device Examples
+## Device Examples
 Some command line parameters, for example those used to set the level of logging or the MDNS interface are now included in the new environment processing. These can be set by generic command line arguments or by using environment variables. These parameters are processed automatically so are no longer handled by the new example code directly. These are:
 
 * `--log-level=...` or environment variable `MATTER_LOG_LEVEL` or in code `environment.vars.set('log.level', Level.DEBUG)`. Allowed values are: Level.FATAL ("fatal"), Level.ERROR ("error"), Level.WARN ("warn"), Level.NOTICE ("notice"), Level.INFO ("info"), Level.DEBUG ("debug")
@@ -59,6 +47,19 @@ Additionally, these two examples are not directly configurable by CLI and mainly
 
 ## Controller example
 * **ControllerNode**: This example shows basically how a controller could be implemented by showing pairing and connections to a paired device. When there is an OnOff Endpoint with ID 1 then this is controlled and toggled.
+
+### Legacy Device Examples
+These examples use the matter.js API up to 0.7, which is considered "Legacy" now because it will be replaced by a new API starting with 0.8. The functionality is still working, but should be considered deprecated and will be removed with a later release!
+The filenames of these examples were adjusted in 0.8 and a "Legacy" was added to the end of the filename and "-legacy" to the npm run script name (exception: DeviceNode is now called DeviceNodeFullLegacy). Other than that they are fully compatible(*) with the pre-0.7 versions also regarding storage location and structure and can be directly used as before.
+
+(*) Note: The CLI format has changed between legacy and the new device examples. In the new the parameters look like "--option=value" while in the legacy examples the parameters look like "--option value".
+
+All examples create a MatterServer instance to add Matter nodes to be announced on a definable port number (default 5540).
+
+* **BridgedDevicesNodeLegacy**: This example shows how to build a Matter-Bridge that offers multiple OnOff lights and/or sockets as a bridge. It can be configured via command line and allows for the specification of shell commands that will be executed for on and off commands on the numbered devices. For more details, see below.
+* **ComposedDeviceNodeLegacy**: This example shows how to build a "simple" composed device where multiple OnOff lights and sockets are combined as one composed device. The devices are all added on the root level, so no bridge is used. The composed device can be configured via command line and allows for the specification of shell commands that will be executed for on and off commands, on the numbered devices. For more details, see below.
+* **DeviceNodeFullLegacy**: This example shows how to build a simple Device node with just one socket or light endpoint. The shell commands to be executed by on/off commands can be configured via CLI. Additionally, this example also shows how to enable BLE for a device node and tweaks the announcement so that only BLE is announced in the beginning. This example also includes a dummy WifiNetworkCommissioning implementation that simulates Wi-Fi logic for the commissioner. Furthermore it also shows how to handle testEventTrigger calls on the GeneralDiagnostics cluster which might be needed for official device testing cases. It also implements the callbacks where implementers can get information on commissioning changes and session/connection changes to better know the status of the node.
+* **MultiDeviceNodeLegacy**: This example shows how to start multiple Matter nodes on one MatterServer where each node is run on its own Port, but share a single MDNS broadcaster and scanner in order to optimize resources. Each node can be configured via CLI to be an onoff socket or a light. CLI. Options also allow specification of shell commands to be executed for on and off commands.
 
 ## Legacy Storage Converter
 The Legacy storage converter can convert the Device and Controller storages from the legacy examples. It will convert all relevant storage keys, but not the persisted cluster specific data (which should be acceptable because near to irrelevant for the device types we had examples for).
@@ -137,36 +138,36 @@ You can use -on and -off parameter to run a script to control something.
 For instance, on a Raspberry Pi, this will turn on / off the red LED:
 
 ```bash
-matter-device -type socket -on "echo 255 > /sys/class/leds/led1/brightness" -off "echo 0 > /sys/class/leds/led1/brightness"
+matter-device --type socket --on="echo 255 > /sys/class/leds/led1/brightness" --off="echo 0 > /sys/class/leds/led1/brightness"
 ```
 
 or when starting from TS files:
 
 ```bash
-npm run matter-device -- -type socket -on "echo 255 > /sys/class/leds/led1/brightness" -off "echo 0 > /sys/class/leds/led1/brightness"
+npm run matter-device -- --type socket --on="echo 255 > /sys/class/leds/led1/brightness" --off="echo 0 > /sys/class/leds/led1/brightness"
 ```
 (Please note the "--" to separate commandline parameters between the npm run and the executed script.
 
 **If you want to start multiple parallel processes please make sure to use different storage locations, different network port and ideally also different passcodes for each process!**
 
 The following parameters are available:
-* -passcode: the passcode to use for pairing (default: 20202021)
-* -discriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
-* -vendorid: the vendor ID as number to use for pairing (default: 65521 (0xFFF1))
-* -productid: the product ID as number to use for pairing (default: 32768 (0x8000))
-* -uniqueid: a unique ID for this device to be used in naming and to store structure information (default: ms time now)
-* -type: the device type to use for pairing (default: light, alternative value is "socket")
-* -netinterface: limit mdns announcements and scanning to the provided network interface, e.g. "en0" (default: all interfaces available)
-* -ble: enable BLE support (default: false) If this is enabled the device will announce itself _only_ via BLE if not commissioned and also presents a "Wifi only" device for commissioning to show this feature!
-* -ble-hci-id: Optionally, HCI ID to use (Linux only, default 0)
-* -port: the port to listen on for the device (default: 5540)
-* -store: the storage location (directory) to use for storing the pairing information (default: .device-node). Ideally use names starting with a ".". Delete the directory or provide an alternative name to reset the device
-* -on: the command to run when the device is turned on (see example above)
-* -off: the command to run when the device is turned off (see example above)
+* --passcode: the passcode to use for pairing (default: 20202021)
+* --discriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
+* --vendorid: the vendor ID as number to use for pairing (default: 65521 (0xFFF1))
+* --productid: the product ID as number to use for pairing (default: 32768 (0x8000))
+* --uniqueid: a unique ID for this device to be used in naming and to store structure information (default: ms time now)
+* --type: the device type to use for pairing (default: light, alternative value is "socket")
+* --netinterface: limit mdns announcements and scanning to the provided network interface, e.g. "en0" (default: all interfaces available)
+* --ble: enable BLE support (default: false) If this is enabled the device will announce itself _only_ via BLE if not commissioned and also presents a "Wifi only" device for commissioning to show this feature!
+* --ble-hci-id: Optionally, HCI ID to use (Linux only, default 0)
+* --port: the port to listen on for the device (default: 5540)
+* --store: the storage location (directory) to use for storing the pairing information (default: .device-node). Ideally use names starting with a ".". Delete the directory or provide an alternative name to reset the device
+* --on: the command to run when the device is turned on (see example above)
+* --off: the command to run when the device is turned off (see example above)
 
 Additionally, there are some Testing parameters:
-* -ble-wifi-scan-ssid: The Wi-Fi SSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "TestSSID"). Ideally use a really existing SSID that also the commissioner (Apple, Alexa, ...) knows to make it easier to commission. Else you could get errors while commissioning.
-* -ble-wifi-scan-bssid: The Wi-Fi BSSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "00:00:00:00:00:00").
+* --ble-wifi-scan-ssid: The Wi-Fi SSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "TestSSID"). Ideally use a really existing SSID that also the commissioner (Apple, Alexa, ...) knows to make it easier to commission. Else you could get errors while commissioning.
+* --ble-wifi-scan-bssid: The Wi-Fi BSSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "00:00:00:00:00:00").
 
 ### Start a Matter Bridge
 
@@ -179,21 +180,21 @@ The usage and parameter are comparable to above, but the bridge adds support for
 **If you want to start multiple parallel processes please make sure to use different storage locations, different network port and ideally also different passcodes for each process!**
 
 The usage is as above but with modified parameters:
-* -num X: number of devices to expose (default 2)
-* -typeX socket: type of the devices to expose as device number X (default Light bulb)
-* -onX "script": script to run when the device number X is turned on
-* -offX "script": script to run when the device number X is turned off
+* --num=X: number of devices to expose (default 2)
+* --typeX=socket: type of the devices to expose as device number X (default Light bulb)
+* --onX "script": script to run when the device number X is turned on
+* --offX "script": script to run when the device number X is turned off
 
-**Please especially use the -uniqueidX parameters to assign unique own IDs to the single deices in order to remember their structure in the bridge. Such an ID should never be reused if you ever remove or add new devices! If you do not use -uniqueidX then the order you added them here is not allowed to ever change.**
+**Please especially use the --uniqueidX parameters to assign unique own IDs to the single deices in order to remember their structure in the bridge. Such an ID should never be reused if you ever remove or add new devices! If you do not use --uniqueidX then the order you added them here is not allowed to ever change.**
 
 ```bash
-matter-bridge -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
+matter-bridge --num=2 --on1="echo 255 > /sys/class/leds/led1/brightness" --off1="echo 0 > /sys/class/leds/led1/brightness" --type2=socket --on2="echo 255 > /sys/class/leds/led2/brightness" --off2="echo 0 > /sys/class/leds/led2/brightness"
 ```
 
 or when starting from TS files:
 
 ```bash
-npm run matter-bridge -- -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
+npm run matter-bridge -- --num=2 --on1="echo 255 > /sys/class/leds/led1/brightness" --off1="echo 0 > /sys/class/leds/led1/brightness" --type2=socket --on2="echo 255 > /sys/class/leds/led2/brightness" --off2="echo 0 > /sys/class/leds/led2/brightness"
 ```
 (Please note the "--" to separate commandline parameters between the npm run and the executed script.
 
@@ -208,13 +209,13 @@ A composed device is one device with multiple different device types combined. T
 The parameters are like with the bridge but with an added "-type light/socket" parameter to define the type of the composed device itself.
 
 ```bash
-matter-composeddevice -type socket -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
+matter-composeddevice --type=socket --num=2 --on1="echo 255 > /sys/class/leds/led1/brightness" --off1="echo 0 > /sys/class/leds/led1/brightness" --type2=socket --on2="echo 255 > /sys/class/leds/led2/brightness" --off2="echo 0 > /sys/class/leds/led2/brightness"
 ```
 
 or when starting from TS files:
 
 ```bash
-npm run matter-composeddevice -- -type socket -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
+npm run matter-composeddevice -- --type=socket --num=2 --on1="echo 255 > /sys/class/leds/led1/brightness" --off1="echo 0 > /sys/class/leds/led1/brightness" --type2=socket --on2="echo 255 > /sys/class/leds/led2/brightness" --off2="echo 0 > /sys/class/leds/led2/brightness"
 ```
 (Please note the "--" to separate commandline parameters between the npm run and the executed script.
 
@@ -229,13 +230,13 @@ matter.js also allows it to start multiple devices in one process. With this esp
 The parameters are like with the composed device or bridge.
 
 ```bash
-matter-multidevice -type socket -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
+matter-multidevice --type=socket --num=2 --on1="echo 255 > /sys/class/leds/led1/brightness" --off1="echo 0 > /sys/class/leds/led1/brightness" --type2=socket --on2="echo 255 > /sys/class/leds/led2/brightness" --off2="echo 0 > /sys/class/leds/led2/brightness"
 ```
 
 or when starting from TS files:
 
 ```bash
-npm run matter-multidevice -- -type socket -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
+npm run matter-multidevice -- --type=socket --num=2 --on1="echo 255 > /sys/class/leds/led1/brightness" --off1="echo 0 > /sys/class/leds/led1/brightness" --type2=socket --on2="echo 255 > /sys/class/leds/led2/brightness" --off2="echo 0 > /sys/class/leds/led2/brightness"
 ```
 (Please note the "--" to separate commandline parameters between the npm run and the executed script.
 
