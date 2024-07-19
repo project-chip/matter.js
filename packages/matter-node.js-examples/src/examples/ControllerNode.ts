@@ -84,7 +84,7 @@ class ControllerNode {
             : environment.vars.number("port");
         const uniqueId = (await controllerStorage.has("uniqueid"))
             ? await controllerStorage.get<string>("uniqueid")
-            : environment.vars.string("uniqueid") ?? Time.nowMs().toString();
+            : (environment.vars.string("uniqueid") ?? Time.nowMs().toString());
         await controllerStorage.set("uniqueid", uniqueId);
 
         const pairingCode = environment.vars.string("pairingcode");

@@ -37,8 +37,8 @@
     },
     "devDependencies": {
         "@project-chip/matter.js-tools": "0.10.0-alpha.0-20240716-446c872f",
-        "@types/chai": "^4.3.12",
-        "@types/mocha": "^10.0.6",
+        "@types/chai": "^4.3.16",
+        "@types/mocha": "^10.0.7",
         "@types/wtfnode": "^0.7.3",
         "chai": "^4.4.1",
         "embedme": "^1.22.1",
