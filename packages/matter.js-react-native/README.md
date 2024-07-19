@@ -30,7 +30,11 @@ To use \`**matter.js**\` with React Native, you need to modify your Metro config
 
 ```javascript
 /* eslint-env node */
+
+// Used to merge configs together.
 const { mergeConfig } = require('@react-native/metro-config');
+
+// Your project configuration.
 const { getYourConfig } = require('your-config-provider');
 
 // Get your config.
