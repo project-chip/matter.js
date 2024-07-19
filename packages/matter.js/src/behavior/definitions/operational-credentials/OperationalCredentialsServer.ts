@@ -12,6 +12,7 @@ import { MatterFabricInvalidAdminSubjectError } from "../../../common/FailsafeCo
 import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
 import { MatterFlowError, UnexpectedDataError } from "../../../common/MatterError.js";
 import { ValidationError } from "../../../common/ValidationError.js";
+import { CryptoVerifyError } from "../../../crypto/Crypto.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { Fabric, PublicKeyError } from "../../../fabric/Fabric.js";
@@ -158,6 +159,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 debugText: error.message,
             };
         } else if (
+            error instanceof CryptoVerifyError ||
             error instanceof CertificateError ||
             error instanceof ValidationError ||
             error instanceof UnexpectedDataError
@@ -406,6 +408,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         } catch (error) {
             logger.info("setting root certificate failed", error);
             if (
+                error instanceof CryptoVerifyError ||
                 error instanceof CertificateError ||
                 error instanceof ValidationError ||
                 error instanceof UnexpectedDataError
@@ -414,6 +417,11 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             }
             throw error;
         }
+
+        const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
+        const trustedRootCertificates = fabrics.map(fabric => fabric.rootCert);
+        trustedRootCertificates.push(rootCaCertificate);
+        this.state.trustedRootCertificates = trustedRootCertificates;
     }
 
     async #updateFabrics() {
@@ -469,11 +477,16 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         this.agent.get(CommissioningBehavior).handleFabricChange(fabricIndex, FabricAction.Removed);
     }
 
+    async #handleFailsafeClosed() {
+        await this.#updateFabrics();
+    }
+
     async #nodeOnline() {
         const fabricManager = this.endpoint.env.get(FabricManager);
         this.reactTo(fabricManager.events.added, this.#handleAddedFabric, { lock: true });
         this.reactTo(fabricManager.events.updated, this.#handleUpdatedFabric, { lock: true });
         this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric, { lock: true });
+        this.reactTo(fabricManager.events.failsafeClosed, this.#handleFailsafeClosed, { lock: true });
         await this.#updateFabrics();
     }
 }

@@ -31,7 +31,7 @@ const TestCMS_SignerPrivateKey = ByteArray.fromHex("AEF3484116E9481EC57BE0472DF4
 const TestCMS_SignerSubjectKeyIdentifier = ByteArray.fromHex("62FA823359ACFAA9963E1CFA140ADDF504F37160");
 
 export class CertificationDeclarationManager {
-    static generate(vendorId: VendorId, productId: number) {
+    static generate(vendorId: VendorId, productId: number, provisional = false) {
         const certificationElements = TlvCertificationDeclaration.encode({
             formatVersion: 1,
             vendorId,
@@ -41,7 +41,7 @@ export class CertificationDeclarationManager {
             securityLevel: 0,
             securityInformation: 0,
             versionNumber: 1,
-            certificationType: 0,
+            certificationType: provisional ? 1 : 0, // 0 = Test, 1 = Provisional/In certification, 2 = official
         });
 
         return CertificateManager.CertificationDeclarationToAsn1(

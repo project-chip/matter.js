@@ -376,9 +376,15 @@ export class FabricBuilder {
 
     setRootCert(rootCert: ByteArray) {
         const decodedRootCertificate = TlvRootCertificate.decode(rootCert);
+        CertificateManager.verifyRootCertificate(decodedRootCertificate);
         this.#rootCert = rootCert;
         this.#rootPublicKey = decodedRootCertificate.ellipticCurvePublicKey;
         return this;
+    }
+
+    // TODO Remove when legacy API gets removed because then no longer needed
+    get rootCert() {
+        return this.#rootCert;
     }
 
     hasRootCert() {

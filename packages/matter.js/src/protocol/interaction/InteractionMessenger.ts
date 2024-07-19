@@ -169,6 +169,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         // This potentially sends multiple DataReport Messages
                         await this.sendDataReport(
                             await recipient.handleReadRequest(this.exchange, readRequest, message),
+                            readRequest.isFabricFiltered,
                         );
                         break;
                     }
@@ -227,7 +228,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
      * Handle DataReportPayload with the content of a DataReport to send, split them into multiple DataReport
      * messages and send them out based on the size.
      */
-    async sendDataReport(dataReportPayload: DataReportPayload) {
+    async sendDataReport(dataReportPayload: DataReportPayload, forFabricFilteredRead: boolean) {
         const {
             subscriptionId,
             attributeReportsPayload,
@@ -273,7 +274,11 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                             firstAttributeAddedToReportMessage = true;
                             messageSize += 3; // Array element is added now which needs 3 bytes
                         }
-                        const encodedAttribute = encodeAttributePayload(attributeReport);
+                        const allowMissingFieldsForNonFabricFilteredRead =
+                            !forFabricFilteredRead && attributeReport.hasFabricSensitiveData;
+                        const encodedAttribute = encodeAttributePayload(attributeReport, {
+                            allowMissingFieldsForNonFabricFilteredRead,
+                        });
                         const attributeReportBytes = TlvAny.getEncodedByteLength(encodedAttribute);
                         if (messageSize + attributeReportBytes > this.exchange.maxPayloadSize) {
                             if (canAttributePayloadBeChunked(attributeReport)) {
@@ -298,7 +303,11 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         firstEventAddedToReportMessage = true;
                         messageSize += 3; // Array element is added now which needs 3 bytes
                     }
-                    const encodedEvent = encodeEventPayload(eventReport);
+                    const allowMissingFieldsForNonFabricFilteredRead =
+                        !forFabricFilteredRead && eventReport.hasFabricSensitiveData;
+                    const encodedEvent = encodeEventPayload(eventReport, {
+                        allowMissingFieldsForNonFabricFilteredRead,
+                    });
                     const eventReportBytes = TlvAny.getEncodedByteLength(encodedEvent);
                     if (messageSize + eventReportBytes > this.exchange.maxPayloadSize) {
                         await sendAndResetReport();
