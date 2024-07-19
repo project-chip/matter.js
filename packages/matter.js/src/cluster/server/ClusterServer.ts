@@ -37,7 +37,7 @@ import {
     SupportedEventsList,
 } from "./ClusterServerTypes.js";
 import { CommandServer } from "./CommandServer.js";
-import { EventServer } from "./EventServer.js";
+import { createEventServer } from "./EventServer.js";
 
 const logger = Logger.get("ClusterServer");
 
@@ -508,7 +508,14 @@ export function ClusterServer<
         }
 
         if ((supportedEvents as any)[eventName] === true) {
-            (events as any)[eventName] = new EventServer(id, clusterId, eventName, schema, priority, readAcl);
+            (events as any)[eventName] = createEventServer(
+                clusterDef,
+                eventDef[eventName],
+                eventName,
+                schema,
+                priority,
+                readAcl,
+            );
             const capitalizedEventName = capitalize(eventName);
             result[`trigger${capitalizedEventName}Event`] = <T>(event: T) =>
                 (events as any)[eventName].triggerEvent(event);

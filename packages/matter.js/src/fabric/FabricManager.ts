@@ -32,6 +32,7 @@ export class FabricManager {
         added: Observable<[fabric: Fabric]>(),
         updated: Observable<[fabric: Fabric]>(),
         deleted: Observable<[fabric: Fabric]>(),
+        failsafeClosed: Observable<[]>(),
     };
 
     constructor(fabricStorage: StorageContext) {

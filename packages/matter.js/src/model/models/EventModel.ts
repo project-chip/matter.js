@@ -17,6 +17,10 @@ export class EventModel extends ValueModel implements EventElement {
         super(definition);
     }
 
+    get fabricSensitive(): boolean {
+        return this.effectiveAccess.fabricSensitive;
+    }
+
     static {
         Model.types[EventElement.Tag] = this;
     }

@@ -13,7 +13,7 @@ import {
     CRYPTO_SYMMETRIC_KEY_LENGTH,
     Crypto,
     CryptoDsaEncoding,
-    CryptoError,
+    CryptoVerifyError,
     PrivateKey,
 } from "@project-chip/matter.js/crypto";
 import { ByteArray } from "@project-chip/matter.js/util";
@@ -146,7 +146,7 @@ export class CryptoNode extends Crypto {
             },
             signature,
         );
-        if (!success) throw new CryptoError("Signature verification failed");
+        if (!success) throw new CryptoVerifyError("Signature verification failed");
     }
 
     createKeyPair() {

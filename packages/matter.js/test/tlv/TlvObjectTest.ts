@@ -165,7 +165,7 @@ describe("TlvObject tests", () => {
                         mandatoryField: 1,
                         optionalField: "test",
                     },
-                    true,
+                    { forWriteInteraction: true },
                 );
 
                 // THe Tlv encoded data is the same as without FabricIndex

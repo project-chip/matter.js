@@ -49,7 +49,7 @@ import {
 import { Scenes } from "../definitions/ScenesCluster.js";
 import { AttributeServer, FabricScopedAttributeServer, FixedAttributeServer } from "./AttributeServer.js";
 import { CommandServer } from "./CommandServer.js";
-import { EventServer } from "./EventServer.js";
+import { AnyEventServer } from "./EventServer.js";
 
 /** Cluster attributes accessible on the cluster server */
 type MandatoryAttributeServers<A extends Attributes> = Omit<
@@ -243,8 +243,8 @@ type ServerAttributeSubscribers<A extends Attributes> = {
 };
 
 export type EventServers<E extends Events> = Merge<
-    { [P in MandatoryEventNames<E>]: EventServer<EventType<E[P]>, any> },
-    { [P in OptionalEventNames<E>]?: EventServer<EventType<E[P]>, any> }
+    { [P in MandatoryEventNames<E>]: AnyEventServer<EventType<E[P]>, any> },
+    { [P in OptionalEventNames<E>]?: AnyEventServer<EventType<E[P]>, any> }
 >;
 type ServerEventTriggers<E extends Events> = {
     [P in MandatoryEventNames<E> as `trigger${Capitalize<string & P>}Event`]: (event: EventType<E[P]>) => void;
