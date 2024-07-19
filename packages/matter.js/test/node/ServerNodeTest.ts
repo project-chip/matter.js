@@ -268,7 +268,6 @@ describe("ServerNode", () => {
         if (node.lifecycle.isOnline) {
             await MockTime.resolve(node.lifecycle.offline);
         }
-
         // ...then go back online
         await MockTime.resolve(node.lifecycle.online);
 

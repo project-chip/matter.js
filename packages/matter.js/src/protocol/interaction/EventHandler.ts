@@ -102,9 +102,7 @@ export class EventHandler<S extends Storage = any> {
         );
 
         if (filterForFabricIndex !== undefined) {
-            return events.filter(
-                event => !("fabricIndex" in event.data) || event.data.fabricIndex === filterForFabricIndex,
-            );
+            return events.filter(({ data }) => !("fabricIndex" in data) || data.fabricIndex === filterForFabricIndex);
         }
 
         return events;
