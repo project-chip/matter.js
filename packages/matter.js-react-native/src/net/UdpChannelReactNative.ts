@@ -53,7 +53,10 @@ interface Socket {
 
 function createDgramSocket(host: string | undefined, port: number | undefined, options: SocketOptions) {
     // @ts-expect-error default types are strange
-    const socket = dgram.createSocket(options);
+    const socket = dgram.createSocket({
+        ...options,
+        reusePort: options.reuseAddr,
+    });
     return new Promise<Socket>((resolve, reject) => {
         const handleBindError = (error: Error) => {
             try {
@@ -64,7 +67,8 @@ function createDgramSocket(host: string | undefined, port: number | undefined, o
             reject(error);
         };
         socket.on("error", handleBindError);
-        socket.bind(port, host, () => {
+        socket.bind(port, host, (error: any) => {
+            if (error) return;
             const { address: localHost, port: localPort } = socket.address();
             logger.debug(
                 "Socket created and bound ",

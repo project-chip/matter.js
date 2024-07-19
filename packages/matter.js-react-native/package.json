@@ -40,7 +40,7 @@
         "@react-native-community/netinfo": "^11.3.2",
         "@types/node": "^20.14.10",
         "react-native-ble-plx": "^3.2.1",
-        "react-native-quick-crypto": "^0.7.1",
+        "react-native-quick-crypto": "^0.7.0-rc.9",
         "react-native-udp": "^4.1.7"
     },
     "files": [

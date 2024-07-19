@@ -896,7 +896,7 @@ export class CommissioningServer extends MatterNode {
         const wasStarted = this.interactionServer !== undefined || this.deviceInstance !== undefined;
         let fabrics = new Array<Fabric>();
         if (wasStarted) {
-            fabrics = this.isCommissioned() ? this.deviceInstance?.getFabrics() ?? [] : [];
+            fabrics = this.isCommissioned() ? (this.deviceInstance?.getFabrics() ?? []) : [];
             await this.close();
         }
 

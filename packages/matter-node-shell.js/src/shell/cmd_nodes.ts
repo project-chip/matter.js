@@ -158,7 +158,7 @@ export default function commands(theNode: MatterNode) {
                                 autoSubscribe,
                                 subscribeMinIntervalFloorSeconds: autoSubscribe ? minSubscriptionInterval : undefined,
                                 subscribeMaxIntervalCeilingSeconds: autoSubscribe
-                                    ? maxSubscriptionInterval ?? 30
+                                    ? (maxSubscriptionInterval ?? 30)
                                     : undefined,
                                 ...createDiagnosticCallbacks(),
                             });
