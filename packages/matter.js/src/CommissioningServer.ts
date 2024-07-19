@@ -544,7 +544,6 @@ export class CommissioningServer extends MatterNode {
 
         this.interactionServer = new LegacyInteractionServer({
             endpointStructure: this.endpointStructure,
-            eventHandler: this.eventHandler,
             subscriptionOptions: {
                 maxIntervalSeconds: this.options.subscriptionMaxIntervalSeconds,
                 minIntervalSeconds: this.options.subscriptionMinIntervalSeconds,

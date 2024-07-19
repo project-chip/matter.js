@@ -60,7 +60,7 @@ export class InteractionEndpointStructure {
     eventPaths = new Array<EventPath>();
     commands = new Map<string, CommandServer<any, any>>();
     commandPaths = new Array<CommandPath>();
-    change = Observable();
+    change = Observable(); // TODO adjust to AsyncObservable when we remove legacy API
 
     public clear() {
         this.endpoints.clear();

@@ -991,11 +991,11 @@ describe("InteractionProtocol", () => {
         storageManager = new StorageManager(new StorageBackendMemory());
         await storageManager.initialize();
         storageContext = storageManager.createContext("test");
+        eventHandler = new EventHandler(storageContext.createContext("EventHandler"));
         endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
         endpointStructure = new InteractionEndpointStructure();
         interactionProtocol = new InteractionServer({
             endpointStructure: endpointStructure,
-            eventHandler: (eventHandler = new EventHandler(storageContext.createContext("EventHandler"))),
         });
     });
 
@@ -1544,7 +1544,6 @@ describe("InteractionProtocol", () => {
 
             interactionProtocol = new InteractionServer({
                 endpointStructure: endpointStructure,
-                eventHandler: (eventHandler = new EventHandler(storageContext.createContext("EventHandler"))),
                 maxPathsPerInvoke: 1,
             });
 
@@ -1645,7 +1644,6 @@ describe("InteractionProtocol", () => {
 
             interactionProtocol = new InteractionServer({
                 endpointStructure: endpointStructure,
-                eventHandler: (eventHandler = new EventHandler(storageContext.createContext("EventHandler"))),
                 maxPathsPerInvoke: 1000,
             });
 

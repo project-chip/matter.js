@@ -6,7 +6,7 @@
 
 import { MatterDevice } from "../../MatterDevice.js";
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
-import { AnyEventServer } from "../../cluster/server/EventServer.js";
+import { AnyEventServer, FabricSensitiveEventServer } from "../../cluster/server/EventServer.js";
 import { InternalError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { EventNumber } from "../../datatype/EventNumber.js";
@@ -17,9 +17,10 @@ import { NetworkError } from "../../net/Network.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Time, Timer } from "../../time/Time.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { isObject } from "../../util/Type.js";
 import { RetransmissionLimitReachedError } from "../MessageExchange.js";
 import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
-import { EventHandler, EventStorageData } from "./EventHandler.js";
+import { EventStorageData } from "./EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import { InteractionServerMessenger } from "./InteractionMessenger.js";
 import {
@@ -62,6 +63,22 @@ interface EventPathWithEventData<T> {
 }
 
 export class SubscriptionHandler {
+    readonly subscriptionId: number;
+    private readonly session: SecureSession<any>;
+    private readonly endpointStructure: InteractionEndpointStructure;
+    private readonly attributeRequests?: TypeFromSchema<typeof TlvAttributePath>[];
+    private readonly dataVersionFilters?: TypeFromSchema<typeof TlvDataVersionFilter>[];
+    private readonly eventRequests?: TypeFromSchema<typeof TlvEventPath>[];
+    private readonly eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+    private readonly isFabricFiltered: boolean;
+    private readonly cancelCallback: () => void;
+    private readonly readAttribute: (path: AttributePath, attribute: AnyAttributeServer<any>) => Promise<any>;
+    private readonly readEvent: (
+        path: EventPath,
+        event: AnyEventServer<any, any>,
+        eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
+    ) => Promise<EventStorageData<any>[]>;
+
     private lastUpdateTimeMs = 0;
     private updateTimer: Timer;
     private readonly sendDelayTimer: Timer;
@@ -94,21 +111,52 @@ export class SubscriptionHandler {
     private sendNextUpdateImmediately = false;
     private sendUpdateErrorCounter = 0;
 
-    constructor(
-        readonly subscriptionId: number,
-        private readonly session: SecureSession<any>,
-        private readonly endpointStructure: InteractionEndpointStructure,
-        private readonly attributeRequests: TypeFromSchema<typeof TlvAttributePath>[] | undefined,
-        private readonly dataVersionFilters: TypeFromSchema<typeof TlvDataVersionFilter>[] | undefined,
-        private readonly eventRequests: TypeFromSchema<typeof TlvEventPath>[] | undefined,
-        private readonly eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
-        private readonly eventHandler: EventHandler,
-        private readonly isFabricFiltered: boolean,
-        minIntervalFloor: number,
-        maxIntervalCeiling: number,
-        private readonly cancelCallback: () => void,
-        subscriptionOptions: SubscriptionOptions.Configuration,
-    ) {
+    constructor(options: {
+        subscriptionId: number;
+        session: SecureSession<any>;
+        endpointStructure: InteractionEndpointStructure;
+        attributeRequests?: TypeFromSchema<typeof TlvAttributePath>[];
+        dataVersionFilters?: TypeFromSchema<typeof TlvDataVersionFilter>[];
+        eventRequests?: TypeFromSchema<typeof TlvEventPath>[];
+        eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+        isFabricFiltered: boolean;
+        minIntervalFloor: number;
+        maxIntervalCeiling: number;
+        cancelCallback: () => void;
+        subscriptionOptions: SubscriptionOptions.Configuration;
+        readAttribute: (path: AttributePath, attribute: AnyAttributeServer<any>) => Promise<any>;
+        readEvent: (
+            path: EventPath,
+            event: AnyEventServer<any, any>,
+            eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
+        ) => Promise<EventStorageData<any>[]>;
+    }) {
+        const {
+            subscriptionId,
+            session,
+            endpointStructure,
+            attributeRequests,
+            dataVersionFilters,
+            eventRequests,
+            eventFilters,
+            isFabricFiltered,
+            minIntervalFloor,
+            maxIntervalCeiling,
+            cancelCallback,
+            subscriptionOptions,
+        } = options;
+        this.subscriptionId = subscriptionId;
+        this.session = session;
+        this.endpointStructure = endpointStructure;
+        this.attributeRequests = attributeRequests;
+        this.dataVersionFilters = dataVersionFilters;
+        this.eventRequests = eventRequests;
+        this.eventFilters = eventFilters;
+        this.isFabricFiltered = isFabricFiltered;
+        this.cancelCallback = cancelCallback;
+        this.readAttribute = options.readAttribute;
+        this.readEvent = options.readEvent;
+
         this.server = this.session.context;
         this.fabric = this.session.associatedFabric;
         this.peerNodeId = this.session.peerNodeId;
@@ -346,11 +394,11 @@ export class SubscriptionHandler {
      * Newly added attributes are then treated ad "changed values" and will be sent as subscription data update to the
      * controller. The data of newly added events are not sent automatically.
      */
-    updateSubscription() {
+    async updateSubscription() {
         const { newAttributes } = this.registerNewAttributes();
 
         for (const { path, attribute } of newAttributes) {
-            const { version, value } = attribute.getWithVersion(this.session, true);
+            const { version, value } = await this.readAttribute(path, attribute);
 
             // We do not do any version filtering for attributes that are newly added to make sure controller gets
             // most current state
@@ -369,7 +417,7 @@ export class SubscriptionHandler {
             .flatMap(({ path, event }): EventPathWithEventData<any>[] => {
                 // But we use eventFilters because we do not want to send all events to the controller
                 const { schema } = event;
-                const matchingEvents = this.eventHandler.getEvents(path, this.eventFilters) ?? [];
+                const matchingEvents = event.get(this.session, this.isFabricFiltered, undefined, this.eventFilters);
                 return matchingEvents.map(data => ({
                     event,
                     schema,
@@ -457,8 +505,25 @@ export class SubscriptionHandler {
             this.sendNextUpdateImmediately = true;
             return;
         }
-        const attributeUpdatesToSend = Array.from(this.outstandingAttributeUpdates.values());
+
+        // Get all outstanding updates, make sure the order is correct per endpoint and cluster
+        const attributeUpdatesToSend = new Array<AttributePathWithValueVersion<any>>();
+        const attributeUpdates: Record<string, AttributePathWithValueVersion<any>[]> = {};
+        Array.from(this.outstandingAttributeUpdates.values()).forEach(entry => {
+            const {
+                path: { nodeId, endpointId, clusterId },
+            } = entry;
+            const pathId = `${nodeId}-${endpointId}-${clusterId}`;
+            attributeUpdates[pathId] = attributeUpdates[pathId] ?? [];
+            attributeUpdates[pathId].push(entry);
+        });
         this.outstandingAttributeUpdates.clear();
+        Object.values(attributeUpdates).forEach(data =>
+            attributeUpdatesToSend.push(
+                ...data.sort(({ version: versionA }, { version: versionB }) => versionA - versionB),
+            ),
+        );
+
         const eventUpdatesToSend = Array.from(this.outstandingEventUpdates.values());
         this.outstandingEventUpdates.clear();
         this.lastUpdateTimeMs = Time.nowMs();
@@ -512,15 +577,7 @@ export class SubscriptionHandler {
         }
     }
 
-    async sendInitialReport(
-        messenger: InteractionServerMessenger,
-        readAttribute: (path: AttributePath, attribute: AnyAttributeServer<any>) => Promise<any>,
-        readEvent: (
-            path: EventPath,
-            event: AnyEventServer<any, any>,
-            eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
-        ) => Promise<EventStorageData<any>[]>,
-    ) {
+    async sendInitialReport(messenger: InteractionServerMessenger) {
         this.updateTimer.stop();
 
         const { newAttributes, attributeErrors } = this.registerNewAttributes();
@@ -539,7 +596,7 @@ export class SubscriptionHandler {
         }>();
         for (const { path, attribute } of newAttributes) {
             try {
-                const { value, version } = await readAttribute(path, attribute);
+                const { value, version } = await this.readAttribute(path, attribute);
                 if (value === undefined) continue;
 
                 const { nodeId, endpointId, clusterId } = path;
@@ -583,7 +640,7 @@ export class SubscriptionHandler {
         for (const { path, event } of newEvents) {
             const { schema } = event;
             try {
-                const matchingEvents = await readEvent(path, event, this.eventFilters);
+                const matchingEvents = await this.readEvent(path, event, this.eventFilters);
                 if (matchingEvents.length === 0) {
                     eventsFiltered = true;
                 } else {
@@ -653,35 +710,34 @@ export class SubscriptionHandler {
         );
     }
 
-    attributeChangeListener<T>(
-        path: TypeFromSchema<typeof TlvAttributePath>,
-        schema: TlvSchema<T>,
-        version: number,
-        value: T,
-    ) {
+    async attributeChangeListener<T>(path: AttributePath, schema: TlvSchema<T>, version: number, value: T) {
         const attributeListenerData = this.attributeListeners.get(attributePathToId(path));
         if (attributeListenerData === undefined) return; // Ignore changes to attributes that are not subscribed to
 
         const { attribute } = attributeListenerData;
         if (attribute instanceof FabricScopedAttributeServer) {
             // We can not be sure what value we got for fabric filtered attributes (and from which fabric),
-            // so get it again for this relevant fabric
+            // so get it again for this relevant fabric. This also makes sure that fabric sensitive fields are filtered
             // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
-            value = attribute.get(this.session, this.isFabricFiltered);
+            const { value: readValue } = await this.readAttribute(path, attribute);
+            value = readValue;
         }
         this.outstandingAttributeUpdates.set(attributePathToId(path), { attribute, path, schema, version, value });
         this.prepareDataUpdate();
     }
 
-    eventChangeListener<T>(
-        path: TypeFromSchema<typeof TlvEventPath>,
-        schema: TlvSchema<T>,
-        newEvent: EventStorageData<T>,
-    ) {
+    eventChangeListener<T>(path: EventPath, schema: TlvSchema<T>, newEvent: EventStorageData<T>) {
         const eventListenerData = this.eventListeners.get(eventPathToId(path));
         if (eventListenerData === undefined) return; // Ignore changes to attributes that are not subscribed to
 
         const { event } = eventListenerData;
+        if (event instanceof FabricSensitiveEventServer) {
+            const { data } = newEvent;
+            if (isObject(data) && "fabricIndex" in data && data.fabricIndex !== this.session.fabric?.fabricIndex) {
+                // Ignore events from different fabrics because events are kind of always fabric filtered
+                return;
+            }
+        }
         this.outstandingEventUpdates.add({ event, path, schema, data: newEvent });
         if (path.isUrgent) {
             this.prepareDataUpdate();

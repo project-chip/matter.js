@@ -32,7 +32,6 @@ import { Specification } from "../../model/definitions/Specification.js";
 import { AttributeModel, ClusterModel, CommandModel, GLOBAL_IDS, MatterModel } from "../../model/index.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
-import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
@@ -100,6 +99,7 @@ export interface EventPath {
     endpointId: EndpointNumber;
     clusterId: ClusterId;
     eventId: EventId;
+    isUrgent?: boolean;
 }
 
 export interface AttributeWithPath {
@@ -234,23 +234,20 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
     readonly #subscriptionMap = new Map<number, SubscriptionHandler>();
     #isClosing = false;
     readonly #subscriptionConfig: SubscriptionOptions.Configuration;
-    readonly #eventHandler: EventHandler;
     readonly #maxPathsPerInvoke;
 
     constructor({
         subscriptionOptions,
-        eventHandler,
         endpointStructure,
         maxPathsPerInvoke = DEFAULT_MAX_PATHS_PER_INVOKE,
     }: InteractionServer.Configuration) {
         this.#subscriptionConfig = SubscriptionOptions.configurationFor(subscriptionOptions);
-        this.#eventHandler = eventHandler;
         this.#endpointStructure = endpointStructure;
         this.#maxPathsPerInvoke = maxPathsPerInvoke;
 
-        this.#endpointStructure.change.on(() => {
+        this.#endpointStructure.change.on(async () => {
             for (const subscription of this.#subscriptionMap.values()) {
-                subscription.updateSubscription();
+                await subscription.updateSubscription();
             }
         });
     }
@@ -1034,46 +1031,43 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 
         if (this.#nextSubscriptionId === 0xffffffff) this.#nextSubscriptionId = 0;
         const subscriptionId = this.#nextSubscriptionId++;
-        const subscriptionHandler = new SubscriptionHandler(
+        const subscriptionHandler = new SubscriptionHandler({
             subscriptionId,
             session,
-            this.#endpointStructure,
+            endpointStructure: this.#endpointStructure,
             attributeRequests,
             dataVersionFilters,
             eventRequests,
             eventFilters,
-            this.#eventHandler,
             isFabricFiltered,
-            minIntervalFloorSeconds,
-            maxIntervalCeilingSeconds,
-            () => this.#subscriptionMap.delete(subscriptionId),
-            this.#subscriptionConfig,
-        );
+            minIntervalFloor: minIntervalFloorSeconds,
+            maxIntervalCeiling: maxIntervalCeilingSeconds,
+            cancelCallback: () => this.#subscriptionMap.delete(subscriptionId),
+            subscriptionOptions: this.#subscriptionConfig,
+            readAttribute: (path, attribute) =>
+                this.readAttribute(
+                    path,
+                    attribute,
+                    exchange,
+                    isFabricFiltered,
+                    message,
+                    this.#endpointStructure.getEndpoint(path.endpointId)!,
+                ),
+            readEvent: (path, event, eventFilters) =>
+                this.readEvent(
+                    path,
+                    eventFilters,
+                    event,
+                    exchange,
+                    isFabricFiltered,
+                    message,
+                    this.#endpointStructure.getEndpoint(path.endpointId)!,
+                ),
+        });
 
         try {
             // Send initial data report to prime the subscription with initial data
-            await subscriptionHandler.sendInitialReport(
-                messenger,
-                (path, attribute) =>
-                    this.readAttribute(
-                        path,
-                        attribute,
-                        exchange,
-                        isFabricFiltered,
-                        message,
-                        this.#endpointStructure.getEndpoint(path.endpointId)!,
-                    ),
-                (path, event, eventFilters) =>
-                    this.readEvent(
-                        path,
-                        eventFilters,
-                        event,
-                        exchange,
-                        isFabricFiltered,
-                        message,
-                        this.#endpointStructure.getEndpoint(path.endpointId)!,
-                    ),
-            );
+            await subscriptionHandler.sendInitialReport(messenger);
         } catch (error: any) {
             logger.error(
                 `Subscription ${subscriptionId} for Session ${session.id}: Error while sending initial data reports`,
@@ -1445,7 +1439,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
 export namespace InteractionServer {
     export interface Configuration {
         readonly subscriptionOptions?: SubscriptionOptions;
-        readonly eventHandler: EventHandler;
         readonly endpointStructure: InteractionEndpointStructure;
         readonly maxPathsPerInvoke?: number;
     }

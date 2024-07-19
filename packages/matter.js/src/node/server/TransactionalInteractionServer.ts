@@ -42,7 +42,6 @@ import {
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { ServerNode } from "../ServerNode.js";
-import { ServerStore } from "./storage/ServerStore.js";
 
 const activityKey = Symbol("activity");
 
@@ -82,7 +81,6 @@ export class TransactionalInteractionServer extends InteractionServer {
         );
 
         return new TransactionalInteractionServer(endpoint, {
-            eventHandler: endpoint.env.get(ServerStore).eventHandler,
             endpointStructure,
             subscriptionOptions: endpoint.state.network.subscriptionOptions,
             maxPathsPerInvoke,

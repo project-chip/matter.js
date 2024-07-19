@@ -308,18 +308,16 @@ describe("ClusterServerBacking", () => {
         expect(report?.attributeReports?.length).equals(2);
         expect(report?.eventReports).equals(undefined);
 
-        // Confirm the first report is for Fabrics
-        const fabricsReport = report?.attributeReports?.[0]?.attributeData;
+        // Confirm the second report is for Fabrics (because of async-ness is a bit delayed)
+        const fabricsReport = report?.attributeReports?.[1]?.attributeData;
         expect(fabricsReport?.path).deep.equals(FABRICS_PATH);
-        expect(
-            (
-                fabricsReport?.data &&
-                OperationalCredentials.Cluster.attributes.fabrics.schema.decodeTlv(fabricsReport?.data)
-            )?.map(({ fabricIndex }) => fabricIndex),
-        ).deep.equals([1, 2]);
+        const decodedFabrics =
+            fabricsReport?.data &&
+            OperationalCredentials.Cluster.attributes.fabrics.schema.decodeTlv(fabricsReport?.data);
+        expect(decodedFabrics?.map(({ fabricIndex }) => fabricIndex)).deep.equals([1, 2]);
 
-        // Confirm the second report is for CommissionedFabrics
-        const commissionedFabricsReport = report?.attributeReports?.[1]?.attributeData;
+        // Confirm the first report is for CommissionedFabrics
+        const commissionedFabricsReport = report?.attributeReports?.[0]?.attributeData;
         expect(commissionedFabricsReport?.path).deep.equals(COMMISSIONED_FABRICS_PATH);
         expect(
             commissionedFabricsReport?.data &&
