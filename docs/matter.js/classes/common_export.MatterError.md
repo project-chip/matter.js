@@ -36,7 +36,7 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`ImplementationError`](common_export.ImplementationError.md)
 
-  ↳↳ [`CryptoError`](crypto_export.CryptoError.md)
+  ↳↳ [`CryptoVerifyError`](crypto_export.CryptoVerifyError.md)
 
   ↳↳ [`PublicKeyError`](fabric_export.PublicKeyError.md)
 

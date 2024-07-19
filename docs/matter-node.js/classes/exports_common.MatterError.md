@@ -26,7 +26,7 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`FabricScopeError`](exports_cluster.FabricScopeError.md)
 
-  ↳↳ [`CryptoError`](crypto_export.CryptoError.md)
+  ↳↳ [`CryptoVerifyError`](crypto_export.CryptoVerifyError.md)
 
   ↳↳ [`NoProviderError`](exports_common.NoProviderError.md)
 

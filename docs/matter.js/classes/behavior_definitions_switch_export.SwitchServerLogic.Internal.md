@@ -42,7 +42,7 @@ Flag to indicate if the current press is a long press.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:249](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L249)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:249](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L249)
 
 ___
 
@@ -54,7 +54,7 @@ Position of the current long press.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:246](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L246)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:246](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L246)
 
 ___
 
@@ -66,7 +66,7 @@ Counter to count the number of presses.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:237](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L237)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:237](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L237)
 
 ___
 
@@ -78,7 +78,7 @@ Position of the current unstable position which is debounced
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:252](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L252)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:252](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L252)
 
 ___
 
@@ -90,7 +90,7 @@ Timer to debounce the raw position.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:228](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L228)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:228](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L228)
 
 ___
 
@@ -102,7 +102,7 @@ Timer to detect a long press.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:231](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L231)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:231](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L231)
 
 ___
 
@@ -114,7 +114,7 @@ Timer to detect multi presses.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:234](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L234)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:234](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L234)
 
 ___
 
@@ -126,7 +126,7 @@ Position of the previous multi press.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:243](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L243)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:243](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L243)
 
 ___
 
@@ -138,4 +138,4 @@ Position previously reported in events.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:240](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L240)
+[packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts:240](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/switch/SwitchServer.ts#L240)

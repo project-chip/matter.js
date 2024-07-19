@@ -9,7 +9,6 @@
 ### Properties
 
 - [endpointStructure](exports_interaction.InteractionServer.Configuration.md#endpointstructure)
-- [eventHandler](exports_interaction.InteractionServer.Configuration.md#eventhandler)
 - [subscriptionOptions](exports_interaction.InteractionServer.Configuration.md#subscriptionoptions)
 
 ## Properties
@@ -17,16 +16,6 @@
 ### endpointStructure
 
 • `Readonly` **endpointStructure**: [`InteractionEndpointStructure`](../classes/exports_interaction.InteractionEndpointStructure.md)
-
-#### Defined in
-
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:103
-
-___
-
-### eventHandler
-
-• `Readonly` **eventHandler**: [`EventHandler`](../classes/exports_interaction.EventHandler.md)\<`any`\>
 
 #### Defined in
 

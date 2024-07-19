@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:73](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/math/ReedSolomon.ts#L73)
+[packages/matter.js/src/math/ReedSolomon.ts:73](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/math/ReedSolomon.ts#L73)
 
 ## Methods
 
@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:75](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/math/ReedSolomon.ts#L75)
+[packages/matter.js/src/math/ReedSolomon.ts:75](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/math/ReedSolomon.ts#L75)
 
 ___
 
@@ -78,4 +78,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:93](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/math/ReedSolomon.ts#L93)
+[packages/matter.js/src/math/ReedSolomon.ts:93](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/math/ReedSolomon.ts#L93)

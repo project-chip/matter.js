@@ -24,7 +24,7 @@ Vendor-specific BLE advertisement data.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts:45](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts#L45)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts:45](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts#L45)
 
 ___
 
@@ -36,7 +36,7 @@ The discriminator used during initial commissioning.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts:35](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts#L35)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts:35](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts#L35)
 
 ___
 
@@ -48,7 +48,7 @@ The Flow type of commissioning used in announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts:40](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts#L40)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts:40](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts#L40)
 
 ___
 
@@ -60,7 +60,7 @@ The commissioning passcode/pin.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts:30](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts#L30)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts:30](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts#L30)
 
 ___
 
@@ -72,4 +72,4 @@ Product details included in commissioning advertisements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts:25](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts#L25)
+[packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts:25](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/system/commissioning/CommissioningOptions.ts#L25)

@@ -1,8 +1,8 @@
-[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [cluster/export](../modules/cluster_export.md) / FabricScopedEventServer
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [cluster/export](../modules/cluster_export.md) / FabricSensitiveEventServer
 
-# Class: FabricScopedEventServer\<T, S\>
+# Class: FabricSensitiveEventServer\<T, S\>
 
-[cluster/export](../modules/cluster_export.md).FabricScopedEventServer
+[cluster/export](../modules/cluster_export.md).FabricSensitiveEventServer
 
 ## Type parameters
 
@@ -15,43 +15,44 @@
 
 - [`EventServer`](cluster_export.EventServer.md)\<`T`, `S`\>
 
-  ↳ **`FabricScopedEventServer`**
+  ↳ **`FabricSensitiveEventServer`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](cluster_export.FabricScopedEventServer.md#constructor)
+- [constructor](cluster_export.FabricSensitiveEventServer.md#constructor)
 
 ### Properties
 
-- [#readAcl](cluster_export.FabricScopedEventServer.md##readacl)
-- [clusterId](cluster_export.FabricScopedEventServer.md#clusterid)
-- [endpoint](cluster_export.FabricScopedEventServer.md#endpoint)
-- [eventHandler](cluster_export.FabricScopedEventServer.md#eventhandler)
-- [id](cluster_export.FabricScopedEventServer.md#id)
-- [name](cluster_export.FabricScopedEventServer.md#name)
-- [priority](cluster_export.FabricScopedEventServer.md#priority)
-- [schema](cluster_export.FabricScopedEventServer.md#schema)
+- [#readAcl](cluster_export.FabricSensitiveEventServer.md##readacl)
+- [clusterId](cluster_export.FabricSensitiveEventServer.md#clusterid)
+- [endpoint](cluster_export.FabricSensitiveEventServer.md#endpoint)
+- [eventHandler](cluster_export.FabricSensitiveEventServer.md#eventhandler)
+- [hasFabricSensitiveData](cluster_export.FabricSensitiveEventServer.md#hasfabricsensitivedata)
+- [id](cluster_export.FabricSensitiveEventServer.md#id)
+- [name](cluster_export.FabricSensitiveEventServer.md#name)
+- [priority](cluster_export.FabricSensitiveEventServer.md#priority)
+- [schema](cluster_export.FabricSensitiveEventServer.md#schema)
 
 ### Accessors
 
-- [readAcl](cluster_export.FabricScopedEventServer.md#readacl)
+- [readAcl](cluster_export.FabricSensitiveEventServer.md#readacl)
 
 ### Methods
 
-- [addListener](cluster_export.FabricScopedEventServer.md#addlistener)
-- [assignToEndpoint](cluster_export.FabricScopedEventServer.md#assigntoendpoint)
-- [bindToEventHandler](cluster_export.FabricScopedEventServer.md#bindtoeventhandler)
-- [get](cluster_export.FabricScopedEventServer.md#get)
-- [removeListener](cluster_export.FabricScopedEventServer.md#removelistener)
-- [triggerEvent](cluster_export.FabricScopedEventServer.md#triggerevent)
+- [addListener](cluster_export.FabricSensitiveEventServer.md#addlistener)
+- [assignToEndpoint](cluster_export.FabricSensitiveEventServer.md#assigntoendpoint)
+- [bindToEventHandler](cluster_export.FabricSensitiveEventServer.md#bindtoeventhandler)
+- [get](cluster_export.FabricSensitiveEventServer.md#get)
+- [removeListener](cluster_export.FabricSensitiveEventServer.md#removelistener)
+- [triggerEvent](cluster_export.FabricSensitiveEventServer.md#triggerevent)
 
 ## Constructors
 
 ### constructor
 
-• **new FabricScopedEventServer**\<`T`, `S`\>(`id`, `clusterId`, `name`, `schema`, `priority`, `readAcl`): [`FabricScopedEventServer`](cluster_export.FabricScopedEventServer.md)\<`T`, `S`\>
+• **new FabricSensitiveEventServer**\<`T`, `S`\>(`id`, `clusterId`, `name`, `schema`, `priority`, `readAcl`): [`FabricSensitiveEventServer`](cluster_export.FabricSensitiveEventServer.md)\<`T`, `S`\>
 
 #### Type parameters
 
@@ -73,7 +74,7 @@
 
 #### Returns
 
-[`FabricScopedEventServer`](cluster_export.FabricScopedEventServer.md)\<`T`, `S`\>
+[`FabricSensitiveEventServer`](cluster_export.FabricSensitiveEventServer.md)\<`T`, `S`\>
 
 #### Inherited from
 
@@ -81,7 +82,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:30](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L30)
+[packages/matter.js/src/cluster/server/EventServer.ts:67](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L67)
 
 ## Properties
 
@@ -95,7 +96,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:28](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L28)
+[packages/matter.js/src/cluster/server/EventServer.ts:64](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L64)
 
 ___
 
@@ -109,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:32](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L32)
+[packages/matter.js/src/cluster/server/EventServer.ts:69](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L69)
 
 ___
 
@@ -123,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:26](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L26)
+[packages/matter.js/src/cluster/server/EventServer.ts:62](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L62)
 
 ___
 
@@ -137,7 +138,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:27](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L27)
+[packages/matter.js/src/cluster/server/EventServer.ts:63](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L63)
+
+___
+
+### hasFabricSensitiveData
+
+• **hasFabricSensitiveData**: `boolean` = `true`
+
+#### Overrides
+
+[EventServer](cluster_export.EventServer.md).[hasFabricSensitiveData](cluster_export.EventServer.md#hasfabricsensitivedata)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/server/EventServer.ts:165](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L165)
 
 ___
 
@@ -151,7 +166,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:31](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L31)
+[packages/matter.js/src/cluster/server/EventServer.ts:68](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L68)
 
 ___
 
@@ -165,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:33](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L33)
+[packages/matter.js/src/cluster/server/EventServer.ts:70](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L70)
 
 ___
 
@@ -179,7 +194,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:35](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L35)
+[packages/matter.js/src/cluster/server/EventServer.ts:72](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L72)
 
 ___
 
@@ -193,7 +208,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:34](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L34)
+[packages/matter.js/src/cluster/server/EventServer.ts:71](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L71)
 
 ## Accessors
 
@@ -211,7 +226,7 @@ EventServer.readAcl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:41](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L41)
+[packages/matter.js/src/cluster/server/EventServer.ts:78](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L78)
 
 ## Methods
 
@@ -235,7 +250,7 @@ EventServer.readAcl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:94](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L94)
+[packages/matter.js/src/cluster/server/EventServer.ts:131](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L131)
 
 ___
 
@@ -259,7 +274,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:45](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L45)
+[packages/matter.js/src/cluster/server/EventServer.ts:82](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L82)
 
 ___
 
@@ -283,34 +298,34 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:51](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L51)
+[packages/matter.js/src/cluster/server/EventServer.ts:88](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L88)
 
 ___
 
 ### get
 
-▸ **get**(`session`, `isFabricFiltered`, `_message?`, `filters?`): [`EventStorageData`](../interfaces/protocol_interaction_export.EventStorageData.md)\<`any`\>[]
+▸ **get**(`session`, `_isFabricFiltered`, `message?`, `filters?`): [`EventStorageData`](../interfaces/protocol_interaction_export.EventStorageData.md)\<`any`\>[]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `session` | [`Session`](session_export.Session.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\> |
-| `isFabricFiltered` | `boolean` |
-| `_message?` | [`Message`](../interfaces/codec_export.Message.md) |
+| `_isFabricFiltered` | `boolean` |
+| `message?` | [`Message`](../interfaces/codec_export.Message.md) |
 | `filters?` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[] |
 
 #### Returns
 
 [`EventStorageData`](../interfaces/protocol_interaction_export.EventStorageData.md)\<`any`\>[]
 
-#### Inherited from
+#### Overrides
 
 [EventServer](cluster_export.EventServer.md).[get](cluster_export.EventServer.md#get)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:105](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L105)
+[packages/matter.js/src/cluster/server/EventServer.ts:167](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L167)
 
 ___
 
@@ -334,7 +349,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:98](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L98)
+[packages/matter.js/src/cluster/server/EventServer.ts:135](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L135)
 
 ___
 
@@ -358,4 +373,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:130](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/server/EventServer.ts#L130)
+[packages/matter.js/src/cluster/server/EventServer.ts:177](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/server/EventServer.ts#L177)

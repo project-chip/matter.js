@@ -34,7 +34,7 @@ Inform [Transaction](../modules/behavior_export._internal_.md#transaction) this 
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Resource.ts:27](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/transaction/Resource.ts#L27)
+[packages/matter.js/src/behavior/state/transaction/Resource.ts:27](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/state/transaction/Resource.ts#L27)
 
 ___
 
@@ -46,7 +46,7 @@ Locking transaction, maintained by [Transaction](../modules/behavior_export._int
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Resource.ts:22](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/transaction/Resource.ts#L22)
+[packages/matter.js/src/behavior/state/transaction/Resource.ts:22](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/state/transaction/Resource.ts#L22)
 
 ## Methods
 
@@ -62,4 +62,4 @@ Textual description of the resource used in error messages.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Resource.ts:17](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/transaction/Resource.ts#L17)
+[packages/matter.js/src/behavior/state/transaction/Resource.ts:17](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/state/transaction/Resource.ts#L17)

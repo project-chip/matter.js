@@ -46,7 +46,7 @@ MatterSpecification.v11.Cluster § 1.5.7.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:18](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L18)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:18](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L18)
 
 ___
 
@@ -62,9 +62,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:31](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L31)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:31](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L31)
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:86](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L86)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:86](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L86)
 
 ___
 
@@ -84,7 +84,7 @@ MatterSpecification.v11.Cluster § 1.5.7.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:29](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L29)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:29](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L29)
 
 ## Variables
 
@@ -99,8 +99,8 @@ OnOffBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts:19](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts:19](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts:24](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts:24](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts#L24)
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts:26](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts#L26)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts:26](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/on-off/OnOffBehavior.ts#L26)

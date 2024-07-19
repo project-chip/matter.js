@@ -38,7 +38,7 @@ StateType.maxMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:59](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L59)
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:59](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L59)
 
 ___
 
@@ -70,7 +70,7 @@ StateType.measuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:43](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:43](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L43)
 
 ___
 
@@ -91,7 +91,7 @@ StateType.minMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:51](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L51)
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:51](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L51)
 
 ___
 
@@ -111,4 +111,4 @@ StateType.tolerance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:66](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L66)
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:66](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L66)

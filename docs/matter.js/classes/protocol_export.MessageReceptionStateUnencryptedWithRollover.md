@@ -54,7 +54,7 @@ back the window to the current location.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:33](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/MessageReceptionState.ts#L33)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:33](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/MessageReceptionState.ts#L33)
 
 ## Properties
 
@@ -68,7 +68,7 @@ back the window to the current location.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:30](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/MessageReceptionState.ts#L30)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:30](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/MessageReceptionState.ts#L30)
 
 ## Methods
 
@@ -99,7 +99,7 @@ Return number is:
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:181](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/MessageReceptionState.ts#L181)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:181](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/MessageReceptionState.ts#L181)
 
 ___
 
@@ -125,4 +125,4 @@ Returns true if the message counter is a duplicate.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:111](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/MessageReceptionState.ts#L111)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:111](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/MessageReceptionState.ts#L111)

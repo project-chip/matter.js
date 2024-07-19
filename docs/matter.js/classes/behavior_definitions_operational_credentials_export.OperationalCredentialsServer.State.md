@@ -46,7 +46,7 @@ OperationalCredentialsBehavior.State.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:216](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L216)
 
 ## Properties
 
@@ -64,7 +64,7 @@ default if you do not provide an official certification in ServerOptions.certifi
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:502](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L502)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:515](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L515)
 
 ___
 
@@ -91,7 +91,7 @@ OperationalCredentialsBehavior.State.commissionedFabrics
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:757](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L757)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:757](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L757)
 
 ___
 
@@ -115,7 +115,7 @@ OperationalCredentialsBehavior.State.currentFabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:792](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L792)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:792](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L792)
 
 ___
 
@@ -140,7 +140,7 @@ OperationalCredentialsBehavior.State.fabrics
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:735](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L735)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:735](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L735)
 
 ___
 
@@ -167,7 +167,7 @@ OperationalCredentialsBehavior.State.nocs
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:712](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L712)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:712](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L712)
 
 ___
 
@@ -188,7 +188,7 @@ OperationalCredentialsBehavior.State.supportedFabrics
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:743](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L743)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:743](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L743)
 
 ___
 
@@ -221,7 +221,7 @@ OperationalCredentialsBehavior.State.trustedRootCertificates
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:777](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L777)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:777](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L777)
 
 ## Methods
 
@@ -246,4 +246,4 @@ OperationalCredentialsBehavior.State.trustedRootCertificates
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:504](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L504)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:517](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L517)

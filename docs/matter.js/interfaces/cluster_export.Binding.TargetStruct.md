@@ -44,7 +44,7 @@ TypeFromSchema.cluster
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:57](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L57)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:57](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L57)
 
 ___
 
@@ -65,7 +65,7 @@ TypeFromSchema.endpoint
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:48](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L48)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:48](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L48)
 
 ___
 
@@ -79,7 +79,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:59](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L59)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:59](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L59)
 
 ___
 
@@ -100,7 +100,7 @@ TypeFromSchema.group
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:40](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L40)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:40](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L40)
 
 ___
 
@@ -120,4 +120,4 @@ TypeFromSchema.node
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:32](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L32)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:32](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L32)

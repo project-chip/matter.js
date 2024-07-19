@@ -70,7 +70,7 @@ This class manages [Behavior](behavior_export.Behavior-1.md) instances owned by 
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:100](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L100)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:100](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L100)
 
 ## Properties
 
@@ -80,7 +80,7 @@ This class manages [Behavior](behavior_export.Behavior-1.md) instances owned by 
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:40](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L40)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:40](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L40)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:38](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L38)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:38](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L38)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:42](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L42)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:42](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L42)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:41](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L41)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:41](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L41)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:39](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L39)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:39](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L39)
 
 ## Accessors
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:59](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L59)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:59](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L59)
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:63](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L63)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:63](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L63)
 
 ___
 
@@ -164,7 +164,7 @@ True if any behaviors failed to initialized
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:210](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L210)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:210](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L210)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:51](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L51)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:51](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L51)
 
 ___
 
@@ -194,7 +194,7 @@ The [SupportedBehaviors](../modules/behavior_cluster_export._internal_.md#suppor
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:47](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L47)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:47](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L47)
 
 ## Methods
 
@@ -214,7 +214,7 @@ The [SupportedBehaviors](../modules/behavior_cluster_export._internal_.md#suppor
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:438](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L438)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:438](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L438)
 
 ___
 
@@ -236,7 +236,7 @@ Updates endpoint "state" and "events" properties to include properties for our i
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:535](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L535)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:535](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L535)
 
 ___
 
@@ -259,7 +259,7 @@ Obtain a backing for an endpoint shortcut.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:460](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L460)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:460](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L460)
 
 ___
 
@@ -280,7 +280,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:484](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L484)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:484](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L484)
 
 ___
 
@@ -300,7 +300,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:518](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L518)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:518](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L518)
 
 ___
 
@@ -321,7 +321,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:500](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L500)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:500](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L500)
 
 ___
 
@@ -348,7 +348,7 @@ Behaviors that fail initialization will be marked with crashed [status](node_exp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:283](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L283)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:283](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L283)
 
 ___
 
@@ -364,7 +364,7 @@ Destroy all behaviors that are initialized (have backings present).
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:302](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L302)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:302](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L302)
 
 ___
 
@@ -387,7 +387,7 @@ Create a behavior asynchronously.  Waits for the behavior to complete initializa
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:221](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L221)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:221](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L221)
 
 ___
 
@@ -413,7 +413,7 @@ possible.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:243](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L243)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:243](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L243)
 
 ___
 
@@ -436,7 +436,7 @@ Create a behavior synchronously.  Fails if the behavior is not fully initialized
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:195](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L195)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:195](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L195)
 
 ___
 
@@ -459,7 +459,7 @@ a new endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:385](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L385)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:385](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L385)
 
 ___
 
@@ -487,7 +487,7 @@ Does the [Endpoint](endpoint_export.Endpoint-1.md) support a specified behavior?
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:159](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L159)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:159](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L159)
 
 ___
 
@@ -510,7 +510,7 @@ initialization.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:130](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L130)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:130](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L130)
 
 ___
 
@@ -544,7 +544,7 @@ does access to [Behavior.State](behavior_export.Behavior-1.md#state-1) and [Beha
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:410](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L410)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:410](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L410)
 
 ___
 
@@ -566,7 +566,7 @@ Determine if a specified behavior is supported and active.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:294](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L294)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:294](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L294)
 
 ___
 
@@ -595,7 +595,7 @@ Add behavior support dynamically at runtime.  Typically called via [Agent.requir
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:167](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L167)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:167](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L167)
 
 ___
 
@@ -611,7 +611,7 @@ Destroy in-memory state, resetting behaviors to uninitialized state.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:425](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L425)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:425](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L425)
 
 ___
 
@@ -633,4 +633,4 @@ Ensure a set of behavior requirements are met.  Throws an error detailing missin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/Behaviors.ts:345](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/Behaviors.ts#L345)
+[packages/matter.js/src/endpoint/properties/Behaviors.ts:345](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/Behaviors.ts#L345)

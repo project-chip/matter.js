@@ -51,7 +51,7 @@ Timer for the managed colorTemperature transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2111](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2111)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2111](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2111)
 
 ___
 
@@ -63,7 +63,7 @@ Structure to store the data of the current managed color Temperature transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2126](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2126)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2126](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2126)
 
 ___
 
@@ -75,7 +75,7 @@ Structure to store the data of the current managed hue transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2120](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2120)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2120](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2120)
 
 ___
 
@@ -87,7 +87,7 @@ Structure to store the data of the current managed saturation transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2123](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2123)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2123](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2123)
 
 ___
 
@@ -99,7 +99,7 @@ Structure to store the data of the current managed x transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2129](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2129)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2129](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2129)
 
 ___
 
@@ -111,7 +111,7 @@ Structure to store the data of the current managed y transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2132](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2132)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2132](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2132)
 
 ___
 
@@ -123,7 +123,7 @@ Timer for the managed hue transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2105](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2105)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2105](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2105)
 
 ___
 
@@ -135,7 +135,7 @@ Timer for the managed saturation transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2108](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2108)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2108](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2108)
 
 ___
 
@@ -147,7 +147,7 @@ Timer for the managed x transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2114](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2114)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2114](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2114)
 
 ___
 
@@ -159,7 +159,7 @@ Timer for the managed y transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2117](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2117)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2117](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2117)
 
 ## Methods
 
@@ -173,7 +173,7 @@ Timer for the managed y transition
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2148](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2148)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2148](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2148)
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2134](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2134)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2134](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2134)
 
 ___
 
@@ -201,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2141](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2141)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2141](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2141)
 
 ___
 
@@ -215,7 +215,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2155](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2155)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2155](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2155)
 
 ___
 
@@ -229,4 +229,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2162](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2162)
+[packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts:2162](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts#L2162)

@@ -414,7 +414,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:15
+packages/matter.js/dist/esm/session/SessionManager.d.ts:16
 
 ## Functions
 

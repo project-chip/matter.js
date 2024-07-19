@@ -32,7 +32,7 @@ TypeFromSchema.id
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:48](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L48)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:48](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L48)
 
 ___
 
@@ -46,7 +46,7 @@ TypeFromSchema.percentage
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:49](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L49)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:49](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L49)
 
 ___
 
@@ -60,4 +60,4 @@ TypeFromSchema.type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:47](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:47](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L47)

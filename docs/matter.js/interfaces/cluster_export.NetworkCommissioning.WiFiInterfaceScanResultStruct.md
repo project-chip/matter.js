@@ -39,7 +39,7 @@ TypeFromSchema.bssid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:199](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L199)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:199](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L199)
 
 ___
 
@@ -53,7 +53,7 @@ TypeFromSchema.channel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:200](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L200)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:200](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L200)
 
 ___
 
@@ -73,7 +73,7 @@ TypeFromSchema.rssi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:215](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L215)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:215](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L215)
 
 ___
 
@@ -87,7 +87,7 @@ TypeFromSchema.security
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:197](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L197)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:197](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L197)
 
 ___
 
@@ -101,7 +101,7 @@ TypeFromSchema.ssid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:198](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L198)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:198](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L198)
 
 ___
 
@@ -122,4 +122,4 @@ TypeFromSchema.wiFiBand
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:208](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L208)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:208](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L208)

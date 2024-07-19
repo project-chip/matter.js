@@ -25,7 +25,7 @@ We provide this alias to the default implementation [BindingServer](endpoint_def
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:19](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L19)
+[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:19](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L19)
 
 ___
 
@@ -39,7 +39,7 @@ We provide this alias to the default implementation [FixedLabelServer](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:26](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L26)
+[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:26](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L26)
 
 ___
 
@@ -53,7 +53,7 @@ We provide this alias to the default implementation [UserLabelServer](endpoint_d
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:33](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L33)
+[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:33](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L33)
 
 ___
 
@@ -75,4 +75,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:38](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L38)
+[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:38](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L38)

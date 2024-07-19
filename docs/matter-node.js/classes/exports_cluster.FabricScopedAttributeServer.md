@@ -28,11 +28,13 @@ on fabric level if no custom getter or setter is defined.
 ### Properties
 
 - [#private](exports_cluster.FabricScopedAttributeServer.md##private)
+- [#private](exports_cluster.FabricScopedAttributeServer.md##private-1)
 - [cluster](exports_cluster.FabricScopedAttributeServer.md#cluster)
 - [datasource](exports_cluster.FabricScopedAttributeServer.md#datasource)
 - [defaultValue](exports_cluster.FabricScopedAttributeServer.md#defaultvalue)
 - [delayedChangeData](exports_cluster.FabricScopedAttributeServer.md#delayedchangedata)
 - [endpoint](exports_cluster.FabricScopedAttributeServer.md#endpoint)
+- [fabricSensitiveElementsToRemove](exports_cluster.FabricScopedAttributeServer.md#fabricsensitiveelementstoremove)
 - [getter](exports_cluster.FabricScopedAttributeServer.md#getter)
 - [id](exports_cluster.FabricScopedAttributeServer.md#id)
 - [isCustomGetter](exports_cluster.FabricScopedAttributeServer.md#iscustomgetter)
@@ -51,6 +53,7 @@ on fabric level if no custom getter or setter is defined.
 
 ### Accessors
 
+- [hasFabricSensitiveData](exports_cluster.FabricScopedAttributeServer.md#hasfabricsensitivedata)
 - [readAcl](exports_cluster.FabricScopedAttributeServer.md#readacl)
 - [writeAcl](exports_cluster.FabricScopedAttributeServer.md#writeacl)
 
@@ -68,6 +71,7 @@ on fabric level if no custom getter or setter is defined.
 - [processSet](exports_cluster.FabricScopedAttributeServer.md#processset)
 - [removeValueChangeListener](exports_cluster.FabricScopedAttributeServer.md#removevaluechangelistener)
 - [removeValueSetListener](exports_cluster.FabricScopedAttributeServer.md#removevaluesetlistener)
+- [sanitizeFabricSensitiveFields](exports_cluster.FabricScopedAttributeServer.md#sanitizefabricsensitivefields)
 - [set](exports_cluster.FabricScopedAttributeServer.md#set)
 - [setLocal](exports_cluster.FabricScopedAttributeServer.md#setlocal)
 - [setLocalForFabric](exports_cluster.FabricScopedAttributeServer.md#setlocalforfabric)
@@ -121,7 +125,7 @@ on fabric level if no custom getter or setter is defined.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:259
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:262
 
 ## Properties
 
@@ -135,6 +139,20 @@ packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:259
 
 #### Defined in
 
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:257
+
+___
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Inherited from
+
+AttributeServer.#private
+
+#### Defined in
+
 packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:38
 
 ___
@@ -145,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:256
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:258
 
 ___
 
@@ -159,7 +177,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:67
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:68
 
 ___
 
@@ -187,7 +205,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:143
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:144
 
 ___
 
@@ -202,6 +220,16 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:49
+
+___
+
+### fabricSensitiveElementsToRemove
+
+• `Private` `Readonly` **fabricSensitiveElementsToRemove**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:261
 
 ___
 
@@ -232,7 +260,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:69
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:70
 
 ___
 
@@ -256,7 +284,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:257
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:259
 
 ___
 
@@ -266,7 +294,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:258
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:260
 
 ___
 
@@ -280,7 +308,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:138
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:139
 
 ___
 
@@ -381,7 +409,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:141
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:142
 
 ___
 
@@ -411,7 +439,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:142
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:143
 
 ___
 
@@ -441,7 +469,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:139
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:140
 
 ___
 
@@ -455,9 +483,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:140
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:141
 
 ## Accessors
+
+### hasFabricSensitiveData
+
+• `get` **hasFabricSensitiveData**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Overrides
+
+AttributeServer.hasFabricSensitiveData
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:263
+
+___
 
 ### readAcl
 
@@ -473,7 +519,7 @@ AttributeServer.readAcl
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:61
 
 ___
 
@@ -491,7 +537,7 @@ AttributeServer.writeAcl
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
 
 ## Methods
 
@@ -518,7 +564,7 @@ new value and the version number.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:227
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:228
 
 ___
 
@@ -545,7 +591,7 @@ new value and the old value.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:236
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:237
 
 ___
 
@@ -569,7 +615,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:54
 
 ___
 
@@ -600,7 +646,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:86
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:87
 
 ___
 
@@ -622,7 +668,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:103
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:104
 
 ___
 
@@ -646,7 +692,7 @@ If a getter is defined this method returns an error and the value should be retr
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:298
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:307
 
 ___
 
@@ -683,7 +729,7 @@ attributes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:94
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:95
 
 ___
 
@@ -712,7 +758,7 @@ internally.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:206
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:207
 
 ___
 
@@ -739,7 +785,7 @@ the version number.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:264
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:273
 
 ___
 
@@ -768,7 +814,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:200
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:201
 
 ___
 
@@ -794,7 +840,7 @@ Remove an internal listener.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:231
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:232
 
 ___
 
@@ -820,7 +866,31 @@ Remove an external listener.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:245
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:246
+
+___
+
+### sanitizeFabricSensitiveFields
+
+▸ **sanitizeFabricSensitiveFields**(`value`, `associatedFabric?`): `any`[] \| `T`
+
+Sanitize the value of the attribute by removing fabric sensitive fields that do not belong to the
+associated fabric
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `T` |
+| `associatedFabric?` | [`Fabric`](exports_fabric.Fabric.md) |
+
+#### Returns
+
+`any`[] \| `T`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:268
 
 ___
 
@@ -850,7 +920,7 @@ Fabric scoped enhancement of set to allow setting special fabricindex locally.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:268
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:277
 
 ___
 
@@ -876,7 +946,7 @@ Set Local is not allowed for fabric scoped attributes. Use setLocalForFabric ins
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:277
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:286
 
 ___
 
@@ -903,7 +973,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:285
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:294
 
 ___
 
@@ -934,7 +1004,7 @@ we need to inject the fabric index into the value.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:273
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:282
 
 ___
 
@@ -961,7 +1031,7 @@ new value and the old value. This method is a convenient alias for addValueSetLi
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:241
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:242
 
 ___
 
@@ -979,7 +1049,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:201
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:202
 
 ___
 
@@ -1009,7 +1079,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:214
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:215
 
 ___
 
@@ -1033,7 +1103,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:222
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:223
 
 ___
 
@@ -1058,7 +1128,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:292
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:301
 
 ___
 
@@ -1082,4 +1152,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53

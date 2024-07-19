@@ -337,7 +337,7 @@ ___
 | :------ | :------ |
 | `_path` | [`EventPath`](../interfaces/exports_interaction.EventPath.md) |
 | `eventFilters` | `undefined` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
-| `event` | [`EventServer`](exports_cluster.EventServer.md)\<`any`, `any`\> |
+| `event` | [`AnyEventServer`](../modules/exports_cluster.md#anyeventserver)\<`any`, `any`\> |
 | `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |

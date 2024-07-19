@@ -46,7 +46,7 @@ Consolidated access control information for the schema.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:48](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L48)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:48](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L48)
 
 ___
 
@@ -58,7 +58,7 @@ Create a managed instance of a value.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:58](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L58)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:58](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L58)
 
 ___
 
@@ -70,7 +70,7 @@ The schema manager that owns this ValueSupervisor.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:38](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L38)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:38](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L38)
 
 ___
 
@@ -82,7 +82,7 @@ Apply changes.  Does not validate perform validation.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:63](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L63)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:63](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L63)
 
 ___
 
@@ -94,7 +94,7 @@ The logical schema that controls the value's behavior.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:43](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L43)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:43](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L43)
 
 ___
 
@@ -106,4 +106,4 @@ Perform validation.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:53](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L53)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:53](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L53)

@@ -28,14 +28,15 @@
 
 ### generate
 
-▸ **generate**(`vendorId`, `productId`): `Uint8Array`
+▸ **generate**(`vendorId`, `productId`, `provisional?`): `Uint8Array`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `vendorId` | [`VendorId`](../modules/datatype_export.md#vendorid) |
-| `productId` | `number` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `vendorId` | [`VendorId`](../modules/datatype_export.md#vendorid) | `undefined` |
+| `productId` | `number` | `undefined` |
+| `provisional` | `boolean` | `false` |
 
 #### Returns
 
@@ -43,4 +44,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificationDeclarationManager.ts:34](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/certificate/CertificationDeclarationManager.ts#L34)
+[packages/matter.js/src/certificate/CertificationDeclarationManager.ts:34](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/certificate/CertificationDeclarationManager.ts#L34)

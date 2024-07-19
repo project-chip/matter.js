@@ -43,7 +43,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:467](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/models/Model.ts#L467)
+[packages/matter.js/src/model/models/Model.ts:467](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/models/Model.ts#L467)
 
 ## Properties
 
@@ -57,7 +57,7 @@ Specification.CrossReference.document
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:463](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/models/Model.ts#L463)
+[packages/matter.js/src/model/models/Model.ts:463](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/models/Model.ts#L463)
 
 ___
 
@@ -71,7 +71,7 @@ Specification.CrossReference.section
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:464](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/models/Model.ts#L464)
+[packages/matter.js/src/model/models/Model.ts:464](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/models/Model.ts#L464)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:465](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/models/Model.ts#L465)
+[packages/matter.js/src/model/models/Model.ts:465](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/models/Model.ts#L465)
 
 ## Methods
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:472](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/models/Model.ts#L472)
+[packages/matter.js/src/model/models/Model.ts:472](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/models/Model.ts#L472)
 
 ___
 
@@ -119,4 +119,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:476](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/models/Model.ts#L476)
+[packages/matter.js/src/model/models/Model.ts:476](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/models/Model.ts#L476)

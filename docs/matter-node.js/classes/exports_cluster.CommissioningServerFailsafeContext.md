@@ -32,6 +32,7 @@
 - [fabricIndex](exports_cluster.CommissioningServerFailsafeContext.md#fabricindex)
 - [forUpdateNoc](exports_cluster.CommissioningServerFailsafeContext.md#forupdatenoc)
 - [hasRootCert](exports_cluster.CommissioningServerFailsafeContext.md#hasrootcert)
+- [rootCert](exports_cluster.CommissioningServerFailsafeContext.md#rootcert)
 
 ### Methods
 
@@ -234,6 +235,24 @@ FailsafeContext.hasRootCert
 
 packages/matter.js/dist/esm/common/FailsafeContext.d.ts:38
 
+___
+
+### rootCert
+
+• `get` **rootCert**(): `undefined` \| `Uint8Array`
+
+#### Returns
+
+`undefined` \| `Uint8Array`
+
+#### Inherited from
+
+FailsafeContext.rootCert
+
+#### Defined in
+
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:39
+
 ## Methods
 
 ### addFabric
@@ -256,7 +275,7 @@ packages/matter.js/dist/esm/common/FailsafeContext.d.ts:38
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:42
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:43
 
 ___
 
@@ -287,7 +306,7 @@ Build a new Fabric object for a new fabric for the "AddNoc" case of the Operatio
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:59
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:60
 
 ___
 
@@ -315,7 +334,7 @@ cluster.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:57
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:58
 
 ___
 
@@ -333,7 +352,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:50
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:51
 
 ___
 
@@ -351,7 +370,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:39
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:40
 
 ___
 
@@ -379,7 +398,7 @@ validity checks.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:48
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:49
 
 ___
 
@@ -422,7 +441,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:40
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:41
 
 ___
 
@@ -440,7 +459,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:41
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:42
 
 ___
 
@@ -458,7 +477,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:49
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:50
 
 ___
 
@@ -562,7 +581,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:66
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:67
 
 ___
 
@@ -588,7 +607,7 @@ Handles adding a trusted root certificate from Operational Credentials cluster.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:52
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:53
 
 ___
 
@@ -630,7 +649,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/FailsafeContext.d.ts:43
+packages/matter.js/dist/esm/common/FailsafeContext.d.ts:44
 
 ___
 

@@ -45,9 +45,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:676](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L676)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:676](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L676)
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:678](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L678)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:678](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L678)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:491](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L491)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:491](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L491)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:679](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L679)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:679](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L679)
 
 ___
 
@@ -87,7 +87,7 @@ MatterSpecification.v11.Core § 11.11.8.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:463](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L463)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:463](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L463)
 
 ___
 
@@ -103,7 +103,7 @@ MatterSpecification.v11.Core § 11.11.8.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:373](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L373)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:373](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L373)
 
 ___
 
@@ -119,7 +119,7 @@ MatterSpecification.v11.Core § 11.11.8.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:433](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L433)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:433](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L433)
 
 ___
 
@@ -136,7 +136,7 @@ MatterSpecification.v11.Core § 11.11.4.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:67](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L67)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:67](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L67)
 
 ___
 
@@ -152,7 +152,7 @@ MatterSpecification.v11.Core § 11.11.8.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:404](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L404)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:404](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L404)
 
 ___
 
@@ -168,4 +168,4 @@ MatterSpecification.v11.Core § 11.11.7.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:313](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L313)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:313](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L313)

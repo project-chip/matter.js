@@ -62,7 +62,7 @@ These elements and properties are present in all Identify clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:226](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L226)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:226](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L226)
 
 ___
 
@@ -72,9 +72,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:324](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L324)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:324](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L324)
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:326](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L326)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:326](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L326)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:303](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L303)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:303](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L303)
 
 ___
 
@@ -98,9 +98,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:350](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L350)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:350](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L350)
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:352](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L352)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:352](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L352)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:332](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L332)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:332](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L332)
 
 ___
 
@@ -133,7 +133,7 @@ A IdentifyCluster supports these elements if it supports feature Query.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:189](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L189)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:189](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L189)
 
 ___
 
@@ -150,7 +150,7 @@ MatterSpecification.v11.Cluster § 1.2.6.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:33](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L33)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:33](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L33)
 
 ___
 
@@ -166,7 +166,7 @@ MatterSpecification.v11.Cluster § 1.2.6.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:91](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L91)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:91](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L91)
 
 ___
 
@@ -182,4 +182,4 @@ MatterSpecification.v11.Cluster § 1.2.6.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:153](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L153)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:153](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L153)

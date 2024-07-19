@@ -34,7 +34,7 @@ We provide this alias to the default implementation [AccountLoginServer](endpoin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:141](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L141)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:141](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L141)
 
 ___
 
@@ -48,7 +48,7 @@ This version of [ApplicationLauncherServer](endpoint_definitions_device_CastingV
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:134](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L134)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:134](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L134)
 
 ___
 
@@ -62,7 +62,7 @@ We provide this alias to the default implementation [AudioOutputServer](endpoint
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:127](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L127)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:127](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L127)
 
 ___
 
@@ -76,7 +76,7 @@ We provide this alias to the default implementation [ChannelServer](endpoint_def
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:99](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L99)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:99](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L99)
 
 ___
 
@@ -90,7 +90,7 @@ We provide this alias to the default implementation [ContentLauncherServer](endp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:85](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L85)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:85](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L85)
 
 ___
 
@@ -104,7 +104,7 @@ We provide this alias to the default implementation [KeypadInputServer](endpoint
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:78](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L78)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:78](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L78)
 
 ___
 
@@ -118,7 +118,7 @@ We provide this alias to the default implementation [LowPowerServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:120](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L120)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:120](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L120)
 
 ___
 
@@ -132,7 +132,7 @@ We provide this alias to the default implementation [MediaInputServer](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:113](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L113)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:113](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L113)
 
 ___
 
@@ -146,7 +146,7 @@ We provide this alias to the default implementation [MediaPlaybackServer](endpoi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:71](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L71)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:71](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L71)
 
 ___
 
@@ -160,7 +160,7 @@ We provide this alias to the default implementation [OnOffServer](endpoint_defin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:64](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L64)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:64](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L64)
 
 ___
 
@@ -174,7 +174,7 @@ We provide this alias to the default implementation [TargetNavigatorServer](endp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:106](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L106)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:106](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L106)
 
 ___
 
@@ -188,7 +188,7 @@ We provide this alias to the default implementation [WakeOnLanServer](endpoint_d
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:92](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L92)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:92](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L92)
 
 ___
 
@@ -219,4 +219,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:146](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L146)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts:146](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/CastingVideoPlayerDevice.ts#L146)

@@ -35,7 +35,7 @@ We provide this alias to the default implementation [AccountLoginBehavior](endpo
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:144](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L144)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:144](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L144)
 
 ___
 
@@ -49,7 +49,7 @@ We provide this alias to the default implementation [ApplicationLauncherBehavior
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:137](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L137)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:137](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L137)
 
 ___
 
@@ -63,7 +63,7 @@ We provide this alias to the default implementation [AudioOutputBehavior](endpoi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:130](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L130)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:130](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L130)
 
 ___
 
@@ -77,7 +77,7 @@ We provide this alias to the default implementation [ChannelBehavior](endpoint_d
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:95](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L95)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:95](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L95)
 
 ___
 
@@ -91,7 +91,7 @@ We provide this alias to the default implementation [ContentLauncherBehavior](en
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:123](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L123)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:123](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L123)
 
 ___
 
@@ -105,7 +105,7 @@ We provide this alias to the default implementation [KeypadInputBehavior](endpoi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:74](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L74)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:74](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L74)
 
 ___
 
@@ -119,7 +119,7 @@ We provide this alias to the default implementation [LevelControlBehavior](endpo
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:81](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L81)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:81](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L81)
 
 ___
 
@@ -133,7 +133,7 @@ We provide this alias to the default implementation [LowPowerBehavior](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:116](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L116)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:116](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L116)
 
 ___
 
@@ -147,7 +147,7 @@ We provide this alias to the default implementation [MediaInputBehavior](endpoin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:109](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L109)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:109](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L109)
 
 ___
 
@@ -161,7 +161,7 @@ We provide this alias to the default implementation [MediaPlaybackBehavior](endp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:67](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L67)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:67](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L67)
 
 ___
 
@@ -175,7 +175,7 @@ We provide this alias to the default implementation [OnOffBehavior](endpoint_def
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:60](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L60)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:60](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L60)
 
 ___
 
@@ -189,7 +189,7 @@ We provide this alias to the default implementation [TargetNavigatorBehavior](en
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:102](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L102)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:102](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L102)
 
 ___
 
@@ -203,7 +203,7 @@ We provide this alias to the default implementation [WakeOnLanBehavior](endpoint
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:88](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L88)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:88](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L88)
 
 ___
 
@@ -235,4 +235,4 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:149](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L149)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:149](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L149)

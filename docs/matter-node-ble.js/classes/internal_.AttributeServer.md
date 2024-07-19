@@ -49,6 +49,7 @@ Attribute server for normal attributes that can be read and written.
 
 ### Accessors
 
+- [hasFabricSensitiveData](internal_.AttributeServer.md#hasfabricsensitivedata)
 - [readAcl](internal_.AttributeServer.md#readacl)
 - [writeAcl](internal_.AttributeServer.md#writeacl)
 
@@ -115,7 +116,7 @@ Attribute server for normal attributes that can be read and written.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:144
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:145
 
 ## Properties
 
@@ -143,7 +144,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:67
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:68
 
 ___
 
@@ -167,7 +168,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:143
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:144
 
 ___
 
@@ -212,7 +213,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:69
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:70
 
 ___
 
@@ -240,7 +241,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:138
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:139
 
 ___
 
@@ -337,7 +338,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:141
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:142
 
 ___
 
@@ -363,7 +364,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:142
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:143
 
 ___
 
@@ -389,7 +390,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:139
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:140
 
 ___
 
@@ -399,9 +400,27 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:140
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:141
 
 ## Accessors
+
+### hasFabricSensitiveData
+
+• `get` **hasFabricSensitiveData**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+FixedAttributeServer.hasFabricSensitiveData
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52
+
+___
 
 ### readAcl
 
@@ -417,7 +436,7 @@ FixedAttributeServer.readAcl
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:61
 
 ___
 
@@ -435,7 +454,7 @@ FixedAttributeServer.writeAcl
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
 
 ## Methods
 
@@ -462,7 +481,7 @@ new value and the version number.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:227
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:228
 
 ___
 
@@ -489,7 +508,7 @@ new value and the old value.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:236
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:237
 
 ___
 
@@ -513,7 +532,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:54
 
 ___
 
@@ -544,7 +563,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:86
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:87
 
 ___
 
@@ -566,7 +585,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:103
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:104
 
 ___
 
@@ -603,7 +622,7 @@ attributes.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:94
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:95
 
 ___
 
@@ -628,7 +647,7 @@ internally.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:206
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:207
 
 ___
 
@@ -655,7 +674,7 @@ adjusted before the Device gets announced. Do not use this method to change valu
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:172
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:173
 
 ___
 
@@ -680,7 +699,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:200
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:201
 
 ___
 
@@ -706,7 +725,7 @@ Remove an internal listener.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:231
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:232
 
 ___
 
@@ -732,7 +751,7 @@ Remove an external listener.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:245
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:246
 
 ___
 
@@ -762,7 +781,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:181
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:182
 
 ___
 
@@ -791,7 +810,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:196
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:197
 
 ___
 
@@ -816,7 +835,7 @@ Method that contains the logic to set a value "from remote" (e.g. from a client)
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:185
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:186
 
 ___
 
@@ -843,7 +862,7 @@ new value and the old value. This method is a convenient alias for addValueSetLi
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:241
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:242
 
 ___
 
@@ -857,7 +876,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:201
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:202
 
 ___
 
@@ -883,7 +902,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:214
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:215
 
 ___
 
@@ -903,7 +922,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:222
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:223
 
 ___
 
@@ -927,4 +946,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53

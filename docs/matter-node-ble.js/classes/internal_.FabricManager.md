@@ -75,6 +75,7 @@ matter.js/dist/esm/fabric/FabricManager.d.ts:25
 | :------ | :------ |
 | `added` | [`Observable`](../interfaces/internal_.Observable.md)\<[fabric: Fabric], `void`\> |
 | `deleted` | [`Observable`](../interfaces/internal_.Observable.md)\<[fabric: Fabric], `void`\> |
+| `failsafeClosed` | [`Observable`](../interfaces/internal_.Observable.md)\<[], `void`\> |
 | `updated` | [`Observable`](../interfaces/internal_.Observable.md)\<[fabric: Fabric], `void`\> |
 
 #### Defined in
@@ -99,7 +100,7 @@ matter.js/dist/esm/fabric/FabricManager.d.ts:28
 
 #### Defined in
 
-matter.js/dist/esm/fabric/FabricManager.d.ts:35
+matter.js/dist/esm/fabric/FabricManager.d.ts:36
 
 ___
 
@@ -119,7 +120,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/FabricManager.d.ts:39
+matter.js/dist/esm/fabric/FabricManager.d.ts:40
 
 ___
 
@@ -140,7 +141,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/FabricManager.d.ts:38
+matter.js/dist/esm/fabric/FabricManager.d.ts:39
 
 ___
 
@@ -154,7 +155,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/FabricManager.d.ts:37
+matter.js/dist/esm/fabric/FabricManager.d.ts:38
 
 ___
 
@@ -168,7 +169,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/FabricManager.d.ts:33
+matter.js/dist/esm/fabric/FabricManager.d.ts:34
 
 ___
 
@@ -196,7 +197,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/FabricManager.d.ts:34
+matter.js/dist/esm/fabric/FabricManager.d.ts:35
 
 ___
 
@@ -216,7 +217,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/FabricManager.d.ts:36
+matter.js/dist/esm/fabric/FabricManager.d.ts:37
 
 ___
 
@@ -236,7 +237,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/FabricManager.d.ts:41
+matter.js/dist/esm/fabric/FabricManager.d.ts:42
 
 ___
 
@@ -256,4 +257,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/FabricManager.d.ts:40
+matter.js/dist/esm/fabric/FabricManager.d.ts:41

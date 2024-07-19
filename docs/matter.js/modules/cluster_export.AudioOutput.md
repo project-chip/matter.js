@@ -57,7 +57,7 @@ These elements and properties are present in all AudioOutput clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:137](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L137)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:137](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L137)
 
 ___
 
@@ -67,9 +67,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:196](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L196)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:196](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L196)
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:198](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L198)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:198](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L198)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:184](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L184)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:184](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L184)
 
 ___
 
@@ -93,9 +93,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:226](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L226)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:226](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L226)
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:228](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L228)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:228](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L228)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:204](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L204)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:204](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L204)
 
 ___
 
@@ -128,7 +128,7 @@ A AudioOutputCluster supports these elements if it supports feature NameUpdates.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:106](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:106](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L106)
 
 ___
 
@@ -144,7 +144,7 @@ MatterSpecification.v11.Cluster § 6.5.5.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:58](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L58)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:58](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L58)
 
 ___
 
@@ -160,7 +160,7 @@ MatterSpecification.v11.Cluster § 6.5.4.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:26](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:26](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L26)
 
 ___
 
@@ -176,4 +176,4 @@ MatterSpecification.v11.Cluster § 6.5.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:94](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L94)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:94](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L94)

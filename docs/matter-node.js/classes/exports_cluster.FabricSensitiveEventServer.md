@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / FabricScopedEventServer
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / FabricSensitiveEventServer
 
-# Class: FabricScopedEventServer\<T, S\>
+# Class: FabricSensitiveEventServer\<T, S\>
 
-[exports/cluster](../modules/exports_cluster.md).FabricScopedEventServer
+[exports/cluster](../modules/exports_cluster.md).FabricSensitiveEventServer
 
 ## Type parameters
 
@@ -15,43 +15,44 @@
 
 - [`EventServer`](exports_cluster.EventServer.md)\<`T`, `S`\>
 
-  ↳ **`FabricScopedEventServer`**
+  ↳ **`FabricSensitiveEventServer`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](exports_cluster.FabricScopedEventServer.md#constructor)
+- [constructor](exports_cluster.FabricSensitiveEventServer.md#constructor)
 
 ### Properties
 
-- [#private](exports_cluster.FabricScopedEventServer.md##private)
-- [clusterId](exports_cluster.FabricScopedEventServer.md#clusterid)
-- [endpoint](exports_cluster.FabricScopedEventServer.md#endpoint)
-- [eventHandler](exports_cluster.FabricScopedEventServer.md#eventhandler)
-- [id](exports_cluster.FabricScopedEventServer.md#id)
-- [name](exports_cluster.FabricScopedEventServer.md#name)
-- [priority](exports_cluster.FabricScopedEventServer.md#priority)
-- [schema](exports_cluster.FabricScopedEventServer.md#schema)
+- [#private](exports_cluster.FabricSensitiveEventServer.md##private)
+- [clusterId](exports_cluster.FabricSensitiveEventServer.md#clusterid)
+- [endpoint](exports_cluster.FabricSensitiveEventServer.md#endpoint)
+- [eventHandler](exports_cluster.FabricSensitiveEventServer.md#eventhandler)
+- [hasFabricSensitiveData](exports_cluster.FabricSensitiveEventServer.md#hasfabricsensitivedata)
+- [id](exports_cluster.FabricSensitiveEventServer.md#id)
+- [name](exports_cluster.FabricSensitiveEventServer.md#name)
+- [priority](exports_cluster.FabricSensitiveEventServer.md#priority)
+- [schema](exports_cluster.FabricSensitiveEventServer.md#schema)
 
 ### Accessors
 
-- [readAcl](exports_cluster.FabricScopedEventServer.md#readacl)
+- [readAcl](exports_cluster.FabricSensitiveEventServer.md#readacl)
 
 ### Methods
 
-- [addListener](exports_cluster.FabricScopedEventServer.md#addlistener)
-- [assignToEndpoint](exports_cluster.FabricScopedEventServer.md#assigntoendpoint)
-- [bindToEventHandler](exports_cluster.FabricScopedEventServer.md#bindtoeventhandler)
-- [get](exports_cluster.FabricScopedEventServer.md#get)
-- [removeListener](exports_cluster.FabricScopedEventServer.md#removelistener)
-- [triggerEvent](exports_cluster.FabricScopedEventServer.md#triggerevent)
+- [addListener](exports_cluster.FabricSensitiveEventServer.md#addlistener)
+- [assignToEndpoint](exports_cluster.FabricSensitiveEventServer.md#assigntoendpoint)
+- [bindToEventHandler](exports_cluster.FabricSensitiveEventServer.md#bindtoeventhandler)
+- [get](exports_cluster.FabricSensitiveEventServer.md#get)
+- [removeListener](exports_cluster.FabricSensitiveEventServer.md#removelistener)
+- [triggerEvent](exports_cluster.FabricSensitiveEventServer.md#triggerevent)
 
 ## Constructors
 
 ### constructor
 
-• **new FabricScopedEventServer**\<`T`, `S`\>(`id`, `clusterId`, `name`, `schema`, `priority`, `readAcl`): [`FabricScopedEventServer`](exports_cluster.FabricScopedEventServer.md)\<`T`, `S`\>
+• **new FabricSensitiveEventServer**\<`T`, `S`\>(`id`, `clusterId`, `name`, `schema`, `priority`, `readAcl`): [`FabricSensitiveEventServer`](exports_cluster.FabricSensitiveEventServer.md)\<`T`, `S`\>
 
 #### Type parameters
 
@@ -73,7 +74,7 @@
 
 #### Returns
 
-[`FabricScopedEventServer`](exports_cluster.FabricScopedEventServer.md)\<`T`, `S`\>
+[`FabricSensitiveEventServer`](exports_cluster.FabricSensitiveEventServer.md)\<`T`, `S`\>
 
 #### Inherited from
 
@@ -81,7 +82,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:28
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:32
 
 ## Properties
 
@@ -95,7 +96,7 @@ packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:28
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:18
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:21
 
 ___
 
@@ -109,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:20
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:23
 
 ___
 
@@ -123,7 +124,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:26
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:29
 
 ___
 
@@ -137,7 +138,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:27
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:30
+
+___
+
+### hasFabricSensitiveData
+
+• **hasFabricSensitiveData**: `boolean`
+
+#### Overrides
+
+[EventServer](exports_cluster.EventServer.md).[hasFabricSensitiveData](exports_cluster.EventServer.md#hasfabricsensitivedata)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:42
 
 ___
 
@@ -151,7 +166,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:19
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:22
 
 ___
 
@@ -165,7 +180,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:21
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:24
 
 ___
 
@@ -179,7 +194,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:23
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:26
 
 ___
 
@@ -193,7 +208,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:22
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:25
 
 ## Accessors
 
@@ -211,7 +226,7 @@ EventServer.readAcl
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:29
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:33
 
 ## Methods
 
@@ -235,7 +250,7 @@ packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:29
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:33
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:37
 
 ___
 
@@ -259,7 +274,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:30
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:34
 
 ___
 
@@ -283,34 +298,34 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:31
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:35
 
 ___
 
 ### get
 
-▸ **get**(`session`, `isFabricFiltered`, `_message?`, `filters?`): [`EventStorageData`](../interfaces/exports_interaction.EventStorageData.md)\<`any`\>[]
+▸ **get**(`session`, `_isFabricFiltered`, `message?`, `filters?`): [`EventStorageData`](../interfaces/exports_interaction.EventStorageData.md)\<`any`\>[]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
-| `isFabricFiltered` | `boolean` |
-| `_message?` | [`Message`](../interfaces/exports_codec.Message.md) |
+| `_isFabricFiltered` | `boolean` |
+| `message?` | [`Message`](../interfaces/exports_codec.Message.md) |
 | `filters?` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
 
 #### Returns
 
 [`EventStorageData`](../interfaces/exports_interaction.EventStorageData.md)\<`any`\>[]
 
-#### Inherited from
+#### Overrides
 
 [EventServer](exports_cluster.EventServer.md).[get](exports_cluster.EventServer.md#get)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:35
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:43
 
 ___
 
@@ -334,7 +349,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:34
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:38
 
 ___
 
@@ -358,4 +373,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:38
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:44

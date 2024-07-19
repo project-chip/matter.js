@@ -15,7 +15,7 @@
 
 - **`EventServer`**
 
-  ↳ [`FabricScopedEventServer`](exports_cluster.FabricScopedEventServer.md)
+  ↳ [`FabricSensitiveEventServer`](exports_cluster.FabricSensitiveEventServer.md)
 
 ## Table of contents
 
@@ -30,6 +30,7 @@
 - [endpoint](exports_cluster.EventServer.md#endpoint)
 - [eventHandler](exports_cluster.EventServer.md#eventhandler)
 - [eventList](exports_cluster.EventServer.md#eventlist)
+- [hasFabricSensitiveData](exports_cluster.EventServer.md#hasfabricsensitivedata)
 - [id](exports_cluster.EventServer.md#id)
 - [listeners](exports_cluster.EventServer.md#listeners)
 - [name](exports_cluster.EventServer.md#name)
@@ -79,7 +80,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:28
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:32
 
 ## Properties
 
@@ -89,7 +90,7 @@ packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:28
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:18
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:21
 
 ___
 
@@ -99,7 +100,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:20
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:23
 
 ___
 
@@ -109,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:26
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:29
 
 ___
 
@@ -119,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:27
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:30
 
 ___
 
@@ -129,7 +130,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:24
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:27
+
+___
+
+### hasFabricSensitiveData
+
+• **hasFabricSensitiveData**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:31
 
 ___
 
@@ -139,7 +150,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:19
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:22
 
 ___
 
@@ -149,7 +160,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:25
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:28
 
 ___
 
@@ -159,7 +170,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:21
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:24
 
 ___
 
@@ -169,7 +180,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:23
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:26
 
 ___
 
@@ -179,7 +190,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:22
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:25
 
 ## Accessors
 
@@ -193,7 +204,7 @@ packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:22
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:29
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:33
 
 ## Methods
 
@@ -213,7 +224,7 @@ packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:29
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:33
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:37
 
 ___
 
@@ -233,7 +244,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:30
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:34
 
 ___
 
@@ -253,7 +264,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:31
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:35
 
 ___
 
@@ -276,7 +287,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:35
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:39
 
 ___
 
@@ -296,7 +307,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:34
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:38
 
 ___
 
@@ -316,4 +327,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:32
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:36

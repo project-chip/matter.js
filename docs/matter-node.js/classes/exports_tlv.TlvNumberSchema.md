@@ -210,7 +210,7 @@ TlvNumericSchema.decodeInternal
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:10
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:22
 
 ___
 
@@ -234,7 +234,7 @@ TlvNumericSchema.decodeTlv
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:13
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:25
 
 ___
 
@@ -263,7 +263,7 @@ TlvNumericSchema.decodeTlvInternal
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:14
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:26
 
 ___
 
@@ -338,20 +338,20 @@ TlvNumericSchema.encodeInternal
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:11
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:23
 
 ___
 
 ### encodeTlv
 
-▸ **encodeTlv**(`value`, `forWriteInteraction?`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
+▸ **encodeTlv**(`value`, `options?`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `value` | `number` |
-| `forWriteInteraction?` | `boolean` |
+| `options?` | [`TlvEncodingOptions`](../modules/exports_tlv.md#tlvencodingoptions) |
 
 #### Returns
 
@@ -363,7 +363,7 @@ TlvNumericSchema.encodeTlv
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:12
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:24
 
 ___
 
@@ -416,7 +416,7 @@ TlvNumericSchema.injectField
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:20
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:32
 
 ___
 
@@ -442,7 +442,7 @@ TlvNumericSchema.removeField
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:21
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:33
 
 ___
 

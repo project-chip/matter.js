@@ -27,4 +27,4 @@ Type for TlvAttributeReportData where the real data are represented with the sch
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:37](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L37)
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:38](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L38)

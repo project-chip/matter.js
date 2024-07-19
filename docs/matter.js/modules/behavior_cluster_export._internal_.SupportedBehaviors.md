@@ -39,7 +39,7 @@ Properties of an endpoint contributed by listed behaviors.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:70](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L70)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:70](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L70)
 
 ___
 
@@ -57,7 +57,7 @@ Compound events for all behaviors.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:84](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L84)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:84](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L84)
 
 ___
 
@@ -75,7 +75,7 @@ Input version of [StateOf](behavior_cluster_export._internal_.SupportedBehaviors
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:91](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L91)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:91](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L91)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:31](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L31)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:31](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L31)
 
 ___
 
@@ -103,7 +103,7 @@ Convert a List to BehaviorTypes.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:61](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L61)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:61](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L61)
 
 ___
 
@@ -121,7 +121,7 @@ Compound state for all behaviors.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:77](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L77)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:77](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L77)
 
 ___
 
@@ -139,7 +139,7 @@ Patch input version of [StateOf](behavior_cluster_export._internal_.SupportedBeh
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:98](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L98)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:98](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L98)
 
 ___
 
@@ -158,7 +158,7 @@ Add or replace behaviors.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:55](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L55)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:55](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L55)
 
 ## Functions
 
@@ -193,4 +193,4 @@ Note: Functional equivalent of With<> but you can't have a method named
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:41](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L41)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:41](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L41)

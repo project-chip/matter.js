@@ -26,9 +26,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:243](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L243)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:243](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L243)
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:245](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L245)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:245](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L245)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:36](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:36](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L36)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:246](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L246)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:246](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L246)
 
 ___
 
@@ -64,4 +64,4 @@ Input to the ElectricalMeasurement getMeasurementProfileCommand command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:22](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L22)
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:22](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L22)

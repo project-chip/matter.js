@@ -31,7 +31,7 @@ Amount of time interval has been active (diagnostics)
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:82](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/time/Time.ts#L82)
+[packages/matter.js/src/time/Time.ts:82](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/time/Time.ts#L82)
 
 ___
 
@@ -43,7 +43,7 @@ Interval (diagnostics)
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:76](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/time/Time.ts#L76)
+[packages/matter.js/src/time/Time.ts:76](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/time/Time.ts#L76)
 
 ___
 
@@ -55,7 +55,7 @@ Is the timer periodic? (diagnostics)
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:79](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/time/Time.ts#L79)
+[packages/matter.js/src/time/Time.ts:79](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/time/Time.ts#L79)
 
 ___
 
@@ -67,7 +67,7 @@ Is true if this timer is running.
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:85](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/time/Time.ts#L85)
+[packages/matter.js/src/time/Time.ts:85](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/time/Time.ts#L85)
 
 ___
 
@@ -79,7 +79,7 @@ Name (diagnostics)
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:67](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/time/Time.ts#L67)
+[packages/matter.js/src/time/Time.ts:67](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/time/Time.ts#L67)
 
 ___
 
@@ -91,7 +91,7 @@ System ID (diagnostics)
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:73](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/time/Time.ts#L73)
+[packages/matter.js/src/time/Time.ts:73](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/time/Time.ts#L73)
 
 ___
 
@@ -103,7 +103,7 @@ Set to true to indicate the timer should not prevent program exit
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:70](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/time/Time.ts#L70)
+[packages/matter.js/src/time/Time.ts:70](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/time/Time.ts#L70)
 
 ## Methods
 
@@ -119,7 +119,7 @@ Starts this timer, chainable.
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:88](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/time/Time.ts#L88)
+[packages/matter.js/src/time/Time.ts:88](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/time/Time.ts#L88)
 
 ___
 
@@ -135,4 +135,4 @@ Stops this timer, chainable.
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:91](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/time/Time.ts#L91)
+[packages/matter.js/src/time/Time.ts:91](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/time/Time.ts#L91)

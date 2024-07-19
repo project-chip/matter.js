@@ -45,6 +45,7 @@ Attribute server types.
 
 ### Accessors
 
+- [hasFabricSensitiveData](exports_cluster.FixedAttributeServer.md#hasfabricsensitivedata)
 - [readAcl](exports_cluster.FixedAttributeServer.md#readacl)
 - [writeAcl](exports_cluster.FixedAttributeServer.md#writeacl)
 
@@ -101,7 +102,7 @@ Attribute server types.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:70
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:71
 
 ## Properties
 
@@ -125,7 +126,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:67
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:68
 
 ___
 
@@ -180,7 +181,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:69
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:70
 
 ___
 
@@ -204,7 +205,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:68
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:69
 
 ___
 
@@ -294,6 +295,24 @@ packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:48
 
 ## Accessors
 
+### hasFabricSensitiveData
+
+• `get` **hasFabricSensitiveData**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+BaseAttributeServer.hasFabricSensitiveData
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52
+
+___
+
 ### readAcl
 
 • `get` **readAcl**(): [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
@@ -308,7 +327,7 @@ BaseAttributeServer.readAcl
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:61
 
 ___
 
@@ -326,7 +345,7 @@ BaseAttributeServer.writeAcl
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
 
 ## Methods
 
@@ -349,7 +368,7 @@ new value and the version number.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:114
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:115
 
 ___
 
@@ -372,7 +391,7 @@ new value and the old value.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:123
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:124
 
 ___
 
@@ -396,7 +415,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:54
 
 ___
 
@@ -423,7 +442,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:86
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:87
 
 ___
 
@@ -441,7 +460,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:103
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:104
 
 ___
 
@@ -474,7 +493,7 @@ attributes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:94
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:95
 
 ___
 
@@ -502,7 +521,7 @@ If a getter or setter is defined the value must be undefined The version number 
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:109
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:110
 
 ___
 
@@ -524,7 +543,7 @@ Remove an internal listener.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:118
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:119
 
 ___
 
@@ -546,7 +565,7 @@ Remove an external listener.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:132
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:133
 
 ___
 
@@ -569,7 +588,7 @@ new value and the old value. This method is a convenient alias for addValueSetLi
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:128
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:129
 
 ___
 
@@ -593,4 +612,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53

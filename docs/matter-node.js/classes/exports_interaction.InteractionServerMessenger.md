@@ -181,7 +181,7 @@ ___
 
 ### sendDataReport
 
-▸ **sendDataReport**(`dataReportPayload`): `Promise`\<`void`\>
+▸ **sendDataReport**(`dataReportPayload`, `forFabricFilteredRead`): `Promise`\<`void`\>
 
 Handle DataReportPayload with the content of a DataReport to send, split them into multiple DataReport
 messages and send them out based on the size.
@@ -191,6 +191,7 @@ messages and send them out based on the size.
 | Name | Type |
 | :------ | :------ |
 | `dataReportPayload` | [`DataReportPayload`](../modules/exports_interaction.md#datareportpayload) |
+| `forFabricFilteredRead` | `boolean` |
 
 #### Returns
 

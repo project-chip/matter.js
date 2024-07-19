@@ -37,7 +37,7 @@ Send out announcements for this instance.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:203](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/InstanceBroadcaster.ts#L203)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:203](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/InstanceBroadcaster.ts#L203)
 
 ___
 
@@ -53,7 +53,7 @@ Destroy the instance
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:215](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/InstanceBroadcaster.ts#L215)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:215](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/InstanceBroadcaster.ts#L215)
 
 ___
 
@@ -69,7 +69,7 @@ Expire all announcements.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:212](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/InstanceBroadcaster.ts#L212)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:212](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/InstanceBroadcaster.ts#L212)
 
 ___
 
@@ -85,7 +85,7 @@ Expire the announcement for this commissioning instance.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:209](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/InstanceBroadcaster.ts#L209)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:209](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/InstanceBroadcaster.ts#L209)
 
 ___
 
@@ -101,7 +101,7 @@ Expire the announcement for this operative instance.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:206](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/InstanceBroadcaster.ts#L206)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:206](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/InstanceBroadcaster.ts#L206)
 
 ___
 
@@ -124,7 +124,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:191](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/InstanceBroadcaster.ts#L191)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:191](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/InstanceBroadcaster.ts#L191)
 
 ___
 
@@ -146,7 +146,7 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:200](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/InstanceBroadcaster.ts#L200)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:200](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/InstanceBroadcaster.ts#L200)
 
 ___
 
@@ -170,4 +170,4 @@ Use expireCommissioningAnnouncements = true when Fabrics are changed after a n c
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:197](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/common/InstanceBroadcaster.ts#L197)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:197](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/common/InstanceBroadcaster.ts#L197)

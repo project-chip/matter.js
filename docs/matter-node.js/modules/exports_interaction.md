@@ -129,7 +129,7 @@
 
 ### AttributeReportPayload
 
-Ƭ **AttributeReportPayload**: `Omit`\<[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvAttributeReport`](exports_interaction.md#tlvattributereport)\>, ``"attributeData"``\> & \{ `attributeData?`: [`AttributeDataPayload`](exports_interaction._internal_.md#attributedatapayload)  }
+Ƭ **AttributeReportPayload**: `Omit`\<[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvAttributeReport`](exports_interaction.md#tlvattributereport)\>, ``"attributeData"``\> & \{ `attributeData?`: [`AttributeDataPayload`](exports_interaction._internal_.md#attributedatapayload) ; `hasFabricSensitiveData`: `boolean`  }
 
 Type for TlvAttributeReport where the real data are represented with the schema and the JS value.
 
@@ -157,7 +157,7 @@ Type for TlvDataReport where the real data are represented with the schema and t
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:26
+packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:28
 
 ___
 
@@ -274,19 +274,19 @@ Type for TlvEventData where the real data are represented with the schema and th
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:21
+packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:23
 
 ___
 
 ### EventReportPayload
 
-Ƭ **EventReportPayload**: `Omit`\<[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvEventReport`](exports_interaction.md#tlveventreport)\>, ``"eventData"``\> & \{ `eventData?`: [`EventDataPayload`](exports_interaction.md#eventdatapayload)  }
+Ƭ **EventReportPayload**: `Omit`\<[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvEventReport`](exports_interaction.md#tlveventreport)\>, ``"eventData"``\> & \{ `eventData?`: [`EventDataPayload`](exports_interaction.md#eventdatapayload) ; `hasFabricSensitiveData`: `boolean`  }
 
 Type for TlvEventReport where the real data are represented with the schema and the JS value.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:17
+packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:18
 
 ___
 
@@ -378,7 +378,7 @@ Backward compatible re-export for Interaction Model version we support currently
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:31
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:30
 
 ___
 
@@ -390,7 +390,7 @@ Protocol ID for the Interaction Protocol as per Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:29
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:28
 
 ___
 
@@ -402,7 +402,7 @@ Number of Invoke Path setting from our Interaction model implementation.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:33
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:32
 
 ___
 
@@ -830,7 +830,7 @@ Return if an AttributeReportPayload can be chunked or not.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:35
+packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:37
 
 ___
 
@@ -852,7 +852,7 @@ Chunk an AttributeReportPayload into multiple AttributeReportPayloads.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:37
+packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:39
 
 ___
 
@@ -898,7 +898,7 @@ ___
 
 ### compressAttributeDataReportTags
 
-▸ **compressAttributeDataReportTags**(`data`): \{ `attributeData`: [`AttributeDataPayload`](exports_interaction._internal_.md#attributedatapayload) \| `undefined` ; `attributeStatus`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| `undefined`  }[]
+▸ **compressAttributeDataReportTags**(`data`): \{ `attributeData`: [`AttributeDataPayload`](exports_interaction._internal_.md#attributedatapayload) \| `undefined` ; `attributeStatus`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| `undefined` ; `hasFabricSensitiveData`: `boolean`  }[]
 
 Sort and use Tag compression to compress a list of AttributeReportPayloads.
 
@@ -910,11 +910,11 @@ Sort and use Tag compression to compress a list of AttributeReportPayloads.
 
 #### Returns
 
-\{ `attributeData`: [`AttributeDataPayload`](exports_interaction._internal_.md#attributedatapayload) \| `undefined` ; `attributeStatus`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| `undefined`  }[]
+\{ `attributeData`: [`AttributeDataPayload`](exports_interaction._internal_.md#attributedatapayload) \| `undefined` ; `attributeStatus`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_certificate._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| `undefined` ; `hasFabricSensitiveData`: `boolean`  }[]
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:44
+packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:46
 
 ___
 
@@ -1020,7 +1020,7 @@ ___
 
 ### encodeAttributePayload
 
-▸ **encodeAttributePayload**(`attributePayload`): [`TlvStream`](exports_tlv.md#tlvstream)
+▸ **encodeAttributePayload**(`attributePayload`, `options?`): [`TlvStream`](exports_tlv.md#tlvstream)
 
 Encodes an AttributeReportPayload into a TlvStream (used for TlvAny type).
 
@@ -1029,28 +1029,7 @@ Encodes an AttributeReportPayload into a TlvStream (used for TlvAny type).
 | Name | Type |
 | :------ | :------ |
 | `attributePayload` | [`AttributeReportPayload`](exports_interaction.md#attributereportpayload) |
-
-#### Returns
-
-[`TlvStream`](exports_tlv.md#tlvstream)
-
-#### Defined in
-
-packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:31
-
-___
-
-### encodeEventPayload
-
-▸ **encodeEventPayload**(`eventPayload`): [`TlvStream`](exports_tlv.md#tlvstream)
-
-Encodes an EventReportPayload into a TlvStream (used for TlvAny type).
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `eventPayload` | [`EventReportPayload`](exports_interaction.md#eventreportpayload) |
+| `options?` | [`TlvEncodingOptions`](exports_tlv.md#tlvencodingoptions) |
 
 #### Returns
 
@@ -1059,6 +1038,29 @@ Encodes an EventReportPayload into a TlvStream (used for TlvAny type).
 #### Defined in
 
 packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:33
+
+___
+
+### encodeEventPayload
+
+▸ **encodeEventPayload**(`eventPayload`, `options?`): [`TlvStream`](exports_tlv.md#tlvstream)
+
+Encodes an EventReportPayload into a TlvStream (used for TlvAny type).
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `eventPayload` | [`EventReportPayload`](exports_interaction.md#eventreportpayload) |
+| `options?` | [`TlvEncodingOptions`](exports_tlv.md#tlvencodingoptions) |
+
+#### Returns
+
+[`TlvStream`](exports_tlv.md#tlvstream)
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:35
 
 ___
 
@@ -1275,7 +1277,7 @@ ground for tag compression.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:42
+packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:44
 
 ___
 

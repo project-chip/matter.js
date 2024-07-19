@@ -67,7 +67,7 @@ These elements and properties are present in all Channel clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:317](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L317)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:317](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L317)
 
 ___
 
@@ -86,7 +86,7 @@ A ChannelCluster supports these elements if it supports feature ChannelList.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:247](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L247)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:247](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L247)
 
 ___
 
@@ -105,7 +105,7 @@ A ChannelCluster supports these elements if it supports features ChannelList or 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:275](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L275)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:275](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L275)
 
 ___
 
@@ -115,9 +115,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:395](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L395)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:395](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L395)
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:397](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L397)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:397](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L397)
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:384](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L384)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:384](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L384)
 
 ___
 
@@ -141,9 +141,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:434](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L434)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:434](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L434)
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:436](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L436)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:436](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L436)
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:404](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L404)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:404](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L404)
 
 ___
 
@@ -176,7 +176,7 @@ A ChannelCluster supports these elements if it supports feature LineupInfo.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:261](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L261)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:261](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L261)
 
 ___
 
@@ -192,7 +192,7 @@ MatterSpecification.v11.Cluster § 6.6.4.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:199](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L199)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:199](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L199)
 
 ___
 
@@ -208,7 +208,7 @@ MatterSpecification.v11.Cluster § 6.6.4.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:130](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L130)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:130](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L130)
 
 ___
 
@@ -224,7 +224,7 @@ MatterSpecification.v11.Cluster § 6.6.4.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:171](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L171)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:171](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L171)
 
 ___
 
@@ -243,7 +243,7 @@ MatterSpecification.v11.Cluster § 6.6.5.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:30](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L30)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:30](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L30)
 
 ___
 
@@ -260,7 +260,7 @@ MatterSpecification.v11.Cluster § 6.6.5.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:98](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L98)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:98](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L98)
 
 ___
 
@@ -276,4 +276,4 @@ MatterSpecification.v11.Cluster § 6.6.4.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:227](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L227)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:227](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L227)

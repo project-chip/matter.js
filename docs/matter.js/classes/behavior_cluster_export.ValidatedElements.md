@@ -60,7 +60,7 @@ for per-instance specialization.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:62](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L62)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:62](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L62)
 
 ## Properties
 
@@ -70,7 +70,7 @@ for per-instance specialization.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:51](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L51)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:51](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L51)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:50](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L50)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:50](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L50)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:48](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L48)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:48](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L48)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:49](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L49)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:49](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L49)
 
 ___
 
@@ -112,7 +112,7 @@ Supported attributes.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:31](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L31)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:31](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L31)
 
 ___
 
@@ -124,7 +124,7 @@ Supported commands.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:36](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L36)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:36](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L36)
 
 ___
 
@@ -136,7 +136,7 @@ A list of implementation errors, if any.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:46](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L46)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:46](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L46)
 
 ___
 
@@ -148,7 +148,7 @@ Supported events.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:41](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L41)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:41](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L41)
 
 ## Methods
 
@@ -162,7 +162,7 @@ Supported events.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:118](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L118)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:118](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L118)
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:170](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L170)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:170](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L170)
 
 ___
 
@@ -190,7 +190,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:229](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L229)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:229](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L229)
 
 ___
 
@@ -212,7 +212,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:273](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L273)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:273](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L273)
 
 ___
 
@@ -228,4 +228,4 @@ If there are errors, log and throw an exception.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:91](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L91)
+[packages/matter.js/src/behavior/cluster/ValidatedElements.ts:91](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/cluster/ValidatedElements.ts#L91)

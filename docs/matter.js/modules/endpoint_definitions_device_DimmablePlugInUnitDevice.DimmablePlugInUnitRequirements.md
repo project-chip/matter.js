@@ -27,7 +27,7 @@ We provide this alias to the default implementation [GroupsServer](endpoint_defi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:42](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L42)
+[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:42](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L42)
 
 ___
 
@@ -41,7 +41,7 @@ This version of [IdentifyServer](endpoint_definitions_device_DimmablePlugInUnitD
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:35](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L35)
+[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:35](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L35)
 
 ___
 
@@ -55,7 +55,7 @@ This version of [LevelControlServer](endpoint_definitions_device_DimmablePlugInU
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:70](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L70)
+[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:70](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L70)
 
 ___
 
@@ -69,7 +69,7 @@ This version of [OnOffServer](endpoint_definitions_device_DimmablePlugInUnitDevi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:63](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L63)
+[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:63](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L63)
 
 ___
 
@@ -83,7 +83,7 @@ This version of [ScenesServer](endpoint_definitions_device_DimmablePlugInUnitDev
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:49](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L49)
+[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:49](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L49)
 
 ___
 
@@ -106,4 +106,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:83](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L83)
+[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:83](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L83)

@@ -24,7 +24,7 @@ We provide this alias to the default implementation [IdentifyServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts:37](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts#L37)
+[packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts:37](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts#L37)
 
 ___
 
@@ -38,7 +38,7 @@ We provide this alias to the default implementation [PressureMeasurementServer](
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts:30](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts#L30)
+[packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts:30](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts#L30)
 
 ___
 
@@ -58,4 +58,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts:42](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts#L42)
+[packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts:42](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/PressureSensorDevice.ts#L42)

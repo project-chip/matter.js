@@ -21,7 +21,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:37
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:36
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:38
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:37
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:36
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:35
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:35
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:34

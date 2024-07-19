@@ -13,6 +13,7 @@
 ### Properties
 
 - [#private](exports_cluster._internal_.MatterDevice.md##private)
+- [activeCommissioningDiscriminator](exports_cluster._internal_.MatterDevice.md#activecommissioningdiscriminator)
 - [activeCommissioningEndCallback](exports_cluster._internal_.MatterDevice.md#activecommissioningendcallback)
 - [activeCommissioningMode](exports_cluster._internal_.MatterDevice.md#activecommissioningmode)
 - [announceAsCommissionable](exports_cluster._internal_.MatterDevice.md#announceascommissionable)
@@ -68,6 +69,7 @@
 - [initiateExchange](exports_cluster._internal_.MatterDevice.md#initiateexchange)
 - [isCommissioned](exports_cluster._internal_.MatterDevice.md#iscommissioned)
 - [isFailsafeArmed](exports_cluster._internal_.MatterDevice.md#isfailsafearmed)
+- [reAnnounceAsCommissionable](exports_cluster._internal_.MatterDevice.md#reannounceascommissionable)
 - [saveResumptionRecord](exports_cluster._internal_.MatterDevice.md#saveresumptionrecord)
 - [sendCommissionableAnnouncement](exports_cluster._internal_.MatterDevice.md#sendcommissionableannouncement)
 - [sendFabricAnnouncements](exports_cluster._internal_.MatterDevice.md#sendfabricannouncements)
@@ -98,7 +100,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:43
+packages/matter.js/dist/esm/MatterDevice.d.ts:44
 
 ## Properties
 
@@ -112,13 +114,23 @@ packages/matter.js/dist/esm/MatterDevice.d.ts:26
 
 ___
 
+### activeCommissioningDiscriminator
+
+• `Private` `Optional` **activeCommissioningDiscriminator**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterDevice.d.ts:38
+
+___
+
 ### activeCommissioningEndCallback
 
 • `Private` `Optional` **activeCommissioningEndCallback**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:38
+packages/matter.js/dist/esm/MatterDevice.d.ts:39
 
 ___
 
@@ -138,7 +150,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:64
+packages/matter.js/dist/esm/MatterDevice.d.ts:65
 
 ___
 
@@ -148,7 +160,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:39
+packages/matter.js/dist/esm/MatterDevice.d.ts:40
 
 ___
 
@@ -158,7 +170,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:40
+packages/matter.js/dist/esm/MatterDevice.d.ts:41
 
 ___
 
@@ -272,7 +284,7 @@ packages/matter.js/dist/esm/MatterDevice.d.ts:34
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:41
+packages/matter.js/dist/esm/MatterDevice.d.ts:42
 
 ___
 
@@ -286,7 +298,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:46
+packages/matter.js/dist/esm/MatterDevice.d.ts:47
 
 ___
 
@@ -300,7 +312,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:44
+packages/matter.js/dist/esm/MatterDevice.d.ts:45
 
 ___
 
@@ -314,7 +326,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:47
+packages/matter.js/dist/esm/MatterDevice.d.ts:48
 
 ___
 
@@ -328,7 +340,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:48
+packages/matter.js/dist/esm/MatterDevice.d.ts:49
 
 ___
 
@@ -342,7 +354,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:45
+packages/matter.js/dist/esm/MatterDevice.d.ts:46
 
 ## Methods
 
@@ -362,7 +374,7 @@ packages/matter.js/dist/esm/MatterDevice.d.ts:45
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:54
+packages/matter.js/dist/esm/MatterDevice.d.ts:55
 
 ___
 
@@ -382,7 +394,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:59
+packages/matter.js/dist/esm/MatterDevice.d.ts:60
 
 ___
 
@@ -402,7 +414,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:52
+packages/matter.js/dist/esm/MatterDevice.d.ts:53
 
 ___
 
@@ -422,7 +434,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:56
+packages/matter.js/dist/esm/MatterDevice.d.ts:57
 
 ___
 
@@ -442,7 +454,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:76
+packages/matter.js/dist/esm/MatterDevice.d.ts:78
 
 ___
 
@@ -464,7 +476,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:75
+packages/matter.js/dist/esm/MatterDevice.d.ts:77
 
 ___
 
@@ -484,7 +496,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:63
+packages/matter.js/dist/esm/MatterDevice.d.ts:64
 
 ___
 
@@ -504,7 +516,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:50
+packages/matter.js/dist/esm/MatterDevice.d.ts:51
 
 ___
 
@@ -524,18 +536,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:49
+packages/matter.js/dist/esm/MatterDevice.d.ts:50
 
 ___
 
 ### clearSubscriptionsForNode
 
-▸ **clearSubscriptionsForNode**(`peerNodeId`, `flushSubscriptions?`): `Promise`\<`void`\>
+▸ **clearSubscriptionsForNode**(`fabricIndex`, `peerNodeId`, `flushSubscriptions?`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `fabricIndex` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) |
 | `peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `flushSubscriptions?` | `boolean` |
 
@@ -545,7 +558,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:83
+packages/matter.js/dist/esm/MatterDevice.d.ts:85
 
 ___
 
@@ -559,7 +572,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:84
+packages/matter.js/dist/esm/MatterDevice.d.ts:86
 
 ___
 
@@ -579,7 +592,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:55
+packages/matter.js/dist/esm/MatterDevice.d.ts:56
 
 ___
 
@@ -599,7 +612,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:57
+packages/matter.js/dist/esm/MatterDevice.d.ts:58
 
 ___
 
@@ -613,7 +626,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:77
+packages/matter.js/dist/esm/MatterDevice.d.ts:79
 
 ___
 
@@ -627,7 +640,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:78
+packages/matter.js/dist/esm/MatterDevice.d.ts:80
 
 ___
 
@@ -641,7 +654,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:62
+packages/matter.js/dist/esm/MatterDevice.d.ts:63
 
 ___
 
@@ -663,7 +676,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:79
+packages/matter.js/dist/esm/MatterDevice.d.ts:81
 
 ___
 
@@ -684,7 +697,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:67
+packages/matter.js/dist/esm/MatterDevice.d.ts:69
 
 ___
 
@@ -704,7 +717,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:71
+packages/matter.js/dist/esm/MatterDevice.d.ts:73
 
 ___
 
@@ -718,7 +731,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:85
+packages/matter.js/dist/esm/MatterDevice.d.ts:87
 
 ___
 
@@ -738,7 +751,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:69
+packages/matter.js/dist/esm/MatterDevice.d.ts:71
 
 ___
 
@@ -752,7 +765,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:73
+packages/matter.js/dist/esm/MatterDevice.d.ts:75
 
 ___
 
@@ -766,7 +779,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:66
+packages/matter.js/dist/esm/MatterDevice.d.ts:68
 
 ___
 
@@ -786,7 +799,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:53
+packages/matter.js/dist/esm/MatterDevice.d.ts:54
 
 ___
 
@@ -806,7 +819,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:58
+packages/matter.js/dist/esm/MatterDevice.d.ts:59
 
 ___
 
@@ -828,7 +841,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:70
+packages/matter.js/dist/esm/MatterDevice.d.ts:72
 
 ___
 
@@ -842,7 +855,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:74
+packages/matter.js/dist/esm/MatterDevice.d.ts:76
 
 ___
 
@@ -856,7 +869,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:51
+packages/matter.js/dist/esm/MatterDevice.d.ts:52
+
+___
+
+### reAnnounceAsCommissionable
+
+▸ **reAnnounceAsCommissionable**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterDevice.d.ts:66
 
 ___
 
@@ -876,7 +903,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:72
+packages/matter.js/dist/esm/MatterDevice.d.ts:74
 
 ___
 
@@ -897,7 +924,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:65
+packages/matter.js/dist/esm/MatterDevice.d.ts:67
 
 ___
 
@@ -918,7 +945,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:68
+packages/matter.js/dist/esm/MatterDevice.d.ts:70
 
 ___
 
@@ -932,7 +959,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:60
+packages/matter.js/dist/esm/MatterDevice.d.ts:61
 
 ___
 
@@ -946,7 +973,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:61
+packages/matter.js/dist/esm/MatterDevice.d.ts:62
 
 ___
 
@@ -971,4 +998,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:42
+packages/matter.js/dist/esm/MatterDevice.d.ts:43

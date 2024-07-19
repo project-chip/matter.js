@@ -34,8 +34,8 @@ OnOffSwitchConfigurationBehavior is the base class for objects that support inte
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts:16](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts:16](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts:19](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts:19](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts:21](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts:21](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/definitions/on-off-switch-configuration/OnOffSwitchConfigurationBehavior.ts#L21)
