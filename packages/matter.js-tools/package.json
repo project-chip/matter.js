@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-tools",
-    "version": "0.10.0-alpha.0-20240710-9f38895c",
+    "version": "0.10.0-alpha.0-20240716-446c872f",
     "description": "Matter.js tooling",
     "type": "module",
     "scripts": {
@@ -49,7 +49,7 @@
         "esbuild": "^0.23.0",
         "express": "^4.19.2",
         "glob": "^10.4.1",
-        "mocha": "^10.4.0",
+        "mocha": "^10.6.0",
         "playwright": "^1.44.1",
         "typescript": "~5.5.3",
         "yargs": "^17.7.2"
