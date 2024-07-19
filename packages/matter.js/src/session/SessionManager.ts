@@ -8,6 +8,7 @@ import { MatterFlowError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { FabricId } from "../datatype/FabricId.js";
+import { FabricIndex } from "../datatype/FabricIndex.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
@@ -343,9 +344,9 @@ export class SessionManager<ContextT> {
             }));
     }
 
-    async clearSubscriptionsForNode(nodeId: NodeId, flushSubscriptions?: boolean) {
+    async clearSubscriptionsForNode(fabricIndex: FabricIndex, nodeId: NodeId, flushSubscriptions?: boolean) {
         for (const session of this.#sessions) {
-            if (session.peerNodeId === nodeId) {
+            if (session.fabric?.fabricIndex === fabricIndex && session.peerNodeId === nodeId) {
                 await session.clearSubscriptions(flushSubscriptions);
             }
         }

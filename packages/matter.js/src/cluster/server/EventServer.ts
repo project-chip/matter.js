@@ -9,16 +9,52 @@ import { Message } from "../../codec/MessageCodec.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EventId } from "../../datatype/EventId.js";
+import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { Endpoint } from "../../device/Endpoint.js";
+import { ClusterModel, EventModel, MatterModel } from "../../model/index.js";
 import { EventData, EventHandler, EventStorageData } from "../../protocol/interaction/EventHandler.js";
 import { TlvEventFilter } from "../../protocol/interaction/InteractionProtocol.js";
+import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { Storage, StorageOperationResult } from "../../storage/Storage.js";
 import { Time } from "../../time/Time.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { MaybePromise } from "../../util/Promises.js";
-import { AccessLevel, EventPriority } from "../Cluster.js";
+import { isObject } from "../../util/Type.js";
+import { AccessLevel, Attributes, Cluster, Commands, Event, EventPriority, Events } from "../Cluster.js";
+
+export type AnyEventServer<T, S extends Storage> = EventServer<T, S> | FabricSensitiveEventServer<T, S>;
+
+export function createEventServer<
+    T,
+    F extends BitSchema,
+    SF extends TypeFromPartialBitSchema<F>,
+    A extends Attributes,
+    C extends Commands,
+    E extends Events,
+    S extends Storage,
+>(
+    clusterDef: Cluster<F, SF, A, C, E>,
+    eventDef: Event<T, F>,
+    eventName: string,
+    schema: TlvSchema<T>,
+    priority: EventPriority,
+    readAcl: AccessLevel | undefined,
+): EventServer<T, S> {
+    let fabricSensitive = false;
+    const clusterFromModel = new MatterModel().get(ClusterModel, clusterDef.id);
+    if (clusterFromModel !== undefined) {
+        const eventModel = clusterFromModel.get(EventModel, eventDef.id);
+        if (eventModel !== undefined) {
+            fabricSensitive = eventModel.fabricSensitive;
+        }
+    }
+    if (fabricSensitive) {
+        return new FabricSensitiveEventServer(eventDef.id, clusterDef.id, eventName, schema, priority, readAcl);
+    }
+    return new EventServer(eventDef.id, clusterDef.id, eventName, schema, priority, readAcl);
+}
 
 export class EventServer<T, S extends Storage> {
     private eventList = new Array<EventData<T>>();
@@ -26,6 +62,7 @@ export class EventServer<T, S extends Storage> {
     protected endpoint?: Endpoint;
     protected eventHandler?: EventHandler;
     #readAcl: AccessLevel | undefined;
+    hasFabricSensitiveData = false;
 
     constructor(
         readonly id: EventId,
@@ -114,25 +151,35 @@ export class EventServer<T, S extends Storage> {
         if (this.endpoint === undefined) {
             throw new InternalError("EventServer not bound to Endpoint");
         }
+
         return this.eventHandler.getEvents(
             { endpointId: this.endpoint.number, clusterId: this.clusterId, eventId: this.id },
             filters,
-            // TODO When not fabricscoped event later then only pass isFabricFiltered through for fabric filtered variant
-            isFabricFiltered && (session as SecureSession<any>).fabric
-                ? session.associatedFabric.fabricIndex
-                : undefined,
+            // When request is fabric filtered or the event is Fabric sensitive then filter the events for the fabrics
+            isFabricFiltered ? (session as SecureSession<any>).fabric?.fabricIndex ?? FabricIndex.NO_FABRIC : undefined,
         );
     }
 }
 
-// TODO this can be added and used once we generate fabric scoped property in the Event definition
-export class FabricScopedEventServer<T, S extends Storage> extends EventServer<T, S> {
+export class FabricSensitiveEventServer<T, S extends Storage> extends EventServer<T, S> {
+    override hasFabricSensitiveData = true;
+
+    override get(
+        session: Session<MatterDevice>,
+        _isFabricFiltered: boolean,
+        message?: Message,
+        filters?: TypeFromSchema<typeof TlvEventFilter>[],
+    ) {
+        // because the event is fabric sensitive it is always filtered out when another fabric tries to access it
+        return super.get(session, true, message, filters);
+    }
+
     override triggerEvent(data: T) {
-        if (typeof data !== "object" || data === null) {
-            throw new ImplementationError("FabricScoped events need to have an object as data.");
+        if (!isObject(data) || data === null) {
+            throw new ImplementationError("FabricSensitive events need to have an object as data.");
         }
         if (!("fabricIndex" in data)) {
-            throw new InternalError("FabricScoped events requires fabricIndex in data.");
+            throw new InternalError("FabricSensitive events requires fabricIndex in data.");
         }
         return super.triggerEvent(data);
     }

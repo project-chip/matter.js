@@ -156,7 +156,7 @@ async function performSubscribe(
         request,
         {
             sendStatus: _code => {},
-            sendDataReport: async _report => {},
+            sendDataReport: async (_report, _forFabricFilteredRead) => {},
             send: async (_type, _message) => {},
             close: async () => {},
         } as InteractionServerMessenger,
@@ -239,11 +239,11 @@ describe("ClusterServerBacking", () => {
         const fabric2Acls = await readAcls(node, fabric2, true);
         expect(fabric2Acls).deep.equals([{ privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 2 }]);
 
-        const allAcls = await readAcls(node, fabric1, false);
+        const allAclsReadAsFabric1 = await readAcls(node, fabric1, false);
 
-        expect(allAcls).deep.equals([
+        expect(allAclsReadAsFabric1).deep.equals([
             { privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 1 },
-            { privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 2 },
+            { privilege: undefined, authMode: undefined, subjects: undefined, targets: undefined, fabricIndex: 2 },
         ]);
 
         await node.close();
@@ -307,18 +307,16 @@ describe("ClusterServerBacking", () => {
         expect(report?.attributeReports?.length).equals(2);
         expect(report?.eventReports).equals(undefined);
 
-        // Confirm the first report is for Fabrics
-        const fabricsReport = report?.attributeReports?.[0]?.attributeData;
+        // Confirm the second report is for Fabrics (because of async-ness is a bit delayed)
+        const fabricsReport = report?.attributeReports?.[1]?.attributeData;
         expect(fabricsReport?.path).deep.equals(FABRICS_PATH);
-        expect(
-            (
-                fabricsReport?.data &&
-                OperationalCredentials.Cluster.attributes.fabrics.schema.decodeTlv(fabricsReport?.data)
-            )?.map(({ fabricIndex }) => fabricIndex),
-        ).deep.equals([1, 2]);
+        const decodedFabrics =
+            fabricsReport?.data &&
+            OperationalCredentials.Cluster.attributes.fabrics.schema.decodeTlv(fabricsReport?.data);
+        expect(decodedFabrics?.map(({ fabricIndex }) => fabricIndex)).deep.equals([1, 2]);
 
-        // Confirm the second report is for CommissionedFabrics
-        const commissionedFabricsReport = report?.attributeReports?.[1]?.attributeData;
+        // Confirm the first report is for CommissionedFabrics
+        const commissionedFabricsReport = report?.attributeReports?.[0]?.attributeData;
         expect(commissionedFabricsReport?.path).deep.equals(COMMISSIONED_FABRICS_PATH);
         expect(
             commissionedFabricsReport?.data &&
