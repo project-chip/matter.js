@@ -87,6 +87,7 @@
 - [Fabric](../classes/internal_.Fabric.md)
 - [FabricManager](../classes/internal_.FabricManager.md)
 - [FabricScopedAttributeServer](../classes/internal_.FabricScopedAttributeServer.md)
+- [FabricSensitiveEventServer](../classes/internal_.FabricSensitiveEventServer.md)
 - [FailsafeContext](../classes/internal_.FailsafeContext-1.md)
 - [FailsafeTimer](../classes/internal_.FailsafeTimer.md)
 - [FixedAttributeServer](../classes/internal_.FixedAttributeServer.md)
@@ -198,6 +199,7 @@
 ### Type Aliases
 
 - [AnyAttributeServer](internal_.md#anyattributeserver)
+- [AnyEventServer](internal_.md#anyeventserver)
 - [AttributeClients](internal_.md#attributeclients)
 - [AttributeDataPayload](internal_.md#attributedatapayload)
 - [AttributeId](internal_.md#attributeid)
@@ -300,6 +302,7 @@
 - [SupportedStorageTypes](internal_.md#supportedstoragetypes)
 - [TimerCallback](internal_.md#timercallback)
 - [TlvElement](internal_.md#tlvelement)
+- [TlvEncodingOptions](internal_.md#tlvencodingoptions)
 - [TlvFields](internal_.md#tlvfields)
 - [TlvStream](internal_.md#tlvstream)
 - [TlvTag](internal_.md#tlvtag)
@@ -551,6 +554,23 @@ matter.js/dist/esm/cluster/server/AttributeServer.d.ts:24
 
 ___
 
+### AnyEventServer
+
+Ƭ **AnyEventServer**\<`T`, `S`\>: [`EventServer`](../classes/internal_.EventServer.md)\<`T`, `S`\> \| [`FabricSensitiveEventServer`](../classes/internal_.FabricSensitiveEventServer.md)\<`T`, `S`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `T` |
+| `S` | extends [`Storage`](../interfaces/internal_.Storage.md) |
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/EventServer.d.ts:18
+
+___
+
 ### AttributeClients
 
 Ƭ **AttributeClients**\<`F`, `A`\>: [`Merge`](internal_.md#merge)\<[`Merge`](internal_.md#merge)\<\{ [P in MandatoryAttributeNames\<A\>]: AttributeClient\<AttributeJsType\<A[P]\>\> }, \{ [P in OptionalAttributeNames\<A\>]: AttributeClient\<AttributeJsType\<A[P]\> \| undefined\> }\>, \{ [P in GlobalAttributeNames\<F\>]: AttributeClient\<AttributeJsType\<GlobalAttributes\<F\>[P]\>\> }\>
@@ -576,7 +596,7 @@ Type for TlvAttributeReportData where the real data are represented with the sch
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:12
+matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:13
 
 ___
 
@@ -618,7 +638,7 @@ ___
 
 ### AttributeReportPayload
 
-Ƭ **AttributeReportPayload**: `Omit`\<[`TypeFromSchema`](internal_.md#typefromschema)\<typeof [`TlvAttributeReport`](internal_.md#tlvattributereport)\>, ``"attributeData"``\> & \{ `attributeData?`: [`AttributeDataPayload`](internal_.md#attributedatapayload)  }
+Ƭ **AttributeReportPayload**: `Omit`\<[`TypeFromSchema`](internal_.md#typefromschema)\<typeof [`TlvAttributeReport`](internal_.md#tlvattributereport)\>, ``"attributeData"``\> & \{ `attributeData?`: [`AttributeDataPayload`](internal_.md#attributedatapayload) ; `hasFabricSensitiveData`: `boolean`  }
 
 Type for TlvAttributeReport where the real data are represented with the schema and the JS value.
 
@@ -1063,7 +1083,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:25](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L25)
+[matter-node-ble.js/src/ble/BleScanner.ts:25](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter-node-ble.js/src/ble/BleScanner.ts#L25)
 
 ___
 
@@ -1173,7 +1193,7 @@ Type for TlvDataReport where the real data are represented with the schema and t
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:26
+matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:28
 
 ___
 
@@ -1429,7 +1449,7 @@ Type for TlvEventData where the real data are represented with the schema and th
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:21
+matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:23
 
 ___
 
@@ -1474,13 +1494,13 @@ ___
 
 ### EventReportPayload
 
-Ƭ **EventReportPayload**: `Omit`\<[`TypeFromSchema`](internal_.md#typefromschema)\<typeof [`TlvEventReport`](internal_.md#tlveventreport)\>, ``"eventData"``\> & \{ `eventData?`: [`EventDataPayload`](internal_.md#eventdatapayload)  }
+Ƭ **EventReportPayload**: `Omit`\<[`TypeFromSchema`](internal_.md#typefromschema)\<typeof [`TlvEventReport`](internal_.md#tlveventreport)\>, ``"eventData"``\> & \{ `eventData?`: [`EventDataPayload`](internal_.md#eventdatapayload) ; `hasFabricSensitiveData`: `boolean`  }
 
 Type for TlvEventReport where the real data are represented with the schema and the JS value.
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:17
+matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:18
 
 ___
 
@@ -2386,7 +2406,24 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:24
+matter.js/dist/esm/tlv/TlvSchema.d.ts:36
+
+___
+
+### TlvEncodingOptions
+
+Ƭ **TlvEncodingOptions**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `allowMissingFieldsForNonFabricFilteredRead?` | `boolean` | When true, mandatory field validation is skipped when encoding TLV for list entries. This flag must not be set together with the former flag. |
+| `forWriteInteraction?` | `boolean` | When true, the fabricIndex field will be excluded from the TLV encoding for list entries. This flag must not be set together with the following flag. |
+
+#### Defined in
+
+matter.js/dist/esm/tlv/TlvSchema.d.ts:9
 
 ___
 
@@ -2410,7 +2447,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:23
+matter.js/dist/esm/tlv/TlvSchema.d.ts:35
 
 ___
 
@@ -2569,7 +2606,7 @@ Type defined by the TLV schema.
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:43
+matter.js/dist/esm/tlv/TlvSchema.d.ts:55
 
 ___
 

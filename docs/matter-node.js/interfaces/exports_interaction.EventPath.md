@@ -11,6 +11,7 @@
 - [clusterId](exports_interaction.EventPath.md#clusterid)
 - [endpointId](exports_interaction.EventPath.md#endpointid)
 - [eventId](exports_interaction.EventPath.md#eventid)
+- [isUrgent](exports_interaction.EventPath.md#isurgent)
 - [nodeId](exports_interaction.EventPath.md#nodeid)
 
 ## Properties
@@ -21,7 +22,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:49
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:48
 
 ___
 
@@ -31,13 +32,23 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:48
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:47
 
 ___
 
 ### eventId
 
 • **eventId**: [`EventId`](../modules/exports_datatype.md#eventid)
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:49
+
+___
+
+### isUrgent
+
+• `Optional` **isUrgent**: `boolean`
 
 #### Defined in
 
@@ -51,4 +62,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:47
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:46

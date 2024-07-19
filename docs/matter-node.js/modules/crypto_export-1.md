@@ -26,8 +26,8 @@
 - [CRYPTO\_SYMMETRIC\_KEY\_LENGTH\_BYTES](crypto_export-1.md#crypto_symmetric_key_length_bytes)
 - [Crypto](crypto_export-1.md#crypto)
 - [CryptoDsaEncoding](crypto_export-1.md#cryptodsaencoding)
-- [CryptoError](crypto_export-1.md#cryptoerror)
 - [CryptoNode](crypto_export-1.md#cryptonode)
+- [CryptoVerifyError](crypto_export-1.md#cryptoverifyerror)
 - [CurveType](crypto_export-1.md#curvetype)
 - [Key](crypto_export-1.md#key)
 - [KeyType](crypto_export-1.md#keytype)
@@ -160,15 +160,15 @@ Re-exports [CryptoDsaEncoding](crypto_export.md#cryptodsaencoding)
 
 ___
 
-### CryptoError
-
-Re-exports [CryptoError](../classes/crypto_export.CryptoError.md)
-
-___
-
 ### CryptoNode
 
 Re-exports [CryptoNode](../classes/crypto_export.CryptoNode.md)
+
+___
+
+### CryptoVerifyError
+
+Re-exports [CryptoVerifyError](../classes/crypto_export.CryptoVerifyError.md)
 
 ___
 

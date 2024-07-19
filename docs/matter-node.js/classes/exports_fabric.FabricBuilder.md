@@ -21,6 +21,7 @@
 - [keyPair](exports_fabric.FabricBuilder.md#keypair)
 - [nodeId](exports_fabric.FabricBuilder.md#nodeid)
 - [publicKey](exports_fabric.FabricBuilder.md#publickey)
+- [rootCert](exports_fabric.FabricBuilder.md#rootcert)
 
 ### Methods
 
@@ -67,7 +68,7 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:112
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:125
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:126
 
 ___
 
@@ -95,7 +96,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:126
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:127
 
 ___
 
@@ -109,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:124
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:125
 
 ___
 
@@ -124,6 +125,20 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/fabric/Fabric.d.ts:113
+
+___
+
+### rootCert
+
+• `get` **rootCert**(): `undefined` \| `Uint8Array`
+
+#### Returns
+
+`undefined` \| `Uint8Array`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:117
 
 ## Methods
 
@@ -143,7 +158,7 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:113
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:127
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:128
 
 ___
 
@@ -171,7 +186,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:117
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:118
 
 ___
 
@@ -191,7 +206,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:122
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:123
 
 ___
 
@@ -211,7 +226,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:123
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:124
 
 ___
 
@@ -231,7 +246,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:121
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:122
 
 ___
 
@@ -252,7 +267,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:118
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:119
 
 ___
 
@@ -292,7 +307,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:120
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:121
 
 ___
 
@@ -312,4 +327,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:119
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:120

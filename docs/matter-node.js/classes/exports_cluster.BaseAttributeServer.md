@@ -39,6 +39,7 @@ Base class for all attribute servers.
 
 ### Accessors
 
+- [hasFabricSensitiveData](exports_cluster.BaseAttributeServer.md#hasfabricsensitivedata)
 - [readAcl](exports_cluster.BaseAttributeServer.md#readacl)
 - [writeAcl](exports_cluster.BaseAttributeServer.md#writeacl)
 
@@ -187,6 +188,20 @@ packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:48
 
 ## Accessors
 
+### hasFabricSensitiveData
+
+• `get` **hasFabricSensitiveData**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52
+
+___
+
 ### readAcl
 
 • `get` **readAcl**(): [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
@@ -197,7 +212,7 @@ packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:48
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:61
 
 ___
 
@@ -211,7 +226,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:60
 
 ## Methods
 
@@ -231,7 +246,7 @@ packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:54
 
 ___
 
@@ -254,7 +269,7 @@ adjusted before the Device gets announced. Do not use this method to change valu
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:58
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
 
 ___
 
@@ -274,4 +289,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:53

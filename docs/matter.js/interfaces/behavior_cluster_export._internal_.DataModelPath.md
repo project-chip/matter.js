@@ -40,7 +40,7 @@ The path consists of a sequence of IDs, optionally with type information.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/DataModelPath.ts:15](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/DataModelPath.ts#L15)
+[packages/matter.js/src/endpoint/DataModelPath.ts:15](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/DataModelPath.ts#L15)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/DataModelPath.ts:13](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/DataModelPath.ts#L13)
+[packages/matter.js/src/endpoint/DataModelPath.ts:13](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/DataModelPath.ts#L13)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/DataModelPath.ts:17](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/DataModelPath.ts#L17)
+[packages/matter.js/src/endpoint/DataModelPath.ts:17](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/DataModelPath.ts#L17)
 
 ## Methods
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/DataModelPath.ts:19](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/DataModelPath.ts#L19)
+[packages/matter.js/src/endpoint/DataModelPath.ts:19](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/DataModelPath.ts#L19)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/DataModelPath.ts:23](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/DataModelPath.ts#L23)
+[packages/matter.js/src/endpoint/DataModelPath.ts:23](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/DataModelPath.ts#L23)
 
 ___
 
@@ -115,4 +115,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/DataModelPath.ts:21](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/DataModelPath.ts#L21)
+[packages/matter.js/src/endpoint/DataModelPath.ts:21](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/DataModelPath.ts#L21)

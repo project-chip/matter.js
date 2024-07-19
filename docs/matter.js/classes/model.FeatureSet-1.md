@@ -55,7 +55,7 @@ Set\&lt;FeatureSet.Flag\&gt;.constructor
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:20](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/definitions/FeatureSet.ts#L20)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:20](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/definitions/FeatureSet.ts#L20)
 
 ## Accessors
 
@@ -71,7 +71,7 @@ Access features as an array of feature names.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:32](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/definitions/FeatureSet.ts#L32)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:32](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/definitions/FeatureSet.ts#L32)
 
 ___
 
@@ -87,7 +87,7 @@ Access features as an object mapping feature name -> true.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:39](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/definitions/FeatureSet.ts#L39)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:39](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/definitions/FeatureSet.ts#L39)
 
 ## Methods
 
@@ -109,7 +109,7 @@ Determine if I am identical to another set.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:46](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/definitions/FeatureSet.ts#L46)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:46](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/definitions/FeatureSet.ts#L46)
 
 ___
 
@@ -135,4 +135,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:50](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/definitions/FeatureSet.ts#L50)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:50](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/definitions/FeatureSet.ts#L50)

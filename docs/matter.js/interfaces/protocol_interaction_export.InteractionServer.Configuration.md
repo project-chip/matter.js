@@ -9,7 +9,6 @@
 ### Properties
 
 - [endpointStructure](protocol_interaction_export.InteractionServer.Configuration.md#endpointstructure)
-- [eventHandler](protocol_interaction_export.InteractionServer.Configuration.md#eventhandler)
 - [subscriptionOptions](protocol_interaction_export.InteractionServer.Configuration.md#subscriptionoptions)
 
 ## Properties
@@ -20,17 +19,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1315](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1315)
-
-___
-
-### eventHandler
-
-• `Readonly` **eventHandler**: [`EventHandler`](../classes/protocol_interaction_export.EventHandler.md)\<`any`\>
-
-#### Defined in
-
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1314](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1314)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1314](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1314)
 
 ___
 
@@ -40,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1313](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1313)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1313](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1313)

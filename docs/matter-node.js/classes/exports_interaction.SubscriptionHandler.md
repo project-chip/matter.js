@@ -14,12 +14,12 @@
 
 - [attributeListeners](exports_interaction.SubscriptionHandler.md#attributelisteners)
 - [attributeRequests](exports_interaction.SubscriptionHandler.md#attributerequests)
+- [attributeUpdatePromises](exports_interaction.SubscriptionHandler.md#attributeupdatepromises)
 - [cancelCallback](exports_interaction.SubscriptionHandler.md#cancelcallback)
 - [dataVersionFilters](exports_interaction.SubscriptionHandler.md#dataversionfilters)
 - [determineSendingIntervals](exports_interaction.SubscriptionHandler.md#determinesendingintervals)
 - [endpointStructure](exports_interaction.SubscriptionHandler.md#endpointstructure)
 - [eventFilters](exports_interaction.SubscriptionHandler.md#eventfilters)
-- [eventHandler](exports_interaction.SubscriptionHandler.md#eventhandler)
 - [eventListeners](exports_interaction.SubscriptionHandler.md#eventlisteners)
 - [eventRequests](exports_interaction.SubscriptionHandler.md#eventrequests)
 - [fabric](exports_interaction.SubscriptionHandler.md#fabric)
@@ -31,6 +31,8 @@
 - [outstandingAttributeUpdates](exports_interaction.SubscriptionHandler.md#outstandingattributeupdates)
 - [outstandingEventUpdates](exports_interaction.SubscriptionHandler.md#outstandingeventupdates)
 - [peerNodeId](exports_interaction.SubscriptionHandler.md#peernodeid)
+- [readAttribute](exports_interaction.SubscriptionHandler.md#readattribute)
+- [readEvent](exports_interaction.SubscriptionHandler.md#readevent)
 - [registerNewAttributes](exports_interaction.SubscriptionHandler.md#registernewattributes)
 - [registerNewEvents](exports_interaction.SubscriptionHandler.md#registernewevents)
 - [sendDelayTimer](exports_interaction.SubscriptionHandler.md#senddelaytimer)
@@ -48,6 +50,7 @@
 ### Methods
 
 - [activateSendingUpdates](exports_interaction.SubscriptionHandler.md#activatesendingupdates)
+- [attributeChangeHandler](exports_interaction.SubscriptionHandler.md#attributechangehandler)
 - [attributeChangeListener](exports_interaction.SubscriptionHandler.md#attributechangelistener)
 - [cancel](exports_interaction.SubscriptionHandler.md#cancel)
 - [eventChangeListener](exports_interaction.SubscriptionHandler.md#eventchangelistener)
@@ -65,25 +68,27 @@
 
 ### constructor
 
-• **new SubscriptionHandler**(`subscriptionId`, `session`, `endpointStructure`, `attributeRequests`, `dataVersionFilters`, `eventRequests`, `eventFilters`, `eventHandler`, `isFabricFiltered`, `minIntervalFloor`, `maxIntervalCeiling`, `cancelCallback`, `subscriptionOptions`): [`SubscriptionHandler`](exports_interaction.SubscriptionHandler.md)
+• **new SubscriptionHandler**(`options`): [`SubscriptionHandler`](exports_interaction.SubscriptionHandler.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `subscriptionId` | `number` |
-| `session` | [`SecureSession`](exports_session.SecureSession.md)\<`any`\> |
-| `endpointStructure` | [`InteractionEndpointStructure`](exports_interaction.InteractionEndpointStructure.md) |
-| `attributeRequests` | `undefined` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
-| `dataVersionFilters` | `undefined` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `dataVersion`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `endpointId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
-| `eventRequests` | `undefined` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](../modules/exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
-| `eventFilters` | `undefined` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
-| `eventHandler` | [`EventHandler`](exports_interaction.EventHandler.md)\<`any`\> |
-| `isFabricFiltered` | `boolean` |
-| `minIntervalFloor` | `number` |
-| `maxIntervalCeiling` | `number` |
-| `cancelCallback` | () => `void` |
-| `subscriptionOptions` | [`Configuration`](../interfaces/exports_interaction._internal_.SubscriptionOptions.Configuration.md) |
+| `options` | `Object` |
+| `options.attributeRequests?` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
+| `options.cancelCallback` | () => `void` |
+| `options.dataVersionFilters?` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `dataVersion`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `endpointId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
+| `options.endpointStructure` | [`InteractionEndpointStructure`](exports_interaction.InteractionEndpointStructure.md) |
+| `options.eventFilters?` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
+| `options.eventRequests?` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](../modules/exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
+| `options.isFabricFiltered` | `boolean` |
+| `options.maxIntervalCeiling` | `number` |
+| `options.minIntervalFloor` | `number` |
+| `options.readAttribute` | (`path`: [`AttributePath`](../interfaces/exports_interaction.AttributePath.md), `attribute`: [`AnyAttributeServer`](../modules/exports_cluster.md#anyattributeserver)\<`any`\>) => `Promise`\<`any`\> |
+| `options.readEvent` | (`path`: [`EventPath`](../interfaces/exports_interaction.EventPath.md), `event`: [`AnyEventServer`](../modules/exports_cluster.md#anyeventserver)\<`any`, `any`\>, `eventFilters`: `undefined` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[]) => `Promise`\<[`EventStorageData`](../interfaces/exports_interaction.EventStorageData.md)\<`any`\>[]\> |
+| `options.session` | [`SecureSession`](exports_session.SecureSession.md)\<`any`\> |
+| `options.subscriptionId` | `number` |
+| `options.subscriptionOptions` | [`Configuration`](../interfaces/exports_interaction._internal_.SubscriptionOptions.Configuration.md) |
 
 #### Returns
 
@@ -91,7 +96,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:45
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:48
 
 ## Properties
 
@@ -101,17 +106,27 @@ packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:45
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:32
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:34
 
 ___
 
 ### attributeRequests
 
-• `Private` `Readonly` **attributeRequests**: `any`
+• `Private` `Optional` `Readonly` **attributeRequests**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:20
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:21
+
+___
+
+### attributeUpdatePromises
+
+• `Private` **attributeUpdatePromises**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:47
 
 ___
 
@@ -127,11 +142,11 @@ ___
 
 ### dataVersionFilters
 
-• `Private` `Readonly` **dataVersionFilters**: `any`
+• `Private` `Optional` `Readonly` **dataVersionFilters**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:21
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:22
 
 ___
 
@@ -141,7 +156,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:46
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:64
 
 ___
 
@@ -151,23 +166,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:19
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:20
 
 ___
 
 ### eventFilters
 
-• `Private` `Readonly` **eventFilters**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:23
-
-___
-
-### eventHandler
-
-• `Private` `Readonly` **eventHandler**: `any`
+• `Private` `Optional` `Readonly` **eventFilters**: `any`
 
 #### Defined in
 
@@ -181,17 +186,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:33
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:35
 
 ___
 
 ### eventRequests
 
-• `Private` `Readonly` **eventRequests**: `any`
+• `Private` `Optional` `Readonly` **eventRequests**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:22
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:23
 
 ___
 
@@ -201,7 +206,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:40
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:42
 
 ___
 
@@ -221,7 +226,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:27
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:29
 
 ___
 
@@ -231,7 +236,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:35
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:37
 
 ___
 
@@ -241,7 +246,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:38
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:40
 
 ___
 
@@ -251,7 +256,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:37
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:39
 
 ___
 
@@ -261,7 +266,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:30
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:32
 
 ___
 
@@ -271,7 +276,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:31
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:33
 
 ___
 
@@ -281,7 +286,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:41
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:43
+
+___
+
+### readAttribute
+
+• `Private` `Readonly` **readAttribute**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:27
+
+___
+
+### readEvent
+
+• `Private` `Readonly` **readEvent**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:28
 
 ___
 
@@ -291,7 +316,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:47
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:65
 
 ___
 
@@ -301,7 +326,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:49
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:67
 
 ___
 
@@ -311,7 +336,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:29
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:31
 
 ___
 
@@ -321,7 +346,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:36
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:38
 
 ___
 
@@ -331,7 +356,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:43
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:45
 
 ___
 
@@ -341,7 +366,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:44
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:46
 
 ___
 
@@ -351,7 +376,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:75
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:94
 
 ___
 
@@ -361,7 +386,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:34
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:36
 
 ___
 
@@ -371,7 +396,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:42
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:44
 
 ___
 
@@ -381,7 +406,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:39
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:41
 
 ___
 
@@ -391,7 +416,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:18
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:19
 
 ___
 
@@ -401,7 +426,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:17
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:18
 
 ___
 
@@ -411,7 +436,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:28
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:30
 
 ## Methods
 
@@ -425,7 +450,36 @@ packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:28
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:60
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:78
+
+___
+
+### attributeChangeHandler
+
+▸ **attributeChangeHandler**\<`T`\>(`path`, `schema`, `version`, `value`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `path` | [`AttributePath`](../interfaces/exports_interaction.AttributePath.md) |
+| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
+| `version` | `number` |
+| `value` | `T` |
+
+#### Returns
+
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:90
 
 ___
 
@@ -443,7 +497,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `path` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\> |
+| `path` | [`AttributePath`](../interfaces/exports_interaction.AttributePath.md) |
 | `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 | `version` | `number` |
 | `value` | `T` |
@@ -454,7 +508,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:71
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:89
 
 ___
 
@@ -475,7 +529,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:74
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:93
 
 ___
 
@@ -493,7 +547,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `path` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](../modules/exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\> |
+| `path` | [`EventPath`](../interfaces/exports_interaction.EventPath.md) |
 | `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 | `newEvent` | [`EventStorageData`](../interfaces/exports_interaction.EventStorageData.md)\<`T`\> |
 
@@ -503,7 +557,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:72
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:91
 
 ___
 
@@ -517,7 +571,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:73
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:92
 
 ___
 
@@ -531,7 +585,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:58
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:76
 
 ___
 
@@ -545,7 +599,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:59
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:77
 
 ___
 
@@ -562,21 +616,19 @@ sending by 50ms in any case to mke sure to catch all updates.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:65
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:83
 
 ___
 
 ### sendInitialReport
 
-▸ **sendInitialReport**(`messenger`, `readAttribute`, `readEvent`): `Promise`\<`void`\>
+▸ **sendInitialReport**(`messenger`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `messenger` | [`InteractionServerMessenger`](exports_interaction.InteractionServerMessenger.md) |
-| `readAttribute` | (`path`: [`AttributePath`](../interfaces/exports_interaction.AttributePath.md), `attribute`: [`AnyAttributeServer`](../modules/exports_cluster.md#anyattributeserver)\<`any`\>) => `Promise`\<`any`\> |
-| `readEvent` | (`path`: [`EventPath`](../interfaces/exports_interaction.EventPath.md), `event`: [`EventServer`](exports_cluster.EventServer.md)\<`any`, `any`\>, `eventFilters`: `undefined` \| [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[]) => `Promise`\<[`EventStorageData`](../interfaces/exports_interaction.EventStorageData.md)\<`any`\>[]\> |
 
 #### Returns
 
@@ -584,7 +636,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:70
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:88
 
 ___
 
@@ -600,7 +652,7 @@ Determine all attributes that have changed since the last update and send them t
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:69
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:87
 
 ___
 
@@ -620,7 +672,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:48
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:66
 
 ___
 
@@ -640,13 +692,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:50
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:68
 
 ___
 
 ### updateSubscription
 
-▸ **updateSubscription**(): `void`
+▸ **updateSubscription**(): `Promise`\<`void`\>
 
 Update the session after an endpoint structure change. The method will initialize all missing new attributes and
 events and will remove listeners no longer needed.
@@ -655,8 +707,8 @@ controller. The data of newly added events are not sent automatically.
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:57
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:75

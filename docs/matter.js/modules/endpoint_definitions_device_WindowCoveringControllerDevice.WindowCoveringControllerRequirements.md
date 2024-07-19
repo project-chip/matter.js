@@ -28,7 +28,7 @@ We provide this alias to the default implementation [GroupsBehavior](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:54](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L54)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:54](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L54)
 
 ___
 
@@ -42,7 +42,7 @@ We provide this alias to the default implementation [IdentifyBehavior](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:47](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L47)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:47](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L47)
 
 ___
 
@@ -56,7 +56,7 @@ We provide this alias to the default implementation [IdentifyServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:33](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L33)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:33](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L33)
 
 ___
 
@@ -70,7 +70,7 @@ We provide this alias to the default implementation [ScenesBehavior](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:61](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L61)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:61](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L61)
 
 ___
 
@@ -84,7 +84,7 @@ We provide this alias to the default implementation [WindowCoveringBehavior](end
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:40](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L40)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:40](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L40)
 
 ___
 
@@ -107,7 +107,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:71](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L71)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:71](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L71)
 
 ___
 
@@ -127,4 +127,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:66](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L66)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:66](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L66)

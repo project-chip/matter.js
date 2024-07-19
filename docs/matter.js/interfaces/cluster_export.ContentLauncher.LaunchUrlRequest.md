@@ -43,7 +43,7 @@ TypeFromSchema.brandingInformation
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:236](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L236)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:236](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L236)
 
 ___
 
@@ -63,7 +63,7 @@ TypeFromSchema.contentUrl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:220](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L220)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:220](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L220)
 
 ___
 
@@ -84,4 +84,4 @@ TypeFromSchema.displayString
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:228](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L228)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:228](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L228)

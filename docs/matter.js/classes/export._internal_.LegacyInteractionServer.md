@@ -24,7 +24,6 @@ attribute/command handlers.
 - [#aclManager](export._internal_.LegacyInteractionServer.md##aclmanager)
 - [#endpointStructure](export._internal_.LegacyInteractionServer.md##endpointstructure)
 - [#endpointStructure](export._internal_.LegacyInteractionServer.md##endpointstructure-1)
-- [#eventHandler](export._internal_.LegacyInteractionServer.md##eventhandler)
 - [#isClosing](export._internal_.LegacyInteractionServer.md##isclosing)
 - [#nextSubscriptionId](export._internal_.LegacyInteractionServer.md##nextsubscriptionid)
 - [#subscriptionConfig](export._internal_.LegacyInteractionServer.md##subscriptionconfig)
@@ -73,7 +72,7 @@ attribute/command handlers.
 
 #### Defined in
 
-[packages/matter.js/src/device/LegacyInteractionServer.ts:39](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/device/LegacyInteractionServer.ts#L39)
+[packages/matter.js/src/device/LegacyInteractionServer.ts:39](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/device/LegacyInteractionServer.ts#L39)
 
 ## Properties
 
@@ -83,7 +82,7 @@ attribute/command handlers.
 
 #### Defined in
 
-[packages/matter.js/src/device/LegacyInteractionServer.ts:37](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/device/LegacyInteractionServer.ts#L37)
+[packages/matter.js/src/device/LegacyInteractionServer.ts:37](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/device/LegacyInteractionServer.ts#L37)
 
 ___
 
@@ -97,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/LegacyInteractionServer.ts:36](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/device/LegacyInteractionServer.ts#L36)
+[packages/matter.js/src/device/LegacyInteractionServer.ts:36](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/device/LegacyInteractionServer.ts#L36)
 
 ___
 
@@ -111,21 +110,7 @@ InteractionServer.#endpointStructure
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:223](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L223)
-
-___
-
-### #eventHandler
-
-• `Private` **#eventHandler**: [`EventHandler`](protocol_interaction_export.EventHandler.md)\<`any`\>
-
-#### Inherited from
-
-[InteractionServer](protocol_interaction_export.InteractionServer-1.md).[#eventHandler](protocol_interaction_export.InteractionServer-1.md##eventhandler)
-
-#### Defined in
-
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:228](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L228)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:218](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L218)
 
 ___
 
@@ -139,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:226](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L226)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:221](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L221)
 
 ___
 
@@ -153,13 +138,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:224](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L224)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:219](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L219)
 
 ___
 
 ### #subscriptionConfig
 
-• `Private` **#subscriptionConfig**: [`Configuration`](../interfaces/node_export._internal_.SubscriptionOptions.Configuration.md)
+• `Private` `Readonly` **#subscriptionConfig**: [`Configuration`](../interfaces/node_export._internal_.SubscriptionOptions.Configuration.md)
 
 #### Inherited from
 
@@ -167,7 +152,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:227](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L227)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:222](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L222)
 
 ___
 
@@ -181,7 +166,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:225](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L225)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:220](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L220)
 
 ## Accessors
 
@@ -199,7 +184,7 @@ InteractionServer.isClosing
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:246](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L246)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:239](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L239)
 
 ## Methods
 
@@ -221,7 +206,7 @@ InteractionServer.isClosing
 
 #### Defined in
 
-[packages/matter.js/src/device/LegacyInteractionServer.ts:66](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/device/LegacyInteractionServer.ts#L66)
+[packages/matter.js/src/device/LegacyInteractionServer.ts:66](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/device/LegacyInteractionServer.ts#L66)
 
 ___
 
@@ -241,7 +226,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/LegacyInteractionServer.ts:45](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/device/LegacyInteractionServer.ts#L45)
+[packages/matter.js/src/device/LegacyInteractionServer.ts:45](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/device/LegacyInteractionServer.ts#L45)
 
 ___
 
@@ -259,7 +244,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1303](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1303)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1303](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1303)
 
 ___
 
@@ -277,7 +262,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:242](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L242)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:235](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L235)
 
 ___
 
@@ -303,7 +288,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1091](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1091)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1091](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1091)
 
 ___
 
@@ -329,7 +314,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:257](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L257)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:250](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L250)
 
 ___
 
@@ -356,7 +341,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:909](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L909)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:912](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L912)
 
 ___
 
@@ -381,7 +366,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1291](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1291)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1291](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1291)
 
 ___
 
@@ -407,7 +392,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:570](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L570)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:573](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L573)
 
 ___
 
@@ -437,7 +422,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/LegacyInteractionServer.ts:134](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/device/LegacyInteractionServer.ts#L134)
+[packages/matter.js/src/device/LegacyInteractionServer.ts:145](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/device/LegacyInteractionServer.ts#L145)
 
 ___
 
@@ -461,7 +446,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:250](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L250)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:243](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L243)
 
 ___
 
@@ -490,7 +475,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/LegacyInteractionServer.ts:86](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/device/LegacyInteractionServer.ts#L86)
+[packages/matter.js/src/device/LegacyInteractionServer.ts:86](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/device/LegacyInteractionServer.ts#L86)
 
 ___
 
@@ -504,7 +489,7 @@ ___
 | :------ | :------ |
 | `path` | [`EventPath`](../interfaces/protocol_interaction_export.EventPath.md) |
 | `eventFilters` | `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[] |
-| `event` | [`EventServer`](cluster_export.EventServer.md)\<`any`, `any`\> |
+| `event` | [`AnyEventServer`](../modules/cluster_export.md#anyeventserver)\<`any`, `any`\> |
 | `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) |
@@ -520,7 +505,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/LegacyInteractionServer.ts:98](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/device/LegacyInteractionServer.ts#L98)
+[packages/matter.js/src/device/LegacyInteractionServer.ts:109](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/device/LegacyInteractionServer.ts#L109)
 
 ___
 
@@ -551,4 +536,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/LegacyInteractionServer.ts:111](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/device/LegacyInteractionServer.ts#L111)
+[packages/matter.js/src/device/LegacyInteractionServer.ts:122](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/device/LegacyInteractionServer.ts#L122)

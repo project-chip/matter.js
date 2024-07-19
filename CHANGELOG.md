@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.9.4 (2024-07-19)
 * Matter-Core functionality:
   * Feature: Allows to generate Certification declarations flagged as provisional for certification purposes
   * Feature: Allows to disable mandatory field checks on TLV encoding when handling fabric sensitive structs

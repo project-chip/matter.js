@@ -110,7 +110,7 @@
 - [EventServer](../classes/exports_cluster.EventServer.md)
 - [FabricScopeError](../classes/exports_cluster.FabricScopeError.md)
 - [FabricScopedAttributeServer](../classes/exports_cluster.FabricScopedAttributeServer.md)
-- [FabricScopedEventServer](../classes/exports_cluster.FabricScopedEventServer.md)
+- [FabricSensitiveEventServer](../classes/exports_cluster.FabricSensitiveEventServer.md)
 - [FixedAttributeServer](../classes/exports_cluster.FixedAttributeServer.md)
 - [GroupsManager](../classes/exports_cluster.GroupsManager.md)
 - [IllegalClusterError](../classes/exports_cluster.IllegalClusterError.md)
@@ -159,6 +159,7 @@
 - [ActionsCluster](exports_cluster.md#actionscluster)
 - [AdministratorCommissioningCluster](exports_cluster.md#administratorcommissioningcluster)
 - [AnyAttributeServer](exports_cluster.md#anyattributeserver)
+- [AnyEventServer](exports_cluster.md#anyeventserver)
 - [ApplicationBasicCluster](exports_cluster.md#applicationbasiccluster)
 - [ApplicationLauncherCluster](exports_cluster.md#applicationlaunchercluster)
 - [AttributeClients](exports_cluster.md#attributeclients)
@@ -388,6 +389,7 @@
 - [createDefaultOnOffClusterServer](exports_cluster.md#createdefaultonoffclusterserver)
 - [createDefaultScenesClusterServer](exports_cluster.md#createdefaultscenesclusterserver)
 - [createEventClient](exports_cluster.md#createeventclient)
+- [createEventServer](exports_cluster.md#createeventserver)
 - [genericFabricScopedAttributeGetter](exports_cluster.md#genericfabricscopedattributegetter)
 - [genericFabricScopedAttributeGetterFromFabric](exports_cluster.md#genericfabricscopedattributegetterfromfabric)
 - [genericFabricScopedAttributeSetter](exports_cluster.md#genericfabricscopedattributesetter)
@@ -468,6 +470,23 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:24
+
+___
+
+### AnyEventServer
+
+Ƭ **AnyEventServer**\<`T`, `S`\>: [`EventServer`](../classes/exports_cluster.EventServer.md)\<`T`, `S`\> \| [`FabricSensitiveEventServer`](../classes/exports_cluster.FabricSensitiveEventServer.md)\<`T`, `S`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `T` |
+| `S` | extends [`Storage`](../interfaces/storage_export.Storage.md) |
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:18
 
 ___
 
@@ -975,7 +994,7 @@ ___
 
 ### EventServers
 
-Ƭ **EventServers**\<`E`\>: [`Merge`](util_export.md#merge)\<\{ [P in MandatoryEventNames\<E\>]: EventServer\<EventType\<E[P]\>, any\> }, \{ [P in OptionalEventNames\<E\>]?: EventServer\<EventType\<E[P]\>, any\> }\>
+Ƭ **EventServers**\<`E`\>: [`Merge`](util_export.md#merge)\<\{ [P in MandatoryEventNames\<E\>]: AnyEventServer\<EventType\<E[P]\>, any\> }, \{ [P in OptionalEventNames\<E\>]?: AnyEventServer\<EventType\<E[P]\>, any\> }\>
 
 #### Type parameters
 
@@ -4042,6 +4061,43 @@ packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:16
 
 ___
 
+### createEventServer
+
+▸ **createEventServer**\<`T`, `F`, `SF`, `A`, `C`, `E`, `S`\>(`clusterDef`, `eventDef`, `eventName`, `schema`, `priority`, `readAcl`): [`EventServer`](../classes/exports_cluster.EventServer.md)\<`T`, `S`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `T` |
+| `F` | extends [`BitSchema`](exports_schema.md#bitschema) |
+| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<`F`\> |
+| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
+| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
+| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
+| `S` | extends [`Storage`](../interfaces/storage_export.Storage.md) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `clusterDef` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `eventDef` | [`Event`](../interfaces/exports_cluster.Event.md)\<`T`, `F`\> |
+| `eventName` | `string` |
+| `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\> |
+| `priority` | [`EventPriority`](../enums/exports_cluster.EventPriority.md) |
+| `readAcl` | `undefined` \| [`AccessLevel`](../enums/exports_cluster.AccessLevel.md) |
+
+#### Returns
+
+[`EventServer`](../classes/exports_cluster.EventServer.md)\<`T`, `S`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:19
+
+___
+
 ### genericFabricScopedAttributeGetter
 
 ▸ **genericFabricScopedAttributeGetter**\<`T`\>(`session`, `isFabricFiltered`, `cluster`, `attributeName`, `defaultValue`): `T`
@@ -4068,7 +4124,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:248
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:249
 
 ___
 
@@ -4097,7 +4153,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:247
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:248
 
 ___
 
@@ -4127,7 +4183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:250
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:251
 
 ___
 
@@ -4157,7 +4213,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:249
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:250
 
 ___
 

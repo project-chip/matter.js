@@ -42,7 +42,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:30
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:42
 
 ## Methods
 
@@ -56,7 +56,7 @@ packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:30
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:33
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:45
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:32
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:44
 
 ___
 
@@ -112,4 +112,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:31
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:43

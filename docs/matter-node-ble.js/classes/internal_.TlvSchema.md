@@ -124,7 +124,7 @@ Schema.decodeInternal
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:10
+matter.js/dist/esm/tlv/TlvSchema.d.ts:22
 
 ___
 
@@ -148,7 +148,7 @@ TlvSchema.decodeTlv
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:13
+matter.js/dist/esm/tlv/TlvSchema.d.ts:25
 
 ___
 
@@ -177,7 +177,7 @@ TlvSchema.decodeTlvInternal
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:14
+matter.js/dist/esm/tlv/TlvSchema.d.ts:26
 
 ___
 
@@ -202,7 +202,7 @@ TlvSchema.decodeTlvInternalValue
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:18
+matter.js/dist/esm/tlv/TlvSchema.d.ts:30
 
 ___
 
@@ -260,20 +260,20 @@ Schema.encodeInternal
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:11
+matter.js/dist/esm/tlv/TlvSchema.d.ts:23
 
 ___
 
 ### encodeTlv
 
-▸ **encodeTlv**(`value`, `forWriteInteraction?`): [`TlvStream`](../modules/internal_.md#tlvstream)
+▸ **encodeTlv**(`value`, `options?`): [`TlvStream`](../modules/internal_.md#tlvstream)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `forWriteInteraction?` | `boolean` |
+| `options?` | [`TlvEncodingOptions`](../modules/internal_.md#tlvencodingoptions) |
 
 #### Returns
 
@@ -285,13 +285,13 @@ TlvSchema.encodeTlv
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:12
+matter.js/dist/esm/tlv/TlvSchema.d.ts:24
 
 ___
 
 ### encodeTlvInternal
 
-▸ **encodeTlvInternal**(`writer`, `value`, `tag?`, `forWriteInteraction?`): `void`
+▸ **encodeTlvInternal**(`writer`, `value`, `tag?`, `options?`): `void`
 
 #### Parameters
 
@@ -300,7 +300,7 @@ ___
 | `writer` | [`TlvWriter`](../interfaces/internal_.TlvWriter.md) |
 | `value` | `T` |
 | `tag?` | [`TlvTag`](../modules/internal_.md#tlvtag) |
-| `forWriteInteraction?` | `boolean` |
+| `options?` | [`TlvEncodingOptions`](../modules/internal_.md#tlvencodingoptions) |
 
 #### Returns
 
@@ -312,7 +312,7 @@ TlvSchema.encodeTlvInternal
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:19
+matter.js/dist/esm/tlv/TlvSchema.d.ts:31
 
 ___
 
@@ -339,7 +339,7 @@ TlvSchema.injectField
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:20
+matter.js/dist/esm/tlv/TlvSchema.d.ts:32
 
 ___
 
@@ -365,7 +365,7 @@ TlvSchema.removeField
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:21
+matter.js/dist/esm/tlv/TlvSchema.d.ts:33
 
 ___
 

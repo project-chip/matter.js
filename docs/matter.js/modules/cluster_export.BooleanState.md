@@ -26,9 +26,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:68](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L68)
+[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:68](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L68)
 
-[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:70](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L70)
+[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:70](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L70)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:35](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L35)
+[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:35](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L35)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:71](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L71)
+[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:71](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L71)
 
 ___
 
@@ -68,4 +68,4 @@ MatterSpecification.v11.Cluster § 1.7.5.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:23](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L23)
+[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:23](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L23)

@@ -57,7 +57,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:259](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L259)
+[packages/matter.js/src/codec/DerCodec.ts:259](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L259)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:276](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L276)
+[packages/matter.js/src/codec/DerCodec.ts:276](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L276)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:263](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L263)
+[packages/matter.js/src/codec/DerCodec.ts:263](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L263)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:79](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L79)
+[packages/matter.js/src/codec/DerCodec.ts:79](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L79)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:172](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L172)
+[packages/matter.js/src/codec/DerCodec.ts:172](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L172)
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:255](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L255)
+[packages/matter.js/src/codec/DerCodec.ts:255](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L255)
 
 ___
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:230](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L230)
+[packages/matter.js/src/codec/DerCodec.ts:230](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L230)
 
 ___
 
@@ -203,7 +203,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:168](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L168)
+[packages/matter.js/src/codec/DerCodec.ts:168](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L168)
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:144](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L144)
+[packages/matter.js/src/codec/DerCodec.ts:144](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L144)
 
 ___
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:202](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L202)
+[packages/matter.js/src/codec/DerCodec.ts:202](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L202)
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:210](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L210)
+[packages/matter.js/src/codec/DerCodec.ts:210](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L210)
 
 ___
 
@@ -283,7 +283,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:237](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L237)
+[packages/matter.js/src/codec/DerCodec.ts:237](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L237)
 
 ___
 
@@ -303,7 +303,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:183](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L183)
+[packages/matter.js/src/codec/DerCodec.ts:183](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L183)
 
 ___
 
@@ -323,7 +323,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:179](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L179)
+[packages/matter.js/src/codec/DerCodec.ts:179](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L179)
 
 ___
 
@@ -343,7 +343,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:195](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L195)
+[packages/matter.js/src/codec/DerCodec.ts:195](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L195)
 
 ___
 
@@ -363,4 +363,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:191](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/codec/DerCodec.ts#L191)
+[packages/matter.js/src/codec/DerCodec.ts:191](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/codec/DerCodec.ts#L191)

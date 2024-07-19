@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts:20](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts#L20)
+[packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts:20](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts#L20)
 
-[packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts:45](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts#L45)
+[packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts:45](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts#L45)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts:36](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts#L36)
+[packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts:36](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/system/PowerSourceEndpoint.ts#L36)

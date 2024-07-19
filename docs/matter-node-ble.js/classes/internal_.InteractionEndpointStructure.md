@@ -135,7 +135,7 @@ ___
 
 ### events
 
-• **events**: `Map`\<`string`, [`EventServer`](internal_.EventServer.md)\<`any`, `any`\>\>
+• **events**: `Map`\<`string`, [`AnyEventServer`](../modules/internal_.md#anyeventserver)\<`any`, `any`\>\>
 
 #### Defined in
 
@@ -319,7 +319,7 @@ ___
 
 ### getEvent
 
-▸ **getEvent**(`endpointId`, `clusterId`, `eventId`): `undefined` \| [`EventServer`](internal_.EventServer.md)\<`any`, `any`\>
+▸ **getEvent**(`endpointId`, `clusterId`, `eventId`): `undefined` \| [`AnyEventServer`](../modules/internal_.md#anyeventserver)\<`any`, `any`\>
 
 #### Parameters
 
@@ -331,7 +331,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`EventServer`](internal_.EventServer.md)\<`any`, `any`\>
+`undefined` \| [`AnyEventServer`](../modules/internal_.md#anyeventserver)\<`any`, `any`\>
 
 #### Defined in
 

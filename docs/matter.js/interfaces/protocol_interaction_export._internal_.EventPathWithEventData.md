@@ -14,19 +14,30 @@
 
 ### Properties
 
+- [data](protocol_interaction_export._internal_.EventPathWithEventData.md#data)
 - [event](protocol_interaction_export._internal_.EventPathWithEventData.md#event)
 - [path](protocol_interaction_export._internal_.EventPathWithEventData.md#path)
 - [schema](protocol_interaction_export._internal_.EventPathWithEventData.md#schema)
 
 ## Properties
 
-### event
+### data
 
-• **event**: [`EventStorageData`](protocol_interaction_export.EventStorageData.md)\<`T`\>
+• **data**: [`EventStorageData`](protocol_interaction_export.EventStorageData.md)\<`T`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:59](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L59)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:63](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L63)
+
+___
+
+### event
+
+• **event**: [`AnyEventServer`](../modules/cluster_export.md#anyeventserver)\<`any`, `any`\>
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:61](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L61)
 
 ___
 
@@ -36,7 +47,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:57](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L57)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:60](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L60)
 
 ___
 
@@ -46,4 +57,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:58](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L58)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:62](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L62)

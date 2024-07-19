@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:58](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/definitions/FeatureSet.ts#L58)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:58](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/definitions/FeatureSet.ts#L58)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:56](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/definitions/FeatureSet.ts#L56)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:56](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/definitions/FeatureSet.ts#L56)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:57](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/definitions/FeatureSet.ts#L57)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:57](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/definitions/FeatureSet.ts#L57)
 
 ## Functions
 
@@ -76,4 +76,4 @@ match is case insensitive.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:67](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/definitions/FeatureSet.ts#L67)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:67](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/definitions/FeatureSet.ts#L67)

@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [crypto/export](../modules/crypto_export.md) / CryptoError
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [crypto/export](../modules/crypto_export.md) / CryptoVerifyError
 
-# Class: CryptoError
+# Class: CryptoVerifyError
 
-[crypto/export](../modules/crypto_export.md).CryptoError
+[crypto/export](../modules/crypto_export.md).CryptoVerifyError
 
 Error base class for all errors thrown by this library.
 
@@ -10,19 +10,19 @@ Error base class for all errors thrown by this library.
 
 - [`MatterError`](exports_common.MatterError.md)
 
-  ↳ **`CryptoError`**
+  ↳ **`CryptoVerifyError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](crypto_export.CryptoError.md#constructor)
+- [constructor](crypto_export.CryptoVerifyError.md#constructor)
 
 ## Constructors
 
 ### constructor
 
-• **new CryptoError**(`message?`): [`CryptoError`](crypto_export.CryptoError.md)
+• **new CryptoVerifyError**(`message?`): [`CryptoVerifyError`](crypto_export.CryptoVerifyError.md)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Error base class for all errors thrown by this library.
 
 #### Returns
 
-[`CryptoError`](crypto_export.CryptoError.md)
+[`CryptoVerifyError`](crypto_export.CryptoVerifyError.md)
 
 #### Inherited from
 

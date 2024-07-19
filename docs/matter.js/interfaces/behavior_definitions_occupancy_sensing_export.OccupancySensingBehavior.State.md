@@ -45,7 +45,7 @@ StateType.occupancy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:89](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L89)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:89](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L89)
 
 ___
 
@@ -65,7 +65,7 @@ StateType.occupancySensorType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:96](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L96)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:96](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L96)
 
 ___
 
@@ -91,7 +91,7 @@ StateType.occupancySensorTypeBitmap
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:109](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:109](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L109)
 
 ___
 
@@ -113,7 +113,7 @@ StateType.physicalContactOccupiedToUnoccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:196](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L196)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:196](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L196)
 
 ___
 
@@ -136,7 +136,7 @@ StateType.physicalContactUnoccupiedToOccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:210](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L210)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:210](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L210)
 
 ___
 
@@ -159,7 +159,7 @@ StateType.physicalContactUnoccupiedToOccupiedThreshold
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:224](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L224)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:224](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L224)
 
 ___
 
@@ -180,7 +180,7 @@ StateType.pirOccupiedToUnoccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:117](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L117)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:117](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L117)
 
 ___
 
@@ -202,7 +202,7 @@ StateType.pirUnoccupiedToOccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:130](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L130)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:130](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L130)
 
 ___
 
@@ -224,7 +224,7 @@ StateType.pirUnoccupiedToOccupiedThreshold
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:143](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L143)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:143](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L143)
 
 ___
 
@@ -246,7 +246,7 @@ StateType.ultrasonicOccupiedToUnoccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:156](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L156)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:156](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L156)
 
 ___
 
@@ -268,7 +268,7 @@ StateType.ultrasonicUnoccupiedToOccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:169](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L169)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:169](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L169)
 
 ___
 
@@ -291,4 +291,4 @@ StateType.ultrasonicUnoccupiedToOccupiedThreshold
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:183](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L183)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:183](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L183)

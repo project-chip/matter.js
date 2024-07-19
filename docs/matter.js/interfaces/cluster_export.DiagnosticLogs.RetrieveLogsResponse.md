@@ -46,7 +46,7 @@ TypeFromSchema.logContent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:222](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L222)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:222](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L222)
 
 ___
 
@@ -66,7 +66,7 @@ TypeFromSchema.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:213](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L213)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:213](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L213)
 
 ___
 
@@ -88,7 +88,7 @@ TypeFromSchema.timeSinceBoot
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:240](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L240)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:240](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L240)
 
 ___
 
@@ -110,4 +110,4 @@ TypeFromSchema.utcTimeStamp
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:231](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L231)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:231](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L231)

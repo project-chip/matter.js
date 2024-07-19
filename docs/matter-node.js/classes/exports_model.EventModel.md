@@ -65,6 +65,7 @@ An event is triggered by endpoints.
 - [effectiveType](exports_model.EventModel.md#effectivetype)
 - [effectiveXref](exports_model.EventModel.md#effectivexref)
 - [elements](exports_model.EventModel.md#elements)
+- [fabricSensitive](exports_model.EventModel.md#fabricsensitive)
 - [globalBase](exports_model.EventModel.md#globalbase)
 - [isDeprecated](exports_model.EventModel.md#isdeprecated)
 - [key](exports_model.EventModel.md#key)
@@ -417,7 +418,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/EventModel.d.ts:14
+packages/matter.js/dist/esm/model/models/EventModel.d.ts:15
 
 ___
 
@@ -954,6 +955,20 @@ ValueModel.elements
 #### Defined in
 
 packages/matter.js/dist/esm/model/models/Model.d.ts:53
+
+___
+
+### fabricSensitive
+
+• `get` **fabricSensitive**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/EventModel.d.ts:14
 
 ___
 

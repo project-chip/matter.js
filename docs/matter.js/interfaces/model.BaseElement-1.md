@@ -56,7 +56,7 @@ Child elements.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:55](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L55)
+[packages/matter.js/src/model/elements/BaseElement.ts:55](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/BaseElement.ts#L55)
 
 ___
 
@@ -68,7 +68,7 @@ A short summary of the element.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:40](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L40)
+[packages/matter.js/src/model/elements/BaseElement.ts:40](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/BaseElement.ts#L40)
 
 ___
 
@@ -80,7 +80,7 @@ A paragraph summary of the element.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:45](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L45)
+[packages/matter.js/src/model/elements/BaseElement.ts:45](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/BaseElement.ts#L45)
 
 ___
 
@@ -93,7 +93,7 @@ and are available in-scope for every cluster.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:61](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L61)
+[packages/matter.js/src/model/elements/BaseElement.ts:61](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/BaseElement.ts#L61)
 
 ___
 
@@ -106,7 +106,7 @@ context-specific.  A "machine appropriate" semantic differentiator.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:23](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L23)
+[packages/matter.js/src/model/elements/BaseElement.ts:23](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/BaseElement.ts#L23)
 
 ___
 
@@ -119,7 +119,7 @@ differentiator.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:29](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L29)
+[packages/matter.js/src/model/elements/BaseElement.ts:29](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/BaseElement.ts#L29)
 
 ___
 
@@ -132,7 +132,7 @@ element goes here.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:35](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L35)
+[packages/matter.js/src/model/elements/BaseElement.ts:35](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/BaseElement.ts#L35)
 
 ___
 
@@ -144,4 +144,4 @@ Reference to Matter specification document.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:50](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/model/elements/BaseElement.ts#L50)
+[packages/matter.js/src/model/elements/BaseElement.ts:50](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/model/elements/BaseElement.ts#L50)

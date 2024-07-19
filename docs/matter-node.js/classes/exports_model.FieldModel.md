@@ -64,6 +64,7 @@ A field element defines a field in a list, struct, enum or bitmap.
 - [effectiveType](exports_model.FieldModel.md#effectivetype)
 - [effectiveXref](exports_model.FieldModel.md#effectivexref)
 - [elements](exports_model.FieldModel.md#elements)
+- [fabricSensitive](exports_model.FieldModel.md#fabricsensitive)
 - [globalBase](exports_model.FieldModel.md#globalbase)
 - [isDeprecated](exports_model.FieldModel.md#isdeprecated)
 - [key](exports_model.FieldModel.md#key)
@@ -846,7 +847,7 @@ PropertyModel.effectiveId
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/FieldModel.d.ts:17
+packages/matter.js/dist/esm/model/models/FieldModel.d.ts:18
 
 ___
 
@@ -949,6 +950,20 @@ packages/matter.js/dist/esm/model/models/Model.d.ts:53
 
 ___
 
+### fabricSensitive
+
+• `get` **fabricSensitive**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/FieldModel.d.ts:14
+
+___
+
 ### globalBase
 
 • `get` **globalBase**(): `undefined` \| [`Model`](exports_model.Model-1.md)
@@ -1006,7 +1021,7 @@ PropertyModel.key
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/FieldModel.d.ts:22
+packages/matter.js/dist/esm/model/models/FieldModel.d.ts:23
 
 ___
 

@@ -27,7 +27,7 @@ Initial values must be loaded beforehand.  That allows the behavior to initializ
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:170](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L170)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:170](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/state/managed/Datasource.ts#L170)
 
 ## Methods
 
@@ -53,4 +53,4 @@ undefined are deleted.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:178](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L178)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:178](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/behavior/state/managed/Datasource.ts#L178)

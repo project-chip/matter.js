@@ -26,7 +26,7 @@ Command failed: Requested key code is invalid in the context of the responder’
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:146](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L146)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:146](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L146)
 
 ___
 
@@ -38,7 +38,7 @@ Command succeeded
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:136](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L136)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:136](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L136)
 
 ___
 
@@ -50,4 +50,4 @@ Command failed: Key code is not supported.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:141](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L141)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:141](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L141)

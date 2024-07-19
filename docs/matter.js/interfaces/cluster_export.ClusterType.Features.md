@@ -38,7 +38,7 @@ If you enable features, this property tracks the shape of the cluster with no fe
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:163](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/ClusterType.ts#L163)
+[packages/matter.js/src/cluster/ClusterType.ts:163](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/ClusterType.ts#L163)
 
 ___
 
@@ -50,7 +50,7 @@ Metadata controlling how enabled features affect cluster structure.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:158](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/ClusterType.ts#L158)
+[packages/matter.js/src/cluster/ClusterType.ts:158](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/ClusterType.ts#L158)
 
 ___
 
@@ -62,7 +62,7 @@ Features the cluster may support.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:148](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/ClusterType.ts#L148)
+[packages/matter.js/src/cluster/ClusterType.ts:148](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/ClusterType.ts#L148)
 
 ___
 
@@ -74,7 +74,7 @@ Features the cluster does support.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:153](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/ClusterType.ts#L153)
+[packages/matter.js/src/cluster/ClusterType.ts:153](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/ClusterType.ts#L153)
 
 ___
 
@@ -90,4 +90,4 @@ for full functionality.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterType.ts:172](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/ClusterType.ts#L172)
+[packages/matter.js/src/cluster/ClusterType.ts:172](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/ClusterType.ts#L172)

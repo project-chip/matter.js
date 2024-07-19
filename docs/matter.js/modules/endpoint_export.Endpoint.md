@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:729](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/Endpoint.ts#L729)
+[packages/matter.js/src/endpoint/Endpoint.ts:729](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/Endpoint.ts#L729)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:748](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/Endpoint.ts#L748)
+[packages/matter.js/src/endpoint/Endpoint.ts:748](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/Endpoint.ts#L748)
 
 ___
 
@@ -73,7 +73,7 @@ instance.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:757](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/Endpoint.ts#L757)
+[packages/matter.js/src/endpoint/Endpoint.ts:757](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/Endpoint.ts#L757)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:743](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/Endpoint.ts#L743)
+[packages/matter.js/src/endpoint/Endpoint.ts:743](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/Endpoint.ts#L743)
 
 ## Functions
 
@@ -119,7 +119,7 @@ Obtain a configuration from constructor parameters.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:762](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/Endpoint.ts#L762)
+[packages/matter.js/src/endpoint/Endpoint.ts:762](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/Endpoint.ts#L762)
 
 ___
 
@@ -147,4 +147,4 @@ Obtain an endpoint for the given [Definition](endpoint_export.Endpoint.md#defini
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:778](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/Endpoint.ts#L778)
+[packages/matter.js/src/endpoint/Endpoint.ts:778](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/Endpoint.ts#L778)

@@ -25,7 +25,7 @@ We provide this alias to the default implementation [FanControlServer](endpoint_
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:45](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L45)
+[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:45](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L45)
 
 ___
 
@@ -39,7 +39,7 @@ We provide this alias to the default implementation [GroupsServer](endpoint_defi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:38](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L38)
+[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:38](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L38)
 
 ___
 
@@ -53,7 +53,7 @@ We provide this alias to the default implementation [IdentifyServer](endpoint_de
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:31](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L31)
+[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:31](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L31)
 
 ___
 
@@ -74,4 +74,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:50](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L50)
+[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:50](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L50)

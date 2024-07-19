@@ -36,7 +36,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:53
+matter.js/dist/esm/tlv/TlvSchema.d.ts:65
 
 ___
 
@@ -57,4 +57,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:52
+matter.js/dist/esm/tlv/TlvSchema.d.ts:64

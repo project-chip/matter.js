@@ -48,6 +48,7 @@
 - [LengthConstraints](exports_tlv.md#lengthconstraints)
 - [NumericConstraints](exports_tlv.md#numericconstraints)
 - [TlvElement](exports_tlv.md#tlvelement)
+- [TlvEncodingOptions](exports_tlv.md#tlvencodingoptions)
 - [TlvFields](exports_tlv.md#tlvfields)
 - [TlvStream](exports_tlv.md#tlvstream)
 - [TlvTag](exports_tlv.md#tlvtag)
@@ -174,7 +175,24 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:24
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:36
+
+___
+
+### TlvEncodingOptions
+
+Ƭ **TlvEncodingOptions**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `allowMissingFieldsForNonFabricFilteredRead?` | `boolean` | When true, mandatory field validation is skipped when encoding TLV for list entries. This flag must not be set together with the former flag. |
+| `forWriteInteraction?` | `boolean` | When true, the fabricIndex field will be excluded from the TLV encoding for list entries. This flag must not be set together with the following flag. |
+
+#### Defined in
+
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:9
 
 ___
 
@@ -198,7 +216,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:23
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:35
 
 ___
 
@@ -291,7 +309,7 @@ Type defined by the TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:43
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:55
 
 ## Variables
 

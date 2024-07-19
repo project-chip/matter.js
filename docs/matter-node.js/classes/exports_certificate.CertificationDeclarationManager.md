@@ -28,7 +28,7 @@
 
 ### generate
 
-▸ **generate**(`vendorId`, `productId`): `Uint8Array`
+▸ **generate**(`vendorId`, `productId`, `provisional?`): `Uint8Array`
 
 #### Parameters
 
@@ -36,6 +36,7 @@
 | :------ | :------ |
 | `vendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
 | `productId` | `number` |
+| `provisional?` | `boolean` |
 
 #### Returns
 

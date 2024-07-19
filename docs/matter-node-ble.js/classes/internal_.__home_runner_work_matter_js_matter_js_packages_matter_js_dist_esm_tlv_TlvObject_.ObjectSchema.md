@@ -182,7 +182,7 @@ TlvSchema.decodeInternal
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:10
+matter.js/dist/esm/tlv/TlvSchema.d.ts:22
 
 ___
 
@@ -206,7 +206,7 @@ TlvSchema.decodeTlv
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:13
+matter.js/dist/esm/tlv/TlvSchema.d.ts:25
 
 ___
 
@@ -235,7 +235,7 @@ TlvSchema.decodeTlvInternal
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:14
+matter.js/dist/esm/tlv/TlvSchema.d.ts:26
 
 ___
 
@@ -310,20 +310,20 @@ TlvSchema.encodeInternal
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:11
+matter.js/dist/esm/tlv/TlvSchema.d.ts:23
 
 ___
 
 ### encodeTlv
 
-▸ **encodeTlv**(`value`, `forWriteInteraction?`): [`TlvStream`](../modules/internal_.md#tlvstream)
+▸ **encodeTlv**(`value`, `options?`): [`TlvStream`](../modules/internal_.md#tlvstream)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\> |
-| `forWriteInteraction?` | `boolean` |
+| `options?` | [`TlvEncodingOptions`](../modules/internal_.md#tlvencodingoptions) |
 
 #### Returns
 
@@ -335,13 +335,13 @@ TlvSchema.encodeTlv
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvSchema.d.ts:12
+matter.js/dist/esm/tlv/TlvSchema.d.ts:24
 
 ___
 
 ### encodeTlvInternal
 
-▸ **encodeTlvInternal**(`writer`, `value`, `tag?`, `forWriteInteraction?`): `void`
+▸ **encodeTlvInternal**(`writer`, `value`, `tag?`, `options?`): `void`
 
 #### Parameters
 
@@ -350,7 +350,7 @@ ___
 | `writer` | [`TlvWriter`](../interfaces/internal_.TlvWriter.md) |
 | `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\> |
 | `tag?` | [`TlvTag`](../modules/internal_.md#tlvtag) |
-| `forWriteInteraction?` | `boolean` |
+| `options?` | [`TlvEncodingOptions`](../modules/internal_.md#tlvencodingoptions) |
 
 #### Returns
 

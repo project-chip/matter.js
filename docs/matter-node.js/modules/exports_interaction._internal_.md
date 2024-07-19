@@ -40,4 +40,4 @@ Type for TlvAttributeReportData where the real data are represented with the sch
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:12
+packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:13

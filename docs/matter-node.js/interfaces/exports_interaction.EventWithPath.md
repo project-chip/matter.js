@@ -15,7 +15,7 @@
 
 ### event
 
-• **event**: [`EventServer`](../classes/exports_cluster.EventServer.md)\<`any`, `any`\>
+• **event**: [`AnyEventServer`](../modules/exports_cluster.md#anyeventserver)\<`any`, `any`\>
 
 #### Defined in
 

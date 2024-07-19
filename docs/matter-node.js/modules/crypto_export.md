@@ -12,8 +12,8 @@
 ### Classes
 
 - [Crypto](../classes/crypto_export.Crypto.md)
-- [CryptoError](../classes/crypto_export.CryptoError.md)
 - [CryptoNode](../classes/crypto_export.CryptoNode.md)
+- [CryptoVerifyError](../classes/crypto_export.CryptoVerifyError.md)
 - [Spake2p](../classes/crypto_export.Spake2p.md)
 
 ### Interfaces

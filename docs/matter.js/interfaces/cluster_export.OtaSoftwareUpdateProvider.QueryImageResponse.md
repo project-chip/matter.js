@@ -39,7 +39,7 @@ TypeFromSchema.delayedActionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:106](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:106](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L106)
 
 ___
 
@@ -53,7 +53,7 @@ TypeFromSchema.imageUri
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:107](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L107)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:107](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L107)
 
 ___
 
@@ -67,7 +67,7 @@ TypeFromSchema.metadataForRequestor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:112](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L112)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:112](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L112)
 
 ___
 
@@ -81,7 +81,7 @@ TypeFromSchema.softwareVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:108](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L108)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:108](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L108)
 
 ___
 
@@ -95,7 +95,7 @@ TypeFromSchema.softwareVersionString
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:109](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:109](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L109)
 
 ___
 
@@ -109,7 +109,7 @@ TypeFromSchema.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:105](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:105](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L105)
 
 ___
 
@@ -123,7 +123,7 @@ TypeFromSchema.updateToken
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:110](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:110](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L110)
 
 ___
 
@@ -137,4 +137,4 @@ TypeFromSchema.userConsentNeeded
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:111](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L111)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:111](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L111)

@@ -11,6 +11,7 @@
 - [clusterId](protocol_interaction_export.EventPath.md#clusterid)
 - [endpointId](protocol_interaction_export.EventPath.md#endpointid)
 - [eventId](protocol_interaction_export.EventPath.md#eventid)
+- [isUrgent](protocol_interaction_export.EventPath.md#isurgent)
 - [nodeId](protocol_interaction_export.EventPath.md#nodeid)
 
 ## Properties
@@ -21,7 +22,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:104](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L104)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:98](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L98)
 
 ___
 
@@ -31,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:103](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L103)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:97](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L97)
 
 ___
 
@@ -41,7 +42,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:105](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L105)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:99](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L99)
+
+___
+
+### isUrgent
+
+• `Optional` **isUrgent**: `boolean`
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:100](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L100)
 
 ___
 
@@ -51,4 +62,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:102](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L102)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:96](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L96)

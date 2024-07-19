@@ -15,7 +15,7 @@
 
 ### event
 
-• **event**: [`EventServer`](../classes/internal_.EventServer.md)\<`any`, `any`\>
+• **event**: [`AnyEventServer`](../modules/internal_.md#anyeventserver)\<`any`, `any`\>
 
 #### Defined in
 

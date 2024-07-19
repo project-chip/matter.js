@@ -23,7 +23,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:22
+matter.js/dist/esm/session/SessionManager.d.ts:23
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:19
+matter.js/dist/esm/session/SessionManager.d.ts:20
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:20
+matter.js/dist/esm/session/SessionManager.d.ts:21
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:18
+matter.js/dist/esm/session/SessionManager.d.ts:19
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:21
+matter.js/dist/esm/session/SessionManager.d.ts:22
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:17
+matter.js/dist/esm/session/SessionManager.d.ts:18

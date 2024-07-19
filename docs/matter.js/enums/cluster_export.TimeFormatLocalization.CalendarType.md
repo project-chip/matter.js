@@ -35,7 +35,7 @@ Dates conveyed using the Buddhist calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:26](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:26](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L26)
 
 ___
 
@@ -47,7 +47,7 @@ Dates conveyed using the Chinese calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:31](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:31](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L31)
 
 ___
 
@@ -59,7 +59,7 @@ Dates conveyed using the Coptic calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:36](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:36](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L36)
 
 ___
 
@@ -71,7 +71,7 @@ Dates conveyed using the Ethiopian calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:41](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:41](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L41)
 
 ___
 
@@ -83,7 +83,7 @@ Dates conveyed using the Gregorian calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:46](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:46](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L46)
 
 ___
 
@@ -95,7 +95,7 @@ Dates conveyed using the Hebrew calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:51](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L51)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:51](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L51)
 
 ___
 
@@ -107,7 +107,7 @@ Dates conveyed using the Indian calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:56](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L56)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:56](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L56)
 
 ___
 
@@ -119,7 +119,7 @@ Dates conveyed using the Islamic calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:61](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L61)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:61](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L61)
 
 ___
 
@@ -131,7 +131,7 @@ Dates conveyed using the Japanese calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:66](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L66)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:66](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L66)
 
 ___
 
@@ -143,7 +143,7 @@ Dates conveyed using the Korean calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:71](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L71)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:71](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L71)
 
 ___
 
@@ -155,7 +155,7 @@ Dates conveyed using the Persian calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:76](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:76](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L76)
 
 ___
 
@@ -167,4 +167,4 @@ Dates conveyed using the Taiwanese calendar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:81](https://github.com/project-chip/matter.js/blob/2d9f2165d2672864fda3496a6d0d5f93597f82c6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L81)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:81](https://github.com/project-chip/matter.js/blob/904d0c9b952b91f28a21803759c5e5c66ee4d272/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L81)
