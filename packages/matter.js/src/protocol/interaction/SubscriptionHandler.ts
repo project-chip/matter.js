@@ -274,8 +274,11 @@ export class SubscriptionHandler {
                     }
                     if (attribute.isSubscribable) {
                         // If subscribable register listener
+                        // TODO: Move to state change listeners from behaviors to remove the dangling promise here
                         const listener = (value: any, version: number) =>
-                            this.attributeChangeListener(path, attribute.schema, version, value);
+                            void this.attributeChangeListener(path, attribute.schema, version, value).catch(error =>
+                                logger.error("Ignored error on attribute update", error),
+                            );
                         attribute.addValueChangeListener(listener);
                         this.attributeListeners.set(attributePathToId(path), { attribute, listener });
                     } else {
