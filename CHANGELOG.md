@@ -9,6 +9,14 @@ The main work (all changes without a GitHub username in brackets in the below li
 	### __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+* Matter-Core functionality:
+  * Feature: Allows to generate Certification declarations flagged as provisional for certification purposes
+  * Feature: Allows to disable mandatory field checks on TLV encoding when handling fabric sensitive structs
+  * Fix: Makes sure to remove fabric sensitive fields and events when they are not allowed to be read or subscribed
+  * Fix: Makes sure to handle commissioning related cases with PASE sessions correctly regarding temporarily added fabrics and certificates
+  * Fix: Verifies provided trusted root certificates completely
+
 ### 0.9.3 (2024-06-26)
 * Matter-Core functionality:
   * Fix: Makes sure to clear all subscriptions from the subscriber noe and not only the current session when not keeping subscriptions
