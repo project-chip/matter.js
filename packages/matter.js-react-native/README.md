@@ -31,17 +31,12 @@ To use \`**matter.js**\` with React Native, you need to modify your Metro config
 ```javascript
 /* eslint-env node */
 const { mergeConfig } = require('@react-native/metro-config');
-const { getSentryExpoConfig } = require('@sentry/react-native/metro');
 
-// Your existing Sentry configuration (or any other configuration you have)
-const sentryConfig = getSentryExpoConfig(__dirname);
-
-// New resolver configuration to fix the package resolution issue
+// New resolver configuration to fix the package resolution issue.
 const customConfig = { resolver: { unstable_enablePackageExports: true } };
 
-// Merging your existing configuration with the new resolver configuration
-module.exports = mergeConfig(sentryConfig, customConfig);
-
+// Merging your existing configuration with the new resolver configuration.
+module.exports = mergeConfig(customConfig);
 ```
 
 In this example, \`**customConfig**\` includes the necessary resolver configuration, and \`**mergeConfig**\` is used to combine it with your existing configuration (\`**sentryConfig**\` in this case). Adjust \`**sentryConfig**\` to fit your existing Metro configuration setup.
