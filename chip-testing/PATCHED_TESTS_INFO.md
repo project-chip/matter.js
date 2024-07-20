@@ -8,6 +8,7 @@
 | TestBasicInformation.yaml     | use test file from before adjustment to Matter 1.4 in chip       |
 | Test_TC_BINFO_2_1.yaml        | use test file from before adjustment to Matter 1.4 in chip       |
 | Test_TC_CC_*.yaml             | use test file from before adjustment to Matter 1.4 in chip       |
+| Test_TC_LVL_4_1.yaml          | use test file from before adjustment to Matter 1.4 in chip       |
 
 # CI-PICS
 
