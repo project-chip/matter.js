@@ -107,7 +107,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             delete this.model.default;
             return;
         }
-        const cast = Metatype.cast(metatype, defaultValue);
+        const cast = FieldValue.cast(metatype, defaultValue);
         if (cast === FieldValue.Invalid) {
             this.error("INVALID_VALUE", `Value "${defaultValue}" is not a ${metatype}`);
             return;

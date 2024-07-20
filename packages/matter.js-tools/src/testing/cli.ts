@@ -58,6 +58,7 @@ export async function main(argv = process.argv) {
         .option("invert", { alias: "i", type: "boolean", describe: "Inverts --grep and --fgrep matches" })
         .option("profile", { type: "boolean", describe: "Write profiling data to build/profiles (node only)" })
         .option("wtf", { type: "boolean", describe: "Enlist wtfnode to detect test leaks" })
+        .option("trace-unhandled", { type: "boolean", describe: "Detail unhandled rejections with trace-unhandled" })
         .command("*", "run all supported test types")
         .command("esm", "run tests on node (ES6 modules)", () => testTypes.add(TestType.esm))
         .command("cjs", "run tests on node (CommonJS modules)", () => testTypes.add(TestType.cjs))

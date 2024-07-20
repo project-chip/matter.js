@@ -10,7 +10,6 @@ import { Val } from "../../src/behavior/state/Val.js";
 import { Datasource } from "../../src/behavior/state/managed/Datasource.js";
 import { Transaction } from "../../src/behavior/state/transaction/Transaction.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
-import { Agent } from "../../src/endpoint/Agent.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { EndpointInitializer } from "../../src/endpoint/properties/EndpointInitializer.js";
 import { PartStore } from "../../src/endpoint/storage/PartStore.js";
@@ -138,13 +137,13 @@ export class MockNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoin
         (this.#storage as any).initialized = true;
     }
 
-    override initialize(agent: Agent.Instance<T>) {
+    override initialize() {
         this.env.set(StorageService, new StorageService(this.env, () => new StorageBackendMemory()));
         this.env.set(EndpointInitializer, new MockPartInitializer());
         this.env.set(ServerStore, new MockServerStore(this.env, "test"));
         this.env.set(PartStoreService, new MockPartStoreService());
         this.env.set(IdentityService, new IdentityService(this));
-        return super.initialize(agent);
+        return super.initialize();
     }
 
     override get owner() {

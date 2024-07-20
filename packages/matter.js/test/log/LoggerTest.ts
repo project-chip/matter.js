@@ -327,7 +327,7 @@ describe("Logger", () => {
             });
 
             expect(result?.message).equals(
-                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx INFO   \u001b[0;1;90mUnitTest             \u001b[0mstart same line\nnext line\nand more \nand more\n    indented\n    next line\n        indented deeper\n        and more\n    up again\n        and down\nand all the way up\u001b[0m",
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx INFO   \u001b[0;1;90mUnitTest             \u001b[0mstart same line\nnext line\nand more \nand more\n  indented\n  next line\n    indented deeper\n    and more\n  up again\n    and down\nand all the way up\u001b[0m",
             );
         });
     });

@@ -86,8 +86,7 @@ export class Builder {
             await this.#transpile(project, progress, Target.cjs);
         }
 
-        // Only update timestamp when there are no explicit targets so we know
-        // it's a full build
+        // Only update timestamp when there are no explicit targets so we know it's a full build
         if (!this.options.targets?.length) {
             await project.recordBuildTime();
         }

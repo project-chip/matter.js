@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Cancellable, Destructable, Lifecycle, Startable } from "../common/Lifecycle.js";
+import { Cancellable, Destructable, Lifecycle } from "../common/Lifecycle.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
-import { AsyncConstruction } from "../util/AsyncConstruction.js";
+import { Construction, type Constructable } from "../util/Construction.js";
 import { Multiplex } from "../util/Multiplex.js";
 import { Observable } from "../util/Observable.js";
 import type { Environment } from "./Environment.js";
@@ -17,7 +17,7 @@ import { Environmental } from "./Environmental.js";
 const logger = Logger.get("Runtime");
 
 /**
- * Handles execution and lifecycle management of other components.
+ * Handles lifecycle management of other components.
  */
 export class RuntimeService implements Multiplex {
     #workers = new Set<RuntimeService.Worker>();
@@ -38,8 +38,11 @@ export class RuntimeService implements Multiplex {
      *
      * The runtime considers itself "active" if there are one or more workers installed.
      *
-     * A worker must either be {@link PromiseLike} or {@link AsyncConstructable} for the runtime to detect completion.
-     * On completion the worker is removed and destroyed if the worker is {@link Destructable}.
+     * A worker must either be {@link PromiseLike} or {@link Constructable} for the runtime to detect completion. On
+     * completion the worker is removed and destroyed if the worker is {@link Destructable}.
+     *
+     * Once added, the {@link worker} is owned by the RuntimeService until closed, resolved or removed via
+     * {@link delete}.
      */
     add(worker: RuntimeService.Worker | void) {
         if (!worker) {
@@ -59,44 +62,55 @@ export class RuntimeService implements Multiplex {
         if (worker.then) {
             Promise.resolve(worker)
                 .catch(error => this.#crash(error))
-                .finally(() => this.#deleteWorker(worker));
+                .finally(() => this.delete(worker));
             return;
         }
 
         if (worker.construction?.change) {
-            // AsyncCostructable
-            let started = false;
-            if (worker.construction.status === Lifecycle.Status.Active) {
-                started = true;
-                worker.start?.();
-            }
+            // Constructable
             worker.construction.change.on(status => {
                 switch (status) {
-                    case Lifecycle.Status.Active:
-                        if (!started) {
-                            started = true;
-                            worker.start?.();
-                        }
-                        break;
-
                     case Lifecycle.Status.Crashed:
                         this.#crash();
                         break;
 
                     case Lifecycle.Status.Destroyed:
-                        this.#deleteWorker(worker);
+                        this.delete(worker);
                         break;
                 }
             });
-        } else {
-            // PromiseLike or no termination tracking
-            worker.start?.();
+        } else if (worker.then) {
             if (worker.then) {
                 Promise.resolve(worker)
                     .catch(error => this.#crash(error))
-                    .finally(() => this.#deleteWorker(worker));
+                    .finally(() => this.delete(worker));
             }
         }
+    }
+
+    /**
+     * Remove a worker.
+     */
+    delete(worker: RuntimeService.Worker) {
+        if (!this.#workers.has(worker)) {
+            return;
+        }
+
+        // Remove the worker
+        this.#workers.delete(worker);
+        this.#cancelled.delete(worker);
+        this.#workerDeleted.emit();
+
+        // If there are still non-helper workers, remain in active state
+        if (this.#workers.size) {
+            return;
+        }
+
+        // No workers except helpers; cancel helpers and exit
+        this.cancel();
+
+        // Emit stopped event when all activity stops.  Safe to ignore rejection because this promise can't reject
+        void this.inactive.finally(() => this.#stopped.emit());
     }
 
     /**
@@ -199,19 +213,19 @@ export class RuntimeService implements Multiplex {
         const cancel = () => {
             this.#cancelled.add(worker);
 
+            if (worker.close) {
+                this.#cancelled.add(worker);
+                return Promise.resolve(worker.close()).finally(() => this.delete(worker));
+            }
+
             if (worker[Symbol.asyncDispose]) {
                 this.#cancelled.add(worker);
-                return Promise.resolve(worker[Symbol.asyncDispose]?.()).finally(() => this.#deleteWorker(worker));
+                return Promise.resolve(worker[Symbol.asyncDispose]?.()).finally(() => this.delete(worker));
             }
 
             if (worker[Symbol.dispose]) {
                 worker[Symbol.dispose]?.();
-                this.#deleteWorker(worker);
-                return;
-            }
-
-            if (worker.cancel) {
-                worker.cancel();
+                this.delete(worker);
                 return;
             }
 
@@ -220,33 +234,10 @@ export class RuntimeService implements Multiplex {
 
         if (worker.construction) {
             worker.construction.onSuccess(cancel);
-        }
-
-        return cancel();
-    }
-
-    #deleteWorker(worker: RuntimeService.Worker) {
-        if (!this.#workers.has(worker)) {
             return;
         }
 
-        // Remove the worker
-        this.#workers.delete(worker);
-        this.#cancelled.delete(worker);
-        this.#workerDeleted.emit();
-
-        // If there are still non-helper workers, remain in active state
-        for (const worker of this.#workers) {
-            if (!worker.helper) {
-                return;
-            }
-        }
-
-        // No workers except helpers; cancel helpers and exit
-        this.cancel();
-
-        // Emit stopped event when all activity stops.  Safe to ignore rejection because this promise can't reject
-        void this.inactive.finally(() => this.#stopped.emit());
+        return cancel();
     }
 
     #crash(cause?: Error) {
@@ -269,33 +260,16 @@ export namespace RuntimeService {
      *
      * If a worker is a {@link PromiseLike} the runtime will delete and/or destroy it on completion.
      */
-    export interface Worker
-        extends Partial<PromiseLike<any>>,
-            Partial<Startable>,
-            Partial<Cancellable>,
-            Partial<Destructable> {
+    export interface Worker extends Partial<PromiseLike<any>>, Partial<Cancellable>, Partial<Destructable> {
         /**
-         * If present, {@link RuntimeService} will invoke when the worker is added.
-         *
-         * If the worker also supports {@link construction} the runtime will invoke once construction completes.
-         */
-        start?: () => void;
-
-        /**
-         * If this is true, the worker is considered a "helper".  When the last non-helper worker departs the runtime
-         * cancels helpers and emits {@link RuntimeService.stopped}.
-         */
-        helper?: boolean;
-
-        /**
-         * If the worker supports {@link AsyncConstruction}, the runtime will monitor the worker's lifecycle:
+         * If the worker supports {@link Construction}, the runtime will monitor the worker's lifecycle:
          *
          *   - If the worker crashed (e.g. experiences an error during initialization) the runtime will cancel all
          *     workers and exit
          *
          *   - If the worker is destroyed the runtime deletes it from the set of known workers
          */
-        construction?: AsyncConstruction<any>;
+        construction?: Construction<any>;
 
         /**
          * If the worker supports {@link Symbol.asyncDispose} the runtime will invoke when the worker is no longer

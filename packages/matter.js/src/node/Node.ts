@@ -5,15 +5,17 @@
  */
 
 import { NodeActivity } from "../behavior/context/NodeActivity.js";
+import { NetworkRuntime } from "../behavior/system/network/NetworkRuntime.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
 import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
-import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
 import { EndpointType } from "../endpoint/type/EndpointType.js";
 import { Environment } from "../environment/Environment.js";
 import { RuntimeService } from "../environment/RuntimeService.js";
 import { Diagnostic } from "../log/Diagnostic.js";
+import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
+import { Construction } from "../util/Construction.js";
 import { NodeLifecycle } from "./NodeLifecycle.js";
 
 const logger = Logger.get("Node");
@@ -23,8 +25,9 @@ const logger = Logger.get("Node");
  *
  * In Matter, a "node" is an individually addressable top-level network resource.
  */
-export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
+export abstract class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
     #environment: Environment;
+    #runtime?: NetworkRuntime;
 
     constructor(config: Node.Configuration<T>) {
         const parentEnvironment = config.environment ?? Environment.default;
@@ -48,9 +51,7 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
             this.number = 0;
         }
 
-        // We don't really get "installed" as we are the root endpoint.  This informs the endpoint it is ready for full
-        // initialization
-        this.lifecycle.change(EndpointLifecycle.Change.Installed);
+        this.construction.start();
 
         this.lifecycle.online.on(() => {
             this.statusUpdate("is online");
@@ -58,12 +59,6 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
 
         this.lifecycle.offline.on(() => {
             this.statusUpdate("is offline");
-        });
-
-        this.lifecycle.changed.on((type, endpoint) => {
-            if (type === EndpointLifecycle.Change.Crashed) {
-                this.endpointCrashed(endpoint);
-            }
         });
     }
 
@@ -79,29 +74,75 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
     }
 
     /**
-     * Starts the node and resolve when the node enters his online state. Use `cancel()` to stop the node.
+     * Bring the node online.
      */
-    async bringOnline() {
-        const runtime = this.env.runtime;
+    async start() {
+        this.env.runtime.add(this);
 
-        runtime.add(this);
+        try {
+            await this.construction.ready;
 
-        await this.lifecycle.online;
+            if (this.#runtime) {
+                return;
+            }
+
+            this.statusUpdate("going online");
+
+            this.#runtime = this.createRuntime();
+            this.#runtime.construction.start();
+            await this.#runtime.construction.ready;
+        } catch (e) {
+            this.env.runtime.delete(this);
+            throw e;
+        }
     }
 
     /**
-     * Run the node in standalone mode and resolve when the node goes offline again.
-     *
-     * If you are implementing a single node and all logic is handled by registered change handlers and cluster
-     * implementations this is the most convenient way to bring it online.
+     * @deprecated use {@link start}
+     */
+    async bringOnline() {
+        return this.start();
+    }
+
+    /**
+     * Run the node in standalone mode.  Returns when the node is closed.
      */
     async run() {
-        const runtime = this.env.runtime;
-
-        runtime.add(this);
-
-        await runtime.inactive;
+        await this.start();
+        await this.construction.closed;
     }
+
+    /**
+     * Take the node offline but leave state and structure intact.
+     *
+     * This happens automatically on close.
+     */
+    async cancel() {
+        if (!this.#runtime) {
+            return;
+        }
+
+        this.statusUpdate("going offline");
+        await this.#runtime?.close();
+        this.#runtime = undefined;
+    }
+
+    override async close() {
+        // The runtime is not designed to operate with a node that is shutting down so destroy it before performing
+        // actual close
+        //
+        // TODO - this should probably block other functions like start()
+        if (this.#runtime) {
+            await this.cancel();
+        }
+
+        await super.close();
+    }
+
+    /**
+     * Create the network runtime.
+     */
+    protected abstract createRuntime(): NetworkRuntime;
 
     get [RuntimeService.label]() {
         return ["Runtime for", Diagnostic.strong(this.toString())];
@@ -129,9 +170,17 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
         logger.notice(Diagnostic.strong(this.toString()), message);
     }
 
-    protected endpointCrashed(endpoint: Endpoint) {
-        return this.lifecycle.endpointError.emit(endpoint, endpoint.construction.error ?? new Error("Unknown error"));
+    override async [Construction.destruct]() {
+        await this.cancel();
+        await super[Construction.destruct]();
+        DiagnosticSource.delete(this);
     }
+
+    /**
+     * Normal endpoints must have an owner to complete construction but Nodes have no such precondition for
+     * construction.
+     */
+    protected override assertConstructable() {}
 }
 
 export namespace Node {

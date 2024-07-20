@@ -4,29 +4,34 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NodeActivity } from "../behavior/context/NodeActivity.js";
 import { CommissioningBehavior } from "../behavior/system/commissioning/CommissioningBehavior.js";
 import { NetworkServer } from "../behavior/system/network/NetworkServer.js";
 import { ServerNetworkRuntime } from "../behavior/system/network/ServerNetworkRuntime.js";
 import { ProductDescriptionServer } from "../behavior/system/product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "../behavior/system/sessions/SessionsBehavior.js";
-import { Agent } from "../endpoint/Agent.js";
+import { MatterError } from "../common/MatterError.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
-import { EndpointServer } from "../endpoint/EndpointServer.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { EndpointInitializer } from "../endpoint/properties/EndpointInitializer.js";
-import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
-import { Diagnostic } from "../log/Diagnostic.js";
+import type { Environment } from "../environment/Environment.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
-import { Logger } from "../log/Logger.js";
-import { Mutex } from "../util/Mutex.js";
+import { Construction, asyncNew } from "../util/Construction.js";
+import { errorOf } from "../util/Error.js";
 import { Identity } from "../util/Type.js";
 import { Node } from "./Node.js";
 import { IdentityService } from "./server/IdentityService.js";
 import { ServerEndpointInitializer } from "./server/ServerEndpointInitializer.js";
 import { ServerStore } from "./server/storage/ServerStore.js";
 
-const logger = Logger.get("ServerNode");
+/**
+ * Thrown when there is an error during factory reset.
+ */
+class FactoryResetError extends MatterError {
+    constructor(message: string, cause: any) {
+        super(message);
+        this.cause = errorOf(cause);
+    }
+}
 
 /**
  * A server-side Matter {@link Node}.
@@ -34,9 +39,6 @@ const logger = Logger.get("ServerNode");
  * The Matter specification often refers to server-side nodes as "devices".
  */
 export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends Node<T> {
-    #mutex: Mutex;
-    #crashed = false;
-
     /**
      * Construct a new ServerNode.
      *
@@ -58,7 +60,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     constructor(definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
         super(Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options));
-        this.#mutex = new Mutex(this, this.construction);
+
         DiagnosticSource.add(this);
     }
 
@@ -87,116 +89,63 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         This extends typeof ServerNode<any>,
         T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint,
     >(this: This, definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
-        const node = new this(definition, options);
-
-        if (!node.lifecycle.isTreeReady) {
-            await node.lifecycle.treeReady;
-        }
-
-        const activity = node.env.get(NodeActivity);
-        if (activity.isActive) {
-            await activity.inactive;
-        }
-
-        return node as ServerNode<T>;
+        return await asyncNew(this, definition, options);
     }
 
-    /**
-     * Bring the server online.
-     *
-     * If you add the server as a worker to {@link Environment.runtime} this happens automatically.
-     */
-    start() {
-        this.#mutex.run(async () => {
-            if (this.#crashed) {
-                this.#crashed = false;
-                this.#reportCrashTermination();
-                return;
-            }
-
-            if (!this.lifecycle.isTreeReady) {
-                await this.lifecycle.treeReady;
-            }
-
-            await new ServerNetworkRuntime(this).run();
-        });
+    protected createRuntime(): ServerNetworkRuntime {
+        return new ServerNetworkRuntime(this);
     }
 
-    /**
-     * Take the server offline but leave state and structure intact.
-     *
-     * This happens automatically on close.
-     */
-    cancel() {
-        if (this.behaviors.isActive(NetworkServer)) {
-            const runtime = this.behaviors.internalsOf(NetworkServer).runtime;
+    override async [Construction.destruct]() {
+        await super[Construction.destruct]();
 
-            if (runtime) {
-                // Note that we call close() immediately -- not once the mutex is free -- because the mutex is probably
-                // held by the network's run() promise
-                this.#mutex.run(runtime.close());
-            }
+        if (this.env.has(ServerStore)) {
+            const store = this.env.get(ServerStore);
+            await store.close();
+            this.env.delete(ServerStore, store);
         }
-    }
-
-    override async close() {
-        this.cancel();
-
-        this.#mutex.terminate(async () => {
-            await super.close();
-
-            if (this.env.has(ServerStore)) {
-                const store = this.env.get(ServerStore);
-                await store.close();
-                this.env.delete(ServerStore, store);
-            }
-        });
-
-        await this.#mutex;
-
-        DiagnosticSource.delete(this);
     }
 
     /**
      * Perform a factory reset of the node.
      */
     async factoryReset() {
-        // Go offline before performing reset
-        const isOnline = this.lifecycle.isOnline;
-        if (isOnline) {
-            this.cancel();
-        }
+        try {
+            await this.construction;
 
-        this.#mutex.run(async () => {
+            // Go offline before performing reset
+            const isOnline = this.lifecycle.isOnline;
+            if (isOnline) {
+                await this.cancel();
+            }
+
             // Inform user
             this.statusUpdate("resetting to factory defaults");
-
-            // Destroy the PartServer hierarchy
-            await EndpointServer.forEndpoint(this)[Symbol.asyncDispose]();
 
             // Reset in-memory state
             await this.reset();
 
-            // Reset storage
+            // Reset persistent state
             await this.resetStorage();
 
-            // Reset puts parts back into inactive state; set to "installed" to trigger re-initialization
-            this.lifecycle.change(EndpointLifecycle.Change.Installed);
+            // Reset reverts node to inactive state; now reinitialize
+            this.construction.start();
 
             // Go back online if we were online at time of reset
             if (isOnline) {
-                this.start();
+                await this.start();
             }
-        });
-
-        await this.#mutex;
+        } catch (e) {
+            this.construction.crash();
+            throw new FactoryResetError(`Error during factory reset of ${this}`, e);
+        }
     }
 
     async advertiseNow() {
         await this.act(`advertiseNow<${this}>`, agent => agent.get(NetworkServer).advertiseNow());
     }
 
-    protected override async initialize(agent: Agent.Instance<T>) {
+    protected override async initialize() {
         // Load the environment with node-specific services
         const serverStore = await ServerStore.create(this.env, this.id);
 
@@ -206,20 +155,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
         this.env.set(IdentityService, new IdentityService(this));
 
-        return super.initialize(agent);
-    }
-
-    protected override endpointCrashed(endpoint: Endpoint) {
-        // Endpoint crashes may be disabled by event handlers except for the node
-        if (super.endpointCrashed(endpoint) === false && endpoint !== this) {
-            return false;
-        }
-
-        if (this.lifecycle.isOnline) {
-            this.#reportCrashTermination();
-        } else {
-            this.#crashed = true;
-        }
+        return super.initialize();
     }
 
     /**
@@ -232,11 +168,6 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      */
     protected async resetStorage() {
         await this.env.get(ServerStore).erase();
-    }
-
-    #reportCrashTermination() {
-        logger.info("Aborting", Diagnostic.strong(this.toString()), "due to endpoint error");
-        this.construction.onSuccess(() => this.construction.crashed(new Error(`Aborted ${this} due to error`), false));
     }
 }
 

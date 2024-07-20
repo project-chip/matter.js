@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NetworkRuntime } from "../behavior/system/network/NetworkRuntime.js";
 import { NotImplementedError } from "../common/MatterError.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { Identity } from "../util/Type.js";
@@ -21,6 +22,10 @@ export class ClientNode<T extends ClientNode.RootEndpoint> extends Node<T> {
         super(Node.nodeConfigFor(ClientNode.RootEndpoint as T, definition, options));
 
         throw new NotImplementedError("Client node API is not implemented yet, please use CommissioningController");
+    }
+
+    createRuntime(): NetworkRuntime {
+        throw new NotImplementedError();
     }
 }
 

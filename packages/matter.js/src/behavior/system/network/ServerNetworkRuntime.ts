@@ -39,7 +39,6 @@ function convertNetworkEnvironmentType(type: string | number) {
  * Handles network functionality for {@link NodeServer}.
  */
 export class ServerNetworkRuntime extends NetworkRuntime {
-    #rootServer?: EndpointServer;
     #interactionServer?: TransactionalInteractionServer;
     #matterDevice?: MatterDevice;
     #mdnsBroadcaster?: MdnsInstanceBroadcaster;
@@ -50,16 +49,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
     override get owner() {
         return super.owner as ServerNode;
-    }
-
-    /**
-     * Access the {@link EndpointServer} for the root endpoint.
-     */
-    get rootServer() {
-        if (!this.#rootServer) {
-            this.#rootServer = EndpointServer.forEndpoint(this.owner);
-        }
-        return this.#rootServer;
     }
 
     /**
@@ -337,8 +326,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.#interactionServer?.[Symbol.asyncDispose]();
         this.#interactionServer = undefined;
 
-        await this.#rootServer?.[Symbol.asyncDispose]();
-        this.#rootServer = undefined;
+        await EndpointServer.forEndpoint(this.owner)[Symbol.asyncDispose]();
 
         if (this.#commissionedListener) {
             const commissionedListener = this.#commissionedListener;

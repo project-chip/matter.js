@@ -12,8 +12,8 @@ import { NodeId } from "../datatype/NodeId.js";
 import { Logger } from "../log/Logger.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { Time } from "../time/Time.js";
-import { AsyncConstruction, asyncNew } from "../util/AsyncConstruction.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { Construction, asyncNew } from "../util/Construction.js";
 import { toHex } from "../util/Number.js";
 import {
     CertificateManager,
@@ -33,7 +33,7 @@ export class RootCertificateManager {
     private rootKeyIdentifier = Crypto.hash(this.rootKeyPair.publicKey).slice(0, 20);
     private rootCertBytes = this.generateRootCert();
     private nextCertificateId = BigInt(1);
-    #construction: AsyncConstruction<RootCertificateManager>;
+    #construction: Construction<RootCertificateManager>;
 
     get construction() {
         return this.#construction;
@@ -44,9 +44,10 @@ export class RootCertificateManager {
     }
 
     constructor(options: StorageContext | RootCertificateManager.Data) {
-        this.#construction = AsyncConstruction(this, async () => {
+        this.#construction = Construction(this, async () => {
             // Use provided root certificate data or read from storage if we have them stored, else store the just generated data
             const certValues = options instanceof StorageContext ? await options.values() : options;
+
             if (
                 typeof certValues.rootCertId === "bigint" &&
                 (ArrayBuffer.isView(certValues.rootKeyPair) || typeof certValues.rootKeyPair === "object") &&
@@ -62,7 +63,9 @@ export class RootCertificateManager {
                 logger.debug(`Loaded root certificate with ID ${this.rootCertId} from storage`);
                 return;
             }
+
             logger.debug(`Created new root certificate with ID ${this.rootCertId}`);
+
             if (options instanceof StorageContext) {
                 await options.set({
                     rootCertId: this.rootCertId,

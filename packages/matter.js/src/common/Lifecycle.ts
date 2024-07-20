@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic } from "../log/Diagnostic.js";
 import { MaybePromise } from "../util/Promises.js";
-import { ImplementationError } from "./MatterError.js";
+import { ImplementationError, MatterAggregateError } from "./MatterError.js";
 
 export namespace Lifecycle {
     /**
@@ -49,10 +48,10 @@ export namespace Lifecycle {
                 throw new CrashedDependencyError(description, "initialization failed");
 
             case Status.Destroying:
-                throw new DestroyedDependencyError(description, "is undergoing destruction");
+                throw new DestroyedDependencyError(description, "is closing");
 
             case Status.Destroyed:
-                throw new DestroyedDependencyError(description, "was destroyed");
+                throw new DestroyedDependencyError(description, "is closed");
         }
 
         throw new DependencyLifecycleError(description, `status "${status}" is unknown`);
@@ -65,9 +64,6 @@ export namespace Lifecycle {
 export class DependencyLifecycleError extends ImplementationError {
     constructor(what: string, why: string) {
         super(`${what} ${why}`);
-        this.message = Diagnostic.upgrade(this.message, () => {
-            Diagnostic.squash(Diagnostic.strong(what), " ", why);
-        });
     }
 }
 
@@ -119,7 +115,9 @@ export class UninitializedDependencyError extends DependencyLifecycleError {}
 /**
  * Thrown for actions that cannot be performed because dependency crashed.
  */
-export class CrashedDependencyError extends DependencyLifecycleError {}
+export class CrashedDependencyError extends DependencyLifecycleError {
+    subject?: object;
+}
 
 /**
  * Thrown for actions that cannot be performed because a dependency has been destroyed.
@@ -130,3 +128,8 @@ export class DestroyedDependencyError extends DependencyLifecycleError {}
  * Thrown for actions that cannot be performed because a dependency is not supported.
  */
 export class UnsupportedDependencyError extends DependencyLifecycleError {}
+
+/**
+ * Thrown if multiple dependencies crash.
+ */
+export class CrashedDependenciesError extends MatterAggregateError {}

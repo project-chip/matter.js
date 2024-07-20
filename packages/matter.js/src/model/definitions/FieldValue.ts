@@ -5,7 +5,9 @@
  */
 
 import { UnexpectedDataError } from "../../common/MatterError.js";
+import { ByteArray } from "../../util/ByteArray.js";
 import { serialize as stringSerialize } from "../../util/String.js";
+import type { Metatype } from "./Metatype.js";
 
 /**
  * A FieldValue represents a concrete value for a datatype.  Most values are primitives but some values we encode with
@@ -22,7 +24,8 @@ export type FieldValue =
     | FieldValue.Properties
     | FieldValue.Reference
     | FieldValue.Percent
-    | FieldValue.Celsius;
+    | FieldValue.Celsius
+    | FieldValue.Bytes;
 
 export namespace FieldValue {
     // Typing with constants should be just as type safe as using an enum but simplifies type definitions
@@ -39,10 +42,13 @@ export namespace FieldValue {
     export const properties = "properties";
     export type properties = typeof properties;
 
+    export const bytes = "bytes";
+    export type bytes = typeof bytes;
+
     /**
      * If a field value isn't a primitive type, it's an object with a type field indicating one of these types.
      */
-    export type Type = percent | celsius | reference | properties;
+    export type Type = percent | celsius | reference | properties | bytes;
 
     /**
      * Test for one of the special placeholder types.
@@ -101,6 +107,18 @@ export namespace FieldValue {
         type: properties;
         properties: { [name: string]: FieldValue };
     };
+
+    /**
+     * Byte value, encoded as hex string.
+     */
+    export type Bytes = {
+        type: bytes;
+        value: string;
+    };
+
+    export function Bytes(value: ByteArray | string): Bytes {
+        return { type: bytes, value: ArrayBuffer.isView(value) ? value.toHex() : value };
+    }
 
     /**
      * Convert the field value to a "defacto-standard" form.
@@ -207,5 +225,163 @@ export namespace FieldValue {
         if (is(value, reference)) {
             return (value as Reference).name;
         }
+    }
+
+    /**
+     * Convert an arbitrary value to a proper FieldValue.
+     *
+     * @param type casts to a native equivalent of this type
+     * @param value value to cast
+     * @returns the cast value or FieldValue.Invalid if cast is not possible
+     */
+    export function cast(type: Metatype, value: any): FieldValue | FieldValue.Invalid | undefined {
+        if (value === undefined || value === null || type === "any") {
+            return value;
+        }
+
+        if (value === "null") {
+            return null;
+        }
+
+        if (value === "") {
+            if (type === "string") {
+                return "";
+            }
+            return undefined;
+        }
+
+        if (FieldValue.is(value, FieldValue.reference)) {
+            return value;
+        }
+
+        switch (type) {
+            case "string":
+                return value.toString();
+
+            case "boolean":
+                if (typeof value === "string") {
+                    value = value.trim().toLowerCase();
+                }
+                return value !== "false" && value !== "no" && !!value;
+
+            case "bitmap":
+            case "enum":
+                const id = Number(value);
+                if (Number.isNaN(id)) {
+                    // Key name
+                    return `${value}`;
+                }
+                // Value
+                return id;
+
+            case "integer":
+                if (typeof value === "string") {
+                    // Specialized support for percentages and temperatures
+                    let type: FieldValue.celsius | FieldValue.percent | undefined;
+                    if (value.endsWith("°C")) {
+                        type = FieldValue.celsius;
+                    } else if (value.endsWith("%")) {
+                        type = FieldValue.percent;
+                    }
+                    if (type) {
+                        value = Number.parseInt(value);
+                        if (Number.isNaN(value)) {
+                            return FieldValue.Invalid;
+                        }
+                        return { type, value };
+                    }
+
+                    // Strip off extra garbage like Number.parseInt would but BigInt doesn't
+                    const match = value.match(/^(0x[0-9a-f]+|0b[01]+|\d+)/i);
+                    if (match) {
+                        value = match[1];
+                    }
+                }
+
+                try {
+                    switch (typeof value) {
+                        case "string":
+                        case "number":
+                        case "bigint":
+                        case "boolean":
+                            break;
+
+                        default:
+                            if (FieldValue.is(value, FieldValue.celsius) || FieldValue.is(value, FieldValue.percent)) {
+                                return value;
+                            }
+                            return FieldValue.Invalid;
+                    }
+                    const i = BigInt(value);
+                    const n = Number(i);
+                    if (BigInt(n) === i) {
+                        return n;
+                    }
+                    return i;
+                } catch (e) {
+                    if (e instanceof SyntaxError) {
+                        return FieldValue.Invalid;
+                    }
+                    throw e;
+                }
+
+            case "float":
+                const float = Number(value);
+                if (Number.isNaN(float)) {
+                    return FieldValue.Invalid;
+                }
+                return float.valueOf();
+
+            case "date":
+                if (value instanceof Date) {
+                    return value;
+                }
+                if (typeof value !== "string") {
+                    return FieldValue.Invalid;
+                }
+                value = new Date(value);
+                if (Number.isNaN(value.valueOf())) {
+                    return FieldValue.Invalid;
+                }
+                return value;
+
+            case "object":
+                if (value === "null") {
+                    return null;
+                }
+                if (FieldValue.is(value, FieldValue.properties)) {
+                    return value;
+                }
+                break;
+
+            case "bytes":
+                if (value === "empty") {
+                    return undefined;
+                }
+                if (FieldValue.is(value, FieldValue.bytes)) {
+                    return value;
+                }
+                if (typeof value === "string" || value instanceof Uint8Array) {
+                    return Bytes(value);
+                }
+                break;
+
+            case "array":
+                // Eject garbage we've seen in the spec
+                if (value === "0" || value === "{0,0}") {
+                    return;
+                }
+                if (value === "empty" || value === "[]" || value === "{}") {
+                    return [];
+                }
+                if (Array.isArray(value)) {
+                    return value;
+                }
+
+                // The only supported literal is an empty array
+                return FieldValue.Invalid;
+        }
+
+        return FieldValue.Invalid;
     }
 }

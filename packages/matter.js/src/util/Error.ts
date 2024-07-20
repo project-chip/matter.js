@@ -4,20 +4,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Constructable } from "./Construction.js";
+
 /**
- * Access value as an {@link Error}ish object.
+ * Ensure that a cause is an error object.
+ *
+ * We consider anything with a "message" property to be a reasonable error object.
  */
-export function errorOf(cause: unknown) {
-    if (cause instanceof Error) {
-        // An actual error
-        return cause;
-    }
-    const { name, message } = (Error ?? {}) as { name?: string; message?: string };
-    if (name !== undefined && name !== null && message !== undefined && message !== null) {
-        // Fulfills minimal error interface
-        return cause;
+export function errorOf(cause: unknown): Error {
+    // If the cause is an Constructable, use its construction error
+    if ((cause as Constructable)?.construction?.error) {
+        cause = (cause as Constructable)?.construction.error;
     }
 
-    // Create an actual error
-    return new Error((cause ?? "Unknown error").toString());
+    // If the cause is indeterminate we fall back to the helpful "Unknown error"
+    if (cause === undefined || cause === null) {
+        return Error("Unknown error");
+    }
+
+    // If the cause has a "message" field, treat as an Error
+    if ((cause as Error).message !== undefined) {
+        return cause as Error;
+    }
+
+    // Otherwise create a new error using the original cause as the message
+    return new Error(cause.toString());
 }

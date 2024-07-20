@@ -21,7 +21,7 @@ async function createBridge<T extends AggregatorEndpoint>(
     const bridge = await MockEndpoint.create(definition);
 
     const node = bridge.owner as MockServerNode;
-    await node.bringOnline();
+    await node.start();
 
     return bridge;
 }

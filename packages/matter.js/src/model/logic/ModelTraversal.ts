@@ -655,7 +655,7 @@ export class ModelTraversal {
     /**
      * Find the root model.
      */
-    findRoot(model: Model | undefined) {
+    findRoot(model: Model | undefined): Model | undefined {
         if (!model) {
             return undefined;
         }
@@ -665,7 +665,7 @@ export class ModelTraversal {
             return model;
         }
 
-        this.operation(() => {
+        return this.operation(() => {
             return this.findRoot(parent);
         });
     }

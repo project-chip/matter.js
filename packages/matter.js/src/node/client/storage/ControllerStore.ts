@@ -12,7 +12,7 @@ import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { StorageManager } from "../../../storage/StorageManager.js";
-import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
+import { Construction, asyncNew } from "../../../util/Construction.js";
 
 const logger = Logger.get("ControllerStore");
 
@@ -30,7 +30,7 @@ export class ControllerStore implements Destructable {
     #sessionStorage?: StorageContext;
     #credentialsStorage?: StorageContext; // Root certificate and Fabric
     #nodesStorage?: StorageContext; // Holds list of nodes in root level and then sub levels with data per client node?
-    #construction: AsyncConstruction<ControllerStore>;
+    #construction: Construction<ControllerStore>;
 
     get construction() {
         return this.#construction;
@@ -56,7 +56,7 @@ export class ControllerStore implements Destructable {
             this.#logChange("Opened");
         };
 
-        this.#construction = AsyncConstruction(this, initializeStorage);
+        this.#construction = Construction(this, initializeStorage);
     }
 
     static async create(environment: Environment, nodeId: string) {

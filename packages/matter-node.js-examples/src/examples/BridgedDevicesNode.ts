@@ -140,7 +140,7 @@ for (let idx = 0; idx < isSocket.length; idx++) {
  * offline again because we do not need anything more here. See the Full example for other starting options.
  * The QR Code is printed automatically.
  */
-await server.bringOnline();
+await server.start();
 
 /**
  * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
