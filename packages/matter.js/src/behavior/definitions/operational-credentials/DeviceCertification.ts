@@ -11,8 +11,8 @@ import { ImplementationError, InternalError } from "../../../common/MatterError.
 import { Crypto } from "../../../crypto/Crypto.js";
 import { PrivateKey } from "../../../crypto/Key.js";
 import { SecureSession } from "../../../session/SecureSession.js";
-import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
 import { ByteArray } from "../../../util/ByteArray.js";
+import { Construction } from "../../../util/Construction.js";
 import { ProductDescription } from "../../system/product-description/ProductDescription.js";
 
 /**
@@ -23,7 +23,7 @@ export class DeviceCertification {
     #certificate?: ByteArray;
     #intermediateCertificate?: ByteArray;
     #declaration?: ByteArray;
-    readonly #construction: AsyncConstruction<DeviceCertification>;
+    readonly #construction: Construction<DeviceCertification>;
 
     get construction() {
         return this.#construction;
@@ -45,14 +45,14 @@ export class DeviceCertification {
         // Certification Provider function is used to request the certificates delayed
         if (typeof config === "function") {
             const configProvider = config;
-            this.#construction = AsyncConstruction(this, async () => {
+            this.#construction = Construction(this, async () => {
                 this.#initializeFromConfig(await configProvider());
             });
             return;
         }
 
         // We need a dummy construction to avoid errors
-        this.#construction = AsyncConstruction(this, () => {});
+        this.#construction = Construction(this, () => {});
 
         // With a directly provided config or without we con initialize directly
         if (config === undefined) {

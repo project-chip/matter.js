@@ -43,7 +43,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: Refactored Message size handling to dynamically calculate payload size based on transport capabilities
     -   Enhancement: Refactored and cleanup CASE and PASE and corrected handling in some places
     -   Enhancement: Added BTP Idle timeout as defined in Matter specification
-    -   Enhancement: Enhanced default implementation of GeneralDiagnostics cluster with new convenience methods 
+    -   Enhancement: Enhanced default implementation of GeneralDiagnostics cluster with new convenience methods
     -   Enhancement: Many more protocol and functionality syncs with matter specification 1.3
     -   Enhancement: The Network methods that handles NetworkInterfaces are now "MaybePromise" to allow async implementations
     -   Enhancement/Fix: Several fixes and optimizations in Session and Message Exchange handling
@@ -54,16 +54,20 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Fix: Makes sure subscription maxInterval can not exceed the matter defined maximum of 60mins
     -   Fix: Synced attMtu handling with chip to always use MTU-3 bytes for BLE connections
 -   matter.js API:
+-   -   Breaking: Node.start() is now asynchronous and returns when the node is online. This is only breaking in that lack of await will result in an unhandled rejection. Node.bringOnline() is deprecated.
     -   Feature: Adds default implementations for i18n clusters including Localization, Time Format Localization and Unit Localization.
     -   Feature: Adds interactionBegin and interactionEnd events for ClusterBehaviors to demarcate online interactions that mutate state.
-- matter.js Controller API:
+    -   Feature: Any state value defined with schema is now configurable via the environment.
+    -   Feature: You may now mark endpoints as "non-essential" to prevent errors from incapacitating a node.
+    -   Enhancement: Various Endpoint methods throw the root cause when there is an error rather than logging the root cause and throwing a less descriptive error.
+-   matter.js Controller API:
     -   Breaking: commissionNode() in CommissioningController now returns the Node-ID and not the PairedNode instance.
     -   Feature: (Experimental!) Adds PaseCommissioner to allow to execute the initial (PASE based) commissioning process separately from the operational completion of the commissioning process, also allowed to be BLE only.
     -   Feature: Allows to complete the commissioning process for a node where this process was started by a PASE commissioner
     -   Feature: Allows to commission a node without directly connecting to it
     -   Fix: Fixes Node reconnection when disconnected before
     -   Fix: Makes sure to always use the BLE scanner when required
-- matter.js Legacy API:
+-   matter.js Legacy API:
     -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
     -   Removal: We removed old Scenes cluster implementation which was never fully implemented or used by any Matter controller
 -   matter.js-react-native:
@@ -72,7 +76,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 
 ### 0.9.4 (2024-07-19)
-- Matter-Core functionality:
+
+-   Matter-Core functionality:
     -   Feature: Allows to generate Certification declarations flagged as provisional for certification purposes
     -   Feature: Allows to disable mandatory field checks on TLV encoding when handling fabric sensitive structs
     -   Fix: Makes sure to remove fabric sensitive fields and events when they are not allowed to be read or subscribed
@@ -80,12 +85,14 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Fix: Verifies provided trusted root certificates completely
 
 ### 0.9.3 (2024-06-26)
-- Matter-Core functionality:
+
+-   Matter-Core functionality:
     -   Fix: Makes sure to clear all subscriptions from the subscriber noe and not only the current session when not keeping subscriptions
 
 ### 0.9.2 (2026-06-20)
-- Matter-Core functionality:
-    - Enhancement: Added some more certification relevant checks in Interaction server
+
+-   Matter-Core functionality:
+    -   Enhancement: Added some more certification relevant checks in Interaction server
 
 ### 0.9.1 (2024-06-01)
 

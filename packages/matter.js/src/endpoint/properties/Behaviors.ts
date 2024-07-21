@@ -8,23 +8,27 @@ import { Behavior } from "../../behavior/Behavior.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ValidatedElements } from "../../behavior/cluster/ValidatedElements.js";
 import { ActionContext } from "../../behavior/context/ActionContext.js";
+import { ActionTracer } from "../../behavior/context/ActionTracer.js";
 import { NodeActivity } from "../../behavior/context/NodeActivity.js";
 import { OfflineContext } from "../../behavior/context/server/OfflineContext.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
 import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import { Val } from "../../behavior/state/Val.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
+import { ClusterType } from "../../cluster/ClusterType.js";
 import { Lifecycle, UninitializedDependencyError } from "../../common/Lifecycle.js";
 import { ImplementationError, InternalError, ReadOnlyError } from "../../common/MatterError.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { FeatureSet } from "../../model/index.js";
+import { Construction } from "../../util/Construction.js";
 import { EventEmitter } from "../../util/Observable.js";
 import { MaybePromise } from "../../util/Promises.js";
-import { BasicSet } from "../../util/Set.js";
 import { camelize, describeList } from "../../util/String.js";
 import type { Agent } from "../Agent.js";
 import type { Endpoint } from "../Endpoint.js";
+import { EndpointVariableService } from "../EndpointVariableService.js";
+import { BehaviorInitializationError, EndpointBehaviorsError } from "../errors.js";
 import { EndpointInitializer } from "./EndpointInitializer.js";
 import { EndpointLifecycle } from "./EndpointLifecycle.js";
 import type { SupportedBehaviors } from "./SupportedBehaviors.js";
@@ -39,7 +43,6 @@ export class Behaviors {
     #supported: SupportedBehaviors;
     #backings: Record<string, BehaviorBacking> = {};
     #options: Record<string, object | undefined>;
-    #initializing?: BasicSet<BehaviorBacking>;
 
     /**
      * The {@link SupportedBehaviors} of the {@link Endpoint}.
@@ -66,7 +69,8 @@ export class Behaviors {
 
             const result = [Diagnostic(backing?.status ?? Lifecycle.Status.Inactive, name)];
 
-            if (!(type as ClusterBehavior.Type).cluster) {
+            const cluster = clusterOf(type);
+            if (!cluster) {
                 return result;
             }
 
@@ -74,7 +78,7 @@ export class Behaviors {
 
             const elements = new ValidatedElements(type as ClusterBehavior.Type);
 
-            const features = new FeatureSet((type as ClusterBehavior.Type).cluster.supportedFeatures);
+            const features = new FeatureSet(cluster.supportedFeatures);
             if (features.size) {
                 elementDiagnostic.push([Diagnostic.strong("features"), features]);
             }
@@ -97,13 +101,14 @@ export class Behaviors {
         });
     }
 
-    constructor(endpoint: Endpoint, supported: SupportedBehaviors, options: Record<string, object | undefined>) {
-        if (typeof supported !== "object") {
-            throw new ImplementationError('Endpoint "behaviors" option must be an array of Behavior.Type instances');
+    constructor(endpoint: Endpoint, options: Record<string, object | undefined>) {
+        const { type } = endpoint;
+        if (typeof type?.behaviors !== "object") {
+            throw new ImplementationError('EndpointType "behaviors" must be an array of Behavior.Type instances');
         }
 
         this.#endpoint = endpoint;
-        this.#supported = { ...supported };
+        this.#supported = type.behaviors;
         this.#options = options;
 
         // DescriptorBehavior is unequivocally mandatory
@@ -126,31 +131,66 @@ export class Behaviors {
     /**
      * Activate any behaviors designated for immediate activation.  Returns a promise iff any behaviors have ongoing
      * initialization.
+     *
+     * Throws an error if any behavior crashes, but we allow all behaviors to settle before throwing.  The goal is to
+     * surface multiple configuration errors and prevent inconsistent state caused by partial initialization.
      */
-    initialize(agent: Agent): MaybePromise {
-        for (const type of Object.values(this.supported)) {
-            if (type.early) {
-                this.activate(type, agent);
-            }
+    initialize(): MaybePromise {
+        // Sanity check
+        if (!this.#endpoint.lifecycle.isInstalled) {
+            throw new ImplementationError(`Cannot initialize behaviors because endpoint is not installed`);
         }
 
-        // If all behaviors are initialized then we complete synchronously
-        const initializing = this.#initializing;
-        if (!initializing?.size) {
-            return;
-        }
+        // Initialization action.  We initialize all behaviors in the same transaction
+        const initializeBehaviors = (context: ActionContext) => {
+            const agent = context.agentFor(this.#endpoint);
 
-        // Return a promise that fulfills once all behaviors complete initialization
-        return new Promise<void>(fulfilled => {
-            const initializationListener = () => {
-                if (initializing.size === 0) {
-                    initializing.deleted.off(initializationListener);
-                    fulfilled();
+            // Activate behaviors
+            //
+            // TODO - add a timeout on behavior initialization
+            for (const type of Object.values(this.supported)) {
+                if (type.early) {
+                    this.activate(type, agent);
                 }
-            };
+            }
 
-            initializing.deleted.on(initializationListener);
-        });
+            // Wait for all behaviors to initialize
+            return Construction.all(
+                {
+                    [Symbol.iterator]: () => {
+                        return Object.values(this.#backings)[Symbol.iterator]();
+                    },
+                },
+
+                causes => new EndpointBehaviorsError(causes),
+            );
+        };
+
+        // Initialize instrumentation
+        const activity = this.#endpoint.env.get(NodeActivity);
+        const trace: ActionTracer.Action | undefined = this.#endpoint.env.has(ActionTracer)
+            ? { type: ActionTracer.ActionType.Initialize }
+            : undefined;
+
+        // Perform initialization
+        let promise = OfflineContext.act(`initialize<${this.#endpoint}>`, activity, initializeBehaviors, { trace });
+
+        // Once behaviors are ready the endpoint we consider the endpoint "ready"
+        const onReady = () => {
+            this.#endpoint.lifecycle.change(EndpointLifecycle.Change.Ready);
+
+            if (trace) {
+                trace.path = this.#endpoint.path;
+                this.#endpoint.env.get(ActionTracer).record(trace);
+            }
+        };
+        if (promise) {
+            promise = promise.then(onReady);
+        } else {
+            onReady();
+        }
+
+        return promise;
     }
 
     /**
@@ -178,6 +218,9 @@ export class Behaviors {
             return;
         }
 
+        if (this.#supported === this.#endpoint.type.behaviors) {
+            this.#supported = { ...this.#supported };
+        }
         this.#supported[type.id] = type;
 
         this.#augmentEndpoint(type);
@@ -202,17 +245,6 @@ export class Behaviors {
         }
 
         return behavior;
-    }
-
-    /**
-     * True if any behaviors failed to initialized
-     */
-    get hasCrashed() {
-        return (
-            Object.values(this.#backings).findIndex(
-                behavior => behavior.construction.status === Lifecycle.Status.Crashed,
-            ) !== -1
-        );
     }
 
     /**
@@ -254,7 +286,7 @@ export class Behaviors {
         };
 
         // If the backing initializes asynchronously, return a promise that returns the behavior when initialized
-        if (!backing.construction.ready) {
+        if (backing.construction.status === Lifecycle.Status.Initializing) {
             return backing.construction
                 .then(() => getBehavior())
                 .catch(() => {
@@ -297,7 +329,7 @@ export class Behaviors {
     }
 
     /**
-     * Destroy all behaviors that are initialized (have backings present).
+     * Destroy all behaviors that are initialized (have backings present).  The object may be reused after close.
      */
     async close() {
         const dispose = async (context: ActionContext) => {
@@ -336,7 +368,7 @@ export class Behaviors {
             }
         };
 
-        await OfflineContext.act("dispose-behaviors", this.#endpoint.env.get(NodeActivity), dispose);
+        await OfflineContext.act(`close<${this.#endpoint}>`, this.#endpoint.env.get(NodeActivity), dispose);
     }
 
     /**
@@ -357,11 +389,11 @@ export class Behaviors {
 
             // For ClusterBehaviors, accept any behavior that supports the cluster.  Could confirm features too but
             // doesn't currently
-            const cluster = (requirement as ClusterBehavior.Type).cluster;
+            const cluster = clusterOf(requirement);
             if (cluster) {
                 const other = this.#endpoint.behaviors.supported[requirement.id];
 
-                if ((other as ClusterBehavior.Type | undefined)?.cluster?.id === cluster.id) {
+                if (clusterOf(other)?.id === cluster.id) {
                     continue;
                 }
 
@@ -383,8 +415,10 @@ export class Behaviors {
      * a new endpoint.
      */
     defaultsFor(type: Behavior.Type) {
-        const options = this.#options[type.id];
         let defaults: Val.Struct | undefined;
+
+        // Set defaults from options
+        const options = this.#options[type.id];
         if (options) {
             for (const key in type.defaults) {
                 if (key in options) {
@@ -395,6 +429,13 @@ export class Behaviors {
                 }
             }
         }
+        // Set defaults from environmental configuration
+        const varService = this.#endpoint.env.get(EndpointVariableService);
+        const vars = varService.forBehaviorInstance(this.#endpoint, type);
+        if (vars !== undefined) {
+            defaults = { ...defaults, ...(type.supervisor.cast(vars) as Val.Struct) };
+        }
+
         return defaults;
     }
 
@@ -419,22 +460,6 @@ export class Behaviors {
         return backing.getInternal() as InstanceType<T["Internal"]>;
     }
 
-    /**
-     * Destroy in-memory state, resetting behaviors to uninitialized state.
-     */
-    async reset() {
-        for (const backing of Object.values(this.#backings)) {
-            try {
-                await this.#endpoint.act(`close<${this}>`, async agent => {
-                    await backing.close(agent);
-                });
-            } catch (e) {
-                logger.error(`Error during reset of ${backing}:`, e);
-            }
-            delete this.#backings[backing.type.id];
-        }
-    }
-
     #activateLate(type: Behavior.Type) {
         const result = OfflineContext.act("behavior-late-activation", this.#endpoint.env.get(NodeActivity), context =>
             this.activate(type, context.agentFor(this.#endpoint)),
@@ -442,13 +467,14 @@ export class Behaviors {
 
         if (MaybePromise.is(result)) {
             result.then(undefined, error => {
-                // The backing should handle its own errors so assume this is a commit error and crash the backing.  If
-                // there's no backing then there shouldn't be a promise so this is effectively an internal error
+                // The backing should handle its own errors so if present assume this is a commit error and crash the
+                // backing.  If there's no backing then there shouldn't be a promise so this is effectively an internal
+                // error
                 const backing = this.#backings[type.id];
                 if (backing) {
-                    backing.construction.crashed(error);
+                    logger.error(`Error initializing ${backing}`, error);
                 } else {
-                    logger.error("Unexpected rejection of late activation", error);
+                    logger.error(`Unexpected rejection initializing ${type.name}`, error);
                 }
             });
         }
@@ -486,31 +512,12 @@ export class Behaviors {
         // our type might be an extension
         const myType = this.#getBehaviorType(type);
         if (!myType) {
-            throw new ImplementationError(`Request for unsupported behavior ${this.#endpoint}.${type.id}}`);
+            throw new BehaviorInitializationError(`Initializing ${this.#endpoint}.${type.id}: Unsupported behavior`);
         }
 
         const backing = this.#endpoint.env.get(EndpointInitializer).createBacking(this.#endpoint, myType);
         this.#backings[type.id] = backing;
-
-        this.#initializeBacking(backing, agent);
-
-        return backing;
-    }
-
-    #initializeBacking(backing: BehaviorBacking, agent: Agent) {
-        backing.initialize(agent);
-
-        // Initialize backing state
-        if (!backing.construction.ready) {
-            if (!this.#initializing) {
-                this.#initializing = new BasicSet();
-            }
-            this.#initializing.add(backing);
-
-            backing.construction.onCompletion(() => {
-                this.#initializing?.delete(backing);
-            });
-        }
+        backing.construction.start(agent);
 
         return backing;
     }
@@ -557,4 +564,8 @@ export class Behaviors {
             enumerable: true,
         });
     }
+}
+
+function clusterOf(behavior?: Behavior.Type): ClusterType | undefined {
+    return (behavior as ClusterBehavior.Type)?.cluster;
 }

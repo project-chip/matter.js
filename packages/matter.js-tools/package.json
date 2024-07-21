@@ -68,7 +68,8 @@
         "@types/wtfnode": "^0.7.3",
         "@types/yargs": "^17.0.32",
         "dockerode": "^4.0.2",
-        "wtfnode": "^0.9.3"
+        "wtfnode": "^0.9.3",
+        "trace-unhandled": "^2.0.1"
     },
     "publishConfig": {
         "access": "public"

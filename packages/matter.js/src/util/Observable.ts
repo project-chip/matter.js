@@ -171,7 +171,11 @@ export class BasicObservable<T extends any[] = any[], R = void> implements Obser
         // Iterate over a clone of observers so we do not trigger new observers added during observation
         const iterator = [...this.#observers][Symbol.iterator]();
 
-        const emitNext = (): R | undefined => {
+        const emitNext = (previousEmitResult?: R): R | undefined => {
+            if (previousEmitResult !== undefined) {
+                return previousEmitResult;
+            }
+
             for (let iteration = iterator.next(); !iteration.done; iteration = iterator.next()) {
                 let result;
 
@@ -426,7 +430,7 @@ export namespace EventEmitter {
  */
 export class ObservableProxy extends BasicObservable {
     #target: Observable;
-    #emitter = (...args: unknown[]) => super.emit(...args);
+    #emitter = super.emit.bind(this);
 
     constructor(target: Observable) {
         super();
@@ -439,6 +443,7 @@ export class ObservableProxy extends BasicObservable {
 
         this.#target = target;
         this.#target.on(this.#emitter);
+        this.emit = this.#target.emit.bind(this.#target);
     }
 
     override [Symbol.dispose]() {
@@ -454,7 +459,5 @@ export class ObservableProxy extends BasicObservable {
         return this.#target.isObserved;
     }
 
-    override emit(...payload: any[]): void | undefined {
-        return this.#target.emit(...payload);
-    }
+    override emit: (...payload: any) => any | undefined;
 }

@@ -93,7 +93,7 @@ export class TestRunner {
 }
 
 function fatal(message: string, stack?: string) {
-    process.stderr.write(colors.redBright(`\n\n${message}\n\n`));
+    process.stderr.write(colors.redBright(`\n${message}\n\n`));
     if (stack) {
         stack = stack.replace(/^ {4}/gms, "");
         process.stderr.write(`${stack}\n\n`);

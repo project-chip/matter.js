@@ -386,7 +386,7 @@ logEndpoint(EndpointServer.forEndpoint(server));
  * node enters his online state. Alternatively, we could also use `await server.run()` which
  * resolves when the node goes offline again, but we want to execute code afterwards, so we use start() here
  */
-await server.bringOnline();
+await server.start();
 
 console.log("Initial Fabrics", server.state.operationalCredentials.fabrics);
 

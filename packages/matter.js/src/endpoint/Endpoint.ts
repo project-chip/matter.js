@@ -5,11 +5,9 @@
  */
 
 import { Behavior } from "../behavior/Behavior.js";
-import { ActionContext } from "../behavior/context/ActionContext.js";
-import { ActionTracer } from "../behavior/context/ActionTracer.js";
 import { NodeActivity } from "../behavior/context/NodeActivity.js";
 import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
-import { CrashedDependencyError, Lifecycle, UninitializedDependencyError } from "../common/Lifecycle.js";
+import { Lifecycle, UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Environment } from "../environment/Environment.js";
@@ -17,7 +15,7 @@ import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import type { Node } from "../node/Node.js";
 import { IdentityService } from "../node/server/IdentityService.js";
-import { AsyncConstruction } from "../util/AsyncConstruction.js";
+import { Construction } from "../util/Construction.js";
 import { MaybePromise } from "../util/Promises.js";
 import { Immutable } from "../util/Type.js";
 import { Agent } from "./Agent.js";
@@ -47,10 +45,10 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     #number?: EndpointNumber;
     #owner?: Endpoint;
     #agentType?: Agent.Type<T>;
-    #behaviors?: Behaviors;
+    #behaviors: Behaviors;
     #lifecycle: EndpointLifecycle;
     #parts?: Parts;
-    #construction: AsyncConstruction<Endpoint<T>>;
+    #construction: Construction<Endpoint<T>>;
     #stateView = {} as Immutable<SupportedBehaviors.StateOf<T["behaviors"]>>;
     #events = {} as SupportedBehaviors.EventsOf<T["behaviors"]>;
     #activity?: NodeActivity;
@@ -135,12 +133,6 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * Access the pool of behaviors supported by this endpoint.
      */
     get behaviors() {
-        if (this.#behaviors === undefined) {
-            throw new UninitializedDependencyError(
-                this.toString(),
-                "behaviors are not yet initialized; await endpoint.construction to avoid this error",
-            );
-        }
         return this.#behaviors;
     }
 
@@ -156,7 +148,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     stateOf<T extends Behavior.Type>(type: T) {
         if (!this.behaviors.has(type)) {
-            throw new ImplementationError(`Behavior ${type.id} is not supported by this endpoint`);
+            throw new ImplementationError(`Behavior ${type.id} is not supported by ${this}`);
         }
         return (this.#stateView as Record<string, unknown>)[type.id] as Immutable<Behavior.StateOf<T>>;
     }
@@ -231,7 +223,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
                 throw new ImplementationError(`State values for ${type.id} must be an object, not ${typeof values}`);
             }
             if (Array.isArray(values)) {
-                throw new ImplementationError(`StateValue for ${type.id} must be an object, not an array`);
+                throw new ImplementationError(`State values for ${type.id} must be an object, not an array`);
             }
 
             patch(values, behavior.state, this.path);
@@ -262,8 +254,8 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     /**
      * Create new endpoint.
      *
-     * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Endpoint.add} to construct
-     * and initialize a {@link Endpoint} in one step.
+     * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Endpoint.add} to
+     * construct and initialize an {@link Endpoint} in one step.
      *
      * @param config
      */
@@ -272,25 +264,23 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     /**
      * Create new endpoint.
      *
-     * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Endpoint.add} to construct
-     * and initialize a {@link Endpoint} in one step.
+     * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Endpoint.add} to
+     * construct and initialize an {@link Endpoint} in one step.
      *
      * @param config
      */
     constructor(type: T, options?: Endpoint.Options<T>);
 
     constructor(definition: T | Endpoint.Configuration<T>, options?: Endpoint.Options<T>) {
-        // Create construction early so endpoints and behaviors can hook events
-        this.#construction = AsyncConstruction(this);
-
         const config = Endpoint.configurationFor(definition, options);
 
         this.#type = config.type;
-        this.#lifecycle = this.createLifecycle();
 
+        // Create construction early so other components can hook events
+        this.#construction = Construction(this);
+
+        this.#lifecycle = this.createLifecycle(config.isEssential);
         this.#lifecycle.ready.on(() => this.#logReady());
-
-        this.#behaviors = new Behaviors(this, this.#type.behaviors, config as Record<string, object | undefined>);
 
         if (config.id !== undefined) {
             this.id = config.id;
@@ -299,6 +289,8 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         if (config.number !== undefined) {
             this.number = config.number;
         }
+
+        this.#behaviors = new Behaviors(this, config as Record<string, object | undefined>);
 
         if (config.owner) {
             this.owner = config.owner instanceof Agent ? config.owner.endpoint : config.owner;
@@ -309,31 +301,6 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
                 this.parts.add(part);
             }
         }
-
-        this.#construction.start(() => {
-            if (this.lifecycle.isInstalled) {
-                // Immediate initialization
-                return this.#initialize();
-            }
-
-            // Deferred initialization -- wait for installation
-            return new Promise<void>((fulfilled, rejected) => {
-                const initializeOnInstall = () => {
-                    try {
-                        const result = this.#initialize();
-                        if (MaybePromise.is(result)) {
-                            result.then(fulfilled, rejected);
-                            return;
-                        }
-                    } catch (e) {
-                        rejected(e);
-                    }
-                    fulfilled();
-                };
-
-                this.lifecycle.installed.once(initializeOnInstall);
-            });
-        });
     }
 
     set id(id: string) {
@@ -418,20 +385,27 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         try {
             owner.parts.add(this);
         } catch (e) {
+            owner.parts.delete(this);
             this.#owner = undefined;
             throw e;
         }
     }
 
     /**
-     * Add a child endpoint.
+     * Add a child endpoint.  If this endpoint is initialized, awaits child initialization.
+     *
+     * If child initialization fails:
+     *
+     *   - If the child is essential (@see {@link EndpointLifecycle#isEssential}), removes the child and rethrows
+     *
+     *   - If the child is non-essential then logs the error but leaves the child installed.
      *
      * @param endpoint the {@link Endpoint} or {@link Endpoint.Configuration}
      */
     async add<T extends EndpointType>(endpoint: Endpoint<T> | Endpoint.Configuration<T> | T): Promise<Endpoint<T>>;
 
     /**
-     * Add a child endpoint.
+     * Add a child endpoint with separate type and options arguments.
      *
      * @param type the {@link EndpointType} of the child endpoint
      * @param options settings for the new endpoint
@@ -446,6 +420,8 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             throw new ImplementationError(`You may not use add() here because ${this} is not installed in a Node`);
         }
 
+        await this.construction;
+
         let endpoint;
         if (definition instanceof Endpoint) {
             endpoint = definition;
@@ -453,9 +429,30 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             endpoint = new Endpoint(definition as any, options);
         }
 
+        if (this.#lifecycle.isPartsReady) {
+            // Disable the default logging of construction errors because we throw the cause below
+            endpoint.construction.onError(() => {});
+        }
+
         this.parts.add(endpoint);
 
-        await endpoint.construction;
+        try {
+            await endpoint.construction.ready;
+        } catch (e) {
+            // If endpoint is essential do not allow it to be added
+            if (endpoint.lifecycle.isEssential) {
+                await endpoint.reset();
+                this.parts.delete(endpoint);
+                endpoint.#owner = undefined;
+            }
+
+            // For non-essential endpoints just log the error
+            if (!endpoint.lifecycle.isEssential) {
+                logger.error(`Initialization error in non-essential endpoint ${endpoint}:`, e);
+            }
+
+            throw e;
+        }
 
         return endpoint;
     }
@@ -491,8 +488,8 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         return this.#lifecycle;
     }
 
-    protected createLifecycle() {
-        return new EndpointLifecycle(this);
+    protected createLifecycle(isEssential?: boolean) {
+        return new EndpointLifecycle(this, isEssential);
     }
 
     /**
@@ -563,25 +560,24 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * Perform "soft" reset of the endpoint, reverting all in-memory structures to uninitialized.
      */
     async reset() {
-        // Revert lifecycle to uninitialized
-        this.lifecycle.resetting();
+        try {
+            // Revert lifecycle to uninitialized
+            this.lifecycle.resetting();
 
-        // Reset child parts
-        for (const endpoint of this.parts) {
-            await endpoint.reset();
+            // Reset child parts
+            await this.parts.reset();
+
+            // Reset behaviors
+            await this.behaviors.close();
+
+            // Notify
+            await this.lifecycle.reset.emit();
+
+            // Set construction to inactive so we can restart
+            this.construction.setStatus(Lifecycle.Status.Inactive);
+        } catch (e) {
+            logger.error(`Unhandled error during reset of ${this}`, e);
         }
-
-        // Reset behaviors
-        await this.behaviors.reset();
-
-        // Notify
-        await this.lifecycle.reset.emit();
-
-        // Set construction to inactive so we can restart
-        this.construction.setStatus(Lifecycle.Status.Inactive);
-
-        // The endpoint will defer construction until it is notified of installation by a node
-        this.construction.start();
     }
 
     /**
@@ -609,17 +605,19 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     async close() {
-        await this.construction.close(async () => {
-            await this.#parts?.close();
-            await this.#behaviors?.close();
+        await this.#construction.close();
+    }
 
-            for (const events of Object.values(this.#events)) {
-                events[Symbol.dispose]();
-            }
+    async [Construction.destruct]() {
+        await this.#parts?.close();
+        await this.#behaviors?.close();
 
-            this.lifecycle.change(EndpointLifecycle.Change.Destroyed);
-            this.#owner = undefined;
-        });
+        for (const events of Object.values(this.#events)) {
+            events[Symbol.dispose]();
+        }
+
+        this.lifecycle.change(EndpointLifecycle.Change.Destroyed);
+        this.#owner = undefined;
     }
 
     async [Symbol.asyncDispose]() {
@@ -635,9 +633,9 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     get path(): DataModelPath {
         let ident;
-        if (this.lifecycle.hasId) {
+        if (this.lifecycle?.hasId) {
             ident = this.id;
-        } else if (this.lifecycle.hasNumber) {
+        } else if (this.lifecycle?.hasNumber) {
             ident = this.number;
         } else {
             ident = "?";
@@ -647,7 +645,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             return this.#owner.path.at(ident, this.#type.name);
         }
 
-        return DataModelPath(ident, this.type.name);
+        return DataModelPath(ident, this.type?.name);
     }
 
     /**
@@ -655,63 +653,47 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      *
      * Derivatives may override to perform async construction prior to full initialization.
      */
-    protected initialize(agent: Agent.Instance<T>) {
+    protected initialize() {
+        // Configure the endpoint for the appropriate node type
         this.env.get(EndpointInitializer).initializeDescendent(this);
-        return this.behaviors.initialize(agent);
+
+        // Initialize behaviors.  Success brings endpoint to "ready" state
+        let promise = this.behaviors.initialize();
+
+        // Initialize parts.  Success brings endpoint to "tree ready" state
+        if (promise) {
+            promise = promise.then(this.parts.initialize.bind(this.parts));
+        } else {
+            promise = this.parts.initialize();
+        }
+
+        return promise;
     }
 
     /**
-     * Invoked if one or more behaviors crashed during initialization.
-     *
-     * The default implementation crashes the endpoint.
+     * Ensure requirements for construction are met.
      */
-    protected behaviorCrash() {
-        this.construction.onSuccess(() => {
-            logger.info(
-                "Endpoint",
-                Diagnostic.strong(this.toString()),
-                "initialization failed because of errors in behaviors",
-            );
-
-            this.#construction.crashed(
-                new CrashedDependencyError(this.toString(), "unavailable due to behavior initialization failure"),
-
-                // We do not want this error logged
-                false,
-            );
-        });
+    protected assertConstructable() {
+        if (this.#owner === undefined) {
+            throw new ImplementationError(`Endpoint construction initiated without owner`);
+        }
+        if (!this.#owner.#lifecycle.isInstalled) {
+            throw new ImplementationError(`Endpoint construction initiated with uninstalled owner`);
+        }
     }
 
-    #initialize() {
-        const trace: ActionTracer.Action | undefined = this.env.has(ActionTracer)
-            ? { type: ActionTracer.ActionType.Initialize }
-            : undefined;
+    /**
+     * Complete initialization.  Invoked via {@link Construction#start} by the owner.
+     */
+    [Construction.construct]() {
+        // Sanity checks
+        this.assertConstructable();
 
-        const initializeEndpoint = (context: ActionContext) => this.initialize(context.agentFor(this));
+        // We now consider the endpoint "installed"
+        this.lifecycle.change(EndpointLifecycle.Change.Installed);
 
-        if (!this.#activity) {
-            this.#activity = this.env.get(NodeActivity);
-        }
-
-        const result = OfflineContext.act(`initialize<${this}>`, this.#activity, initializeEndpoint, {
-            trace,
-        });
-
-        const afterEndpointInitialized = () => {
-            this.lifecycle.change(EndpointLifecycle.Change.Ready);
-            if (trace && this.env.has(ActionTracer)) {
-                trace.path = this.path;
-                this.env.get(ActionTracer).record(trace);
-            }
-
-            if (this.behaviors.hasCrashed) {
-                this.behaviorCrash();
-            }
-        };
-
-        this.#construction.onSuccess(afterEndpointInitialized);
-
-        return result;
+        // Initialize
+        return this.initialize();
     }
 
     #logReady() {
@@ -759,10 +741,41 @@ export namespace Endpoint {
     };
 
     export interface EndpointOptions {
+        /**
+         * The owner of the endpoint.
+         *
+         * If provided, takes ownership of the endpoint at construction.
+         */
         owner?: Endpoint | Agent;
+
+        /**
+         * The endpoint's string identifier.  Must be unique within the parent.
+         *
+         * If you omit the identifier the node assigns a generated one for you.
+         */
         id?: string;
+
+        /**
+         * The endpoint number.  Must be unique within the node.
+         *
+         * If you omit the endpoint number the node assigns a sequential one for you.
+         */
         number?: number;
+
+        /**
+         * Child endpoints.
+         *
+         * This is the inverse of setting {@link owner} above.  The endpoint instantiates and takes ownership of child
+         * endpoints at construction time.
+         */
         parts?: Iterable<Endpoint.Definition>;
+
+        /**
+         * Designates whether an endpoint is essential.
+         *
+         * Endpoints are essential by default but you may disable by setting this to false.
+         */
+        isEssential?: boolean;
     }
 
     export type Options<

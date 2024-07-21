@@ -127,7 +127,7 @@ for (let idx = 1; idx < devices.length; idx++) {
      * offline again because we do not need anything more here. See the Full example for other starting options.
      * The QR Code is printed automatically.
      */
-    await server.bringOnline();
+    await server.start();
 }
 
 /*********************************************************************************************************

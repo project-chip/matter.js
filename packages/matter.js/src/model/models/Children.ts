@@ -567,7 +567,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
             delete children[p as unknown as number];
 
             // Child may have been added elsewhere in the index so only delete if not still present
-            if (child instanceof Model && children.indexOf(child) === -1) {
+            if (child instanceof Model && !children.includes(child)) {
                 deleteChild(child);
             }
 

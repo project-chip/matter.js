@@ -4,8 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { UnexpectedDataError } from "../../common/MatterError.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { FieldValue } from "./FieldValue.js";
+import { isObject } from "../../util/Type.js";
+
+export class UnsupportedCastError extends UnexpectedDataError {}
 
 /**
  * General groupings of Matter types.
@@ -74,159 +77,256 @@ export namespace Metatype {
     }
 
     /**
-     * Cast a value to a specific type.
-     *
-     * @param type casts to a native equivalent of this type
-     * @param value value to cast
-     * @returns the cast value or FieldValue.Invalid if cast is not possible
+     * Returned if type conversion is impossible.
      */
-    export function cast(type: Metatype, value: FieldValue): FieldValue | FieldValue.Invalid | undefined {
-        if (value === undefined || value === null || type === Metatype.any) {
+    export const Invalid = Symbol("invalid");
+
+    /**
+     * Functions that perform conversion of arbitrary values to a metatype.
+     *
+     * This is a "best effort" that ensures the value is an appropriate JS type but cannot ensure semantic validity in
+     * all cases.
+     *
+     * @throws {@link UnsupportedCastError} if the cast is deemed impossible
+     */
+    export const cast: Record<Metatype, (value: any) => any> = {
+        any(value: any) {
             return value;
-        }
+        },
 
-        if (value === "null") {
-            return null;
-        }
-
-        if (value === "") {
-            if (type === Metatype.string) {
-                return "";
+        boolean(value: any): boolean | null | undefined {
+            if (typeof value === "boolean" || value === null || value === undefined) {
+                return value;
             }
-            return undefined;
-        }
 
-        if (FieldValue.is(value, FieldValue.reference)) {
-            return value;
-        }
+            if (typeof value === "string") {
+                const normalized = value.toLowerCase().trim();
+                switch (normalized) {
+                    case "":
+                    case "0":
+                    case "off":
+                    case "no":
+                    case "false":
+                        return false;
 
-        switch (type) {
-            case Metatype.string:
-                return value.toString();
-
-            case Metatype.boolean:
-                if (typeof value === "string") {
-                    value = value.trim().toLowerCase();
+                    case "1":
+                    case "on":
+                    case "yes":
+                    case "true":
+                        return true;
                 }
-                return value === "false" || value === "no" || !!value;
+            }
 
-            case Metatype.bitmap:
-            case Metatype.enum:
-                const id = Number(value);
-                if (Number.isNaN(id)) {
-                    // Key name
-                    return `${value}`;
-                }
-                // Value
-                return id;
+            if (typeof value === "number" || typeof value === "bigint") {
+                return !!value;
+            }
 
-            case Metatype.integer:
-                if (typeof value === "string") {
-                    // Specialized support for percentages and temperatures
-                    let type: FieldValue.celsius | FieldValue.percent | undefined;
-                    if (value.endsWith("°C")) {
-                        type = FieldValue.celsius;
-                    } else if (value.endsWith("%")) {
-                        type = FieldValue.percent;
-                    }
-                    if (type) {
-                        value = Number.parseInt(value);
-                        if (Number.isNaN(value)) {
-                            return FieldValue.Invalid;
-                        }
-                        return { type, value };
-                    }
-
-                    // Strip off extra garbage like Number.parseInt would but BigInt doesn't
-                    const match = value.match(/^(0x[0-9a-f]+|0b[01]+|\d+)/i);
-                    if (match) {
-                        value = match[1];
+            if (ArrayBuffer.isView(value)) {
+                for (const byte of new ByteArray(value.buffer)) {
+                    if (byte) {
+                        return true;
                     }
                 }
+                return false;
+            }
 
+            throw new UnsupportedCastError(`Cannot convert "${value}" to boolean`);
+        },
+
+        bitmap(value: any): number | bigint | Record<string, number> | null | undefined {
+            if (value === null || value === undefined) {
+                return value;
+            }
+
+            if (typeof value === "string") {
+                value = cast.integer(value);
+            }
+
+            if (typeof value === "number") {
+                if (Number.isFinite(value)) {
+                    return value;
+                }
+            } else if (typeof value === "bigint") {
+                return value;
+            } else if (isObject(value)) {
+                return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, cast.integer(v)])) as Record<
+                    string,
+                    number
+                >;
+            }
+
+            throw new UnsupportedCastError(`Cannot convert "${value}" to bitmap`);
+        },
+
+        enum(value: any): number | string | null | undefined {
+            if (typeof value === "string") {
+                if (value.trim().match(/^(?:[0-9]+|0x[0-9a-f]+|0b[01]+)$/)) {
+                    value = Number.parseInt(value);
+                } else {
+                    return value;
+                }
+            }
+
+            if (typeof value === "number" && !Number.isNaN(value) && Number.isFinite(value)) {
+                return value;
+            }
+
+            throw new UnsupportedCastError(`Cannot convert "${value}" to an enum value`);
+        },
+
+        integer(value: any): number | bigint | null | undefined {
+            if (value === null || value === undefined) {
+                return value;
+            }
+
+            switch (typeof value) {
+                case "number":
+                    return Math.floor(value);
+
+                case "bigint":
+                    return value;
+
+                case "boolean":
+                    return value ? 1 : 0;
+            }
+
+            if (value instanceof Date) {
+                return value.getTime();
+            }
+
+            if (typeof value === "string") {
                 try {
-                    switch (typeof value) {
-                        case "string":
-                        case "number":
-                        case "bigint":
-                        case "boolean":
-                            break;
-
-                        default:
-                            if (FieldValue.is(value, FieldValue.celsius) || FieldValue.is(value, FieldValue.percent)) {
-                                return value;
-                            }
-                            return FieldValue.Invalid;
+                    const big = BigInt(value);
+                    const little = Number.parseInt(value);
+                    if (big === BigInt(little)) {
+                        return little;
                     }
-                    const i = BigInt(value);
-                    const n = Number(i);
-                    if (BigInt(n) === i) {
-                        return n;
-                    }
-                    return i;
+                    return big;
                 } catch (e) {
-                    if (e instanceof SyntaxError) {
-                        return FieldValue.Invalid;
+                    if (!(e instanceof SyntaxError)) {
+                        throw e;
                     }
-                    throw e;
                 }
+            }
 
-            case Metatype.float:
-                const float = Number(value);
-                if (Number.isNaN(float)) {
-                    return FieldValue.Invalid;
-                }
-                return float.valueOf();
+            throw new UnsupportedCastError(`Cannot convert "${value}" to an integer`);
+        },
 
-            case Metatype.date:
-                if (value instanceof Date) {
-                    return value;
-                }
-                if (typeof value !== "string") {
-                    return FieldValue.Invalid;
-                }
-                value = new Date(value);
-                if (Number.isNaN(value.valueOf())) {
-                    return FieldValue.Invalid;
-                }
+        float(value: any): number | null | undefined {
+            if (typeof value === "number" || value === null || value === undefined) {
                 return value;
+            }
 
-            case Metatype.object:
-                if (value === "null") {
-                    return null;
-                }
-                if (FieldValue.is(value, FieldValue.properties)) {
-                    return value;
-                }
-                break;
+            if (value instanceof Date) {
+                return value.getTime();
+            }
 
-            case Metatype.bytes:
-                if (value === "empty") {
-                    return undefined;
-                }
-                if (!(value instanceof Uint8Array)) {
-                    return FieldValue.Invalid;
-                }
+            const number = Number(value);
+            if (!Number.isNaN(number) && Number.isFinite(value)) {
+                return number;
+            }
+
+            throw new UnsupportedCastError(`Cannot convert "${value}" to a float`);
+        },
+
+        bytes(value: any): ByteArray | null | undefined {
+            if (value === undefined || value === null || value instanceof ByteArray) {
                 return value;
+            }
 
-            case Metatype.array:
-                // Eject garbage we've seen in the spec
-                if (value === "0" || value === "{0,0}") {
-                    return;
-                }
-                if (value === "empty" || value === "[]" || value === "{}") {
-                    return [];
-                }
-                if (Array.isArray(value)) {
-                    return value;
-                }
+            if (typeof value === "string") {
+                return ByteArray.fromHex(value);
+            }
 
-                // The only supported literal is an empty array
-                return FieldValue.Invalid;
-        }
+            if (typeof value === "boolean") {
+                return new ByteArray([value ? 1 : 0]);
+            }
 
-        return FieldValue.Invalid;
-    }
+            if (typeof value === "number" || typeof value === "bigint") {
+                return ByteArray.fromHex(value.toString(16));
+            }
+
+            throw new UnsupportedCastError(`Cannot convert "${value}" to bytes`);
+        },
+
+        array(value: any): Array<unknown> | null | undefined {
+            if (value === undefined || value === null || Array.isArray(value)) {
+                return value;
+            }
+
+            if (typeof value === "string") {
+                try {
+                    const parsed = JSON.parse(value);
+                    if (Array.isArray(parsed)) {
+                        return parsed;
+                    }
+                } catch (e) {
+                    if (!(e instanceof SyntaxError)) {
+                        throw e;
+                    }
+                }
+            }
+
+            throw new UnsupportedCastError(`Cannot convert "${value}" to array`);
+        },
+
+        object(value: any): Record<string, unknown> | null | undefined {
+            if (
+                value === undefined ||
+                (typeof value === "object" && !Array.isArray(value) && !(value instanceof Date))
+            ) {
+                return value;
+            }
+
+            if (typeof value === "string") {
+                try {
+                    const parsed = JSON.parse(value);
+                    return parsed;
+                } catch (e) {
+                    if (!(e instanceof SyntaxError)) {
+                        throw e;
+                    }
+                }
+            }
+
+            throw new UnsupportedCastError(`Cannot convert "${value}" to object`);
+        },
+
+        string(value: any): string | null | undefined {
+            if (value === undefined || value === null) {
+                return value;
+            }
+
+            if (typeof value === "string") {
+                return value;
+            }
+
+            if (value instanceof Date) {
+                return value.toISOString();
+            }
+
+            if (typeof value === "object" || Array.isArray(value)) {
+                return JSON.stringify(value);
+            }
+
+            return value.toString();
+        },
+
+        date(value: any): Date | null | undefined {
+            if (value === undefined || value === null || value instanceof Date) {
+                return value;
+            }
+
+            if (typeof value === "number" || typeof value === "string") {
+                const date = new Date(value);
+                if (!Number.isNaN(date.getTime())) {
+                    return date;
+                }
+            }
+
+            throw new UnexpectedDataError();
+        },
+    };
 
     /**
      * These are the native types used by this module.

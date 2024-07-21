@@ -13,7 +13,7 @@ import { Logger } from "../../../log/Logger.js";
 import { EventHandler } from "../../../protocol/interaction/EventHandler.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { StorageManager } from "../../../storage/StorageManager.js";
-import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
+import { Construction, asyncNew } from "../../../util/Construction.js";
 import { PartStoreFactory, PartStoreService } from "./PartStoreService.js";
 
 const logger = Logger.get("ServerStore");
@@ -33,7 +33,7 @@ export class ServerStore implements Destructable {
     #fabricStorage?: StorageContext;
     #eventStorage?: StorageContext;
     #rootStore?: PartStoreFactory;
-    #construction: AsyncConstruction<ServerStore>;
+    #construction: Construction<ServerStore>;
 
     get construction() {
         return this.#construction;
@@ -66,7 +66,7 @@ export class ServerStore implements Destructable {
             this.#logChange("Opened");
         };
 
-        this.#construction = AsyncConstruction(this, initializeStorage);
+        this.#construction = Construction(this, initializeStorage);
     }
 
     static async create(environment: Environment, nodeId: string) {

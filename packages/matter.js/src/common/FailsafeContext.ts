@@ -13,8 +13,8 @@ import { FabricManager } from "../fabric/FabricManager.js";
 import { Logger } from "../log/Logger.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { SessionManager } from "../session/SessionManager.js";
-import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { Construction } from "../util/Construction.js";
 import { AsyncObservable } from "../util/Observable.js";
 import { FailsafeTimer, MatterFabricConflictError } from "./FailsafeTimer.js";
 import { MatterFlowError, UnexpectedDataError } from "./MatterError.js";
@@ -37,7 +37,7 @@ export abstract class FailsafeContext {
     #sessions: SessionManager<MatterDevice>;
     #fabrics: FabricManager;
     #failsafe?: FailsafeTimer;
-    #construction: AsyncConstruction<FailsafeContext>;
+    #construction: Construction<FailsafeContext>;
     #associatedFabric?: Fabric;
     #csrSessionId?: number;
     #forUpdateNoc?: boolean;
@@ -52,7 +52,7 @@ export abstract class FailsafeContext {
         this.#fabrics = options.fabrics;
         this.#associatedFabric = options.associatedFabric;
 
-        this.#construction = AsyncConstruction(this, async () => {
+        this.#construction = Construction(this, async () => {
             // Ensure derived class construction is complete
             await Promise.resolve();
 

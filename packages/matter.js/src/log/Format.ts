@@ -11,6 +11,8 @@ import { serialize } from "../util/String.js";
 import { Diagnostic } from "./Diagnostic.js";
 import { Level } from "./Level.js";
 
+const INDENT_SPACES = 2;
+
 /**
  * Get a formatter for the specified format.
  */
@@ -64,6 +66,7 @@ interface Formatter {
     value(producer: Producer): string;
     strong(producer: Producer): string;
     weak(producer: Producer): string;
+    error(producer: Producer): string;
     status(status: Lifecycle.Status, producer: Producer): string;
     via(text: string): string;
 }
@@ -89,7 +92,7 @@ function plaintextCreator() {
         text(value: string) {
             if (broke) {
                 broke = false;
-                return `\n${"".padStart(indents * 4)}${value}`;
+                return `\n${"".padStart(indents * INDENT_SPACES)}${value}`;
             }
             return value;
         },
@@ -121,6 +124,7 @@ function plainLogFormatter(now: Date, level: Level, facility: string, prefix: st
         value: producer => creator.text(producer()),
         strong: producer => creator.text(`*${producer()}*`),
         weak: producer => creator.text(producer()),
+        error: producer => creator.text(producer()),
         status: (status, producer) => `${creator.text(statusIcon(status))}${producer()}`,
         via: text => creator.text(text),
     });
@@ -259,6 +263,13 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
             return result;
         },
 
+        error: producer => {
+            styles.push("error");
+            const result = producer();
+            styles.pop();
+            return result;
+        },
+
         status: (status, producer) => {
             styles.push(status);
             const result = `${creator.text(style(status, statusIcon(status)))}${producer()}`;
@@ -371,7 +382,8 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: str
         key: text => htmlSpan("key", `${escape(text)}:`) + " ",
         value: producer => htmlSpan("value", producer()),
         strong: producer => `<em>${producer()}</em>`,
-        weak: producer => htmlSpan(`weak`, producer()),
+        weak: producer => htmlSpan("weak", producer()),
+        error: producer => htmlSpan("error", producer()),
         status: (status, producer) => htmlSpan(`status-${status}`, producer()),
         via: text => htmlSpan("via", escape(text)),
     });
@@ -411,7 +423,8 @@ function renderValue(value: unknown, formatter: Formatter, squash: boolean): str
         if (list.length > 1) {
             return renderList(list, formatter);
         }
-        return list[0]
+        const first = valueFor(list[0]) as unknown[];
+        return first
             .map(e => {
                 if (typeof e === "string" && !squash) {
                     e = e.trim();
@@ -424,11 +437,14 @@ function renderValue(value: unknown, formatter: Formatter, squash: boolean): str
         return formatter.text(formatTime(value));
     }
     if (typeof value === "object") {
+        if (value instanceof String) {
+            return value.toString();
+        }
         return formatter.text(serialize(value) ?? "undefined");
     }
 
     const text = typeof value === "string" || value instanceof String ? value : value.toString().trim();
-    if (text.indexOf("\n") === -1) {
+    if (!text.includes("\n")) {
         return formatter.text(text as string);
     }
 
@@ -522,6 +538,9 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
 
         case Diagnostic.Presentation.Weak:
             return formatter.weak(() => renderDiagnostic(value, formatter));
+
+        case Diagnostic.Presentation.Error:
+            return formatter.error(() => renderDiagnostic(value, formatter));
 
         case Diagnostic.Presentation.Via:
             return formatter.via(`${value}`);

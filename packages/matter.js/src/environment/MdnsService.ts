@@ -9,7 +9,7 @@ import { Logger } from "../log/Logger.js";
 import { MdnsBroadcaster } from "../mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "../mdns/MdnsScanner.js";
 import { Network } from "../net/Network.js";
-import { AsyncConstruction } from "../util/AsyncConstruction.js";
+import { Construction } from "../util/Construction.js";
 import { MaybePromise } from "../util/Promises.js";
 import { Environment } from "./Environment.js";
 import { Environmental } from "./Environmental.js";
@@ -20,7 +20,7 @@ const logger = Logger.get("MDNS");
 export class MdnsService {
     #broadcaster?: MdnsBroadcaster;
     #scanner?: MdnsScanner;
-    readonly #construction: AsyncConstruction<MdnsService>;
+    readonly #construction: Construction<MdnsService>;
     readonly #enableIpv4: boolean;
     readonly limitedToNetInterface?: string;
 
@@ -36,7 +36,7 @@ export class MdnsService {
         this.#enableIpv4 = vars.boolean("mdns.ipv4") ?? options?.ipv4 ?? true;
         this.limitedToNetInterface = vars.get("mdns.networkInterface", options?.networkInterface);
 
-        this.#construction = AsyncConstruction(this, async () => {
+        this.#construction = Construction(this, async () => {
             const network = environment.get(Network);
 
             this.#broadcaster = await MdnsBroadcaster.create(network, {

@@ -22,6 +22,7 @@ These examples were also adjusted and exist for the legacy API (\*Legacy.ts) as 
 too to see the differences between the APIs.
 
 ## TypeScript relevant settings
+
 Beside the TS module resolution settings already mentioned in the [matter.js README.md](../packages/matter.js/README.md), the new API also requires to use at least `"strictNullChecks": true` or better for code quality `"strict": true` to make sure that all types are correctly determined.
 
 ## Components
@@ -44,7 +45,8 @@ In fact this is all what they have in common, so the differences are:
 -   Basic configuration can be provided via a config file, CLI parameters or also environment variables. Some defined configuration keys are used by the base environment or the Node.js environment (e.g. MDNS network interface and such), but also custom configuration can be added and access from within every place in the code by accessing the environment. So this also acts as central place to share configuration for the device implementation. Some variables and their usage is documented in the [Examples Readme](../packages/matter-node.js-examples/README.md). Else check the [Environment.ts](../packages/matter.js/src/environment/Environment.ts) and [NodeJsEnvironment.ts](../packages/matter-node.js/src/environment/NodeJsEnvironment.ts).
 -   The "ProcessManager" of the environment will, in case of the Node.js environment, also register Process signal handlers to handle Shutdown (SIGINT, SIGTERM, exit) or to trigger logging diagnostic data (SIGUSR2). For other environments this needs to be implemented accordingly.
 -   The environment adds the concept of Workers that can execute tasks/jobs/logic and these workers are used to run Nodes and finish when they are ended. With this Matter Servers (old name CommissioningServer)/Server Nodes (new) are registered on the Environment as workers. The ServerNode (see below) has convenient methods to do that registration, so these Workers are ideally encapsulated and are not needed be used directly the developer, but could for own workloads. The Workers are all disposed/ended when the Environment is disposed.
--    Port numbers that were optionally managed by the MatterServer are no longer managed and so the application needs to take care itself!
+-   The environment adds the concept "variables" that is a general configuration hierarchy. You may set variables via OS environment variables, command line arguments or configuration file. See [VariableService](../packages/matter.js/src/environment/VariableService.ts) and [EndpointVariableService](../packages/matter.js/src/endpoint/EndpointVariableService.ts) for usage details.
+-   Port numbers that were optionally managed by the MatterServer are now allocated instead by the operating system.
 
 This Environment component even more simplifies to build devices by making sure base components are handled centrally for all things needed.
 
@@ -63,11 +65,10 @@ When the node is created you add "Endpoints" to it which is comparable (and re-u
 Afterward you start the node. Here you have two options:
 
 -   **`node.run()`**: This registers the node as worker on the environment and runs the server and resolves when the node gets closed! SO there is no code executed after this await until the devices was closed. Use this if you just have such a single node in one Node.js process and nothing else is needed and all additional logic is done by event handlers that were attached earlier in code.
--   **`node.bringOnline()`**: This registers the node as worker on the environment and start the server. The promise resolves when the node is online and announced in the network, so additional code can be executed afterwards.
+-   **`node.start()`**: This registers the node as worker on the environment and start the server. The promise resolves when the node is online and announced in the network, so additional code can be executed afterwards.
 
 The following methods are also existing on the ServerNode:
 
--   **`start()`**: This starts the node. Use only if the node was stopped before.
 -   **`cancel()`**: This brings the node offline and removes all network sockets but leave state and structure intact, so it can be started again.
 -   **`factoryReset()`**: This factory resets the device. If started it is stopped and restarted afterward.
 -   **`destroy()`**: This destroys the node, taking it offline and removing it from the environment workers-
@@ -190,18 +191,20 @@ const endpoint = await serverNode.add(
 
 #### Override Cluster handlers and implementations
 
-Matter.js provides default implementations for several clusters. See the [Readme of matter.js project](../packages/matter.js/README.md#included-cluster-default-implementations) for a list of all available clusters, their default implementations and notes for it. The implemented functionality is also described in the cluster implementations themselves that can be found in the [behavior/definitions](../packages/matter.js/src/behavior/definitions) folder (check the *Server.ts files).
+Matter.js provides default implementations for several clusters. See the [Readme of matter.js project](../packages/matter.js/README.md#included-cluster-default-implementations) for a list of all available clusters, their default implementations and notes for it. The implemented functionality is also described in the cluster implementations themselves that can be found in the [behavior/definitions](../packages/matter.js/src/behavior/definitions) folder (check the \*Server.ts files).
 
 You can override the matter commands directly as one option and implement the full required logic as defined by the specification. Most default implementations already do this and provide special logic methods to override to implement just the relevant device/hardware/platform specific logic. In these cases you only need to take care about this and can leave matter specific requirements aside because we already took care about them.
 
-Examples here are e.g. 
-* [LevelControlServer](../packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts)
-* [OnOffServer](../packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts)
-* [ColorControl](../packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts)
-* [Window-Covering](../packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts)
-* ... and several more :-)
+Examples here are e.g.
+
+-   [LevelControlServer](../packages/matter.js/src/behavior/definitions/level-control/LevelControlServer.ts)
+-   [OnOffServer](../packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts)
+-   [ColorControl](../packages/matter.js/src/behavior/definitions/color-control/ColorControlServer.ts)
+-   [Window-Covering](../packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringServer.ts)
+-   ... and several more :-)
 
 ### New:BridgedNodeEndpoint <--> Legacy:ComposedDevice
+
 To create a Composed device in a bridge context a structure container is needed to encapsulate the endpoints of the composed device. In the new API this is done by the BridgedNodeEndpoint class.
 
 An Endpoint of this type is added to the Aggregator endpoint together with it's Bridged Device Basic Information data.
@@ -237,10 +240,11 @@ await composed.add(composedLight);
 For hints on options to add endpoints into a structure see next paragraph.
 
 ### How to add endpoints into a structure?
+
 The new API provides basically two ways to add endpoints into a structure:
 
-* "Lazy" way: When using `endpoint.parts.add()` or when you provide the parts in the configuration of the Endpoint when creating it. While this is convenient it has the side-effect that the Endpoint is not directly initialized, and so you can not directly access the cluster state of the endpoint. This is only possible when the node is online or an endpoint was added with full initialization (see next point).
-* "Initialized/Async" way: When you add the endpoint to the node with `await node.add(endpoint)` the endpoint is directly initialized, including all internal data structures, and you can add event handlers or such directly after the add call. This is currently the recommended way if you need to do something directly after the endpoint was added, but requires that you need to carefully add all relevant endpoints in the right order to the node.
+-   "Lazy" way: When using `endpoint.parts.add()` or when you provide the parts in the configuration of the Endpoint when creating it. While this is convenient it has the side-effect that the Endpoint is not directly initialized, and so you can not directly access the cluster state of the endpoint. This is only possible when the node is online or an endpoint was added with full initialization (see next point).
+-   "Initialized/Async" way: When you add the endpoint to the node with `await node.add(endpoint)` the endpoint is directly initialized, including all internal data structures, and you can add event handlers or such directly after the add call. This is currently the recommended way if you need to do something directly after the endpoint was added, but requires that you need to carefully add all relevant endpoints in the right order to the node.
 
 ### Initialize and destroy cluster logic
 
@@ -293,8 +297,9 @@ The DevicesFullNode.ts contains a [MyFancyFunctionality custom cluster](../packa
 ### React to change events on cluster attributes
 
 matter.js supports two type of change events for attribute values:
-* **"fieldName$Changed"**: This is the most commonly used when you want to react to the final value of a changed attribute. This event is triggered when the attribute value is already considered "changed" and you want to react based on this "fact" and want to execute other actions. Be careful when you change other state values of the same or other clusters of this device in this event handler - this might lead to errors because the state could be locked by such an action and especially multiple change handlers trying to adjust the same cluster might produce errors that might be hard to tackle. Exceptions thrown in $Changed event handlers are logged but do not lead to a rollback of the transaction.
-* **fieldName$Changing**: Since matter.js v0.9 this new event is available. This event is triggered when the attribute value is about to be changed. This is especially useful if you want to react to the change to adjust other state values of the same or other clusters of this device. This event handler should not be used to actually trigger actions because there could be cyclic dependencies between such $Changing event handlers that modify the state again. Additionally, exceptions thrown in $Changing event handlers lead to a rollback of the current transactions, so another use case for $Changing are special value checks. Most likely the use of these event handlers is for special cases and requirements only.
+
+-   **"fieldName$Changed"**: This is the most commonly used when you want to react to the final value of a changed attribute. This event is triggered when the attribute value is already considered "changed" and you want to react based on this "fact" and want to execute other actions. Be careful when you change other state values of the same or other clusters of this device in this event handler - this might lead to errors because the state could be locked by such an action and especially multiple change handlers trying to adjust the same cluster might produce errors that might be hard to tackle. Exceptions thrown in $Changed event handlers are logged but do not lead to a rollback of the transaction.
+-   **fieldName$Changing**: Since matter.js v0.9 this new event is available. This event is triggered when the attribute value is about to be changed. This is especially useful if you want to react to the change to adjust other state values of the same or other clusters of this device. This event handler should not be used to actually trigger actions because there could be cyclic dependencies between such $Changing event handlers that modify the state again. Additionally, exceptions thrown in $Changing event handlers lead to a rollback of the current transactions, so another use case for $Changing are special value checks. Most likely the use of these event handlers is for special cases and requirements only.
 
 To react to an attribute change event in your code outside of cluster implementations you do:
 
@@ -343,6 +348,7 @@ if (!serverNode.lifecycle.isCommissioned) {
 ```
 
 ### Which events are available to get notified on commissioning changes?
+
 The Lagacy API used callbacks included in the CommissioningServer configuration. The new API uses the `lifecycle` property of the ServerNode to get notified on commissioning changes.
 
 ```javascript
@@ -378,6 +384,7 @@ server.events.commissioning.fabricsChanged.on((fabricIndex, fabricAction) => {
 ```
 
 ### Which events are available to get notified that a node is online or offline?
+
 The new API provides this information also via events on the ServerNode instance.
 
 ```javascript
@@ -389,6 +396,7 @@ server.lifecycle.offline.on(() => console.log("Server is offline"));
 ```
 
 ### Which events are available to get an overview on controller connections/sessions that are established?
+
 Events on session changes are available on the sessions behavior of the ServerNode instance.
 
 ```javascript
@@ -410,10 +418,12 @@ server.events.sessions.subscriptionsChanged.on(session => console.log(`Session s
 With `server.state.sessions.sessions` you can get a list of all currently active sessions including the relevant information.
 
 ### Can I add Clusters dynamically to an endpoint also after creation?
+
 Yes also this is possible. You can add clusters to an endpoint also after creation. This is done by the `behaviors.require` method of the endpoint.
 
 This example dynamically adds a BridgedDeviceBasicInformation cluster to an endpoint, to dynamically allow the endpoint to be added to a bridge. The second parameter contains the default values for the cluster state of the added cluster.
 This do not have any effects on the typings of the relevant endpoint, so especially when using attributes of this added cluster you ned to use special methods to do so:
+
 -   `endpoint.stateOf(BridgedDeviceBasicInformationServer)` to get and
 -   `endpoint.setStateOf(BridgedDeviceBasicInformationServer, { ... })` to set the states of this cluster.
 
@@ -422,7 +432,7 @@ endpoint.behaviors.require(BridgedDeviceBasicInformationServer, {
     nodeLabel: name,
     productName: name,
     productLabel: name,
-    uniqueId: this.devicesOptions[i].uuid[i].replace(/-/g, ''),
+    uniqueId: this.devicesOptions[i].uuid[i].replace(/-/g, ""),
     reachable: true,
 });
 ```
@@ -448,16 +458,17 @@ The naming of all these elements is 100% in sync with the specification with the
 
 The three ways to access the data are the following:
 
-* Use `endpoint.state.onOff.onOff` to read the OnOff attribute of the OnOff cluster of your endpoint
-* Use `await endpoint.set({ onOff: { onOff: true } })` to set the OnOff attribute of the OnOff cluster of your endpoint
-* Use `endpoint.events.onOff.onOff$Changed.on(value => { ... })` to setup a change handler for the OnOff attribute of the OnOff cluster
-* Use `await server.set({ basicInformation: { reachable: false } })` to set the reachable event on the "Basic Information" cluster on the Root Endpoint of the server. This also automatically fires the "ReachableChanged" event
-* To fire events use `server.act(agent => agent.basicInformation.reachableChanged?.emit({ ... }, agent.context));`. This manually fires the "Reachable Changed" event which normally (see above) should not be needed, so serves as an example here.
+-   Use `endpoint.state.onOff.onOff` to read the OnOff attribute of the OnOff cluster of your endpoint
+-   Use `await endpoint.set({ onOff: { onOff: true } })` to set the OnOff attribute of the OnOff cluster of your endpoint
+-   Use `endpoint.events.onOff.onOff$Changed.on(value => { ... })` to setup a change handler for the OnOff attribute of the OnOff cluster
+-   Use `await server.set({ basicInformation: { reachable: false } })` to set the reachable event on the "Basic Information" cluster on the Root Endpoint of the server. This also automatically fires the "ReachableChanged" event
+-   To fire events use `server.act(agent => agent.basicInformation.reachableChanged?.emit({ ... }, agent.context));`. This manually fires the "Reachable Changed" event which normally (see above) should not be needed, so serves as an example here.
 
 Here some examples for other attributes for other clusters:
-* `endpoint.state.identify.identifyTime` accesses the IdentifyTime attribute of the Identify cluster
-* `endpoint.state.temperatureMeasurement.measuredValue` accesses the MeasuredValue attribute of the "Temperature Measurement" cluster
-* `endpoint.levelControl.currentLevel` accessed the Current Level attribute of the "Level Control" cluster
+
+-   `endpoint.state.identify.identifyTime` accesses the IdentifyTime attribute of the Identify cluster
+-   `endpoint.state.temperatureMeasurement.measuredValue` accesses the MeasuredValue attribute of the "Temperature Measurement" cluster
+-   `endpoint.levelControl.currentLevel` accessed the Current Level attribute of the "Level Control" cluster
 
 When building your device you need to know the Matter specifications at least a bit, so that you know the relevant cluster names and attributes.
 
@@ -467,7 +478,7 @@ Matter.js automatically initializes all cluster attributes with their defaults w
 
 In some cases, e.g. in a Device that uses the "Boolean State" cluster like a "Contact Sensor" device there are no defaults specified for the attributes and you might get an error like
 
-> ERROR  ClusterSer~orBacking Validating xxxx.aggregator.xxxx.booleanState.state.stateValue: Conformance "M": Field must be defined (128)
+> ERROR ClusterSer~orBacking Validating xxxx.aggregator.xxxx.booleanState.state.stateValue: Conformance "M": Field must be defined (128)
 
 which basically means that you need to provide a value for this attribute when creating the endpoint.
 
@@ -475,9 +486,9 @@ You do this then by e.g.
 
 ```javascript
 const endpoint = new Endpoint(ContactSensorDevice, {
-    booleanState: { 
-        stateValue: false 
-    }
+    booleanState: {
+        stateValue: false,
+    },
 });
 ```
 
@@ -493,9 +504,9 @@ const endpoint = new Endpoint(OccupancySensorDevice, {
                 pir: true,
                 ultrasonic: false,
                 physicalContact: false,
-            }
-        } 
-    }
+            },
+        },
+    },
 });
 ```
 
@@ -529,9 +540,10 @@ In the new matter.js API since v0.8.0 cluster implementations are more likely st
 There are two options to use dynamic dependencies or hardware specific implementations.
 
 #### Extending the cluster state
+
 The first requires to extend the cluster implementation and adding own custom state attributes that can then be initialized with a value or an implementation instance when adding the endpoint to the node. YOu can then access this normally via `this.state.myDeviceImpl` in the cluster implementation.
 
-This option works good for cluster specific dynamic enhancements, means when you mainly need this just on one cluster. 
+This option works good for cluster specific dynamic enhancements, means when you mainly need this just on one cluster.
 
 ```javascript
 export class MyLevelControlServer extends LevelControlServer {

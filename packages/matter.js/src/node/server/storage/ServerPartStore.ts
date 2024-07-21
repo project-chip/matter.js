@@ -6,7 +6,7 @@ import { DatasourceStore } from "../../../endpoint/storage/DatasourceStore.js";
 import { PartStore } from "../../../endpoint/storage/PartStore.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { SupportedStorageTypes } from "../../../storage/StringifyTools.js";
-import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
+import { Construction } from "../../../util/Construction.js";
 
 const NUMBER_KEY = "__number__";
 
@@ -19,7 +19,7 @@ export class ServerPartStore implements PartStore {
     #storage: StorageContext;
     #initialValues = {} as Record<string, Val.Struct>;
     #number: number | undefined;
-    #construction: AsyncConstruction<PartStore>;
+    #construction: Construction<PartStore>;
 
     #childStorage: StorageContext;
     #childStores = {} as Record<string, ServerPartStore>;
@@ -56,7 +56,7 @@ export class ServerPartStore implements PartStore {
         this.#storage = storage;
         this.#childStorage = storage.createContext("parts");
 
-        this.#construction = AsyncConstruction(this, () => {
+        this.#construction = Construction(this, () => {
             // Load is false when the store was not pre-loaded, which means it does not yet exist on disk and we can
             // avoid async I/O
             if (!load) {

@@ -17,22 +17,18 @@ import { Schema } from "./Schema.js";
  *
  * {@link Behavior} uses this internally for its {@link Behavior.supervisor}.
  *
- * BehaviorSchema derives operational schema from a "logical" schema.  If the
- * {@link Behavior} implementation has a static schema property this
- * defines the logical schema.  Otherwise the logical schema is
- * {@link Schema.empty}.
+ * BehaviorSupervisor derives operational schema from a "logical" schema.  If the {@link Behavior} implementation has a
+ * static schema property this defines the logical schema.  Otherwise the logical schema is {@link Schema.empty}.
  *
  * This function loads the logical schema and mutates as required:
  *
- *   - Filters schema elements to only those applicable for the supported
- *     features.  This improves validation performance and drops conflicting
- *     elements with multiple definitions for different feature selections.
+ *   - Filters schema elements to only those applicable for the supported features.  This improves validation
+ *     performance and drops conflicting elements with multiple definitions for different feature selections.
  *
- *   - Adds fields for any programmatic extensions of state.  This allows
- *     schema-driven logic to process state fields added in pure JS.
+ *   - Adds fields for any programmatic extensions of state.  This allows schema-driven logic to process state fields
+ *     added in pure JS.
  *
- * The {@link RootSupervisor} is then constructed from the mutated logical
- * schema.
+ * The {@link RootSupervisor} is then constructed from the mutated logical schema.
  */
 export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSupervisor {
     let featuresAvailable: Set<string>, featuresSupported: FeatureSet;
