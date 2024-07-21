@@ -396,7 +396,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      *
      * If child initialization fails:
      *
-     *   - If the child is essential (@see {@link Endpoint.isEssential}), removes the child and rethrows
+     *   - If the child is essential (@see {@link EndpointLifecycle#isEssential}), removes the child and rethrows
      *
      *   - If the child is non-essential then logs the error but leaves the child installed.
      *

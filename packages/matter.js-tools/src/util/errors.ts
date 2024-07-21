@@ -9,7 +9,7 @@ function notCode(code: string | string[], cause: any) {
     if (typeof code === "string") {
         return code !== causeCode;
     }
-    return code.indexOf(causeCode) === -1;
+    return !code.includes(causeCode);
 }
 
 export async function ignoreError<T>(code: string | string[], fn: () => Promise<T>): Promise<T | undefined> {

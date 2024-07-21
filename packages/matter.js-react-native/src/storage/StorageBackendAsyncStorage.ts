@@ -101,7 +101,7 @@ export class StorageBackendAsyncStorage extends MaybeAsyncStorage {
         // @ts-expect-error AsyncStorage types are not correct
         const allKeys = await AsyncStorage.getAllKeys();
         for (const key of allKeys) {
-            if (key.startsWith(contextKeyStart) && key.indexOf(".", contextKeyStart.length) === -1) {
+            if (key.startsWith(contextKeyStart) && !key.includes(".", contextKeyStart.length)) {
                 keys.push(key.substring(contextKeyStart.length));
             }
         }

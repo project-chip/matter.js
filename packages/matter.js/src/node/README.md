@@ -302,7 +302,7 @@ const node = await ServerNode.create();
 
 const light = await node.add(OnOffLightDevice);
 
-await node.bringOnline();
+await node.start();
 
 await light.act(async agent => {
     await agent.onOff.toggle();
@@ -313,12 +313,11 @@ await light.act(async agent => {
 });
 
 await node.close();
-
 ```
 
 > [!NOTE]
 >
-> `bringOnline` starts a node and waits for it to go online. `close` shuts the node down and releases its resources.
+> `start` starts a node and waits for it to go online. `close` shuts the node down and releases its resources.
 
 ### Further reading
 

@@ -86,7 +86,7 @@ export class StorageBackendDisk extends SyncStorage {
         const contextKeyStart = `${contextKey}.`;
         const len = contextKeyStart.length;
         for (const key of Object.keys(this.localStorage)) {
-            if (key.startsWith(contextKeyStart) && key.indexOf(".", len) === -1) {
+            if (key.startsWith(contextKeyStart) && !key.includes(".", len)) {
                 keys.push(key.substring(len));
             }
         }

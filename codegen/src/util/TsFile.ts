@@ -446,9 +446,9 @@ class BuilderBlock extends NestedBlock {
         if (this.entries.length === 1) {
             return first;
         }
-        if (this.entries.length === 2 && first.indexOf("\n") === -1) {
+        if (this.entries.length === 2 && !first.includes("\n")) {
             const second = this.entries[1]?.toString("");
-            if (second.indexOf("\n") === -1 && first.length + second.length + 1 < WRAP_WIDTH) {
+            if (!second.includes("\n") && first.length + second.length + 1 < WRAP_WIDTH) {
                 return `${first}.${second}`;
             }
         }
@@ -633,7 +633,7 @@ export class TsFile extends Block {
             list = new Array<string>();
             this.imports.set(filename, list);
         }
-        if (name && list.indexOf(name) === -1) {
+        if (name && !list.includes(name)) {
             list.push(name);
 
             name = name.replace(/^\w+ as /, "");
@@ -660,7 +660,7 @@ export class TsFile extends Block {
 
         if (this.editable) {
             try {
-                if (readMatterFile(filename).indexOf(EDITABLE_WARNING) === -1) {
+                if (!readMatterFile(filename).includes(EDITABLE_WARNING)) {
                     return;
                 }
             } catch (e) {

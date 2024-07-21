@@ -444,7 +444,7 @@ function renderValue(value: unknown, formatter: Formatter, squash: boolean): str
     }
 
     const text = typeof value === "string" || value instanceof String ? value : value.toString().trim();
-    if (text.indexOf("\n") === -1) {
+    if (!text.includes("\n")) {
         return formatter.text(text as string);
     }
 

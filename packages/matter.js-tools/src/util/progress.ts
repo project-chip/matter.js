@@ -78,7 +78,9 @@ export class Progress {
     #ongoingText?: string;
     #start?: number;
     #spinner = "⧗";
-    #spinnerInterval?: ReturnType<typeof setInterval>;
+    #refreshInterval?: ReturnType<typeof setInterval>;
+    #spinnerPosition = 0;
+    #spinnerWindow?: number;
 
     constructor() {}
 
@@ -87,16 +89,16 @@ export class Progress {
     }
 
     startup(what: string, pkg?: Package) {
+        if (process.stdout.isTTY) {
+            this.#updateSpinner();
+            this.#refreshInterval = setInterval(this.refresh.bind(this), SPINNER_INTERVAL);
+        }
+
         this.status = Progress.Status.Startup;
         if (pkg === undefined) {
             writeStatus(what, true);
         } else {
             writeStatus(`${what} ${packageIdentity(pkg)}`);
-        }
-
-        if (process.stdout.isTTY) {
-            this.#spinner = SPINNER[0];
-            this.#spinnerInterval = setInterval(this.#updateSpinner.bind(this), SPINNER_INTERVAL);
         }
     }
 
@@ -142,11 +144,34 @@ export class Progress {
     }
 
     shutdown() {
-        if (this.#spinnerInterval) {
-            clearInterval(this.#spinnerInterval);
-            this.#spinnerInterval = undefined;
+        if (this.#refreshInterval) {
+            clearInterval(this.#refreshInterval);
+            this.#refreshInterval = undefined;
         }
         writeStatus("");
+    }
+
+    refresh() {
+        if (this.#updateSpinner()) {
+            this.#writeOngoing();
+        }
+    }
+
+    #updateSpinner() {
+        if (!stdout.isTTY) {
+            return false;
+        }
+
+        const window = Math.floor(new Date().getTime() / SPINNER_INTERVAL);
+        if (this.#spinnerWindow === window) {
+            return false;
+        }
+        this.#spinnerWindow = window;
+
+        this.#spinnerPosition = (this.#spinnerPosition + 1) % SPINNER.length;
+        this.#spinner = SPINNER[this.#spinnerPosition];
+
+        return true;
     }
 
     async run(what: string, fn: () => Promise<void>) {
@@ -165,13 +190,6 @@ export class Progress {
             ms = Math.trunc(ms / 1000);
         }
         return colors.dim.yellow(`(${ms}s)`);
-    }
-
-    #updateSpinner() {
-        const slot = this.#start ? Math.floor(new Date().getTime() / SPINNER_INTERVAL) % SPINNER.length : 0;
-        this.#spinner = SPINNER[slot];
-
-        this.#writeOngoing();
     }
 }
 

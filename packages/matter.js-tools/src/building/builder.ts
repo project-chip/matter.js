@@ -57,16 +57,17 @@ export class Builder {
         }
 
         if (targets.has(Target.types)) {
+            const refresh = progress.refresh.bind(progress);
             try {
                 if (project.pkg.library) {
                     await progress.run(`Generate ${colors.bold("type declarations")}`, () =>
-                        project.buildDeclarations(),
+                        project.buildDeclarations(refresh),
                     );
                     await progress.run(`Install ${colors.bold("type declarations")}`, () =>
                         project.installDeclarations(),
                     );
                 } else {
-                    await progress.run(`Validating ${colors.bold("types")}`, () => project.validateTypes());
+                    await progress.run(`Validating ${colors.bold("types")}`, () => project.validateTypes(refresh));
                 }
             } catch (e) {
                 if (e instanceof BuildError) {

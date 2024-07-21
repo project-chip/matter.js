@@ -15,11 +15,12 @@ import { BuildError, InternalBuildError } from "./error.js";
  * Implements Typescript validation and declaration emit using tsc API.
  */
 export class Typescript {
-    private host: ts.CompilerHost;
+    #host: ts.CompilerHost;
 
     private constructor(
         private pkg: Package,
         private options: ts.CompilerOptions,
+        refreshCallback?: () => void,
     ) {
         options = {
             ...options,
@@ -27,7 +28,7 @@ export class Typescript {
             rootDir: this.pkg.path,
         };
 
-        this.host = ts.createIncrementalCompilerHost(options);
+        this.#host = ts.createIncrementalCompilerHost(options);
         const baseOptions = this.getCompilerOptions(Package.tools.resolve("tsconfig.base.json"));
         this.options = {
             ...baseOptions,
@@ -54,21 +55,48 @@ export class Typescript {
         if (this.pkg.tests) {
             this.loadPackageOptions("test/tsconfig.json");
         }
+
+        // The refresh callback allows us to make spinner updates even though TS is synchronous.
+        //
+        // TODO - we need additional interception points as spinner still hangs
+        if (refreshCallback) {
+            const { getSourceFile, writeFile } = this.#host;
+
+            this.#host.getSourceFile = (...args: any) => {
+                const result = getSourceFile.apply(this.#host, args);
+                refreshCallback?.();
+                return result;
+            };
+
+            this.#host.writeFile = (...args: any) => {
+                const result = writeFile.apply(this.#host, args);
+                refreshCallback?.();
+                return result;
+            };
+        }
     }
 
-    static emitDeclarations(pkg: Package) {
-        new Typescript(pkg, {
-            outDir: pkg.resolve("build/types"),
-            emitDeclarationOnly: true,
-            sourceMap: true,
-            declarationMap: true,
-        }).run();
+    static emitDeclarations(pkg: Package, refreshCallback?: () => void) {
+        new Typescript(
+            pkg,
+            {
+                outDir: pkg.resolve("build/types"),
+                emitDeclarationOnly: true,
+                sourceMap: true,
+                declarationMap: true,
+            },
+            refreshCallback,
+        ).run();
     }
 
-    static validateTypes(pkg: Package) {
-        new Typescript(pkg, {
-            noEmit: true,
-        }).run();
+    static validateTypes(pkg: Package, refreshCallback?: () => void) {
+        new Typescript(
+            pkg,
+            {
+                noEmit: true,
+            },
+            refreshCallback,
+        ).run();
     }
 
     private run() {
@@ -84,7 +112,7 @@ export class Typescript {
         const program = ts.createIncrementalProgram({
             rootNames: sources,
             options: this.options,
-            host: this.host,
+            host: this.#host,
         });
 
         // See https://github.com/microsoft/TypeScript/issues/31849
@@ -112,7 +140,7 @@ export class Typescript {
 
     private passTscError(diagnostic: undefined | ts.Diagnostic) {
         if (diagnostic) {
-            throw new InternalBuildError(ts.formatDiagnostic(diagnostic, this.host));
+            throw new InternalBuildError(ts.formatDiagnostic(diagnostic, this.#host));
         }
     }
 
@@ -125,7 +153,7 @@ export class Typescript {
             return;
         }
 
-        let formatted = ts.formatDiagnosticsWithColorAndContext(diagnostics, this.host);
+        let formatted = ts.formatDiagnosticsWithColorAndContext(diagnostics, this.#host);
 
         // Strangely there are not newlines between errors in this output like
         // there is when you run tsc from the command line.  Use the "light

@@ -31,6 +31,8 @@ const PART_SUBKEY = "parts";
  * Additionally you may configure behaviors globally (regardless of endpoint) using the `<behavior id>.<property name>`
  * subkey.  Endpoint-specific configuration overrides this value.
  *
+ * Environmental configuration overrides values supplied in {@link Endpoint.Configuration}.
+ *
  * This effectively makes all state values configuration.  It is settable via command line, system environment variable
  * or configuration file.
  *

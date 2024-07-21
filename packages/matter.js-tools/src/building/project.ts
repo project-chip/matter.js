@@ -65,12 +65,12 @@ export class Project {
         }
     }
 
-    async buildDeclarations() {
-        Typescript.emitDeclarations(this.pkg);
+    async buildDeclarations(refreshCallback?: () => void) {
+        Typescript.emitDeclarations(this.pkg, refreshCallback);
     }
 
-    async validateTypes() {
-        Typescript.validateTypes(this.pkg);
+    async validateTypes(refreshCallback?: () => void) {
+        Typescript.validateTypes(this.pkg, refreshCallback);
     }
 
     async installDeclarationFormat(format: Format) {

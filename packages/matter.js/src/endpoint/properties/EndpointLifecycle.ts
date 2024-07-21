@@ -117,6 +117,8 @@ export class EndpointLifecycle {
      *
      * By default endpoints are considered "essential".  An essential endpoint must initialize successfully or an error
      * is thrown.  Non-essential endpoints may be installed even if they have errors.
+     *
+     * You may configure this property via {@link Endpoint.Configuration#isEssential}.
      */
     get isEssential() {
         return this.#isEssential;

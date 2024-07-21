@@ -28,7 +28,7 @@ export const Str = (el: HTMLElement) => {
             // Followed by a span
             (child.firstChild.nextSibling as Element)?.tagName === "SPAN" &&
             // That doesn't indicate numeric arity
-            ["st", "nd", "rd", "th"].indexOf(child.firstChild.nextSibling?.textContent as string) === -1
+            !["st", "nd", "rd", "th"].includes(child.firstChild.nextSibling?.textContent as string)
         ) {
             child.firstChild?.remove();
         }

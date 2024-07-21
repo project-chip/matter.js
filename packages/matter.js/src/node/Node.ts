@@ -113,9 +113,9 @@ export abstract class Node<T extends RootEndpoint = RootEndpoint> extends Endpoi
     }
 
     /**
-     * Take the node offline but leave state and structure intact.
+     * Take the node offline but leave state and structure intact.  Happens automatically on close.
      *
-     * This happens automatically on close.
+     * Once the node is offline you may use {@link start} to bring the node online again.
      */
     async cancel() {
         if (!this.#runtime) {

@@ -7,7 +7,7 @@
 export const traceUnhandled = {
     async initialize() {
         // We process args and environment manually so we don't need dependencies and can install as early as possible
-        if (process.argv.indexOf("--trace-unhandled") === -1 && !process.env.MATTER_TRACE_UNHANDLED) {
+        if (!process.argv.includes("--trace-unhandled") && !process.env.MATTER_TRACE_UNHANDLED) {
             return;
         }
 

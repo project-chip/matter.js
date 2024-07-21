@@ -240,7 +240,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
             subsection: subref.xref.section,
             collector(ref) {
                 // Only collect namespace sections that appear to have a defining table
-                if (!ref.tables || ref.tables[0].fields.indexOf("name") === -1) {
+                if (!ref.tables || !ref.tables[0].fields.includes("name")) {
                     return;
                 }
 

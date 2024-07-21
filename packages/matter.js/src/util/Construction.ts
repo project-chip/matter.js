@@ -118,14 +118,14 @@ export interface Construction<T> extends Promise<T> {
      *
      * Handling errors on this promise will prevent other handlers from seeing the primary cause.
      */
-    ready: Promise<T>;
+    readonly ready: Promise<T>;
 
     /**
      * Resolves when destruction completes; rejects if the component crashes.
      *
      * Handling errors on this promise will prevent other handlers from seeing the primary cause.
      */
-    closed: Promise<T>;
+    readonly closed: Promise<T>;
 
     /**
      * If you omit the initializer parameter to {@link Construction} execution is deferred until you invoke this
@@ -141,6 +141,16 @@ export interface Construction<T> extends Promise<T> {
 
     /**
      * Invoke destruction logic then move to destroyed status.
+     *
+     * Typically you invoke this in the subject's "close" method.
+     *
+     * Use of this function is optional.  It provides these benefits:
+     *
+     *   - Ensures the subject is fully initialized before closing.
+     *
+     *   - Handles and logs errors, ensuring close() always completes successfully.
+     *
+     *   - Makes destruction observable via {@link change} and {@link closed}.
      */
     close(destructor?: () => MaybePromise): MaybePromise;
 
