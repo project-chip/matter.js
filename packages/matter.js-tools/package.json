@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-tools",
-    "version": "0.10.0-alpha.0-20240720-471dea8c",
+    "version": "0.10.0-alpha.0-20240722-39f917c1",
     "description": "Matter.js tooling",
     "type": "module",
     "scripts": {
@@ -68,8 +68,8 @@
         "@types/wtfnode": "^0.7.3",
         "@types/yargs": "^17.0.32",
         "dockerode": "^4.0.2",
-        "wtfnode": "^0.9.3",
-        "trace-unhandled": "^2.0.1"
+        "trace-unhandled": "^2.0.1",
+        "wtfnode": "^0.9.3"
     },
     "publishConfig": {
         "access": "public"
