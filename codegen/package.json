@@ -37,7 +37,7 @@
     "devDependencies": {
         "@project-chip/matter.js-tools": "0.10.0-alpha.0-20240722-39f917c1",
         "@types/jsdom": "^21.1.6",
-        "jsdom": "^24.1.0",
+        "jsdom": "^24.1.1",
         "typescript": "~5.5.3",
         "word-list": "^4.0.0",
         "yargs": "^17.7.2"
