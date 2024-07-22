@@ -77,10 +77,10 @@ class ControllerNode {
 
         const controllerStorage = (await storageService.open("controller")).createContext("data");
         const ip = (await controllerStorage.has("ip"))
-            ? controllerStorage.get<string>("ip")
+            ? await controllerStorage.get<string>("ip")
             : environment.vars.string("ip");
         const port = (await controllerStorage.has("port"))
-            ? controllerStorage.get<number>("port")
+            ? await controllerStorage.get<number>("port")
             : environment.vars.number("port");
         const uniqueId = (await controllerStorage.has("uniqueid"))
             ? await controllerStorage.get<string>("uniqueid")
