@@ -63,6 +63,7 @@ export function ClusterServer<
     attributesInitialValues: AttributeInitialValues<A>,
     handlers: H,
     supportedEvents: SupportedEventsList<E> = <SupportedEventsList<E>>{},
+    ignoreMissingElements = false,
 ): ClusterServerObj<A, E> {
     const {
         id: clusterId,
@@ -416,7 +417,15 @@ export function ClusterServer<
     for (const eventName in eventDef) {
         const { id, schema, priority, optional, readAcl } = eventDef[eventName];
         if (!optional && (supportedEvents as any)[eventName] !== true) {
-            throw new ImplementationError(`Event ${eventName} needs to be supported by cluster ${name} (${clusterId})`);
+            if (!ignoreMissingElements) {
+                throw new ImplementationError(
+                    `Event ${eventName} needs to be supported by cluster ${name} (${clusterId})`,
+                );
+            }
+            logger.warn(
+                `Event ${eventName} should to be supported by cluster ${name} (${clusterId}) but not present and ignored.`,
+            );
+            continue;
         }
 
         if (eventDef[eventName].isConditional) {

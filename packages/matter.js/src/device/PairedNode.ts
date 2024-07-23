@@ -566,10 +566,13 @@ export class PairedNode {
             const clusterData = (data[clusterId] ?? {}) as AttributeInitialValues<Attributes>; // TODO correct typing
             // Todo add logic for Events
             endpointClusters.push(
-                ClusterServer(cluster, /*clusterData.featureMap,*/ clusterData, {}) as ClusterServerObj<
-                    Attributes,
-                    Events
-                >,
+                ClusterServer(
+                    cluster,
+                    /*clusterData.featureMap,*/ clusterData,
+                    {},
+                    undefined,
+                    true,
+                ) as ClusterServerObj<Attributes, Events>,
             ); // TODO Add Default handler!
         }
 
