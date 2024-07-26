@@ -22,3 +22,9 @@
 | CNET.S.A0002..3=0         | We use an Ethernet Network commissioning cluster and so we do not have these two attributes, so disable tests for that |
 | DESC.S.F00=0              | We do not provide a Taglist on Descriptor cluster, so disable tests for that                                           |
 | PCC.S.A0005..c=0          | We provide a Constant pressure pump, so these attributes must not exist, so disable tests for that                     |
+
+# Excluded tests
+| Testname             | Reason                                                                    |
+|----------------------|---------------------------------------------------------------------------|
+| Test_TC_LVL_9_1.yaml | Test expects a group cluster with multiple groups support                 |
+| Test_TC_OO_2_7.yaml  | Test expects a group cluster with multiple groups support                 |
