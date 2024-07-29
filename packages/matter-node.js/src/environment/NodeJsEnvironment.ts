@@ -47,7 +47,8 @@ import { ProcessManager } from "./ProcessManager.js";
  * * `storage.path` - Where to store storage files, Default: "path.root"
  * * `storage.clear` - Clear storage on start? Default: false
  * * `runtime.signals` - By default register SIGINT and SIGUSR2 (diag) handlers, set to false if not wanted
- * * `runtime.exitcode` - by default we set the process.exitcode to 0 (ok) or 1 (crash), set to false if not wanted
+ * * `runtime.exitcode` - By default we set the process.exitcode to 0 (ok) or 1 (crash); set to false to disable
+ * * `runtime.unhandlederrors` - By default we log unhandled errors to matter.js log; set to false to disable
  */
 export function NodeJsEnvironment() {
     const env = new Environment("default");
