@@ -6,7 +6,6 @@
 
 import { Channel } from "../common/Channel.js";
 import { MatterError } from "../common/MatterError.js";
-import { tryCatchAsync } from "../common/TryCatchHandler.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
@@ -137,17 +136,19 @@ export class ChannelManager {
             return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }
 
-        return tryCatchAsync(
-            async () => this.getChannel(fabric, nodeId, session),
-            NoChannelError,
-            async () => {
-                const result = new MessageChannel(byteArrayChannel, session, async () =>
-                    this.removeChannel(fabric, nodeId, session),
-                );
-                await this.setChannel(fabric, nodeId, result);
-                return result;
-            },
+        // Try to get
+        try {
+            return this.getChannel(fabric, nodeId, session);
+        } catch (e) {
+            NoChannelError.accept(e);
+        }
+
+        // Need to create
+        const result = new MessageChannel(byteArrayChannel, session, async () =>
+            this.removeChannel(fabric, nodeId, session),
         );
+        await this.setChannel(fabric, nodeId, result);
+        return result;
     }
 
     async close() {

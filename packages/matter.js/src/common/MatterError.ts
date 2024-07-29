@@ -60,6 +60,25 @@ export class MatterError extends Error {
     }
 
     /**
+     * Rethrow an error unless it is an instance of this class.
+     */
+    static accept<T extends MatterError>(this: new (...args: any[]) => T, error: unknown): asserts error is T {
+        if (error instanceof this) {
+            return;
+        }
+        throw error;
+    }
+
+    /**
+     * Rethrow an error if it is an instance of this class.
+     */
+    static reject(error: unknown): void {
+        if (error instanceof this) {
+            throw error;
+        }
+    }
+
+    /**
      * The fallback formatter factory.  This produces a limited plaintext formatter.
      */
     static defaultFormatterFactory = () => fallbackFormatter;

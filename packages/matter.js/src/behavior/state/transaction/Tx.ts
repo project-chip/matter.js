@@ -417,16 +417,12 @@ class Tx implements Transaction {
 
             if (MaybePromise.is(result)) {
                 return result.then(() => {
-                    if (error instanceof StatusResponseError) {
-                        throw error;
-                    }
+                    StatusResponseError.reject(error);
                     throw new FinalizationError("Rolled back due to pre-commit error");
                 });
             }
 
-            if (error instanceof StatusResponseError) {
-                throw error;
-            }
+            StatusResponseError.reject(error);
             throw new FinalizationError("Rolled back due to pre-commit error");
         };
 

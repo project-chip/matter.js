@@ -639,11 +639,8 @@ export class CommissioningServer extends MatterNode {
                     deviceInstance.addBroadcaster(ble.getBleBroadcaster(this.options.additionalBleAdvertisementData));
                 }
             } catch (error) {
-                if (error instanceof NoProviderError) {
-                    logger.debug("Ble not enabled");
-                } else {
-                    throw error;
-                }
+                NoProviderError.accept(error);
+                logger.debug("Ble not enabled");
             }
         }
 
@@ -771,10 +768,8 @@ export class CommissioningServer extends MatterNode {
         try {
             bleEnabled = !!Ble.get();
         } catch (error) {
-            if (!(error instanceof NoProviderError)) {
-                // only ignore NoProviderError cases
-                throw error;
-            }
+            // only ignore NoProviderError cases
+            NoProviderError.accept(error);
         }
 
         const qrPairingCode = QrPairingCodeCodec.encode([

@@ -250,7 +250,7 @@ describe("TlvObject tests", () => {
                     schema.validate({ mandatoryField: 1, optionalField: 2 });
                 } catch (error) {
                     hasThrown = true;
-                    expect(error instanceof ValidationError).true;
+                    expect(error).instanceof(ValidationError);
                     if (error instanceof ValidationError) {
                         expect(error.message).equal(
                             "(ValidationDatatypeMismatchError/128) Expected string, got number.",

@@ -52,7 +52,7 @@ const writeStatus = (() => {
     return function writeStatus(text: string, willOverwrite = false) {
         const columns = process.stdout.columns;
         if (willOverwrite && columns !== undefined && text.length > columns - 2) {
-            text = text.substring(0, columns - 2) + "…";
+            text = filterAnsi(text, columns - 2) + "…";
         }
 
         text += willOverwrite ? "\r" : "\n";
@@ -200,4 +200,36 @@ export namespace Progress {
         Success = "success",
         Failure = "failure",
     }
+}
+
+// See https://stackoverflow.com/questions/26238553/how-can-i-truncate-a-string-to-a-maximum-length-without-breaking-ansi-escape-cod
+// TODO - this function doesn't seem entirely correct, still seems to truncate too much
+// Crop the length of lines, ANSI escape code aware
+// Always outputs every escape char, regardless of length (so we always end up with a sane state)
+// Visible characters are filtered out once length is exceeded
+function filterAnsi(str: string, len: number) {
+    if (!len || len < 10) return str; // probably not a valid console -- send back the whole line
+    let count = 0, // number of visible chars on line so far
+        esc = false, // in an escape sequence
+        longesc = false; // in a multi-character escape sequence
+    let outp = true; // should output this character
+    return str
+        .split("")
+        .filter(function (c) {
+            // filter characters...
+            if (esc && !longesc && c == "[") longesc = true; // have seen an escape, now '[', start multi-char escape
+            if (c == "\x1b") esc = true; // start of escape sequence
+
+            outp = count < len || esc; // if length exceeded, don't output non-escape chars
+            if (!esc && !longesc) count++; // if not in escape, count visible char
+
+            if (esc && !longesc && c != "\x1b") esc = false; // out of single char escape
+            if (longesc && c != "[" && c >= "@" && c <= "~") {
+                esc = false;
+                longesc = false;
+            } // end of multi-char escape
+
+            return outp; // result for filter
+        })
+        .join(""); // glue chars back into string
 }

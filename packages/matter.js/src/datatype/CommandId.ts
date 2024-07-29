@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
+import { ValidationOutOfBoundsError, validatorOf } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -30,16 +29,7 @@ export function CommandId(commandId: number, validate = true): CommandId {
 }
 
 export namespace CommandId {
-    export const isValid = (commandId: number): commandId is CommandId => {
-        return tryCatch(
-            () => {
-                CommandId(commandId);
-                return true;
-            },
-            ValidationError,
-            false,
-        );
-    };
+    export const isValid = validatorOf(CommandId);
 }
 
 /** Tlv schema for an Command Id. */

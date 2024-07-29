@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
+import { ValidationOutOfBoundsError, validatorOf } from "../common/ValidationError.js";
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -25,16 +24,7 @@ export function EndpointNumber(endpointId: number, validate = true): EndpointNum
 }
 
 export namespace EndpointNumber {
-    export const isValid = (endpointId: number): boolean => {
-        return tryCatch(
-            () => {
-                EndpointNumber(endpointId);
-                return true;
-            },
-            ValidationError,
-            false,
-        );
-    };
+    export const isValid = validatorOf(EndpointNumber);
 }
 
 /** Tlv schema for an Endpoint number. */

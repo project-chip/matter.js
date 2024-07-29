@@ -353,19 +353,15 @@ export class ControllerCommissioner {
                     // accepting PASE again.
                     await this.resetFailsafeTimer();
 
-                    if (error instanceof StatusResponseError) {
-                        // Convert error
-                        const commError = new CommissioningError(error.message);
-                        commError.stack = error.stack;
-                        throw commError;
-                    }
-                    throw error;
+                    StatusResponseError.accept(error);
+
+                    // Convert error
+                    const commError = new CommissioningError(error.message);
+                    commError.stack = error.stack;
+                    throw commError;
                 }
-                if (error instanceof CommissioningSuccessfullyFinished) {
-                    break;
-                } else {
-                    throw error;
-                }
+
+                CommissioningSuccessfullyFinished.accept(error);
             }
         }
     }

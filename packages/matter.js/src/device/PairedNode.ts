@@ -214,16 +214,14 @@ export class PairedNode {
                 await this.initialize();
                 return;
             } catch (error) {
-                if (error instanceof MatterError) {
-                    // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others
-                    if (this.connectionState === NodeStateInformation.Disconnected) {
-                        return;
-                    }
-                    logger.info(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
-                    this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
-                } else {
-                    throw error;
+                MatterError.accept(error);
+
+                // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others
+                if (this.connectionState === NodeStateInformation.Disconnected) {
+                    return;
                 }
+                logger.info(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
+                this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
             }
         }
     }
@@ -677,8 +675,7 @@ export class PairedNode {
         } catch (error) {
             // Accept the error if no window is already open
             if (
-                !(error instanceof StatusResponseError) ||
-                error.code !== StatusCode.Failure ||
+                !StatusResponseError.is(error, StatusCode.Failure) ||
                 error.clusterCode !== AdministratorCommissioning.StatusCode.WindowNotOpen
             ) {
                 throw error;
@@ -700,8 +697,7 @@ export class PairedNode {
         } catch (error) {
             // Accept the error if no window is already open
             if (
-                !(error instanceof StatusResponseError) ||
-                error.code !== StatusCode.Failure ||
+                !StatusResponseError.is(error, StatusCode.Failure) ||
                 error.clusterCode !== AdministratorCommissioning.StatusCode.WindowNotOpen
             ) {
                 throw error;

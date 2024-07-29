@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
+import { ValidationOutOfBoundsError, validatorOf } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -30,16 +29,7 @@ export function DeviceTypeId(deviceTypeId: number, validate = true): DeviceTypeI
 }
 
 export namespace DeviceTypeId {
-    export const isValid = (deviceTypeId: number): deviceTypeId is DeviceTypeId => {
-        return tryCatch(
-            () => {
-                DeviceTypeId(deviceTypeId);
-                return true;
-            },
-            ValidationError,
-            false,
-        );
-    };
+    export const isValid = validatorOf(DeviceTypeId);
 }
 
 /** Tlv schema for a Device type ID. */

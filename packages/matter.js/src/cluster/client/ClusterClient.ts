@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
@@ -50,19 +49,14 @@ export function ClusterClient<const T extends ClusterType>(
             alwaysRequestFromRemote?: boolean,
             isFabricFiltered = true,
         ) => {
-            return tryCatchAsync(
-                async () => {
-                    return await (attributes as any)[attributeName].get(isFabricFiltered, alwaysRequestFromRemote);
-                },
-                StatusResponseError,
-                (e: StatusResponseError) => {
-                    const { code } = e;
-                    if (code === StatusCode.UnsupportedAttribute) {
-                        return undefined;
-                    }
-                    throw e;
-                },
-            );
+            try {
+                return await (attributes as any)[attributeName].get(isFabricFiltered, alwaysRequestFromRemote);
+            } catch (e) {
+                if (StatusResponseError.is(e, StatusCode.UnsupportedAttribute)) {
+                    return undefined;
+                }
+                throw e;
+            }
         };
         result[`set${capitalizedAttributeName}Attribute`] = async <T>(value: T, dataVersion?: number) =>
             (attributes as any)[attributeName].set(value, dataVersion);
@@ -101,19 +95,14 @@ export function ClusterClient<const T extends ClusterType>(
             minimumEventNumber?: number | bigint,
             isFabricFiltered?: boolean,
         ) => {
-            return tryCatchAsync(
-                async () => {
-                    return await (events as any)[eventName].get(minimumEventNumber, isFabricFiltered);
-                },
-                StatusResponseError,
-                (e: StatusResponseError) => {
-                    const { code } = e;
-                    if (code === StatusCode.UnsupportedEvent) {
-                        return undefined;
-                    }
-                    throw e;
-                },
-            );
+            try {
+                return await (events as any)[eventName].get(minimumEventNumber, isFabricFiltered);
+            } catch (e) {
+                if (StatusResponseError.is(e, StatusCode.UnsupportedEvent)) {
+                    return undefined;
+                }
+                throw e;
+            }
         };
         result[`subscribe${capitalizedEventName}Event`] = async <T>(
             listener: (value: DecodedEventData<T>) => void,

@@ -7,7 +7,6 @@
 import { MatterDevice } from "../../MatterDevice.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { ImplementationError, InternalError, MatterError } from "../../common/MatterError.js";
-import { tryCatch } from "../../common/TryCatchHandler.js";
 import { ValidationError } from "../../common/ValidationError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
@@ -189,11 +188,12 @@ export abstract class BaseAttributeServer<T> {
     validateWithSchema(value: T) {
         try {
             this.schema.validate(value);
-        } catch (error) {
-            if (error instanceof ValidationError) {
-                error.message = `Validation error for attribute "${this.name}"${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}: ${error.message}`;
-            }
-            throw error;
+        } catch (e) {
+            ValidationError.accept(e);
+
+            // Handle potential error cases where a custom validator is used.
+            e.message = `Validation error for attribute "${this.name}"${e.fieldName !== undefined ? ` in field ${e.fieldName}` : ""}: ${e.message}`;
+            throw e;
         }
     }
 
@@ -580,11 +580,16 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      */
     updated(session: SecureSession<MatterDevice>) {
         const oldValue = this.value ?? this.defaultValue;
-        this.value = tryCatch(
-            () => this.get(session, false),
-            NoAssociatedFabricError, // Handle potential error cases where the session does not have a fabric assigned.
-            this.value ?? this.defaultValue,
-        );
+        try {
+            this.value = this.get(session, false);
+        } catch (e) {
+            NoAssociatedFabricError.accept(e);
+
+            // Handle potential error cases where the session does not have a fabric assigned.
+            if (this.value === undefined) {
+                this.value = this.defaultValue;
+            }
+        }
         this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
 
@@ -983,11 +988,15 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      */
     updatedLocalForFabric(fabric: Fabric) {
         const oldValue = this.value ?? this.defaultValue;
-        this.value = tryCatch(
-            () => this.getLocalForFabric(fabric),
-            FabricScopeError, // Handle potential error cases where a custom getter is used.
-            this.value ?? this.defaultValue,
-        );
+        try {
+            this.value = this.getLocalForFabric(fabric);
+        } catch (e) {
+            FabricScopeError.accept(e);
+
+            if (this.value === undefined) {
+                this.value = this.defaultValue;
+            }
+        }
         this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
 

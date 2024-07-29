@@ -9,7 +9,6 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { Status } from "../../cluster/globals/index.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { ImplementationError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
-import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { Logger } from "../../log/Logger.js";
 import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
 import {
@@ -347,17 +346,16 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 
         if (dataReportToSend.suppressResponse) {
             // We do not expect a response other than a Standalone Ack, so if we receive anything else, we throw an error
-            await tryCatchAsync(
-                async () =>
-                    await this.exchange.send(MessageType.ReportData, encodedMessage, {
-                        expectAckOnly: true,
-                    }),
-                UnexpectedMessageError,
-                async error => {
-                    const { receivedMessage } = error;
-                    this.throwIfErrorStatusMessage(receivedMessage);
-                },
-            );
+            try {
+                await this.exchange.send(MessageType.ReportData, encodedMessage, {
+                    expectAckOnly: true,
+                });
+            } catch (e) {
+                UnexpectedMessageError.accept(e);
+
+                const { receivedMessage } = e;
+                this.throwIfErrorStatusMessage(receivedMessage);
+            }
         } else {
             await this.exchange.send(MessageType.ReportData, encodedMessage);
             await this.waitForSuccess();

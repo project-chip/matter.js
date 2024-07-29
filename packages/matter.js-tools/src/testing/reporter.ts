@@ -104,7 +104,7 @@ export abstract class ProgressReporter implements Reporter {
     }
 
     #formatName(suite: string[], test: string) {
-        return `${suite.join(" ➡ ")} ➡ ${colors.bold(test)}}`;
+        return `${suite.join(" ➡ ")} ➡ ${colors.bold(test)}`;
     }
 }
 

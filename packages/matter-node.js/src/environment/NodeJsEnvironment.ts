@@ -119,15 +119,15 @@ export function loadConfigFile(vars: VariableService) {
     let configJson;
     try {
         configJson = readFileSync(path).toString();
-    } catch (e: any) {
-        throw new ImplementationError(`Error reading configuration file ${path}: ${e.message}`);
+    } catch (e) {
+        throw new ImplementationError(`Error reading configuration file ${path}: ${(e as Error).message}`);
     }
 
     let configVars;
     try {
         configVars = JSON.parse(configJson);
-    } catch (e: any) {
-        throw new ImplementationError(`Error parsing configuration file ${path}: ${e.message}`);
+    } catch (e) {
+        throw new ImplementationError(`Error parsing configuration file ${path}: ${(e as Error).message}`);
     }
 
     return configVars;

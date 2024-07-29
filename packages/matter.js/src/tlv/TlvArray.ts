@@ -5,7 +5,6 @@
  */
 
 import { UnexpectedDataError } from "../common/MatterError.js";
-import { tryCatch } from "../common/TryCatchHandler.js";
 import {
     ValidationDatatypeMismatchError,
     ValidationError,
@@ -96,14 +95,13 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
                 `Array ${serialize(data)} is too short: ${data.length}, min ${this.minLength}.`,
             );
         data.forEach((element, index) => {
-            tryCatch(
-                () => this.elementSchema.validate(element),
-                ValidationError,
-                error => {
-                    error.fieldName = `[${index}]${error.fieldName !== undefined ? `.${error.fieldName}` : ""}`;
-                    throw error;
-                },
-            );
+            try {
+                this.elementSchema.validate(element);
+            } catch (e) {
+                ValidationError.accept(e);
+                e.fieldName = `[${index}]${e.fieldName !== undefined ? `.${e.fieldName}` : ""}`;
+                throw e;
+            }
         });
     }
 

@@ -104,17 +104,15 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
 
     override async rollback() {
         if (!this.fabricIndex && this.hasRootCert) {
-            // Update the fabric details if needed (like Trusted Root certificates)
-            // Only if fabric was not added because else all data gets updated anyway
+            // Update the fabric details if needed (like Trusted Root certificates) Only if fabric was not added because
+            // else all data gets updated anyway
             try {
                 const fabricManager = this.#node.env.get(FabricManager);
                 fabricManager.events.failsafeClosed.emit();
             } catch (error) {
-                // UnsupportedDependencyError can happen when the node closes.
-                // Then data are refreshed on next start anyway, so ignore this case
-                if (!(error instanceof UnsupportedDependencyError)) {
-                    throw error;
-                }
+                // UnsupportedDependencyError can happen when the node closes. Then data are refreshed on next start
+                // anyway, so ignore this case
+                UnsupportedDependencyError.accept(error);
             }
         }
 
