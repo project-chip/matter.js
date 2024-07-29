@@ -39,9 +39,14 @@
         "@react-native-async-storage/async-storage": "^1.23.1",
         "@react-native-community/netinfo": "^11.3.2",
         "@types/node": "^20.14.10",
+        "jwk-to-pem": "^2.0.5",
         "react-native-ble-plx": "^3.2.1",
-        "react-native-quick-crypto": "^0.7.0-rc.9",
+        "react-native-polyfill-globals": "^3.1.0",
+        "react-native-quick-crypto": "^0.7.1",
         "react-native-udp": "^4.1.7"
+    },
+    "overrides": {
+        "brorand": "npm:@matter.js/brorand@1.1.0"
     },
     "files": [
         "dist/**/*",

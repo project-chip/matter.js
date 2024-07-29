@@ -45,5 +45,8 @@
     "typedoc-plugin-markdown": "^3.17.1",
     "typedoc-plugin-missing-exports": "^3.0.0",
     "typescript": "~5.5.3"
+  },
+  "overrides": {
+    "brorand": "npm:@matter.js/brorand@1.1.0"
   }
 }
