@@ -677,20 +677,20 @@ I.C.AO-WRITE=0
 
 # Scenes Management Cluster
 S.S=0
-S.S.A0000=1
-S.S.A0001=1
-S.S.A0002=1
-S.S.C00.Rsp=1
-S.S.C01.Rsp=1
-S.S.C02.Rsp=1
-S.S.C03.Rsp=1
-S.S.C04.Rsp=1
-S.S.C05.Rsp=1
-S.S.C06.Rsp=1
-S.S.C40.Rsp=1
+S.S.A0000=0
+S.S.A0001=0
+S.S.A0002=0
+S.S.C00.Rsp=0
+S.S.C01.Rsp=0
+S.S.C02.Rsp=0
+S.S.C03.Rsp=0
+S.S.C04.Rsp=0
+S.S.C05.Rsp=0
+S.S.C06.Rsp=0
+S.S.C40.Rsp=0
 S.S.AM=0
 S.S.AO=0
-S.S.F00=1
+S.S.F00=0
 
 S.C=0
 S.C.C00.Tx=0
