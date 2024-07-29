@@ -11,7 +11,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ### **WORK_IN_PROGRESS**
 
--   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
+-   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3.0.1. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
 
 -   Matter.js Parser and Code generator:
     -   Feature: We now generate all Matter datatypes and elements. This includes some we defined by hand previously and those introduced by the Matter 1.2 and Matter 1.3 specifications.
@@ -26,9 +26,12 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Breaking: We've removed a few deprecated definitions for unused Matter elements such as the Scenes cluster.
     -   Breaking: Globals.ts previously defined core datatypes for the Matter object model. These are now generated and individually importable.
     -   Breaking: We've removed a few old draft datatypes defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip) that were abandoned, renamed or are still "draft" as of Matter 1.3.
+    -   Breaking: Some types related to ClusterServer are simplified.  This should be largely transparent but the template arguments are slightly different
     -   Feature: Adds all elements (clusters, attributes, events, commands, device types and datatypes) introduced in Matter 1.2 and Matter 1.3.
 -   Matter-Core functionality:
     -   Breaking: Removes the discovery capability "softAccessPoint" as it was removed from the Matter specification
+    -   Breaking: Matter.js now requires node.js 18+
+    -   Breaking: We now target ES 2022 for transpiled output.  We have not adopted new language features but this does mean that we generate true class properties now
     -   Feature: Increase Data Model revision to 17 (introduced by Matter 1.2)
     -   Feature: Added Base64 encoding/decoding support to ByteArray
     -   Feature: Added WildcardPathFlagsBitmap to Attribute expansion for read/subscribe Interactions
