@@ -5,6 +5,7 @@
  */
 
 import type { Lifecycle } from "../common/Lifecycle.js";
+import { Level } from "./Level.js";
 
 /**
  * Logged values may implement this interface to customize presentation.
@@ -29,6 +30,11 @@ export function Diagnostic(presentation: Diagnostic.Presentation | Lifecycle.Sta
 
 export namespace Diagnostic {
     export enum Presentation {
+        /**
+         * Render an object as a log message.
+         */
+        Message = "message",
+
         /**
          * By default iterables render as a single line with spaces separating.  The "list" presentation treats elements
          * instead as separate entities which typically means presentation on different lines.
@@ -70,6 +76,31 @@ export namespace Diagnostic {
 
     export const presentation = Symbol("presentation");
     export const value = Symbol("value");
+
+    export interface Message {
+        [presentation]?: Presentation.Message;
+        now: Date;
+        level: Level;
+        facility: string;
+        prefix: string;
+        values: unknown[];
+    }
+
+    /**
+     * Create an object representing a log message.
+     */
+    export function message(value: Partial<Message>): Message {
+        const { now, level, facility, prefix: nestingPrefix, values } = value;
+
+        return {
+            [presentation]: Presentation.Message,
+            now: now ?? new Date(),
+            level: level ?? Level.INFO,
+            facility: facility ?? "Diagnostic",
+            prefix: nestingPrefix ?? "",
+            values: values ?? [],
+        } satisfies Message;
+    }
 
     /**
      * Create a value presented emphatically.
@@ -294,10 +325,14 @@ function formatError(error: any, options: { messagePrefix?: string; parentStack?
     // causes (I think) this is a decent tradeoff
     if (Array.isArray(errors)) {
         let cause = 0;
-        list.push(...errors.map(e => formatError(e, { messagePrefix: `Cause #${cause++}:`, parentStack: stackLines })));
+        list.push(
+            Diagnostic.list(
+                errors.map(e => formatError(e, { messagePrefix: `Cause #${cause++}:`, parentStack: stackLines })),
+            ),
+        );
     }
 
-    return Diagnostic(Diagnostic.Presentation.List, list);
+    return list as Diagnostic;
 }
 
 function messageAndStackFor(error: any, parentStack?: string[]) {

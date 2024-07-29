@@ -5,7 +5,7 @@
  */
 
 import { Lifecycle } from "../common/Lifecycle.js";
-import { ImplementationError, InternalError } from "../common/MatterError.js";
+import { ImplementationError, InternalError, MatterError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { serialize } from "../util/String.js";
 import { Diagnostic } from "./Diagnostic.js";
@@ -14,7 +14,10 @@ import { Level } from "./Level.js";
 const INDENT_SPACES = 2;
 
 /**
- * Get a formatter for the specified format.
+ * Get a diagnostic formatter for the specified format.
+ *
+ * A "diagnostic formatter" converts arbitrary values into a formatted string.  Formatting is controlled by type and the
+ * {@link Diagnostic.presentation} and {@link Diagnostic.value} properties.
  */
 export function Format(format: string) {
     if (format === undefined) {
@@ -23,13 +26,13 @@ export function Format(format: string) {
 
     switch (format) {
         case Format.PLAIN:
-            return plainLogFormatter;
+            return Format.plain;
 
         case Format.ANSI:
-            return ansiLogFormatter;
+            return Format.ansi;
 
         case Format.HTML:
-            return htmlLogFormatter;
+            return Format.html;
 
         default:
             throw new ImplementationError(`Unsupported log format "${format}"`);
@@ -51,14 +54,15 @@ export namespace Format {
     /** Format log messages using HTML tags */
     export const HTML = "html";
 
-    export const plain = plainLogFormatter;
-    export const ansi = ansiLogFormatter;
-    export const html = htmlLogFormatter;
+    export const plain = formatPlain;
+    export const ansi = formatAnsi;
+    export const html = formatHtml;
 }
 
 export type Producer = () => string;
 
 interface Formatter {
+    message(message: Diagnostic.Message): string;
     text(text: string): string;
     indent(producer: Producer): string;
     break(): string;
@@ -84,9 +88,8 @@ const LifecycleIcons = {
 /**
  * Create a small utility shared by plain and ansi formats.
  */
-function plaintextCreator() {
+function plaintextCreator(indents: number) {
     let broke = false;
-    let indents = 0;
 
     return {
         text(value: string) {
@@ -115,11 +118,18 @@ function statusIcon(status: Lifecycle.Status) {
     return LifecycleIcons[status] ?? LifecycleIcons[Lifecycle.Status.Unknown];
 }
 
-function plainLogFormatter(now: Date, level: Level, facility: string, prefix: string, values: any[]) {
-    const creator = plaintextCreator();
+function formatPlain(diagnostic: unknown, indents = 0) {
+    const creator = plaintextCreator(indents);
 
-    const formattedValues = renderDiagnostic(values, {
+    const formatter = {
         ...creator,
+        message: message => {
+            const formattedValues = ensureIndented(renderDiagnostic(message.values, formatter));
+
+            return `${formatTime(message.now)} ${
+                Level[message.level]
+            } ${message.facility} ${message.prefix}${formattedValues}`;
+        },
         key: text => creator.text(`${text}: `),
         value: producer => creator.text(producer()),
         strong: producer => creator.text(`*${producer()}*`),
@@ -127,9 +137,9 @@ function plainLogFormatter(now: Date, level: Level, facility: string, prefix: st
         error: producer => creator.text(producer()),
         status: (status, producer) => `${creator.text(statusIcon(status))}${producer()}`,
         via: text => creator.text(text),
-    });
+    } satisfies Formatter;
 
-    return `${formatTime(now)} ${Level[level]} ${facility} ${prefix}${formattedValues}`;
+    return renderDiagnostic(diagnostic, formatter);
 }
 
 const ANSI_CODES = {
@@ -201,39 +211,51 @@ const Styles = {
 
 type StyleName = keyof typeof Styles;
 
-function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix: string, values: any[]) {
-    const primary = Level[level].toLowerCase() as StyleName;
-    const creator = plaintextCreator();
+function formatAnsi(diagnostic: unknown, indents = 0) {
+    let baseStyleChanged = false;
+    const creator = plaintextCreator(indents);
     const currentStyle: Style = {
         color: "default",
         dim: false,
         bold: false,
     };
-    const styles: StyleName[] = [primary];
-
-    const prefix = style("prefix", `${formatTime(now)} ${Level[level].padEnd(6)}`);
-
-    facility = style(
-        "facility",
-        facility.length > 20 ? `${facility.slice(0, 10)}~${facility.slice(facility.length - 9)}` : facility.padEnd(20),
-    );
-
-    if (nestPrefix) {
-        nestPrefix = style("prefix", nestPrefix);
-    }
+    const styles: StyleName[] = ["default"];
 
     function normal(text: string) {
-        return style(styles[styles.length - 1], text);
+        return style(styles[styles.length - 1] ?? "default", text);
     }
 
-    const message = renderDiagnostic(values, {
+    const formatter = {
+        message: ({ now, level, facility, prefix: nestPrefix, values }) => {
+            baseStyleChanged = true;
+            styles[0] = (Level[level] ?? "default").toLowerCase() as StyleName;
+
+            const prefix = style("prefix", `${formatTime(now)} ${Level[level].padEnd(6)}`);
+
+            facility = style(
+                "facility",
+                facility.length > 20
+                    ? `${facility.slice(0, 10)}~${facility.slice(facility.length - 9)}`
+                    : facility.padEnd(20),
+            );
+
+            if (nestPrefix) {
+                nestPrefix = style("prefix", nestPrefix);
+            }
+
+            const formattedValues = ensureIndented(renderDiagnostic(values, formatter));
+
+            return `${prefix} ${facility} ${nestPrefix}${formattedValues}`;
+        },
+
         text: text => creator.text(normal(text)),
 
         indent: producer => creator.indent(producer),
 
         break: () => {
-            // After the first line revert to default styling
-            if (styles[0] === primary) {
+            // After the first line revert to default styling so e.g. stack traces aren't all red
+            if (baseStyleChanged) {
+                baseStyleChanged = false;
                 styles[0] = "default";
             }
 
@@ -278,9 +300,9 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
         },
 
         via: text => creator.text(style("via", text)),
-    });
+    } satisfies Formatter;
 
-    return `${prefix} ${facility} ${nestPrefix}${message}${ansiEscape("reset")}`;
+    return renderDiagnostic(diagnostic, formatter) + ansiEscape("reset");
 
     // Convert a style name into a set of escape codes to transition state
     function escapes(styleName: StyleName) {
@@ -296,7 +318,7 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
         // Compute target color from style stack if not explicit
         if (!targetColor) {
             for (let i = styles.length; i > 0; i--) {
-                const color = (Styles[styles[i - 1]] as Style).color;
+                const color = (Styles[styles[i - 1] ?? "default"] as Style).color;
                 if (color) {
                     targetColor = color;
                     break;
@@ -370,12 +392,24 @@ function htmlSpan(type: string, inner: string) {
     return `<span class="matter-log-${type}">${inner}</span>`;
 }
 
-function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: string, values: any[]) {
+function formatHtml(diagnostic: unknown) {
     function escape(text: string) {
         return text.toString().replace(/</g, "&amp").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    const formattedValues = renderDiagnostic(values, {
+    const formatter = {
+        message: ({ now, level, facility, prefix, values }) => {
+            prefix = prefix.replace(/ /g, "&nbsp;");
+            const formattedValues = renderDiagnostic(values, formatter);
+
+            return htmlSpan(
+                `line ${Level[level].toLowerCase()}`,
+                `${htmlSpan("time", formatTime(now))} ${htmlSpan("level", Level[level])} ${htmlSpan(
+                    "facility",
+                    facility,
+                )} ${prefix}${formattedValues}`,
+            );
+        },
         text: escape,
         break: () => "<br/>",
         indent: producer => htmlSpan("indent", producer()),
@@ -386,17 +420,9 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: str
         error: producer => htmlSpan("error", producer()),
         status: (status, producer) => htmlSpan(`status-${status}`, producer()),
         via: text => htmlSpan("via", escape(text)),
-    });
+    } satisfies Formatter;
 
-    const np = prefix.replace(/ /g, "&nbsp;");
-
-    return htmlSpan(
-        `line ${Level[level].toLowerCase()}`,
-        `${htmlSpan("time", formatTime(now))} ${htmlSpan("level", Level[level])} ${htmlSpan(
-            "facility",
-            facility,
-        )} ${np}${formattedValues}`,
-    );
+    return renderDiagnostic(diagnostic, formatter);
 }
 
 /**
@@ -524,6 +550,12 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
         case undefined:
             return renderValue(value, formatter, false);
 
+        case Diagnostic.Presentation.Message:
+            if (value === undefined || value === null) {
+                throw new ImplementationError("Diagnostic message is not an object");
+            }
+            return formatter.message(Diagnostic.message(value));
+
         case Diagnostic.Presentation.List:
             if (typeof (value as Iterable<unknown>)?.[Symbol.iterator] !== "function") {
                 throw new ImplementationError("Diagnostic list is not iterable");
@@ -597,4 +629,18 @@ function formatTime(time: Date) {
         .getMilliseconds()
         .toString()
         .padStart(3, "0")}`;
+}
+
+/**
+ * Multiline messages should always have whitespace as the first character after newlines.  Ensure this is so.
+ */
+function ensureIndented(text: string) {
+    if (text.match(/\n\S/s)) {
+        return text.replace(/\n/gs, "\n  ");
+    }
+    return text;
+}
+
+if (MatterError.formatterFor === MatterError.defaultFormatterFactory) {
+    MatterError.formatterFor = Format;
 }
