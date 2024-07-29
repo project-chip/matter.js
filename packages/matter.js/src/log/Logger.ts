@@ -7,6 +7,7 @@
 import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
 import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { Diagnostic } from "./Diagnostic.js";
 import { Format } from "./Format.js";
 import { Level } from "./Level.js";
 
@@ -47,19 +48,13 @@ export namespace consoleLogger {
 }
 
 /**
- * Returns the default log formatter for a given format.
+ * Create a log formatter for a given format.
  */
-function determineLoggerForFormat(format: string) {
-    switch (format) {
-        case Format.PLAIN:
-            return Format.plain;
-        case Format.ANSI:
-            return Format.ansi;
-        case Format.HTML:
-            return Format.html;
-        default:
-            throw new NotImplementedError(`Unsupported log format "${format}"`);
-    }
+function logFormatterFor(formatName: string): LoggerDefinition["logFormatter"] {
+    const format = Format(formatName);
+
+    return (now, level, facility, prefix, ...values) =>
+        format(Diagnostic.message({ now, level, facility, prefix, values }));
 }
 
 /**
@@ -67,7 +62,7 @@ function determineLoggerForFormat(format: string) {
  */
 type LoggerDefinition = {
     logIdentifier: string;
-    logFormatter: (now: Date, level: Level, facility: string, ...values: any[]) => string;
+    logFormatter: (now: Date, level: Level, facility: string, prefix: string, ...values: any[]) => string;
     log: (level: Level, formattedLog: string) => void;
     defaultLogLevel: Level;
     logLevels: { [facility: string]: Level };
@@ -75,24 +70,27 @@ type LoggerDefinition = {
 
 /**
  * Logger that can be used to emit traces.
+ *
  * The class supports adding multiple loggers for different targets. A default logger (identifier "default") is added on
  * startup which logs to "console".
  *
  * Usage:
- * const facility = Logger.get("loggerName");
- * facility.debug("My debug message", "my extra value to log");
  *
- * Configuration:
+ *   const facility = Logger.get("loggerName");
+ *   facility.debug("My debug message", "my extra value to log");
+ *
  * The configuration of the default logger can be adjusted by using the static properties of the Logger class:
- * - Logger.defaultLogLevel sets the default log level for all the facility
- * - Logger.logLevels = { loggerName: Level.DEBUG } can set the level for the specific loggers
- * - Logger.format = Format.ANSI enables colorization via ANSI escape sequences in default formatter
+ *
+ *   - Logger.defaultLogLevel sets the default log level for all the facility
+ *   - Logger.logLevels = { loggerName: Level.DEBUG } can set the level for the specific loggers
+ *   - Logger.format = Format.ANSI enables colorization via ANSI escape sequences in default formatter
  *
  * For additional loggers, use Logger.addLogger() to add a new logger with a specific identifier. Afterwards the
  * configuration of these can be adjusted using static methods with the identifier as first parameter:
- * - Logger.setFormatForLogger("loggerName", Format.ANSI)
- * - Logger.setLogLevelsForLogger("loggerName", { loggerName: Level.DEBUG })
- * - Logger.setDefaultLoglevelForLogger("loggerName", Level.DEBUG)
+ *
+ *   - Logger.setFormatForLogger("loggerName", Format.ANSI)
+ *   - Logger.setLogLevelsForLogger("loggerName", { loggerName: Level.DEBUG })
+ *   - Logger.setDefaultLoglevelForLogger("loggerName", Level.DEBUG)
  */
 export class Logger {
     static logger = new Array<LoggerDefinition>({
@@ -119,7 +117,7 @@ export class Logger {
         }
         Logger.logger.push({
             logIdentifier: identifier,
-            logFormatter: determineLoggerForFormat(options?.logFormat ?? Format.PLAIN),
+            logFormatter: logFormatterFor(options?.logFormat ?? Format.PLAIN),
             log: logger,
             defaultLogLevel: options?.defaultLogLevel ?? Level.DEBUG,
             logLevels: options?.logLevels ?? {},
@@ -181,7 +179,7 @@ export class Logger {
      * @param format the name of the formatter (see Format enum)
      */
     static set format(format: string) {
-        Logger.setLogFormatterForLogger("default", Format(format));
+        Logger.setLogFormatterForLogger("default", logFormatterFor(format));
     }
 
     /**
@@ -258,7 +256,7 @@ export class Logger {
     public static setFormatForLogger(identifier: string, format: string) {
         const logger = Logger.logger.find(logger => logger.logIdentifier === identifier);
         if (logger) {
-            logger.logFormatter = determineLoggerForFormat(format);
+            logger.logFormatter = logFormatterFor(format);
         } else {
             throw new NotImplementedError(`Unknown logger "${identifier}"`);
         }
@@ -392,6 +390,23 @@ export class Logger {
             return await context();
         } finally {
             this.nestingLevel--;
+        }
+    }
+
+    /**
+     * Unhandled error reporter.
+     *
+     * Some environments do not report full error details such as {@link Error#cause} and {@link AggregateError#errors}.
+     *
+     * To ensure these details are always recorded somewhere, unhandled errors may be reported here.
+     *
+     * To disable this behavior replace this function.
+     */
+    static reportUnhandledError(error: Error) {
+        try {
+            Logger.get("Logger").fatal("Unhandled error detected:", error);
+        } catch (e) {
+            // We do not want to cause yet another error so if logging fails for any reason it goes unreported
         }
     }
 

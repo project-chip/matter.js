@@ -6,8 +6,73 @@
 
 import { errorOf } from "../util/Error.js";
 
-/** Error base class for all errors thrown by this library. */
-export class MatterError extends Error {}
+const inspect = Symbol.for("nodejs.util.inspect.custom");
+
+/**
+ * Error base class for all errors thrown by this library.
+ */
+export class MatterError extends Error {
+    /**
+     * Convert the error to formatted text.
+     *
+     * Matter encodes errors with modern JS features including {@link Error#cause} and {@link AggregateError#errors}
+     * subfields.  You can use this function to ensure all error details are presented regardless of environment.
+     */
+    format(format: "plain" | "ansi" | "html" = "plain", indents = 0) {
+        let formatterFor = MatterError.formatterFor;
+        if (typeof formatterFor !== "function") {
+            formatterFor = MatterError.defaultFormatterFactory;
+        }
+
+        let formatter = formatterFor(format);
+        if (typeof formatter !== "function") {
+            formatter = fallbackFormatter;
+        }
+
+        let result = formatter(this, indents);
+        if (typeof result !== "string") {
+            result = `${result}`;
+        }
+
+        return result as string;
+    }
+
+    /**
+     * Node.js-style object inspection.
+     *
+     * Node's default inspection only prevents two levels of depth which may hide critical information.  It's also
+     * considerably more verbose than native matter.js formatting.  We therefore offer this custom implementation.
+     *
+     * Note that this conforms to Node's API but is not dependent on Node.
+     */
+    [inspect](depth: number, inspectionOptions?: { colors?: boolean }) {
+        const formatterFor = MatterError.formatterFor;
+        if (typeof formatterFor !== "function") {
+            return this;
+        }
+
+        const format = formatterFor(inspectionOptions?.colors ? "ansi" : "plain");
+        if (typeof format !== "function") {
+            return this;
+        }
+
+        return format(this, depth);
+    }
+
+    /**
+     * The fallback formatter factory.  This produces a limited plaintext formatter.
+     */
+    static defaultFormatterFactory = () => fallbackFormatter;
+
+    /**
+     * The error formatter factory.  The default formatter is replaced by Matter.js in ./Format.ts.
+     */
+    static formatterFor: (formatName: string) => (value: unknown, indents?: number) => unknown =
+        MatterError.defaultFormatterFactory;
+
+    // Remove when es2022
+    declare cause?: unknown;
+}
 
 /**
  * Error thrown when a Platform specific implementation was not added and so a provider (Network, Time, Crypto, etc)
@@ -54,10 +119,61 @@ export class MatterAggregateError extends AggregateError {
         super(causes, message);
     }
 
+    [inspect] = MatterError.prototype[inspect];
+    format = MatterError.prototype.format;
+
     static [Symbol.hasInstance](instance: unknown) {
         if (instance instanceof MatterError) {
             return true;
         }
-        return Error[Symbol.hasInstance](instance);
+        return AggregateError[Symbol.hasInstance](instance);
     }
+}
+
+/**
+ * It's never reasonable to fail to present error information so we include this rudimentary fallback error formatter.
+ */
+function fallbackFormatter(value: unknown, indents = 0) {
+    if (value === undefined || value === null) {
+        return `${value}`;
+    }
+
+    function formatOne(value: unknown, indents: number, messagePrefix: string) {
+        const { message, stack, cause, errors } = value as {
+            message?: unknown;
+            stack?: unknown;
+            cause?: unknown;
+            errors?: unknown;
+        };
+
+        let indent;
+        if (typeof indents !== "number" || indents < 0) {
+            indent = "";
+        } else {
+            indent = "  ".repeat(indents);
+        }
+
+        const buffer = [`${indent}${messagePrefix}${message ?? "(unknown error)"}`];
+
+        if (stack !== undefined && stack !== null) {
+            const frames = stack.toString().split("\n");
+            frames.shift();
+            buffer.push(...frames.map(f => `${indent}  ${f.trim()}`));
+        }
+
+        if (cause !== undefined) {
+            buffer.push(formatOne(cause, indents, "Caused by: "));
+        }
+
+        if (typeof (errors as Iterable<unknown> | undefined)?.[Symbol.iterator] === "function") {
+            let causeNumber = 0;
+            for (const error of errors as Iterable<unknown>) {
+                buffer.push(formatOne(error, indents + 1, `Cause #${causeNumber++}: `));
+            }
+        }
+
+        return buffer.join("\n");
+    }
+
+    return formatOne(value, indents, "");
 }
