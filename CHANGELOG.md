@@ -32,6 +32,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Breaking: Removes the discovery capability "softAccessPoint" as it was removed from the Matter specification
     -   Breaking: Matter.js now requires node.js 18+
     -   Breaking: We now target ES 2022 for transpiled output.  We have not adopted new language features but this does mean that we generate true class properties now
+    -   Breaking: We've removed the APIs `tryCatch` and `tryCatchAsync`.  These were used internally -- not part of any Matter related API -- but were exported
     -   Feature: Increase Data Model revision to 17 (introduced by Matter 1.2)
     -   Feature: Added Base64 encoding/decoding support to ByteArray
     -   Feature: Added WildcardPathFlagsBitmap to Attribute expansion for read/subscribe Interactions

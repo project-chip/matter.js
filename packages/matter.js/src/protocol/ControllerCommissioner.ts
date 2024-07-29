@@ -362,6 +362,7 @@ export class ControllerCommissioner {
                 }
 
                 CommissioningSuccessfullyFinished.accept(error);
+                break;
             }
         }
     }

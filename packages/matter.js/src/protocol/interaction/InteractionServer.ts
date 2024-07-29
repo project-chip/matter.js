@@ -1366,6 +1366,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         if (errorCode === StatusCode.InvalidAction) {
                             errorCode = StatusCode.InvalidCommand;
                         }
+                    } else {
+                        logger.info(errorLogText);
                     }
 
                     result = {
