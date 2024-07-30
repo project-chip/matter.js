@@ -39,6 +39,7 @@
         "@react-native-async-storage/async-storage": "^1.23.1",
         "@react-native-community/netinfo": "^11.3.2",
         "@types/node": "^20.14.10",
+        "@types/jwk-to-pem": "^2.0.3",
         "jwk-to-pem": "^2.0.5",
         "react-native-ble-plx": "^3.2.1",
         "react-native-polyfill-globals": "^3.1.0",

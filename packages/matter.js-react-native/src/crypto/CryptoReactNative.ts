@@ -15,8 +15,7 @@ import {
     CryptoVerifyError,
 } from "@project-chip/matter-node.js/crypto";
 import { ByteArray } from "@project-chip/matter.js/util";
-// @ts-expect-error No types but all fine
-import jwt2pem from "jwk-to-pem";
+import jwk2pem from "jwk-to-pem";
 
 // @ts-expect-error No types but all fine
 crypto.hkdf = (
@@ -83,7 +82,7 @@ export class CryptoReactNative extends CryptoNode {
         }
         return new ByteArray(
             signer.sign({
-                key: jwt2pem(privateKey, { private: true }),
+                key: jwk2pem(privateKey as jwk2pem.JWK, { private: true }),
                 format: "pem",
                 type: "pkcs8",
                 dsaEncoding,
@@ -102,7 +101,7 @@ export class CryptoReactNative extends CryptoNode {
         verifier.update(data);
         const success = verifier.verify(
             {
-                key: jwt2pem(publicKey),
+                key: jwk2pem(publicKey as jwk2pem.JWK),
                 format: "pem",
                 type: "spki",
                 dsaEncoding,
