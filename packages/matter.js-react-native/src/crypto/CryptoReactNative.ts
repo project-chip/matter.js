@@ -17,7 +17,7 @@ import {
 import { DerCodec } from "@project-chip/matter.js/codec";
 import { ByteArray } from "@project-chip/matter.js/util";
 // @ts-expect-error No types but all fine
-import jwt2pem from "jwt-to-pem";
+import jwt2pem from "jwk-to-pem";
 
 // @ts-expect-error No types but all fine
 crypto.hkdf = (
