@@ -14,7 +14,7 @@ import { FinalizationError } from "../../../../src/behavior/state/transaction/Er
 import { BehaviorSupervisor } from "../../../../src/behavior/supervision/BehaviorSupervisor.js";
 import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../../../src/behavior/supervision/ValueSupervisor.js";
-import { DataModelPath } from "../../../../src/endpoint/DataModelPath.js";
+import { DataModelPath } from "../../../../src/model/definitions/DataModelPath.js";
 import { DatatypeModel, FieldElement, FieldModel } from "../../../../src/model/index.js";
 import { AsyncObservable, Observable } from "../../../../src/util/Observable.js";
 import { MaybePromise } from "../../../../src/util/Promises.js";

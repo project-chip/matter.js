@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../../../endpoint/DataModelPath.js";
+import { DataModelPath } from "../../../../model/definitions/DataModelPath.js";
 import { ValueModel } from "../../../../model/models/ValueModel.js";
 import { GeneratedClass } from "../../../../util/GeneratedClass.js";
 import { camelize } from "../../../../util/String.js";
@@ -44,7 +44,7 @@ export function BitmapManager(_owner: RootSupervisor, schema: Schema): ValueSupe
     }
     const maxBit = byteSize * 8;
 
-    for (const member of schema.members) {
+    for (const member of schema.activeMembers) {
         if (member.isDeprecated) {
             continue;
         }

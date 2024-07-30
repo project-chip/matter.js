@@ -5,7 +5,7 @@
  */
 
 import { ImplementationError } from "../../../../common/MatterError.js";
-import { DataModelPath } from "../../../../endpoint/DataModelPath.js";
+import { DataModelPath } from "../../../../model/definitions/DataModelPath.js";
 import { Metatype, ValueModel } from "../../../../model/index.js";
 import { camelize } from "../../../../util/String.js";
 import { isObject } from "../../../../util/Type.js";
@@ -45,7 +45,7 @@ function getDefaults(schema: Schema): Val.Struct {
     }
 
     const defaults = {} as Val.Struct;
-    for (const member of schema.members) {
+    for (const member of schema.activeMembers) {
         if (member.default !== undefined) {
             defaults[camelize(member.name)] = member.default;
             continue;
@@ -77,7 +77,7 @@ function StructPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervis
     // An object mapping name to true iff member is an array
     const memberArrays = {} as Record<string, boolean>;
 
-    for (const member of schema.members) {
+    for (const member of schema.activeMembers) {
         const metatype = member.effectiveMetatype;
 
         let handler: ValueSupervisor.Patch | undefined;

@@ -146,7 +146,7 @@ export class DefaultValueGenerator {
 
         const alreadyProcessed = new Set<string>();
         let result: Properties | undefined;
-        for (const member of model.members) {
+        for (const member of model.activeMembers) {
             const name = camelize(member.name);
 
             // Members are listed with overrides first so we ignore subsequent definitions for the same name

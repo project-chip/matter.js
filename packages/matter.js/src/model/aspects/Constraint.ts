@@ -207,6 +207,16 @@ export namespace Constraint {
         } else {
             value = Number.parseFloat(numOrName);
         }
+        if (typeof numOrName === "string") {
+            const lower = numOrName.toLowerCase();
+            switch (lower) {
+                case "true":
+                    return true;
+
+                case "false":
+                    return false;
+            }
+        }
         if (Number.isNaN(value)) {
             return FieldValue.Reference(camelize(numOrName));
         }

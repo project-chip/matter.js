@@ -66,7 +66,7 @@ export class ServerBehaviorBacking extends BehaviorBacking {
             return;
         }
 
-        for (const member of schema.members) {
+        for (const member of schema.activeMembers) {
             const name = camelize(member.name);
             if (state[name] === undefined) {
                 const referenced = FieldValue.referenced(member.default);

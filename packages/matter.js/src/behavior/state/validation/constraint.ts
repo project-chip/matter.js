@@ -9,7 +9,7 @@ import { Constraint, FieldValue, Metatype, ValueModel } from "../../../model/ind
 import { ConstraintError } from "../../errors.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../Val.js";
-import { assertArray, assertNumeric, assertSequence } from "./assertions.js";
+import { assertArray, assertBoolean, assertNumeric, assertSequence } from "./assertions.js";
 
 /**
  * Creates a function that validates values based on the constraint in the
@@ -51,6 +51,14 @@ export function createConstraintValidator(
                         location,
                         `Value ${value} is not within bounds defined by constraint`,
                     );
+                }
+            };
+
+        case Metatype.boolean:
+            return (value, _session, location) => {
+                assertBoolean(value, location);
+                if (!constraint.test(value, location.siblings)) {
+                    throw new ConstraintError(schema, location, `Value ${value} is disallowed by constraint`);
                 }
             };
 

@@ -7,17 +7,17 @@
 import { Access, Aspect, Conformance, Constraint, Quality } from "../aspects/index.js";
 import { ElementTag, FieldValue, Metatype } from "../definitions/index.js";
 import { AnyElement, FieldElement, ValueElement } from "../elements/index.js";
-import { Model } from "./Model.js";
-
-// These are circular dependencies so just to be safe we only import the
-// types.  We also need the class, though, at runtime.  So we use the
-// references in the Model.constructors factory pool.
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { DefaultValue } from "../logic/index.js";
 import { Aspects } from "./Aspects.js";
 import { Children } from "./Children.js";
-import { type FieldModel } from "./FieldModel.js";
+import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
+
+// These are circular dependencies so just to be safe we only import the types.  We also need the class, though, at
+// runtime.  So we use the references in the Model.constructors factory pool.
+import { type ClusterModel } from "./ClusterModel.js";
+import { type FieldModel } from "./FieldModel.js";
 
 const CONSTRAINT: unique symbol = Symbol("constraint");
 const CONFORMANCE: unique symbol = Symbol("conformance");
@@ -25,7 +25,7 @@ const ACCESS: unique symbol = Symbol("access");
 const QUALITY: unique symbol = Symbol("quality");
 
 /**
- * Each ValueElement has a corresponding implementation that derives from this class.
+ * Each {@link ValueElement} type has a corresponding implementation that derives from this class.
  */
 export abstract class ValueModel extends Model implements ValueElement {
     declare byteSize?: ValueElement.ByteSize;
@@ -175,10 +175,18 @@ export abstract class ValueModel extends Model implements ValueElement {
     }
 
     /**
-     * Retrieve all datatype members.
+     * All {@link PropertyModel} children}.
      */
     get members(): PropertyModel[] {
-        return new ModelTraversal().findMembers(this, [ElementTag.Field, ElementTag.Attribute]) as FieldModel[];
+        return new ModelTraversal().findMembers(this);
+    }
+
+    /**
+     * A subset of {@link members} with conflicts resolved by conformance.
+     */
+    get activeMembers() {
+        const cluster = this.owner(Model.types[ElementTag.Cluster]) as ClusterModel | undefined;
+        return new ModelTraversal().findActiveMembers(this, cluster);
     }
 
     /**

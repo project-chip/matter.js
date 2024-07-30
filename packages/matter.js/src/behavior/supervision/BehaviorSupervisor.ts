@@ -65,20 +65,17 @@ export namespace BehaviorSupervisor {
 /**
  * Adds a field for every property in state that isn't defined in the schema.
  *
- * Note 1: We skip all attributes, not just those that are applicable given the
- * supported features.
+ * Note 1: We skip all attributes, not just those that are applicable given the supported features.
  *
- * Note 2: Finding fields isn't as simple as just using "for ... in" because
- * ES6 class accessors are non-enumerable.  So we instead search the prototype
- * chain for read/write descriptors.
+ * Note 2: Finding fields isn't as simple as just using "for ... in" because ES6 class accessors are non-enumerable.  So
+ * we instead search the prototype chain for read/write descriptors.
  *
- * Note 3: We can't do anything with types either.  This means e.g. writing to
- * subfields won't behave as expected.  Really to do things correctly behavior
- * authors should hand-craft schema.  Or maybe we do something with decorators?.
+ * Note 3: We can't do anything with types either.  This means e.g. writing to subfields won't behave as expected.
+ * Really to do things correctly behavior authors should hand-craft schema.  Or maybe we do something with decorators?.
  */
 function addExtensionFields(base: Schema, defaultState: Val.Struct, children: ValueModel[]) {
     const props = new Set<string>();
-    for (const field of base.members) {
+    for (const field of base.activeMembers) {
         props.add(camelize(field.name));
     }
 

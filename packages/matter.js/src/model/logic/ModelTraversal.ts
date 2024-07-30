@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { SchemaImplementationError } from "../../behavior/errors.js";
 import { InternalError } from "../../common/MatterError.js";
 import { Access, Aspect, Constraint } from "../aspects/index.js";
-import { ElementTag, FieldValue, Metatype } from "../definitions/index.js";
+import { ElementTag, FeatureSet, FieldValue, Metatype } from "../definitions/index.js";
 import { AnyElement } from "../elements/index.js";
 import { Children } from "../models/Children.js";
-import { type CommandModel, type Model, type ValueModel } from "../models/index.js";
+import { PropertyModel, type ClusterModel, type CommandModel, type Model, type ValueModel } from "../models/index.js";
 import * as Elements from "../standard/elements/index.js";
 
 const OPERATION_DEPTH_LIMIT = 20;
@@ -437,8 +438,8 @@ export class ModelTraversal {
      * Retrieve all children of a specific type, including those inherited from the base or a shadow.  Does not include
      * members overridden by a deeper member.
      */
-    findMembers(scope: Model, allowedTags: ElementTag[]) {
-        const members = Array<Model>();
+    findMembers(scope: Model) {
+        const members = Array<PropertyModel>();
 
         // This is a map of identity (based on tag + id/name + discriminator) to a priority based on inheritance depth
         const defined = {} as Record<string, number | undefined>;
@@ -447,7 +448,7 @@ export class ModelTraversal {
         this.visitInheritance(scope, model => {
             level++;
             for (const child of model.children) {
-                if (!allowedTags.includes(child.tag)) {
+                if (child.tag !== ElementTag.Attribute && child.tag !== ElementTag.Field) {
                     continue;
                 }
 
@@ -475,11 +476,62 @@ export class ModelTraversal {
                 defined[nameIdentity] = level;
 
                 // Found a member
-                members.push(child);
+                members.push(child as PropertyModel);
             }
         });
 
         return members;
+    }
+
+    /**
+     * Filter a model's members as follows:
+     *
+     *   - If the member is deprecated, ignore it
+     *
+     *   - If there is only a single member of a given name, select that member
+     *
+     *   - If there are multiple members with the same name but there is no cluster throw an error
+     *
+     *   - If there are multiple members with the same name, use conformance to select the member that is applicable
+     *     based on active features in the provided cluster
+     *
+     *   - If there are multiple applicable members based on conformance the definitions conflict and throw an error
+     *
+     * Note that "active" in this case does not imply the member is conformant, only that conflicts are resolved.
+     *
+     * Note 2 - members may not be differentiated with conformance rules that rely on field values in this way. That
+     * will probably never be necessary and would require an entirely different (more complicated) structure.
+     */
+    findActiveMembers(scope: Model & { members: PropertyModel[] }, cluster?: ClusterModel) {
+        const features = cluster?.featureNames ?? new FeatureSet();
+        const supportedFeatures = cluster?.supportedFeatures ?? new FeatureSet();
+
+        const selectedMembers = {} as Record<string, ValueModel>;
+        for (const member of scope.members) {
+            if (member.isDeprecated) {
+                continue;
+            }
+
+            const other = selectedMembers[member.name];
+            if (other !== undefined) {
+                if (!member.conformance.isApplicable(features, supportedFeatures)) {
+                    continue;
+                }
+
+                if (other.conformance.isApplicable(features, supportedFeatures)) {
+                    throw new SchemaImplementationError(
+                        scope,
+                        `There are multiple definitions of "${member.name}" that cannot be differentiated by conformance`,
+                    );
+                }
+
+                // This member takes precedence and will overwrite below
+            }
+
+            selectedMembers[member.name] = member;
+        }
+
+        return Object.values(selectedMembers);
     }
 
     /**

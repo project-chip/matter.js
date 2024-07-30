@@ -5,10 +5,16 @@
  */
 
 import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
+import { OfflineContext } from "../../../../../src/behavior/context/server/OfflineContext.js";
+import { ConstraintError } from "../../../../../src/behavior/errors.js";
+import { Datasource } from "../../../../../src/behavior/state/managed/Datasource.js";
 import { Val } from "../../../../../src/behavior/state/Val.js";
+import { RootSupervisor } from "../../../../../src/behavior/supervision/RootSupervisor.js";
 import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../../../../src/datatype/NodeId.js";
-import { FieldElement } from "../../../../../src/model/index.js";
+import { DataModelPath } from "../../../../../src/model/definitions/DataModelPath.js";
+import { ClusterModel, FeatureSet, FieldElement } from "../../../../../src/model/index.js";
+import { FeatureMap } from "../../../../../src/model/standard/elements/FeatureMap.js";
 import { MaybePromise } from "../../../../../src/util/Promises.js";
 import { aclEndpoint, TestStruct } from "./value-utils.js";
 
@@ -44,6 +50,41 @@ function testNested(
 
     return struct.online(TestContext, (ref, cx) => {
         return actor({ struct, cx, ref: ref as Nested });
+    });
+}
+
+/**
+ * Schrödinger's cat cannot in fact be both alive and dead as that's just silly.
+ */
+const SchrödingersCat = new ClusterModel({
+    id: 0xdeadbeef,
+    name: "SchrödingersCat",
+    children: [
+        {
+            ...FeatureMap,
+            children: [{ tag: "field", name: "LF", description: "Life", constraint: "0" }],
+        },
+        { tag: "field", name: "Alive", type: "bool", constraint: "true", conformance: "[LF]" },
+        { tag: "field", name: "Alive", type: "bool", constraint: "false", conformance: "[!LF]" },
+    ],
+});
+
+class SchrödingersCatsState {
+    alive?: boolean;
+}
+
+async function testDuality(life: boolean, actor: (struct: { alive?: boolean }) => void) {
+    const schema = SchrödingersCat.clone();
+    if (life) {
+        schema.supportedFeatures = new FeatureSet("LF");
+    }
+
+    const supervisor = new RootSupervisor(schema);
+
+    const datasource = Datasource({ type: SchrödingersCatsState, supervisor, path: DataModelPath(0) });
+
+    await OfflineContext.act("test", undefined, cx => {
+        actor(datasource.reference(cx));
     });
 }
 
@@ -147,6 +188,24 @@ describe("StructManager", () => {
 
             array = ref.array as { num: number; str: string }[];
             expect(array).deep.equals([...input, { num: 3, str: "baz" }]);
+        });
+    });
+
+    describe("conformance-based property variance", () => {
+        it("uses correct model for disabled feature", async () => {
+            await testDuality(false, struct => {
+                struct.alive = false;
+
+                expect(() => (struct.alive = true)).throws(ConstraintError);
+            });
+        });
+
+        it("uses correct model for enabled feature", async () => {
+            await testDuality(true, struct => {
+                struct.alive = true;
+
+                expect(() => (struct.alive = false)).throws(ConstraintError);
+            });
         });
     });
 });

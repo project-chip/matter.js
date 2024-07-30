@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../../../endpoint/DataModelPath.js";
+import { DataModelPath } from "../../../../model/definitions/DataModelPath.js";
 import { Access, ValueModel } from "../../../../model/index.js";
 import { StatusCode } from "../../../../protocol/interaction/StatusCode.js";
 import { serialize } from "../../../../util/String.js";

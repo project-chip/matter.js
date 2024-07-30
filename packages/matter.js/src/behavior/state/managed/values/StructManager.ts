@@ -33,11 +33,7 @@ export function StructManager(owner: RootSupervisor, schema: Schema): ValueSuper
     let hasFabricIndex = false;
 
     // Scan the schema and configure each member (field or attribute) as a property
-    for (const member of schema.members) {
-        if (member.isDeprecated) {
-            continue;
-        }
-
+    for (const member of schema.activeMembers) {
         const name = camelize(member.name);
 
         const { access, descriptor } = configureProperty(owner, member);
@@ -230,8 +226,8 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
                             siblings: struct,
                         });
                     } catch (e) {
-                        // Undo our change on error.  Rollback will take care of this when transactional but this handles
-                        // the cases of 1.) no transaction, and 2.) error is caught within transaction
+                        // Undo our change on error.  Rollback will take care of this when transactional but this
+                        // handles the cases of 1.) no transaction, and 2.) error is caught within transaction
                         target[name] = oldValue;
 
                         throw e;

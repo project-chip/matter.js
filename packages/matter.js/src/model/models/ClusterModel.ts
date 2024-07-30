@@ -5,10 +5,11 @@
  */
 
 import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
-import { camelize } from "../../util/String.js";
+import { camelize, describeList } from "../../util/String.js";
 import { Access } from "../aspects/Access.js";
 import { Quality } from "../aspects/Quality.js";
-import { ElementTag, FeatureSet, Metatype } from "../definitions/index.js";
+import { SchemaImplementationError } from "../definitions/errors.js";
+import { FeatureSet, Metatype } from "../definitions/index.js";
 import { ClusterElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { ClusterRevision } from "../standard/elements/ClusterRevision.js";
@@ -21,6 +22,7 @@ import { DatatypeModel } from "./DatatypeModel.js";
 import { EventModel } from "./EventModel.js";
 import type { FieldModel } from "./FieldModel.js";
 import { Model } from "./Model.js";
+import { PropertyModel } from "./PropertyModel.js";
 
 const QUALITY = Symbol("quality");
 
@@ -61,15 +63,12 @@ export class ClusterModel extends Model implements ClusterElement {
         return this.all(DatatypeModel);
     }
 
-    get members() {
+    get members(): PropertyModel[] {
         const traversal = new ModelTraversal();
 
         // Formally a field element cannot be a cluster child but we allow it for metadata control when a field should
         // not be published
-        const members = traversal.findMembers(this, [ElementTag.Attribute, ElementTag.Field]) as (
-            | AttributeModel
-            | FieldModel
-        )[];
+        const members = traversal.findMembers(this);
 
         // We consider the standard set of "global" attributes members of all clusters
         const missingGlobalIds = new Set(AttributeModel.globalIds);
@@ -94,6 +93,10 @@ export class ClusterModel extends Model implements ClusterElement {
         return members;
     }
 
+    get activeMembers() {
+        return new ModelTraversal().findActiveMembers(this, this);
+    }
+
     get revision() {
         let revision = 1;
         const revisionAttr = this.get(AttributeModel, ClusterRevision.id);
@@ -111,30 +114,47 @@ export class ClusterModel extends Model implements ClusterElement {
         return this.get(AttributeModel, FeatureMap.id) ?? new AttributeModel(FeatureMap);
     }
 
+    get featureNames(): FeatureSet {
+        return new FeatureSet(this.features.map(feature => feature.name));
+    }
+
     get supportedFeatures(): FeatureSet {
         const supported = {} as { [name: string]: boolean | undefined };
         for (const feature of this.features) {
             if (feature.default) {
-                supported[feature.description ? camelize(feature.description) : feature.name] = true;
+                supported[feature.name] = true;
             }
         }
         return new FeatureSet(supported);
     }
 
     set supportedFeatures(features: FeatureSet.Definition | undefined) {
-        const featureSet = features instanceof FeatureSet ? features : new FeatureSet(features);
+        const featureSet = new FeatureSet(features);
 
         const featureMap = this.featureMap;
 
         for (const feature of featureMap.children) {
-            if (
-                (feature.description && featureSet.has(camelize(feature.description))) ||
-                featureSet.has(feature.name)
-            ) {
+            const desc = feature.description && camelize(feature.description);
+            if (desc !== undefined && featureSet.has(desc)) {
                 feature.default = true;
-            } else {
-                feature.default = undefined;
+                featureSet.delete(desc);
+                continue;
             }
+
+            if (featureSet.has(feature.name)) {
+                featureSet.delete(feature.name);
+                feature.default = true;
+                continue;
+            }
+
+            feature.default = undefined;
+        }
+
+        if (featureSet.size) {
+            throw new SchemaImplementationError(
+                this,
+                `Cannot set unknown feature${featureSet.size > 1 ? "s" : ""} ${describeList("and", ...featureSet)}`,
+            );
         }
     }
 

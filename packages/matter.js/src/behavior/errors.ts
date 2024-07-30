@@ -4,25 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../endpoint/DataModelPath.js";
+import { SchemaErrorPath, SchemaViolationError } from "../model/definitions/errors.js";
 import { ValueModel } from "../model/index.js";
-import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
+import { StatusCode } from "../protocol/interaction/StatusCode.js";
 import { Schema } from "./supervision/Schema.js";
 
-export type SchemaErrorPath = (DataModelPath & { path?: undefined }) | { path: DataModelPath };
-
-/**
- * Thrown due to schema violations.
- */
-export class SchemaViolationError extends StatusResponseError {
-    constructor(prefix: string, path: SchemaErrorPath, message: string, code: StatusCode) {
-        const text = `${prefix} ${path.path ?? path}: ${message} (${code})`;
-        super(text, code);
-
-        // Remove default status code injection
-        this.message = text;
-    }
-}
+export { SchemaImplementationError } from "../model/definitions/errors.js";
 
 /**
  * Thrown for invalid reads.
@@ -117,14 +104,5 @@ export class ExpiredReferenceError extends SchemaViolationError {
 export class PhantomReferenceError extends SchemaViolationError {
     constructor(path: SchemaErrorPath) {
         super("Referencing", path, "Container was removed", StatusCode.Failure);
-    }
-}
-
-/**
- * Thrown for issues with metadata definitions or related data that are a local (vs network client) problem.
- */
-export class SchemaImplementationError extends SchemaViolationError {
-    constructor(path: SchemaErrorPath, message: string, code?: StatusCode) {
-        super("Definition of", path, message, code ?? StatusCode.Failure);
     }
 }

@@ -135,7 +135,7 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
 
     // Index schema members by name
     const props = {} as Record<string, ValueModel[]>;
-    for (const member of schema.members) {
+    for (const member of schema.activeMembers) {
         const name = camelize(member.name);
         if (props[name]) {
             props[name].push(member);
