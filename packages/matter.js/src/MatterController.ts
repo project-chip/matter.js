@@ -565,10 +565,9 @@ export class MatterController {
 
         let paseSecureSession;
         try {
-            // Close the exchange if the pairing fails and rethrow the error
             paseSecureSession = await this.paseClient.pair(this, paseExchange, passcode);
         } catch (e) {
-            // Close the exchange if the pairing fails and rethrow the error
+            // Close the exchange and rethrow
             await paseExchange.close();
             throw e;
         }

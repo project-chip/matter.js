@@ -92,7 +92,6 @@ export class AttributeClient<T> {
                 );
             } catch (e) {
                 NoAssociatedFabricError.accept(e);
-                return value;
             }
         }
 
