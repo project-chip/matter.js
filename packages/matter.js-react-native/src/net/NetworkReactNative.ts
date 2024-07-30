@@ -15,6 +15,14 @@ const rnDGramCreateSocket = dgram.createSocket;
 dgram.createSocket = (...args: any[]) => {
     const socket = rnDGramCreateSocket(...args);
     socket.setMulticastInterface = () => {}; // Stub for now
+
+    const originalSend = socket.send;
+    socket.send = (
+        buffer: ByteArray,
+        port: number,
+        address: string,
+        callback: (error: Error | null, bytes: number) => void,
+    ) => originalSend(buffer, 0, buffer.length, port, address, callback);
     return socket;
 };
 
@@ -28,7 +36,7 @@ import {
     UdpChannel,
     UdpChannelOptions,
 } from "@project-chip/matter.js/net";
-import { AsyncCache, isIPv6, onSameNetwork } from "@project-chip/matter.js/util";
+import { AsyncCache, ByteArray, isIPv6, onSameNetwork } from "@project-chip/matter.js/util";
 import { fetch as fetchNetworkInfo } from "@react-native-community/netinfo";
 import { UdpChannelReactNative } from "./UdpChannelReactNative.js";
 
