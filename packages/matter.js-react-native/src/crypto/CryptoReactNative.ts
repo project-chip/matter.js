@@ -14,7 +14,6 @@ import {
     CryptoNode,
     CryptoVerifyError,
 } from "@project-chip/matter-node.js/crypto";
-import { DerCodec } from "@project-chip/matter.js/codec";
 import { ByteArray } from "@project-chip/matter.js/util";
 // @ts-expect-error No types but all fine
 import jwt2pem from "jwk-to-pem";
@@ -73,7 +72,7 @@ export class CryptoReactNative extends CryptoNode {
     override sign(
         privateKey: JsonWebKey,
         data: ByteArray | ByteArray[],
-        _dsaEncoding: CryptoDsaEncoding = "ieee-p1363",
+        dsaEncoding: CryptoDsaEncoding = "ieee-p1363",
     ): ByteArray {
         // @ts-expect-error No types but all fine
         const signer = crypto.createSign(CRYPTO_HASH_ALGORITHM);
@@ -82,37 +81,14 @@ export class CryptoReactNative extends CryptoNode {
         } else {
             signer.update(data);
         }
-        const signatureDer = new ByteArray(
+        return new ByteArray(
             signer.sign({
                 key: jwt2pem(privateKey, { private: true }),
                 format: "pem",
                 type: "pkcs8",
-                //dsaEncoding, ... will be DER for now because lib do not support it
+                dsaEncoding,
             }),
         );
-
-        // So lets build the ieee-p1363 signature version
-        const decoded = DerCodec.decode(signatureDer);
-        const signatureData = decoded._elements
-            ?.filter(({ _tag }) => _tag === 2)
-            .map(({ _bytes }) => {
-                if (_bytes.length < 32) {
-                    return ByteArray.concat(new ByteArray(32 - _bytes.length), _bytes);
-                }
-                if (_bytes.length > 32) {
-                    while (_bytes.length > 32 && _bytes[0] === 0) {
-                        _bytes = _bytes.slice(1);
-                    }
-                }
-                if (_bytes.length !== 32) {
-                    throw new CryptoVerifyError(`Signature element to long ${_bytes.toHex()}`);
-                }
-                return _bytes;
-            });
-        if (signatureData?.length !== 2) {
-            throw new CryptoVerifyError(`Signature returned is too long: ${signatureData?.length}`);
-        }
-        return ByteArray.concat(...signatureData);
     }
 
     override verify(
