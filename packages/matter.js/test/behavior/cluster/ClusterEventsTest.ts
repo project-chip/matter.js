@@ -55,9 +55,9 @@ describe("ClusterEvents", () => {
 
         it("allows optional", () => {
             undefined satisfies Ep["optAttr$Changed"];
-            ({}) as AsyncObservable<[boolean, boolean, context: ActionContext]> satisfies Ep["optAttr$Changed"];
+            void ({} as AsyncObservable<[boolean, boolean, context: ActionContext]> satisfies Ep["optAttr$Changed"]);
             undefined satisfies Ep["optEv"];
-            ({}) as Observable<[string, context: ActionContext]> satisfies Ep["optEv"];
+            void ({} as Observable<[string, context: ActionContext]> satisfies Ep["optEv"]);
         });
     });
 
@@ -113,9 +113,9 @@ describe("ClusterEvents", () => {
 
         it("allows optional", () => {
             undefined satisfies Ei["optAttr$Changed"];
-            ({}) as AsyncObservable<[boolean, boolean, context: ActionContext]> satisfies Ei["optAttr$Changed"];
+            void ({} as AsyncObservable<[boolean, boolean, context: ActionContext]> satisfies Ei["optAttr$Changed"]);
             undefined satisfies Ei["optEv"];
-            ({}) as Observable<[string, context: ActionContext]> satisfies Ei["optEv"];
+            void ({} as Observable<[string, context: ActionContext]> satisfies Ei["optEv"]);
         });
     });
 

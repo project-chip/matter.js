@@ -586,9 +586,6 @@ class Tx implements Transaction {
                 if (ongoing) {
                     ongoing.push(promise as Promise<void>);
                 } else {
-                    // eslint has helpfully decided you can't place promises in an array, suggesting you use Promise.all
-                    // or similar...  Which is exactly why we're putting them in an array...
-                    // eslint-disable-next-line
                     ongoing = [promise as Promise<void>];
                 }
             }
@@ -657,8 +654,6 @@ class Tx implements Transaction {
                 if (ongoing) {
                     ongoing.push(promise as Promise<void>);
                 } else {
-                    // See comment on similar line above
-                    // eslint-disable-next-line
                     ongoing = [promise as Promise<void>];
                 }
             }
