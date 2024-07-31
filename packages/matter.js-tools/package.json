@@ -48,7 +48,7 @@
         "chai-as-promised": "^7.1.2",
         "esbuild": "^0.23.0",
         "express": "^4.19.2",
-        "glob": "^10.4.5",
+        "glob": "^11.0.0",
         "mocha": "^10.6.0",
         "playwright": "^1.45.2",
         "typescript": "~5.5.3",
