@@ -337,7 +337,7 @@ describe("ClusterBehavior", () => {
             ({}) as InstanceType<typeof Events2> satisfies EventEmitter;
 
             const eventsInstance = new Events2();
-            eventsInstance.startUp satisfies Observable;
+            void (eventsInstance.startUp satisfies Observable);
             expect(eventsInstance.startUp).not.undefined;
         });
 

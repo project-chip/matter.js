@@ -385,7 +385,8 @@ export function Construction<const T extends Constructable>(
                 }
             };
 
-            this.finally(onCompletion);
+            // Do not use finally() because eslint rule doesn't like it
+            this.then(onCompletion, onCompletion);
         },
 
         close(destructor): MaybePromise {

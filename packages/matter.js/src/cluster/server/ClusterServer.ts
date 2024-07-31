@@ -419,11 +419,11 @@ export function ClusterServer<
         if (!optional && (supportedEvents as any)[eventName] !== true) {
             if (!ignoreMissingElements) {
                 throw new ImplementationError(
-                    `Event ${eventName} needs to be supported by cluster ${name} (${clusterId})`,
+                    `Event ${eventName} needs be supported by cluster ${name} (${clusterId})`,
                 );
             }
             logger.warn(
-                `Event ${eventName} should to be supported by cluster ${name} (${clusterId}) but not present and ignored.`,
+                `Event ${eventName} should be supported by cluster ${name} (${clusterId}) but not present and ignored.`,
             );
             continue;
         }
