@@ -87,9 +87,7 @@ export function act<T>(via: string, actor: (transaction: Transaction) => T): T {
         throw error;
     }) as (error: any) => MaybePromise<T>; // Cast because otherwise type is MaybePromise<void>
 
-    const closeTransaction = () => {
-        tx.close();
-    };
+    const closeTransaction = tx.close.bind(tx);
 
     let isAsync = false;
     try {

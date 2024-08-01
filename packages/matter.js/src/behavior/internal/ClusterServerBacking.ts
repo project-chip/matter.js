@@ -10,7 +10,7 @@ import {
     createAttributeServer as ConstructAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
-import { ClusterDatasource, type CommandHandler } from "../../cluster/server/ClusterServerTypes.js";
+import { ClusterDatasource } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { Message } from "../../codec/MessageCodec.js";
@@ -292,7 +292,7 @@ function createCommandServer(name: string, definition: Command<any, any, any>, b
     }
     const access = AccessControl(schema);
 
-    const handler: CommandHandler<any, any, any> = ({ request, message }) => {
+    const handler = (request: unknown, _session: unknown, message: Message) => {
         let requestDiagnostic: unknown;
         if (isObject(request)) {
             requestDiagnostic = Diagnostic.dict(request);

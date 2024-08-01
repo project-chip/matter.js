@@ -6,14 +6,18 @@
 
 import { MatterDevice } from "../../../src/MatterDevice.js";
 import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
+import { OnOffServer } from "../../../src/behavior/definitions/on-off/OnOffServer.js";
 import { NetworkServer } from "../../../src/behavior/system/network/NetworkServer.js";
 import { AccessControl } from "../../../src/cluster/definitions/AccessControlCluster.js";
 import { BasicInformation } from "../../../src/cluster/definitions/BasicInformationCluster.js";
 import { NetworkCommissioning } from "../../../src/cluster/definitions/NetworkCommissioningCluster.js";
+import { OnOff } from "../../../src/cluster/definitions/OnOffCluster.js";
 import { OperationalCredentials } from "../../../src/cluster/definitions/OperationalCredentialsCluster.js";
+import { Status } from "../../../src/cluster/globals/Status.js";
 import { Message, SessionType } from "../../../src/codec/MessageCodec.js";
 import { AttributeId } from "../../../src/datatype/AttributeId.js";
 import { ClusterId } from "../../../src/datatype/ClusterId.js";
+import { CommandId } from "../../../src/datatype/CommandId.js";
 import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
 import { FabricId } from "../../../src/datatype/FabricId.js";
 import { FabricIndex } from "../../../src/datatype/FabricIndex.js";
@@ -29,6 +33,9 @@ import { MessageExchange } from "../../../src/protocol/MessageExchange.js";
 import { InteractionServerMessenger, MessageType } from "../../../src/protocol/interaction/InteractionMessenger.js";
 import {
     TlvDataReport,
+    TlvInvokeRequest,
+    TlvInvokeResponseData,
+    TlvInvokeResponseForSend,
     TlvReadRequest,
     TlvStatusResponse,
     TlvSubscribeRequest,
@@ -145,6 +152,44 @@ async function performRead(
     return result.attributeReportsPayload?.[0]?.attributeData?.payload;
 }
 
+const BarelyMockedMessenger = {
+    sendStatus: _code => {},
+    sendDataReport: async (_report, _forFabricFilteredRead) => {},
+    send: async (_type, _message) => {},
+    close: async () => {},
+} as InteractionServerMessenger;
+
+const BarelyMockedMessage = {
+    packetHeader: { sessionType: SessionType.Unicast },
+} as Message;
+
+async function performInvoke(
+    node: MockServerNode,
+    fabric: Fabric,
+    request: TypeFromSchema<typeof TlvInvokeRequest>["invokeRequests"][number],
+    responder: (value: TypeFromSchema<typeof TlvInvokeResponseData>) => void,
+) {
+    const { exchange, interactionServer } = await connect(node, fabric);
+
+    await interactionServer.handleInvokeRequest(
+        exchange,
+        {
+            invokeRequests: [request],
+            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            suppressResponse: false,
+            timedRequest: false,
+        },
+        {
+            ...BarelyMockedMessenger,
+            send: async (_type, message) => {
+                const response = TlvInvokeResponseForSend.decode(message).invokeResponses[0];
+                responder(TlvInvokeResponseData.decodeTlv(response));
+            },
+        } as InteractionServerMessenger,
+        BarelyMockedMessage,
+    );
+}
+
 async function performSubscribe(
     node: MockServerNode,
     fabric: Fabric,
@@ -152,19 +197,7 @@ async function performSubscribe(
 ) {
     const { exchange, interactionServer } = await connect(node, fabric);
 
-    await interactionServer.handleSubscribeRequest(
-        exchange,
-        request,
-        {
-            sendStatus: _code => {},
-            sendDataReport: async (_report, _forFabricFilteredRead) => {},
-            send: async (_type, _message) => {},
-            close: async () => {},
-        } as InteractionServerMessenger,
-        {
-            packetHeader: { sessionType: SessionType.Unicast },
-        } as Message,
-    );
+    await interactionServer.handleSubscribeRequest(exchange, request, BarelyMockedMessenger, BarelyMockedMessage);
 }
 
 // This is AccessControl.AccessControlEntryStruct but not sure how to remove fabric index from payload so just
@@ -346,26 +379,63 @@ describe("ClusterServerBacking", () => {
         await node.close();
     });
 
-    describe("AcceptedCommandList", () => {
-        it("indicates support only for implemented methods", async () => {
-            class MyServer extends WifiCommissioningServer {
-                override scanNetworks(): NetworkCommissioning.ScanNetworksResponse {
-                    return {
-                        networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-                    };
-                }
+    it("indicates support only for implemented commands", async () => {
+        class MyServer extends WifiCommissioningServer {
+            override scanNetworks(): NetworkCommissioning.ScanNetworksResponse {
+                return {
+                    networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                };
             }
+        }
 
-            const MyDevice = OnOffLightDevice.with(MyServer);
+        const MyDevice = OnOffLightDevice.with(MyServer);
 
-            const node = await MockServerNode.createOnline({ device: MyDevice });
+        const node = await MockServerNode.createOnline({ device: MyDevice });
 
-            const commands = await readCommandList(node, NetworkCommissioning.Cluster.id, 1);
+        const commands = await readCommandList(node, NetworkCommissioning.Cluster.id, 1);
 
-            expect(commands).deep.equals([
-                NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks
-                    .requestId,
-            ]);
-        });
+        expect(commands).deep.equals([
+            NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks.requestId,
+        ]);
+    });
+
+    it("invokes", async () => {
+        let received: undefined | OnOff.OffWithEffectRequest;
+        let sent: undefined | TypeFromSchema<typeof TlvInvokeResponseData>;
+
+        class MyServer extends OnOffServer.with("Lighting") {
+            override offWithEffect(request: OnOff.OffWithEffectRequest) {
+                received = request;
+            }
+        }
+
+        const MyDevice = OnOffLightDevice.with(MyServer);
+
+        const node = await MockServerNode.createOnline({ device: MyDevice });
+
+        await performInvoke(
+            node,
+            await createFabric(node, 1),
+            {
+                commandPath: {
+                    endpointId: EndpointNumber(1),
+                    clusterId: OnOff.Cluster.id,
+                    commandId: CommandId(OnOff.LightingComponent.commands.offWithEffect.requestId),
+                },
+
+                commandFields: OnOff.TlvOffWithEffectRequest.encodeTlv({
+                    effectIdentifier: 0,
+                    effectVariant: 1,
+                }),
+            },
+            response => {
+                sent = response;
+            },
+        );
+
+        expect(received).deep.equals({ effectIdentifier: 0, effectVariant: 1 });
+
+        // Nice, three nested fields called "status"
+        expect(sent?.status?.status.status).deep.equals(Status.Success);
     });
 });
