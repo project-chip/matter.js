@@ -45,42 +45,42 @@ export interface SmokeCoAlarmDevice extends Identity<typeof SmokeCoAlarmDeviceDe
 
 export namespace SmokeCoAlarmRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The SmokeCoAlarm cluster is required by the Matter specification
+     * The SmokeCoAlarm cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link SmokeCoAlarmServer} for convenience.
      */
     export const SmokeCoAlarmServer = BaseSmokeCoAlarmServer;
 
     /**
-     * The Groups cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The RelativeHumidityMeasurement cluster is optional per the Matter specification
+     * The RelativeHumidityMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link RelativeHumidityMeasurementServer} for convenience.
      */
     export const RelativeHumidityMeasurementServer = BaseRelativeHumidityMeasurementServer;
 
     /**
-     * The TemperatureMeasurement cluster is optional per the Matter specification
+     * The TemperatureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureMeasurementServer} for convenience.
      */
     export const TemperatureMeasurementServer = BaseTemperatureMeasurementServer;
 
     /**
-     * The CarbonMonoxideConcentrationMeasurement cluster is optional per the Matter specification
+     * The CarbonMonoxideConcentrationMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link CarbonMonoxideConcentrationMeasurementServer} for
      * convenience.

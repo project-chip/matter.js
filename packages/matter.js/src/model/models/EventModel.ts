@@ -10,8 +10,8 @@ import { ValueModel } from "./ValueModel.js";
 
 export class EventModel extends ValueModel implements EventElement {
     override tag: EventElement.Tag = EventElement.Tag;
-    override id!: Mei;
-    priority?: EventElement.Priority;
+    declare id: Mei;
+    declare priority?: EventElement.Priority;
 
     constructor(definition: EventElement.Properties) {
         super(definition);

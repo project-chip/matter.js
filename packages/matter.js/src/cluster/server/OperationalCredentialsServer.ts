@@ -16,7 +16,6 @@ import { CertificateError } from "../../certificate/CertificateManager.js";
 import { MatterFabricInvalidAdminSubjectError } from "../../common/FailsafeContext.js";
 import { MatterFabricConflictError } from "../../common/FailsafeTimer.js";
 import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
-import { tryCatch } from "../../common/TryCatchHandler.js";
 import { ValidationError } from "../../common/ValidationError.js";
 import { CryptoVerifyError } from "../../crypto/Crypto.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
@@ -24,7 +23,7 @@ import { PublicKeyError } from "../../fabric/Fabric.js";
 import { FabricTableFullError } from "../../fabric/FabricManager.js";
 import { Logger } from "../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
-import { NoAssociatedFabricError, assertSecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession } from "../../session/SecureSession.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
@@ -350,13 +349,8 @@ export const OperationalCredentialsClusterHandler: (
         updateNoc: async ({ request: { nocValue, icacValue }, attributes: { nocs, fabrics }, session }) => {
             assertSecureSession(session);
 
-            tryCatch(
-                () => session.associatedFabric,
-                NoAssociatedFabricError,
-                () => {
-                    throw new StatusResponseError("No associated fabric existing", StatusCode.UnsupportedAccess);
-                },
-            );
+            // Assert associated fabric is present
+            session.associatedFabric;
 
             const device = session.context;
 
@@ -434,14 +428,7 @@ export const OperationalCredentialsClusterHandler: (
         updateFabricLabel: async ({ request: { label }, attributes: { fabrics }, session }) => {
             assertSecureSession(session, "updateOperationalCert should be called on a secure session.");
 
-            const fabric = tryCatch(
-                () => session.associatedFabric,
-                NoAssociatedFabricError,
-                () => {
-                    throw new StatusResponseError("No associated fabric existing", StatusCode.UnsupportedAccess);
-                },
-            );
-
+            const fabric = session.associatedFabric;
             const currentFabricIndex = fabric.fabricIndex;
             const device = session.context;
             const conflictingLabelFabric = device
@@ -513,7 +500,7 @@ export const OperationalCredentialsClusterHandler: (
 
             if (failsafeContext.fabricIndex !== undefined) {
                 throw new StatusResponseError(
-                    `Can not add trusted root certificates after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
+                    `Cannot add trusted root certificates after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
                     StatusCode.ConstraintError,
                 );
             }

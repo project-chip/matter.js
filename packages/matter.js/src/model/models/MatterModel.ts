@@ -23,7 +23,7 @@ import { Model } from "./Model.js";
 export class MatterModel extends Model implements MatterElement {
     override tag: MatterElement.Tag = MatterElement.Tag;
     override isTypeScope = true;
-    revision?: Specification.Revision;
+    declare revision?: Specification.Revision;
 
     /**
      * The default instance of the canonical MatterModel.

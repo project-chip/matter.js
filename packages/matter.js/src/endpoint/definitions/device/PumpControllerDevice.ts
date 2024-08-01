@@ -42,77 +42,77 @@ export interface PumpControllerDevice extends Identity<typeof PumpControllerDevi
 
 export namespace PumpControllerRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The Binding cluster is required by the Matter specification
+     * The Binding cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link BindingBehavior} for convenience.
      */
     export const BindingBehavior = BaseBindingBehavior;
 
     /**
-     * The OnOff cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link OnOffBehavior} for convenience.
      */
     export const OnOffBehavior = BaseOnOffBehavior;
 
     /**
-     * The PumpConfigurationAndControl cluster is required by the Matter specification
+     * The PumpConfigurationAndControl cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link PumpConfigurationAndControlBehavior} for convenience.
      */
     export const PumpConfigurationAndControlBehavior = BasePumpConfigurationAndControlBehavior;
 
     /**
-     * The Identify cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyBehavior} for convenience.
      */
     export const IdentifyBehavior = BaseIdentifyBehavior;
 
     /**
-     * The Groups cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsBehavior} for convenience.
      */
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The LevelControl cluster is optional per the Matter specification
+     * The LevelControl cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link LevelControlBehavior} for convenience.
      */
     export const LevelControlBehavior = BaseLevelControlBehavior;
 
     /**
-     * The ScenesManagement cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
      */
     export const ScenesManagementBehavior = BaseScenesManagementBehavior;
 
     /**
-     * The TemperatureMeasurement cluster is optional per the Matter specification
+     * The TemperatureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureMeasurementBehavior} for convenience.
      */
     export const TemperatureMeasurementBehavior = BaseTemperatureMeasurementBehavior;
 
     /**
-     * The PressureMeasurement cluster is optional per the Matter specification
+     * The PressureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link PressureMeasurementBehavior} for convenience.
      */
     export const PressureMeasurementBehavior = BasePressureMeasurementBehavior;
 
     /**
-     * The FlowMeasurement cluster is optional per the Matter specification
+     * The FlowMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link FlowMeasurementBehavior} for convenience.
      */

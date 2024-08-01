@@ -41,49 +41,49 @@ export interface RoomAirConditionerDevice extends Identity<typeof RoomAirConditi
 
 export namespace RoomAirConditionerRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The OnOff cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification.
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
     export const OnOffServer = BaseOnOffServer.with("DeadFrontBehavior");
 
     /**
-     * The Thermostat cluster is required by the Matter specification
+     * The Thermostat cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link ThermostatServer} for convenience.
      */
     export const ThermostatServer = BaseThermostatServer;
 
     /**
-     * The Groups cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The ScenesManagement cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ScenesManagementServer} for convenience.
      */
     export const ScenesManagementServer = BaseScenesManagementServer;
 
     /**
-     * The FanControl cluster is optional per the Matter specification
+     * The FanControl cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link FanControlServer} for convenience.
      */
     export const FanControlServer = BaseFanControlServer;
 
     /**
-     * The ThermostatUserInterfaceConfiguration cluster is optional per the Matter specification
+     * The ThermostatUserInterfaceConfiguration cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ThermostatUserInterfaceConfigurationServer} for
      * convenience.
@@ -91,14 +91,14 @@ export namespace RoomAirConditionerRequirements {
     export const ThermostatUserInterfaceConfigurationServer = BaseThermostatUserInterfaceConfigurationServer;
 
     /**
-     * The TemperatureMeasurement cluster is optional per the Matter specification
+     * The TemperatureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureMeasurementServer} for convenience.
      */
     export const TemperatureMeasurementServer = BaseTemperatureMeasurementServer;
 
     /**
-     * The RelativeHumidityMeasurement cluster is optional per the Matter specification
+     * The RelativeHumidityMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link RelativeHumidityMeasurementServer} for convenience.
      */

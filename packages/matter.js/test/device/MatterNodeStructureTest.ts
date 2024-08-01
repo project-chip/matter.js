@@ -35,8 +35,8 @@ import { Aggregator } from "../../src/device/Aggregator.js";
 import { ComposedDevice } from "../../src/device/ComposedDevice.js";
 import { RootEndpoint } from "../../src/device/Device.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
+import { Endpoint } from "../../src/device/Endpoint.js";
 import { OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
-import { EndpointInterface } from "../../src/endpoint/EndpointInterface.js";
 import { ClusterModel, MatterModel, Specification } from "../../src/model/index.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
 import { attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
@@ -48,7 +48,7 @@ import { serialize } from "../../src/util/String.js";
 import { DUMMY_KEY, PRIVATE_KEY } from "../crypto/test-util.js";
 
 function addRequiredRootClusters(
-    rootEndpoint: EndpointInterface,
+    rootEndpoint: Endpoint,
     includeAdminCommissioningCluster = true,
     includeBasicInformationCluster = true,
 ) {
@@ -270,7 +270,7 @@ function expectPaths(structure: InteractionEndpointStructure, ...expected: PathS
 
 let testStorageManager: StorageManager;
 let endpointStorage: StorageContext;
-let rootEndpoint: EndpointInterface;
+let rootEndpoint: Endpoint;
 
 async function commissioningServer({ storage, values }: { storage?: boolean; values?: Record<string, any> } = {}) {
     const testStorage = new StorageBackendMemory();

@@ -96,7 +96,7 @@ export class ServerStore implements Destructable {
 
     get eventHandler() {
         if (!this.#eventHandler) {
-            throw new ImplementationError("Event Handler accessed prior to initialization");
+            throw new ImplementationError("Event handler accessed prior to initialization");
         }
         return this.#eventHandler;
     }

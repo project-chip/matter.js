@@ -14,7 +14,7 @@ import { FinalizationError } from "../../../../src/behavior/state/transaction/Er
 import { BehaviorSupervisor } from "../../../../src/behavior/supervision/BehaviorSupervisor.js";
 import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../../../src/behavior/supervision/ValueSupervisor.js";
-import { DataModelPath } from "../../../../src/endpoint/DataModelPath.js";
+import { DataModelPath } from "../../../../src/model/definitions/DataModelPath.js";
 import { DatatypeModel, FieldElement, FieldModel } from "../../../../src/model/index.js";
 import { AsyncObservable, Observable } from "../../../../src/util/Observable.js";
 import { MaybePromise } from "../../../../src/util/Promises.js";
@@ -454,12 +454,12 @@ describe("Datasource", () => {
                     {
                         type: "changing",
                         newValue: { subfield: 1, subfield2: undefined },
-                        oldValue: { subfield: 0 },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                     {
                         type: "changed",
-                        newValue: { subfield: 1 },
-                        oldValue: { subfield: 0 },
+                        newValue: { subfield: 1, subfield2: undefined },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                 ],
             });
@@ -486,12 +486,12 @@ describe("Datasource", () => {
                     {
                         type: "changing",
                         newValue: { subfield: 1, subfield2: undefined },
-                        oldValue: { subfield: 0 },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                     {
                         type: "changed",
-                        newValue: { subfield: 1 },
-                        oldValue: { subfield: 0 },
+                        newValue: { subfield: 1, subfield2: undefined },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                     {
                         type: "changed",
@@ -514,17 +514,17 @@ describe("Datasource", () => {
                     {
                         type: "changing",
                         newValue: { subfield: 1, subfield2: undefined },
-                        oldValue: { subfield: 0 },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                     {
                         type: "changing",
                         newValue: { subfield: 2, subfield2: undefined },
-                        oldValue: { subfield: 1 },
+                        oldValue: { subfield: 1, subfield2: undefined },
                     },
                     {
                         type: "changed",
-                        newValue: { subfield: 2 },
-                        oldValue: { subfield: 0 },
+                        newValue: { subfield: 2, subfield2: undefined },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                 ],
             });
@@ -542,17 +542,17 @@ describe("Datasource", () => {
                     {
                         type: "changing",
                         newValue: { subfield: 1, subfield2: undefined },
-                        oldValue: { subfield: 0 },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                     {
                         type: "changing",
                         newValue: { subfield: 1, subfield2: true },
-                        oldValue: { subfield: 1 },
+                        oldValue: { subfield: 1, subfield2: undefined },
                     },
                     {
                         type: "changed",
                         newValue: { subfield: 1, subfield2: true },
-                        oldValue: { subfield: 0 },
+                        oldValue: { subfield: 0, subfield2: undefined },
                     },
                 ],
             });

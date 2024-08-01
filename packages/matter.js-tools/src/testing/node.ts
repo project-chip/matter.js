@@ -12,6 +12,7 @@ import { TestOptions } from "./options.js";
 import type { TestRunner } from "./runner.js";
 
 // Load globals so settings get applied
+import { FailureDetail } from "./failure-detail.js";
 import "./global-definitions.js";
 
 export async function testNode(runner: TestRunner, format: "cjs" | "esm") {
@@ -23,13 +24,9 @@ export async function testNode(runner: TestRunner, format: "cjs" | "esm") {
     // installed, because the code that Mocha uses to determine if an error is a "mocha" error is not exported.
     process.on("unhandledRejection", e => {
         if (process.listenerCount("unhandledRejection") === 1) {
-            let message: string, stack: string | undefined;
-            if (e instanceof Error) {
-                ({ message, stack } = e);
-            } else {
-                message = `${e}`;
-            }
-            runner.reporter.failRun(`Unhandled rejection (ignored by Mocha): ${message}`, stack);
+            const error = new Error("Unhandled rejection (ignored by mocha)");
+            error.cause = e;
+            runner.reporter.failRun(FailureDetail(error));
         }
     });
 

@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
+import { Cluster } from "../cluster/Cluster.js";
+import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClientTypes.js";
 import { Binding } from "../cluster/definitions/BindingCluster.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
@@ -12,7 +13,6 @@ import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { ClusterServerHandlers, ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { AtLeastOne } from "../util/Array.js";
 import { HandlerFunction, NamedHandler } from "../util/NamedHandler.js";
 import { DeviceClasses, DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.js";
@@ -69,7 +69,7 @@ export class PairedDevice extends Endpoint {
      */
     constructor(
         definition: AtLeastOne<DeviceTypeDefinition>,
-        clusters: (ClusterServerObj<Attributes, Events> | ClusterClientObj<any, Attributes, Commands, Events>)[] = [],
+        clusters: (ClusterServerObj | ClusterClientObj)[] = [],
         endpointId: EndpointNumber,
     ) {
         super(definition, { endpointId });
@@ -88,7 +88,7 @@ export class PairedDevice extends Endpoint {
      * Add cluster servers (used internally only!)
      * @deprecated PairedDevice does not support adding additional clusters
      */
-    override addClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+    override addClusterServer<const T extends ClusterType>(cluster: ClusterServerObj<T>) {
         if (this.declineAddingMoreClusters) {
             throw new ImplementationError("PairedDevice does not support adding additional clusters");
         }
@@ -99,9 +99,7 @@ export class PairedDevice extends Endpoint {
      * Add cluster clients (used internally only!)
      * @deprecated PairedDevice does not support adding additional clusters
      */
-    override addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: ClusterClientObj<F, A, C, E>,
-    ) {
+    override addClusterClient<const T extends ClusterType>(cluster: ClusterClientObj<T>) {
         if (this.declineAddingMoreClusters) {
             throw new ImplementationError("PairedDevice does not support adding additional clusters");
         }
@@ -125,13 +123,7 @@ export class RootEndpoint extends Endpoint {
      *
      * @param cluster ClusterServer to get or undefined if not existing
      */
-    getRootClusterServer<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    getRootClusterServer<const T extends ClusterType>(cluster: T): ClusterServerObj<T> | undefined {
         return this.getClusterServer(cluster);
     }
 
@@ -140,9 +132,7 @@ export class RootEndpoint extends Endpoint {
      *
      * @param cluster ClusterClient object to add
      */
-    addRootClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: ClusterClientObj<F, A, C, E>,
-    ) {
+    addRootClusterClient(cluster: ClusterClientObj) {
         this.addClusterClient(cluster);
     }
 
@@ -151,13 +141,7 @@ export class RootEndpoint extends Endpoint {
      *
      * @param cluster ClusterClient to get or undefined if not existing
      */
-    getRootClusterClient<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    getRootClusterClient<const T extends ClusterType>(cluster: T): ClusterClientObj<T> | undefined {
         return this.getClusterClient(cluster);
     }
 }
@@ -219,7 +203,7 @@ export class Device extends Endpoint {
     }
 
     /**
-     * Execute a command handler. Should only be used internally, but can not be declared as protected officially
+     * Execute a command handler. Should only be used internally, but cannot be declared as protected officially
      * because needed public for derived classes.
      *
      * @protected
@@ -230,55 +214,31 @@ export class Device extends Endpoint {
         return await this.commandHandler.executeHandler(command, ...args);
     }
 
-    protected createOptionalClusterServer<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(_cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> {
+    protected createOptionalClusterServer<const T extends ClusterType>(_cluster: T): ClusterServerObj<T> {
         // TODO: Implement this in upper classes to add optional clusters on the fly
         throw new ImplementationError("createOptionalClusterServer needs to be implemented by derived classes");
     }
 
-    protected createOptionalClusterClient<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(_cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> {
+    protected createOptionalClusterClient<const T extends ClusterType>(_cluster: T): ClusterClientObj<T> {
         // TODO: Implement this in upper classes to add optional clusters on the fly
         throw new ImplementationError("createOptionalClusterClient needs to be implemented by derived classes");
     }
 
-    override getClusterServer<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    override getClusterServer<const T extends ClusterType>(cluster: T): ClusterServerObj<T> | undefined {
         const clusterServer = super.getClusterServer(cluster);
         if (clusterServer !== undefined) {
             return clusterServer;
         }
         for (const deviceType of this.deviceTypes) {
             if (deviceType.optionalServerClusters.includes(cluster.id)) {
-                const clusterServer = this.createOptionalClusterServer<F, SF, A, C, E>(cluster);
+                const clusterServer = this.createOptionalClusterServer(cluster);
                 this.addClusterServer(clusterServer);
                 return clusterServer;
             }
         }
     }
 
-    override getClusterClient<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    override getClusterClient<const T extends ClusterType>(cluster: T): ClusterClientObj<T> | undefined {
         const clusterClient = super.getClusterClient(cluster);
         if (clusterClient !== undefined) {
             return clusterClient;

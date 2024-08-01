@@ -10,7 +10,7 @@ import { ImplementationError, InternalError } from "../../common/MatterError.js"
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EventId } from "../../datatype/EventId.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { Endpoint } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { ClusterModel, EventModel, MatterModel } from "../../model/index.js";
 import { EventData, EventHandler, EventStorageData } from "../../protocol/interaction/EventHandler.js";
 import { TlvEventFilter } from "../../protocol/interaction/InteractionProtocol.js";
@@ -59,7 +59,7 @@ export function createEventServer<
 export class EventServer<T, S extends Storage> {
     private eventList = new Array<EventData<T>>();
     private readonly listeners = new Array<(event: EventStorageData<T>) => void>();
-    protected endpoint?: Endpoint;
+    protected endpoint?: EndpointInterface;
     protected eventHandler?: EventHandler;
     #readAcl: AccessLevel | undefined;
     hasFabricSensitiveData = false;
@@ -79,7 +79,7 @@ export class EventServer<T, S extends Storage> {
         return this.#readAcl ?? AccessLevel.View; // ???
     }
 
-    assignToEndpoint(endpoint: Endpoint) {
+    assignToEndpoint(endpoint: EndpointInterface) {
         this.endpoint = endpoint;
     }
 

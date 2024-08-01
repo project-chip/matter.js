@@ -21,24 +21,20 @@ import { Identity } from "../../../util/Type.js";
  * A Device Energy Management device provides reporting and optionally adjustment of the electrical power planned on
  * being consumed or produced by the device.
  *
- * DeviceEnergyManagementEndpoint requires DeviceEnergyManagement cluster but DeviceEnergyManagement is not added by
- * default because you must select the features your device supports. You can add manually using
- * DeviceEnergyManagementEndpoint.with().
- *
  * @see {@link MatterSpecification.v13.Device} § 2.7
  */
 export interface DeviceEnergyManagementEndpoint extends Identity<typeof DeviceEnergyManagementEndpointDefinition> {}
 
 export namespace DeviceEnergyManagementRequirements {
     /**
-     * The DeviceEnergyManagement cluster is required by the Matter specification
+     * The DeviceEnergyManagement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link DeviceEnergyManagementServer} for convenience.
      */
     export const DeviceEnergyManagementServer = BaseDeviceEnergyManagementServer;
 
     /**
-     * The DeviceEnergyManagementMode cluster is required by the Matter specification
+     * The DeviceEnergyManagementMode cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link DeviceEnergyManagementModeServer} for convenience.
      */
@@ -48,10 +44,11 @@ export namespace DeviceEnergyManagementRequirements {
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
     export const server = {
-        mandatory: {
+        optional: {
             DeviceEnergyManagement: DeviceEnergyManagementServer,
             DeviceEnergyManagementMode: DeviceEnergyManagementModeServer
-        }
+        },
+        mandatory: {}
     };
 }
 
@@ -61,7 +58,7 @@ export const DeviceEnergyManagementEndpointDefinition = MutableEndpoint({
     deviceRevision: 1,
     deviceClass: DeviceClasses.Utility,
     requirements: DeviceEnergyManagementRequirements,
-    behaviors: SupportedBehaviors(DeviceEnergyManagementRequirements.server.mandatory.DeviceEnergyManagementMode)
+    behaviors: SupportedBehaviors()
 });
 
 export const DeviceEnergyManagementEndpoint: DeviceEnergyManagementEndpoint = DeviceEnergyManagementEndpointDefinition;

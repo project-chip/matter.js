@@ -53,7 +53,7 @@ export class RootSupervisor implements ValueSupervisor {
             this.#featureMap = new AttributeModel(FeatureMap);
             this.#supportedFeatures = new FeatureSet();
         }
-        this.#members = new Set(schema.members);
+        this.#members = new Set(schema.activeMembers);
 
         this.#root = this.#createValueSupervisor(schema);
     }
@@ -84,13 +84,6 @@ export class RootSupervisor implements ValueSupervisor {
 
     get cast() {
         return this.#root.cast;
-    }
-
-    /**
-     * Retrieve root schema elements that contribute fields to the data model.
-     */
-    get members() {
-        return this.#members;
     }
 
     /**

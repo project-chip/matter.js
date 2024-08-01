@@ -8,13 +8,13 @@
 
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
-import {
-    ScenesManagementServer as BaseScenesManagementServer
-} from "../../../behavior/definitions/scenes-management/ScenesManagementServer.js";
 import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
 import {
     LevelControlServer as BaseLevelControlServer
 } from "../../../behavior/definitions/level-control/LevelControlServer.js";
+import {
+    ScenesManagementServer as BaseScenesManagementServer
+} from "../../../behavior/definitions/scenes-management/ScenesManagementServer.js";
 import {
     OccupancySensingBehavior as BaseOccupancySensingBehavior
 } from "../../../behavior/definitions/occupancy-sensing/OccupancySensingBehavior.js";
@@ -33,36 +33,28 @@ export interface DimmablePlugInUnitDevice extends Identity<typeof DimmablePlugIn
 
 export namespace DimmablePlugInUnitRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * This version of {@link IdentifyServer} is specialized per the specification.
      */
     export const IdentifyServer = BaseIdentifyServer.alter({ commands: { triggerEffect: { optional: false } } });
 
     /**
-     * The Groups cluster is required by the Matter specification
+     * The Groups cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The ScenesManagement cluster is required by the Matter specification
-     *
-     * This version of {@link ScenesManagementServer} is specialized per the specification.
-     */
-    export const ScenesManagementServer = BaseScenesManagementServer
-        .alter({ commands: { copyScene: { optional: false } } });
-
-    /**
-     * The OnOff cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification.
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
     export const OnOffServer = BaseOnOffServer.with("Lighting");
 
     /**
-     * The LevelControl cluster is required by the Matter specification
+     * The LevelControl cluster is required by the Matter specification.
      *
      * This version of {@link LevelControlServer} is specialized per the specification.
      */
@@ -77,7 +69,14 @@ export namespace DimmablePlugInUnitRequirements {
         });
 
     /**
-     * The OccupancySensing cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link ScenesManagementServer} for convenience.
+     */
+    export const ScenesManagementServer = BaseScenesManagementServer;
+
+    /**
+     * The OccupancySensing cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link OccupancySensingBehavior} for convenience.
      */
@@ -90,10 +89,11 @@ export namespace DimmablePlugInUnitRequirements {
         mandatory: {
             Identify: IdentifyServer,
             Groups: GroupsServer,
-            ScenesManagement: ScenesManagementServer,
             OnOff: OnOffServer,
             LevelControl: LevelControlServer
-        }
+        },
+
+        optional: { ScenesManagement: ScenesManagementServer }
     };
 
     /**
@@ -111,7 +111,6 @@ export const DimmablePlugInUnitDeviceDefinition = MutableEndpoint({
     behaviors: SupportedBehaviors(
         DimmablePlugInUnitRequirements.server.mandatory.Identify,
         DimmablePlugInUnitRequirements.server.mandatory.Groups,
-        DimmablePlugInUnitRequirements.server.mandatory.ScenesManagement,
         DimmablePlugInUnitRequirements.server.mandatory.OnOff,
         DimmablePlugInUnitRequirements.server.mandatory.LevelControl
     )

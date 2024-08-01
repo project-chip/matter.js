@@ -107,7 +107,7 @@ export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
 
     static async create(definition: EndpointType | MockEndpoint.Configuration, options?: MockEndpoint.Options) {
         const endpoint = new MockEndpoint(Endpoint.configurationFor(definition, options));
-        return await endpoint.construction;
+        return await endpoint.construction.ready;
     }
 
     static async createWith<T extends Behavior.Type>(type: T) {

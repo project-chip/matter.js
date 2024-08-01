@@ -298,10 +298,9 @@ export class BtpSessionHandler {
         } catch (error) {
             logger.error(`Error while handling incoming BTP data: ${error}`);
             await this.close();
-            if (!(error instanceof BtpProtocolError)) {
-                // If no BTP protocol error, rethrow
-                throw error;
-            }
+
+            // If no BTP protocol error, rethrow
+            BtpProtocolError.accept(error);
         }
     }
 

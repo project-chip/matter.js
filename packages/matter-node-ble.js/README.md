@@ -13,7 +13,7 @@ This package implements all needed Interfaces and classes to enable BLE Support 
 The used packages have some limitations and prerequisites. Please check the Readme's of the packages for more details:
 * [bleno](https://github.com/abandonware/bleno#readme)
   * For Linux: also consider https://github.com/abandonware/bleno#running-on-linux
-  * Bleno is currently not working on macOS because it can not announce the proper data because of macOS limitations!
+  * Bleno is currently not working on macOS because it cannot announce the proper data because of macOS limitations!
 * [noble](https://github.com/abandonware/noble#readme)
   * Consider Noble prerequisites for your platform: https://github.com/abandonware/noble#prerequisites
   * For Linux: https://github.com/abandonware/noble#running-without-rootsudo-linux-specific

@@ -19,7 +19,6 @@ import { Channel } from "./common/Channel.js";
 import { ImplementationError, NoProviderError } from "./common/MatterError.js";
 import { CommissionableDevice, DiscoveryData, Scanner } from "./common/Scanner.js";
 import { ServerAddress, ServerAddressIp, serverAddressToString } from "./common/ServerAddress.js";
-import { tryCatchAsync } from "./common/TryCatchHandler.js";
 import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "./crypto/Crypto.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
@@ -206,16 +205,14 @@ export class MatterController {
         try {
             Ble.get();
         } catch (error) {
-            if (error instanceof NoProviderError) {
-                if (!mdnsScanner || !netInterfaceIpv6) {
-                    throw new ImplementationError(
-                        "Ble must be initialized to create a Sub Commissioner without an IP network!",
-                    );
-                }
-                logger.info("BLE is not enabled. Using only IP network for commissioning.");
-            } else {
-                throw error;
+            NoProviderError.accept(error);
+
+            if (!mdnsScanner || !netInterfaceIpv6) {
+                throw new ImplementationError(
+                    "Ble must be initialized to create a Sub Commissioner without an IP network!",
+                );
             }
+            logger.info("BLE is not enabled. Using only IP network for commissioning.");
         }
 
         const certificateManager = await RootCertificateManager.create(rootCertificateData);
@@ -385,13 +382,9 @@ export class MatterController {
 
                     this.bleScanner = ble.getBleScanner();
                 } catch (error) {
-                    if (error instanceof NoProviderError) {
-                        logger.warn(
-                            "BLE is not supported on this platform. The device to commission might not be found!",
-                        );
-                    } else {
-                        throw error;
-                    }
+                    NoProviderError.accept(error);
+
+                    logger.warn("BLE is not supported on this platform. The device to commission might not be found!");
                 }
             }
             // If we have an BLE Scanner then we use it
@@ -470,9 +463,7 @@ export class MatterController {
             try {
                 paseSecureChannel = await this.initializePaseSecureChannel(knownAddress, passcode);
             } catch (error) {
-                if (!(error instanceof RetransmissionLimitReachedError)) {
-                    throw error;
-                }
+                RetransmissionLimitReachedError.accept(error);
             }
         }
         if (paseSecureChannel === undefined) {
@@ -571,15 +562,15 @@ export class MatterController {
             paseUnsecureMessageChannel,
             SECURE_CHANNEL_PROTOCOL_ID,
         );
-        const paseSecureSession = await tryCatchAsync(
-            async () => await this.paseClient.pair(this, paseExchange, passcode),
-            Error,
-            async error => {
-                // Close the exchange if the pairing fails and rethrow the error
-                await paseExchange.close();
-                throw error;
-            },
-        );
+
+        let paseSecureSession;
+        try {
+            paseSecureSession = await this.paseClient.pair(this, paseExchange, passcode);
+        } catch (e) {
+            // Close the exchange and rethrow
+            await paseExchange.close();
+            throw e;
+        }
 
         await unsecureSession.destroy();
         return new MessageChannel(paseChannel, paseSecureSession);
@@ -861,27 +852,25 @@ export class MatterController {
             isInitiator: true,
         });
         const operationalUnsecureMessageExchange = new MessageChannel(operationalChannel, unsecureSession);
-        const operationalSecureSession = await tryCatchAsync(
-            async () => {
-                const exchange = this.exchangeManager.initiateExchangeWithChannel(
-                    operationalUnsecureMessageExchange,
-                    SECURE_CHANNEL_PROTOCOL_ID,
-                );
-                return tryCatchAsync(
-                    async () => await this.caseClient.pair(this, exchange, this.fabric, peerNodeId),
-                    Error,
-                    async error => {
-                        // Close the exchange if the pairing fails and rethrow the error
-                        await exchange.close();
-                        throw error;
-                    },
-                );
-            },
-            RetransmissionLimitReachedError,
-            error => {
-                throw new PairRetransmissionLimitReachedError(error.message);
-            }, // Convert error
-        );
+        let operationalSecureSession;
+        try {
+            const exchange = this.exchangeManager.initiateExchangeWithChannel(
+                operationalUnsecureMessageExchange,
+                SECURE_CHANNEL_PROTOCOL_ID,
+            );
+
+            try {
+                operationalSecureSession = await this.caseClient.pair(this, exchange, this.fabric, peerNodeId);
+            } catch (e) {
+                await exchange.close();
+                throw e;
+            }
+        } catch (e) {
+            RetransmissionLimitReachedError.accept(e);
+
+            // Convert error
+            throw new PairRetransmissionLimitReachedError(e.message);
+        }
         await unsecureSession.destroy();
         const channel = new MessageChannel(operationalChannel, operationalSecureSession);
         await this.channelManager.setChannel(this.fabric, peerNodeId, channel);
@@ -962,11 +951,9 @@ export class MatterController {
         try {
             channel = this.channelManager.getChannel(this.fabric, peerNodeId);
         } catch (error) {
-            if (error instanceof NoChannelError) {
-                channel = await this.resume(peerNodeId, timeoutSeconds, discoveryData);
-            } else {
-                throw error;
-            }
+            NoChannelError.accept(error);
+
+            channel = await this.resume(peerNodeId, timeoutSeconds, discoveryData);
         }
         return new InteractionClient(
             new ExchangeProvider(this.exchangeManager, channel, async () => {

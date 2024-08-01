@@ -46,3 +46,18 @@ export class ValidationMandatoryFieldMissingError extends ValidationError {
         super(message, fieldName, StatusCode.InvalidAction);
     }
 }
+
+/**
+ * Convert a function that may throw a ValidationError into a boolean predicate.
+ */
+export function validatorOf<A extends any[]>(test: (...a: A) => void) {
+    return (...a: A) => {
+        try {
+            test(...a);
+            return true;
+        } catch (e) {
+            ValidationError.accept(e);
+            return false;
+        }
+    };
+}

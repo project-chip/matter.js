@@ -474,7 +474,7 @@ export class MatterDevice {
     ) {
         if (this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen) {
             throw new MatterFlowError(
-                "Basic commissioning window is already open! Can not set Enhanced commissioning mode.",
+                "Basic commissioning window is already open! Cannot set Enhanced commissioning mode.",
             );
         }
 
@@ -489,7 +489,7 @@ export class MatterDevice {
     async allowBasicCommissioning(commissioningEndCallback?: () => void) {
         if (this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen) {
             throw new MatterFlowError(
-                "Enhanced commissioning window is already open! Can not set Basic commissioning mode.",
+                "Enhanced commissioning window is already open! Cannot set Basic commissioning mode.",
             );
         }
 

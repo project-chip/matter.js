@@ -8,7 +8,6 @@ import { ClusterType } from "../../cluster/ClusterType.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
-import { AttributeModel, MatterModel } from "../../model/index.js";
 import { Observable } from "../../util/Observable.js";
 import { Behavior } from "../Behavior.js";
 import { ClusterBehavior } from "./ClusterBehavior.js";
@@ -148,15 +147,11 @@ export class ValidatedElements {
                 continue;
             }
 
-            if (MatterModel.standard.children.get(AttributeModel, attr.id) !== undefined) {
-                continue;
-            }
-
-            if (!(name in state)) {
+            if ((state as Record<string, unknown>)[name] === undefined) {
                 if (!attr.optional) {
                     this.error(`State.${name}`, "Mandatory element unsupported", false);
                 }
-                // This error does not incapacitate the endpoint
+                continue;
             }
 
             this.attributes.add(name);

@@ -28,7 +28,7 @@ function generateClusterEventHandlers(yargs: Argv, cluster: ClusterModel, theNod
         `Read ${cluster.name} events`,
         yargs => {
             cluster.events.forEach(event => {
-                yargs = generateEventHandler(yargs, cluster.id!, cluster.name, event, theNode);
+                yargs = generateEventHandler(yargs, cluster.id, cluster.name, event, theNode);
             });
             return yargs;
         },

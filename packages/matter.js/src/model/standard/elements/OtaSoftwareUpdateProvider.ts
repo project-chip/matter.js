@@ -89,7 +89,7 @@ export const OtaSoftwareUpdateProvider = Cluster({
                 }),
 
                 Field({
-                    name: "RequestorCanConsent", id: 0x6, type: "bool", conformance: "O", default: true,
+                    name: "RequestorCanConsent", id: 0x6, type: "bool", conformance: "O", default: false,
                     details: "This field shall be set to true by an OTA Requestor that is capable of obtaining user consent for " +
                         "OTA application by virtue of built-in user interface capabilities. Otherwise, it shall be false." +
                         "\n" +
@@ -309,7 +309,7 @@ export const OtaSoftwareUpdateProvider = Cluster({
                 }),
 
                 Field({
-                    name: "UserConsentNeeded", id: 0x6, type: "bool", conformance: "O", default: true,
+                    name: "UserConsentNeeded", id: 0x6, type: "bool", conformance: "O", default: false,
 
                     details: "This field, if present, shall only be interpreted if the OTA Requestor had previously indicated a " +
                         "value of True in the RequestorCanConsent field of the QueryImageRequest. This field, when present " +

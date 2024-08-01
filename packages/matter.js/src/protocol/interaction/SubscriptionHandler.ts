@@ -8,7 +8,6 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { AnyEventServer, FabricSensitiveEventServer } from "../../cluster/server/EventServer.js";
 import { InternalError } from "../../common/MatterError.js";
-import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { EventNumber } from "../../datatype/EventNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
@@ -232,29 +231,22 @@ export class SubscriptionHandler {
                         );
                     } else {
                         // was a concrete path
-                        attributeErrors.push(
-                            tryCatch(
-                                () => {
-                                    this.endpointStructure.validateConcreteAttributePath(
-                                        endpointId,
-                                        clusterId,
-                                        attributeId,
-                                    );
-                                    throw new InternalError(
-                                        "validateConcreteAttributePath check should throw StatusResponseError but did not.",
-                                    );
-                                },
-                                StatusResponseError,
-                                error => {
-                                    logger.debug(
-                                        `Subscription attribute ${this.endpointStructure.resolveAttributeName(
-                                            path,
-                                        )}: unsupported path: Status=${error.code}`,
-                                    );
-                                    return { path, status: { status: error.code } };
-                                },
-                            ),
-                        );
+                        try {
+                            this.endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
+                            throw new InternalError(
+                                "validateConcreteAttributePath check should throw StatusResponseError but did not.",
+                            );
+                        } catch (e) {
+                            StatusResponseError.accept(e);
+
+                            logger.debug(
+                                `Subscription attribute ${this.endpointStructure.resolveAttributeName(
+                                    path,
+                                )}: unsupported path: Status=${e.code}`,
+                            );
+
+                            attributeErrors.push({ path, status: { status: e.code } });
+                        }
                     }
                     return;
                 }
@@ -325,25 +317,22 @@ export class SubscriptionHandler {
                             )}: ignore non-existing event`,
                         );
                     } else {
-                        eventErrors.push(
-                            tryCatch(
-                                () => {
-                                    this.endpointStructure.validateConcreteEventPath(endpointId, clusterId, eventId);
-                                    throw new InternalError(
-                                        "validateConcreteEventPath should throw StatusResponseError but did not.",
-                                    );
-                                },
-                                StatusResponseError,
-                                error => {
-                                    logger.debug(
-                                        `Subscription event ${this.endpointStructure.resolveEventName(
-                                            path,
-                                        )}: unsupported path: Status=${error.code}`,
-                                    );
-                                    return { path, status: { status: error.code } };
-                                },
-                            ),
-                        );
+                        try {
+                            this.endpointStructure.validateConcreteEventPath(endpointId, clusterId, eventId);
+                            throw new InternalError(
+                                "validateConcreteEventPath should throw StatusResponseError but did not.",
+                            );
+                        } catch (e) {
+                            StatusResponseError.accept(e);
+
+                            logger.debug(
+                                `Subscription event ${this.endpointStructure.resolveEventName(
+                                    path,
+                                )}: unsupported path: Status=${e.code}`,
+                            );
+
+                            eventErrors.push({ path, status: { status: e.code } });
+                        }
                     }
                     return;
                 }
@@ -734,9 +723,9 @@ export class SubscriptionHandler {
 
         const { attribute } = attributeListenerData;
         if (attribute instanceof FabricScopedAttributeServer) {
-            // We can not be sure what value we got for fabric filtered attributes (and from which fabric),
+            // We cannot be sure what value we got for fabric filtered attributes (and from which fabric),
             // so get it again for this relevant fabric. This also makes sure that fabric sensitive fields are filtered
-            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
+            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we cannot get the value?
             return this.readAttribute(path, attribute).then(({ value }) => {
                 this.outstandingAttributeUpdates.set(attributePathToId(path), {
                     attribute,
@@ -821,64 +810,56 @@ export class SubscriptionHandler {
         const messenger = new InteractionServerMessenger(exchange);
 
         try {
-            await tryCatchAsync(
-                async () => {
-                    if (attributes.length === 0 && events.length === 0) {
-                        await messenger.sendDataReport(
-                            {
-                                suppressResponse: true, // suppressResponse true for empty DataReports
-                                subscriptionId: this.subscriptionId,
-                                interactionModelRevision: INTERACTION_MODEL_REVISION,
+            if (attributes.length === 0 && events.length === 0) {
+                await messenger.sendDataReport(
+                    {
+                        suppressResponse: true, // suppressResponse true for empty DataReports
+                        subscriptionId: this.subscriptionId,
+                        interactionModelRevision: INTERACTION_MODEL_REVISION,
+                    },
+                    this.isFabricFiltered,
+                );
+            } else {
+                await messenger.sendDataReport(
+                    {
+                        suppressResponse: false, // Non empty data reports always need to send response
+                        subscriptionId: this.subscriptionId,
+                        interactionModelRevision: INTERACTION_MODEL_REVISION,
+                        attributeReportsPayload: attributes.map(({ path, schema, value, version, attribute }) => ({
+                            hasFabricSensitiveData: attribute.hasFabricSensitiveData,
+                            attributeData: {
+                                path,
+                                dataVersion: version,
+                                schema,
+                                payload: value,
                             },
-                            this.isFabricFiltered,
-                        );
-                    } else {
-                        await messenger.sendDataReport(
-                            {
-                                suppressResponse: false, // Non empty data reports always need to send response
-                                subscriptionId: this.subscriptionId,
-                                interactionModelRevision: INTERACTION_MODEL_REVISION,
-                                attributeReportsPayload: attributes.map(
-                                    ({ path, schema, value, version, attribute }) => ({
-                                        hasFabricSensitiveData: attribute.hasFabricSensitiveData,
-                                        attributeData: {
-                                            path,
-                                            dataVersion: version,
-                                            schema,
-                                            payload: value,
-                                        },
-                                    }),
-                                ),
-                                eventReportsPayload: events.map(({ path, schema, event, data }) => {
-                                    const { eventNumber, priority, epochTimestamp, data: payload } = data;
-                                    return {
-                                        hasFabricSensitiveData: event.hasFabricSensitiveData,
-                                        eventData: {
-                                            path,
-                                            eventNumber,
-                                            priority,
-                                            epochTimestamp,
-                                            schema,
-                                            payload,
-                                        },
-                                    };
-                                }),
-                            },
-                            this.isFabricFiltered,
-                        );
-                    }
-                },
-                StatusResponseError,
-                async error => {
-                    if (error.code === StatusCode.InvalidSubscription || error.code === StatusCode.Failure) {
-                        logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
-                        await this.cancel(false, true);
-                    } else {
-                        await this.cancel(false);
-                        throw error;
-                    }
-                },
-            );
+                        })),
+                        eventReportsPayload: events.map(({ path, schema, event, data }) => {
+                            const { eventNumber, priority, epochTimestamp, data: payload } = data;
+                            return {
+                                hasFabricSensitiveData: event.hasFabricSensitiveData,
+                                eventData: {
+                                    path,
+                                    eventNumber,
+                                    priority,
+                                    epochTimestamp,
+                                    schema,
+                                    payload,
+                                },
+                            };
+                        }),
+                    },
+                    this.isFabricFiltered,
+                );
+            }
+        } catch (e) {
+            if (StatusResponseError.is(e, StatusCode.InvalidSubscription, StatusCode.Failure)) {
+                logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
+                await this.cancel(false, true);
+            } else {
+                await this.cancel(false);
+                throw e;
+            }
         } finally {
             await messenger.close();
         }

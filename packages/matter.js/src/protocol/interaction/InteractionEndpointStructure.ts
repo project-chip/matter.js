@@ -5,7 +5,7 @@
  */
 
 import { AnyAttributeServer } from "../../cluster/server/AttributeServer.js";
-import { ClusterServerObj, asClusterServerInternal } from "../../cluster/server/ClusterServerTypes.js";
+import { ClusterServer } from "../../cluster/server/ClusterServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AnyEventServer } from "../../cluster/server/EventServer.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
@@ -106,9 +106,9 @@ export class InteractionEndpointStructure {
             const {
                 id: clusterId,
                 attributes: clusterAttributes,
-                _events: clusterEvents,
-                _commands: clusterCommands,
-            } = asClusterServerInternal(cluster);
+                events: clusterEvents,
+                commands: clusterCommands,
+            } = cluster;
 
             // Add attributes
             for (const name in clusterAttributes) {
@@ -207,7 +207,7 @@ export class InteractionEndpointStructure {
         return this.endpoints.has(endpointId);
     }
 
-    getClusterServer(endpointId: EndpointNumber, clusterId: ClusterId): ClusterServerObj<any, any> | undefined {
+    getClusterServer(endpointId: EndpointNumber, clusterId: ClusterId): ClusterServer | undefined {
         return this.endpoints.get(endpointId)?.getClusterServerById(clusterId);
     }
 

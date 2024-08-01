@@ -194,7 +194,7 @@ describe("TlvObject", () => {
                 try {
                     schema.validate(structure);
                 } catch (error) {
-                    expect(error instanceof ValidationError).true;
+                    expect(error).instanceof(ValidationError);
                     expect((error as ValidationError).message).equal(expectedError);
                     expect((error as ValidationError).fieldName).equal(errorFieldName);
                 }
@@ -204,7 +204,7 @@ describe("TlvObject", () => {
                 try {
                     schema.encode(structure);
                 } catch (error) {
-                    expect(error instanceof ValidationError).true;
+                    expect(error).instanceof(ValidationError);
                     expect((error as ValidationError).message).equal(expectedError);
                     expect((error as ValidationError).fieldName).equal(errorFieldName);
                 }

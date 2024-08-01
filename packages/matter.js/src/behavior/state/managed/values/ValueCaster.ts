@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../../../endpoint/DataModelPath.js";
+import { DataModelPath } from "../../../../model/definitions/DataModelPath.js";
 import { ClusterModel, Metatype, UnsupportedCastError, ValueModel } from "../../../../model/index.js";
 import { camelize } from "../../../../util/String.js";
 import { SchemaImplementationError } from "../../../errors.js";
@@ -33,7 +33,7 @@ export function ValueCaster(schema: Schema, owner: RootSupervisor) {
 
 function StructCaster(schema: ValueModel | ClusterModel, owner: RootSupervisor) {
     const memberConfigs = {} as Record<string, { name: string; cast: ValueSupervisor.Cast }>;
-    for (const member of schema.members) {
+    for (const member of schema.activeMembers) {
         if (member.isDeprecated) {
             continue;
         }

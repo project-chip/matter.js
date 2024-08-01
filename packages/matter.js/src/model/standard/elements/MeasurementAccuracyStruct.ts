@@ -24,7 +24,7 @@ export const MeasurementAccuracyStruct = Datatype({
         }),
 
         Field({
-            name: "Measured", id: 0x1, type: "bool", conformance: "M", default: true, quality: "F",
+            name: "Measured", id: 0x1, type: "bool", conformance: "M", default: false, quality: "F",
             details: "This field shall indicate whether the associated measurement was directly measured. If this field " +
                 "is not set to true, then the associated measurement was estimated.",
             xref: { document: "cluster", section: "2.1.4.4.2" }

@@ -37,7 +37,7 @@ export const ProxyConfiguration = Cluster({
             children: [
                 Field({
                     name: "ProxyAllNodes", id: 0x1, type: "bool", access: "RW", conformance: "M", constraint: "desc",
-                    default: true,
+                    default: false,
                     details: "This field shall be set to true to indicate to the proxy that it shall proxy all nodes. When true, " +
                         "the SourceList attribute is ignored.",
                     xref: { document: "core", section: "9.15.13.4.1.1" }

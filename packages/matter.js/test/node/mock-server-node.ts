@@ -143,6 +143,7 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
             hasActiveTimedInteraction: () => false,
             hasExpiredTimedInteraction: () => false,
             session: await this.createSession(options),
+            maxPayloadSize: 1000,
         } as unknown as MessageExchange<any>;
     }
 

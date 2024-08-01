@@ -24,14 +24,14 @@ export interface LightSensorDevice extends Identity<typeof LightSensorDeviceDefi
 
 export namespace LightSensorRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The IlluminanceMeasurement cluster is required by the Matter specification
+     * The IlluminanceMeasurement cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IlluminanceMeasurementServer} for convenience.
      */

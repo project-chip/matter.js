@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { tryCatch } from "../../common/TryCatchHandler.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
@@ -82,19 +81,18 @@ export class AttributeClient<T> {
                 <number>FabricIndexElement.id,
                 existingFieldIndex => existingFieldIndex === FabricIndex.OMIT_FABRIC,
             );
-            value = tryCatch(
-                () => {
-                    const sessionFabric = this.interactionClient.session.associatedFabric;
-                    // also remove fabric index if it is the same as the session fabric
-                    return this.schema.removeField(
-                        value,
-                        <number>FabricIndexElement.id,
-                        existingFieldIndex => existingFieldIndex.index === sessionFabric.fabricIndex,
-                    );
-                },
-                NoAssociatedFabricError,
-                value,
-            );
+
+            try {
+                const sessionFabric = this.interactionClient.session.associatedFabric;
+                // also remove fabric index if it is the same as the session fabric
+                value = this.schema.removeField(
+                    value,
+                    <number>FabricIndexElement.id,
+                    existingFieldIndex => existingFieldIndex.index === sessionFabric.fabricIndex,
+                );
+            } catch (e) {
+                NoAssociatedFabricError.accept(e);
+            }
         }
 
         return await this.interactionClient.setAttribute<T>({

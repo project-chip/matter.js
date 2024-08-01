@@ -18,13 +18,13 @@ import { Aspect } from "./Aspect.js";
  * so we keep it in the same section.
  */
 export class Constraint extends Aspect<Constraint.Definition> implements Constraint.Ast {
-    desc?: boolean;
-    value?: FieldValue;
-    min?: FieldValue;
-    max?: FieldValue;
-    in?: FieldValue;
-    entry?: Constraint;
-    parts?: Constraint[];
+    declare desc?: boolean;
+    declare value?: FieldValue;
+    declare min?: FieldValue;
+    declare max?: FieldValue;
+    declare in?: FieldValue;
+    declare entry?: Constraint;
+    declare parts?: Constraint[];
 
     /**
      * Initialize from a Constraint.Definition or the constraint DSL defined by the Matter Specification.
@@ -206,6 +206,16 @@ export namespace Constraint {
             value = Number.parseInt(numOrName.replace(/[_ ]/g, ""));
         } else {
             value = Number.parseFloat(numOrName);
+        }
+        if (typeof numOrName === "string") {
+            const lower = numOrName.toLowerCase();
+            switch (lower) {
+                case "true":
+                    return true;
+
+                case "false":
+                    return false;
+            }
         }
         if (Number.isNaN(value)) {
             return FieldValue.Reference(camelize(numOrName));

@@ -120,12 +120,10 @@ export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol
                 try {
                     await this.paseCommissioner.onNewExchange(exchange);
                 } catch (error) {
-                    if (error instanceof MaximumPasePairingErrorsReachedError) {
-                        logger.info("Maximum number of PASE pairing errors reached, cancelling commissioning.");
-                        await this.commissioningCancelledCallback();
-                    } else {
-                        throw error;
-                    }
+                    MaximumPasePairingErrorsReachedError.accept(error);
+
+                    logger.info("Maximum number of PASE pairing errors reached, cancelling commissioning.");
+                    await this.commissioningCancelledCallback();
                 }
                 break;
             case MessageType.Sigma1:

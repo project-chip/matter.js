@@ -4,7 +4,7 @@
 
 Matter protocol for node.js with no native dependencies (and very limited dependencies).
 
-> This package requires Node 16+ for the required Crypto primitives
+> This package requires Node 18+
 
 This package is meant to be used as library as basis for Node.js based implementation of Matter Device and controller functionality
  

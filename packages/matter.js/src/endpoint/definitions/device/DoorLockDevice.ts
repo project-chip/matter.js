@@ -26,28 +26,28 @@ export interface DoorLockDevice extends Identity<typeof DoorLockDeviceDefinition
 
 export namespace DoorLockRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The DoorLock cluster is required by the Matter specification
+     * The DoorLock cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link DoorLockServer} for convenience.
      */
     export const DoorLockServer = BaseDoorLockServer;
 
     /**
-     * The Groups cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The ScenesManagement cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ScenesManagementServer} for convenience.
      */

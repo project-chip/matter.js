@@ -147,7 +147,7 @@ export const MaybePromise = {
      * Determine whether a {@link MaybePromiseLike} is a {@link Promise}.
      */
     is<T>(value: MaybePromise<T>): value is PromiseLike<T> {
-        // We can not use isObject because this could collide with valid values here
+        // We cannot use isObject because this could collide with valid values here
         return typeof value === "object" && value !== null && typeof (value as { then?: unknown }).then === "function";
     },
 

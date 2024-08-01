@@ -29,7 +29,7 @@ function generateClusterCommandHandlers(yargs: Argv, cluster: ClusterModel, theN
         `Invoke ${cluster.name} commands`,
         yargs => {
             cluster.commands.forEach(command => {
-                yargs = generateCommandHandler(yargs, cluster.id!, cluster.name, command, theNode);
+                yargs = generateCommandHandler(yargs, cluster.id, cluster.name, command, theNode);
             });
             return yargs;
         },

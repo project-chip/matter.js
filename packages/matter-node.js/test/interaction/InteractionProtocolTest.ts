@@ -10,13 +10,12 @@ import {
     AccessControlCluster,
     AccessLevel,
     AdministratorCommissioning,
-    Attributes,
     BasicInformation,
     BasicInformationCluster,
     ClusterDatasource,
     ClusterServer,
     ClusterServerObj,
-    Events,
+    ClusterType,
     OnOffCluster,
     WiFiNetworkDiagnosticsCluster,
     WritableAttribute,
@@ -919,16 +918,13 @@ describe("InteractionProtocol", () => {
     let endpointStructure: InteractionEndpointStructure;
     let interactionProtocol: InteractionServer;
     let eventHandler: EventHandler;
-    let basicInfoClusterServer: ClusterServerObj<
-        BasicInformationCluster["attributes"],
-        BasicInformationCluster["events"]
-    >;
+    let basicInfoClusterServer: ClusterServerObj<BasicInformationCluster>;
 
-    function withClusters<A extends Attributes, E extends Events, A2 extends Attributes, E2 extends Events>(
-        cluster?: ClusterServerObj<A, E>,
-        cluster2?: ClusterServerObj<A2, E2>,
+    function withClusters<T1 extends ClusterType, T2 extends ClusterType>(
+        cluster?: ClusterServerObj<T1>,
+        cluster2?: ClusterServerObj<T2>,
     ) {
-        function addClusterServer(cluster: ClusterServerObj<any, any>) {
+        function addClusterServer<const T extends ClusterType>(cluster: ClusterServerObj<T>) {
             endpoint.addClusterServer(cluster);
             let version = 0;
             cluster.datasource = {
@@ -981,7 +977,7 @@ describe("InteractionProtocol", () => {
                     startUp: true,
                 },
             );
-            addClusterServer(basicInfoClusterServer as ClusterServerObj<any, any>);
+            addClusterServer(basicInfoClusterServer);
         }
 
         endpointStructure.initializeFromEndpoint(endpoint);

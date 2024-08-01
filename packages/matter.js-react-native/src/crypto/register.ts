@@ -13,9 +13,6 @@ import { CryptoReactNative } from "./CryptoReactNative.js";
 try {
     Crypto.get();
 } catch (error) {
-    if (error instanceof NoProviderError) {
-        Crypto.get = singleton(() => new CryptoReactNative());
-    } else {
-        throw error;
-    }
+    NoProviderError.accept(error);
+    Crypto.get = singleton(() => new CryptoReactNative());
 }

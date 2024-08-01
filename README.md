@@ -117,7 +117,7 @@ npm install
 
 This will install all dependencies and create symlinks between the packages, so that it can be used locally. It also builds all packages.
 
-On Windows in order to successfully build all the packages (tested on Windows 11 Pro) make sure that to have installed Node.js 16+, the windows-build-tools and node-gyp version 10.
+On Windows in order to successfully build all the packages (tested on Windows 11 Pro) make sure that to have installed Node.js 18+, the windows-build-tools and node-gyp version 10.
 On Non-Windows platforms and having Python 3.12+ installed please also make sure to use npm 10.2.3+.
 
 ### To use matter(-node).js in own projects
@@ -178,7 +178,7 @@ See the [Roadmap](https://github.com/orgs/project-chip/projects/11/views/1) for 
 
 ## How to use matter.js in own projects
 
-matter.js itself can not be used directly in a project because some platform specific functionalities needs to be added. These are:
+matter.js itself cannot be used directly in a project because some platform specific functionalities needs to be added. These are:
 
 - **BigInt/UInt8Array**: Right now matter.js relies on certain ES6 JavaScript language features like BigInt and UInt8Array. If your platform does not support this you need to add a polyfill for this.
 - **Network**: The Network implementation needs to provide UDP server and client functionality. This is a core requirement. The [Network Interface](packages/matter.js/src/net/Network.ts) needs to be implemented which includes methods to query network interfaces of the system and to use UDP sockets.
@@ -199,7 +199,7 @@ If you implement a specific platform we would be happy about a PR with the code,
 
 ## matter.js based projects
 
-If you use a platform where Node.js 16.x+ is available then you can easily and directly use the following project that base on matter.js
+If you use a platform where Node.js 18+ is available then you can easily and directly use the following project that base on matter.js
 
 matter.js is used at the core of those two projects currently:
 

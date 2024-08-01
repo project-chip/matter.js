@@ -82,15 +82,13 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 this.state.breadcrumb = breadcrumb;
             }
         } catch (error) {
-            if (error instanceof MatterFlowError) {
-                logger.debug(`Error while arming failSafe timer`, error);
-                return {
-                    errorCode: GeneralCommissioning.CommissioningError.BusyWithOtherAdmin,
-                    debugText: error.message,
-                };
-            } else {
-                throw error;
-            }
+            MatterFlowError.accept(error);
+
+            logger.debug(`Error while arming failSafe timer`, error);
+            return {
+                errorCode: GeneralCommissioning.CommissioningError.BusyWithOtherAdmin,
+                debugText: error.message,
+            };
         }
 
         return SuccessResponse;

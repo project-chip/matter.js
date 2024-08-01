@@ -6,23 +6,17 @@
 
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EventId } from "../../datatype/EventId.js";
-import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
+import { Endpoint } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { capitalize } from "../../util/String.js";
-import {
-    AccessLevel,
-    Attributes,
-    Cluster,
-    Commands,
-    ConditionalFeatureList,
-    Events,
-    TlvNoResponse,
-} from "../Cluster.js";
+import { AccessLevel, ConditionalFeatureList, TlvNoResponse } from "../Cluster.js";
+import { ClusterType } from "../ClusterType.js";
 import { createAttributeServer } from "./AttributeServer.js";
 import {
     AttributeInitialValues,
@@ -51,20 +45,49 @@ function isConditionMatching<F extends BitSchema, SF extends TypeFromPartialBitS
     return false;
 }
 
-export function ClusterServer<
-    F extends BitSchema,
-    SF extends TypeFromPartialBitSchema<F>,
-    A extends Attributes,
-    C extends Commands,
-    E extends Events,
-    H extends ClusterServerHandlers<Cluster<F, SF, A, C, E>>,
->(
-    clusterDef: Cluster<F, SF, A, C, E>,
-    attributesInitialValues: AttributeInitialValues<A>,
+/**
+ * A collection of servers for a cluster's attributes, commands and events.
+ */
+export interface ClusterServer<T extends ClusterType = ClusterType> {
+    /**
+     * Cluster ID
+     */
+    id: ClusterId;
+
+    /**
+     * Cluster name
+     */
+    readonly name: string;
+
+    /**
+     * Cluster datasource
+     */
+    datasource?: ClusterDatasource;
+
+    /**
+     * Cluster attributes as named object that can be used to programmatically work with available attributes
+     */
+    readonly attributes: AttributeServers<T["attributes"]>;
+
+    /**
+     * Cluster commands as array
+     */
+    readonly commands: CommandServers<T["commands"]>;
+
+    /**
+     * Cluster events as named object
+     */
+    readonly events: EventServers<T["events"]>;
+}
+
+// Note - template parameter H should not be necessary but works around TS (as of 5.4) bug
+export function ClusterServer<const T extends ClusterType, const H extends ClusterServerHandlers<T>>(
+    clusterDef: T,
+    attributesInitialValues: AttributeInitialValues<T["attributes"]>,
     handlers: H,
-    supportedEvents: SupportedEventsList<E> = <SupportedEventsList<E>>{},
+    supportedEvents: SupportedEventsList<T["events"]> = <SupportedEventsList<T["events"]>>{},
     ignoreMissingElements = false,
-): ClusterServerObj<A, E> {
+): ClusterServerObj<T> {
     const {
         id: clusterId,
         name,
@@ -75,17 +98,15 @@ export function ClusterServer<
     } = clusterDef;
     let datasource: ClusterDatasource | undefined;
     const sceneAttributeList = new Array<string>();
-    const attributes = <AttributeServers<A>>{};
-    const commands = <CommandServers<C>>{};
-    const events = <EventServers<E>>{};
-    let assignedEndpoint: EndpointInterface | undefined = undefined;
+    const attributes = <AttributeServers<T["attributes"]>>{};
+    const commands = <CommandServers<T["commands"]>>{};
+    const events = <EventServers<T["events"]>>{};
+    let assignedEndpoint: Endpoint | undefined = undefined;
 
-    // We pass a proxy into attribute servers so we can swap out our datasource
-    // without updating all servers
+    // We pass a proxy into attribute servers so we can swap out our datasource without updating all servers
     //
-    // There should always be a datasource when the server is online, so if
-    // there is no datasource we just report version as 0 rather than assigning
-    // a random version that will be overwritten when we receive a datasource
+    // There should always be a datasource when the server is online, so if there is no datasource we just report
+    // version as 0 rather than assigning a random version that will be overwritten when we receive a datasource
     const datasourceProxy: ClusterDatasource = {
         get version() {
             return datasource?.version ?? 0;
@@ -109,8 +130,8 @@ export function ClusterServer<
         name,
         _type: "ClusterServer",
         attributes,
-        _commands: commands,
-        _events: events,
+        commands: commands,
+        events: events,
 
         get datasource() {
             return datasource;
@@ -148,7 +169,7 @@ export function ClusterServer<
             }
         },
 
-        _assignToEndpoint: (endpoint: EndpointInterface) => {
+        _assignToEndpoint: (endpoint: Endpoint) => {
             for (const name in attributes) {
                 (attributes as any)[name].assignToEndpoint(endpoint);
             }
@@ -483,5 +504,5 @@ export function ClusterServer<
     }
     (attributes as any).eventList.setLocal(eventList.sort((a, b) => a - b));
 
-    return result as ClusterServerObj<A, E>;
+    return result as ClusterServerObj<T>;
 }

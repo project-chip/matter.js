@@ -12,9 +12,9 @@ import { ValueModel } from "./ValueModel.js";
 
 export class CommandModel extends ValueModel implements CommandElement {
     override tag: CommandElement.Tag = CommandElement.Tag;
-    override id!: Mei;
-    direction?: CommandElement.Direction;
-    response?: string;
+    declare id: Mei;
+    declare direction?: CommandElement.Direction;
+    declare response?: string;
 
     get fabricScoped() {
         return !!this.effectiveAccess.fabric;

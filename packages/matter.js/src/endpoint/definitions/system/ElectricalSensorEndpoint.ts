@@ -32,21 +32,21 @@ export interface ElectricalSensorEndpoint extends Identity<typeof ElectricalSens
 
 export namespace ElectricalSensorRequirements {
     /**
-     * The PowerTopology cluster is required by the Matter specification
+     * The PowerTopology cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link PowerTopologyServer} for convenience.
      */
     export const PowerTopologyServer = BasePowerTopologyServer;
 
     /**
-     * The ElectricalPowerMeasurement cluster is optional per the Matter specification
+     * The ElectricalPowerMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ElectricalPowerMeasurementServer} for convenience.
      */
     export const ElectricalPowerMeasurementServer = BaseElectricalPowerMeasurementServer;
 
     /**
-     * The ElectricalEnergyMeasurement cluster is optional per the Matter specification
+     * The ElectricalEnergyMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ElectricalEnergyMeasurementServer} for convenience.
      */

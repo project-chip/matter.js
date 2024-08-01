@@ -13,10 +13,7 @@ import { NetworkReactNative } from "./NetworkReactNative.js";
 try {
     Network.get();
 } catch (error) {
-    if (error instanceof NoProviderError) {
-        Network.get = singleton(() => new NetworkReactNative());
-        // use net export closeNetwork() to close the network
-    } else {
-        throw error;
-    }
+    NoProviderError.accept(error);
+    Network.get = singleton(() => new NetworkReactNative());
+    // use net export closeNetwork() to close the network
 }

@@ -346,14 +346,9 @@ export function Construction<const T extends Constructable>(
 
             this.then(onSuccess).catch(e => {
                 // Failure should result in a CrashedDependencyError which simply means initialization failed.  The
-                // actual error is logged so we can safely ignore
-                if (e instanceof CrashedDependencyError) {
-                    return;
-                }
-
-                // If the error was not a CrashedDependencyError then it is unexpected.  We rethrow which will result in
-                // the process exiting with an unexpected error
-                throw e;
+                // actual error is logged so we can safely ignore.  If the error was not a CrashedDependencyError then
+                // it is unexpected.  We rethrow which will result in the process exiting with an unexpected error
+                CrashedDependencyError.accept(e);
             });
         },
 

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
+import { ValidationOutOfBoundsError, validatorOf } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -30,16 +29,7 @@ export function EventId(eventId: number, validate = true): EventId {
 }
 
 export namespace EventId {
-    export const isValid = (eventId: number): eventId is EventId => {
-        return tryCatch(
-            () => {
-                EventId(eventId);
-                return true;
-            },
-            ValidationError,
-            false,
-        );
-    };
+    export const isValid = validatorOf(EventId);
 }
 
 /** Tlv schema for an Event Id. */

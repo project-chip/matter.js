@@ -78,7 +78,7 @@ if (legacyNodes.includes("Controller")) {
 console.log(uniqueIds);
 
 if (!Object.keys(uniqueIds).length) {
-    console.error("No uniqueId(s) found in legacy storage. Can not convert the node storage.");
+    console.error("No uniqueId(s) found in legacy storage. Cannot convert the node storage.");
     process.exit(1);
 }
 
@@ -87,7 +87,7 @@ for (const nodeId of legacyNodes) {
         const rootCertId = legacyStorage.get(["0", "RootCertificateManager"], "rootCertId");
 
         if (nodeId !== "0" || rootCertId === undefined) {
-            console.error(`No uniqueId found for node ${nodeId}. Can not convert the node storage.`);
+            console.error(`No uniqueId found for node ${nodeId}. Cannot convert the node storage.`);
             continue;
         }
 

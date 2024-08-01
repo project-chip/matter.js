@@ -11,7 +11,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ### **WORK_IN_PROGRESS**
 
--   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
+-   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3.0.1. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
 
 -   Matter.js Parser and Code generator:
     -   Feature: We now generate all Matter datatypes and elements. This includes some we defined by hand previously and those introduced by the Matter 1.2 and Matter 1.3 specifications.
@@ -26,9 +26,13 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Breaking: We've removed a few deprecated definitions for unused Matter elements such as the Scenes cluster.
     -   Breaking: Globals.ts previously defined core datatypes for the Matter object model. These are now generated and individually importable.
     -   Breaking: We've removed a few old draft datatypes defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip) that were abandoned, renamed or are still "draft" as of Matter 1.3.
+    -   Breaking: Some types related to ClusterServer are simplified.  This should be largely transparent but the template arguments are slightly different
     -   Feature: Adds all elements (clusters, attributes, events, commands, device types and datatypes) introduced in Matter 1.2 and Matter 1.3.
 -   Matter-Core functionality:
     -   Breaking: Removes the discovery capability "softAccessPoint" as it was removed from the Matter specification
+    -   Breaking: Matter.js now requires node.js 18+
+    -   Breaking: We now target ES 2022 for transpiled output.  We have not adopted new language features but this does mean that we generate true class properties now
+    -   Breaking: We've removed the APIs `tryCatch` and `tryCatchAsync`.  These were used internally -- not part of any Matter related API -- but were exported
     -   Feature: Increase Data Model revision to 17 (introduced by Matter 1.2)
     -   Feature: Added Base64 encoding/decoding support to ByteArray
     -   Feature: Added WildcardPathFlagsBitmap to Attribute expansion for read/subscribe Interactions
@@ -51,7 +55,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Fix: Adjusted ValidationErrors to be more specific if they should return "InvalidAction" ot "ConstraintError".
     -   Fix: Adjusted some returned errors to be more specific and to the specification (e.g. InvalidAction instead of Failure)
     -   Fix: Fixed StandaloneAck handling to use an outstanding ack number as piggybacked ack number
-    -   Fix: Makes sure subscription maxInterval can not exceed the matter defined maximum of 60mins
+    -   Fix: Makes sure subscription maxInterval cannot exceed the matter defined maximum of 60mins
     -   Fix: Synced attMtu handling with chip to always use MTU-3 bytes for BLE connections
 -   matter.js API:
 -   -   Breaking: Node.start() is now asynchronous and returns when the node is online. This is only breaking in that lack of await will result in an unhandled rejection. Node.bringOnline() is deprecated.
@@ -484,7 +488,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Examples/Reference implementations:
         -   The reference implementations are moved to example directory and details moved into own [README.md](./packages/matter-node.js-examples/README.md) file
         -   the "npm run matter" command got renamed to "npm run matter-device" (same for binary usage
-        -   Add hints for all imports in the examples to show what the corresponding "matter-node.js" import would be (because they can not be used directly for build reasons)
+        -   Add hints for all imports in the examples to show what the corresponding "matter-node.js" import would be (because they cannot be used directly for build reasons)
         -   Added the "npm run matter-\*" commands also to the base package.json
         -   Added parameter -clearstorage to start with an empty storage
 

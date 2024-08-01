@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { SchemaImplementationError } from "../../behavior/errors.js";
 import { InternalError } from "../../common/MatterError.js";
 import { Access, Aspect, Constraint } from "../aspects/index.js";
-import { ElementTag, FieldValue, Metatype } from "../definitions/index.js";
+import { ElementTag, FeatureSet, FieldValue, Metatype } from "../definitions/index.js";
 import { AnyElement } from "../elements/index.js";
 import { Children } from "../models/Children.js";
-import { type CommandModel, type Model, type ValueModel } from "../models/index.js";
+import { PropertyModel, type ClusterModel, type CommandModel, type Model, type ValueModel } from "../models/index.js";
 import * as Elements from "../standard/elements/index.js";
 
 const OPERATION_DEPTH_LIMIT = 20;
@@ -22,8 +23,6 @@ let memos: Memos | undefined;
  *
  * Any logic that requires traversal of a multi-model ownership or inheritance should use this class.
  *
- * Note that we don't currently utilize any kind of index when we perform search.  Not currently a problem but may need
- * to address if it becomes too inefficient.
  */
 export class ModelTraversal {
     #operationDepth = 0;
@@ -436,20 +435,103 @@ export class ModelTraversal {
     }
 
     /**
-     * Retrieve all children of a specific type, inherited, shadowed or otherwise.
+     * Retrieve all children of a specific type, including those inherited from the base or a shadow.  Does not include
+     * members overridden by a deeper member.
      */
-    findMembers(scope: Model, allowedTags: ElementTag[]) {
-        const members = Array<Model>();
+    findMembers(scope: Model) {
+        const members = Array<PropertyModel>();
 
+        // This is a map of identity (based on tag + id/name + discriminator) to a priority based on inheritance depth
+        const defined = {} as Record<string, number | undefined>;
+
+        let level = 0;
         this.visitInheritance(scope, model => {
+            level++;
             for (const child of model.children) {
-                if (allowedTags.indexOf(child.tag) !== -1) {
-                    members.push(child);
+                if (child.tag !== ElementTag.Attribute && child.tag !== ElementTag.Field) {
+                    continue;
                 }
+
+                // Identify and skip shadows based on ID
+                let numericIdentity;
+                if (child.id !== undefined) {
+                    numericIdentity = `i␜${child.tag}␜${child.id}␜${child.discriminator ?? ""}`;
+                    const numericLevel = defined[numericIdentity];
+                    if (numericLevel !== undefined && numericLevel < level) {
+                        continue;
+                    }
+                }
+
+                // Identify and skip shadows based on name
+                const nameIdentity = `s␜${child.tag}␜${child.name}␜${child.discriminator ?? ""}`;
+                const nameLevel = defined[nameIdentity];
+                if (nameLevel !== undefined && nameLevel < level) {
+                    continue;
+                }
+
+                // Mark the level in which we saw these members
+                if (numericIdentity) {
+                    defined[numericIdentity] = level;
+                }
+                defined[nameIdentity] = level;
+
+                // Found a member
+                members.push(child as PropertyModel);
             }
         });
 
         return members;
+    }
+
+    /**
+     * Filter a model's members as follows:
+     *
+     *   - If the member is deprecated, ignore it
+     *
+     *   - If there is only a single member of a given name, select that member
+     *
+     *   - If there are multiple members with the same name but there is no cluster throw an error
+     *
+     *   - If there are multiple members with the same name, use conformance to select the member that is applicable
+     *     based on active features in the provided cluster
+     *
+     *   - If there are multiple applicable members based on conformance the definitions conflict and throw an error
+     *
+     * Note that "active" in this case does not imply the member is conformant, only that conflicts are resolved.
+     *
+     * Note 2 - members may not be differentiated with conformance rules that rely on field values in this way. That
+     * will probably never be necessary and would require an entirely different (more complicated) structure.
+     */
+    findActiveMembers(scope: Model & { members: PropertyModel[] }, cluster?: ClusterModel) {
+        const features = cluster?.featureNames ?? new FeatureSet();
+        const supportedFeatures = cluster?.supportedFeatures ?? new FeatureSet();
+
+        const selectedMembers = {} as Record<string, ValueModel>;
+        for (const member of scope.members) {
+            if (member.isDeprecated) {
+                continue;
+            }
+
+            const other = selectedMembers[member.name];
+            if (other !== undefined) {
+                if (!member.conformance.isApplicable(features, supportedFeatures)) {
+                    continue;
+                }
+
+                if (other.conformance.isApplicable(features, supportedFeatures)) {
+                    throw new SchemaImplementationError(
+                        scope,
+                        `There are multiple definitions of "${member.name}" that cannot be differentiated by conformance`,
+                    );
+                }
+
+                // This member takes precedence and will overwrite below
+            }
+
+            selectedMembers[member.name] = member;
+        }
+
+        return Object.values(selectedMembers);
     }
 
     /**

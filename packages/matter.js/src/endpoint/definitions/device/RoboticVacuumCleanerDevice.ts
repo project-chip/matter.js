@@ -27,28 +27,28 @@ export interface RoboticVacuumCleanerDevice extends Identity<typeof RoboticVacuu
 
 export namespace RoboticVacuumCleanerRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The RvcRunMode cluster is required by the Matter specification
+     * The RvcRunMode cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link RvcRunModeServer} for convenience.
      */
     export const RvcRunModeServer = BaseRvcRunModeServer;
 
     /**
-     * The RvcOperationalState cluster is required by the Matter specification
+     * The RvcOperationalState cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link RvcOperationalStateServer} for convenience.
      */
     export const RvcOperationalStateServer = BaseRvcOperationalStateServer;
 
     /**
-     * The RvcCleanMode cluster is optional per the Matter specification
+     * The RvcCleanMode cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link RvcCleanModeServer} for convenience.
      */

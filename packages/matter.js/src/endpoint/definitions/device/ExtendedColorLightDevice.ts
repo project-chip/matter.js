@@ -8,9 +8,6 @@
 
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
-import {
-    ScenesManagementServer as BaseScenesManagementServer
-} from "../../../behavior/definitions/scenes-management/ScenesManagementServer.js";
 import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
 import {
     LevelControlServer as BaseLevelControlServer
@@ -18,6 +15,9 @@ import {
 import {
     ColorControlServer as BaseColorControlServer
 } from "../../../behavior/definitions/color-control/ColorControlServer.js";
+import {
+    ScenesManagementServer as BaseScenesManagementServer
+} from "../../../behavior/definitions/scenes-management/ScenesManagementServer.js";
 import {
     OccupancySensingBehavior as BaseOccupancySensingBehavior
 } from "../../../behavior/definitions/occupancy-sensing/OccupancySensingBehavior.js";
@@ -38,36 +38,28 @@ export interface ExtendedColorLightDevice extends Identity<typeof ExtendedColorL
 
 export namespace ExtendedColorLightRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * This version of {@link IdentifyServer} is specialized per the specification.
      */
     export const IdentifyServer = BaseIdentifyServer.alter({ commands: { triggerEffect: { optional: false } } });
 
     /**
-     * The Groups cluster is required by the Matter specification
+     * The Groups cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The ScenesManagement cluster is required by the Matter specification
-     *
-     * This version of {@link ScenesManagementServer} is specialized per the specification.
-     */
-    export const ScenesManagementServer = BaseScenesManagementServer
-        .alter({ commands: { copyScene: { optional: false } } });
-
-    /**
-     * The OnOff cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification.
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
     export const OnOffServer = BaseOnOffServer.with("Lighting");
 
     /**
-     * The LevelControl cluster is required by the Matter specification
+     * The LevelControl cluster is required by the Matter specification.
      *
      * This version of {@link LevelControlServer} is specialized per the specification.
      */
@@ -82,7 +74,7 @@ export namespace ExtendedColorLightRequirements {
         });
 
     /**
-     * The ColorControl cluster is required by the Matter specification
+     * The ColorControl cluster is required by the Matter specification.
      *
      * This version of {@link ColorControlServer} is specialized per the specification.
      */
@@ -91,7 +83,14 @@ export namespace ExtendedColorLightRequirements {
         .alter({ attributes: { remainingTime: { optional: false } } });
 
     /**
-     * The OccupancySensing cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link ScenesManagementServer} for convenience.
+     */
+    export const ScenesManagementServer = BaseScenesManagementServer;
+
+    /**
+     * The OccupancySensing cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link OccupancySensingBehavior} for convenience.
      */
@@ -104,11 +103,12 @@ export namespace ExtendedColorLightRequirements {
         mandatory: {
             Identify: IdentifyServer,
             Groups: GroupsServer,
-            ScenesManagement: ScenesManagementServer,
             OnOff: OnOffServer,
             LevelControl: LevelControlServer,
             ColorControl: ColorControlServer
-        }
+        },
+
+        optional: { ScenesManagement: ScenesManagementServer }
     };
 
     /**
@@ -126,7 +126,6 @@ export const ExtendedColorLightDeviceDefinition = MutableEndpoint({
     behaviors: SupportedBehaviors(
         ExtendedColorLightRequirements.server.mandatory.Identify,
         ExtendedColorLightRequirements.server.mandatory.Groups,
-        ExtendedColorLightRequirements.server.mandatory.ScenesManagement,
         ExtendedColorLightRequirements.server.mandatory.OnOff,
         ExtendedColorLightRequirements.server.mandatory.LevelControl,
         ExtendedColorLightRequirements.server.mandatory.ColorControl

@@ -490,7 +490,7 @@ export namespace BasicInformation {
             localConfigDisabled: OptionalWritableAttribute(
                 0x10,
                 TlvBoolean,
-                { persistent: true, default: true, writeAcl: AccessLevel.Manage }
+                { persistent: true, default: false, writeAcl: AccessLevel.Manage }
             ),
 
             /**

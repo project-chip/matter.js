@@ -7,12 +7,11 @@
 import { Behavior } from "../behavior/Behavior.js";
 import { ClusterBehavior } from "../behavior/cluster/ClusterBehavior.js";
 import { BehaviorBacking } from "../behavior/internal/BehaviorBacking.js";
-import { ClusterServerBehaviorBacking } from "../behavior/internal/ClusterServerBacking.js";
+import { ClusterServerBacking } from "../behavior/internal/ClusterServerBacking.js";
 import { ServerBehaviorBacking } from "../behavior/internal/ServerBacking.js";
-import { Attributes, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
+import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
@@ -25,12 +24,12 @@ interface ServerPart extends Endpoint {
 }
 
 /**
- * EndpointServer makes a {@link Endpoint} available for remote access as an Endpoint on a Matter network.
+ * EndpointServer makes an {@link Endpoint} available for remote access as an Endpoint on a Matter network.
  */
 export class EndpointServer implements EndpointInterface {
     #endpoint: Endpoint;
     #name = "";
-    readonly #clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>();
+    readonly #clusterServers = new Map<ClusterId, ClusterServer>();
 
     get endpoint() {
         return this.#endpoint;
@@ -58,7 +57,7 @@ export class EndpointServer implements EndpointInterface {
                 );
             }
 
-            backing = new ClusterServerBehaviorBacking(this, type as ClusterBehavior.Type);
+            backing = new ClusterServerBacking(this, type as ClusterBehavior.Type);
         } else {
             backing = new ServerBehaviorBacking(this.#endpoint, type);
         }
@@ -125,7 +124,7 @@ export class EndpointServer implements EndpointInterface {
         // Unused, should move out of EndpointInterface
     }
 
-    addClusterServer<A extends Attributes, E extends Events>(server: ClusterServerObj<A, E>): void {
+    addClusterServer<const T extends ClusterType>(server: ClusterServer<T>): void {
         this.#clusterServers.set(server.id, server);
     }
 
@@ -133,24 +132,22 @@ export class EndpointServer implements EndpointInterface {
         return this.#clusterServers.has(cluster.id);
     }
 
-    getClusterServer<const T extends ClusterType>(
-        cluster: T,
-    ): ClusterServerObj<T["attributes"], T["events"]> | undefined {
+    getClusterServer<const T extends ClusterType>(cluster: T): ClusterServer<T> | undefined {
         const server = this.#clusterServers.get(cluster.id);
         if (server !== undefined) {
-            return server as unknown as ClusterServerObj<T["attributes"], T["events"]>;
+            return server as ClusterServer<T>;
         }
     }
 
-    getClusterServerById(clusterId: ClusterId): ClusterServerObj<Attributes, Events> | undefined {
+    getClusterServerById(clusterId: ClusterId): ClusterServer | undefined {
         return this.#clusterServers.get(clusterId);
     }
 
-    getAllClusterServers(): ClusterServerObj<Attributes, Events>[] {
+    getAllClusterServers(): ClusterServer[] {
         return [...this.#clusterServers.values()];
     }
 
-    getAllClusterClients(): ClusterClientObj<any, Attributes, Commands, Events>[] {
+    getAllClusterClients(): ClusterClientObj[] {
         // TODO -- no binding support yet (or client behaviors)
         return [];
     }

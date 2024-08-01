@@ -9,7 +9,6 @@ import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { Channel } from "../common/Channel.js";
 import { ImplementationError, MatterError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
 import { Listener, TransportInterface } from "../common/TransportInterface.js";
-import { tryCatch } from "../common/TryCatchHandler.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -194,14 +193,15 @@ export class ExchangeManager<ContextT> {
         }
 
         const messageId = packet.header.messageId;
-        const isDuplicate = tryCatch(
-            () => {
-                session?.updateMessageCounter(packet.header.messageId, packet.header.sourceNodeId);
-                return false;
-            },
-            DuplicateMessageError,
-            () => true,
-        );
+
+        let isDuplicate;
+        try {
+            session?.updateMessageCounter(packet.header.messageId, packet.header.sourceNodeId);
+            isDuplicate = false;
+        } catch (e) {
+            DuplicateMessageError.accept(e);
+            isDuplicate = true;
+        }
 
         const aad = messageBytes.slice(0, messageBytes.length - packet.applicationPayload.length); // Header+Extensions
         const message = session.decode(packet, aad);

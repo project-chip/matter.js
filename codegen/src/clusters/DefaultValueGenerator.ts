@@ -78,37 +78,22 @@ export class DefaultValueGenerator {
     }
 
     /**
-     * Bitmaps are more complicated.  We need to collect bits into individual fields.  Then we generate a value for each
-     * field depending on the field type.
+     * Bitmaps are more complicated.  Input is an object of bit fields.  We generate a value for each field depending on
+     * the field type.
      */
     private createBitmap(defaultValue: any, model: ValueModel) {
-        if (typeof defaultValue !== "number") {
+        if (typeof defaultValue !== "object" || defaultValue === null) {
             return;
         }
 
-        const fields = new Map<ValueModel, number>();
-        for (let bit = 0; Math.pow(bit, 2) <= defaultValue; bit++) {
-            if (!(defaultValue & (1 << bit))) {
-                continue;
-            }
-
-            const definition = model.bitDefinition(bit);
-            if (!definition || definition.isDeprecated) {
-                continue;
-            }
-
-            const constraint = definition.effectiveConstraint;
-            if (constraint.value !== undefined) {
-                fields.set(definition, 1);
-            } else if (constraint.min !== undefined) {
-                const fieldBit = 1 << (bit - (constraint.min as number));
-                fields.set(definition, (fields.get(definition) ?? 0) & fieldBit);
-            }
-        }
-
         const properties = {} as { [name: string]: boolean | number | string };
-        for (const [field, bits] of fields) {
-            const name = camelize(field.name);
+        for (const name in defaultValue) {
+            const field = model.get(ValueModel, camelize(name, true));
+            if (field === undefined) {
+                throw new Error(`No model for bit field ${name}`);
+            }
+
+            const bits = defaultValue[name];
             const constraint = field.effectiveConstraint;
             if (typeof constraint.value === "number") {
                 properties[name] = true;
@@ -122,6 +107,7 @@ export class DefaultValueGenerator {
                 properties[name] = valueName ?? bits;
             }
         }
+
         if (!Object.keys(properties).length) {
             return;
         }
@@ -146,7 +132,7 @@ export class DefaultValueGenerator {
 
         const alreadyProcessed = new Set<string>();
         let result: Properties | undefined;
-        for (const member of model.members) {
+        for (const member of model.activeMembers) {
             const name = camelize(member.name);
 
             // Members are listed with overrides first so we ignore subsequent definitions for the same name

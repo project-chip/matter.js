@@ -5,10 +5,13 @@
  */
 
 import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
+import { camelize, describeList } from "../../util/String.js";
 import { Access } from "../aspects/Access.js";
 import { Quality } from "../aspects/Quality.js";
+import { SchemaImplementationError } from "../definitions/errors.js";
 import { FeatureSet, Metatype } from "../definitions/index.js";
 import { ClusterElement } from "../elements/index.js";
+import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { ClusterRevision } from "../standard/elements/ClusterRevision.js";
 import { FeatureMap } from "../standard/elements/FeatureMap.js";
 import { Aspects } from "./Aspects.js";
@@ -25,11 +28,10 @@ const QUALITY = Symbol("quality");
 
 export class ClusterModel extends Model implements ClusterElement {
     override tag: ClusterElement.Tag = ClusterElement.Tag;
-    override id?: Mei;
-    classification?: ClusterElement.Classification;
-    pics?: string;
+    declare id: Mei;
+    declare classification?: ClusterElement.Classification;
+    declare pics?: string;
     override isTypeScope = true;
-    supportedFeatures?: FeatureSet;
 
     get diagnostics() {
         return this.effectiveQuality.diagnostics;
@@ -61,8 +63,38 @@ export class ClusterModel extends Model implements ClusterElement {
         return this.all(DatatypeModel);
     }
 
-    get members() {
-        return this.all(PropertyModel);
+    get members(): PropertyModel[] {
+        const traversal = new ModelTraversal();
+
+        // Formally a field element cannot be a cluster child but we allow it for metadata control when a field should
+        // not be published
+        const members = traversal.findMembers(this);
+
+        // We consider the standard set of "global" attributes members of all clusters
+        const missingGlobalIds = new Set(AttributeModel.globalIds);
+        for (const m of members) {
+            if (m instanceof AttributeModel && m.id) {
+                missingGlobalIds.delete(m.id);
+            }
+        }
+
+        if (missingGlobalIds.size) {
+            const root = traversal.findRoot(this);
+            if (root) {
+                for (const id of missingGlobalIds) {
+                    const global = root.get(AttributeModel, id);
+                    if (global) {
+                        members.push(global);
+                    }
+                }
+            }
+        }
+
+        return members;
+    }
+
+    get activeMembers() {
+        return new ModelTraversal().findActiveMembers(this, this);
     }
 
     get revision() {
@@ -80,6 +112,50 @@ export class ClusterModel extends Model implements ClusterElement {
 
     get featureMap() {
         return this.get(AttributeModel, FeatureMap.id) ?? new AttributeModel(FeatureMap);
+    }
+
+    get featureNames(): FeatureSet {
+        return new FeatureSet(this.features.map(feature => feature.name));
+    }
+
+    get supportedFeatures(): FeatureSet {
+        const supported = {} as { [name: string]: boolean | undefined };
+        for (const feature of this.features) {
+            if (feature.default) {
+                supported[feature.name] = true;
+            }
+        }
+        return new FeatureSet(supported);
+    }
+
+    set supportedFeatures(features: FeatureSet.Definition | undefined) {
+        const featureSet = new FeatureSet(features);
+
+        const featureMap = this.featureMap;
+
+        for (const feature of featureMap.children) {
+            const desc = feature.description && camelize(feature.description);
+            if (desc !== undefined && featureSet.has(desc)) {
+                feature.default = true;
+                featureSet.delete(desc);
+                continue;
+            }
+
+            if (featureSet.has(feature.name)) {
+                featureSet.delete(feature.name);
+                feature.default = true;
+                continue;
+            }
+
+            feature.default = undefined;
+        }
+
+        if (featureSet.size) {
+            throw new SchemaImplementationError(
+                this,
+                `Cannot set unknown feature${featureSet.size > 1 ? "s" : ""} ${describeList("and", ...featureSet)}`,
+            );
+        }
     }
 
     override get children(): Children<ClusterModel.Child, ClusterElement.Child> {

@@ -24,14 +24,14 @@ export interface OccupancySensorDevice extends Identity<typeof OccupancySensorDe
 
 export namespace OccupancySensorRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The OccupancySensing cluster is required by the Matter specification
+     * The OccupancySensing cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link OccupancySensingServer} for convenience.
      */

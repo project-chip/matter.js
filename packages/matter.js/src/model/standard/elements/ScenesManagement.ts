@@ -520,7 +520,7 @@ export const ScenesManagement = Cluster({
                 }),
 
                 Field({
-                    name: "SceneValid", id: 0x3, type: "bool", access: "S", conformance: "M", default: true,
+                    name: "SceneValid", id: 0x3, type: "bool", access: "S", conformance: "M", default: false,
 
                     details: "This field shall indicate whether the state of the server corresponds to that associated with the " +
                         "CurrentScene and CurrentGroup fields of the SceneInfoStruct they belong to. TRUE indicates that " +

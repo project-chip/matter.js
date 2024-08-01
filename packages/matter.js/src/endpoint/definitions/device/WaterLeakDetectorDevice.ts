@@ -26,21 +26,21 @@ export interface WaterLeakDetectorDevice extends Identity<typeof WaterLeakDetect
 
 export namespace WaterLeakDetectorRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The BooleanState cluster is required by the Matter specification
+     * The BooleanState cluster is required by the Matter specification.
      *
      * This version of {@link BooleanStateServer} is specialized per the specification.
      */
     export const BooleanStateServer = BaseBooleanStateServer.alter({ events: { stateChange: { optional: false } } });
 
     /**
-     * The BooleanStateConfiguration cluster is optional per the Matter specification
+     * The BooleanStateConfiguration cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link BooleanStateConfigurationServer} for convenience.
      */

@@ -15,7 +15,6 @@ import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AnyEventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { InternalError, MatterFlowError } from "../../common/MatterError.js";
-import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { ValidationError } from "../../common/ValidationError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
@@ -333,28 +332,25 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                 if (isConcreteAttributePath(requestPath)) {
                     const { endpointId, clusterId, attributeId } = requestPath;
                     // Concrete path, but still unknown for us, so generate the right error status
-                    tryCatch(
-                        () => {
-                            this.#endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
-                            throw new InternalError(
-                                "validateConcreteAttributePath should throw StatusResponseError but did not.",
-                            );
-                        },
-                        StatusResponseError,
-                        error => {
-                            logger.debug(
-                                `Error reading attribute from ${
-                                    exchange.channel.name
-                                }: ${this.#endpointStructure.resolveAttributeName(requestPath)}: unsupported path: Status=${
-                                    error.code
-                                }`,
-                            );
-                            attributeReportsPayload.push({
-                                hasFabricSensitiveData: false,
-                                attributeStatus: { path: requestPath, status: { status: error.code } },
-                            });
-                        },
-                    );
+                    try {
+                        this.#endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
+                        throw new InternalError(
+                            "validateConcreteAttributePath should throw StatusResponseError but did not.",
+                        );
+                    } catch (e) {
+                        StatusResponseError.accept(e);
+                        logger.debug(
+                            `Error reading attribute from ${
+                                exchange.channel.name
+                            }: ${this.#endpointStructure.resolveAttributeName(requestPath)}: unsupported path: Status=${
+                                e.code
+                            }`,
+                        );
+                        attributeReportsPayload.push({
+                            hasFabricSensitiveData: false,
+                            attributeStatus: { path: requestPath, status: { status: e.code } },
+                        });
+                    }
                 }
 
                 // Wildcard path and we do not know any of the attributes: Ignore the error
@@ -379,36 +375,34 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         );
                     }
 
-                    const { value, version } = await tryCatchAsync(
-                        async () =>
-                            this.readAttribute(
-                                path,
-                                attribute,
-                                exchange,
-                                isFabricFiltered,
-                                message,
-                                this.#endpointStructure.getEndpoint(endpointId)!,
-                            ),
-                        NoAssociatedFabricError,
-                        async () => {
-                            // TODO: Remove when we remove legacy API
-                            //  This is not fully correct but should be sufficient for now
-                            //  This is fixed in the new API already, so this error should never throw
-                            //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
-                            //  Assume for now that in this place we only need to handle fabric sensitive case
-                            if (endpointId === undefined || clusterId === undefined) {
-                                throw new MatterFlowError("Should never happen");
-                            }
-                            const cluster = this.#endpointStructure.getClusterServer(endpointId, clusterId);
-                            if (cluster === undefined || cluster.datasource == undefined) {
-                                throw new MatterFlowError("Should never happen");
-                            }
-                            return {
-                                version: cluster.datasource.version,
-                                value: [],
-                            };
-                        },
-                    );
+                    let value, version;
+                    try {
+                        ({ value, version } = await this.readAttribute(
+                            path,
+                            attribute,
+                            exchange,
+                            isFabricFiltered,
+                            message,
+                            this.#endpointStructure.getEndpoint(endpointId)!,
+                        ));
+                    } catch (e) {
+                        NoAssociatedFabricError.accept(e);
+
+                        // TODO: Remove when we remove legacy API
+                        //  This is not fully correct but should be sufficient for now
+                        //  This is fixed in the new API already, so this error should never throw
+                        //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
+                        //  Assume for now that in this place we only need to handle fabric sensitive case
+                        if (endpointId === undefined || clusterId === undefined) {
+                            throw new MatterFlowError("Should never happen");
+                        }
+                        const cluster = this.#endpointStructure.getClusterServer(endpointId, clusterId);
+                        if (cluster === undefined || cluster.datasource == undefined) {
+                            throw new MatterFlowError("Should never happen");
+                        }
+                        version = cluster.datasource.version;
+                        value = [];
+                    }
 
                     const versionFilterValue =
                         endpointId !== undefined && clusterId !== undefined
@@ -441,16 +435,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         } to ${this.#endpointStructure.resolveAttributeName(path)}:`,
                         error,
                     );
-                    if (error instanceof StatusResponseError) {
-                        // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
-                        if (isConcreteAttributePath(requestPath)) {
-                            attributeReportsPayload.push({
-                                hasFabricSensitiveData: false,
-                                attributeStatus: { path, status: { status: error.code } },
-                            });
-                        }
-                    } else {
-                        throw error;
+
+                    StatusResponseError.accept(error);
+
+                    // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
+                    if (isConcreteAttributePath(requestPath)) {
+                        attributeReportsPayload.push({
+                            hasFabricSensitiveData: false,
+                            attributeStatus: { path, status: { status: error.code } },
+                        });
                     }
                 }
             }
@@ -468,28 +461,26 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                 if (events.length === 0) {
                     if (isConcreteEventPath(requestPath)) {
                         const { endpointId, clusterId, eventId } = requestPath;
-                        tryCatch(
-                            () => {
-                                this.#endpointStructure.validateConcreteEventPath(endpointId, clusterId, eventId);
-                                throw new InternalError(
-                                    "validateConcreteEventPath should throw StatusResponseError but did not.",
-                                );
-                            },
-                            StatusResponseError,
-                            error => {
-                                logger.debug(
-                                    `Read event from ${
-                                        exchange.channel.name
-                                    }: ${this.#endpointStructure.resolveEventName(requestPath)}: unsupported path: Status=${
-                                        error.code
-                                    }`,
-                                );
-                                eventReportsPayload?.push({
-                                    hasFabricSensitiveData: false,
-                                    eventStatus: { path: requestPath, status: { status: error.code } },
-                                });
-                            },
-                        );
+                        try {
+                            this.#endpointStructure.validateConcreteEventPath(endpointId, clusterId, eventId);
+                            throw new InternalError(
+                                "validateConcreteEventPath should throw StatusResponseError but did not.",
+                            );
+                        } catch (e) {
+                            StatusResponseError.accept(e);
+
+                            logger.debug(
+                                `Read event from ${
+                                    exchange.channel.name
+                                }: ${this.#endpointStructure.resolveEventName(requestPath)}: unsupported path: Status=${
+                                    e.code
+                                }`,
+                            );
+                            eventReportsPayload?.push({
+                                hasFabricSensitiveData: false,
+                                eventStatus: { path: requestPath, status: { status: e.code } },
+                            });
+                        }
                     }
                     // Wildcard path: Just leave out values
                     logger.debug(
@@ -539,16 +530,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                             } to ${this.#endpointStructure.resolveEventName(path)}:`,
                             error,
                         );
-                        if (error instanceof StatusResponseError) {
-                            // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
-                            if (isConcreteEventPath(requestPath)) {
-                                eventReportsPayload?.push({
-                                    hasFabricSensitiveData: false,
-                                    eventStatus: { path, status: { status: error.code } },
-                                });
-                            }
-                        } else {
-                            throw error;
+
+                        StatusResponseError.accept(error);
+
+                        // Add StatusResponseErrors, but only when the initial path was concrete, else error are ignored
+                        if (isConcreteEventPath(requestPath)) {
+                            eventReportsPayload?.push({
+                                hasFabricSensitiveData: false,
+                                eventStatus: { path, status: { status: error.code } },
+                            });
                         }
                     }
                 }
@@ -691,26 +681,24 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                     const { endpointId, clusterId, attributeId } = writePath;
 
                     // was a concrete path
-                    tryCatch(
-                        () => {
-                            this.#endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
+                    try {
+                        this.#endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
 
-                            // Ok it is a valid  concrete path, so it is not writable
-                            throw new StatusResponseError(
-                                `Attribute ${attributeId} is not writable.`,
-                                StatusCode.UnsupportedWrite,
-                            );
-                        },
-                        StatusResponseError,
-                        error => {
-                            logger.debug(
-                                `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
-                                    writePath,
-                                )} not allowed: Status=${error.code}`,
-                            );
-                            writeResults.push({ path: writePath, statusCode: error.code });
-                        },
-                    );
+                        // Ok it is a valid  concrete path, so it is not writable
+                        throw new StatusResponseError(
+                            `Attribute ${attributeId} is not writable.`,
+                            StatusCode.UnsupportedWrite,
+                        );
+                    } catch (e) {
+                        StatusResponseError.accept(e);
+
+                        logger.debug(
+                            `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                                writePath,
+                            )} not allowed: Status=${e.code}`,
+                        );
+                        writeResults.push({ path: writePath, statusCode: e.code });
+                    }
                 } else {
                     // Wildcard path: Just ignore
                     logger.debug(
@@ -833,7 +821,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                         attributeListWrites.add(attribute);
                     }
                 } catch (error: any) {
-                    if (error instanceof StatusResponseError && error.code === StatusCode.UnsupportedAccess) {
+                    if (StatusResponseError.is(error, StatusCode.UnsupportedAccess)) {
                         inaccessiblePaths.add(pathId);
                     }
                     if (attributes.length === 1 && isConcreteAttributePath(writePath)) {
@@ -1255,25 +1243,26 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
             if (commands.length === 0) {
                 if (isConcreteCommandPath(commandPath)) {
                     const { endpointId, clusterId, commandId } = commandPath;
-                    await processResponseResult(
-                        tryCatch(
-                            () => {
-                                this.#endpointStructure.validateConcreteCommandPath(endpointId, clusterId, commandId);
-                                throw new InternalError(
-                                    "validateConcreteCommandPath should throw StatusResponseError but did not.",
-                                );
-                            },
-                            StatusResponseError,
-                            error => {
-                                logger.debug(
-                                    `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
-                                        commandPath,
-                                    )} unsupported path: Status=${error.code}`,
-                                );
-                                return { status: { commandPath, status: { status: error.code }, commandRef } };
-                            },
-                        ),
-                    );
+
+                    let result;
+
+                    try {
+                        this.#endpointStructure.validateConcreteCommandPath(endpointId, clusterId, commandId);
+                        throw new InternalError(
+                            "validateConcreteCommandPath should throw StatusResponseError but did not.",
+                        );
+                    } catch (e) {
+                        StatusResponseError.accept(e);
+
+                        logger.debug(
+                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
+                                commandPath,
+                            )} unsupported path: Status=${e.code}`,
+                        );
+                        result = { status: { commandPath, status: { status: e.code }, commandRef } };
+                    }
+
+                    await processResponseResult(result);
                 } else {
                     // Wildcard path: Just ignore
                     logger.debug(
@@ -1351,41 +1340,43 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                     continue;
                 }
 
-                const result = await tryCatchAsync(
-                    async () =>
-                        await this.invokeCommand(
-                            path,
-                            command,
-                            exchange,
-                            commandFields ?? TlvNoArguments.encodeTlv(commandFields),
-                            message,
-                            endpoint,
-                            receivedWithinTimedInteraction,
-                        ),
-                    StatusResponseError,
-                    async error => {
-                        let errorCode = error.code;
-                        const errorLogText = `Error ${Diagnostic.hex(errorCode)}${
-                            error.clusterCode !== undefined ? `/${Diagnostic.hex(error.clusterCode)}` : ""
-                        } while invoking command: ${error.message}`;
-                        if (error instanceof ValidationError) {
-                            logger.info(
-                                `Validation-${errorLogText}${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}`,
-                            );
-                            if (errorCode === StatusCode.InvalidAction) {
-                                errorCode = StatusCode.InvalidCommand;
-                            }
-                        } else {
-                            logger.info(errorLogText);
+                let result;
+                try {
+                    result = await this.invokeCommand(
+                        path,
+                        command,
+                        exchange,
+                        commandFields ?? TlvNoArguments.encodeTlv(commandFields),
+                        message,
+                        endpoint,
+                        receivedWithinTimedInteraction,
+                    );
+                } catch (e) {
+                    StatusResponseError.accept(e);
+
+                    let errorCode = e.code;
+                    const errorLogText = `Error ${Diagnostic.hex(errorCode)}${
+                        e.clusterCode !== undefined ? `/${Diagnostic.hex(e.clusterCode)}` : ""
+                    } while invoking command: ${e.message}`;
+
+                    if (e instanceof ValidationError) {
+                        logger.info(
+                            `Validation-${errorLogText}${e.fieldName !== undefined ? ` in field ${e.fieldName}` : ""}`,
+                        );
+                        if (errorCode === StatusCode.InvalidAction) {
+                            errorCode = StatusCode.InvalidCommand;
                         }
-                        return {
-                            code: errorCode,
-                            clusterCode: error.clusterCode,
-                            responseId: command.responseId,
-                            response: TlvNoResponse.encodeTlv(),
-                        };
-                    },
-                );
+                    } else {
+                        logger.info(errorLogText);
+                    }
+
+                    result = {
+                        code: errorCode,
+                        clusterCode: e.clusterCode,
+                        responseId: command.responseId,
+                        response: TlvNoResponse.encodeTlv(),
+                    };
+                }
                 const { code, clusterCode, responseId, response } = result;
                 if (response.length === 0) {
                     await processResponseResult({

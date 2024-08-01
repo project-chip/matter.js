@@ -4,7 +4,7 @@
 
 This project provides a set of reference implementations to offer several types of Matter device nodes or also a controller.
 
-> This package requires Node 16+ for the required Crypto primitives
+> This package requires Node 18+
 
 # matter-node.js Usage examples / Reference implementations
 

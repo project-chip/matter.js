@@ -11,7 +11,7 @@ import { Model } from "./Model.js";
 
 export class EndpointModel extends Model implements EndpointElement {
     override tag: EndpointElement.Tag = EndpointElement.Tag;
-    override id!: number;
+    declare id: number;
 
     get deviceTypes() {
         return this.children;

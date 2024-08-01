@@ -23,14 +23,14 @@ export interface PressureSensorDevice extends Identity<typeof PressureSensorDevi
 
 export namespace PressureSensorRequirements {
     /**
-     * The PressureMeasurement cluster is required by the Matter specification
+     * The PressureMeasurement cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link PressureMeasurementServer} for convenience.
      */
     export const PressureMeasurementServer = BasePressureMeasurementServer;
 
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */

@@ -42,8 +42,7 @@
         "node-localstorage": "^3.0.5"
     },
     "engines": {
-        "_comment": "For Crypto.hkdf support",
-        "node": ">=16.0.0"
+        "node": ">=18.0.0"
     },
     "files": [
         "dist/**/*",

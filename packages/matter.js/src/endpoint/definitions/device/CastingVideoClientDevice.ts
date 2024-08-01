@@ -63,119 +63,119 @@ export interface CastingVideoClientDevice extends Identity<typeof CastingVideoCl
 
 export namespace CastingVideoClientRequirements {
     /**
-     * The ContentAppObserver cluster is optional per the Matter specification
+     * The ContentAppObserver cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ContentAppObserverServer} for convenience.
      */
     export const ContentAppObserverServer = BaseContentAppObserverServer;
 
     /**
-     * The OnOff cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link OnOffBehavior} for convenience.
      */
     export const OnOffBehavior = BaseOnOffBehavior;
 
     /**
-     * The KeypadInput cluster is required by the Matter specification
+     * The KeypadInput cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link KeypadInputBehavior} for convenience.
      */
     export const KeypadInputBehavior = BaseKeypadInputBehavior;
 
     /**
-     * The ContentLauncher cluster is required by the Matter specification
+     * The ContentLauncher cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link ContentLauncherBehavior} for convenience.
      */
     export const ContentLauncherBehavior = BaseContentLauncherBehavior;
 
     /**
-     * The ApplicationBasic cluster is required by the Matter specification
+     * The ApplicationBasic cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link ApplicationBasicBehavior} for convenience.
      */
     export const ApplicationBasicBehavior = BaseApplicationBasicBehavior;
 
     /**
-     * The LevelControl cluster is optional per the Matter specification
+     * The LevelControl cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link LevelControlBehavior} for convenience.
      */
     export const LevelControlBehavior = BaseLevelControlBehavior;
 
     /**
-     * The WakeOnLan cluster is optional per the Matter specification
+     * The WakeOnLan cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link WakeOnLanBehavior} for convenience.
      */
     export const WakeOnLanBehavior = BaseWakeOnLanBehavior;
 
     /**
-     * The Channel cluster is optional per the Matter specification
+     * The Channel cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ChannelBehavior} for convenience.
      */
     export const ChannelBehavior = BaseChannelBehavior;
 
     /**
-     * The TargetNavigator cluster is optional per the Matter specification
+     * The TargetNavigator cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TargetNavigatorBehavior} for convenience.
      */
     export const TargetNavigatorBehavior = BaseTargetNavigatorBehavior;
 
     /**
-     * The MediaPlayback cluster is optional per the Matter specification
+     * The MediaPlayback cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link MediaPlaybackBehavior} for convenience.
      */
     export const MediaPlaybackBehavior = BaseMediaPlaybackBehavior;
 
     /**
-     * The MediaInput cluster is optional per the Matter specification
+     * The MediaInput cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link MediaInputBehavior} for convenience.
      */
     export const MediaInputBehavior = BaseMediaInputBehavior;
 
     /**
-     * The LowPower cluster is optional per the Matter specification
+     * The LowPower cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link LowPowerBehavior} for convenience.
      */
     export const LowPowerBehavior = BaseLowPowerBehavior;
 
     /**
-     * The AudioOutput cluster is optional per the Matter specification
+     * The AudioOutput cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link AudioOutputBehavior} for convenience.
      */
     export const AudioOutputBehavior = BaseAudioOutputBehavior;
 
     /**
-     * The ApplicationLauncher cluster is optional per the Matter specification
+     * The ApplicationLauncher cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ApplicationLauncherBehavior} for convenience.
      */
     export const ApplicationLauncherBehavior = BaseApplicationLauncherBehavior;
 
     /**
-     * The AccountLogin cluster is optional per the Matter specification
+     * The AccountLogin cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link AccountLoginBehavior} for convenience.
      */
     export const AccountLoginBehavior = BaseAccountLoginBehavior;
 
     /**
-     * The ContentControl cluster is optional per the Matter specification
+     * The ContentControl cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ContentControlBehavior} for convenience.
      */
     export const ContentControlBehavior = BaseContentControlBehavior;
 
     /**
-     * The Messages cluster is optional per the Matter specification
+     * The Messages cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link MessagesBehavior} for convenience.
      */

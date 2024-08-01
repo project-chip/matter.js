@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { SchemaErrorPath } from "../../../model/index.js";
 import { ByteArray } from "../../../util/ByteArray.js";
 import { isObject } from "../../../util/Type.js";
-import { DatatypeError, SchemaErrorPath } from "../../errors.js";
+import { DatatypeError } from "../../errors.js";
 import { Val } from "../Val.js";
 
 export function assertNumber(value: Val, path: SchemaErrorPath): asserts value is number {

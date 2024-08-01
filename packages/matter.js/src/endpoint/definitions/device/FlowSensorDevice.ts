@@ -23,14 +23,14 @@ export interface FlowSensorDevice extends Identity<typeof FlowSensorDeviceDefini
 
 export namespace FlowSensorRequirements {
     /**
-     * The FlowMeasurement cluster is required by the Matter specification
+     * The FlowMeasurement cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link FlowMeasurementServer} for convenience.
      */
     export const FlowMeasurementServer = BaseFlowMeasurementServer;
 
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */

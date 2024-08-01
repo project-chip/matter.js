@@ -6,7 +6,7 @@
 
 import {
     ClusterServer,
-    ClusterServerObjForCluster,
+    ClusterServerObj,
     GroupsCluster,
     GroupsClusterHandler,
     Identify,
@@ -23,7 +23,7 @@ import * as assert from "assert";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil.js";
 
 describe("Groups Server test", () => {
-    let groupsServer: ClusterServerObjForCluster<typeof GroupsCluster> | undefined;
+    let groupsServer: ClusterServerObj<GroupsCluster> | undefined;
     let testFabric: Fabric | undefined;
     let testSession: SecureSession<any> | undefined;
     let endpoint: Endpoint | undefined;

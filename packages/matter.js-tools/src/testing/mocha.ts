@@ -7,16 +7,19 @@
 // Can't import Mocha in the browser so just import type here
 import type MochaType from "mocha";
 import { wtf } from "../util/wtf.js";
+import { FailureDetail } from "./failure-detail.js";
 import { LoggerHooks } from "./mocks/logging.js";
 import { TestOptions } from "./options.js";
-import { ConsoleProxyReporter, FailureDetail, Reporter } from "./reporter.js";
+import { ConsoleProxyReporter, Reporter } from "./reporter.js";
 
 export function generalSetup(mocha: MochaType) {
+    const Base = (mocha.constructor as typeof MochaType).reporters.Base;
+
     // White text, 16-bit and 256-bit green background
-    (mocha.constructor as typeof MochaType).reporters.Base.colors["diff added inline"] = "97;42;48;5;22" as any;
+    Base.colors["diff added inline"] = "97;42;48;5;22" as any;
 
     // White text, 16-bit and 256-bit red background
-    (mocha.constructor as typeof MochaType).reporters.Base.colors["diff removed inline"] = "97;41;48;5;52" as any;
+    Base.colors["diff removed inline"] = "97;41;48;5;52" as any;
 
     // Some of our test suites have setup/teardown logic that logs profusely. Hide these logs unless something goes
     // wrong
@@ -73,6 +76,8 @@ export function generalSetup(mocha: MochaType) {
             hook(mocha);
         }
     });
+
+    FailureDetail.diff = Base.generateDiff.bind(Base);
 }
 
 export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: Reporter) {
@@ -104,13 +109,8 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
             });
 
             runner.on(RUNNER.EVENT_TEST_FAIL, (test, error) => {
-                if ((test as any).type === "hook") {
-                    const { message, stack } = parseError(error);
-                    reporter.failRun(`Aborting due to error in ${test.title}: ${message}`, stack);
-                    throw error;
-                }
                 const logs = (test as any).logs as string[];
-                reporter.failTest(test.title, translateError(error, logs));
+                reporter.failTest(test.title, FailureDetail(error, logs));
                 wtf.dump();
             });
 
@@ -133,64 +133,7 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
         }
     }
 
-    function translateError(error: any, logs: string[]) {
-        let diff: string | undefined;
-
-        const { message, stack } = parseError(error);
-
-        if (error.expected && error.actual) {
-            diff = Mocha.reporters.Base.generateDiff(error.actual.toString(), error.expected.toString());
-            diff = diff.trim().replace(/^ {6}/gms, "");
-        }
-
-        const result = { message } as FailureDetail;
-        if (diff) {
-            result.diff = diff;
-        }
-        if (stack) {
-            result.stack = stack;
-        }
-        if (logs.length) {
-            result.logs = logs.join("\n");
-        }
-
-        return result;
-    }
-
     return MochaReporter;
-}
-
-function parseError(error: Error) {
-    let message, stack;
-
-    if (error === undefined || error === null) {
-        message = `(error is ${error})`;
-    } else {
-        message = error.message;
-    }
-
-    if (error.stack) {
-        let lines = error.stack.trim().split("\n");
-        if (!message) {
-            message = lines[0];
-        }
-        lines = lines.filter(line => line.match(/:\d+:\d+\)?/));
-        if (lines.length) {
-            stack = lines.map(line => line.trim()).join("\n");
-        }
-    } else if (error.message) {
-        message = error.message;
-    } else {
-        message = error.toString();
-    }
-
-    message = message.trim().replace(/Error: /, "");
-
-    if (message.endsWith(":")) {
-        message = message.slice(0, message.length - 1);
-    }
-
-    return { message, stack };
 }
 
 export function browserSetup(mocha: BrowserMocha) {

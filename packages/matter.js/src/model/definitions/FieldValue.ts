@@ -232,6 +232,7 @@ export namespace FieldValue {
      *
      * @param type casts to a native equivalent of this type
      * @param value value to cast
+     *
      * @returns the cast value or FieldValue.Invalid if cast is not possible
      */
     export function cast(type: Metatype, value: any): FieldValue | FieldValue.Invalid | undefined {
@@ -266,11 +267,20 @@ export namespace FieldValue {
 
             case "bitmap":
             case "enum":
+                if (FieldValue.is(value, FieldValue.properties) && type === "bitmap") {
+                    return value;
+                }
+
+                if (typeof value === "string") {
+                    // Key name
+                    return value;
+                }
+
                 const id = Number(value);
                 if (Number.isNaN(id)) {
-                    // Key name
-                    return `${value}`;
+                    return;
                 }
+
                 // Value
                 return id;
 
@@ -346,9 +356,6 @@ export namespace FieldValue {
                 return value;
 
             case "object":
-                if (value === "null") {
-                    return null;
-                }
                 if (FieldValue.is(value, FieldValue.properties)) {
                     return value;
                 }

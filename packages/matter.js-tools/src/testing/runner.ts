@@ -12,6 +12,7 @@ import { Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
 import { testChip } from "./chip.js";
 import { TestEnvironment } from "./chip/chip-config.js";
+import { FailureDetail } from "./failure-detail.js";
 import { listSupportFiles } from "./files.js";
 import { testNode } from "./node.js";
 import { TestOptions } from "./options.js";
@@ -31,8 +32,10 @@ export class TestRunner {
             constructor() {
                 super(progress);
             }
-            override failRun(message: string, stack?: string) {
-                fatal(message, stack);
+            override failRun(detail: FailureDetail) {
+                process.stdout.write("\n");
+                FailureDetail.dump(detail);
+                process.exit(1);
             }
         })();
 
@@ -92,11 +95,7 @@ export class TestRunner {
     }
 }
 
-function fatal(message: string, stack?: string) {
+function fatal(message: string) {
     process.stderr.write(colors.redBright(`\n${message}\n\n`));
-    if (stack) {
-        stack = stack.replace(/^ {4}/gms, "");
-        process.stderr.write(`${stack}\n\n`);
-    }
     process.exit(1);
 }

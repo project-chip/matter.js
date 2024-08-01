@@ -225,7 +225,7 @@ export const TimeSynchronization = Cluster({
 
         Attribute({
             name: "NtpServerAvailable", id: 0x9, type: "bool", access: "R V", conformance: "NTPS",
-            default: true,
+            default: false,
             details: "If the node is running an RFC 5905 NTPv4 compliant server on port 123, this value shall be True. If " +
                 "the node is not currently running an NTP server, this value shall be False.",
             xref: { document: "core", section: "11.17.8.10" }
@@ -249,7 +249,7 @@ export const TimeSynchronization = Cluster({
 
         Attribute({
             name: "SupportsDnsResolve", id: 0xc, type: "bool", access: "R V", conformance: "NTPC",
-            default: true, quality: "F",
+            default: false, quality: "F",
             details: "This attribute is true if the node supports resolving a domain name. DefaultNTP Address values for " +
                 "these nodes may include domain names. If this is False, the Address for a DefaultNTP shall be an " +
                 "IPv6 address.",

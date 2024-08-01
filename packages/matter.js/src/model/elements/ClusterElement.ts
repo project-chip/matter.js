@@ -6,7 +6,7 @@
 
 import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
 import { Quality } from "../aspects/Quality.js";
-import { ElementTag, FeatureSet } from "../definitions/index.js";
+import { ElementTag } from "../definitions/index.js";
 import { AttributeElement } from "./AttributeElement.js";
 import { BaseElement } from "./BaseElement.js";
 import { CommandElement } from "./CommandElement.js";
@@ -39,12 +39,6 @@ export interface ClusterElement extends BaseElement {
      * Encodes both classification and scope from the Matter specification.
      */
     classification?: `${ClusterElement.Classification}`;
-
-    /**
-     * Optional supported features.  This is for clusters used operationally
-     * and is not present in the static data model.
-     */
-    supportedFeatures?: FeatureSet;
 
     children?: ClusterElement.Child[];
 }

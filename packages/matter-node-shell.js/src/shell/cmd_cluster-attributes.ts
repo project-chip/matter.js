@@ -110,7 +110,7 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                                 });
                         },
                         async argv => {
-                            const clusterId = cluster.id!;
+                            const clusterId = cluster.id;
                             const { nodeId, endpointId } = argv;
                             const node = (await theNode.connectAndGetNodes(nodeId))[0];
 
@@ -140,7 +140,7 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                     );
 
                     cluster.attributes.forEach(attribute => {
-                        yargs = generateAttributeReadHandler(yargs, cluster.id!, cluster.name, attribute, theNode);
+                        yargs = generateAttributeReadHandler(yargs, cluster.id, cluster.name, attribute, theNode);
                     });
                     return yargs;
                 },
@@ -158,7 +158,7 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                             if (!attribute.writable) {
                                 return;
                             }
-                            yargs = generateAttributeWriteHandler(yargs, cluster.id!, cluster.name, attribute, theNode);
+                            yargs = generateAttributeWriteHandler(yargs, cluster.id, cluster.name, attribute, theNode);
                         });
                         return yargs;
                     },

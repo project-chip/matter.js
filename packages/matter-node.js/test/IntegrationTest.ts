@@ -1598,7 +1598,7 @@ describe("Integration Test", () => {
                         },
                         passcode,
                     }),
-            ); // We can not check the real exception because text is dynamic
+            ); // We cannot check the real exception because text is dynamic
 
             assert.equal(commissioningChangedCallsServer2.length, 1);
             assert.equal(commissioningChangedCallsServer.length, 1);

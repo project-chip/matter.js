@@ -48,70 +48,70 @@ export interface ContentAppDevice extends Identity<typeof ContentAppDeviceDefini
 
 export namespace ContentAppRequirements {
     /**
-     * The KeypadInput cluster is required by the Matter specification
+     * The KeypadInput cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link KeypadInputServer} for convenience.
      */
     export const KeypadInputServer = BaseKeypadInputServer;
 
     /**
-     * The ApplicationLauncher cluster is required by the Matter specification
+     * The ApplicationLauncher cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link ApplicationLauncherServer} for convenience.
      */
     export const ApplicationLauncherServer = BaseApplicationLauncherServer;
 
     /**
-     * The ApplicationBasic cluster is required by the Matter specification
+     * The ApplicationBasic cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link ApplicationBasicServer} for convenience.
      */
     export const ApplicationBasicServer = BaseApplicationBasicServer;
 
     /**
-     * The Binding cluster is optional per the Matter specification
+     * The Binding cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link BindingServer} for convenience.
      */
     export const BindingServer = BaseBindingServer;
 
     /**
-     * The Channel cluster is optional per the Matter specification
+     * The Channel cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ChannelServer} for convenience.
      */
     export const ChannelServer = BaseChannelServer;
 
     /**
-     * The TargetNavigator cluster is optional per the Matter specification
+     * The TargetNavigator cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TargetNavigatorServer} for convenience.
      */
     export const TargetNavigatorServer = BaseTargetNavigatorServer;
 
     /**
-     * The MediaPlayback cluster is optional per the Matter specification
+     * The MediaPlayback cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link MediaPlaybackServer} for convenience.
      */
     export const MediaPlaybackServer = BaseMediaPlaybackServer;
 
     /**
-     * The ContentLauncher cluster is optional per the Matter specification
+     * The ContentLauncher cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ContentLauncherServer} for convenience.
      */
     export const ContentLauncherServer = BaseContentLauncherServer;
 
     /**
-     * The AccountLogin cluster is optional per the Matter specification
+     * The AccountLogin cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link AccountLoginServer} for convenience.
      */
     export const AccountLoginServer = BaseAccountLoginServer;
 
     /**
-     * The ContentAppObserver cluster is optional per the Matter specification
+     * The ContentAppObserver cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ContentAppObserverBehavior} for convenience.
      */

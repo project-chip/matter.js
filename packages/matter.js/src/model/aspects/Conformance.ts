@@ -68,7 +68,7 @@ export class Conformance extends Aspect<Conformance.Definition> {
      *
      * This supports a limited subset of conformance and is only appropriate for field and requirement conformance.
      */
-    get mandatory() {
+    get isMandatory() {
         const conformance = this.ast;
         if (conformance.type === Conformance.Flag.Mandatory) {
             return true;
@@ -76,7 +76,7 @@ export class Conformance extends Aspect<Conformance.Definition> {
         if (conformance.type === Conformance.Special.Group) {
             for (const c of conformance.param) {
                 if (c.type === Conformance.Flag.Provisional) {
-                    continue;
+                    return false;
                 }
                 if (c.type === Conformance.Flag.Mandatory) {
                     return true;
