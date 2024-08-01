@@ -28,6 +28,7 @@ import { OnOffLightDevice } from "../../../src/endpoint/definitions/device/OnOff
 import { Fabric, FabricBuilder } from "../../../src/fabric/Fabric.js";
 import { FabricManager } from "../../../src/fabric/FabricManager.js";
 import { AcceptedCommandList } from "../../../src/model/standard/elements/AcceptedCommandList.js";
+import { FeatureMap } from "../../../src/model/standard/elements/index.js";
 import { ExchangeManager } from "../../../src/protocol/ExchangeManager.js";
 import { MessageExchange } from "../../../src/protocol/MessageExchange.js";
 import { InteractionServerMessenger, MessageType } from "../../../src/protocol/interaction/InteractionMessenger.js";
@@ -228,14 +229,6 @@ async function readAcls(node: MockServerNode, fabric: Fabric, isFabricFiltered: 
     });
 }
 
-async function readCommandList(node: MockServerNode, cluster: number, endpoint = 1) {
-    return await performRead(node, await createFabric(node, 1), false, {
-        endpointId: EndpointNumber(endpoint),
-        clusterId: ClusterId(cluster),
-        attributeId: AttributeId(AcceptedCommandList.id),
-    });
-}
-
 describe("ClusterServerBacking", () => {
     beforeEach(() => {
         MockTime.reset(676698400000);
@@ -392,11 +385,39 @@ describe("ClusterServerBacking", () => {
 
         const node = await MockServerNode.createOnline({ device: MyDevice });
 
-        const commands = await readCommandList(node, NetworkCommissioning.Cluster.id, 1);
+        const commands = await performRead(node, await createFabric(node, 1), false, {
+            endpointId: EndpointNumber(1),
+            clusterId: ClusterId(NetworkCommissioning.Cluster.id),
+            attributeId: AttributeId(AcceptedCommandList.id),
+        });
 
         expect(commands).deep.equals([
             NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks.requestId,
         ]);
+    });
+
+    it("publishes correct feature map", async () => {
+        const MyServer = OnOffServer.with("Lighting");
+
+        const MyDevice = OnOffLightDevice.with(MyServer);
+
+        const node = await MockServerNode.createOnline({ device: MyDevice });
+
+        const featureMap = await performRead(node, await createFabric(node, 1), false, {
+            endpointId: EndpointNumber(1),
+            clusterId: ClusterId(OnOff.Cluster.id),
+            attributeId: AttributeId(FeatureMap.id),
+        });
+
+        expect(() => {
+            OnOff.Cluster.attributes.featureMap.schema.validate(featureMap);
+        }).not.throws();
+
+        expect({ ...featureMap }).deep.equals({
+            lighting: true,
+            deadFrontBehavior: false,
+            offOnly: false,
+        });
     });
 
     it("invokes", async () => {

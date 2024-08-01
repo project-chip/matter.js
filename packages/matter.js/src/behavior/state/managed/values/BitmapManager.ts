@@ -6,6 +6,7 @@
 
 import { DataModelPath } from "../../../../model/definitions/DataModelPath.js";
 import { ValueModel } from "../../../../model/models/ValueModel.js";
+import { FeatureMap } from "../../../../model/standard/elements/FeatureMap.js";
 import { GeneratedClass } from "../../../../util/GeneratedClass.js";
 import { camelize } from "../../../../util/String.js";
 import { isObject } from "../../../../util/Type.js";
@@ -49,7 +50,14 @@ export function BitmapManager(_owner: RootSupervisor, schema: Schema): ValueSupe
             continue;
         }
 
-        const name = camelize(member.name);
+        let name;
+        if (schema.id === FeatureMap.id) {
+            // We require special casing for feature maps because the spec code uses "feature" field from spec as name
+            // and model uses "code".  The model should probably be inverted but we just special case for now
+            name = camelize(member.description ?? member.name);
+        } else {
+            name = camelize(member.name);
+        }
 
         const descriptor = configureProperty(name, maxBit, member);
 

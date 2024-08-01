@@ -8,6 +8,7 @@ import { Attribute } from "../../cluster/Cluster.js";
 import { ClusterType } from "../../cluster/ClusterType.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { ClusterModel, ElementTag, FeatureSet, FieldValue, Matter, Metatype, ValueModel } from "../../model/index.js";
+import { FeatureMap } from "../../model/standard/elements/FeatureMap.js";
 import { GeneratedClass } from "../../util/GeneratedClass.js";
 import { AsyncObservable } from "../../util/Observable.js";
 import { camelize } from "../../util/String.js";
@@ -179,10 +180,20 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
             continue;
         }
 
-        // Attribute applies.  Make sure a default value is present
+        // Attribute applies
+        const attribute = cluster.attributes[name];
+
+        // The feature map value requires a special case because it's encoded in the "supportedFeatures" cluster
+        // property
+        if (attribute?.id === FeatureMap.id) {
+            defaults[name] = cluster.supportedFeatures;
+            continue;
+        }
+
+        // Make sure a default value is present
         defaults[name] = selectDefaultValue(
             oldDefaults[name] === undefined ? knownDefaults?.[name] : oldDefaults[name],
-            cluster.attributes[name],
+            attribute,
             propSchema,
         );
     }
@@ -332,8 +343,8 @@ function selectDefaultValue(oldDefault: Val, clusterAttr?: Attribute<any, any>, 
         return null;
     }
 
-    if (schemaProp.default) {
-        return FieldValue.unwrap(schemaProp.default);
+    if (schemaProp.effectiveDefault) {
+        return FieldValue.unwrap(schemaProp.effectiveDefault);
     }
 
     // TODO - skip the following defaults if conformance is not absolutely mandatory.  This is pretty limited, may need
