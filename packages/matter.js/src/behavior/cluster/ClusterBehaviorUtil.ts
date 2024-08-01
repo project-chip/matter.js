@@ -7,7 +7,7 @@
 import { Attribute } from "../../cluster/Cluster.js";
 import { ClusterType } from "../../cluster/ClusterType.js";
 import { ImplementationError } from "../../common/MatterError.js";
-import { ClusterModel, ElementTag, FeatureSet, FieldValue, Matter, Metatype, ValueModel } from "../../model/index.js";
+import { ClusterModel, ElementTag, FeatureSet, Matter, Metatype, ValueModel } from "../../model/index.js";
 import { FeatureMap } from "../../model/standard/elements/FeatureMap.js";
 import { GeneratedClass } from "../../util/GeneratedClass.js";
 import { AsyncObservable } from "../../util/Observable.js";
@@ -343,8 +343,9 @@ function selectDefaultValue(oldDefault: Val, clusterAttr?: Attribute<any, any>, 
         return null;
     }
 
-    if (schemaProp.effectiveDefault) {
-        return FieldValue.unwrap(schemaProp.effectiveDefault);
+    const effectiveDefault = schemaProp.effectiveDefault;
+    if (effectiveDefault) {
+        return effectiveDefault;
     }
 
     // TODO - skip the following defaults if conformance is not absolutely mandatory.  This is pretty limited, may need

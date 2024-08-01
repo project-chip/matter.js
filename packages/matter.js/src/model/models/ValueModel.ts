@@ -8,7 +8,6 @@ import { Access, Aspect, Conformance, Constraint, Quality } from "../aspects/ind
 import { ElementTag, FieldValue, Metatype } from "../definitions/index.js";
 import { AnyElement, FieldElement, ValueElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
-import { DefaultValue } from "../logic/index.js";
 import { Aspects } from "./Aspects.js";
 import { Children } from "./Children.js";
 import { Model } from "./Model.js";
@@ -16,6 +15,7 @@ import { PropertyModel } from "./PropertyModel.js";
 
 // These are circular dependencies so just to be safe we only import the types.  We also need the class, though, at
 // runtime.  So we use the references in the Model.constructors factory pool.
+import { DefaultValue } from "../logic/DefaultValue.js";
 import { type ClusterModel } from "./ClusterModel.js";
 import { type FieldModel } from "./FieldModel.js";
 

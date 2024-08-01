@@ -77,11 +77,6 @@ export namespace Metatype {
     }
 
     /**
-     * Returned if type conversion is impossible.
-     */
-    export const Invalid = Symbol("invalid");
-
-    /**
      * Functions that perform conversion of arbitrary values to a metatype.
      *
      * This is a "best effort" that ensures the value is an appropriate JS type but cannot ensure semantic validity in
