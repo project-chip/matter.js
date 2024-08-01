@@ -356,7 +356,7 @@ export namespace FieldValue {
                 return value;
 
             case "object":
-                if (value === null || FieldValue.is(value, FieldValue.properties)) {
+                if (FieldValue.is(value, FieldValue.properties)) {
                     return value;
                 }
                 break;
