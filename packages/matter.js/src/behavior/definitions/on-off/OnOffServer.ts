@@ -21,6 +21,10 @@ const Base = OnOffBehavior.with(OnOff.Feature.Lighting);
  * for Lighting" Feature. You should use {@link OnOffServer.with} to specialize the class for the features your
  * implementation supports. Alternatively you can extend this class and override the methods you need to change or add
  * mandatory commands.
+ *
+ * The "OffOnly" feature is automatically supported because the commands are disabled by conformance.
+ * The default implementation do not contain any logic for the DeadFrontBehavior feature because this is very use case
+ * specific, so this needs to be implemented by the device implementor as needed.
  */
 export class OnOffServer extends Base {
     protected declare internal: OnOffServer.Internal;
