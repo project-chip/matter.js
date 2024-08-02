@@ -382,6 +382,13 @@ export class MatterDevice {
         activeCommissioningEndCallback?: () => void,
         discriminator?: number,
     ) {
+        if (
+            this.activeCommissioningMode === mode &&
+            (discriminator === undefined || discriminator === this.activeCommissioningDiscriminator)
+        ) {
+            // We want to re-announce
+            return this.reAnnounceAsCommissionable();
+        }
         if (this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
             throw new InternalError(
                 `Commissioning window already open with different mode (${this.activeCommissioningMode})!`,
