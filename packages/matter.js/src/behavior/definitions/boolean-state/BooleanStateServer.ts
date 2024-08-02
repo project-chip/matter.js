@@ -8,6 +8,7 @@ import { BooleanStateBehavior } from "./BooleanStateBehavior.js";
 
 /**
  * This is the default server implementation of {@link BooleanStateBehavior}.
+ * If the `StateChanged` event is enabled it is emitted automatically on state change.
  */
 export class BooleanStateServer extends BooleanStateBehavior {
     override initialize() {
