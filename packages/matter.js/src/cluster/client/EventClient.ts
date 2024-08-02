@@ -36,24 +36,26 @@ export function createEventClient<T>(
  * General class for EventClients
  */
 export class EventClient<T> {
-    private readonly listeners = new Array<(event: DecodedEventData<T>) => void>();
+    readonly #listeners = new Array<(event: DecodedEventData<T>) => void>();
     readonly id: EventId;
+    readonly #interactionClient: InteractionClient;
 
     constructor(
         readonly event: Event<T, any>,
         readonly name: string,
         readonly endpointId: EndpointNumber,
         readonly clusterId: ClusterId,
-        private readonly interactionClient: InteractionClient,
+        interactionClient: InteractionClient,
     ) {
         this.id = event.id;
+        this.#interactionClient = interactionClient;
     }
 
     async get(
         minimumEventNumber?: EventNumber,
         isFabricFiltered?: boolean,
     ): Promise<DecodedEventData<T>[] | undefined> {
-        return await this.interactionClient.getEvent({
+        return await this.#interactionClient.getEvent({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             event: this.event,
@@ -69,7 +71,7 @@ export class EventClient<T> {
         minimumEventNumber?: EventNumber,
         isFabricFiltered?: boolean,
     ) {
-        return await this.interactionClient.subscribeEvent({
+        return await this.#interactionClient.subscribeEvent({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             event: this.event,
@@ -83,19 +85,19 @@ export class EventClient<T> {
     }
 
     update(newEvent: DecodedEventData<T>) {
-        for (const listener of this.listeners) {
+        for (const listener of this.#listeners) {
             listener(newEvent);
         }
     }
 
     addListener(listener: (newValue: DecodedEventData<T>) => void) {
-        this.listeners.push(listener);
+        this.#listeners.push(listener);
     }
 
     removeListener(listener: (newValue: DecodedEventData<T>) => void) {
-        const entryIndex = this.listeners.indexOf(listener);
+        const entryIndex = this.#listeners.indexOf(listener);
         if (entryIndex !== -1) {
-            this.listeners.splice(entryIndex, 1);
+            this.#listeners.splice(entryIndex, 1);
         }
     }
 }

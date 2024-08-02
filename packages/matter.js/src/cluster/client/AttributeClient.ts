@@ -38,26 +38,28 @@ export function createAttributeClient<T>(
  * General class for AttributeClients
  */
 export class AttributeClient<T> {
-    private readonly isWritable: boolean;
-    private readonly isFabricScoped: boolean;
-    private readonly updatedBySubscriptions: boolean;
+    readonly #isWritable: boolean;
+    readonly #isFabricScoped: boolean;
+    readonly #updatedBySubscriptions: boolean;
     protected readonly schema: TlvSchema<any>;
-    private readonly listeners = new Array<(newValue: T) => void>();
+    readonly #listeners = new Array<(newValue: T) => void>();
     readonly id: AttributeId;
+    readonly #interactionClient: InteractionClient;
 
     constructor(
         readonly attribute: Attribute<T, any>,
         readonly name: string,
         readonly endpointId: EndpointNumber,
         readonly clusterId: ClusterId,
-        private readonly interactionClient: InteractionClient,
+        interactionClient: InteractionClient,
     ) {
         const { schema, writable, fabricScoped, id, omitChanges } = attribute;
         this.schema = schema;
-        this.isWritable = writable;
-        this.isFabricScoped = fabricScoped;
-        this.updatedBySubscriptions = !omitChanges;
+        this.#isWritable = writable;
+        this.#isFabricScoped = fabricScoped;
+        this.#updatedBySubscriptions = !omitChanges;
         this.id = id;
+        this.#interactionClient = interactionClient;
     }
 
     /**
@@ -65,7 +67,7 @@ export class AttributeClient<T> {
      * cluster dataVersion of the server matches. If it does not match it is rejected with an Error.
      */
     async set(value: T, dataVersion?: number) {
-        if (!this.isWritable) throw new AttributeError(`Attribute ${this.name} is not writable`);
+        if (!this.#isWritable) throw new AttributeError(`Attribute ${this.name} is not writable`);
 
         value = this.schema.injectField(
             value,
@@ -76,7 +78,7 @@ export class AttributeClient<T> {
 
         this.schema.validate(value);
 
-        if (this.isFabricScoped) {
+        if (this.#isFabricScoped) {
             // Remove fabric index from structures if the OMIT_FABRIC instance was used (Should be used for all outgoing writes)
             value = this.schema.removeField(
                 value,
@@ -85,7 +87,7 @@ export class AttributeClient<T> {
             );
 
             try {
-                const sessionFabric = this.interactionClient.session.associatedFabric;
+                const sessionFabric = this.#interactionClient.session.associatedFabric;
                 // also remove fabric index if it is the same as the session fabric
                 value = this.schema.removeField(
                     value,
@@ -97,7 +99,7 @@ export class AttributeClient<T> {
             }
         }
 
-        return await this.interactionClient.setAttribute<T>({
+        return await this.#interactionClient.setAttribute<T>({
             attributeData: {
                 endpointId: this.endpointId,
                 clusterId: this.clusterId,
@@ -111,11 +113,11 @@ export class AttributeClient<T> {
     /** Get the value of the attribute. Fabric scoped reads are always done with the remote. */
     async get(alwaysRequestFromRemote?: boolean, isFabricFiltered = true) {
         if (alwaysRequestFromRemote === undefined) {
-            alwaysRequestFromRemote = this.isFabricScoped || !this.updatedBySubscriptions;
-        } else if (!alwaysRequestFromRemote && this.isFabricScoped) {
+            alwaysRequestFromRemote = this.#isFabricScoped || !this.#updatedBySubscriptions;
+        } else if (!alwaysRequestFromRemote && this.#isFabricScoped) {
             alwaysRequestFromRemote = true;
         }
-        return await this.interactionClient.getAttribute({
+        return await this.#interactionClient.getAttribute({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
@@ -129,11 +131,11 @@ export class AttributeClient<T> {
      * */
     async getWithVersion(alwaysRequestFromRemote?: boolean, isFabricFiltered = true) {
         if (alwaysRequestFromRemote === undefined) {
-            alwaysRequestFromRemote = this.isFabricScoped;
-        } else if (!alwaysRequestFromRemote && this.isFabricScoped) {
+            alwaysRequestFromRemote = this.#isFabricScoped;
+        } else if (!alwaysRequestFromRemote && this.#isFabricScoped) {
             alwaysRequestFromRemote = true;
         }
-        return await this.interactionClient.getAttributeWithVersion({
+        return await this.#interactionClient.getAttributeWithVersion({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
@@ -166,19 +168,19 @@ export class AttributeClient<T> {
      * @private
      */
     update(value: T) {
-        this.listeners.forEach(listener => listener(value));
+        this.#listeners.forEach(listener => listener(value));
     }
 
     /** Add a listener to the attribute. */
     addListener(listener: (newValue: T) => void) {
-        this.listeners.push(listener);
+        this.#listeners.push(listener);
     }
 
     /** Remove a listener from the attribute. */
     removeListener(listener: (newValue: T) => void) {
-        const entryIndex = this.listeners.indexOf(listener);
+        const entryIndex = this.#listeners.indexOf(listener);
         if (entryIndex !== -1) {
-            this.listeners.splice(entryIndex, 1);
+            this.#listeners.splice(entryIndex, 1);
         }
     }
 }
