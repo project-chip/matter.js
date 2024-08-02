@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
@@ -151,7 +152,10 @@ export class AttributeClient<T> {
         knownDataVersion?: number,
         isFabricFiltered = true,
     ) {
-        return this.interactionClient.subscribeAttribute({
+        if (!this.#updatedBySubscriptions) {
+            throw new ImplementationError(`Attribute ${this.name} is not updated by subscriptions.`);
+        }
+        return this.#interactionClient.subscribeAttribute({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
