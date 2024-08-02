@@ -575,7 +575,7 @@ export const UnknownAttribute = <F extends BitSchema>(id: number): UnknownAttrib
     scene: false,
     persistent: false,
     fabricScoped: false,
-    omitChanges: false,
+    omitChanges: true, // We assume custom clusters do mot report values via subscription because we do not know it
     default: undefined,
     readAcl: AccessLevel.View,
     timed: false,
