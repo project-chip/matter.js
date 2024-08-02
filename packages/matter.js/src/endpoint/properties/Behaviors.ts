@@ -486,7 +486,7 @@ export class Behaviors {
      */
     #backingFor(container: string, type: Behavior.Type) {
         if (this.#endpoint.construction.status !== Lifecycle.Status.Initializing) {
-            this.#endpoint.construction.assert(`Cannot access ${this.#endpoint}.${type.id} because endpoint`);
+            this.#endpoint.construction.assert(this.#endpoint.toString(), `behavior ${type.id}`);
         }
 
         let backing = this.#backings[type.id];
