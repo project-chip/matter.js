@@ -24,9 +24,10 @@ import { CommissioningController, NodeCommissioningOptions } from "@project-chip
 import { Ble } from "@project-chip/matter.js/ble";
 import {
     BasicInformationCluster,
+    ClusterClientObj,
     DescriptorCluster,
     GeneralCommissioning,
-    OnOffCluster,
+    OnOff,
 } from "@project-chip/matter.js/cluster";
 import { NodeId } from "@project-chip/matter.js/datatype";
 import { NodeStateInformation } from "@project-chip/matter.js/device";
@@ -286,7 +287,7 @@ class ControllerNode {
                 //    console.log("Subscribe-All Data:", Logger.toJSON(data));
                 //});
 
-                const onOff = devices[0].getClusterClient(OnOffCluster);
+                const onOff: ClusterClientObj<OnOff.Complete> | undefined = devices[0].getClusterClient(OnOff.Complete);
                 if (onOff !== undefined) {
                     let onOffStatus = await onOff.getOnOffAttribute();
                     console.log("initial onOffStatus", onOffStatus);
