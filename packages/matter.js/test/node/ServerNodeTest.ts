@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { BasicInformationBehavior } from "../../src/behavior/definitions/basic-information/BasicInformationBehavior.js";
 import { DescriptorBehavior } from "../../src/behavior/definitions/descriptor/DescriptorBehavior.js";
 import { PumpConfigurationAndControlServer } from "../../src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlServer.js";
+import { CommissioningBehavior } from "../../src/behavior/system/commissioning/CommissioningBehavior.js";
 import { AttestationCertificateManager } from "../../src/certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "../../src/certificate/CertificationDeclarationManager.js";
 import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
@@ -323,6 +325,37 @@ describe("ServerNode", () => {
         await commission(node);
 
         await node.close();
+    });
+
+    async function testFactoryReset(online: boolean) {
+        const { node } = await commission();
+
+        if (!online) {
+            await node.cancel();
+        }
+
+        await node.factoryReset();
+
+        // Confirm previous online state is resumed
+        expect(node.lifecycle.isOnline).equals(online);
+
+        // Confirm basic state information is present
+        expect(node.stateOf(BasicInformationBehavior).vendorName).equals("Matter.js Test Vendor");
+
+        // Confirm pairing codes are available
+        const pairingCodes = node.stateOf(CommissioningBehavior).pairingCodes;
+        expect(typeof pairingCodes).equals("object");
+        expect(typeof pairingCodes.manualPairingCode).equals("string");
+
+        await node.close();
+    }
+
+    it("initializes correctly after offline factory reset", async () => {
+        await testFactoryReset(false);
+    });
+
+    it("initializes correctly after online factory reset", async () => {
+        await testFactoryReset(true);
     });
 
     it("commissions twice", async () => {

@@ -131,9 +131,11 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
             // Reset reverts node to inactive state; now reinitialize
             this.construction.start();
 
-            // Go back online if we were online at time of reset
+            // Go back online if we were online at time of reset, otherwise just await reinitialization
             if (isOnline) {
                 await this.start();
+            } else {
+                await this.construction.ready;
             }
         } catch (e) {
             this.construction.crash();
