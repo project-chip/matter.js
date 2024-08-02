@@ -66,9 +66,11 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: Various Endpoint methods throw the root cause when there is an error rather than logging the root cause and throwing a less descriptive error.
 -   matter.js Controller API:
     -   Breaking: commissionNode() in CommissioningController now returns the Node-ID and not the PairedNode instance.
+    -   Breaking: AttributeClient now throws an exception when an attribute should be subscribed which is not reporting updates via subscriptions
     -   Feature: (Experimental!) Adds PaseCommissioner to allow to execute the initial (PASE based) commissioning process separately from the operational completion of the commissioning process, also allowed to be BLE only.
     -   Feature: Allows to complete the commissioning process for a node where this process was started by a PASE commissioner
     -   Feature: Allows to commission a node without directly connecting to it
+    -   Enhancement: Always read attributes that do not report changes via subscriptions (including all unknown Attributes)
     -   Fix: Fixes Node reconnection when disconnected before
     -   Fix: Makes sure to always use the BLE scanner when required
 -   matter.js Legacy API:
