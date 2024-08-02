@@ -40,6 +40,7 @@ export function createAttributeClient<T>(
 export class AttributeClient<T> {
     private readonly isWritable: boolean;
     private readonly isFabricScoped: boolean;
+    private readonly updatedBySubscriptions: boolean;
     protected readonly schema: TlvSchema<any>;
     private readonly listeners = new Array<(newValue: T) => void>();
     readonly id: AttributeId;
@@ -51,10 +52,11 @@ export class AttributeClient<T> {
         readonly clusterId: ClusterId,
         private readonly interactionClient: InteractionClient,
     ) {
-        const { schema, writable, fabricScoped, id } = attribute;
+        const { schema, writable, fabricScoped, id, omitChanges } = attribute;
         this.schema = schema;
         this.isWritable = writable;
         this.isFabricScoped = fabricScoped;
+        this.updatedBySubscriptions = !omitChanges;
         this.id = id;
     }
 
@@ -109,7 +111,7 @@ export class AttributeClient<T> {
     /** Get the value of the attribute. Fabric scoped reads are always done with the remote. */
     async get(alwaysRequestFromRemote?: boolean, isFabricFiltered = true) {
         if (alwaysRequestFromRemote === undefined) {
-            alwaysRequestFromRemote = this.isFabricScoped;
+            alwaysRequestFromRemote = this.isFabricScoped || !this.updatedBySubscriptions;
         } else if (!alwaysRequestFromRemote && this.isFabricScoped) {
             alwaysRequestFromRemote = true;
         }
