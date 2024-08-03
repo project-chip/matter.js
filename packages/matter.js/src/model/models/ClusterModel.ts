@@ -9,7 +9,7 @@ import { camelize, describeList } from "../../util/String.js";
 import { Access } from "../aspects/Access.js";
 import { Quality } from "../aspects/Quality.js";
 import { SchemaImplementationError } from "../definitions/errors.js";
-import { FeatureSet, Metatype } from "../definitions/index.js";
+import { ElementTag, FeatureSet, Metatype } from "../definitions/index.js";
 import { ClusterElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { ClusterRevision } from "../standard/elements/ClusterRevision.js";
@@ -111,7 +111,7 @@ export class ClusterModel extends Model implements ClusterElement {
     }
 
     get featureMap() {
-        return this.get(AttributeModel, FeatureMap.id) ?? new AttributeModel(FeatureMap);
+        return (this.member(FeatureMap.id, [ElementTag.Attribute]) as AttributeModel) ?? new AttributeModel(FeatureMap);
     }
 
     get featureNames(): FeatureSet {
