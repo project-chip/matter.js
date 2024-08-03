@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-intermediate-models",
-    "version": "0.10.0-alpha.0-20240802-4403f787",
+    "version": "0.10.0-alpha.0-20240803-f4969d2b",
     "description": "Matter.js intermediate models",
     "private": true,
     "type": "module",
@@ -30,7 +30,7 @@
     },
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "devDependencies": {
-        "@project-chip/matter.js": "0.10.0-alpha.0-20240802-4403f787",
-        "@project-chip/matter.js-tools": "0.10.0-alpha.0-20240802-4403f787"
+        "@project-chip/matter.js": "0.10.0-alpha.0-20240803-f4969d2b",
+        "@project-chip/matter.js-tools": "0.10.0-alpha.0-20240803-f4969d2b"
     }
 }
