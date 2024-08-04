@@ -57,7 +57,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         setDefault("hardwareVersionString", state.hardwareVersion.toString());
         setDefault("softwareVersionString", state.softwareVersion.toString());
         setDefault("specificationVersion", Specification.SPECIFICATION_VERSION);
-        setDefault("maxPathsPerInvoke", DEFAULT_MAX_PATHS_PER_INVOKE);
+        setDefault("maxPathsPerInvoke", DEFAULT_MAX_PATHS_PER_INVOKE); // TODO: This do not work because default is 1
 
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
