@@ -6,13 +6,17 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../mutation/MutableCluster.js";
-import { ConcentrationMeasurement } from "./ConcentrationMeasurementCluster.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { ConcentrationMeasurement } from "./ConcentrationMeasurementCluster.js";
 
 export namespace CarbonMonoxideConcentrationMeasurement {
-    export const Base = { ...ConcentrationMeasurement.Base, id: 0x40c, name: "CarbonMonoxideConcentrationMeasurement" }
+    export const Base = {
+        ...ConcentrationMeasurement.Base,
+        id: 0x40c,
+        name: "CarbonMonoxideConcentrationMeasurement",
+    } as const;
 
     /**
      * @see {@link Cluster}
@@ -39,7 +43,7 @@ export namespace CarbonMonoxideConcentrationMeasurement {
     export const CompleteInstance = MutableCluster({
         ...ConcentrationMeasurement.Complete,
         id: 0x40c,
-        name: "CarbonMonoxideConcentrationMeasurement"
+        name: "CarbonMonoxideConcentrationMeasurement",
     });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}

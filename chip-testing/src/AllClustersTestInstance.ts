@@ -24,8 +24,10 @@ import { ThermostatUserInterfaceConfigurationServer } from "@project-chip/matter
 import { TimeFormatLocalizationServer } from "@project-chip/matter.js/behavior/definitions/time-format-localization";
 import { UnitLocalizationServer } from "@project-chip/matter.js/behavior/definitions/unit-localization";
 import { UserLabelServer } from "@project-chip/matter.js/behavior/definitions/user-label";
+import { AirQualityServer } from "@project-chip/matter.js/behaviors/air-quality";
 import {
     AdministratorCommissioning,
+    AirQuality,
     BasicInformation,
     ColorControl,
     LevelControl,
@@ -34,6 +36,7 @@ import {
     OccupancySensing,
     PowerSource,
     PumpConfigurationAndControl,
+    ResourceMonitoring,
     Switch,
     ThermostatUserInterfaceConfiguration,
     TimeFormatLocalization,
@@ -47,7 +50,9 @@ import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
+import { TestActivatedCarbonFilterMonitoringServer } from "./cluster/TestActivatedCarbonFilterMonitoringServer.js";
 import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsServer.js";
+import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitoringServer.js";
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
 import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
@@ -220,6 +225,13 @@ export class AllClustersTestInstance implements TestInstance {
 
         const endpoint1 = new Endpoint(
             OnOffLightDevice.with(
+                AirQualityServer.with(
+                    AirQuality.Feature.Fair,
+                    AirQuality.Feature.Moderate,
+                    AirQuality.Feature.VeryPoor,
+                    AirQuality.Feature.ExtremelyPoor,
+                ),
+                TestActivatedCarbonFilterMonitoringServer,
                 BooleanStateServer.enable({ events: { stateChange: true } }),
                 ColorControlServer.with(
                     ColorControl.Feature.HueSaturation,
@@ -230,6 +242,7 @@ export class AllClustersTestInstance implements TestInstance {
                 ),
                 FixedLabelServer,
                 FlowMeasurementServer,
+                TestHepaFilterMonitoringServer,
                 TestIdentifyServer,
                 IlluminanceMeasurementServer,
                 TestLevelControlServer.with(
@@ -252,6 +265,22 @@ export class AllClustersTestInstance implements TestInstance {
             {
                 number: EndpointNumber(1),
                 id: "onoff1",
+                activatedCarbonFilterMonitoring: {
+                    condition: 20,
+                    degradationDirection: ResourceMonitoring.DegradationDirection.Down,
+                    changeIndication: ResourceMonitoring.ChangeIndication.Critical,
+                    inPlaceIndicator: true,
+                    lastChangedTime: null,
+                    replacementProductList: [
+                        {
+                            productIdentifierType: ResourceMonitoring.ProductIdentifierType.Ean,
+                            productIdentifierValue: "1234567890123",
+                        },
+                    ],
+                },
+                airQuality: {
+                    airQuality: AirQuality.AirQualityEnum.Fair,
+                },
                 booleanState: {
                     stateValue: false,
                 },
@@ -304,6 +333,19 @@ export class AllClustersTestInstance implements TestInstance {
                     minMeasuredValue: 0,
                     maxMeasuredValue: 100,
                     tolerance: 0,
+                },
+                hepaFilterMonitoring: {
+                    condition: 20,
+                    degradationDirection: ResourceMonitoring.DegradationDirection.Down,
+                    changeIndication: ResourceMonitoring.ChangeIndication.Warning,
+                    inPlaceIndicator: true,
+                    lastChangedTime: null,
+                    replacementProductList: [
+                        {
+                            productIdentifierType: ResourceMonitoring.ProductIdentifierType.Ean,
+                            productIdentifierValue: "1234567890123",
+                        },
+                    ],
                 },
                 illuminanceMeasurement: {
                     tolerance: 0,
