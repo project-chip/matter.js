@@ -17,7 +17,7 @@ import {
     UserLabel,
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
-import { DimmableLightDevice } from "@project-chip/matter.js/device";
+import { OnOffLightDevice } from "@project-chip/matter.js/device";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
 
@@ -26,7 +26,7 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
     storageManager: StorageManager;
     commissioningServer: CommissioningServer | undefined;
     protected appName: string;
-    onOffDeviceEndpoint1: DimmableLightDevice = new DimmableLightDevice(undefined, undefined, {
+    onOffDeviceEndpoint1: OnOffLightDevice = new OnOffLightDevice(undefined, {
         endpointId: EndpointNumber(1),
     });
 

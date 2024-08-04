@@ -45,7 +45,7 @@ import {
     WindowCovering,
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
-import { DimmableLightDevice } from "@project-chip/matter.js/devices/DimmableLightDevice";
+import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
@@ -133,6 +133,12 @@ export class AllClustersTestInstance implements TestInstance {
 
         const networkId = new ByteArray(32);
 
+        let deviceTestEnableKey = ByteArray.fromHex("00112233445566778899aabbccddeeff");
+        const argsEnableKeyIndex = process.argv.indexOf("--enable-key");
+        if (argsEnableKeyIndex !== -1) {
+            deviceTestEnableKey = ByteArray.fromHex(process.argv[argsEnableKeyIndex + 1]);
+        }
+
         const serverNode = await ServerNode.create(
             ServerNode.RootEndpoint.with(
                 //BasicInformationServer.enable({ events: { shutDown: true, leave: true } }),
@@ -186,6 +192,7 @@ export class AllClustersTestInstance implements TestInstance {
                         primaryColor: BasicInformation.Color.Purple,
                     },
                     reachable: true,
+                    maxPathsPerInvoke: 10,
                 },
                 generalDiagnostics: {
                     totalOperationalHours: 0, // set to enable it
@@ -193,7 +200,7 @@ export class AllClustersTestInstance implements TestInstance {
                     activeRadioFaults: [], // set to enable it
                     activeNetworkFaults: [], // set to enable it
                     testEventTriggersEnabled: true, // Enable Test events
-                    deviceTestEnableKey: ByteArray.fromHex("00112233445566778899aabbccddeeff"),
+                    deviceTestEnableKey,
                 },
                 localizationConfiguration: {
                     activeLocale: "en-US",
@@ -219,7 +226,7 @@ export class AllClustersTestInstance implements TestInstance {
         );
 
         const endpoint1 = new Endpoint(
-            DimmableLightDevice.with(
+            OnOffLightDevice.with(
                 AirQualityServer.with(
                     AirQuality.Feature.Fair,
                     AirQuality.Feature.Moderate,

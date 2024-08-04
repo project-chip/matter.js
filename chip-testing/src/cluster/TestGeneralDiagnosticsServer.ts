@@ -11,9 +11,11 @@ import { Logger } from "@project-chip/matter.js/log";
 const logger = Logger.get("TestGeneralDiagnosticServer");
 
 export class TestGeneralDiagnosticsServer extends GeneralDiagnosticsServer {
-    override triggerTestEvent(testEvent: number): void {
+    override triggerTestEvent(testEvent: number | bigint): void {
         logger.info("Test event triggered: ", testEvent);
-        if (testEvent !== 0x0000000000000003) {
+        if (testEvent === BigInt("0xfffffffffff10000")) {
+            this.triggerTestEvent(0x0000000000000003);
+        } else if (testEvent !== 0x0000000000000003) {
             throw new StatusResponseError("Wrong test event", Status.InvalidCommand);
         }
     }
