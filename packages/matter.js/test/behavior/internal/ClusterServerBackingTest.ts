@@ -28,6 +28,7 @@ import { OnOffLightDevice } from "../../../src/endpoint/definitions/device/OnOff
 import { Fabric, FabricBuilder } from "../../../src/fabric/Fabric.js";
 import { FabricManager } from "../../../src/fabric/FabricManager.js";
 import { AcceptedCommandList } from "../../../src/model/standard/elements/AcceptedCommandList.js";
+import { GeneratedCommandList } from "../../../src/model/standard/elements/GeneratedCommandList.js";
 import { FeatureMap } from "../../../src/model/standard/elements/index.js";
 import { ExchangeManager } from "../../../src/protocol/ExchangeManager.js";
 import { MessageExchange } from "../../../src/protocol/MessageExchange.js";
@@ -385,7 +386,9 @@ describe("ClusterServerBacking", () => {
 
         const node = await MockServerNode.createOnline({ device: MyDevice });
 
-        const commands = await performRead(node, await createFabric(node, 1), false, {
+        const fabric = await createFabric(node, 1);
+
+        const commands = await performRead(node, fabric, false, {
             endpointId: EndpointNumber(1),
             clusterId: ClusterId(NetworkCommissioning.Cluster.id),
             attributeId: AttributeId(AcceptedCommandList.id),
@@ -393,6 +396,16 @@ describe("ClusterServerBacking", () => {
 
         expect(commands).deep.equals([
             NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks.requestId,
+        ]);
+
+        const commandResponds = await performRead(node, fabric, false, {
+            endpointId: EndpointNumber(1),
+            clusterId: ClusterId(NetworkCommissioning.Cluster.id),
+            attributeId: AttributeId(GeneratedCommandList.id),
+        });
+
+        expect(commandResponds).deep.equals([
+            NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks.responseId,
         ]);
     });
 

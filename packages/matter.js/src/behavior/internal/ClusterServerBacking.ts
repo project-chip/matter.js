@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, Command, Event } from "../../cluster/Cluster.js";
+import { Attribute, Command, Event, TlvNoResponse } from "../../cluster/Cluster.js";
 import {
     AttributeServer,
     createAttributeServer as ConstructAttributeServer,
@@ -99,7 +99,7 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
                 attributes,
                 clusterServer.attributes,
                 behavior,
-                "attributeList",
+                ["attributeList"],
                 createAttributeServer,
             );
 
@@ -109,7 +109,7 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
                 commands,
                 clusterServer.commands,
                 behavior,
-                "acceptedCommandList",
+                ["acceptedCommandList", "generatedCommandList"],
                 createCommandServer,
             );
 
@@ -119,7 +119,7 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
                 events,
                 clusterServer.events,
                 behavior,
-                "eventList",
+                ["eventList"],
                 createEventServer,
             );
 
@@ -175,26 +175,29 @@ export class ClusterServerBacking extends ServerBehaviorBacking {
         definitions: Record<string, T>,
         servers: Record<string, S>,
         behavior: Behavior,
-        attributeName: "attributeList" | "acceptedCommandList" | "eventList",
+        attributeNames: ["attributeList"] | ["acceptedCommandList", "generatedCommandList"] | ["eventList"],
         addServer: (
             name: string,
             definition: T,
             backing: ClusterServerBacking,
             behavior: Behavior,
-        ) => { id: number; server: S },
+        ) => { ids: number[]; server: S },
     ) {
-        const ids = Array<number>();
+        const collectedIds = Array<Set<number>>();
+        attributeNames.forEach(() => collectedIds.push(new Set()));
 
         // Create a server for each supported element and record the ID
         for (const name of names) {
             const definition = definitions[name];
-            const { id, server } = addServer(name, definition, this, behavior);
-            ids.push(id);
+            const { ids, server } = addServer(name, definition, this, behavior);
+            ids.forEach((id, index) => collectedIds[index].add(id));
             servers[name] = server;
         }
 
         // Set the global attribute detailing supported elements
-        (behavior.state as Record<string, number[]>)[attributeName] = ids;
+        attributeNames.forEach((attributeName, index) => {
+            (behavior.state as Record<string, number[]>)[attributeName] = [...collectedIds[index].values()];
+        });
     }
 }
 
@@ -280,7 +283,7 @@ function createAttributeServer(
     server.assignToEndpoint(backing.server);
 
     return {
-        id: definition.id,
+        ids: [definition.id],
         server,
     };
 }
@@ -364,8 +367,12 @@ function createCommandServer(name: string, definition: Command<any, any, any>, b
     // Eliminate redundant diagnostic messages
     server.debug = () => {};
 
+    const ids = [definition.requestId];
+    if (definition.responseSchema !== TlvNoResponse) {
+        ids.push(definition.responseId);
+    }
     return {
-        id: definition.requestId,
+        ids,
         server,
     };
 }
@@ -397,7 +404,7 @@ function createEventServer(name: string, definition: Event<any, any>, backing: C
     }
 
     return {
-        id: definition.id,
+        ids: [definition.id],
         server,
     };
 }
