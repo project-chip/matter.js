@@ -40,7 +40,7 @@ import {
     WindowCovering,
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
-import { DimmableLightDevice } from "@project-chip/matter.js/devices/DimmableLightDevice";
+import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
@@ -179,6 +179,7 @@ export class AllClustersTestInstance implements TestInstance {
                         primaryColor: BasicInformation.Color.Purple,
                     },
                     reachable: true,
+                    maxPathsPerInvoke: 10,
                 },
                 generalDiagnostics: {
                     totalOperationalHours: 0, // set to enable it
@@ -212,7 +213,7 @@ export class AllClustersTestInstance implements TestInstance {
         );
 
         const endpoint1 = new Endpoint(
-            DimmableLightDevice.with(
+            OnOffLightDevice.with(
                 BooleanStateServer.enable({ events: { stateChange: true } }),
                 ColorControlServer.with(
                     ColorControl.Feature.HueSaturation,
