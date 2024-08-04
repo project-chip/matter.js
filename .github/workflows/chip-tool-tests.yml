@@ -387,7 +387,7 @@ jobs:
       - name: Generate an argument environment file
         run: |
           echo -n "" >/tmp/test_env.yaml
-          echo "ALL_CLUSTERS_APP: ../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
+          echo "ALL_CLUSTERS_APP: ../chip-testing/dist/esm/AllClustersTestAppLegacy.js" >> /tmp/test_env.yaml
           echo "CHIP_LOCK_APP: not_available" >> /tmp/test_env.yaml
           echo "ENERGY_MANAGEMENT_APP: not_available" >> /tmp/test_env.yaml
           echo "LIT_ICD_APP: not_available" >> /tmp/test_env.yaml
