@@ -15,6 +15,7 @@ import { ModeSelectServer } from "@project-chip/matter.js/behavior/definitions/m
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OccupancySensingServer } from "@project-chip/matter.js/behavior/definitions/occupancy-sensing";
 import { PowerSourceServer } from "@project-chip/matter.js/behavior/definitions/power-source";
+import { PowerTopologyServer } from "@project-chip/matter.js/behavior/definitions/power-topology";
 import { PressureMeasurementServer } from "@project-chip/matter.js/behavior/definitions/pressure-measurement";
 import { PumpConfigurationAndControlServer } from "@project-chip/matter.js/behavior/definitions/pump-configuration-and-control";
 import { RelativeHumidityMeasurementServer } from "@project-chip/matter.js/behavior/definitions/relative-humidity-measurement";
@@ -35,6 +36,7 @@ import {
     NetworkCommissioning,
     OccupancySensing,
     PowerSource,
+    PowerTopology,
     PumpConfigurationAndControl,
     ResourceMonitoring,
     Switch,
@@ -253,6 +255,7 @@ export class AllClustersTestInstance implements TestInstance {
                 ModeSelectServer.with(ModeSelect.Feature.OnOff),
                 OccupancySensingServer,
                 PowerSourceServer.with(PowerSource.Feature.Battery),
+                PowerTopologyServer.with(PowerTopology.Feature.SetTopology, PowerTopology.Feature.DynamicPowerFlow),
                 PressureMeasurementServer,
                 PumpConfigurationAndControlServer.with(PumpConfigurationAndControl.Feature.ConstantPressure),
                 RelativeHumidityMeasurementServer,
@@ -392,6 +395,10 @@ export class AllClustersTestInstance implements TestInstance {
                     batChargeLevel: PowerSource.BatChargeLevel.Ok,
                     batReplacementNeeded: false,
                     batReplaceability: PowerSource.BatReplaceability.NotReplaceable,
+                },
+                powerTopology: {
+                    availableEndpoints: [EndpointNumber(1)],
+                    activeEndpoints: [EndpointNumber(1)],
                 },
                 pumpConfigurationAndControl: {
                     effectiveOperationMode: PumpConfigurationAndControl.OperationMode.Normal,
