@@ -18,7 +18,7 @@ import { ImplementationError, InternalError } from "../../common/MatterError.js"
 import type { EndpointServer } from "../../endpoint/EndpointServer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
-import { CommandModel } from "../../model/index.js";
+import { CommandModel, ElementTag } from "../../model/index.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { camelize } from "../../util/String.js";
@@ -286,7 +286,8 @@ function createAttributeServer(
 }
 
 function createCommandServer(name: string, definition: Command<any, any, any>, backing: ClusterServerBacking) {
-    const schema = backing.type.schema?.get(CommandModel, camelize(name, true));
+    // TODO: Introduce nicer ways to get command incl caching and such, aka "make api suck less"
+    const schema = backing.type.schema?.member(camelize(name, true), [ElementTag.Command]) as CommandModel | undefined;
     if (schema === undefined) {
         throw new ImplementationError(`There is no metadata for command ${name}`);
     }

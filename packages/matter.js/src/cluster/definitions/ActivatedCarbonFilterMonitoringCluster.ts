@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../mutation/MutableCluster.js";
-import { ResourceMonitoring } from "./ResourceMonitoringCluster.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { ResourceMonitoring } from "./ResourceMonitoringCluster.js";
 
 export namespace ActivatedCarbonFilterMonitoring {
-    export const Base = { ...ResourceMonitoring.Base, id: 0x72, name: "ActivatedCarbonFilterMonitoring" }
+    export const Base = { ...ResourceMonitoring.Base, id: 0x72, name: "ActivatedCarbonFilterMonitoring" } as const;
 
     /**
      * @see {@link Cluster}
@@ -38,7 +38,7 @@ export namespace ActivatedCarbonFilterMonitoring {
     export const CompleteInstance = MutableCluster({
         ...ResourceMonitoring.Complete,
         id: 0x72,
-        name: "ActivatedCarbonFilterMonitoring"
+        name: "ActivatedCarbonFilterMonitoring",
     });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}

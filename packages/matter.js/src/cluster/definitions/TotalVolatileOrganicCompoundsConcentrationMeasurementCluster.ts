@@ -6,17 +6,17 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MutableCluster } from "../mutation/MutableCluster.js";
-import { ConcentrationMeasurement } from "./ConcentrationMeasurementCluster.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
+import { MutableCluster } from "../mutation/MutableCluster.js";
+import { ConcentrationMeasurement } from "./ConcentrationMeasurementCluster.js";
 
 export namespace TotalVolatileOrganicCompoundsConcentrationMeasurement {
     export const Base = {
         ...ConcentrationMeasurement.Base,
         id: 0x42e,
-        name: "TotalVolatileOrganicCompoundsConcentrationMeasurement"
-    }
+        name: "TotalVolatileOrganicCompoundsConcentrationMeasurement",
+    } as const;
 
     /**
      * @see {@link Cluster}
@@ -44,13 +44,15 @@ export namespace TotalVolatileOrganicCompoundsConcentrationMeasurement {
     export const CompleteInstance = MutableCluster({
         ...ConcentrationMeasurement.Complete,
         id: 0x42e,
-        name: "TotalVolatileOrganicCompoundsConcentrationMeasurement"
+        name: "TotalVolatileOrganicCompoundsConcentrationMeasurement",
     });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}
     export const Complete: Complete = CompleteInstance;
 }
 
-export type TotalVolatileOrganicCompoundsConcentrationMeasurementCluster = TotalVolatileOrganicCompoundsConcentrationMeasurement.Cluster;
-export const TotalVolatileOrganicCompoundsConcentrationMeasurementCluster = TotalVolatileOrganicCompoundsConcentrationMeasurement.Cluster;
+export type TotalVolatileOrganicCompoundsConcentrationMeasurementCluster =
+    TotalVolatileOrganicCompoundsConcentrationMeasurement.Cluster;
+export const TotalVolatileOrganicCompoundsConcentrationMeasurementCluster =
+    TotalVolatileOrganicCompoundsConcentrationMeasurement.Cluster;
 ClusterRegistry.register(TotalVolatileOrganicCompoundsConcentrationMeasurement.Complete);
