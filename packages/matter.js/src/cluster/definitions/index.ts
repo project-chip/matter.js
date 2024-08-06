@@ -55,7 +55,10 @@ export {
     OzoneConcentrationMeasurementCluster,
     OzoneConcentrationMeasurement
 } from "./OzoneConcentrationMeasurementCluster.js";
-export { Pm2Cluster, Pm2 } from "./Pm2Cluster.js";
+export {
+    Pm25ConcentrationMeasurementCluster,
+    Pm25ConcentrationMeasurement
+} from "./Pm25ConcentrationMeasurementCluster.js";
 export {
     FormaldehydeConcentrationMeasurementCluster,
     FormaldehydeConcentrationMeasurement

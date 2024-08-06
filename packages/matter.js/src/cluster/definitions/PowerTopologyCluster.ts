@@ -16,40 +16,6 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace PowerTopology {
     /**
-     * A PowerTopologyCluster supports these elements if it supports feature SetTopology.
-     */
-    export const SetTopologyComponent = MutableCluster.Component({
-        attributes: {
-            /**
-             * Indicates the list of endpoints capable of providing power to and/or consuming power from the endpoint
-             * hosting this server.
-             *
-             * @see {@link MatterSpecification.v13.Core} § 11.8.5.1
-             */
-            availableEndpoints: FixedAttribute(0x0, TlvArray(TlvEndpointNumber, { maxLength: 20 }), { default: [] })
-        }
-    })
-
-    /**
-     * A PowerTopologyCluster supports these elements if it supports feature DynamicPowerFlow.
-     */
-    export const DynamicPowerFlowComponent = MutableCluster.Component({
-        attributes: {
-            /**
-             * Indicates the current list of endpoints currently providing or consuming power to or from the endpoint
-             * hosting this server. This list shall be a subset of the value of the AvailableEndpoints attribute.
-             *
-             * @see {@link MatterSpecification.v13.Core} § 11.8.5.2
-             */
-            activeEndpoints: Attribute(
-                0x1,
-                TlvArray(TlvEndpointNumber, { maxLength: 20 }),
-                { persistent: true, default: [] }
-            )
-        }
-    });
-
-    /**
      * These are optional features supported by PowerTopologyCluster.
      *
      * @see {@link MatterSpecification.v13.Core} § 11.8.4
@@ -83,6 +49,40 @@ export namespace PowerTopology {
          */
         DynamicPowerFlow = "DynamicPowerFlow"
     }
+
+    /**
+     * A PowerTopologyCluster supports these elements if it supports feature SetTopology.
+     */
+    export const SetTopologyComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * Indicates the list of endpoints capable of providing power to and/or consuming power from the endpoint
+             * hosting this server.
+             *
+             * @see {@link MatterSpecification.v13.Core} § 11.8.5.1
+             */
+            availableEndpoints: FixedAttribute(0x0, TlvArray(TlvEndpointNumber, { maxLength: 20 }), { default: [] })
+        }
+    });
+
+    /**
+     * A PowerTopologyCluster supports these elements if it supports feature DynamicPowerFlow.
+     */
+    export const DynamicPowerFlowComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * Indicates the current list of endpoints currently providing or consuming power to or from the endpoint
+             * hosting this server. This list shall be a subset of the value of the AvailableEndpoints attribute.
+             *
+             * @see {@link MatterSpecification.v13.Core} § 11.8.5.2
+             */
+            activeEndpoints: Attribute(
+                0x1,
+                TlvArray(TlvEndpointNumber, { maxLength: 20 }),
+                { persistent: true, default: [] }
+            )
+        }
+    });
 
     /**
      * These elements and properties are present in all PowerTopology clusters.

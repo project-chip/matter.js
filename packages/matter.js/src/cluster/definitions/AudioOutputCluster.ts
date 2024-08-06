@@ -19,6 +19,20 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace AudioOutput {
     /**
+     * These are optional features supported by AudioOutputCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 6.5.4
+     */
+    export enum Feature {
+        /**
+         * NameUpdates (NU)
+         *
+         * Supports updates to output names
+         */
+        NameUpdates = "NameUpdates"
+    }
+
+    /**
      * Input to the AudioOutput renameOutput command
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.5.7.2
@@ -124,20 +138,6 @@ export namespace AudioOutput {
             renameOutput: Command(0x1, TlvRenameOutputRequest, 0x1, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
     });
-
-    /**
-     * These are optional features supported by AudioOutputCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.5.4
-     */
-    export enum Feature {
-        /**
-         * NameUpdates (NU)
-         *
-         * Supports updates to output names
-         */
-        NameUpdates = "NameUpdates"
-    }
 
     /**
      * These elements and properties are present in all AudioOutput clusters.

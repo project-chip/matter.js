@@ -22,6 +22,49 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ContentLauncher {
     /**
+     * These are optional features supported by ContentLauncherCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 6.7.4
+     */
+    export enum Feature {
+        /**
+         * ContentSearch (CS)
+         *
+         * Device supports content search (non-app specific)
+         */
+        ContentSearch = "ContentSearch",
+
+        /**
+         * UrlPlayback (UP)
+         *
+         * Device supports basic URL-based file playback
+         */
+        UrlPlayback = "UrlPlayback",
+
+        /**
+         * AdvancedSeek (AS)
+         *
+         * Enables clients to implement more advanced media seeking behavior in their user interface, such as for
+         * example a "seek bar".
+         */
+        AdvancedSeek = "AdvancedSeek",
+
+        /**
+         * TextTracks (TT)
+         *
+         * Device or app supports Text Tracks.
+         */
+        TextTracks = "TextTracks",
+
+        /**
+         * AudioTracks (AT)
+         *
+         * Device or app supports Audio Tracks.
+         */
+        AudioTracks = "AudioTracks"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.7.5.1
      */
     export const SupportedProtocols = {
@@ -719,49 +762,6 @@ export namespace ContentLauncher {
      * A ContentLauncherCluster supports these elements if it supports features ContentSearch or UrlPlayback.
      */
     export const ContentSearchOrUrlPlaybackComponent = MutableCluster.Component({});
-
-    /**
-     * These are optional features supported by ContentLauncherCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.7.4
-     */
-    export enum Feature {
-        /**
-         * ContentSearch (CS)
-         *
-         * Device supports content search (non-app specific)
-         */
-        ContentSearch = "ContentSearch",
-
-        /**
-         * UrlPlayback (UP)
-         *
-         * Device supports basic URL-based file playback
-         */
-        UrlPlayback = "UrlPlayback",
-
-        /**
-         * AdvancedSeek (AS)
-         *
-         * Enables clients to implement more advanced media seeking behavior in their user interface, such as for
-         * example a "seek bar".
-         */
-        AdvancedSeek = "AdvancedSeek",
-
-        /**
-         * TextTracks (TT)
-         *
-         * Device or app supports Text Tracks.
-         */
-        TextTracks = "TextTracks",
-
-        /**
-         * AudioTracks (AT)
-         *
-         * Device or app supports Audio Tracks.
-         */
-        AudioTracks = "AudioTracks"
-    }
 
     /**
      * These elements and properties are present in all ContentLauncher clusters.

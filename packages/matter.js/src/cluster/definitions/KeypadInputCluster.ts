@@ -17,6 +17,34 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace KeypadInput {
     /**
+     * These are optional features supported by KeypadInputCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 6.8.4
+     */
+    export enum Feature {
+        /**
+         * NavigationKeyCodes (NV)
+         *
+         * Supports UP, DOWN, LEFT, RIGHT, SELECT, BACK, EXIT, MENU
+         */
+        NavigationKeyCodes = "NavigationKeyCodes",
+
+        /**
+         * LocationKeys (LK)
+         *
+         * Supports CEC keys 0x0A (Settings) and 0x09 (Home)
+         */
+        LocationKeys = "LocationKeys",
+
+        /**
+         * NumberKeys (NK)
+         *
+         * Supports numeric input 0..9
+         */
+        NumberKeys = "NumberKeys"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.8.5.2
      */
     export enum CecKeyCode {
@@ -168,34 +196,6 @@ export namespace KeypadInput {
      * @see {@link MatterSpecification.v13.Cluster} § 6.8.6.2
      */
     export interface SendKeyResponse extends TypeFromSchema<typeof TlvSendKeyResponse> {}
-
-    /**
-     * These are optional features supported by KeypadInputCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.8.4
-     */
-    export enum Feature {
-        /**
-         * NavigationKeyCodes (NV)
-         *
-         * Supports UP, DOWN, LEFT, RIGHT, SELECT, BACK, EXIT, MENU
-         */
-        NavigationKeyCodes = "NavigationKeyCodes",
-
-        /**
-         * LocationKeys (LK)
-         *
-         * Supports CEC keys 0x0A (Settings) and 0x09 (Home)
-         */
-        LocationKeys = "LocationKeys",
-
-        /**
-         * NumberKeys (NK)
-         *
-         * Supports numeric input 0..9
-         */
-        NumberKeys = "NumberKeys"
-    }
 
     /**
      * These elements and properties are present in all KeypadInput clusters.

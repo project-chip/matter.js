@@ -50,7 +50,7 @@ export namespace LocalizationConfiguration {
              */
             supportedLocales: FixedAttribute(0x1, TlvArray(TlvString, { maxLength: 32 }), { default: [] })
         }
-    })
+    });
 
     /**
      * Nodes should be expected to be deployed to any and all regions of the world. These global regions may have

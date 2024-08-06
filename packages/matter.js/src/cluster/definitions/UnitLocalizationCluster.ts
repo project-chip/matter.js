@@ -15,6 +15,20 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace UnitLocalization {
     /**
+     * These are optional features supported by UnitLocalizationCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 11.5.4
+     */
+    export enum Feature {
+        /**
+         * TemperatureUnit (TEMP)
+         *
+         * The Node can be configured to use different units of temperature when conveying values to a user.
+         */
+        TemperatureUnit = "TemperatureUnit"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Core} § 11.5.5.1
      */
     export enum TempUnit {
@@ -53,20 +67,6 @@ export namespace UnitLocalization {
             )
         }
     });
-
-    /**
-     * These are optional features supported by UnitLocalizationCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 11.5.4
-     */
-    export enum Feature {
-        /**
-         * TemperatureUnit (TEMP)
-         *
-         * The Node can be configured to use different units of temperature when conveying values to a user.
-         */
-        TemperatureUnit = "TemperatureUnit"
-    }
 
     /**
      * These elements and properties are present in all UnitLocalization clusters.

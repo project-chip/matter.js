@@ -122,17 +122,6 @@ export abstract class Model {
     }
 
     /**
-     * Element view of children.  For TypeScript this allows children to be added as elements.  For JavaScript this is
-     * identical to children().
-     */
-    get elements(): AnyElement[] {
-        if (!this.#children) {
-            this.children = [];
-        }
-        return this.#children as AnyElement[];
-    }
-
-    /**
      * Allows subclasses to pull a working ID from an alternate source.
      */
     get effectiveId() {

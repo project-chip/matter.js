@@ -5133,7 +5133,7 @@ export const SpecMatter = Matter({
             pics: "NDOCONC"
         }),
         Cluster({ name: "OzoneConcentrationMeasurement", id: 0x415, type: "ConcentrationMeasurement", pics: "OZCONC" }),
-        Cluster({ name: "Pm2", id: 0x42a, type: "ConcentrationMeasurement", pics: "PMICONC" }),
+        Cluster({ name: "Pm25ConcentrationMeasurement", id: 0x42a, type: "ConcentrationMeasurement", pics: "PMICONC" }),
         Cluster({
             name: "FormaldehydeConcentrationMeasurement", id: 0x42b, type: "ConcentrationMeasurement",
             pics: "FLDCONC"
@@ -36347,7 +36347,7 @@ export const SpecMatter = Matter({
                     xref: { document: "device", section: "7.10.4" }
                 }),
                 Requirement({
-                    name: "Pm2", id: 0x42a, conformance: "O", element: "serverCluster",
+                    name: "Pm25ConcentrationMeasurement", id: 0x42a, conformance: "O", element: "serverCluster",
                     xref: { document: "device", section: "7.10.4" }
                 }),
                 Requirement({
@@ -36553,9 +36553,14 @@ export const SpecMatter = Matter({
                 Requirement({
                     name: "WindowCovering", id: 0x102, conformance: "M", element: "serverCluster",
                     xref: { document: "device", section: "8.3.4" },
+
                     children: [
-                        Requirement({ name: "GoToLiftPercentage", conformance: "Matter", element: "commandField" }),
-                        Requirement({ name: "GoToTiltPercentage", conformance: "Matter", element: "commandField" })
+                        Requirement({
+                            name: "GoToLiftPercentageLiftPercent100thsValue", conformance: "Matter", element: "commandField"
+                        }),
+                        Requirement({
+                            name: "GoToTiltPercentageTiltPercent100thsValue", conformance: "Matter", element: "commandField"
+                        })
                     ]
                 })
             ]

@@ -91,9 +91,8 @@ export class ClusterComponentGenerator {
                 options.atom("omitChanges", true);
             }
 
-            // TODO - don't currently have a way to express "this field should
-            // default to the value of another field" as indicated by
-            // model.default.reference
+            // TODO - don't currently have a way to express "this field should default to the value of another field" as
+            // indicated by model.default.reference
             const def = this.defaults.create(model);
             if (def !== undefined) {
                 options.value(def, "default: ");

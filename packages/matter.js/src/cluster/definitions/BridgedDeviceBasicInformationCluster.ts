@@ -156,7 +156,7 @@ export namespace BridgedDeviceBasicInformation {
              */
             reachableChanged: Event(0x3, EventPriority.Critical, BasicInformation.TlvReachableChangedEvent)
         }
-    })
+    });
 
     /**
      * This Cluster serves two purposes towards a Node communicating with a Bridge:

@@ -22,6 +22,23 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Descriptor {
     /**
+     * These are optional features supported by DescriptorCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 9.5.4
+     */
+    export enum Feature {
+        /**
+         * TagList (TAGLIST)
+         *
+         * See the Disambiguation section in the System Model spec for conformance requirements for this feature and
+         * the corresponding attribute.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 9.5.4.1
+         */
+        TagList = "TagList"
+    }
+
+    /**
      * The device type and revision define endpoint conformance to a release of a device type definition. See the Data
      * Model specification for more information.
      *
@@ -82,23 +99,6 @@ export namespace Descriptor {
             tagList: FixedAttribute(0x4, TlvArray(TlvSemtag, { minLength: 1, maxLength: 6 }))
         }
     });
-
-    /**
-     * These are optional features supported by DescriptorCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 9.5.4
-     */
-    export enum Feature {
-        /**
-         * TagList (TAGLIST)
-         *
-         * See the Disambiguation section in the System Model spec for conformance requirements for this feature and
-         * the corresponding attribute.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 9.5.4.1
-         */
-        TagList = "TagList"
-    }
 
     /**
      * These elements and properties are present in all Descriptor clusters.

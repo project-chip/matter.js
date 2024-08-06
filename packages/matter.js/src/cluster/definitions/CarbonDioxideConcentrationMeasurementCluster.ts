@@ -6,16 +6,16 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Identity } from "../../util/Type.js";
-import { ClusterRegistry } from "../ClusterRegistry.js";
 import { MutableCluster } from "../mutation/MutableCluster.js";
 import { ConcentrationMeasurement } from "./ConcentrationMeasurementCluster.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace CarbonDioxideConcentrationMeasurement {
     export const Base = {
         ...ConcentrationMeasurement.Base,
         id: 0x40d,
-        name: "CarbonDioxideConcentrationMeasurement",
+        name: "CarbonDioxideConcentrationMeasurement"
     } as const;
 
     /**
@@ -24,7 +24,7 @@ export namespace CarbonDioxideConcentrationMeasurement {
     export const ClusterInstance = MutableCluster.ExtensibleOnly(Base);
 
     /**
-     * This alias specializes the semantics of {@link ConcentrationMeasurement.Cluster}.
+     * This alias specializes the semantics of {@link ConcentrationMeasurement.Base}.
      *
      * Per the Matter specification you cannot use {@link CarbonDioxideConcentrationMeasurementCluster} without
      * enabling certain feature combinations. You must use the {@link with} factory method to obtain a working cluster.
@@ -43,7 +43,7 @@ export namespace CarbonDioxideConcentrationMeasurement {
     export const CompleteInstance = MutableCluster({
         ...ConcentrationMeasurement.Complete,
         id: 0x40d,
-        name: "CarbonDioxideConcentrationMeasurement",
+        name: "CarbonDioxideConcentrationMeasurement"
     });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}

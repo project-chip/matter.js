@@ -13,7 +13,7 @@ import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace PulseWidthModulation {
-    export const Base = { ...LevelControl.Base, id: 0x1c, name: "PulseWidthModulation" }
+    export const Base = { ...LevelControl.Base, id: 0x1c, name: "PulseWidthModulation" } as const;
 
     /**
      * @see {@link Cluster}
@@ -24,7 +24,7 @@ export namespace PulseWidthModulation {
     );
 
     /**
-     * This alias specializes the semantics of {@link LevelControl.Cluster}.
+     * This alias specializes the semantics of {@link LevelControl.Base}.
      *
      * PulseWidthModulationCluster supports optional features that you can enable with the
      * PulseWidthModulationCluster.with() factory method.

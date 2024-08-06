@@ -15,6 +15,41 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace AirQuality {
     /**
+     * These are optional features supported by AirQualityCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 2.9.4
+     */
+    export enum Feature {
+        /**
+         * Fair (FAIR)
+         *
+         * Cluster supports the Fair air quality level
+         */
+        Fair = "Fair",
+
+        /**
+         * Moderate (MOD)
+         *
+         * Cluster supports the Moderate air quality level
+         */
+        Moderate = "Moderate",
+
+        /**
+         * VeryPoor (VPOOR)
+         *
+         * Cluster supports the Very poor air quality level
+         */
+        VeryPoor = "VeryPoor",
+
+        /**
+         * ExtremelyPoor (XPOOR)
+         *
+         * Cluster supports the Extremely poor air quality level
+         */
+        ExtremelyPoor = "ExtremelyPoor"
+    }
+
+    /**
      * The AirQualityEnum provides a representation of the quality of the analyzed air. It is up to the device
      * manufacturer to determine the mapping between the measured values and their corresponding enumeration values.
      *
@@ -55,41 +90,6 @@ export namespace AirQuality {
          * The air quality is extremely poor.
          */
         ExtremelyPoor = 6
-    }
-
-    /**
-     * These are optional features supported by AirQualityCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.9.4
-     */
-    export enum Feature {
-        /**
-         * Fair (FAIR)
-         *
-         * Cluster supports the Fair air quality level
-         */
-        Fair = "Fair",
-
-        /**
-         * Moderate (MOD)
-         *
-         * Cluster supports the Moderate air quality level
-         */
-        Moderate = "Moderate",
-
-        /**
-         * VeryPoor (VPOOR)
-         *
-         * Cluster supports the Very poor air quality level
-         */
-        VeryPoor = "VeryPoor",
-
-        /**
-         * ExtremelyPoor (XPOOR)
-         *
-         * Cluster supports the Extremely poor air quality level
-         */
-        ExtremelyPoor = "ExtremelyPoor"
     }
 
     /**

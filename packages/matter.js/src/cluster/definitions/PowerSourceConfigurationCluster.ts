@@ -38,7 +38,7 @@ export namespace PowerSourceConfiguration {
              */
             sources: Attribute(0x0, TlvArray(TlvEndpointNumber, { maxLength: 6 }), { persistent: true, default: [] })
         }
-    })
+    });
 
     /**
      * This cluster is used to describe the configuration and capabilities of a Device’s power system. It provides an
