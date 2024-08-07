@@ -16,6 +16,20 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace PressureMeasurement {
     /**
+     * These are optional features supported by PressureMeasurementCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 2.4.4
+     */
+    export enum Feature {
+        /**
+         * Extended (EXT)
+         *
+         * Extended range and resolution
+         */
+        Extended = "Extended"
+    }
+
+    /**
      * A PressureMeasurementCluster supports these elements if it supports feature Extended.
      */
     export const ExtendedComponent = MutableCluster.Component({
@@ -65,21 +79,7 @@ export namespace PressureMeasurement {
              */
             scale: Attribute(0x14, TlvInt8.bound({ min: -127 }), { default: 0 })
         }
-    })
-
-    /**
-     * These are optional features supported by PressureMeasurementCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.4.4
-     */
-    export enum Feature {
-        /**
-         * Extended (EXT)
-         *
-         * Extended range and resolution
-         */
-        Extended = "Extended"
-    }
+    });
 
     /**
      * These elements and properties are present in all PressureMeasurement clusters.

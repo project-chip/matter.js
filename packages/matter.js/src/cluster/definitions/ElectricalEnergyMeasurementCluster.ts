@@ -19,6 +19,54 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ElectricalEnergyMeasurement {
     /**
+     * These are optional features supported by ElectricalEnergyMeasurementCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 2.12.4
+     */
+    export enum Feature {
+        /**
+         * ImportedEnergy (IMPE)
+         *
+         * The feature indicates the server is capable of measuring how much energy is imported by the server.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 2.12.4.1
+         */
+        ImportedEnergy = "ImportedEnergy",
+
+        /**
+         * ExportedEnergy (EXPE)
+         *
+         * The feature indicates the server is capable of measuring how much energy is exported by the server.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 2.12.4.2
+         */
+        ExportedEnergy = "ExportedEnergy",
+
+        /**
+         * CumulativeEnergy (CUME)
+         *
+         * The feature indicates the server is capable of measuring how much energy has been imported or exported by
+         * the server over the device’s lifetime. This measurement may start from when a device’s firmware is updated
+         * to include this feature, when a device’s firmware is updated to correct measurement errors, or when a device
+         * is factory reset.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 2.12.4.3
+         */
+        CumulativeEnergy = "CumulativeEnergy",
+
+        /**
+         * PeriodicEnergy (PERE)
+         *
+         * The feature indicates the server is capable of measuring how much energy has been imported or exported by
+         * the server during a certain period of time. The start and end times for measurement periods shall be
+         * determined by the server, and may represent overlapping periods.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 2.12.4.4
+         */
+        PeriodicEnergy = "PeriodicEnergy"
+    }
+
+    /**
      * This struct shall indicate the amount of energy measured during a given measurement period.
      *
      * A server which does not have the ability to determine the time in UTC, or has not yet done so, shall use the
@@ -415,54 +463,6 @@ export namespace ElectricalEnergyMeasurement {
             periodicEnergyMeasured: Event(0x1, EventPriority.Info, TlvPeriodicEnergyMeasuredEvent)
         }
     });
-
-    /**
-     * These are optional features supported by ElectricalEnergyMeasurementCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.12.4
-     */
-    export enum Feature {
-        /**
-         * ImportedEnergy (IMPE)
-         *
-         * The feature indicates the server is capable of measuring how much energy is imported by the server.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.12.4.1
-         */
-        ImportedEnergy = "ImportedEnergy",
-
-        /**
-         * ExportedEnergy (EXPE)
-         *
-         * The feature indicates the server is capable of measuring how much energy is exported by the server.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.12.4.2
-         */
-        ExportedEnergy = "ExportedEnergy",
-
-        /**
-         * CumulativeEnergy (CUME)
-         *
-         * The feature indicates the server is capable of measuring how much energy has been imported or exported by
-         * the server over the device’s lifetime. This measurement may start from when a device’s firmware is updated
-         * to include this feature, when a device’s firmware is updated to correct measurement errors, or when a device
-         * is factory reset.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.12.4.3
-         */
-        CumulativeEnergy = "CumulativeEnergy",
-
-        /**
-         * PeriodicEnergy (PERE)
-         *
-         * The feature indicates the server is capable of measuring how much energy has been imported or exported by
-         * the server during a certain period of time. The start and end times for measurement periods shall be
-         * determined by the server, and may represent overlapping periods.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.12.4.4
-         */
-        PeriodicEnergy = "PeriodicEnergy"
-    }
 
     /**
      * These elements and properties are present in all ElectricalEnergyMeasurement clusters.

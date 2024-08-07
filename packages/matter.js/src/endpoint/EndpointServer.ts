@@ -52,9 +52,7 @@ export class EndpointServer implements EndpointInterface {
 
             // Sanity check
             if (this.#clusterServers.has(cluster.id)) {
-                throw new InternalError(
-                    `${this.#endpoint}.${cluster.id} cluster ${cluster.id} initialized multiple times`,
-                );
+                throw new InternalError(`${this.#endpoint}.${cluster.id} initialized multiple times`);
             }
 
             backing = new ClusterServerBacking(this, type as ClusterBehavior.Type);

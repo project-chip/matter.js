@@ -21,6 +21,51 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Messages {
     /**
+     * These are optional features supported by MessagesCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.16.4
+     */
+    export enum Feature {
+        /**
+         * ReceivedConfirmation (CONF)
+         *
+         * This feature shall indicate that the device can get confirmation from a user that the message was received.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.16.4.1
+         */
+        ReceivedConfirmation = "ReceivedConfirmation",
+
+        /**
+         * ConfirmationResponse (RESP)
+         *
+         * This feature shall indicate that the device is capable of presenting a list of responses to the user and
+         * recording the user’s choice of response.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.16.4.2
+         */
+        ConfirmationResponse = "ConfirmationResponse",
+
+        /**
+         * ConfirmationReply (RPLY)
+         *
+         * This feature shall indicate that the device is capable of collecting a free-form text response to a message.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.16.4.3
+         */
+        ConfirmationReply = "ConfirmationReply",
+
+        /**
+         * ProtectedMessages (PROT)
+         *
+         * This feature shall indicate that the device is capable of requiring the user to authenticate before viewing
+         * a message; e.g. entering a PIN or password before viewing a message with billing information.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.16.4.4
+         */
+        ProtectedMessages = "ProtectedMessages"
+    }
+
+    /**
      * Priority SHOULD be used to decide which messages to show when the number of eligible messages is larger than the
      * device’s capacity to present them.
      *
@@ -422,51 +467,6 @@ export namespace Messages {
      * @see {@link MatterSpecification.v13.Cluster} § 1.16.8.3
      */
     export interface MessageCompleteEvent extends TypeFromSchema<typeof TlvMessageCompleteEvent> {}
-
-    /**
-     * These are optional features supported by MessagesCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.16.4
-     */
-    export enum Feature {
-        /**
-         * ReceivedConfirmation (CONF)
-         *
-         * This feature shall indicate that the device can get confirmation from a user that the message was received.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.16.4.1
-         */
-        ReceivedConfirmation = "ReceivedConfirmation",
-
-        /**
-         * ConfirmationResponse (RESP)
-         *
-         * This feature shall indicate that the device is capable of presenting a list of responses to the user and
-         * recording the user’s choice of response.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.16.4.2
-         */
-        ConfirmationResponse = "ConfirmationResponse",
-
-        /**
-         * ConfirmationReply (RPLY)
-         *
-         * This feature shall indicate that the device is capable of collecting a free-form text response to a message.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.16.4.3
-         */
-        ConfirmationReply = "ConfirmationReply",
-
-        /**
-         * ProtectedMessages (PROT)
-         *
-         * This feature shall indicate that the device is capable of requiring the user to authenticate before viewing
-         * a message; e.g. entering a PIN or password before viewing a message with billing information.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.16.4.4
-         */
-        ProtectedMessages = "ProtectedMessages"
-    }
 
     /**
      * These elements and properties are present in all Messages clusters.

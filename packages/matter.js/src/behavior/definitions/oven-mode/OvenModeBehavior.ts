@@ -11,6 +11,9 @@ import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**
  * OvenModeBehavior is the base class for objects that support interaction with {@link OvenMode.Cluster}.
+ *
+ * This class does not have optional features of OvenMode.Cluster enabled. You can enable additional features using
+ * OvenModeBehavior.with.
  */
 export const OvenModeBehavior = ClusterBehavior.for(OvenMode.Cluster);
 

@@ -22,6 +22,64 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace MediaPlayback {
     /**
+     * These are optional features supported by MediaPlaybackCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 6.10.4
+     */
+    export enum Feature {
+        /**
+         * AdvancedSeek (AS)
+         *
+         * This feature provides access to the time offset location within current playback media and allows for
+         * jumping to a specific location using time offsets. This enables clients to implement more advanced media
+         * seeking behavior in their user interface, for instance a "seek bar".
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.4.1
+         */
+        AdvancedSeek = "AdvancedSeek",
+
+        /**
+         * VariableSpeed (VS)
+         *
+         * This feature is for a device which supports variable speed playback on media that supports it.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.4.2
+         */
+        VariableSpeed = "VariableSpeed",
+
+        /**
+         * TextTracks (TT)
+         *
+         * This feature is for a device or app that supports Text Tracks.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.4.3
+         */
+        TextTracks = "TextTracks",
+
+        /**
+         * AudioTracks (AT)
+         *
+         * This feature is for a device or app that supports Audio Tracks.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.4.4
+         */
+        AudioTracks = "AudioTracks",
+
+        /**
+         * AudioAdvance (AA)
+         *
+         * This feature is for a device or app that supports playing audio during fast and slow advance and rewind
+         * (e.g., while playback speed is not 1). A device that supports this feature may only support playing audio
+         * during certain speeds.
+         *
+         * A cluster implementing AA shall implement AS.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 6.10.4.5
+         */
+        AudioAdvance = "AudioAdvance"
+    }
+
+    /**
      * This structure defines a playback position within a media stream being played.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.10.5.4
@@ -822,64 +880,6 @@ export namespace MediaPlayback {
             fastForward: Command(0x7, TlvFastForwardRequest, 0xa, TlvPlaybackResponse)
         }
     });
-
-    /**
-     * These are optional features supported by MediaPlaybackCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.10.4
-     */
-    export enum Feature {
-        /**
-         * AdvancedSeek (AS)
-         *
-         * This feature provides access to the time offset location within current playback media and allows for
-         * jumping to a specific location using time offsets. This enables clients to implement more advanced media
-         * seeking behavior in their user interface, for instance a "seek bar".
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.10.4.1
-         */
-        AdvancedSeek = "AdvancedSeek",
-
-        /**
-         * VariableSpeed (VS)
-         *
-         * This feature is for a device which supports variable speed playback on media that supports it.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.10.4.2
-         */
-        VariableSpeed = "VariableSpeed",
-
-        /**
-         * TextTracks (TT)
-         *
-         * This feature is for a device or app that supports Text Tracks.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.10.4.3
-         */
-        TextTracks = "TextTracks",
-
-        /**
-         * AudioTracks (AT)
-         *
-         * This feature is for a device or app that supports Audio Tracks.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.10.4.4
-         */
-        AudioTracks = "AudioTracks",
-
-        /**
-         * AudioAdvance (AA)
-         *
-         * This feature is for a device or app that supports playing audio during fast and slow advance and rewind
-         * (e.g., while playback speed is not 1). A device that supports this feature may only support playing audio
-         * during certain speeds.
-         *
-         * A cluster implementing AA shall implement AS.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 6.10.4.5
-         */
-        AudioAdvance = "AudioAdvance"
-    }
 
     /**
      * These elements and properties are present in all MediaPlayback clusters.

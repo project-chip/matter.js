@@ -46,6 +46,22 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ScenesManagement {
     /**
+     * These are optional features supported by ScenesManagementCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.4.4
+     */
+    export enum Feature {
+        /**
+         * SceneNames (SN)
+         *
+         * This feature indicates the ability to store a name for a scene when a scene is added.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.4.4.1
+         */
+        SceneNames = "SceneNames"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.2
      */
     export const TlvSceneInfo = TlvObject({
@@ -824,22 +840,6 @@ export namespace ScenesManagement {
      * @see {@link MatterSpecification.v13.Cluster} § 1.4.7.5
      */
     export interface LogicalSceneTable extends TypeFromSchema<typeof TlvLogicalSceneTable> {}
-
-    /**
-     * These are optional features supported by ScenesManagementCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.4.4
-     */
-    export enum Feature {
-        /**
-         * SceneNames (SN)
-         *
-         * This feature indicates the ability to store a name for a scene when a scene is added.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.4.4.1
-         */
-        SceneNames = "SceneNames"
-    }
 
     /**
      * These elements and properties are present in all ScenesManagement clusters.

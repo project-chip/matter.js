@@ -37,7 +37,7 @@ export * from "./CarbonMonoxideConcentrationMeasurement.js";
 export * from "./CarbonDioxideConcentrationMeasurement.js";
 export * from "./NitrogenDioxideConcentrationMeasurement.js";
 export * from "./OzoneConcentrationMeasurement.js";
-export * from "./Pm2.js";
+export * from "./Pm25ConcentrationMeasurement.js";
 export * from "./FormaldehydeConcentrationMeasurement.js";
 export * from "./Pm1ConcentrationMeasurement.js";
 export * from "./Pm10ConcentrationMeasurement.js";

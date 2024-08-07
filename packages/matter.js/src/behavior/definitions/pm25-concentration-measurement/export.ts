@@ -6,5 +6,5 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export * from "./Pm2Behavior.js";
-export * from "./Pm2Server.js";
+export * from "./Pm25ConcentrationMeasurementBehavior.js";
+export * from "./Pm25ConcentrationMeasurementServer.js";

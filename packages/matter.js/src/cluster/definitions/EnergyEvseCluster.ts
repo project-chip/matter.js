@@ -40,6 +40,96 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace EnergyEvse {
     /**
+     * These are optional features supported by EnergyEvseCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 9.3.4
+     */
+    export enum Feature {
+        /**
+         * ChargingPreferences (PREF)
+         *
+         * Since some EVSEs cannot obtain the SoC from the vehicle, some EV charging solutions allow the consumer to
+         * specify a daily charging target (for adding energy to the EV’s battery). This feature allows the consumer to
+         * specify how many miles or km of additional range they need for their typical daily commute. This range
+         * requirement can be converted into a daily energy demand with a target charging completion time.
+         *
+         * The EVSE itself may use this information (or may allow a controller such as an EMS) to compute an
+         *
+         * optimized charging schedule.
+         *
+         * An EVSE device may implement the Device Energy Management cluster PFR (Power Forecast Reporting) and FA
+         * (Forecast Adjustment) features. This can help a controller (such as an EMS) to optimize the EVSE against
+         * other ESAs. For example, a solar PV ESA may share its Forecast and allow the EVSE to know the best time to
+         * charge so that any excess solar generation is used to charge the EV.
+         *
+         * EVSE devices that support the Device Energy Management cluster’s FA feature can have their charging profiles
+         * set by a controller device such as an EMS. For example, if the EVSE advertises a simple power forecast which
+         * allows the EMS to adjust over a wide range of power and time durations, then the EVSE may allow the EMS to
+         * propose a revised optimized forecast (which is the charging profile).
+         *
+         * See the Device Energy Management Cluster for more details.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.1
+         */
+        ChargingPreferences = "ChargingPreferences",
+
+        /**
+         * SoCReporting (SOC)
+         *
+         * Vehicles and EVSEs which support ISO 15118 may allow the vehicle to report its battery size and state of
+         * charge. If the EVSE supports PLC it may have a vehicle connected which optionally supports reporting of its
+         * battery size and current State of Charge (SoC).
+         *
+         * If the EVSE supports reporting of State of Charge this feature will only work if a compatible EV is
+         * connected.
+         *
+         * Note some EVSEs may use other undefined mechanisms to obtain vehicle State of Charge outside the scope of
+         * this cluster.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.2
+         */
+        SoCReporting = "SoCReporting",
+
+        /**
+         * PlugAndCharge (PNC)
+         *
+         * If the EVSE supports PLC, it may be able to support the Plug and Charge feature. e.g. this may allow the
+         * vehicle ID to be obtained which may allow an energy management system to track energy usage per vehicle
+         * (e.g. to give the owner an indicative cost of charging, or for work place charging).
+         *
+         * If the EVSE supports the Plug and Charge feature, it will only work if a compatible EV is connected.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.3
+         */
+        PlugAndCharge = "PlugAndCharge",
+
+        /**
+         * Rfid (RFID)
+         *
+         * If the EVSE is fitted with an RFID reader, it may be possible to obtain the User or Vehicle ID from an RFID
+         * card. This may be used to record a charging session against a specific charging account, and may optionally
+         * be used to authorize a charging session.
+         *
+         * An RFID event can be generated when a user taps an RFID card onto the RFID reader. The event must be
+         * subscribed to by the EVSE Management cluster client. This client may use this to enable the EV to charge or
+         * discharge. The lookup and authorization of RIFD UID is outside the scope of this cluster.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.4
+         */
+        Rfid = "Rfid",
+
+        /**
+         * V2X (V2X)
+         *
+         * If the EVSE can support bi-directional charging, it may be possible to request that the vehicle can
+         * discharge to the home or grid.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.5
+         */
+        V2X = "V2X"
+    }
+
+    /**
      * Input to the EnergyEvse enableDischarging command
      *
      * @see {@link MatterSpecification.v13.Cluster} § 9.3.9.3
@@ -964,96 +1054,6 @@ export namespace EnergyEvse {
             rfid: OptionalEvent(0x5, EventPriority.Info, TlvRfidEvent)
         }
     });
-
-    /**
-     * These are optional features supported by EnergyEvseCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 9.3.4
-     */
-    export enum Feature {
-        /**
-         * ChargingPreferences (PREF)
-         *
-         * Since some EVSEs cannot obtain the SoC from the vehicle, some EV charging solutions allow the consumer to
-         * specify a daily charging target (for adding energy to the EV’s battery). This feature allows the consumer to
-         * specify how many miles or km of additional range they need for their typical daily commute. This range
-         * requirement can be converted into a daily energy demand with a target charging completion time.
-         *
-         * The EVSE itself may use this information (or may allow a controller such as an EMS) to compute an
-         *
-         * optimized charging schedule.
-         *
-         * An EVSE device may implement the Device Energy Management cluster PFR (Power Forecast Reporting) and FA
-         * (Forecast Adjustment) features. This can help a controller (such as an EMS) to optimize the EVSE against
-         * other ESAs. For example, a solar PV ESA may share its Forecast and allow the EVSE to know the best time to
-         * charge so that any excess solar generation is used to charge the EV.
-         *
-         * EVSE devices that support the Device Energy Management cluster’s FA feature can have their charging profiles
-         * set by a controller device such as an EMS. For example, if the EVSE advertises a simple power forecast which
-         * allows the EMS to adjust over a wide range of power and time durations, then the EVSE may allow the EMS to
-         * propose a revised optimized forecast (which is the charging profile).
-         *
-         * See the Device Energy Management Cluster for more details.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.1
-         */
-        ChargingPreferences = "ChargingPreferences",
-
-        /**
-         * SoCReporting (SOC)
-         *
-         * Vehicles and EVSEs which support ISO 15118 may allow the vehicle to report its battery size and state of
-         * charge. If the EVSE supports PLC it may have a vehicle connected which optionally supports reporting of its
-         * battery size and current State of Charge (SoC).
-         *
-         * If the EVSE supports reporting of State of Charge this feature will only work if a compatible EV is
-         * connected.
-         *
-         * Note some EVSEs may use other undefined mechanisms to obtain vehicle State of Charge outside the scope of
-         * this cluster.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.2
-         */
-        SoCReporting = "SoCReporting",
-
-        /**
-         * PlugAndCharge (PNC)
-         *
-         * If the EVSE supports PLC, it may be able to support the Plug and Charge feature. e.g. this may allow the
-         * vehicle ID to be obtained which may allow an energy management system to track energy usage per vehicle
-         * (e.g. to give the owner an indicative cost of charging, or for work place charging).
-         *
-         * If the EVSE supports the Plug and Charge feature, it will only work if a compatible EV is connected.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.3
-         */
-        PlugAndCharge = "PlugAndCharge",
-
-        /**
-         * Rfid (RFID)
-         *
-         * If the EVSE is fitted with an RFID reader, it may be possible to obtain the User or Vehicle ID from an RFID
-         * card. This may be used to record a charging session against a specific charging account, and may optionally
-         * be used to authorize a charging session.
-         *
-         * An RFID event can be generated when a user taps an RFID card onto the RFID reader. The event must be
-         * subscribed to by the EVSE Management cluster client. This client may use this to enable the EV to charge or
-         * discharge. The lookup and authorization of RIFD UID is outside the scope of this cluster.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.4
-         */
-        Rfid = "Rfid",
-
-        /**
-         * V2X (V2X)
-         *
-         * If the EVSE can support bi-directional charging, it may be possible to request that the vehicle can
-         * discharge to the home or grid.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.3.4.5
-         */
-        V2X = "V2X"
-    }
 
     /**
      * These elements and properties are present in all EnergyEvse clusters.

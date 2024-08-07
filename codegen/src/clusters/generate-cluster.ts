@@ -231,20 +231,6 @@ function generateClusterExport(file: ClusterFile) {
  * Generate a component representing the "non-varying" elements in a cluster with variable shape.
  */
 function generateExtensibleClusterBase(file: ClusterFile) {
-    // Feature enum
-    const featureEnum = file.ns.expressions(`export enum Feature {`, "}").document({
-        description: `These are optional features supported by ${file.clusterName}.`,
-        xref: file.cluster.featureMap.xref,
-    });
-    for (const f of file.cluster.features) {
-        const name = camelize(f.description ?? f.name, true);
-        featureEnum.atom(`${name} = ${serialize(name)}`).document({
-            description: f.description ? `${f.description} (${f.name})` : f.name,
-            details: f.details,
-            xref: f.xref,
-        });
-    }
-
     // Base component
     const base = file.ns
         .expressions("export const Base = MutableCluster.Component({", "})")
@@ -257,16 +243,36 @@ function generateExtensibleClusterBase(file: ClusterFile) {
     return base;
 }
 
-function generateFeatures(file: ClusterFile, target: Block) {
+/**
+ * Generates the "Feature" enum and "features" property.
+ */
+function generateFeatures(file: ClusterFile, base: Block) {
     const features = file.cluster.features;
-    if (features.length) {
-        const featureBlock = target.expressions("features: {", "}");
-        target.file.addImport("#/schema/BitmapSchema.js", "BitFlag");
-        features.forEach(feature => {
-            const name = camelize(feature.description ?? feature.name);
-            featureBlock.atom(name, `BitFlag(${feature.constraint.value})`).document(feature);
-        });
+    if (!features.length) {
+        return;
     }
+
+    file.ns.insertingBefore(file.types, () => {
+        const featureEnum = file.ns.expressions(`export enum Feature {`, "}").document({
+            description: `These are optional features supported by ${file.clusterName}.`,
+            xref: file.cluster.featureMap.xref,
+        });
+        for (const f of file.cluster.features) {
+            const name = camelize(f.description ?? f.name, true);
+            featureEnum.atom(`${name} = ${serialize(name)}`).document({
+                description: f.description ? `${f.description} (${f.name})` : f.name,
+                details: f.details,
+                xref: f.xref,
+            });
+        }
+    });
+
+    const featureBlock = base.expressions("features: {", "}");
+    base.file.addImport("#/schema/BitmapSchema.js", "BitFlag");
+    features.forEach(feature => {
+        const name = camelize(feature.description ?? feature.name);
+        featureBlock.atom(name, `BitFlag(${feature.constraint.value})`).document(feature);
+    });
 }
 
 /**
@@ -472,7 +478,7 @@ function generateAlias(file: ClusterFile) {
 
     const variance = ClusterVariance(base);
 
-    const baseBlock = file.ns.expressions(`export const Base = {`, "}");
+    const baseBlock = file.ns.expressions(`export const Base = {`, "} as const");
     baseBlock.atom(`...${base.name}.Base`);
     generateIdentity(baseBlock, file.cluster);
 
@@ -480,7 +486,7 @@ function generateAlias(file: ClusterFile) {
         variance,
         file,
         base.featureMap,
-        `This alias specializes the semantics of {@link ${base.name}.Cluster}.`,
+        `This alias specializes the semantics of {@link ${base.name}.Base}.`,
     );
 
     const complete = file.ns.expressions("export const CompleteInstance = MutableCluster({", "})");

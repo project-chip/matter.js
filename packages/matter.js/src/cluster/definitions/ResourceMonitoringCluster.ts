@@ -28,6 +28,34 @@ import { Identity } from "../../util/Type.js";
 
 export namespace ResourceMonitoring {
     /**
+     * These are optional features supported by ResourceMonitoringCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 2.8.4
+     */
+    export enum Feature {
+        /**
+         * Condition (CON)
+         *
+         * Supports monitoring the condition of the resource in percentage
+         */
+        Condition = "Condition",
+
+        /**
+         * Warning (WRN)
+         *
+         * Supports warning indication
+         */
+        Warning = "Warning",
+
+        /**
+         * ReplacementProductList (REP)
+         *
+         * Supports specifying the list of replacement products
+         */
+        ReplacementProductList = "ReplacementProductList"
+    }
+
+    /**
      * Indicates the direction in which the condition of the resource changes over time.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.8.5.1

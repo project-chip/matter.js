@@ -438,8 +438,8 @@ export class ModelTraversal {
      * Retrieve all children of a specific type, including those inherited from the base or a shadow.  Does not include
      * members overridden by a deeper member.
      */
-    findMembers(scope: Model) {
-        const members = Array<PropertyModel>();
+    findChildren(scope: Model, tags: ElementTag[]) {
+        const members = Array<Model>();
 
         // This is a map of identity (based on tag + id/name + discriminator) to a priority based on inheritance depth
         const defined = {} as Record<string, number | undefined>;
@@ -448,7 +448,7 @@ export class ModelTraversal {
         this.visitInheritance(scope, model => {
             level++;
             for (const child of model.children) {
-                if (child.tag !== ElementTag.Attribute && child.tag !== ElementTag.Field) {
+                if (!tags.includes(child.tag)) {
                     continue;
                 }
 
@@ -476,7 +476,7 @@ export class ModelTraversal {
                 defined[nameIdentity] = level;
 
                 // Found a member
-                members.push(child as PropertyModel);
+                members.push(child);
             }
         });
 
@@ -502,7 +502,7 @@ export class ModelTraversal {
      * Note 2 - members may not be differentiated with conformance rules that rely on field values in this way. That
      * will probably never be necessary and would require an entirely different (more complicated) structure.
      */
-    findActiveMembers(scope: Model & { members: PropertyModel[] }, cluster?: ClusterModel) {
+    findActiveMembers(scope: Model & { members: PropertyModel[] }, conformantOnly: boolean, cluster?: ClusterModel) {
         const features = cluster?.featureNames ?? new FeatureSet();
         const supportedFeatures = cluster?.supportedFeatures ?? new FeatureSet();
 
@@ -512,9 +512,13 @@ export class ModelTraversal {
                 continue;
             }
 
+            if (conformantOnly && !member.conformance.isApplicable(features, supportedFeatures)) {
+                continue;
+            }
+
             const other = selectedMembers[member.name];
             if (other !== undefined) {
-                if (!member.conformance.isApplicable(features, supportedFeatures)) {
+                if (!conformantOnly && !member.conformance.isApplicable(features, supportedFeatures)) {
                     continue;
                 }
 

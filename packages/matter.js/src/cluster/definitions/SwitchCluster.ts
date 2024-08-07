@@ -17,6 +17,63 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Switch {
     /**
+     * These are optional features supported by SwitchCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.13.4
+     */
+    export enum Feature {
+        /**
+         * LatchingSwitch (LS)
+         *
+         * This feature is for a switch that maintains its position after being pressed (or turned).
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.1
+         */
+        LatchingSwitch = "LatchingSwitch",
+
+        /**
+         * MomentarySwitch (MS)
+         *
+         * This feature is for a switch that does not maintain its position after being pressed (or turned). After
+         * releasing, it goes back to its idle position.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.2
+         */
+        MomentarySwitch = "MomentarySwitch",
+
+        /**
+         * MomentarySwitchRelease (MSR)
+         *
+         * This feature is for a momentary switch that can distinguish and report release events. When this feature
+         * flag MSR is present, MS shall be present as well.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.3
+         */
+        MomentarySwitchRelease = "MomentarySwitchRelease",
+
+        /**
+         * MomentarySwitchLongPress (MSL)
+         *
+         * This feature is for a momentary switch that can distinguish and report long presses from short presses. When
+         * this feature flag MSL is present, MS and MSR shall be present as well.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.4
+         */
+        MomentarySwitchLongPress = "MomentarySwitchLongPress",
+
+        /**
+         * MomentarySwitchMultiPress (MSM)
+         *
+         * This feature is for a momentary switch that can distinguish and report double press and potentially multiple
+         * presses with more events, such as triple press, etc. When this feature flag MSM is present, MS and MSR shall
+         * be present as well.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.5
+         */
+        MomentarySwitchMultiPress = "MomentarySwitchMultiPress"
+    }
+
+    /**
      * Body of the Switch multiPressOngoing event
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.13.6.6
@@ -300,63 +357,6 @@ export namespace Switch {
             shortRelease: Event(0x3, EventPriority.Info, TlvShortReleaseEvent)
         }
     });
-
-    /**
-     * These are optional features supported by SwitchCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.13.4
-     */
-    export enum Feature {
-        /**
-         * LatchingSwitch (LS)
-         *
-         * This feature is for a switch that maintains its position after being pressed (or turned).
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.1
-         */
-        LatchingSwitch = "LatchingSwitch",
-
-        /**
-         * MomentarySwitch (MS)
-         *
-         * This feature is for a switch that does not maintain its position after being pressed (or turned). After
-         * releasing, it goes back to its idle position.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.2
-         */
-        MomentarySwitch = "MomentarySwitch",
-
-        /**
-         * MomentarySwitchRelease (MSR)
-         *
-         * This feature is for a momentary switch that can distinguish and report release events. When this feature
-         * flag MSR is present, MS shall be present as well.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.3
-         */
-        MomentarySwitchRelease = "MomentarySwitchRelease",
-
-        /**
-         * MomentarySwitchLongPress (MSL)
-         *
-         * This feature is for a momentary switch that can distinguish and report long presses from short presses. When
-         * this feature flag MSL is present, MS and MSR shall be present as well.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.4
-         */
-        MomentarySwitchLongPress = "MomentarySwitchLongPress",
-
-        /**
-         * MomentarySwitchMultiPress (MSM)
-         *
-         * This feature is for a momentary switch that can distinguish and report double press and potentially multiple
-         * presses with more events, such as triple press, etc. When this feature flag MSM is present, MS and MSR shall
-         * be present as well.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.13.4.5
-         */
-        MomentarySwitchMultiPress = "MomentarySwitchMultiPress"
-    }
 
     /**
      * These elements and properties are present in all Switch clusters.

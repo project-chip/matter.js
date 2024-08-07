@@ -31,6 +31,20 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace GroupKeyManagement {
     /**
+     * These are optional features supported by GroupKeyManagementCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 11.2.4
+     */
+    export enum Feature {
+        /**
+         * CacheAndSync (CS)
+         *
+         * The ability to support CacheAndSync security policy and MCSP.
+         */
+        CacheAndSync = "CacheAndSync"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Core} § 11.2.5.3
      */
     export const TlvGroupKeyMap = TlvObject({
@@ -311,20 +325,6 @@ export namespace GroupKeyManagement {
      * @see {@link MatterSpecification.v13.Core} § 11.2.7.6
      */
     export interface KeySetReadAllIndicesResponse extends TypeFromSchema<typeof TlvKeySetReadAllIndicesResponse> {}
-
-    /**
-     * These are optional features supported by GroupKeyManagementCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 11.2.4
-     */
-    export enum Feature {
-        /**
-         * CacheAndSync (CS)
-         *
-         * The ability to support CacheAndSync security policy and MCSP.
-         */
-        CacheAndSync = "CacheAndSync"
-    }
 
     /**
      * These elements and properties are present in all GroupKeyManagement clusters.

@@ -29,6 +29,41 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace PowerSource {
     /**
+     * These are optional features supported by PowerSourceCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 11.7.4
+     */
+    export enum Feature {
+        /**
+         * Wired (WIRED)
+         *
+         * A wired power source
+         */
+        Wired = "Wired",
+
+        /**
+         * Battery (BAT)
+         *
+         * A battery power source
+         */
+        Battery = "Battery",
+
+        /**
+         * Rechargeable (RECHG)
+         *
+         * A rechargeable battery power source
+         */
+        Rechargeable = "Rechargeable",
+
+        /**
+         * Replaceable (REPLC)
+         *
+         * A replaceable battery power source
+         */
+        Replaceable = "Replaceable"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Core} § 11.7.6.5
      */
     export enum WiredCurrentType {
@@ -1226,41 +1261,6 @@ export namespace PowerSource {
             batChargeFaultChange: OptionalEvent(0x2, EventPriority.Info, TlvBatChargeFaultChangeEvent)
         }
     });
-
-    /**
-     * These are optional features supported by PowerSourceCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 11.7.4
-     */
-    export enum Feature {
-        /**
-         * Wired (WIRED)
-         *
-         * A wired power source
-         */
-        Wired = "Wired",
-
-        /**
-         * Battery (BAT)
-         *
-         * A battery power source
-         */
-        Battery = "Battery",
-
-        /**
-         * Rechargeable (RECHG)
-         *
-         * A rechargeable battery power source
-         */
-        Rechargeable = "Rechargeable",
-
-        /**
-         * Replaceable (REPLC)
-         *
-         * A replaceable battery power source
-         */
-        Replaceable = "Replaceable"
-    }
 
     /**
      * These elements and properties are present in all PowerSource clusters.
