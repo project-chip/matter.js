@@ -144,7 +144,7 @@ function buildValue(model: ValueModel, ifValid: boolean) {
 function buildObject(model: ValueModel, ifValid: boolean) {
     let result: { [key: string]: any } | undefined;
 
-    for (const child of model.activeMembers) {
+    for (const child of model.conformantMembers) {
         const name = camelize(child.name);
         if (result && result[name] !== undefined) {
             continue;
@@ -173,7 +173,7 @@ function buildBitmap(model: ValueModel) {
     let result;
     let fieldsDefined = 0;
 
-    for (const m of model.activeMembers) {
+    for (const m of model.conformantMembers) {
         const defaultValue = FieldValue.numericValue(m.default);
         if (defaultValue === undefined) {
             continue;
@@ -217,12 +217,14 @@ function buildBitmap(model: ValueModel) {
 
 function decodeBitmap(model: ValueModel, value: number | bigint) {
     const fields = new Map<ValueModel, number | boolean>();
+
+    // Test each bit.  If set, install appropriate value into object
     for (let bit = 0; Math.pow(bit, 2) <= value; bit++) {
         if (typeof value === "bigint") {
-            if (value & (1n << BigInt(bit))) {
+            if (!(value & (1n << BigInt(bit)))) {
                 continue;
             }
-        } else if (value & (1 << bit)) {
+        } else if (!(value & (1 << bit))) {
             continue;
         }
 

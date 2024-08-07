@@ -22,6 +22,41 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Channel {
     /**
+     * These are optional features supported by ChannelCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 6.6.4
+     */
+    export enum Feature {
+        /**
+         * ChannelList (CL)
+         *
+         * Provides list of available channels.
+         */
+        ChannelList = "ChannelList",
+
+        /**
+         * LineupInfo (LI)
+         *
+         * Provides lineup info, which is a reference to an external source of lineup information.
+         */
+        LineupInfo = "LineupInfo",
+
+        /**
+         * ElectronicGuide (EG)
+         *
+         * Provides electronic program guide information.
+         */
+        ElectronicGuide = "ElectronicGuide",
+
+        /**
+         * RecordProgram (RP)
+         *
+         * Provides ability to record program.
+         */
+        RecordProgram = "RecordProgram"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.6.5.4
      */
     export enum ChannelType {
@@ -919,41 +954,6 @@ export namespace Channel {
             cancelRecordProgram: Command(0x7, TlvCancelRecordProgramRequest, 0x7, TlvNoResponse)
         }
     });
-
-    /**
-     * These are optional features supported by ChannelCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.6.4
-     */
-    export enum Feature {
-        /**
-         * ChannelList (CL)
-         *
-         * Provides list of available channels.
-         */
-        ChannelList = "ChannelList",
-
-        /**
-         * LineupInfo (LI)
-         *
-         * Provides lineup info, which is a reference to an external source of lineup information.
-         */
-        LineupInfo = "LineupInfo",
-
-        /**
-         * ElectronicGuide (EG)
-         *
-         * Provides electronic program guide information.
-         */
-        ElectronicGuide = "ElectronicGuide",
-
-        /**
-         * RecordProgram (RP)
-         *
-         * Provides ability to record program.
-         */
-        RecordProgram = "RecordProgram"
-    }
 
     /**
      * These elements and properties are present in all Channel clusters.

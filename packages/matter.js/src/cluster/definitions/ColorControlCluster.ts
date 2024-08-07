@@ -29,6 +29,48 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ColorControl {
     /**
+     * These are optional features supported by ColorControlCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 3.2.5
+     */
+    export enum Feature {
+        /**
+         * HueSaturation (HS)
+         *
+         * Supports color specification via hue/saturation.
+         */
+        HueSaturation = "HueSaturation",
+
+        /**
+         * EnhancedHue (EHUE)
+         *
+         * Enhanced hue is supported.
+         */
+        EnhancedHue = "EnhancedHue",
+
+        /**
+         * ColorLoop (CL)
+         *
+         * Color loop is supported.
+         */
+        ColorLoop = "ColorLoop",
+
+        /**
+         * Xy (XY)
+         *
+         * Supports color specification via XY.
+         */
+        Xy = "Xy",
+
+        /**
+         * ColorTemperature (CT)
+         *
+         * Supports specification of color temperature.
+         */
+        ColorTemperature = "ColorTemperature"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 3.2.11.4.2
      */
     export enum Direction {
@@ -1278,48 +1320,6 @@ export namespace ColorControl {
             stopMoveStep: Command(0x47, TlvStopMoveStepRequest, 0x47, TlvNoResponse)
         }
     });
-
-    /**
-     * These are optional features supported by ColorControlCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 3.2.5
-     */
-    export enum Feature {
-        /**
-         * HueSaturation (HS)
-         *
-         * Supports color specification via hue/saturation.
-         */
-        HueSaturation = "HueSaturation",
-
-        /**
-         * EnhancedHue (EHUE)
-         *
-         * Enhanced hue is supported.
-         */
-        EnhancedHue = "EnhancedHue",
-
-        /**
-         * ColorLoop (CL)
-         *
-         * Color loop is supported.
-         */
-        ColorLoop = "ColorLoop",
-
-        /**
-         * Xy (XY)
-         *
-         * Supports color specification via XY.
-         */
-        Xy = "Xy",
-
-        /**
-         * ColorTemperature (CT)
-         *
-         * Supports specification of color temperature.
-         */
-        ColorTemperature = "ColorTemperature"
-    }
 
     /**
      * These elements and properties are present in all ColorControl clusters.

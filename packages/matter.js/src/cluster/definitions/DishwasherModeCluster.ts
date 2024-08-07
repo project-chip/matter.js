@@ -7,7 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { FixedAttribute, Attribute, WritableAttribute } from "../Cluster.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { FixedAttribute, Attribute, WritableAttribute, Command, TlvNoResponse } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { ModeBase } from "./ModeBaseCluster.js";
 import { TlvUInt8 } from "../../tlv/TlvNumber.js";
@@ -15,6 +16,23 @@ import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace DishwasherMode {
+    /**
+     * These are optional features supported by DishwasherModeCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.10.4
+     */
+    export enum Feature {
+        /**
+         * OnOff (DEPONOFF)
+         *
+         * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
+         * endpoint. See OnMode for more information.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+         */
+        OnOff = "OnOff"
+    }
+
     export enum ModeTag {
         /**
          * The normal regime of operation.
@@ -39,12 +57,24 @@ export namespace DishwasherMode {
     }
 
     /**
-     * @see {@link Cluster}
+     * These elements and properties are present in all DishwasherMode clusters.
      */
-    export const ClusterInstance = MutableCluster({
+    export const Base = MutableCluster.Component({
         id: 0x59,
         name: "DishwasherMode",
         revision: 2,
+
+        features: {
+            /**
+             * OnOff
+             *
+             * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the
+             * same endpoint. See OnMode for more information.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+             */
+            onOff: BitFlag(0)
+        },
 
         attributes: {
             /**
@@ -74,12 +104,37 @@ export namespace DishwasherMode {
              * @see {@link MatterSpecification.v13.Cluster} § 8.3.5
              */
             onMode: WritableAttribute(0x3, TlvUInt8, { persistent: true })
-        }
+        },
+
+        commands: {
+            /**
+             * This command is used to change device modes.
+             *
+             * On receipt of this command the device shall respond with a ChangeToModeResponse command.
+             *
+             * @see {@link MatterSpecification.v13.Cluster} § 1.10.7.1
+             */
+            changeToMode: Command(0x0, ModeBase.TlvChangeToModeRequest, 0x0, TlvNoResponse)
+        },
+
+        /**
+         * This metadata controls which DishwasherModeCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions()
     });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster(Base);
 
     /**
      * This cluster is derived from the Mode Base cluster, defining additional mode tags and namespaced enumerated
      * values for dishwasher devices.
+     *
+     * DishwasherModeCluster supports optional features that you can enable with the DishwasherModeCluster.with()
+     * factory method.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 8.3
      */

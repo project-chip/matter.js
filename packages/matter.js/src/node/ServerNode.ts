@@ -11,6 +11,7 @@ import { ProductDescriptionServer } from "../behavior/system/product-description
 import { SessionsBehavior } from "../behavior/system/sessions/SessionsBehavior.js";
 import { MatterError } from "../common/MatterError.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
+import { EndpointServer } from "../endpoint/EndpointServer.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { EndpointInitializer } from "../endpoint/properties/EndpointInitializer.js";
 import type { Environment } from "../environment/Environment.js";
@@ -104,6 +105,13 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
             await store.close();
             this.env.delete(ServerStore, store);
         }
+    }
+
+    override async reset() {
+        await super.reset();
+
+        // Destroy the EndpointServer hierarchy
+        await EndpointServer.forEndpoint(this)[Symbol.asyncDispose]();
     }
 
     /**

@@ -15,6 +15,55 @@ import { Identity } from "../../util/Type.js";
 
 export namespace ConcentrationMeasurement {
     /**
+     * These are optional features supported by ConcentrationMeasurementCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 2.10.4
+     */
+    export enum Feature {
+        /**
+         * NumericMeasurement (MEA)
+         *
+         * Cluster supports numeric measurement of substance
+         */
+        NumericMeasurement = "NumericMeasurement",
+
+        /**
+         * LevelIndication (LEV)
+         *
+         * Cluster supports basic level indication for substance using the ConcentrationLevel enum
+         */
+        LevelIndication = "LevelIndication",
+
+        /**
+         * MediumLevel (MED)
+         *
+         * Cluster supports the Medium Concentration Level
+         */
+        MediumLevel = "MediumLevel",
+
+        /**
+         * CriticalLevel (CRI)
+         *
+         * Cluster supports the Critical Concentration Level
+         */
+        CriticalLevel = "CriticalLevel",
+
+        /**
+         * PeakMeasurement (PEA)
+         *
+         * Cluster supports peak numeric measurement of substance
+         */
+        PeakMeasurement = "PeakMeasurement",
+
+        /**
+         * AverageMeasurement (AVG)
+         *
+         * Cluster supports average numeric measurement of substance
+         */
+        AverageMeasurement = "AverageMeasurement"
+    }
+
+    /**
      * Where mentioned, Billion refers to 10, Trillion refers to 1012 (short scale).
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.10.5.1

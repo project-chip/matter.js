@@ -29,6 +29,60 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace WindowCovering {
     /**
+     * These are optional features supported by WindowCoveringCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 5.3.4
+     */
+    export enum Feature {
+        /**
+         * Lift (LF)
+         *
+         * The Lift feature applies to window coverings that lift up and down (e.g. for a roller shade, Up and Down is
+         * lift Open and Close) or slide left to right (e.g. for a sliding curtain, Left and Right is lift Open and
+         * Close).
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.3.4.1
+         */
+        Lift = "Lift",
+
+        /**
+         * Tilt (TL)
+         *
+         * The Tilt feature applies to window coverings with vertical or horizontal strips.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.3.4.2
+         */
+        Tilt = "Tilt",
+
+        /**
+         * PositionAwareLift (PA_LF)
+         *
+         * Position aware lift control is supported.
+         */
+        PositionAwareLift = "PositionAwareLift",
+
+        /**
+         * AbsolutePosition (ABS)
+         *
+         * The percentage attributes shall indicate the position as a percentage between the InstalledOpenLimits and
+         * InstalledClosedLimits attributes of the window covering starting at the open (0.00%).
+         *
+         * As a general rule, absolute positioning (in centimeters or tenth of a degrees) SHOULD NOT be supported for
+         * new implementations.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.3.4.4
+         */
+        AbsolutePosition = "AbsolutePosition",
+
+        /**
+         * PositionAwareTilt (PA_TL)
+         *
+         * Position aware tilt control is supported.
+         */
+        PositionAwareTilt = "PositionAwareTilt"
+    }
+
+    /**
      * Input to the WindowCovering goToLiftPercentage command
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.3.7.5
@@ -884,60 +938,6 @@ export namespace WindowCovering {
             goToTiltValue: OptionalCommand(0x7, TlvGoToTiltValueRequest, 0x7, TlvNoResponse)
         }
     });
-
-    /**
-     * These are optional features supported by WindowCoveringCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 5.3.4
-     */
-    export enum Feature {
-        /**
-         * Lift (LF)
-         *
-         * The Lift feature applies to window coverings that lift up and down (e.g. for a roller shade, Up and Down is
-         * lift Open and Close) or slide left to right (e.g. for a sliding curtain, Left and Right is lift Open and
-         * Close).
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.4.1
-         */
-        Lift = "Lift",
-
-        /**
-         * Tilt (TL)
-         *
-         * The Tilt feature applies to window coverings with vertical or horizontal strips.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.4.2
-         */
-        Tilt = "Tilt",
-
-        /**
-         * PositionAwareLift (PA_LF)
-         *
-         * Position aware lift control is supported.
-         */
-        PositionAwareLift = "PositionAwareLift",
-
-        /**
-         * AbsolutePosition (ABS)
-         *
-         * The percentage attributes shall indicate the position as a percentage between the InstalledOpenLimits and
-         * InstalledClosedLimits attributes of the window covering starting at the open (0.00%).
-         *
-         * As a general rule, absolute positioning (in centimeters or tenth of a degrees) SHOULD NOT be supported for
-         * new implementations.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.3.4.4
-         */
-        AbsolutePosition = "AbsolutePosition",
-
-        /**
-         * PositionAwareTilt (PA_TL)
-         *
-         * Position aware tilt control is supported.
-         */
-        PositionAwareTilt = "PositionAwareTilt"
-    }
 
     /**
      * These elements and properties are present in all WindowCovering clusters.

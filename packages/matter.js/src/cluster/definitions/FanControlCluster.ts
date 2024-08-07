@@ -19,6 +19,65 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace FanControl {
     /**
+     * These are optional features supported by FanControlCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 4.4.4
+     */
+    export enum Feature {
+        /**
+         * MultiSpeed (SPD)
+         *
+         * Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic speed control
+         * but left it up to the implementer to decide what was supported. Therefore, it is assumed that legacy client
+         * implementations are capable of determining, from the server, the number of speeds supported between 1, 2, or
+         * 3, and whether automatic speed control is supported.
+         *
+         * The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to SpeedMax,
+         * which has a maximum of 100.
+         *
+         * See Speed Rules for more details.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.4.4.1
+         */
+        MultiSpeed = "MultiSpeed",
+
+        /**
+         * Auto (AUT)
+         *
+         * Automatic mode supported for fan speed
+         */
+        Auto = "Auto",
+
+        /**
+         * Rocking (RCK)
+         *
+         * Rocking movement supported
+         */
+        Rocking = "Rocking",
+
+        /**
+         * Wind (WND)
+         *
+         * Wind emulation supported
+         */
+        Wind = "Wind",
+
+        /**
+         * Step (STEP)
+         *
+         * Step command supported
+         */
+        Step = "Step",
+
+        /**
+         * AirflowDirection (DIR)
+         *
+         * Airflow Direction attribute is supported
+         */
+        AirflowDirection = "AirflowDirection"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.4.5.1
      */
     export const Rock = {
@@ -338,65 +397,6 @@ export namespace FanControl {
             step: Command(0x0, TlvStepRequest, 0x0, TlvNoResponse)
         }
     });
-
-    /**
-     * These are optional features supported by FanControlCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.4.4
-     */
-    export enum Feature {
-        /**
-         * MultiSpeed (SPD)
-         *
-         * Legacy Fan Control cluster revision 0-1 defined 3 speeds (low, medium and high) plus automatic speed control
-         * but left it up to the implementer to decide what was supported. Therefore, it is assumed that legacy client
-         * implementations are capable of determining, from the server, the number of speeds supported between 1, 2, or
-         * 3, and whether automatic speed control is supported.
-         *
-         * The MultiSpeed feature includes new attributes that support a running fan speed value from 0 to SpeedMax,
-         * which has a maximum of 100.
-         *
-         * See Speed Rules for more details.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.4.4.1
-         */
-        MultiSpeed = "MultiSpeed",
-
-        /**
-         * Auto (AUT)
-         *
-         * Automatic mode supported for fan speed
-         */
-        Auto = "Auto",
-
-        /**
-         * Rocking (RCK)
-         *
-         * Rocking movement supported
-         */
-        Rocking = "Rocking",
-
-        /**
-         * Wind (WND)
-         *
-         * Wind emulation supported
-         */
-        Wind = "Wind",
-
-        /**
-         * Step (STEP)
-         *
-         * Step command supported
-         */
-        Step = "Step",
-
-        /**
-         * AirflowDirection (DIR)
-         *
-         * Airflow Direction attribute is supported
-         */
-        AirflowDirection = "AirflowDirection"
-    }
 
     /**
      * These elements and properties are present in all FanControl clusters.

@@ -327,17 +327,22 @@ describe("ServerNode", () => {
         await node.close();
     });
 
-    async function testFactoryReset(online: boolean) {
-        const { node } = await commission();
+    async function testFactoryReset(mode: "online" | "offline-after-commission" | "offline") {
+        let node: MockServerNode;
+        if (mode !== "offline") {
+            ({ node } = await commission());
+        } else {
+            node = await MockServerNode.createOnline({ online: false });
+        }
 
-        if (!online) {
+        if (mode === "offline-after-commission") {
             await node.cancel();
         }
 
         await node.factoryReset();
 
         // Confirm previous online state is resumed
-        expect(node.lifecycle.isOnline).equals(online);
+        expect(node.lifecycle.isOnline).equals(mode === "online");
 
         // Confirm basic state information is present
         expect(node.stateOf(BasicInformationBehavior).vendorName).equals("Matter.js Test Vendor");
@@ -350,12 +355,16 @@ describe("ServerNode", () => {
         await node.close();
     }
 
-    it("initializes correctly after offline factory reset", async () => {
-        await testFactoryReset(false);
+    it("factory resets when offline after commission", async () => {
+        await testFactoryReset("offline-after-commission");
     });
 
-    it("initializes correctly after online factory reset", async () => {
-        await testFactoryReset(true);
+    it("factory resets when online after commission", async () => {
+        await testFactoryReset("online");
+    });
+
+    it("factory resets when offline without commission", async () => {
+        await testFactoryReset("offline");
     });
 
     it("commissions twice", async () => {

@@ -21,6 +21,34 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace NetworkCommissioning {
     /**
+     * These are optional features supported by NetworkCommissioningCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 11.9.4
+     */
+    export enum Feature {
+        /**
+         * WiFiNetworkInterface (WI)
+         *
+         * Wi-Fi related features
+         */
+        WiFiNetworkInterface = "WiFiNetworkInterface",
+
+        /**
+         * ThreadNetworkInterface (TH)
+         *
+         * Thread related features
+         */
+        ThreadNetworkInterface = "ThreadNetworkInterface",
+
+        /**
+         * EthernetNetworkInterface (ET)
+         *
+         * Ethernet related features
+         */
+        EthernetNetworkInterface = "EthernetNetworkInterface"
+    }
+
+    /**
      * Input to the NetworkCommissioning scanNetworks command
      *
      * @see {@link MatterSpecification.v13.Core} § 11.9.7.1
@@ -1120,34 +1148,6 @@ export namespace NetworkCommissioning {
             )
         }
     });
-
-    /**
-     * These are optional features supported by NetworkCommissioningCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 11.9.4
-     */
-    export enum Feature {
-        /**
-         * WiFiNetworkInterface (WI)
-         *
-         * Wi-Fi related features
-         */
-        WiFiNetworkInterface = "WiFiNetworkInterface",
-
-        /**
-         * ThreadNetworkInterface (TH)
-         *
-         * Thread related features
-         */
-        ThreadNetworkInterface = "ThreadNetworkInterface",
-
-        /**
-         * EthernetNetworkInterface (ET)
-         *
-         * Ethernet related features
-         */
-        EthernetNetworkInterface = "EthernetNetworkInterface"
-    }
 
     /**
      * These elements and properties are present in all NetworkCommissioning clusters.

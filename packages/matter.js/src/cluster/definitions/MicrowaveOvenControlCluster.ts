@@ -26,6 +26,34 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace MicrowaveOvenControl {
     /**
+     * These are optional features supported by MicrowaveOvenControlCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 8.13.4
+     */
+    export enum Feature {
+        /**
+         * PowerAsNumber (PWRNUM)
+         *
+         * Power is specified as a unitless number or a percentage
+         */
+        PowerAsNumber = "PowerAsNumber",
+
+        /**
+         * PowerInWatts (WATTS)
+         *
+         * Power is specified in Watts
+         */
+        PowerInWatts = "PowerInWatts",
+
+        /**
+         * PowerNumberLimits (PWRLMTS)
+         *
+         * Supports the limit attributes used with the PWRNUM feature
+         */
+        PowerNumberLimits = "PowerNumberLimits"
+    }
+
+    /**
      * Input to the MicrowaveOvenControl setCookingParameters command
      *
      * @see {@link MatterSpecification.v13.Cluster} § 8.13.6.2
@@ -195,34 +223,6 @@ export namespace MicrowaveOvenControl {
             selectedWattIndex: Attribute(0x7, TlvUInt8)
         }
     });
-
-    /**
-     * These are optional features supported by MicrowaveOvenControlCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 8.13.4
-     */
-    export enum Feature {
-        /**
-         * PowerAsNumber (PWRNUM)
-         *
-         * Power is specified as a unitless number or a percentage
-         */
-        PowerAsNumber = "PowerAsNumber",
-
-        /**
-         * PowerInWatts (WATTS)
-         *
-         * Power is specified in Watts
-         */
-        PowerInWatts = "PowerInWatts",
-
-        /**
-         * PowerNumberLimits (PWRLMTS)
-         *
-         * Supports the limit attributes used with the PWRNUM feature
-         */
-        PowerNumberLimits = "PowerNumberLimits"
-    }
 
     /**
      * These elements and properties are present in all MicrowaveOvenControl clusters.

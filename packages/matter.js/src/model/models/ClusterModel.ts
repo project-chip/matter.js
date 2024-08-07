@@ -68,7 +68,7 @@ export class ClusterModel extends Model implements ClusterElement {
 
         // Formally a field element cannot be a cluster child but we allow it for metadata control when a field should
         // not be published
-        const members = traversal.findMembers(this);
+        const members = traversal.findChildren(this, [ElementTag.Field, ElementTag.Attribute]) as PropertyModel[];
 
         // We consider the standard set of "global" attributes members of all clusters
         const missingGlobalIds = new Set(AttributeModel.globalIds);
@@ -94,7 +94,22 @@ export class ClusterModel extends Model implements ClusterElement {
     }
 
     get activeMembers() {
-        return new ModelTraversal().findActiveMembers(this, this);
+        return new ModelTraversal().findActiveMembers(this, false, this);
+    }
+
+    get conformantMembers() {
+        return new ModelTraversal().findActiveMembers(this, true, this);
+    }
+
+    /**
+     * Get attributes, commands and events whether inherited or defined directly in this model.
+     */
+    get allAces() {
+        return new ModelTraversal().findChildren(this, [
+            ElementTag.Attribute,
+            ElementTag.Command,
+            ElementTag.Event,
+        ]) as (AttributeModel | CommandModel | EventModel)[];
     }
 
     get revision() {

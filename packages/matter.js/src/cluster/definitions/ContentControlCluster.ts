@@ -22,6 +22,70 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ContentControl {
     /**
+     * These are optional features supported by ContentControlCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 6.13.4
+     */
+    export enum Feature {
+        /**
+         * ScreenTime (ST)
+         *
+         * Supports managing screen time limits.
+         */
+        ScreenTime = "ScreenTime",
+
+        /**
+         * PinManagement (PM)
+         *
+         * Supports managing a PIN code which is used for restricting access to configuration of this feature.
+         */
+        PinManagement = "PinManagement",
+
+        /**
+         * BlockUnrated (BU)
+         *
+         * Supports managing content controls for unrated content.
+         */
+        BlockUnrated = "BlockUnrated",
+
+        /**
+         * OnDemandContentRating (OCR)
+         *
+         * Supports managing content controls based upon rating threshold for on demand content.
+         */
+        OnDemandContentRating = "OnDemandContentRating",
+
+        /**
+         * ScheduledContentRating (SCR)
+         *
+         * Supports managing content controls based upon rating threshold for scheduled content.
+         */
+        ScheduledContentRating = "ScheduledContentRating",
+
+        /**
+         * BlockChannels (BC)
+         *
+         * Supports managing a set of channels that are prohibited.
+         */
+        BlockChannels = "BlockChannels",
+
+        /**
+         * BlockApplications (BA)
+         *
+         * Supports managing a set of applications that are prohibited.
+         */
+        BlockApplications = "BlockApplications",
+
+        /**
+         * BlockContentTimeWindow (BTW)
+         *
+         * Supports managing content controls based upon setting time window in which all contents and applications
+         * SHALL be blocked.
+         */
+        BlockContentTimeWindow = "BlockContentTimeWindow"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 6.13.5.1
      */
     export const TlvRatingName = TlvObject({
@@ -1056,70 +1120,6 @@ export namespace ContentControl {
             )
         }
     });
-
-    /**
-     * These are optional features supported by ContentControlCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.13.4
-     */
-    export enum Feature {
-        /**
-         * ScreenTime (ST)
-         *
-         * Supports managing screen time limits.
-         */
-        ScreenTime = "ScreenTime",
-
-        /**
-         * PinManagement (PM)
-         *
-         * Supports managing a PIN code which is used for restricting access to configuration of this feature.
-         */
-        PinManagement = "PinManagement",
-
-        /**
-         * BlockUnrated (BU)
-         *
-         * Supports managing content controls for unrated content.
-         */
-        BlockUnrated = "BlockUnrated",
-
-        /**
-         * OnDemandContentRating (OCR)
-         *
-         * Supports managing content controls based upon rating threshold for on demand content.
-         */
-        OnDemandContentRating = "OnDemandContentRating",
-
-        /**
-         * ScheduledContentRating (SCR)
-         *
-         * Supports managing content controls based upon rating threshold for scheduled content.
-         */
-        ScheduledContentRating = "ScheduledContentRating",
-
-        /**
-         * BlockChannels (BC)
-         *
-         * Supports managing a set of channels that are prohibited.
-         */
-        BlockChannels = "BlockChannels",
-
-        /**
-         * BlockApplications (BA)
-         *
-         * Supports managing a set of applications that are prohibited.
-         */
-        BlockApplications = "BlockApplications",
-
-        /**
-         * BlockContentTimeWindow (BTW)
-         *
-         * Supports managing content controls based upon setting time window in which all contents and applications
-         * SHALL be blocked.
-         */
-        BlockContentTimeWindow = "BlockContentTimeWindow"
-    }
 
     /**
      * These elements and properties are present in all ContentControl clusters.

@@ -40,6 +40,66 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Thermostat {
     /**
+     * These are optional features supported by ThermostatCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 4.3.4
+     */
+    export enum Feature {
+        /**
+         * Heating (HEAT)
+         *
+         * Thermostat is capable of managing a heating device
+         */
+        Heating = "Heating",
+
+        /**
+         * Cooling (COOL)
+         *
+         * Thermostat is capable of managing a cooling device
+         */
+        Cooling = "Cooling",
+
+        /**
+         * Occupancy (OCC)
+         *
+         * Supports Occupied and Unoccupied setpoints
+         */
+        Occupancy = "Occupancy",
+
+        /**
+         * ScheduleConfiguration (SCH)
+         *
+         * Supports remote configuration of a weekly schedule of setpoint transitions
+         */
+        ScheduleConfiguration = "ScheduleConfiguration",
+
+        /**
+         * Setback (SB)
+         *
+         * Supports configurable setback (or span)
+         */
+        Setback = "Setback",
+
+        /**
+         * AutoMode (AUTO)
+         *
+         * Supports a System Mode of Auto
+         */
+        AutoMode = "AutoMode",
+
+        /**
+         * LocalTemperatureNotExposed (LTNE)
+         *
+         * This feature indicates that the Calculated Local Temperature used internally is unavailable to report
+         * externally, for example due to the temperature control being done by a separate subsystem which does not
+         * offer a view into the currently measured temperature, but allows setpoints to be provided.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.3.4.1
+         */
+        LocalTemperatureNotExposed = "LocalTemperatureNotExposed"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.3.8.22
      */
     export enum ThermostatRunningMode {
@@ -1258,66 +1318,6 @@ export namespace Thermostat {
             unoccupiedSetbackMax: FixedAttribute(0x39, TlvNullable(TlvUInt8), { default: null })
         }
     });
-
-    /**
-     * These are optional features supported by ThermostatCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.3.4
-     */
-    export enum Feature {
-        /**
-         * Heating (HEAT)
-         *
-         * Thermostat is capable of managing a heating device
-         */
-        Heating = "Heating",
-
-        /**
-         * Cooling (COOL)
-         *
-         * Thermostat is capable of managing a cooling device
-         */
-        Cooling = "Cooling",
-
-        /**
-         * Occupancy (OCC)
-         *
-         * Supports Occupied and Unoccupied setpoints
-         */
-        Occupancy = "Occupancy",
-
-        /**
-         * ScheduleConfiguration (SCH)
-         *
-         * Supports remote configuration of a weekly schedule of setpoint transitions
-         */
-        ScheduleConfiguration = "ScheduleConfiguration",
-
-        /**
-         * Setback (SB)
-         *
-         * Supports configurable setback (or span)
-         */
-        Setback = "Setback",
-
-        /**
-         * AutoMode (AUTO)
-         *
-         * Supports a System Mode of Auto
-         */
-        AutoMode = "AutoMode",
-
-        /**
-         * LocalTemperatureNotExposed (LTNE)
-         *
-         * This feature indicates that the Calculated Local Temperature used internally is unavailable to report
-         * externally, for example due to the temperature control being done by a separate subsystem which does not
-         * offer a view into the currently measured temperature, but allows setpoints to be provided.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.3.4.1
-         */
-        LocalTemperatureNotExposed = "LocalTemperatureNotExposed"
-    }
 
     /**
      * These elements and properties are present in all Thermostat clusters.

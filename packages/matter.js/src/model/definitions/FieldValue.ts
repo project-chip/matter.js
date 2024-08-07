@@ -271,13 +271,12 @@ export namespace FieldValue {
                     return value;
                 }
 
-                if (typeof value === "string") {
-                    // Key name
-                    return value;
-                }
-
                 const id = Number(value);
                 if (Number.isNaN(id)) {
+                    if (typeof value === "string") {
+                        // Key name
+                        return value;
+                    }
                     return;
                 }
 

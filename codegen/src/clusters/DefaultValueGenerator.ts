@@ -86,9 +86,11 @@ export class DefaultValueGenerator {
             return;
         }
 
+        const fields = model.fields;
+
         const properties = {} as { [name: string]: boolean | number | string };
         for (const name in defaultValue) {
-            const field = model.get(ValueModel, camelize(name, true));
+            const field = fields[name];
             if (field === undefined) {
                 throw new Error(`No model for bit field ${name}`);
             }
@@ -102,7 +104,7 @@ export class DefaultValueGenerator {
                 const defining = field.definingModel;
                 const enumValue = defining?.member(bits);
                 if (defining && enumValue) {
-                    valueName = `${this.tlv.file.reference(defining)}.${enumValue.name}`;
+                    valueName = serialize.asIs(`${this.tlv.file.reference(defining)}.${enumValue.name}`);
                 }
                 properties[name] = valueName ?? bits;
             }

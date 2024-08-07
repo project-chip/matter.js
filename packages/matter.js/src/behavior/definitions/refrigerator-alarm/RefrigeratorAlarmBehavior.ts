@@ -13,6 +13,9 @@ import { RefrigeratorAlarmInterface } from "./RefrigeratorAlarmInterface.js";
 /**
  * RefrigeratorAlarmBehavior is the base class for objects that support interaction with {@link
  * RefrigeratorAlarm.Cluster}.
+ *
+ * This class does not have optional features of RefrigeratorAlarm.Cluster enabled. You can enable additional features
+ * using RefrigeratorAlarmBehavior.with.
  */
 export const RefrigeratorAlarmBehavior = ClusterBehavior
     .withInterface<RefrigeratorAlarmInterface>()

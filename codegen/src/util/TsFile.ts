@@ -207,7 +207,7 @@ export class Block extends Entry {
         let needSpace = false;
         for (let i = 0; i < serializedEntries.length; i++) {
             // Add delimiter to entry if necessary
-            const entry = `${serializedEntries[i]}${this.delimiterAfter(i, serializedEntries[i])}`;
+            const entry = `${serializedEntries[i]}${this.delimiterAfter(rawEntries[i], serializedEntries[i])}`;
 
             // Separate documented and large elements from their siblings
             if (rawEntries[i].isDocumented || (entry.split("\n").length > 5 && !rawEntries[i].shouldGroup)) {
@@ -393,25 +393,25 @@ export class Block extends Entry {
         this.definedNames.add(name);
     }
 
-    protected delimiterAfter(index: number, serialized: string): string {
-        // Do not delimit functions structures that eslint will complain about
+    protected delimiterAfter(entry: Entry, serialized: string): string {
         if (
             serialized.match(
                 /^(?:\s*(?:\/\*.*\*\/|export|const))*\s*(?:export)?\s*(?:enum|function|namespace|interface|class)/m,
             )
         ) {
+            // Do not delimit functions structures that eslint will complain about
             return "";
         }
 
-        if (this.isDelimited(index)) {
+        if (this.isDelimited(entry)) {
             return ";";
         }
 
         return "";
     }
 
-    protected isDelimited(index: number) {
-        return this.get(index) instanceof Atom || this.get(index) instanceof NestedBlock;
+    protected isDelimited(entry: Entry) {
+        return entry instanceof Atom || entry instanceof NestedBlock;
     }
 }
 
@@ -581,11 +581,14 @@ class ExpressionBlock extends NestedBlock {
         return super.layOutEntries(linePrefix, serializedEntries, rawEntries);
     }
 
-    override delimiterAfter(index: number) {
-        if (this.isDelimited(index)) {
-            for (let i = index + 1; i < this.length; i++) {
-                if (this.isDelimited(i)) {
-                    return ",";
+    override delimiterAfter(entry: Entry) {
+        if (this.isDelimited(entry)) {
+            const index = this.entries.indexOf(entry);
+            if (index !== -1) {
+                for (let i = index + 1; i < this.length; i++) {
+                    if (this.isDelimited(this.get(i))) {
+                        return ",";
+                    }
                 }
             }
         }

@@ -434,7 +434,7 @@ if (!server.lifecycle.isCommissioned) {
 }
 
 /**
- * To correctly tear down the now we can use server[Symbol.asyncDispose]().
+ * To correctly tear down the server we can use server.close().
  */
 process.on("SIGINT", () => {
     // Clean up on CTRL-C

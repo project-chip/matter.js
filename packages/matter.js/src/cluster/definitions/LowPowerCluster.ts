@@ -29,7 +29,7 @@ export namespace LowPower {
              */
             sleep: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse)
         }
-    })
+    });
 
     /**
      * This cluster provides an interface for managing low power mode on a device.

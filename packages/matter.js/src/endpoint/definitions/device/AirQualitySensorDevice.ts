@@ -32,7 +32,9 @@ import {
 import {
     Pm1ConcentrationMeasurementServer as BasePm1ConcentrationMeasurementServer
 } from "../../../behavior/definitions/pm1-concentration-measurement/Pm1ConcentrationMeasurementServer.js";
-import { Pm2Server as BasePm2Server } from "../../../behavior/definitions/pm2/Pm2Server.js";
+import {
+    Pm25ConcentrationMeasurementServer as BasePm25ConcentrationMeasurementServer
+} from "../../../behavior/definitions/pm25-concentration-measurement/Pm25ConcentrationMeasurementServer.js";
 import {
     Pm10ConcentrationMeasurementServer as BasePm10ConcentrationMeasurementServer
 } from "../../../behavior/definitions/pm10-concentration-measurement/Pm10ConcentrationMeasurementServer.js";
@@ -132,11 +134,11 @@ export namespace AirQualitySensorRequirements {
     export const Pm1ConcentrationMeasurementServer = BasePm1ConcentrationMeasurementServer;
 
     /**
-     * The Pm2 cluster is optional per the Matter specification.
+     * The Pm25ConcentrationMeasurement cluster is optional per the Matter specification.
      *
-     * We provide this alias to the default implementation {@link Pm2Server} for convenience.
+     * We provide this alias to the default implementation {@link Pm25ConcentrationMeasurementServer} for convenience.
      */
-    export const Pm2Server = BasePm2Server;
+    export const Pm25ConcentrationMeasurementServer = BasePm25ConcentrationMeasurementServer;
 
     /**
      * The Pm10ConcentrationMeasurement cluster is optional per the Matter specification.
@@ -175,7 +177,7 @@ export namespace AirQualitySensorRequirements {
             OzoneConcentrationMeasurement: OzoneConcentrationMeasurementServer,
             FormaldehydeConcentrationMeasurement: FormaldehydeConcentrationMeasurementServer,
             Pm1ConcentrationMeasurement: Pm1ConcentrationMeasurementServer,
-            Pm2: Pm2Server,
+            Pm25ConcentrationMeasurement: Pm25ConcentrationMeasurementServer,
             Pm10ConcentrationMeasurement: Pm10ConcentrationMeasurementServer,
             RadonConcentrationMeasurement: RadonConcentrationMeasurementServer,
             TotalVolatileOrganicCompoundsConcentrationMeasurement: TotalVolatileOrganicCompoundsConcentrationMeasurementServer

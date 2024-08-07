@@ -24,6 +24,22 @@ import { Identity } from "../../util/Type.js";
 
 export namespace AlarmBase {
     /**
+     * These are optional features supported by AlarmBaseCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.15.4
+     */
+    export enum Feature {
+        /**
+         * Reset (RESET)
+         *
+         * This feature indicates that alarms can be reset via the Reset command.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.15.4.1
+         */
+        Reset = "Reset"
+    }
+
+    /**
      * Input to the AlarmBase reset command
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.15.7.1

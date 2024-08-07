@@ -15,6 +15,7 @@ import { PropertyModel } from "./PropertyModel.js";
 
 // These are circular dependencies so just to be safe we only import the types.  We also need the class, though, at
 // runtime.  So we use the references in the Model.constructors factory pool.
+import { camelize } from "../../util/String.js";
 import { DefaultValue } from "../logic/DefaultValue.js";
 import { type ClusterModel } from "./ClusterModel.js";
 import { type FieldModel } from "./FieldModel.js";
@@ -175,10 +176,10 @@ export abstract class ValueModel extends Model implements ValueElement {
     }
 
     /**
-     * All {@link PropertyModel} children}.
+     * All {@link FieldModel} children}.
      */
     get members(): PropertyModel[] {
-        return new ModelTraversal().findMembers(this);
+        return new ModelTraversal().findChildren(this, [ElementTag.Field]) as PropertyModel[];
     }
 
     /**
@@ -186,7 +187,23 @@ export abstract class ValueModel extends Model implements ValueElement {
      */
     get activeMembers() {
         const cluster = this.owner(Model.types[ElementTag.Cluster]) as ClusterModel | undefined;
-        return new ModelTraversal().findActiveMembers(this, cluster);
+        return new ModelTraversal().findActiveMembers(this, false, cluster);
+    }
+
+    /**
+     * The subset of {@link members} that are conformant.
+     */
+    get conformantMembers() {
+        const cluster = this.owner(Model.types[ElementTag.Cluster]) as ClusterModel | undefined;
+        return new ModelTraversal().findActiveMembers(this, true, cluster);
+    }
+
+    /**
+     * Active members keyed by property name.
+     */
+    get fields() {
+        const members = this.activeMembers;
+        return Object.fromEntries(members.map(member => [camelize(member.name), member]));
     }
 
     /**

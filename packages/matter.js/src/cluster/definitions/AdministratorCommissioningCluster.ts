@@ -22,6 +22,20 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace AdministratorCommissioning {
     /**
+     * These are optional features supported by AdministratorCommissioningCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 11.19.4
+     */
+    export enum Feature {
+        /**
+         * Basic (BC)
+         *
+         * Node supports Basic Commissioning Method.
+         */
+        Basic = "Basic"
+    }
+
+    /**
      * Input to the AdministratorCommissioning openBasicCommissioningWindow command
      *
      * @see {@link MatterSpecification.v13.Core} § 11.19.8.2
@@ -206,20 +220,6 @@ export namespace AdministratorCommissioning {
             )
         }
     });
-
-    /**
-     * These are optional features supported by AdministratorCommissioningCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 11.19.4
-     */
-    export enum Feature {
-        /**
-         * Basic (BC)
-         *
-         * Node supports Basic Commissioning Method.
-         */
-        Basic = "Basic"
-    }
 
     /**
      * These elements and properties are present in all AdministratorCommissioning clusters.

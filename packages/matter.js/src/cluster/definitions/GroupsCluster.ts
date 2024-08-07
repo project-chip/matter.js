@@ -23,6 +23,22 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Groups {
     /**
+     * These are optional features supported by GroupsCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.3.4
+     */
+    export enum Feature {
+        /**
+         * GroupNames (GN)
+         *
+         * The Group Names feature indicates the ability to store a name for a group when a group is added.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.3.4.1
+         */
+        GroupNames = "GroupNames"
+    }
+
+    /**
      * The value of the Groups nameSupport attribute
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.3.6.1
@@ -282,22 +298,6 @@ export namespace Groups {
          */
         groupNames: BitFlag(7)
     };
-
-    /**
-     * These are optional features supported by GroupsCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.3.4
-     */
-    export enum Feature {
-        /**
-         * GroupNames (GN)
-         *
-         * The Group Names feature indicates the ability to store a name for a group when a group is added.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.3.4.1
-         */
-        GroupNames = "GroupNames"
-    }
 
     /**
      * These elements and properties are present in all Groups clusters.

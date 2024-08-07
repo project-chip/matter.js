@@ -20,6 +20,28 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace WiFiNetworkDiagnostics {
     /**
+     * These are optional features supported by WiFiNetworkDiagnosticsCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 11.15.4
+     */
+    export enum Feature {
+        /**
+         * PacketCounts (PKTCNT)
+         *
+         * Node makes available the counts for the number of received and transmitted packets on the Wi-Fi interface.
+         */
+        PacketCounts = "PacketCounts",
+
+        /**
+         * ErrorCounts (ERRCNT)
+         *
+         * Node makes available the counts for the number of errors that have occurred during the reception and
+         * transmission of packets on the Wi-Fi interface.
+         */
+        ErrorCounts = "ErrorCounts"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Core} § 11.15.5.1
      */
     export enum SecurityType {
@@ -303,28 +325,6 @@ export namespace WiFiNetworkDiagnostics {
             packetUnicastTxCount: Attribute(0xa, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 })
         }
     });
-
-    /**
-     * These are optional features supported by WiFiNetworkDiagnosticsCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 11.15.4
-     */
-    export enum Feature {
-        /**
-         * PacketCounts (PKTCNT)
-         *
-         * Node makes available the counts for the number of received and transmitted packets on the Wi-Fi interface.
-         */
-        PacketCounts = "PacketCounts",
-
-        /**
-         * ErrorCounts (ERRCNT)
-         *
-         * Node makes available the counts for the number of errors that have occurred during the reception and
-         * transmission of packets on the Wi-Fi interface.
-         */
-        ErrorCounts = "ErrorCounts"
-    }
 
     /**
      * These elements and properties are present in all WiFiNetworkDiagnostics clusters.

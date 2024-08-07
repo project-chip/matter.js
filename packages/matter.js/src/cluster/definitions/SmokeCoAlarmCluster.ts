@@ -30,6 +30,27 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace SmokeCoAlarm {
     /**
+     * These are optional features supported by SmokeCoAlarmCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 2.11.4
+     */
+    export enum Feature {
+        /**
+         * SmokeAlarm (SMOKE)
+         *
+         * Supports Smoke alarm
+         */
+        SmokeAlarm = "SmokeAlarm",
+
+        /**
+         * CoAlarm (CO)
+         *
+         * Supports CO alarm
+         */
+        CoAlarm = "CoAlarm"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 2.11.5.1
      */
     export enum AlarmState {
@@ -460,27 +481,6 @@ export namespace SmokeCoAlarm {
             interconnectCoAlarm: OptionalEvent(0x9, EventPriority.Critical, TlvInterconnectCoAlarmEvent)
         }
     });
-
-    /**
-     * These are optional features supported by SmokeCoAlarmCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.11.4
-     */
-    export enum Feature {
-        /**
-         * SmokeAlarm (SMOKE)
-         *
-         * Supports Smoke alarm
-         */
-        SmokeAlarm = "SmokeAlarm",
-
-        /**
-         * CoAlarm (CO)
-         *
-         * Supports CO alarm
-         */
-        CoAlarm = "CoAlarm"
-    }
 
     /**
      * These elements and properties are present in all SmokeCoAlarm clusters.

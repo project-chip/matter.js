@@ -28,7 +28,7 @@ export namespace FixedLabel {
              */
             labelList: Attribute(0x0, TlvArray(Label.TlvLabelStruct), { persistent: true, default: [] })
         }
-    })
+    });
 
     /**
      * This cluster provides a feature for the device to tag an endpoint with zero or more read only labels. Examples:

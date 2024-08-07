@@ -28,6 +28,20 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace SoftwareDiagnostics {
     /**
+     * These are optional features supported by SoftwareDiagnosticsCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 11.13.4
+     */
+    export enum Feature {
+        /**
+         * Watermarks (WTRMRK)
+         *
+         * Node makes available the metrics for high watermark related to memory consumption.
+         */
+        Watermarks = "Watermarks"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Core} § 11.13.5.1
      */
     export const TlvThreadMetrics = TlvObject({
@@ -155,20 +169,6 @@ export namespace SoftwareDiagnostics {
             resetWatermarks: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
     });
-
-    /**
-     * These are optional features supported by SoftwareDiagnosticsCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 11.13.4
-     */
-    export enum Feature {
-        /**
-         * Watermarks (WTRMRK)
-         *
-         * Node makes available the metrics for high watermark related to memory consumption.
-         */
-        Watermarks = "Watermarks"
-    }
 
     /**
      * These elements and properties are present in all SoftwareDiagnostics clusters.

@@ -10,7 +10,6 @@ import { InstanceBroadcaster } from "../../../common/InstanceBroadcaster.js";
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { TransportInterface } from "../../../common/TransportInterface.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
-import { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
 import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
@@ -325,8 +324,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         await this.#interactionServer?.[Symbol.asyncDispose]();
         this.#interactionServer = undefined;
-
-        await EndpointServer.forEndpoint(this.owner)[Symbol.asyncDispose]();
 
         if (this.#commissionedListener) {
             const commissionedListener = this.#commissionedListener;

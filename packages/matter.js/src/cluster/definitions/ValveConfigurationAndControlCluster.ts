@@ -29,6 +29,35 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ValveConfigurationAndControl {
     /**
+     * These are optional features supported by ValveConfigurationAndControlCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 4.6.4
+     */
+    export enum Feature {
+        /**
+         * TimeSync (TS)
+         *
+         * This feature shall indicate that the valve uses Time Synchronization and UTC time to indicate duration and
+         * auto close time.
+         *
+         * This feature shall NOT be supported unless the device supports the Time Synchronization cluster.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.6.4.1
+         */
+        TimeSync = "TimeSync",
+
+        /**
+         * Level (LVL)
+         *
+         * This feature shall indicate that the valve is capable of being adjusted to a specific position, as a
+         * percentage, of its full range of motion.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 4.6.4.2
+         */
+        Level = "Level"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.6.5.2
      */
     export enum ValveState {
@@ -266,35 +295,6 @@ export namespace ValveConfigurationAndControl {
             levelStep: OptionalFixedAttribute(0xa, TlvUInt8.bound({ min: 1, max: 50 }), { default: 1 })
         }
     });
-
-    /**
-     * These are optional features supported by ValveConfigurationAndControlCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.6.4
-     */
-    export enum Feature {
-        /**
-         * TimeSync (TS)
-         *
-         * This feature shall indicate that the valve uses Time Synchronization and UTC time to indicate duration and
-         * auto close time.
-         *
-         * This feature shall NOT be supported unless the device supports the Time Synchronization cluster.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.6.4.1
-         */
-        TimeSync = "TimeSync",
-
-        /**
-         * Level (LVL)
-         *
-         * This feature shall indicate that the valve is capable of being adjusted to a specific position, as a
-         * percentage, of its full range of motion.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 4.6.4.2
-         */
-        Level = "Level"
-    }
 
     /**
      * These elements and properties are present in all ValveConfigurationAndControl clusters.

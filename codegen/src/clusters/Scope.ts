@@ -235,7 +235,20 @@ function identifyNamedModels(rootScope: Model): Locations {
         }
     }
 
+    // Visit all direct descendents and assign names
     rootScope.visit(define);
+
+    // For clusters, also visit inherited attributes, commands and events
+    if (rootScope instanceof ClusterModel) {
+        const aces = rootScope.allAces;
+        for (const ace of aces) {
+            if (ace.parent === rootScope) {
+                continue;
+            }
+
+            ace.visit(define);
+        }
+    }
 
     return locations;
 }
