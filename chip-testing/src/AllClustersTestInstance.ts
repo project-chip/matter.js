@@ -51,6 +51,7 @@ import { Environment, StorageService } from "@project-chip/matter.js/environment
 import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
+import * as net from "node:net";
 import { TestInstance } from "./GenericTestApp.js";
 import { TestActivatedCarbonFilterMonitoringServer } from "./cluster/TestActivatedCarbonFilterMonitoringServer.js";
 import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsServer.js";
@@ -61,8 +62,8 @@ import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js"
 
 export class AllClustersTestInstance implements TestInstance {
     serverNode: ServerNode | undefined;
-    //storageManager: StorageManager;
     protected appName: string;
+    #namedPipeServer?: net.Server;
 
     constructor(
         public storage: Storage,
@@ -72,8 +73,29 @@ export class AllClustersTestInstance implements TestInstance {
             passcode?: number;
         },
     ) {
-        //this.storageManager = new StorageManager(storage);
         this.appName = options.appName;
+    }
+
+    #setupNamedPipe() {
+        this.#namedPipeServer = net.createServer();
+
+        this.#namedPipeServer.on("connection", socket => {
+            console.log("Named pipe connected");
+            socket.on("data", data => {
+                console.log("Named pipe data:", data.toString());
+            });
+        });
+        this.#namedPipeServer.on("error", err => {
+            console.log("Named pipe error:", err);
+        });
+        this.#namedPipeServer.on("close", () => {
+            console.log("Named pipe closed");
+        });
+
+        const namedPipe = `/tmp/chip_all_clusters_fifo_${process.pid}`;
+        this.#namedPipeServer.listen({ path: namedPipe, readableAll: true, writableAll: true }, () =>
+            console.log(`listening on ${namedPipe}`),
+        );
     }
 
     /** Set up the test instance MatterServer. */
@@ -82,6 +104,7 @@ export class AllClustersTestInstance implements TestInstance {
             //await this.storageManager.initialize(); // hacky but works
 
             this.serverNode = await this.setupServer();
+            this.#setupNamedPipe();
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
             console.log(error);
@@ -125,6 +148,8 @@ export class AllClustersTestInstance implements TestInstance {
         //this.serverNode.cancel();
         //await this.serverNode.lifecycle.act;
         this.serverNode = undefined;
+        this.#namedPipeServer?.close();
+        this.#namedPipeServer = undefined;
         console.log(`======> ${this.appName}: Instance stopped`);
     }
 
