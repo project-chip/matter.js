@@ -159,12 +159,10 @@ export abstract class Behavior {
      * The data supervisor for the behavior.  The supervisor controls validation and access to behavior data.
      */
     static get supervisor(): RootSupervisor {
-        const internal = this as unknown as StaticInternal;
-        let supervisor = internal[SUPERVISOR];
-        if (!supervisor) {
-            supervisor = internal[SUPERVISOR] = BehaviorSupervisor(this);
+        if (Object.hasOwn(this, SUPERVISOR)) {
+            return (this as StaticInternal)[SUPERVISOR] as RootSupervisor;
         }
-        return supervisor;
+        return ((this as StaticInternal)[SUPERVISOR] = BehaviorSupervisor(this));
     }
 
     /**

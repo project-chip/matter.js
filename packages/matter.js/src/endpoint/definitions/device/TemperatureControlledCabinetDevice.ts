@@ -39,21 +39,21 @@ export interface TemperatureControlledCabinetDevice extends Identity<typeof Temp
 
 export namespace TemperatureControlledCabinetRequirements {
     /**
-     * The TemperatureControl cluster is required by the Matter specification
+     * The TemperatureControl cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureControlServer} for convenience.
      */
     export const TemperatureControlServer = BaseTemperatureControlServer;
 
     /**
-     * The TemperatureMeasurement cluster is optional per the Matter specification
+     * The TemperatureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureMeasurementServer} for convenience.
      */
     export const TemperatureMeasurementServer = BaseTemperatureMeasurementServer;
 
     /**
-     * The RefrigeratorAndTemperatureControlledCabinetMode cluster is optional per the Matter specification
+     * The RefrigeratorAndTemperatureControlledCabinetMode cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation
      * {@link RefrigeratorAndTemperatureControlledCabinetModeServer} for convenience.
@@ -61,14 +61,14 @@ export namespace TemperatureControlledCabinetRequirements {
     export const RefrigeratorAndTemperatureControlledCabinetModeServer = BaseRefrigeratorAndTemperatureControlledCabinetModeServer;
 
     /**
-     * The OvenMode cluster is optional per the Matter specification
+     * The OvenMode cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link OvenModeServer} for convenience.
      */
     export const OvenModeServer = BaseOvenModeServer;
 
     /**
-     * The OvenCavityOperationalState cluster is optional per the Matter specification
+     * The OvenCavityOperationalState cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link OvenCavityOperationalStateServer} for convenience.
      */

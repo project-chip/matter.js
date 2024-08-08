@@ -14,14 +14,18 @@ export type StatusMessage = {
     generalStatus: GeneralStatusCode;
     protocolId: number;
     protocolStatus: ProtocolStatusCode;
+    protocolData?: ByteArray;
 };
 
 export class SecureChannelStatusMessageSchema extends Schema<StatusMessage, ByteArray> {
-    encodeInternal({ generalStatus, protocolId, protocolStatus }: StatusMessage) {
+    encodeInternal({ generalStatus, protocolId, protocolStatus, protocolData }: StatusMessage) {
         const writer = new DataWriter(Endian.Little);
         writer.writeUInt16(generalStatus);
         writer.writeUInt32(protocolId);
         writer.writeUInt16(protocolStatus);
+        if (protocolData !== undefined && protocolData.length > 0) {
+            writer.writeByteArray(protocolData);
+        }
         return writer.toByteArray();
     }
 
@@ -30,7 +34,9 @@ export class SecureChannelStatusMessageSchema extends Schema<StatusMessage, Byte
         const generalStatus = reader.readUInt16();
         const protocolId = reader.readUInt32();
         const protocolStatus = reader.readUInt16();
-        return { generalStatus, protocolId, protocolStatus };
+        const remainingBytes = reader.getRemainingBytesCount() > 0 ? reader.getRemainingBytes() : undefined;
+
+        return { generalStatus, protocolId, protocolStatus, remainingBytes };
     }
 }
 

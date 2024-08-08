@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationOutOfBoundsError, validatorOf } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
-import { fromMEI } from "./ManufacturerExtensibleIdentifier.js";
+import { Mei } from "./ManufacturerExtensibleIdentifier.js";
 
 /**
  * A "field ID" is an unsigned 32-bit integer that identifies a specific field
@@ -27,11 +26,11 @@ export function FieldId(fieldId: number, validate = true): FieldId {
         // Global
         return fieldId as FieldId;
     }
-    const { typeSuffix } = fromMEI(fieldId);
+    const { typeSuffix } = Mei.fromMei(fieldId);
     if (typeSuffix >= 0x00 && typeSuffix <= 0xdf) {
         return fieldId as FieldId;
     }
-    throw new ValidationError(`Invalid field ID: ${fieldId}`);
+    throw new ValidationOutOfBoundsError(`Invalid field ID: ${fieldId}`);
 }
 
 export namespace FieldId {
@@ -39,18 +38,15 @@ export namespace FieldId {
         return fieldId >= 0xe0 && fieldId <= 0xfe;
     };
 
-    export const isValid = (fieldId: number): fieldId is FieldId => {
-        return tryCatch(
-            () => {
-                FieldId(fieldId);
-                return true;
-            },
-            ValidationError,
-            false,
-        );
-    };
+    export const isValid = validatorOf(FieldId);
 }
 
+// TODO Adjust how to encode Field IDs
+//  Field IDs SHALL be encoded as:
+//    • A context tag when the MEI prefix encodes a standard/scoped source.
+//    • A fully-qualified profile-specific tag when the MEI prefix encodes a manufacturer code. The Vendor ID SHALL be
+//      set to the manufacturer code, the profile number set to 0 and the tag number set to the MEI suffix.
+//  NOTE Support for encoding Field IDs with an MC source is provisional.
 /** TLV schema for a field ID. */
 export const TlvFieldId = new TlvWrapper<FieldId, number>(
     TlvUInt32,

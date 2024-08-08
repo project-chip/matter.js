@@ -61,7 +61,7 @@ export class RequirementGenerator {
                 continue;
             }
 
-            if (requirement.mandatory || requirement.name === "Descriptor") {
+            if (requirement.isMandatory || requirement.name === "Descriptor") {
                 const variance = ClusterVariance(definition);
                 if (variance.requiresFeatures) {
                     if (!this.mandatoryWithExtension) {
@@ -162,7 +162,7 @@ export class RequirementGenerator {
 
         const requiredOrMandatory = target === this.mandatoryBlock ? "required by" : "optional per";
 
-        let documentation = `The ${detail.definition.name} cluster is ${requiredOrMandatory} the Matter specification`;
+        let documentation = `The ${detail.definition.name} cluster is ${requiredOrMandatory} the Matter specification.`;
 
         if (specialized) {
             documentation += `\nThis version of {@link ${name}} is specialized per the specification.`;

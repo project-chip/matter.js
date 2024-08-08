@@ -9,11 +9,11 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EventId } from "../../datatype/EventId.js";
+import { Endpoint } from "../../device/Endpoint.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
-import { BitSchema } from "../../schema/BitmapSchema.js";
 import { Session } from "../../session/Session.js";
 import { Storage } from "../../storage/Storage.js";
 import { SupportedStorageTypes } from "../../storage/StringifyTools.js";
@@ -45,9 +45,11 @@ import {
     WritableAttribute,
     WritableFabricScopedAttribute,
 } from "../Cluster.js";
+import { ClusterType } from "../ClusterType.js";
 import { AttributeServer, FabricScopedAttributeServer, FixedAttributeServer } from "./AttributeServer.js";
+import { type ClusterServer } from "./ClusterServer.js";
 import { CommandServer } from "./CommandServer.js";
-import { EventServer } from "./EventServer.js";
+import { AnyEventServer } from "./EventServer.js";
 
 /** Cluster attributes accessible on the cluster server */
 type MandatoryAttributeServers<A extends Attributes> = Omit<
@@ -69,7 +71,10 @@ type OptionalAttributeServers<A extends Attributes> = {
           ? FixedAttributeServer<AttributeJsType<A[P]>>
           : AttributeServer<AttributeJsType<A[P]>>;
 };
-export type AttributeServers<A extends Attributes> = Merge<MandatoryAttributeServers<A>, OptionalAttributeServers<A>>;
+export type AttributeServers<A extends Attributes = Attributes> = Merge<
+    MandatoryAttributeServers<A>,
+    OptionalAttributeServers<A>
+>;
 
 /** Initial values for the cluster attribute */
 export type AttributeInitialValues<A extends Attributes> = Merge<
@@ -90,7 +95,7 @@ type OptionalCommandNames<C extends Commands> = {
 type AttributeGetters<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeGetter`]?: (args: {
         attributes: AttributeServers<A>;
-        endpoint?: EndpointInterface;
+        endpoint?: Endpoint;
         session?: Session<MatterDevice>;
         isFabricFiltered?: boolean;
     }) => AttributeJsType<A[P]>;
@@ -98,13 +103,13 @@ type AttributeGetters<A extends Attributes> = {
 type AttributeSetters<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeSetter`]?: (
         value: AttributeJsType<A[P]>,
-        args: { attributes: AttributeServers<A>; endpoint?: EndpointInterface; session?: Session<MatterDevice> },
+        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: Session<MatterDevice> },
     ) => boolean;
 };
 type AttributeValidators<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeValidator`]?: (
         value: AttributeJsType<A[P]>,
-        args: { attributes: AttributeServers<A>; endpoint?: EndpointInterface; session?: Session<MatterDevice> },
+        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: Session<MatterDevice> },
     ) => void;
 };
 export type CommandHandler<
@@ -119,7 +124,7 @@ export type CommandHandler<
               events: ES;
               session: Session<MatterDevice>;
               message: Message;
-              endpoint: EndpointInterface;
+              endpoint: Endpoint;
           }) => Promise<ResponseT> | ResponseT
         : never;
 type CommandHandlers<T extends Commands, AS extends AttributeServers<any>, ES extends EventServers<any>> = Merge<
@@ -132,7 +137,7 @@ type AttributeHandlers<A extends Attributes> = Merge<
     AttributeGetters<A>,
     Merge<AttributeSetters<A>, AttributeValidators<A>>
 >;
-export type ClusterServerHandlers<C extends Cluster<any, any, any, any, any>> = Merge<
+export type ClusterServerHandlers<C extends ClusterType> = Merge<
     CommandHandlers<C["commands"], AttributeServers<C["attributes"]>, EventServers<C["events"]>>,
     Merge<
         AttributeHandlers<C["attributes"]>,
@@ -140,14 +145,14 @@ export type ClusterServerHandlers<C extends Cluster<any, any, any, any, any>> = 
             initializeClusterServer?: (args: {
                 attributes: AttributeServers<C["attributes"]>;
                 events: EventServers<C["events"]>;
-                endpoint: EndpointInterface;
+                endpoint: Endpoint;
             }) => void;
             destroyClusterServer?: () => void;
         }
     >
 >;
 
-export type CommandServers<C extends Commands> = Merge<
+export type CommandServers<C extends Commands = Commands> = Merge<
     { [P in MandatoryCommandNames<C>]: CommandServer<RequestType<C[P]>, ResponseType<C[P]>> },
     { [P in OptionalCommandNames<C>]?: CommandServer<RequestType<C[P]>, ResponseType<C[P]>> }
 >;
@@ -240,9 +245,9 @@ type ServerAttributeSubscribers<A extends Attributes> = {
     ) => void;
 };
 
-export type EventServers<E extends Events> = Merge<
-    { [P in MandatoryEventNames<E>]: EventServer<EventType<E[P]>, any> },
-    { [P in OptionalEventNames<E>]?: EventServer<EventType<E[P]>, any> }
+export type EventServers<E extends Events = Events> = Merge<
+    { [P in MandatoryEventNames<E>]: AnyEventServer<EventType<E[P]>, any> },
+    { [P in OptionalEventNames<E>]?: AnyEventServer<EventType<E[P]>, any> }
 >;
 type ServerEventTriggers<E extends Events> = {
     [P in MandatoryEventNames<E> as `trigger${Capitalize<string & P>}Event`]: (event: EventType<E[P]>) => void;
@@ -250,11 +255,6 @@ type ServerEventTriggers<E extends Events> = {
 export type SupportedEventsList<E extends Events> = Merge<
     { [P in MandatoryEventNames<E>]: true },
     { [P in OptionalEventNames<E>]?: boolean }
->;
-
-export type ClusterServerObjForCluster<C extends Cluster<any, any, any, any, any>> = ClusterServerObj<
-    C["attributes"],
-    C["events"]
 >;
 
 export interface ClusterDatasource<S extends Storage = any> {
@@ -265,10 +265,10 @@ export interface ClusterDatasource<S extends Storage = any> {
 }
 
 export namespace ClusterDatasource {
-    export type Factory = (endpoint: EndpointInterface, cluster: ClusterServerObj<any, any>) => ClusterDatasource;
+    export type Factory = (endpoint: EndpointInterface, cluster: ClusterServerObj) => ClusterDatasource;
 }
 
-export type ClusterServerObj<A extends Attributes, E extends Events> = {
+export type ClusterServerObj<T extends ClusterType = ClusterType> = ClusterServer<T> & {
     /**
      * Cluster ID
      * @readonly
@@ -288,18 +288,6 @@ export type ClusterServerObj<A extends Attributes, E extends Events> = {
      */
     _type: "ClusterServer";
 
-    /**
-     * Cluster datasource
-     * @readonly
-     */
-    datasource?: ClusterDatasource;
-
-    /**
-     * Cluster attributes as named object that can be used to programmatically work with available attributes
-     * @readonly
-     */
-    readonly attributes: AttributeServers<A>;
-
     /** Returns if a given Attribute Id is defined and supported by this cluster server. */
     isAttributeSupported: (attributeId: AttributeId) => boolean;
 
@@ -317,37 +305,20 @@ export type ClusterServerObj<A extends Attributes, E extends Events> = {
 
     /** Returns if a given Command for provided name is defined and supported by this cluster server. */
     isCommandSupportedByName: (commandName: string) => boolean;
-} & ServerAttributeGetters<A> &
-    ServerAttributeSetters<A> &
-    ServerAttributeSubscribers<A> &
-    ServerEventTriggers<E>;
+} & ServerAttributeGetters<T["attributes"]> &
+    ServerAttributeSetters<T["attributes"]> &
+    ServerAttributeSubscribers<T["attributes"]> &
+    ServerEventTriggers<T["events"]>;
 
 /** Strongly typed interface of a cluster server */
-export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E extends Events> = ClusterServerObj<
-    A,
-    E
-> & {
-    /**
-     * Cluster commands as array
-     * @private
-     * @readonly
-     */
-    readonly _commands: CommandServers<C>;
-
-    /**
-     * Cluster events as named object
-     * @private
-     * @readonly
-     */
-    readonly _events: EventServers<E>;
-
+export type ClusterServerObjInternal<T extends ClusterType = ClusterType> = ClusterServerObj<T> & {
     /**
      * Assign this cluster to a specific endpoint. This method also initializes the internal Cluster logics
      * @private
      *
      * @param endpoint Endpoint to assign to
      */
-    readonly _assignToEndpoint: (endpoint: EndpointInterface) => void;
+    readonly _assignToEndpoint: (endpoint: Endpoint) => void;
 
     /**
      * Destroy internal cluster logics, timers and such
@@ -356,24 +327,19 @@ export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E
     readonly _close: () => void;
 };
 
-export function isClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-    obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, E>,
-): obj is ClusterServerObj<A, E> {
+export function isClusterServer<T extends ClusterType>(
+    obj: ClusterClientObj<T> | ClusterServerObj<T>,
+): obj is ClusterServerObj<T> {
     return obj._type === "ClusterServer";
 }
 
-export function isClusterServerInternal<
-    F extends BitSchema,
-    A extends Attributes,
-    C extends Commands,
-    E extends Events,
->(obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, E>): obj is ClusterServerObjInternal<A, C, E> {
+export function isClusterServerInternal<T extends ClusterType>(
+    obj: ClusterClientObj<T> | ClusterServerObj<T>,
+): obj is ClusterServerObjInternal<T> {
     return obj._type === "ClusterServer";
 }
 
-export function asClusterServerInternal<A extends Attributes, E extends Events>(
-    obj: ClusterServerObj<A, E>,
-): ClusterServerObjInternal<A, Commands, E> {
+export function asClusterServerInternal<T extends ClusterType>(obj: ClusterServerObj<T>): ClusterServerObjInternal<T> {
     if (!isClusterServerInternal(obj)) {
         throw new Error("Object is not a ClusterServerObj instance.");
     }

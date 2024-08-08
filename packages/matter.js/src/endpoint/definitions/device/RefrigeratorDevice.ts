@@ -28,14 +28,14 @@ export interface RefrigeratorDevice extends Identity<typeof RefrigeratorDeviceDe
 
 export namespace RefrigeratorRequirements {
     /**
-     * The Identify cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The RefrigeratorAndTemperatureControlledCabinetMode cluster is optional per the Matter specification
+     * The RefrigeratorAndTemperatureControlledCabinetMode cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation
      * {@link RefrigeratorAndTemperatureControlledCabinetModeServer} for convenience.
@@ -43,7 +43,7 @@ export namespace RefrigeratorRequirements {
     export const RefrigeratorAndTemperatureControlledCabinetModeServer = BaseRefrigeratorAndTemperatureControlledCabinetModeServer;
 
     /**
-     * The RefrigeratorAlarm cluster is optional per the Matter specification
+     * The RefrigeratorAlarm cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link RefrigeratorAlarmServer} for convenience.
      */

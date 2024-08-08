@@ -14,8 +14,9 @@ Please let us know if you have more information about any of the items in this l
 * Names/Labels provided by matter.js for devices and composed devices are currently ignored by Apple when pairing. Devices are always labeled "Matter Accessory". For bridges the names from the BridgedBasicInformationCluster apply correctly, so the labels work. Just the name for the bridge itself is ignored.
 
 ## Amazon Alexa
+* Amazon only discovers matter devices on port 5540, so you need to use this port and none else. This limits the devices to be published to one per Host for Amazon.  This is a limitation of the Amazon implementation.
 * Routines are not always available for Matter devices.
-* 
+
 ## Samsung SmartThings
 * On some devices, during commissioning the SmartThings app reports a timeout even when pairing completes successfully.
 

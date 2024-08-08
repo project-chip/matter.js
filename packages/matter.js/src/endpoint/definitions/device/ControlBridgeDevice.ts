@@ -9,9 +9,6 @@
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import {
-    ScenesManagementBehavior as BaseScenesManagementBehavior
-} from "../../../behavior/definitions/scenes-management/ScenesManagementBehavior.js";
 import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
 import {
     LevelControlBehavior as BaseLevelControlBehavior
@@ -19,6 +16,9 @@ import {
 import {
     ColorControlBehavior as BaseColorControlBehavior
 } from "../../../behavior/definitions/color-control/ColorControlBehavior.js";
+import {
+    ScenesManagementBehavior as BaseScenesManagementBehavior
+} from "../../../behavior/definitions/scenes-management/ScenesManagementBehavior.js";
 import {
     IlluminanceMeasurementBehavior as BaseIlluminanceMeasurementBehavior
 } from "../../../behavior/definitions/illuminance-measurement/IlluminanceMeasurementBehavior.js";
@@ -40,63 +40,63 @@ export interface ControlBridgeDevice extends Identity<typeof ControlBridgeDevice
 
 export namespace ControlBridgeRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyBehavior} for convenience.
      */
     export const IdentifyBehavior = BaseIdentifyBehavior;
 
     /**
-     * The Groups cluster is required by the Matter specification
+     * The Groups cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsBehavior} for convenience.
      */
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The ScenesManagement cluster is required by the Matter specification
-     *
-     * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
-     */
-    export const ScenesManagementBehavior = BaseScenesManagementBehavior;
-
-    /**
-     * The OnOff cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link OnOffBehavior} for convenience.
      */
     export const OnOffBehavior = BaseOnOffBehavior;
 
     /**
-     * The LevelControl cluster is required by the Matter specification
+     * The LevelControl cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link LevelControlBehavior} for convenience.
      */
     export const LevelControlBehavior = BaseLevelControlBehavior;
 
     /**
-     * The ColorControl cluster is required by the Matter specification
+     * The ColorControl cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link ColorControlBehavior} for convenience.
      */
     export const ColorControlBehavior = BaseColorControlBehavior;
 
     /**
-     * The IlluminanceMeasurement cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification.
+     *
+     * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
+     */
+    export const ScenesManagementBehavior = BaseScenesManagementBehavior;
+
+    /**
+     * The IlluminanceMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IlluminanceMeasurementBehavior} for convenience.
      */
     export const IlluminanceMeasurementBehavior = BaseIlluminanceMeasurementBehavior;
 
     /**
-     * The OccupancySensing cluster is optional per the Matter specification
+     * The OccupancySensing cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link OccupancySensingBehavior} for convenience.
      */
@@ -114,13 +114,13 @@ export namespace ControlBridgeRequirements {
         mandatory: {
             Identify: IdentifyBehavior,
             Groups: GroupsBehavior,
-            ScenesManagement: ScenesManagementBehavior,
             OnOff: OnOffBehavior,
             LevelControl: LevelControlBehavior,
             ColorControl: ColorControlBehavior
         },
 
         optional: {
+            ScenesManagement: ScenesManagementBehavior,
             IlluminanceMeasurement: IlluminanceMeasurementBehavior,
             OccupancySensing: OccupancySensingBehavior
         }

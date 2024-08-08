@@ -7,8 +7,9 @@
 import { NotImplementedError } from "../../common/MatterError.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { camelize } from "../../util/String.js";
-import { FieldValue, Metatype } from "../index.js";
+import { AttributeModel, FieldValue, Metatype } from "../index.js";
 import { ValueModel } from "../models/index.js";
+import { FeatureMap } from "../standard/elements/FeatureMap.js";
 
 /**
  * Obtain a native JS default value for a ValueModel.
@@ -64,10 +65,15 @@ function castValue(model: ValueModel, modelDefault?: FieldValue): unknown {
             return;
 
         case Metatype.bitmap:
+            // Bitmaps defaults may be encoded three ways - number, bitfield k/v object, or via defaults on individual
+            // bit fields (composed above)
             if (typeof modelDefault === "number" || typeof modelDefault === "bigint") {
-                return modelDefault;
+                // Default value is a number
+                return decodeBitmap(model, modelDefault);
             }
-            return;
+
+            // Default value may be an object
+            return FieldValue.objectValue(modelDefault);
 
         case Metatype.object:
             return FieldValue.objectValue(modelDefault);
@@ -110,15 +116,13 @@ function castValue(model: ValueModel, modelDefault?: FieldValue): unknown {
 }
 
 /**
- * When an explicit default value is not present, for some types we generate
- * a default from the structure.
+ * When an explicit default value is not present, for some types we generate a default from the structure.
  */
 function buildValue(model: ValueModel, ifValid: boolean) {
     switch (model.effectiveMetatype) {
         case Metatype.array:
-            // We don't really build default array values except in the case of
-            // non-nullable arrays where zero items is allowed; then we create
-            // an empty array
+            // We don't really build default array values except in the case of non-nullable arrays where zero items is
+            // allowed; then we create an empty array
             if (
                 !model.nullable &&
                 model.effectiveMetatype === Metatype.array &&
@@ -140,7 +144,7 @@ function buildValue(model: ValueModel, ifValid: boolean) {
 function buildObject(model: ValueModel, ifValid: boolean) {
     let result: { [key: string]: any } | undefined;
 
-    for (const child of model.members) {
+    for (const child of model.conformantMembers) {
         const name = camelize(child.name);
         if (result && result[name] !== undefined) {
             continue;
@@ -169,7 +173,7 @@ function buildBitmap(model: ValueModel) {
     let result;
     let fieldsDefined = 0;
 
-    for (const m of model.members) {
+    for (const m of model.conformantMembers) {
         const defaultValue = FieldValue.numericValue(m.default);
         if (defaultValue === undefined) {
             continue;
@@ -209,4 +213,45 @@ function buildBitmap(model: ValueModel) {
     }
 
     return result;
+}
+
+function decodeBitmap(model: ValueModel, value: number | bigint) {
+    const fields = new Map<ValueModel, number | boolean>();
+
+    // Test each bit.  If set, install appropriate value into object
+    for (let bit = 0; Math.pow(bit, 2) <= value; bit++) {
+        if (typeof value === "bigint") {
+            if (!(value & (1n << BigInt(bit)))) {
+                continue;
+            }
+        } else if (!(value & (1 << bit))) {
+            continue;
+        }
+
+        const definition = model.bitDefinition(bit);
+        if (!definition || definition.isDeprecated) {
+            continue;
+        }
+
+        const constraint = definition.effectiveConstraint;
+        if (constraint.value !== undefined) {
+            // Bit flag
+            fields.set(definition, true);
+        } else if (constraint.min !== undefined) {
+            // Bit range
+            const fieldBit = 1 << (bit - (constraint.min as number));
+            fields.set(definition, ((fields.get(definition) as number) ?? 0) & fieldBit);
+        }
+    }
+
+    let nameGenerator;
+    if (model instanceof AttributeModel && model.id === FeatureMap.id) {
+        // Special case for feature map; use the description as the key rather than the name
+        nameGenerator = (model: ValueModel) =>
+            model.description === undefined ? camelize(model.name) : camelize(model.description);
+    } else {
+        nameGenerator = (model: ValueModel) => camelize(model.name);
+    }
+
+    return Object.fromEntries([...fields.entries()].map(([k, v]) => [nameGenerator(k), v]));
 }

@@ -6,9 +6,8 @@
 
 import { MatterDevice } from "../../MatterDevice.js";
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
-import { EventServer } from "../../cluster/server/EventServer.js";
+import { AnyEventServer, FabricSensitiveEventServer } from "../../cluster/server/EventServer.js";
 import { InternalError } from "../../common/MatterError.js";
-import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { EventNumber } from "../../datatype/EventNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
@@ -17,9 +16,11 @@ import { NetworkError } from "../../net/Network.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Time, Timer } from "../../time/Time.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { MaybePromise } from "../../util/Promises.js";
+import { isObject } from "../../util/Type.js";
 import { RetransmissionLimitReachedError } from "../MessageExchange.js";
 import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
-import { EventHandler, EventStorageData } from "./EventHandler.js";
+import { EventStorageData } from "./EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import { InteractionServerMessenger } from "./InteractionMessenger.js";
 import {
@@ -42,12 +43,13 @@ import {
     eventPathToId,
 } from "./InteractionServer.js";
 import { StatusCode, StatusResponseError } from "./StatusCode.js";
-import { SubscriptionOptions } from "./SubscriptionOptions.js";
+import { MAX_INTERVAL_PUBLISHER_LIMIT_S, SubscriptionOptions } from "./SubscriptionOptions.js";
 
 const logger = Logger.get("SubscriptionHandler");
 
 interface AttributePathWithValueVersion<T> {
     path: TypeFromSchema<typeof TlvAttributePath>;
+    attribute: AnyAttributeServer<T>;
     schema: TlvSchema<T>;
     value: T;
     version: number;
@@ -55,11 +57,28 @@ interface AttributePathWithValueVersion<T> {
 
 interface EventPathWithEventData<T> {
     path: TypeFromSchema<typeof TlvEventPath>;
+    event: AnyEventServer<any, any>;
     schema: TlvSchema<T>;
-    event: EventStorageData<T>;
+    data: EventStorageData<T>;
 }
 
 export class SubscriptionHandler {
+    readonly subscriptionId: number;
+    private readonly session: SecureSession<any>;
+    private readonly endpointStructure: InteractionEndpointStructure;
+    private readonly attributeRequests?: TypeFromSchema<typeof TlvAttributePath>[];
+    private readonly dataVersionFilters?: TypeFromSchema<typeof TlvDataVersionFilter>[];
+    private readonly eventRequests?: TypeFromSchema<typeof TlvEventPath>[];
+    private readonly eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+    private readonly isFabricFiltered: boolean;
+    private readonly cancelCallback: () => void;
+    private readonly readAttribute: (path: AttributePath, attribute: AnyAttributeServer<any>) => Promise<any>;
+    private readonly readEvent: (
+        path: EventPath,
+        event: AnyEventServer<any, any>,
+        eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
+    ) => Promise<EventStorageData<any>[]>;
+
     private lastUpdateTimeMs = 0;
     private updateTimer: Timer;
     private readonly sendDelayTimer: Timer;
@@ -75,13 +94,13 @@ export class SubscriptionHandler {
     private readonly eventListeners = new Map<
         string,
         {
-            event: EventServer<any, any>;
+            event: AnyEventServer<any, any>;
             listener?: (newEvent: EventStorageData<any>) => void;
         }
     >();
     private sendUpdatesActivated = false;
-    readonly maxInterval: number;
-    readonly sendInterval: number;
+    readonly #maxIntervalMs: number;
+    readonly #sendIntervalMs: number;
     private readonly minIntervalFloorMs: number;
     private readonly maxIntervalCeilingMs: number;
     private readonly server: MatterDevice;
@@ -91,22 +110,54 @@ export class SubscriptionHandler {
     private sendingUpdateInProgress = false;
     private sendNextUpdateImmediately = false;
     private sendUpdateErrorCounter = 0;
+    private attributeUpdatePromises = new Set<PromiseLike<void>>();
 
-    constructor(
-        readonly subscriptionId: number,
-        private readonly session: SecureSession<any>,
-        private readonly endpointStructure: InteractionEndpointStructure,
-        private readonly attributeRequests: TypeFromSchema<typeof TlvAttributePath>[] | undefined,
-        private readonly dataVersionFilters: TypeFromSchema<typeof TlvDataVersionFilter>[] | undefined,
-        private readonly eventRequests: TypeFromSchema<typeof TlvEventPath>[] | undefined,
-        private readonly eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
-        private readonly eventHandler: EventHandler,
-        private readonly isFabricFiltered: boolean,
-        minIntervalFloor: number,
-        maxIntervalCeiling: number,
-        private readonly cancelCallback: () => void,
-        subscriptionOptions: SubscriptionOptions.Configuration,
-    ) {
+    constructor(options: {
+        subscriptionId: number;
+        session: SecureSession<any>;
+        endpointStructure: InteractionEndpointStructure;
+        attributeRequests?: TypeFromSchema<typeof TlvAttributePath>[];
+        dataVersionFilters?: TypeFromSchema<typeof TlvDataVersionFilter>[];
+        eventRequests?: TypeFromSchema<typeof TlvEventPath>[];
+        eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+        isFabricFiltered: boolean;
+        minIntervalFloor: number;
+        maxIntervalCeiling: number;
+        cancelCallback: () => void;
+        subscriptionOptions: SubscriptionOptions.Configuration;
+        readAttribute: (path: AttributePath, attribute: AnyAttributeServer<any>) => Promise<any>;
+        readEvent: (
+            path: EventPath,
+            event: AnyEventServer<any, any>,
+            eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
+        ) => Promise<EventStorageData<any>[]>;
+    }) {
+        const {
+            subscriptionId,
+            session,
+            endpointStructure,
+            attributeRequests,
+            dataVersionFilters,
+            eventRequests,
+            eventFilters,
+            isFabricFiltered,
+            minIntervalFloor,
+            maxIntervalCeiling,
+            cancelCallback,
+            subscriptionOptions,
+        } = options;
+        this.subscriptionId = subscriptionId;
+        this.session = session;
+        this.endpointStructure = endpointStructure;
+        this.attributeRequests = attributeRequests;
+        this.dataVersionFilters = dataVersionFilters;
+        this.eventRequests = eventRequests;
+        this.eventFilters = eventFilters;
+        this.isFabricFiltered = isFabricFiltered;
+        this.cancelCallback = cancelCallback;
+        this.readAttribute = options.readAttribute;
+        this.readEvent = options.readEvent;
+
         this.server = this.session.context;
         this.fabric = this.session.associatedFabric;
         this.peerNodeId = this.session.peerNodeId;
@@ -118,10 +169,10 @@ export class SubscriptionHandler {
             subscriptionOptions.maxIntervalSeconds * 1000,
             subscriptionOptions.randomizationWindowSeconds * 1000,
         );
-        this.maxInterval = maxInterval;
-        this.sendInterval = sendInterval;
+        this.#maxIntervalMs = maxInterval;
+        this.#sendIntervalMs = sendInterval;
 
-        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () => this.prepareDataUpdate()); // will be started later
+        this.updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () => this.prepareDataUpdate()); // will be started later
         this.sendDelayTimer = Time.getTimer("Subscription delay", 50, () => this.sendUpdate()); // will be started later
     }
 
@@ -134,12 +185,14 @@ export class SubscriptionHandler {
         // is lower. In that case we use the configured one. But we make sure to not be smaller than the requested
         // controller minimum. But in general never faster than minimum interval configured or 2 seconds
         // (SUBSCRIPTION_MIN_INTERVAL_S). Additionally, we add a randomization window to the max interval to avoid all
-        // devices sending at the same time.
-        const maxInterval =
+        // devices sending at the same time. But we make sure not to exceed the global max interval.
+        const maxInterval = Math.min(
             Math.max(
                 subscriptionMinIntervalMs,
                 Math.max(this.minIntervalFloorMs, Math.min(subscriptionMaxIntervalMs, this.maxIntervalCeilingMs)),
-            ) + Math.floor(subscriptionRandomizationWindowMs * Math.random());
+            ) + Math.floor(subscriptionRandomizationWindowMs * Math.random()),
+            MAX_INTERVAL_PUBLISHER_LIMIT_S * 1000,
+        );
         let sendInterval = Math.floor(maxInterval / 2); // Ideally we send at half the max interval
         if (sendInterval < 60_000) {
             // But if we have no chance of at least one full resubmission process we do like chip-tool.
@@ -178,36 +231,22 @@ export class SubscriptionHandler {
                         );
                     } else {
                         // was a concrete path
-                        attributeErrors.push(
-                            tryCatch(
-                                () => {
-                                    if (
-                                        this.endpointStructure.validateConcreteAttributePath(
-                                            endpointId,
-                                            clusterId,
-                                            attributeId,
-                                        )
-                                    ) {
-                                        throw new StatusResponseError(
-                                            `Attribute ${attributeId} is not writable.`,
-                                            StatusCode.UnsupportedWrite,
-                                        );
-                                    }
-                                    throw new InternalError(
-                                        "validateConcreteAttributePath check should throw StatusResponseError but did not.",
-                                    );
-                                },
-                                StatusResponseError,
-                                error => {
-                                    logger.debug(
-                                        `Subscription attribute ${this.endpointStructure.resolveAttributeName(
-                                            path,
-                                        )}: unsupported path: Status=${error.code}`,
-                                    );
-                                    return { path, status: { status: error.code } };
-                                },
-                            ),
-                        );
+                        try {
+                            this.endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
+                            throw new InternalError(
+                                "validateConcreteAttributePath check should throw StatusResponseError but did not.",
+                            );
+                        } catch (e) {
+                            StatusResponseError.accept(e);
+
+                            logger.debug(
+                                `Subscription attribute ${this.endpointStructure.resolveAttributeName(
+                                    path,
+                                )}: unsupported path: Status=${e.code}`,
+                            );
+
+                            attributeErrors.push({ path, status: { status: e.code } });
+                        }
                     }
                     return;
                 }
@@ -229,6 +268,7 @@ export class SubscriptionHandler {
                     }
                     if (attribute.isSubscribable) {
                         // If subscribable register listener
+                        // TODO: Move to state change listeners from behaviors to remove the dangling promise here
                         const listener = (value: any, version: number) =>
                             this.attributeChangeListener(path, attribute.schema, version, value);
                         attribute.addValueChangeListener(listener);
@@ -277,25 +317,22 @@ export class SubscriptionHandler {
                             )}: ignore non-existing event`,
                         );
                     } else {
-                        eventErrors.push(
-                            tryCatch(
-                                () => {
-                                    this.endpointStructure.validateConcreteEventPath(endpointId, clusterId, eventId);
-                                    throw new InternalError(
-                                        "validateConcreteEventPath should throw StatusResponseError but did not.",
-                                    );
-                                },
-                                StatusResponseError,
-                                error => {
-                                    logger.debug(
-                                        `Subscription event ${this.endpointStructure.resolveEventName(
-                                            path,
-                                        )}: unsupported path: Status=${error.code}`,
-                                    );
-                                    return { path, status: { status: error.code } };
-                                },
-                            ),
-                        );
+                        try {
+                            this.endpointStructure.validateConcreteEventPath(endpointId, clusterId, eventId);
+                            throw new InternalError(
+                                "validateConcreteEventPath should throw StatusResponseError but did not.",
+                            );
+                        } catch (e) {
+                            StatusResponseError.accept(e);
+
+                            logger.debug(
+                                `Subscription event ${this.endpointStructure.resolveEventName(
+                                    path,
+                                )}: unsupported path: Status=${e.code}`,
+                            );
+
+                            eventErrors.push({ path, status: { status: e.code } });
+                        }
                     }
                     return;
                 }
@@ -349,16 +386,17 @@ export class SubscriptionHandler {
      * Newly added attributes are then treated ad "changed values" and will be sent as subscription data update to the
      * controller. The data of newly added events are not sent automatically.
      */
-    updateSubscription() {
+    async updateSubscription() {
         const { newAttributes } = this.registerNewAttributes();
 
         for (const { path, attribute } of newAttributes) {
-            const { version, value } = attribute.getWithVersion(this.session, true);
+            const { version, value } = await this.readAttribute(path, attribute);
 
             // We do not do any version filtering for attributes that are newly added to make sure controller gets
             // most current state
 
             this.outstandingAttributeUpdates.set(attributePathToId(path), {
+                attribute,
                 path,
                 schema: attribute.schema,
                 version,
@@ -368,18 +406,20 @@ export class SubscriptionHandler {
 
         const { newEvents } = this.registerNewEvents();
         newEvents
-            .flatMap(({ path, event: { schema } }): EventPathWithEventData<any>[] => {
+            .flatMap(({ path, event }): EventPathWithEventData<any>[] => {
                 // But we use eventFilters because we do not want to send all events to the controller
-                const matchingEvents = this.eventHandler.getEvents(path, this.eventFilters) ?? [];
-                return matchingEvents.map(event => ({
+                const { schema } = event;
+                const matchingEvents = event.get(this.session, this.isFabricFiltered, undefined, this.eventFilters);
+                return matchingEvents.map(data => ({
+                    event,
                     schema,
                     path,
-                    event,
+                    data,
                 }));
             })
             .sort((a, b) => {
-                const eventNumberA = a.event?.eventNumber ?? EventNumber(0);
-                const eventNumberB = b.event?.eventNumber ?? EventNumber(0);
+                const eventNumberA = a.data?.eventNumber ?? EventNumber(0);
+                const eventNumberB = b.data?.eventNumber ?? EventNumber(0);
                 if (eventNumberA > eventNumberB) {
                     return 1;
                 } else if (eventNumberA < eventNumberB) {
@@ -393,12 +433,12 @@ export class SubscriptionHandler {
         this.prepareDataUpdate();
     }
 
-    getMaxInterval(): number {
-        return Math.ceil(this.maxInterval / 1000);
+    get maxInterval(): number {
+        return Math.ceil(this.#maxIntervalMs / 1000);
     }
 
-    getSendInterval(): number {
-        return Math.ceil(this.sendInterval / 1000);
+    get sendInterval(): number {
+        return Math.ceil(this.#sendIntervalMs / 1000);
     }
 
     activateSendingUpdates() {
@@ -410,7 +450,7 @@ export class SubscriptionHandler {
         if (this.outstandingAttributeUpdates.size > 0 || this.outstandingEventUpdates.size > 0) {
             void this.sendUpdate();
         }
-        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () =>
+        this.updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () =>
             this.prepareDataUpdate(),
         ).start();
     }
@@ -443,7 +483,7 @@ export class SubscriptionHandler {
         }
 
         this.sendDelayTimer.start();
-        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () =>
+        this.updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () =>
             this.prepareDataUpdate(),
         ).start();
     }
@@ -457,8 +497,25 @@ export class SubscriptionHandler {
             this.sendNextUpdateImmediately = true;
             return;
         }
-        const attributeUpdatesToSend = Array.from(this.outstandingAttributeUpdates.values());
+
+        // Get all outstanding updates, make sure the order is correct per endpoint and cluster
+        const attributeUpdatesToSend = new Array<AttributePathWithValueVersion<any>>();
+        const attributeUpdates: Record<string, AttributePathWithValueVersion<any>[]> = {};
+        Array.from(this.outstandingAttributeUpdates.values()).forEach(entry => {
+            const {
+                path: { nodeId, endpointId, clusterId },
+            } = entry;
+            const pathId = `${nodeId}-${endpointId}-${clusterId}`;
+            attributeUpdates[pathId] = attributeUpdates[pathId] ?? [];
+            attributeUpdates[pathId].push(entry);
+        });
         this.outstandingAttributeUpdates.clear();
+        Object.values(attributeUpdates).forEach(data =>
+            attributeUpdatesToSend.push(
+                ...data.sort(({ version: versionA }, { version: versionB }) => versionA - versionB),
+            ),
+        );
+
         const eventUpdatesToSend = Array.from(this.outstandingEventUpdates.values());
         this.outstandingEventUpdates.clear();
         this.lastUpdateTimeMs = Time.nowMs();
@@ -478,7 +535,19 @@ export class SubscriptionHandler {
                 `Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`,
                 error,
             );
-            if (this.sendUpdateErrorCounter > 2) {
+            if (this.sendUpdateErrorCounter <= 2) {
+                // fill the data back in the queue to resend with next try
+                const newAttributeUpdatesToSend = Array.from(this.outstandingAttributeUpdates.values());
+                this.outstandingAttributeUpdates.clear();
+                const newEventUpdatesToSend = Array.from(this.outstandingEventUpdates.values());
+                this.outstandingEventUpdates.clear();
+                [...attributeUpdatesToSend, ...newAttributeUpdatesToSend].forEach(update =>
+                    this.outstandingAttributeUpdates.set(attributePathToId(update.path), update),
+                );
+                [...eventUpdatesToSend, ...newEventUpdatesToSend].forEach(update =>
+                    this.outstandingEventUpdates.add(update),
+                );
+            } else {
                 logger.error(
                     `Sending update failed 3 times in a row, canceling subscription ${this.subscriptionId} and let controller subscribe again.`,
                 );
@@ -500,15 +569,7 @@ export class SubscriptionHandler {
         }
     }
 
-    async sendInitialReport(
-        messenger: InteractionServerMessenger,
-        readAttribute: (path: AttributePath, attribute: AnyAttributeServer<any>) => Promise<any>,
-        readEvent: (
-            path: EventPath,
-            event: EventServer<any, any>,
-            eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
-        ) => Promise<EventStorageData<any>[]>,
-    ) {
+    async sendInitialReport(messenger: InteractionServerMessenger) {
         this.updateTimer.stop();
 
         const { newAttributes, attributeErrors } = this.registerNewAttributes();
@@ -523,10 +584,11 @@ export class SubscriptionHandler {
             value: any;
             version: number;
             schema: TlvSchema<any>;
+            attribute: AnyAttributeServer<any>;
         }>();
         for (const { path, attribute } of newAttributes) {
             try {
-                const { value, version } = await readAttribute(path, attribute);
+                const { value, version } = await this.readAttribute(path, attribute);
                 if (value === undefined) continue;
 
                 const { nodeId, endpointId, clusterId } = path;
@@ -540,13 +602,14 @@ export class SubscriptionHandler {
                     continue;
                 }
 
-                attributes.push({ path, value, version, schema: attribute.schema });
+                attributes.push({ path, value, version, schema: attribute.schema, attribute });
             } catch (error) {
                 logger.error(`Error reading attribute ${this.endpointStructure.resolveAttributeName(path)}:`, error);
             }
         }
         const attributeReportsPayload: AttributeReportPayload[] = attributes.map(
-            ({ path, schema, value, version }) => ({
+            ({ path, schema, value, version, attribute }) => ({
+                hasFabricSensitiveData: attribute.hasFabricSensitiveData,
                 attributeData: {
                     path,
                     dataVersion: version,
@@ -555,7 +618,12 @@ export class SubscriptionHandler {
                 },
             }),
         );
-        attributeErrors.forEach(attributeStatus => attributeReportsPayload.push({ attributeStatus }));
+        attributeErrors.forEach(attributeStatus =>
+            attributeReportsPayload.push({
+                hasFabricSensitiveData: false,
+                attributeStatus,
+            }),
+        );
 
         const { newEvents, eventErrors } = this.registerNewEvents();
 
@@ -564,12 +632,13 @@ export class SubscriptionHandler {
         for (const { path, event } of newEvents) {
             const { schema } = event;
             try {
-                const matchingEvents = await readEvent(path, event, this.eventFilters);
+                const matchingEvents = await this.readEvent(path, event, this.eventFilters);
                 if (matchingEvents.length === 0) {
                     eventsFiltered = true;
                 } else {
                     matchingEvents.forEach(({ eventNumber, priority, epochTimestamp, data }) => {
                         eventReportsPayload.push({
+                            hasFabricSensitiveData: event.hasFabricSensitiveData,
                             eventData: {
                                 path,
                                 eventNumber,
@@ -609,48 +678,82 @@ export class SubscriptionHandler {
             );
         }
 
-        eventErrors.forEach(eventStatus => eventReportsPayload.push({ eventStatus }));
+        eventErrors.forEach(eventStatus =>
+            eventReportsPayload.push({
+                hasFabricSensitiveData: false,
+                eventStatus,
+            }),
+        );
 
         logger.debug(
             `Initialize Subscription with ${attributes.length} attributes and ${eventReportsPayload.length} events.`,
         );
         this.lastUpdateTimeMs = Time.nowMs();
 
-        await messenger.sendDataReport({
-            suppressResponse: false,
-            subscriptionId: this.subscriptionId,
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
-            attributeReportsPayload, // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
-            eventReportsPayload,
-        });
+        await messenger.sendDataReport(
+            {
+                suppressResponse: false, // we always need proper response for initial report
+                subscriptionId: this.subscriptionId,
+                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                attributeReportsPayload,
+                eventReportsPayload,
+            },
+            this.isFabricFiltered,
+        );
     }
 
-    attributeChangeListener<T>(
-        path: TypeFromSchema<typeof TlvAttributePath>,
+    attributeChangeListener<T>(path: AttributePath, schema: TlvSchema<T>, version: number, value: T) {
+        const changeResult = this.attributeChangeHandler(path, schema, version, value);
+        if (MaybePromise.is(changeResult)) {
+            const resolver = Promise.resolve(changeResult)
+                .catch(error => logger.error(`Error handling attribute change:`, error))
+                .finally(() => this.attributeUpdatePromises.delete(resolver));
+            this.attributeUpdatePromises.add(resolver);
+        }
+    }
+
+    attributeChangeHandler<T>(
+        path: AttributePath,
         schema: TlvSchema<T>,
         version: number,
         value: T,
-    ) {
+    ): MaybePromise<void> {
         const attributeListenerData = this.attributeListeners.get(attributePathToId(path));
         if (attributeListenerData === undefined) return; // Ignore changes to attributes that are not subscribed to
 
         const { attribute } = attributeListenerData;
         if (attribute instanceof FabricScopedAttributeServer) {
-            // We can not be sure what value we got for fabric filtered attributes (and from which fabric),
-            // so get it again for this relevant fabric
-            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
-            value = attribute.get(this.session, this.isFabricFiltered);
+            // We cannot be sure what value we got for fabric filtered attributes (and from which fabric),
+            // so get it again for this relevant fabric. This also makes sure that fabric sensitive fields are filtered
+            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we cannot get the value?
+            return this.readAttribute(path, attribute).then(({ value }) => {
+                this.outstandingAttributeUpdates.set(attributePathToId(path), {
+                    attribute,
+                    path,
+                    schema,
+                    version,
+                    value,
+                });
+                this.prepareDataUpdate();
+            });
         }
-        this.outstandingAttributeUpdates.set(attributePathToId(path), { path, schema, version, value });
+        this.outstandingAttributeUpdates.set(attributePathToId(path), { attribute, path, schema, version, value });
         this.prepareDataUpdate();
     }
 
-    eventChangeListener<T>(
-        path: TypeFromSchema<typeof TlvEventPath>,
-        schema: TlvSchema<T>,
-        newEvent: EventStorageData<T>,
-    ) {
-        this.outstandingEventUpdates.add({ path, schema, event: newEvent });
+    eventChangeListener<T>(path: EventPath, schema: TlvSchema<T>, newEvent: EventStorageData<T>) {
+        const eventListenerData = this.eventListeners.get(eventPathToId(path));
+        if (eventListenerData === undefined) return; // Ignore changes to attributes that are not subscribed to
+
+        const { event } = eventListenerData;
+        if (event instanceof FabricSensitiveEventServer) {
+            const { data } = newEvent;
+            if (isObject(data) && "fabricIndex" in data && data.fabricIndex !== this.session.fabric?.fabricIndex) {
+                // Ignore events from different fabrics because events are kind of always fabric filtered
+                return;
+            }
+        }
+        this.outstandingEventUpdates.add({ event, path, schema, data: newEvent });
         if (path.isUrgent) {
             this.prepareDataUpdate();
         }
@@ -668,6 +771,11 @@ export class SubscriptionHandler {
 
     async cancel(flush = false, cancelledByPeer = false) {
         this.sendUpdatesActivated = false;
+        if (this.attributeUpdatePromises.size) {
+            const resolvers = [...this.attributeUpdatePromises.values()];
+            this.attributeUpdatePromises.clear();
+            await Promise.all(resolvers);
+        }
         this.updateTimer.stop();
         this.sendDelayTimer.stop();
         this.unregisterAttributeListeners(Array.from(this.attributeListeners.keys()));
@@ -702,54 +810,56 @@ export class SubscriptionHandler {
         const messenger = new InteractionServerMessenger(exchange);
 
         try {
-            await tryCatchAsync(
-                async () => {
-                    if (attributes.length === 0 && events.length === 0) {
-                        await messenger.sendDataReport({
-                            suppressResponse: true, // suppressResponse ok for empty DataReports
-                            subscriptionId: this.subscriptionId,
-                            interactionModelRevision: INTERACTION_MODEL_REVISION,
-                        });
-                    } else {
-                        await messenger.sendDataReport({
-                            suppressResponse: false,
-                            subscriptionId: this.subscriptionId,
-                            interactionModelRevision: INTERACTION_MODEL_REVISION,
-                            // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
-                            attributeReportsPayload: attributes.map(({ path, schema, value, version }) => ({
-                                attributeData: {
+            if (attributes.length === 0 && events.length === 0) {
+                await messenger.sendDataReport(
+                    {
+                        suppressResponse: true, // suppressResponse true for empty DataReports
+                        subscriptionId: this.subscriptionId,
+                        interactionModelRevision: INTERACTION_MODEL_REVISION,
+                    },
+                    this.isFabricFiltered,
+                );
+            } else {
+                await messenger.sendDataReport(
+                    {
+                        suppressResponse: false, // Non empty data reports always need to send response
+                        subscriptionId: this.subscriptionId,
+                        interactionModelRevision: INTERACTION_MODEL_REVISION,
+                        attributeReportsPayload: attributes.map(({ path, schema, value, version, attribute }) => ({
+                            hasFabricSensitiveData: attribute.hasFabricSensitiveData,
+                            attributeData: {
+                                path,
+                                dataVersion: version,
+                                schema,
+                                payload: value,
+                            },
+                        })),
+                        eventReportsPayload: events.map(({ path, schema, event, data }) => {
+                            const { eventNumber, priority, epochTimestamp, data: payload } = data;
+                            return {
+                                hasFabricSensitiveData: event.hasFabricSensitiveData,
+                                eventData: {
                                     path,
-                                    dataVersion: version,
+                                    eventNumber,
+                                    priority,
+                                    epochTimestamp,
                                     schema,
-                                    payload: value,
+                                    payload,
                                 },
-                            })),
-                            eventReportsPayload: events.map(
-                                ({ path, schema, event: { eventNumber, priority, epochTimestamp, data } }) => ({
-                                    eventData: {
-                                        path,
-                                        eventNumber,
-                                        priority,
-                                        epochTimestamp,
-                                        schema,
-                                        payload: data,
-                                    },
-                                }),
-                            ),
-                        });
-                    }
-                },
-                StatusResponseError,
-                async error => {
-                    if (error.code === StatusCode.InvalidSubscription || error.code === StatusCode.Failure) {
-                        logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
-                        await this.cancel(false, true);
-                    } else {
-                        await this.cancel(false);
-                        throw error;
-                    }
-                },
-            );
+                            };
+                        }),
+                    },
+                    this.isFabricFiltered,
+                );
+            }
+        } catch (e) {
+            if (StatusResponseError.is(e, StatusCode.InvalidSubscription, StatusCode.Failure)) {
+                logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
+                await this.cancel(false, true);
+            } else {
+                await this.cancel(false);
+                throw e;
+            }
         } finally {
             await messenger.close();
         }

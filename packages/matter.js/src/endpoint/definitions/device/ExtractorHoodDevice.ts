@@ -44,28 +44,28 @@ export interface ExtractorHoodDevice extends Identity<typeof ExtractorHoodDevice
 
 export namespace ExtractorHoodRequirements {
     /**
-     * The FanControl cluster is required by the Matter specification
+     * The FanControl cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link FanControlServer} for convenience.
      */
     export const FanControlServer = BaseFanControlServer;
 
     /**
-     * The Identify cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The HepaFilterMonitoring cluster is optional per the Matter specification
+     * The HepaFilterMonitoring cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link HepaFilterMonitoringServer} for convenience.
      */
     export const HepaFilterMonitoringServer = BaseHepaFilterMonitoringServer;
 
     /**
-     * The ActivatedCarbonFilterMonitoring cluster is optional per the Matter specification
+     * The ActivatedCarbonFilterMonitoring cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ActivatedCarbonFilterMonitoringServer} for
      * convenience.

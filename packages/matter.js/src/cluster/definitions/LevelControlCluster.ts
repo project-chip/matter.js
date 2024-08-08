@@ -27,6 +27,47 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace LevelControl {
     /**
+     * These are optional features supported by LevelControlCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.6.4
+     */
+    export enum Feature {
+        /**
+         * OnOff (OO)
+         *
+         * Dependency with the On/Off cluster
+         */
+        OnOff = "OnOff",
+
+        /**
+         * Lighting (LT)
+         *
+         * This feature supports an interface for controlling the level of a light source. For the CurrentLevel
+         * attribute:
+         *
+         * A value of 0x00 shall NOT be used.
+         *
+         * A value of 0x01 shall indicate the minimum level that can be attained on a device. A value of 0xFE shall
+         * indicate the maximum level that can be attained on a device. A value of null shall represent an undefined
+         * value.
+         *
+         * All other values are application specific gradations from the minimum to the maximum level.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.6.4.2
+         */
+        Lighting = "Lighting",
+
+        /**
+         * Frequency (FQ)
+         *
+         * NOTE The Frequency feature is provisional.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.6.4.3
+         */
+        Frequency = "Frequency"
+    }
+
+    /**
      * Input to the LevelControl moveToClosestFrequency command
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.6.7.5
@@ -295,47 +336,6 @@ export namespace LevelControl {
             moveToClosestFrequency: Command(0x8, TlvMoveToClosestFrequencyRequest, 0x8, TlvNoResponse)
         }
     });
-
-    /**
-     * These are optional features supported by LevelControlCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.6.4
-     */
-    export enum Feature {
-        /**
-         * OnOff (OO)
-         *
-         * Dependency with the On/Off cluster
-         */
-        OnOff = "OnOff",
-
-        /**
-         * Lighting (LT)
-         *
-         * This feature supports an interface for controlling the level of a light source. For the CurrentLevel
-         * attribute:
-         *
-         * A value of 0x00 shall NOT be used.
-         *
-         * A value of 0x01 shall indicate the minimum level that can be attained on a device. A value of 0xFE shall
-         * indicate the maximum level that can be attained on a device. A value of null shall represent an undefined
-         * value.
-         *
-         * All other values are application specific gradations from the minimum to the maximum level.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.6.4.2
-         */
-        Lighting = "Lighting",
-
-        /**
-         * Frequency (FQ)
-         *
-         * NOTE The Frequency feature is provisional.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.6.4.3
-         */
-        Frequency = "Frequency"
-    }
 
     /**
      * These elements and properties are present in all LevelControl clusters.

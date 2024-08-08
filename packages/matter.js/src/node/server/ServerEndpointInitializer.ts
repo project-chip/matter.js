@@ -36,9 +36,8 @@ export class ServerEndpointInitializer extends EndpointInitializer {
     }
 
     /**
-     * If a {@link Endpoint} does not yet have a {@link EndpointServer}, create one
-     * now, then create a {@link BehaviorBacking} for a specific
-     * {@link Behavior}.
+     * If a {@link Endpoint} does not yet have a {@link EndpointServer}, create one now, then create a
+     * {@link BehaviorBacking} for a specific {@link Behavior}.
      *
      * This is where we adapt endpoints and behaviors for a server role.
      */

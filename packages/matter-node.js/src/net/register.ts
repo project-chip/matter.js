@@ -13,11 +13,10 @@ import { NetworkNode } from "./NetworkNode.js";
 try {
     Network.get();
 } catch (error) {
-    if (error instanceof NoProviderError) {
-        Network.get = singleton(() => new NetworkNode());
-        // When we initialize anything we also need to make st is closed correctly
-        process.on("beforeExit", () => void Network.get().close());
-    } else {
-        throw error;
-    }
+    NoProviderError.accept(error);
+
+    Network.get = singleton(() => new NetworkNode());
+
+    // Ensure network gets cleaned up on exit
+    process.on("beforeExit", () => void Network.get().close());
 }

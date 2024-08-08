@@ -9,7 +9,7 @@ import { SupportedAttributeClient, UnknownSupportedAttributeClient } from "../cl
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { SupportedEventClient, UnknownSupportedEventClient } from "../cluster/client/EventClient.js";
 import { AnyAttributeServer, FabricScopeError } from "../cluster/server/AttributeServer.js";
-import { ClusterServerObj, asClusterServerInternal } from "../cluster/server/ClusterServerTypes.js";
+import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
@@ -34,8 +34,8 @@ export type EndpointLoggingOptions = {
     logAttributePrimitiveValues?: boolean;
     logAttributeObjectValues?: boolean;
 
-    clusterServerFilter?: (endpoint: EndpointInterface, cluster: ClusterServerObj<any, any>) => boolean;
-    clusterClientFilter?: (endpoint: EndpointInterface, cluster: ClusterClientObj<any, any, any, any>) => boolean;
+    clusterServerFilter?: (endpoint: EndpointInterface, cluster: ClusterServer) => boolean;
+    clusterClientFilter?: (endpoint: EndpointInterface, cluster: ClusterClientObj) => boolean;
     endpointFilter?: (endpoint: EndpointInterface) => boolean;
 };
 
@@ -68,7 +68,7 @@ function getAttributeServerValue(attribute: AnyAttributeServer<any>, options: En
 
 function logClusterServer(
     endpoint: EndpointInterface,
-    clusterServer: ClusterServerObj<any, any>,
+    clusterServer: ClusterServer,
     options: EndpointLoggingOptions = {},
 ) {
     if (options.clusterServerFilter !== undefined && !options.clusterServerFilter(endpoint, clusterServer)) return;
@@ -77,7 +77,7 @@ function logClusterServer(
     const globalAttributes = GlobalAttributes<any>(featureMap);
     const supportedFeatures = new Array<string>();
     for (const featureName in featureMap) {
-        if ((featureMap as any)[featureName] === true) supportedFeatures.push(featureName);
+        if (featureMap[featureName] === true) supportedFeatures.push(featureName);
     }
     logger.info(
         `Cluster-Server "${clusterServer.name}" (${Diagnostic.hex(clusterServer.id)}) ${
@@ -121,7 +121,7 @@ function logClusterServer(
         Logger.nest(() => {
             logger.info("Commands:");
             Logger.nest(() => {
-                const commands = asClusterServerInternal(clusterServer)._commands;
+                const commands = clusterServer.commands;
                 for (const commandName in commands) {
                     const command = commands[commandName];
                     if (command === undefined) continue;
@@ -136,7 +136,7 @@ function logClusterServer(
         Logger.nest(() => {
             logger.info("Events:");
             Logger.nest(() => {
-                const events = asClusterServerInternal(clusterServer)._events;
+                const events = clusterServer.events;
                 for (const eventName in events) {
                     const event = events[eventName];
                     if (event === undefined) continue;
@@ -149,7 +149,7 @@ function logClusterServer(
 
 function logClusterClient(
     endpoint: EndpointInterface,
-    clusterClient: ClusterClientObj<any, any, any, any>,
+    clusterClient: ClusterClientObj,
     options: EndpointLoggingOptions = {},
 ) {
     if (options.clusterClientFilter !== undefined && !options.clusterClientFilter(endpoint, clusterClient)) return;

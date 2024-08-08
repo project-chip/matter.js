@@ -36,7 +36,7 @@ import {
     InteractionClientMessenger,
     ReadRequest,
 } from "./InteractionMessenger.js";
-import { TlvAttributeReport, TlvEventFilter, TlvEventReport } from "./InteractionProtocol.js";
+import { TlvEventFilter } from "./InteractionProtocol.js";
 import {
     INTERACTION_MODEL_REVISION,
     INTERACTION_PROTOCOL_ID,
@@ -90,7 +90,7 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
 
     async onNewExchange(exchange: MessageExchange<MatterController>) {
         const messenger = new IncomingInteractionClientMessenger(exchange);
-        const dataReport = await messenger.readDataReport();
+        const dataReport = await messenger.readDataReports(false);
         const subscriptionId = dataReport.subscriptionId;
         if (subscriptionId === undefined) {
             await messenger.sendStatus(StatusCode.InvalidSubscription);
@@ -359,28 +359,12 @@ export class InteractionClient {
                 .join(", ")} and events ${eventRequests?.map(path => resolveEventName(path)).join(", ")}`,
         );
         // Send read request and combine all (potentially chunked) responses
-        let response = await messenger.sendReadRequest(request);
-        const attributeReports = new Array<TypeFromSchema<typeof TlvAttributeReport>>();
-        const eventReports = new Array<TypeFromSchema<typeof TlvEventReport>>();
-
-        while (true) {
-            if (response.attributeReports !== undefined) {
-                attributeReports.push(...response.attributeReports);
-            }
-            if (response.eventReports !== undefined) {
-                eventReports.push(...response.eventReports);
-            }
-            if (!response.suppressResponse) {
-                await messenger.sendStatus(StatusCode.Success);
-            }
-            if (!response.moreChunkedMessages) break;
-            response = await messenger.readDataReport();
-        }
+        const response = await messenger.sendReadRequest(request);
 
         // Normalize and decode the response
         const normalizedResult = {
-            attributeReports: normalizeAndDecodeReadAttributeReport(attributeReports),
-            eventReports: normalizeAndDecodeReadEventReport(eventReports),
+            attributeReports: normalizeAndDecodeReadAttributeReport(response.attributeReports ?? []),
+            eventReports: normalizeAndDecodeReadEventReport(response.eventReports ?? []),
         };
         logger.debug(
             `Received read response with attributes ${normalizedResult.attributeReports
@@ -444,7 +428,7 @@ export class InteractionClient {
             attributes,
             asTimedRequest,
             timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
-            suppressResponse = false,
+            suppressResponse = false, // TODO needs to be TRUE for Group writes
         } = options;
         return this.withMessenger<AttributeStatus[]>(async messenger => {
             logger.debug(
@@ -460,7 +444,7 @@ export class InteractionClient {
             const writeRequests = attributes.map(
                 ({ endpointId, clusterId, attribute: { id, schema }, value, dataVersion }) => ({
                     path: { endpointId, clusterId, attributeId: id },
-                    data: schema.encodeTlv(value, true),
+                    data: schema.encodeTlv(value, { forWriteInteraction: true }),
                     dataVersion,
                 }),
             );
@@ -1011,6 +995,8 @@ export class InteractionClient {
                 `Cannot register update timer for subscription ${subscriptionId} because it is not owned by this client.`,
             );
         }
+
+        // TODO: Add measurement of latency and also consider this in the timeout calculation
         maxInterval += 5; // Add 5 seconds to the maxInterval to allow at least one full resubmission cycle before assuming the subscription is lost
         const timer = Time.getTimer("Subscription retry", maxInterval * 1000, () => {
             logger.info(`Subscription ${subscriptionId} timed out ...`);

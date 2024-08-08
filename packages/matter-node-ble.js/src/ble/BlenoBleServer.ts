@@ -10,6 +10,7 @@ import {
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID,
+    BLE_MAX_MATTER_PAYLOAD_SIZE,
     BTP_CONN_RSP_TIMEOUT_MS,
     BleError,
     BtpFlowError,
@@ -143,6 +144,8 @@ export class BlenoBleServer implements Channel<ByteArray> {
     );
 
     private readonly matterBleService;
+    readonly maxPayloadSize = BLE_MAX_MATTER_PAYLOAD_SIZE;
+    readonly isReliable = true; // BTP is reliable
 
     constructor(options?: BleOptions) {
         this.matterBleService = initializeBleno(this, options?.hciId);
@@ -258,7 +261,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
         }
         if (this.btpSession !== undefined) {
             throw new BtpFlowError(
-                `Subscription request received but BTP session already initialized. Can not handle two sessions!`,
+                `Subscription request received but BTP session already initialized. Cannot handle two sessions!`,
             );
         }
         this.btpHandshakeTimeout.stop();
@@ -392,7 +395,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
      */
     async send(data: ByteArray) {
         if (this.btpSession === undefined) {
-            throw new ChannelNotConnectedError(`Can not send data, no BTP session initialized`);
+            throw new ChannelNotConnectedError(`Cannot send data, no BTP session initialized`);
         }
         await this.btpSession.sendMatterMessage(data);
     }

@@ -21,6 +21,23 @@ import { Identity } from "../../util/Type.js";
 
 export namespace ModeBase {
     /**
+     * These are optional features supported by ModeBaseCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.10.4
+     */
+    export enum Feature {
+        /**
+         * OnOff (DEPONOFF)
+         *
+         * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
+         * endpoint. See OnMode for more information.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.10.4.1
+         */
+        OnOff = "OnOff"
+    }
+
+    /**
      * A Mode Tag is meant to be interpreted by the client for the purpose the cluster serves.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.10.5.1

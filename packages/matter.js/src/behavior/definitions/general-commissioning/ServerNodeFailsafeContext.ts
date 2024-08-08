@@ -5,9 +5,10 @@
  */
 
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
-import { Lifecycle } from "../../../common/Lifecycle.js";
+import { Lifecycle, UnsupportedDependencyError } from "../../../common/Lifecycle.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { Fabric } from "../../../fabric/Fabric.js";
+import { FabricManager } from "../../../fabric/FabricManager.js";
 import { Node } from "../../../node/Node.js";
 import { Immutable } from "../../../util/Type.js";
 import { NetworkCommissioningBehavior } from "../network-commissioning/NetworkCommissioningBehavior.js";
@@ -77,7 +78,7 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
     }
 
     override async restoreNetworkState() {
-        await this.#node.act(async agent => {
+        await this.#node.act(this.restoreNetworkState.name, async agent => {
             const context = agent.context;
 
             await this.#node.visit(async endpoint => {
@@ -96,9 +97,26 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
     }
 
     override async restoreBreadcrumb() {
-        await this.#node.act(agent => {
+        await this.#node.act(this.restoreBreadcrumb.name, agent => {
             agent.generalCommissioning.state.breadcrumb = 0;
         });
+    }
+
+    override async rollback() {
+        if (!this.fabricIndex && this.hasRootCert) {
+            // Update the fabric details if needed (like Trusted Root certificates) Only if fabric was not added because
+            // else all data gets updated anyway
+            try {
+                const fabricManager = this.#node.env.get(FabricManager);
+                fabricManager.events.failsafeClosed.emit();
+            } catch (error) {
+                // UnsupportedDependencyError can happen when the node closes. Then data are refreshed on next start
+                // anyway, so ignore this case
+                UnsupportedDependencyError.accept(error);
+            }
+        }
+
+        return super.rollback();
     }
 
     /*

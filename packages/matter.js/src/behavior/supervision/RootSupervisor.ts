@@ -10,6 +10,7 @@ import { FeatureMap } from "../../model/standard/elements/FeatureMap.js";
 import { camelize } from "../../util/String.js";
 import { AccessControl } from "../AccessControl.js";
 import { Val } from "../state/Val.js";
+import { ValueCaster } from "../state/managed/values/ValueCaster.js";
 import { ValueManager } from "../state/managed/values/ValueManager.js";
 import { ValuePatcher } from "../state/managed/values/ValuePatcher.js";
 import { ValueValidator } from "../state/validation/ValueValidator.js";
@@ -20,7 +21,7 @@ import { ValueSupervisor } from "./ValueSupervisor.js";
  * A RootSupervisor is a {@link ValueSupervisor} that supervises a specific root {@link Schema}.  It acts as a factory
  * for {@link ValueSupervisor}s for sub-schemas of the root schema.
  *
- * You can produce n ValueSupervisor for any schema using this factory. However, there are specific customizations
+ * You can produce a ValueSupervisor for any schema using this factory. However, there are specific customizations
  * controlled by the root schema:
  *
  * - Change eventing occur for root schema members.  In the case of a cluster this means you can monitor for changes on
@@ -52,7 +53,7 @@ export class RootSupervisor implements ValueSupervisor {
             this.#featureMap = new AttributeModel(FeatureMap);
             this.#supportedFeatures = new FeatureSet();
         }
-        this.#members = new Set(schema.members);
+        this.#members = new Set(schema.activeMembers);
 
         this.#root = this.#createValueSupervisor(schema);
     }
@@ -81,11 +82,8 @@ export class RootSupervisor implements ValueSupervisor {
         return this.#root.patch;
     }
 
-    /**
-     * Retrieve root schema elements that contribute fields to the data model.
-     */
-    get members() {
-        return this.#members;
+    get cast() {
+        return this.#root.cast;
     }
 
     /**
@@ -194,6 +192,7 @@ export class RootSupervisor implements ValueSupervisor {
                 validate: deferGeneration("validate", ValueValidator),
                 manage: deferGeneration("manage", ValueManager),
                 patch: deferGeneration("patch", ValuePatcher),
+                cast: deferGeneration("cast", ValueCaster),
             };
         } else {
             try {
@@ -205,6 +204,7 @@ export class RootSupervisor implements ValueSupervisor {
                     validate: ValueValidator(schema, this),
                     manage: ValueManager(schema, this),
                     patch: ValuePatcher(schema, this),
+                    cast: ValueCaster(schema, this),
                 };
             } finally {
                 this.#generating.delete(schema);

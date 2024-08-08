@@ -163,7 +163,7 @@ describe("ClusterBehavior", () => {
                     errorCount++;
                 }
                 expect(errorCount).equals(2);
-                expect(behavior.events.optAttr$Changed).instanceof(BasicObservable);
+                expect(behavior.events.optAttr$Changed).undefined;
                 expect(behavior.events.optEv).undefined;
             });
         });
@@ -303,7 +303,7 @@ describe("ClusterBehavior", () => {
             };
 
             expect(AwesomeBehavior.cluster.supportedFeatures).deep.equals({ awesome: true });
-            expect((AwesomeBehavior.schema as ClusterModel).supportedFeatures).deep.equals(new Set(["awesome"]));
+            expect((AwesomeBehavior.schema as ClusterModel).supportedFeatures).deep.equals(new Set(["AWE"]));
         });
 
         it("allows extension and base command overrides", () => {
@@ -337,7 +337,7 @@ describe("ClusterBehavior", () => {
             ({}) as InstanceType<typeof Events2> satisfies EventEmitter;
 
             const eventsInstance = new Events2();
-            eventsInstance.startUp satisfies Observable;
+            void (eventsInstance.startUp satisfies Observable);
             expect(eventsInstance.startUp).not.undefined;
         });
 

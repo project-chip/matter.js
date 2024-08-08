@@ -10,6 +10,8 @@ This package uses the following react-native libraries to provide the needed fun
 - react-native-quick-crypto
 - react-native-ble-plx
 - react-native-udp
+- @react-native-community/netinfo
+- @react-native-async-storage/async-storage
   Please check these projects if special preparations need to be done for your developed app.
 
 
@@ -21,3 +23,28 @@ This package uses the following react-native libraries to provide the needed fun
 ## Tests
 
 No tests available for now
+
+## React Native Configuration
+
+To use \`**matter.js**\` with React Native, you need to modify your Metro configuration to ensure that the packages are resolved correctly. You need to add a special resolver entry and merge it with your existing Metro configuration. Below is an example of how to do this:
+
+```javascript
+/* eslint-env node */
+
+// Used to merge configs together.
+const { mergeConfig } = require('@react-native/metro-config');
+
+// Your project configuration.
+const { getYourConfig } = require('your-config-provider');
+
+// Get your config.
+const yourConfig = getYourConfig();
+
+// New resolver configuration to fix the package resolution issue.
+const customConfig = { resolver: { unstable_enablePackageExports: true } };
+
+// Merging your existing configuration with the new resolver configuration.
+module.exports = mergeConfig(yourConfig, customConfig);
+```
+
+In this example, \`**customConfig**\` includes the necessary resolver configuration, and \`**mergeConfig**\` is used to combine it with your existing configuration (\`**yourConfig**\` in this case). Adjust \`**yourConfig**\` to fit your existing Metro configuration setup.

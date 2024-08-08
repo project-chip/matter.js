@@ -16,6 +16,20 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace TimeFormatLocalization {
     /**
+     * These are optional features supported by TimeFormatLocalizationCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 11.4.4
+     */
+    export enum Feature {
+        /**
+         * CalendarFormat (CALFMT)
+         *
+         * The Node can be configured to use different calendar formats when conveying values to a user.
+         */
+        CalendarFormat = "CalendarFormat"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Core} § 11.4.5.2
      */
     export enum CalendarType {
@@ -138,20 +152,6 @@ export namespace TimeFormatLocalization {
             supportedCalendarTypes: FixedAttribute(0x2, TlvArray(TlvEnum<CalendarType>()), { default: [] })
         }
     });
-
-    /**
-     * These are optional features supported by TimeFormatLocalizationCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 11.4.4
-     */
-    export enum Feature {
-        /**
-         * CalendarFormat (CALFMT)
-         *
-         * The Node can be configured to use different calendar formats when conveying values to a user.
-         */
-        CalendarFormat = "CalendarFormat"
-    }
 
     /**
      * These elements and properties are present in all TimeFormatLocalization clusters.

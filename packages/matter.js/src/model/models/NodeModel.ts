@@ -11,7 +11,7 @@ import { Model } from "./Model.js";
 
 export class NodeModel extends Model implements NodeElement {
     override tag: NodeElement.Tag = NodeElement.Tag;
-    override id!: number;
+    declare id: number;
 
     get endpoints() {
         return this.children;

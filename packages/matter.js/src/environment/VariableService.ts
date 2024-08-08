@@ -11,7 +11,7 @@ import type { Environment } from "./Environment.js";
 import { Environmental } from "./Environmental.js";
 
 /**
- * Read access to environmental configuration values.
+ * Environmental configuration values.
  */
 export class VariableService {
     #vars = {} as VariableService.Map;

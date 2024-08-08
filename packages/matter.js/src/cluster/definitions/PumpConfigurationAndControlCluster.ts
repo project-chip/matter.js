@@ -27,6 +27,62 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace PumpConfigurationAndControl {
     /**
+     * These are optional features supported by PumpConfigurationAndControlCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 4.2.4
+     */
+    export enum Feature {
+        /**
+         * ConstantPressure (PRSCONST)
+         *
+         * Supports operating in constant pressure mode
+         */
+        ConstantPressure = "ConstantPressure",
+
+        /**
+         * CompensatedPressure (PRSCOMP)
+         *
+         * Supports operating in compensated pressure mode
+         */
+        CompensatedPressure = "CompensatedPressure",
+
+        /**
+         * ConstantFlow (FLW)
+         *
+         * Supports operating in constant flow mode
+         */
+        ConstantFlow = "ConstantFlow",
+
+        /**
+         * ConstantSpeed (SPD)
+         *
+         * Supports operating in constant speed mode
+         */
+        ConstantSpeed = "ConstantSpeed",
+
+        /**
+         * ConstantTemperature (TEMP)
+         *
+         * Supports operating in constant temperature mode
+         */
+        ConstantTemperature = "ConstantTemperature",
+
+        /**
+         * Automatic (AUTO)
+         *
+         * Supports operating in automatic mode
+         */
+        Automatic = "Automatic",
+
+        /**
+         * LocalOperation (LOCAL)
+         *
+         * Supports operating using local settings
+         */
+        LocalOperation = "LocalOperation"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 4.2.6.1
      */
     export const PumpStatus = {
@@ -457,62 +513,6 @@ export namespace PumpConfigurationAndControl {
             maxConstTemp: FixedAttribute(0xc, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null })
         }
     });
-
-    /**
-     * These are optional features supported by PumpConfigurationAndControlCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 4.2.4
-     */
-    export enum Feature {
-        /**
-         * ConstantPressure (PRSCONST)
-         *
-         * Supports operating in constant pressure mode
-         */
-        ConstantPressure = "ConstantPressure",
-
-        /**
-         * CompensatedPressure (PRSCOMP)
-         *
-         * Supports operating in compensated pressure mode
-         */
-        CompensatedPressure = "CompensatedPressure",
-
-        /**
-         * ConstantFlow (FLW)
-         *
-         * Supports operating in constant flow mode
-         */
-        ConstantFlow = "ConstantFlow",
-
-        /**
-         * ConstantSpeed (SPD)
-         *
-         * Supports operating in constant speed mode
-         */
-        ConstantSpeed = "ConstantSpeed",
-
-        /**
-         * ConstantTemperature (TEMP)
-         *
-         * Supports operating in constant temperature mode
-         */
-        ConstantTemperature = "ConstantTemperature",
-
-        /**
-         * Automatic (AUTO)
-         *
-         * Supports operating in automatic mode
-         */
-        Automatic = "Automatic",
-
-        /**
-         * LocalOperation (LOCAL)
-         *
-         * Supports operating using local settings
-         */
-        LocalOperation = "LocalOperation"
-    }
 
     /**
      * These elements and properties are present in all PumpConfigurationAndControl clusters.

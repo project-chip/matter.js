@@ -96,7 +96,7 @@ export class ModelValidator<T extends Model> {
             }
             return;
         }
-        if (Object.values(type).indexOf(value) === -1) {
+        if (!Object.values(type).includes(value)) {
             this.error("INVALID_ENUM_KEY", `Property ${name} value ${value} is not in enum`);
         }
     }

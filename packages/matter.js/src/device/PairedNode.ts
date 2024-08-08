@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { CommissioningController } from "../CommissioningController.js";
-import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
+import { Attributes } from "../cluster/Cluster.js";
 import { ClusterClientObj, asClusterClientInternal, isClusterClient } from "../cluster/client/ClusterClientTypes.js";
 
 import { getClusterById } from "../cluster/ClusterHelper.js";
@@ -28,12 +28,12 @@ import {
     structureReadAttributeDataToClusterObject,
 } from "../protocol/interaction/AttributeDataDecoder.js";
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { AtLeastOne } from "../util/Array.js";
 import { Aggregator } from "./Aggregator.js";
 import { ComposedDevice } from "./ComposedDevice.js";
 import { PairedDevice, RootEndpoint } from "./Device.js";
 
+import { ClusterType } from "../cluster/ClusterType.js";
 import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
 import { AdministratorCommissioning } from "../cluster/definitions/index.js";
 import { Crypto } from "../crypto/Crypto.js";
@@ -140,7 +140,7 @@ export class PairedNode {
     );
     private readonly updateEndpointStructureTimer = Time.getTimer(
         "Endpoint structure update",
-        5_000,
+        STRUCTURE_UPDATE_TIMEOUT_MS,
         async () => await this.updateEndpointStructure(),
     );
     private connectionState: NodeStateInformation = NodeStateInformation.Disconnected;
@@ -201,28 +201,27 @@ export class PairedNode {
 
     /**
      * Force a reconnection to the device. This method is mainly used internally to reconnect after the active session
-     * was closed or the device wen offline and was detected as being online again.
+     * was closed or the device went offline and was detected as being online again.
      */
     async reconnect() {
+        this.setConnectionState(NodeStateInformation.Reconnecting);
         while (true) {
             if (this.interactionClient !== undefined) {
                 this.interactionClient.close();
                 this.interactionClient = undefined;
             }
-            this.setConnectionState(NodeStateInformation.Reconnecting);
             try {
                 await this.initialize();
+                return;
             } catch (error) {
-                if (error instanceof MatterError) {
-                    // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others
-                    if (this.connectionState === NodeStateInformation.Disconnected) {
-                        return;
-                    }
-                    logger.info(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
-                    this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
-                } else {
-                    throw error;
+                MatterError.accept(error);
+
+                // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others
+                if (this.connectionState === NodeStateInformation.Disconnected) {
+                    return;
                 }
+                logger.info(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
+                this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
             }
         }
     }
@@ -547,9 +546,7 @@ export class PairedNode {
             throw new MatterError(`NodeId ${this.nodeId}: No device type found for endpoint`);
         }
 
-        const endpointClusters = Array<
-            ClusterServerObj<Attributes, Events> | ClusterClientObj<any, Attributes, Commands, Events>
-        >();
+        const endpointClusters = Array<ClusterServerObj | ClusterClientObj>();
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
@@ -565,10 +562,13 @@ export class PairedNode {
             const clusterData = (data[clusterId] ?? {}) as AttributeInitialValues<Attributes>; // TODO correct typing
             // Todo add logic for Events
             endpointClusters.push(
-                ClusterServer(cluster, /*clusterData.featureMap,*/ clusterData, {}) as ClusterServerObj<
-                    Attributes,
-                    Events
-                >,
+                ClusterServer(
+                    cluster,
+                    /*clusterData.featureMap,*/ clusterData,
+                    {},
+                    undefined,
+                    true,
+                ) as ClusterServerObj,
             ); // TODO Add Default handler!
         }
 
@@ -675,8 +675,7 @@ export class PairedNode {
         } catch (error) {
             // Accept the error if no window is already open
             if (
-                !(error instanceof StatusResponseError) ||
-                error.code !== StatusCode.Failure ||
+                !StatusResponseError.is(error, StatusCode.Failure) ||
                 error.clusterCode !== AdministratorCommissioning.StatusCode.WindowNotOpen
             ) {
                 throw error;
@@ -698,8 +697,7 @@ export class PairedNode {
         } catch (error) {
             // Accept the error if no window is already open
             if (
-                !(error instanceof StatusResponseError) ||
-                error.code !== StatusCode.Failure ||
+                !StatusResponseError.is(error, StatusCode.Failure) ||
                 error.clusterCode !== AdministratorCommissioning.StatusCode.WindowNotOpen
             ) {
                 throw error;
@@ -769,13 +767,7 @@ export class PairedNode {
      *
      * @param cluster ClusterServer to get or undefined if not existing
      */
-    getRootClusterServer<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    getRootClusterServer<const T extends ClusterType>(cluster: T): ClusterServerObj<T> | undefined {
         return this.endpoints.get(EndpointNumber(0))?.getClusterServer(cluster);
     }
 
@@ -784,13 +776,7 @@ export class PairedNode {
      *
      * @param cluster ClusterClient to get or undefined if not existing
      */
-    getRootClusterClient<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    getRootClusterClient<const T extends ClusterType>(cluster: T): ClusterClientObj<T> | undefined {
         return this.endpoints.get(EndpointNumber(0))?.getClusterClient(cluster);
     }
 
@@ -800,13 +786,10 @@ export class PairedNode {
      * @param endpointId EndpointNumber to get the cluster from
      * @param cluster ClusterServer to get or undefined if not existing
      */
-    getClusterServerForDevice<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(endpointId: EndpointNumber, cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    getClusterServerForDevice<const T extends ClusterType>(
+        endpointId: EndpointNumber,
+        cluster: T,
+    ): ClusterServerObj<T> | undefined {
         return this.getDeviceById(endpointId)?.getClusterServer(cluster);
     }
 
@@ -816,13 +799,10 @@ export class PairedNode {
      * @param endpointId EndpointNumber to get the cluster from
      * @param cluster ClusterClient to get or undefined if not existing
      */
-    getClusterClientForDevice<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(endpointId: EndpointNumber, cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    getClusterClientForDevice<const T extends ClusterType>(
+        endpointId: EndpointNumber,
+        cluster: T,
+    ): ClusterClientObj<T> | undefined {
         return this.getDeviceById(endpointId)?.getClusterClient(cluster);
     }
 }

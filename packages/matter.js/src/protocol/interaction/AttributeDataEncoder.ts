@@ -10,7 +10,7 @@ import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
-import { TlvSchema, TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvEncodingOptions, TlvSchema, TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {
     TlvAttributePath,
     TlvAttributeReport,
@@ -31,6 +31,7 @@ type FullAttributePath = {
 /** Type for TlvAttributeReport where the real data are represented with the schema and the JS value. */
 export type AttributeReportPayload = Omit<TypeFromSchema<typeof TlvAttributeReport>, "attributeData"> & {
     attributeData?: AttributeDataPayload;
+    hasFabricSensitiveData: boolean;
 };
 
 /** Type for TlvAttributeReportData where the real data are represented with the schema and the JS value. */
@@ -42,6 +43,7 @@ type AttributeDataPayload = Omit<TypeFromSchema<typeof TlvAttributeReportData>, 
 /** Type for TlvEventReport where the real data are represented with the schema and the JS value. */
 export type EventReportPayload = Omit<TypeFromSchema<typeof TlvEventReport>, "eventData"> & {
     eventData?: EventDataPayload;
+    hasFabricSensitiveData: boolean;
 };
 
 /** Type for TlvEventData where the real data are represented with the schema and the JS value. */
@@ -57,18 +59,23 @@ export type DataReportPayload = Omit<TypeFromSchema<typeof TlvDataReport>, "attr
 };
 
 /** Encodes an AttributeReportPayload into a TlvStream (used for TlvAny type). */
-export function encodeAttributePayload(attributePayload: AttributeReportPayload): TlvStream {
+export function encodeAttributePayload(
+    attributePayload: AttributeReportPayload,
+    options?: TlvEncodingOptions,
+): TlvStream {
     const { attributeData, attributeStatus } = attributePayload;
     if (attributeData === undefined) {
         return TlvAttributeReport.encodeTlv({ attributeStatus });
     }
 
     const { path, schema, payload, dataVersion } = attributeData;
-    return TlvAttributeReport.encodeTlv({ attributeData: { path, data: schema.encodeTlv(payload), dataVersion } });
+    return TlvAttributeReport.encodeTlv({
+        attributeData: { path, data: schema.encodeTlv(payload, options), dataVersion },
+    });
 }
 
 /** Encodes an EventReportPayload into a TlvStream (used for TlvAny type). */
-export function encodeEventPayload(eventPayload: EventReportPayload): TlvStream {
+export function encodeEventPayload(eventPayload: EventReportPayload, options?: TlvEncodingOptions): TlvStream {
     const { eventData, eventStatus } = eventPayload;
     if (eventData === undefined) {
         return TlvEventReport.encodeTlv({ eventStatus });
@@ -88,7 +95,7 @@ export function encodeEventPayload(eventPayload: EventReportPayload): TlvStream 
     return TlvEventReport.encodeTlv({
         eventData: {
             path,
-            data: schema.encodeTlv(payload),
+            data: schema.encodeTlv(payload, options),
             priority,
             systemTimestamp,
             deltaSystemTimestamp,
@@ -115,24 +122,28 @@ export function canAttributePayloadBeChunked(attributePayload: AttributeReportPa
 
 /** Chunk an AttributeReportPayload into multiple AttributeReportPayloads. */
 export function chunkAttributePayload(attributePayload: AttributeReportPayload): AttributeReportPayload[] {
-    const { attributeData } = attributePayload;
+    const { hasFabricSensitiveData, attributeData } = attributePayload;
     if (attributeData === undefined) {
         throw new MatterFlowError(
-            `Can not chunk an AttributePayload with just a attributeStatus: ${Logger.toJSON(attributePayload)}`,
+            `Cannot chunk an AttributePayload with just a attributeStatus: ${Logger.toJSON(attributePayload)}`,
         );
     }
     const { schema, path, dataVersion, payload } = attributeData;
     if (!(schema instanceof ArraySchema) || !Array.isArray(payload)) {
         throw new MatterFlowError(
-            `Can not chunk an AttributePayload with attributeData that is not an array: ${Logger.toJSON(
+            `Cannot chunk an AttributePayload with attributeData that is not an array: ${Logger.toJSON(
                 attributePayload,
             )}`,
         );
     }
     const chunks = new Array<AttributeReportPayload>();
-    chunks.push({ attributeData: { schema, path: { ...path, listIndex: undefined }, payload: [], dataVersion } });
+    chunks.push({
+        hasFabricSensitiveData: hasFabricSensitiveData,
+        attributeData: { schema, path: { ...path, listIndex: undefined }, payload: [], dataVersion },
+    });
     payload.forEach(element => {
         chunks.push({
+            hasFabricSensitiveData: hasFabricSensitiveData,
             attributeData: {
                 schema: schema.elementSchema,
                 path: { ...path, listIndex: null },
@@ -183,7 +194,7 @@ export function sortAttributeDataByPath(data1: AttributeReportPayload, data2: At
 export function compressAttributeDataReportTags(data: AttributeReportPayload[]) {
     let lastFullPath: FullAttributePath | undefined;
 
-    return data.sort(sortAttributeDataByPath).map(({ attributeData, attributeStatus }) => {
+    return data.sort(sortAttributeDataByPath).map(({ hasFabricSensitiveData, attributeData, attributeStatus }) => {
         if (attributeData !== undefined) {
             const { path, dataVersion } = attributeData;
             const compressedPath = compressPath(path, dataVersion, lastFullPath);
@@ -201,7 +212,7 @@ export function compressAttributeDataReportTags(data: AttributeReportPayload[]) 
             attributeStatus = { ...attributeStatus, path: compressedPath.path };
             lastFullPath = compressedPath.lastFullPath;
         }
-        return { attributeData, attributeStatus };
+        return { hasFabricSensitiveData, attributeData, attributeStatus };
     });
 }
 

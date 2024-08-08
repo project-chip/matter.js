@@ -207,7 +207,7 @@ export class Block extends Entry {
         let needSpace = false;
         for (let i = 0; i < serializedEntries.length; i++) {
             // Add delimiter to entry if necessary
-            const entry = `${serializedEntries[i]}${this.delimiterAfter(i, serializedEntries[i])}`;
+            const entry = `${serializedEntries[i]}${this.delimiterAfter(rawEntries[i], serializedEntries[i])}`;
 
             // Separate documented and large elements from their siblings
             if (rawEntries[i].isDocumented || (entry.split("\n").length > 5 && !rawEntries[i].shouldGroup)) {
@@ -393,25 +393,25 @@ export class Block extends Entry {
         this.definedNames.add(name);
     }
 
-    protected delimiterAfter(index: number, serialized: string): string {
-        // Do not delimit functions structures that eslint will complain about
+    protected delimiterAfter(entry: Entry, serialized: string): string {
         if (
             serialized.match(
                 /^(?:\s*(?:\/\*.*\*\/|export|const))*\s*(?:export)?\s*(?:enum|function|namespace|interface|class)/m,
             )
         ) {
+            // Do not delimit functions structures that eslint will complain about
             return "";
         }
 
-        if (this.isDelimited(index)) {
+        if (this.isDelimited(entry)) {
             return ";";
         }
 
         return "";
     }
 
-    protected isDelimited(index: number) {
-        return this.get(index) instanceof Atom || this.get(index) instanceof NestedBlock;
+    protected isDelimited(entry: Entry) {
+        return entry instanceof Atom || entry instanceof NestedBlock;
     }
 }
 
@@ -446,9 +446,9 @@ class BuilderBlock extends NestedBlock {
         if (this.entries.length === 1) {
             return first;
         }
-        if (this.entries.length === 2 && first.indexOf("\n") === -1) {
+        if (this.entries.length === 2 && !first.includes("\n")) {
             const second = this.entries[1]?.toString("");
-            if (second.indexOf("\n") === -1 && first.length + second.length + 1 < WRAP_WIDTH) {
+            if (!second.includes("\n") && first.length + second.length + 1 < WRAP_WIDTH) {
                 return `${first}.${second}`;
             }
         }
@@ -581,11 +581,14 @@ class ExpressionBlock extends NestedBlock {
         return super.layOutEntries(linePrefix, serializedEntries, rawEntries);
     }
 
-    override delimiterAfter(index: number) {
-        if (this.isDelimited(index)) {
-            for (let i = index + 1; i < this.length; i++) {
-                if (this.isDelimited(i)) {
-                    return ",";
+    override delimiterAfter(entry: Entry) {
+        if (this.isDelimited(entry)) {
+            const index = this.entries.indexOf(entry);
+            if (index !== -1) {
+                for (let i = index + 1; i < this.length; i++) {
+                    if (this.isDelimited(this.get(i))) {
+                        return ",";
+                    }
                 }
             }
         }
@@ -633,7 +636,7 @@ export class TsFile extends Block {
             list = new Array<string>();
             this.imports.set(filename, list);
         }
-        if (name && list.indexOf(name) === -1) {
+        if (name && !list.includes(name)) {
             list.push(name);
 
             name = name.replace(/^\w+ as /, "");
@@ -660,7 +663,7 @@ export class TsFile extends Block {
 
         if (this.editable) {
             try {
-                if (readMatterFile(filename).indexOf(EDITABLE_WARNING) === -1) {
+                if (!readMatterFile(filename).includes(EDITABLE_WARNING)) {
                     return;
                 }
             } catch (e) {

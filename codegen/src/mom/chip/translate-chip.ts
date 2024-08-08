@@ -105,7 +105,7 @@ function setAccessPrivileges(src: Element, target: Access.Ast) {
             return;
         }
         const op = need("access op", str(accessEl.getAttribute("op"))) as keyof typeof srcAccess;
-        if (Object.keys(srcAccess).indexOf(op) === -1) {
+        if (!Object.keys(srcAccess).includes(op)) {
             throw new Error(`Unknown access op "${op}"`);
         }
 

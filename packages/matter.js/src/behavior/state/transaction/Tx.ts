@@ -87,9 +87,7 @@ export function act<T>(via: string, actor: (transaction: Transaction) => T): T {
         throw error;
     }) as (error: any) => MaybePromise<T>; // Cast because otherwise type is MaybePromise<void>
 
-    const closeTransaction = () => {
-        tx.close();
-    };
+    const closeTransaction = tx.close.bind(tx);
 
     let isAsync = false;
     try {
@@ -417,16 +415,12 @@ class Tx implements Transaction {
 
             if (MaybePromise.is(result)) {
                 return result.then(() => {
-                    if (error instanceof StatusResponseError) {
-                        throw error;
-                    }
+                    StatusResponseError.reject(error);
                     throw new FinalizationError("Rolled back due to pre-commit error");
                 });
             }
 
-            if (error instanceof StatusResponseError) {
-                throw error;
-            }
+            StatusResponseError.reject(error);
             throw new FinalizationError("Rolled back due to pre-commit error");
         };
 
@@ -586,9 +580,6 @@ class Tx implements Transaction {
                 if (ongoing) {
                     ongoing.push(promise as Promise<void>);
                 } else {
-                    // eslint has helpfully decided you can't place promises in an array, suggesting you use Promise.all
-                    // or similar...  Which is exactly why we're putting them in an array...
-                    // eslint-disable-next-line
                     ongoing = [promise as Promise<void>];
                 }
             }
@@ -657,8 +648,6 @@ class Tx implements Transaction {
                 if (ongoing) {
                     ongoing.push(promise as Promise<void>);
                 } else {
-                    // See comment on similar line above
-                    // eslint-disable-next-line
                     ongoing = [promise as Promise<void>];
                 }
             }

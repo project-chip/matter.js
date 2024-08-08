@@ -45,6 +45,7 @@ export class SecureSession<T> extends Session<T> {
     readonly #attestationKey: ByteArray;
     readonly #subscriptionChangedCallback: () => void;
     #caseAuthenticatedTags: CaseAuthenticatedTag[];
+    readonly supportsMRP = true;
 
     static async create<T>(args: {
         context: T;
@@ -58,7 +59,7 @@ export class SecureSession<T> extends Session<T> {
         isResumption: boolean;
         closeCallback: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
-        sessionParameters?: SessionParameterOptions;
+        peerSessionParameters?: SessionParameterOptions;
         caseAuthenticatedTags?: CaseAuthenticatedTag[];
     }) {
         const {
@@ -72,7 +73,7 @@ export class SecureSession<T> extends Session<T> {
             isInitiator,
             isResumption,
             closeCallback,
-            sessionParameters,
+            peerSessionParameters,
             caseAuthenticatedTags,
             subscriptionChangedCallback,
         } = args;
@@ -96,7 +97,7 @@ export class SecureSession<T> extends Session<T> {
             attestationKey,
             closeCallback,
             subscriptionChangedCallback,
-            sessionParameters,
+            sessionParameters: peerSessionParameters,
             isInitiator,
             caseAuthenticatedTags,
         });
@@ -220,7 +221,7 @@ export class SecureSession<T> extends Session<T> {
         const securityFlags = headerBytes[3];
         const sessionNodeId = this.isPase
             ? NodeId.UNSPECIFIED_NODE_ID
-            : this.#fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID;
+            : (this.#fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID);
         const nonce = this.generateNonce(securityFlags, header.messageId, sessionNodeId);
         return { header, applicationPayload: Crypto.encrypt(this.#encryptKey, applicationPayload, nonce, headerBytes) };
     }
@@ -293,7 +294,8 @@ export class SecureSession<T> extends Session<T> {
     }
 
     async clearSubscriptions(flushSubscriptions = false) {
-        for (const subscription of this.#subscriptions) {
+        const subscriptions = [...this.#subscriptions]; // get all values because subscriptions will remove themselves when cancelled
+        for (const subscription of subscriptions) {
             await subscription.cancel(flushSubscriptions);
         }
         this.#subscriptions.length = 0;

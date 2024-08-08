@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
 import { GroupKeyManagement } from "../../../cluster/definitions/GroupKeyManagementCluster.js";
 import { ImplementationError } from "../../../common/MatterError.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";

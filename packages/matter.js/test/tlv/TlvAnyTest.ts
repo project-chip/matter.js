@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationError } from "../../src/common/ValidationError.js";
+import { ValidationDatatypeMismatchError } from "../../src/common/ValidationError.js";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvType } from "../../src/tlv/TlvCodec.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
@@ -63,7 +63,10 @@ describe("TlvAny", () => {
 
     describe("validation", () => {
         it("throws an error if the value is not a boolean", () => {
-            expect(() => TlvAny.validate("a" as any)).throw(ValidationError, "Expected TlvStream, got string.");
+            expect(() => TlvAny.validate("a" as any)).throw(
+                ValidationDatatypeMismatchError,
+                "Expected TlvStream, got string.",
+            );
         });
 
         it("does not throw an error if the value is a boolean", () => {

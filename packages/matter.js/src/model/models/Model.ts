@@ -16,14 +16,14 @@ import { Children } from "./Children.js";
  */
 export abstract class Model {
     abstract readonly tag: ElementTag;
-    type?: string;
-    isSeed?: boolean;
-    description?: string;
-    details?: string;
-    xref?: Model.CrossReference;
-    errors?: DefinitionError[];
-    asOf?: Specification.Revision;
-    until?: Specification.Revision;
+    declare type?: string;
+    declare isSeed?: boolean;
+    declare description?: string;
+    declare details?: string;
+    declare xref?: Model.CrossReference;
+    declare errors?: DefinitionError[];
+    declare asOf?: Specification.Revision;
+    declare until?: Specification.Revision;
     declare id?: number;
     declare name: string;
 
@@ -119,17 +119,6 @@ export abstract class Model {
         }
 
         // Note that parent updates this.#parent so don't touch that
-    }
-
-    /**
-     * Element view of children.  For TypeScript this allows children to be added as elements.  For JavaScript this is
-     * identical to children().
-     */
-    get elements(): AnyElement[] {
-        if (!this.#children) {
-            this.children = [];
-        }
-        return this.#children as AnyElement[];
     }
 
     /**

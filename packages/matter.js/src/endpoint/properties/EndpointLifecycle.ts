@@ -19,14 +19,15 @@ const logger = Logger.get("PartLifecycle");
  */
 export class EndpointLifecycle {
     #endpoint: Endpoint;
+    #isEssential: boolean;
     #isInstalled = false;
     #isReady = false;
-    #isTreeReady = false;
+    #isPartsReady = false;
     #hasId = false;
     #hasNumber = false;
     #installed = Observable<[]>(error => this.emitError("installed", error));
     #ready = Observable<[]>(error => this.emitError("ready", error));
-    #treeReady = Observable<[]>(error => this.emitError("treeReady", error));
+    #partsReady = Observable<[]>(error => this.emitError("partsReady", error));
     #destroyed = Observable<[]>(error => this.emitError("destroyed", error));
     #changed = Observable<[type: EndpointLifecycle.Change, endpoint: Endpoint]>(error =>
         this.emitError("changed", error),
@@ -51,8 +52,15 @@ export class EndpointLifecycle {
     /**
      * Emitted when an endpoint is fully initialized including children.
      */
+    get partsReady() {
+        return this.#partsReady;
+    }
+
+    /**
+     * @deprecated use {@link partsReady}
+     */
     get treeReady() {
-        return this.#treeReady;
+        return this.partsReady;
     }
 
     /**
@@ -93,8 +101,27 @@ export class EndpointLifecycle {
     /**
      * Is the {@link Endpoint} fully initialized, including children?
      */
+    get isPartsReady() {
+        return this.#isPartsReady;
+    }
+
+    /**
+     * @deprecated use {@link isPartsReady}
+     */
     get isTreeReady() {
-        return this.#isTreeReady;
+        return this.isPartsReady;
+    }
+
+    /**
+     * Designates endpoint as essential.
+     *
+     * By default endpoints are considered "essential".  An essential endpoint must initialize successfully or an error
+     * is thrown.  Non-essential endpoints may be installed even if they have errors.
+     *
+     * You may configure this property via {@link Endpoint.Configuration#isEssential}.
+     */
+    get isEssential() {
+        return this.#isEssential;
     }
 
     /**
@@ -111,8 +138,9 @@ export class EndpointLifecycle {
         return this.#hasNumber;
     }
 
-    constructor(endpoint: Endpoint) {
+    constructor(endpoint: Endpoint, isEssential?: boolean) {
         this.#endpoint = endpoint;
+        this.#isEssential = isEssential ?? true;
 
         // Bubble crash events
         endpoint.construction.change.on(status => {
@@ -127,10 +155,6 @@ export class EndpointLifecycle {
      */
     bubble(type: EndpointLifecycle.Change, endpoint: Endpoint) {
         this.#changed.emit(type, endpoint);
-
-        if (type === EndpointLifecycle.Change.TreeReady) {
-            this.#checkTreeReadiness();
-        }
     }
 
     /**
@@ -152,7 +176,14 @@ export class EndpointLifecycle {
                     throw new ImplementationError("Endpoint reports as ready but has no number assigned");
                 }
                 this.#isReady = true;
-                this.#checkTreeReadiness();
+                break;
+
+            case EndpointLifecycle.Change.PartsReady:
+                // Sanity checks
+                if (!this.#isReady) {
+                    throw new ImplementationError("Endpoint reports as parts-ready but is not itself ready");
+                }
+                this.#isPartsReady = true;
                 break;
 
             case EndpointLifecycle.Change.IdAssigned:
@@ -200,20 +231,7 @@ export class EndpointLifecycle {
      * Revert to uninstalled state.
      */
     resetting() {
-        this.#isInstalled = this.#isReady = this.#isTreeReady = false;
-    }
-
-    #checkTreeReadiness() {
-        if (this.#isTreeReady) {
-            return;
-        }
-
-        if (!this.#endpoint.parts.areReady) {
-            return;
-        }
-
-        this.#isTreeReady = true;
-        this.change(EndpointLifecycle.Change.TreeReady);
+        this.#isInstalled = this.#isReady = this.#isPartsReady = false;
     }
 }
 
@@ -221,7 +239,7 @@ export namespace EndpointLifecycle {
     export enum Change {
         Installed = "installed",
         Ready = "ready",
-        TreeReady = "treeReady",
+        PartsReady = "partsReady",
         Crashed = "crashed",
         Destroyed = "destroyed",
         ServersChanged = "serversChanged",

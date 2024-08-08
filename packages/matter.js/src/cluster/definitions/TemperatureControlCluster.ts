@@ -19,6 +19,44 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace TemperatureControl {
     /**
+     * These are optional features supported by TemperatureControlCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 8.2.4
+     */
+    export enum Feature {
+        /**
+         * TemperatureNumber (TN)
+         *
+         * For devices that use an actual temperature value for the temperature setpoint, such as some water heaters,
+         * the feature TN shall be used. Note that this cluster provides and supports temperatures in degrees Celsius
+         * via the temperature data type.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 8.2.4.1
+         */
+        TemperatureNumber = "TemperatureNumber",
+
+        /**
+         * TemperatureLevel (TL)
+         *
+         * For devices that use vendor-specific temperature levels for the temperature setpoint, such as some washers,
+         * the feature TL shall be used.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 8.2.4.2
+         */
+        TemperatureLevel = "TemperatureLevel",
+
+        /**
+         * TemperatureStep (STEP)
+         *
+         * For devices that support discrete temperature setpoints that are larger than the temperature resolution
+         * imposed via the temperature data type, the Step feature may be used.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 8.2.4.3
+         */
+        TemperatureStep = "TemperatureStep"
+    }
+
+    /**
      * Input to the TemperatureControl setTemperature command
      *
      * @see {@link MatterSpecification.v13.Cluster} § 8.2.6.1
@@ -132,44 +170,6 @@ export namespace TemperatureControl {
             supportedTemperatureLevels: Attribute(0x5, TlvArray(TlvString, { maxLength: 32 }), { default: [] })
         }
     });
-
-    /**
-     * These are optional features supported by TemperatureControlCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 8.2.4
-     */
-    export enum Feature {
-        /**
-         * TemperatureNumber (TN)
-         *
-         * For devices that use an actual temperature value for the temperature setpoint, such as some water heaters,
-         * the feature TN shall be used. Note that this cluster provides and supports temperatures in degrees Celsius
-         * via the temperature data type.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 8.2.4.1
-         */
-        TemperatureNumber = "TemperatureNumber",
-
-        /**
-         * TemperatureLevel (TL)
-         *
-         * For devices that use vendor-specific temperature levels for the temperature setpoint, such as some washers,
-         * the feature TL shall be used.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 8.2.4.2
-         */
-        TemperatureLevel = "TemperatureLevel",
-
-        /**
-         * TemperatureStep (STEP)
-         *
-         * For devices that support discrete temperature setpoints that are larger than the temperature resolution
-         * imposed via the temperature data type, the Step feature may be used.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 8.2.4.3
-         */
-        TemperatureStep = "TemperatureStep"
-    }
 
     /**
      * These elements and properties are present in all TemperatureControl clusters.

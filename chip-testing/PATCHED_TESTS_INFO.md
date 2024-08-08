@@ -7,6 +7,9 @@
 | TestAccessControlCluster.yaml | see https://github.com/project-chip/connectedhomeip/issues/33578 |
 | TestBasicInformation.yaml     | use test file from before adjustment to Matter 1.4 in chip       |
 | Test_TC_BINFO_2_1.yaml        | use test file from before adjustment to Matter 1.4 in chip       |
+| Test_TC_CC_*.yaml             | use test file from before adjustment to Matter 1.4 in chip       |
+| Test_TC_LVL_4_1.yaml          | use test file from before adjustment to Matter 1.4 in chip       |
+| Test_TC_SWTCH_1_1.yaml        | use test file from before adjustment to Matter 1.4 in chip       |
 
 # CI-PICS
 
@@ -16,12 +19,13 @@
 | WNCV.S.F03=1              | We support "Absolute position feature" and want to run tests for that too                                              |
 | WNCV.S.M.Calibration=0    | We need to turn off calibration because the test expect a different behavior then we do in default implementation      |
 | CC.S.F00=1                | We support "Hue/Saturation" feature and want to run tests for that too                                                 |
-| DGGEN.S.A0003..7=0        | We do not add attributes 3..7 to our test, so disable tests for that                                                   |
-| DGGEN.S.C00.Rsp=0         | We do not support the "TestTrigger" command, so disable tests for that                                                 |
-| DGGEN.S.C03.Rsp=0         | We do not support the "TimeSnapshotResponse" command, so disable tests for that                                        |
-| DGGEN.S.E00..2=0          | We do not enable events 0..2 for now, so disable tests for that                                                        |
-| DGGEN.S.F00=0             | We do not support the "DM Test" feature, so disable tests for that                                                     |
 | PS.S.E01=0                | We do not support the optional Battery Fault Change event, so disable tests for that                                   |
 | CNET.S.A0002..3=0         | We use an Ethernet Network commissioning cluster and so we do not have these two attributes, so disable tests for that |
 | DESC.S.F00=0              | We do not provide a Taglist on Descriptor cluster, so disable tests for that                                           |
 | PCC.S.A0005..c=0          | We provide a Constant pressure pump, so these attributes must not exist, so disable tests for that                     |
+
+# Excluded tests
+| Testname             | Reason                                                                    |
+|----------------------|---------------------------------------------------------------------------|
+| Test_TC_LVL_9_1.yaml | Test expects a group cluster with multiple groups support                 |
+| Test_TC_OO_2_7.yaml  | Test expects a group cluster with multiple groups support                 |

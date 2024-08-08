@@ -946,7 +946,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "SceneValid", id: 0x3, type: "bool", access: "S", conformance: "M", default: true,
+                            name: "SceneValid", id: 0x3, type: "bool", access: "S", conformance: "M", default: false,
 
                             details: "This field shall indicate whether the state of the server corresponds to that associated with the " +
                                 "CurrentScene and CurrentGroup fields of the SceneInfoStruct they belong to. TRUE indicates that " +
@@ -1225,7 +1225,7 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "OnOff", id: 0x0, type: "bool", access: "R V", conformance: "M", default: true,
+                    name: "OnOff", id: 0x0, type: "bool", access: "R V", conformance: "M", default: false,
                     quality: "N S",
                     details: "This attribute indicates whether the device type implemented on the endpoint is turned off or " +
                         "turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively.",
@@ -4177,7 +4177,7 @@ export const SpecMatter = Matter({
                 }),
 
                 Field({
-                    name: "Measured", id: 0x1, type: "bool", conformance: "M", default: true, quality: "F",
+                    name: "Measured", id: 0x1, type: "bool", conformance: "M", default: false, quality: "F",
                     details: "This field shall indicate whether the associated measurement was directly measured. If this field " +
                         "is not set to true, then the associated measurement was estimated.",
                     xref: { document: "cluster", section: "2.1.4.4.2" }
@@ -5133,7 +5133,7 @@ export const SpecMatter = Matter({
             pics: "NDOCONC"
         }),
         Cluster({ name: "OzoneConcentrationMeasurement", id: 0x415, type: "ConcentrationMeasurement", pics: "OZCONC" }),
-        Cluster({ name: "Pm2", id: 0x42a, type: "ConcentrationMeasurement", pics: "PMICONC" }),
+        Cluster({ name: "Pm25ConcentrationMeasurement", id: 0x42a, type: "ConcentrationMeasurement", pics: "PMICONC" }),
         Cluster({
             name: "FormaldehydeConcentrationMeasurement", id: 0x42b, type: "ConcentrationMeasurement",
             pics: "FLDCONC"
@@ -10283,7 +10283,7 @@ export const SpecMatter = Matter({
                             xref: { document: "cluster", section: "4.4.7.1.1" }
                         }),
                         Field({
-                            name: "Wrap", id: 0x1, type: "bool", conformance: "O", default: true,
+                            name: "Wrap", id: 0x1, type: "bool", conformance: "O", default: false,
                             details: "This field shall indicate if the fan speed wraps between highest and lowest step value.",
                             xref: { document: "cluster", section: "4.4.7.1.2" }
                         }),
@@ -17402,7 +17402,7 @@ export const SpecMatter = Matter({
 
                         Field({
                             name: "AudioAdvanceUnmuted", id: 0x8, type: "bool", conformance: "AA", constraint: "desc",
-                            default: true,
+                            default: false,
 
                             details: "This field shall indicate whether audio is unmuted by the player due to a FF or REW command. This " +
                                 "field is only meaningful when the PlaybackSpeed is present and not equal to 0 (paused) or 1 (normal " +
@@ -17483,7 +17483,7 @@ export const SpecMatter = Matter({
                     xref: { document: "cluster", section: "6.10.7.7" },
 
                     children: [Field({
-                        name: "AudioAdvanceUnmuted", id: 0x0, type: "bool", conformance: "AA", default: true,
+                        name: "AudioAdvanceUnmuted", id: 0x0, type: "bool", conformance: "AA", default: false,
                         details: "This field shall indicate whether audio should be unmuted by the player during rewind." +
                             "\n" +
                             "A value of true does not guarantee that audio can be heard by the user since the speaker may be " +
@@ -17512,7 +17512,7 @@ export const SpecMatter = Matter({
                     xref: { document: "cluster", section: "6.10.7.8" },
 
                     children: [Field({
-                        name: "AudioAdvanceUnmuted", id: 0x0, type: "bool", conformance: "AA", default: true,
+                        name: "AudioAdvanceUnmuted", id: 0x0, type: "bool", conformance: "AA", default: false,
                         details: "This field shall indicate whether audio should be unmuted by the player during fast forward." +
                             "\n" +
                             "A value of true does not guarantee that audio can be heard by the user since the speaker may be " +
@@ -20040,7 +20040,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "StartAfterSetting", id: 0x4, type: "bool", conformance: "O", default: true,
+                            name: "StartAfterSetting", id: 0x4, type: "bool", conformance: "O", default: false,
                             details: "This field shall indicate whether or not oven operation shall be started when the command is " +
                                 "received.",
                             xref: { document: "cluster", section: "8.13.6.2.5" }
@@ -20346,7 +20346,7 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "EsaCanGenerate", id: 0x1, type: "bool", access: "R V", conformance: "M", default: true,
+                    name: "EsaCanGenerate", id: 0x1, type: "bool", access: "R V", conformance: "M", default: false,
                     quality: "F",
 
                     details: "Indicates whether the ESA is classed as a generator or load. This allows an EMS to understand " +
@@ -25597,7 +25597,7 @@ export const SpecMatter = Matter({
                     children: [
                         Field({
                             name: "ProxyAllNodes", id: 0x1, type: "bool", access: "RW", conformance: "M", constraint: "desc",
-                            default: true,
+                            default: false,
                             details: "This field shall be set to true to indicate to the proxy that it shall proxy all nodes. When true, " +
                                 "the SourceList attribute is ignored.",
                             xref: { document: "core", section: "9.15.13.4.1.1" }
@@ -26251,7 +26251,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "LocalConfigDisabled", id: 0x10, type: "bool", access: "RW VM", conformance: "O",
-                    default: true, quality: "N",
+                    default: false, quality: "N",
                     details: "This attribute shall allow a local Node configuration to be disabled. When this attribute is set to " +
                         "True the Node shall disable the ability to configure the Node through an on-Node user interface. " +
                         "The value of the LocalConfigDisabled attribute shall NOT in any way modify, disable, or otherwise " +
@@ -29633,15 +29633,11 @@ export const SpecMatter = Matter({
 
         Cluster({
             name: "DiagnosticLogs", id: 0x32, classification: "node", pics: "DLOG",
-
             details: "This Cluster supports an interface to a Node. It provides commands for retrieving unstructured " +
                 "diagnostic logs from a Node that may be used to aid in diagnostics. It will often be the case that " +
                 "unstructured diagnostic logs will be Node-wide and not specific to any subset of Endpoints. When " +
                 "present, this Cluster shall be implemented once for the Node. The Node SHOULD also implement the " +
-                "BDX Initiator and BDX Sender roles as defined in the BDX Protocol." +
-                "\n" +
-                "NOTE Support for Diagnostic Logs cluster is provisional.",
-
+                "BDX Initiator and BDX Sender roles as defined in the BDX Protocol.",
             xref: { document: "core", section: "11.11" },
 
             children: [
@@ -32325,7 +32321,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "NtpServerAvailable", id: 0x9, type: "bool", access: "R V", conformance: "NTPS",
-                    default: true,
+                    default: false,
                     details: "If the node is running an RFC 5905 NTPv4 compliant server on port 123, this value shall be True. If " +
                         "the node is not currently running an NTP server, this value shall be False.",
                     xref: { document: "core", section: "11.17.8.10" }
@@ -32349,7 +32345,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "SupportsDnsResolve", id: 0xc, type: "bool", access: "R V", conformance: "NTPC",
-                    default: true, quality: "F",
+                    default: false, quality: "F",
                     details: "This attribute is true if the node supports resolving a domain name. DefaultNTP Address values for " +
                         "these nodes may include domain names. If this is False, the Address for a DefaultNTP shall be an " +
                         "IPv6 address.",
@@ -33023,7 +33019,7 @@ export const SpecMatter = Matter({
                     xref: { document: "core", section: "11.18.6.5" },
                     children: [
                         Field({ name: "CsrNonce", id: 0x0, type: "octstr", conformance: "M", constraint: "32" }),
-                        Field({ name: "IsForUpdateNoc", id: 0x1, type: "bool", conformance: "O", default: true })
+                        Field({ name: "IsForUpdateNoc", id: 0x1, type: "bool", conformance: "O", default: false })
                     ]
                 }),
 
@@ -34006,7 +34002,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "RequestorCanConsent", id: 0x6, type: "bool", conformance: "O", default: true,
+                            name: "RequestorCanConsent", id: 0x6, type: "bool", conformance: "O", default: false,
                             details: "This field shall be set to true by an OTA Requestor that is capable of obtaining user consent for " +
                                 "OTA application by virtue of built-in user interface capabilities. Otherwise, it shall be false." +
                                 "\n" +
@@ -34226,7 +34222,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "UserConsentNeeded", id: 0x6, type: "bool", conformance: "O", default: true,
+                            name: "UserConsentNeeded", id: 0x6, type: "bool", conformance: "O", default: false,
 
                             details: "This field, if present, shall only be interpreted if the OTA Requestor had previously indicated a " +
                                 "value of True in the RequestorCanConsent field of the QueryImageRequest. This field, when present " +
@@ -36351,7 +36347,7 @@ export const SpecMatter = Matter({
                     xref: { document: "device", section: "7.10.4" }
                 }),
                 Requirement({
-                    name: "Pm2", id: 0x42a, conformance: "O", element: "serverCluster",
+                    name: "Pm25ConcentrationMeasurement", id: 0x42a, conformance: "O", element: "serverCluster",
                     xref: { document: "device", section: "7.10.4" }
                 }),
                 Requirement({
@@ -36518,7 +36514,7 @@ export const SpecMatter = Matter({
                     xref: { document: "device", section: "8.2.4" }
                 }),
                 Requirement({
-                    name: "TimeSynchronization", id: 0x38, conformance: "P, O", element: "serverCluster",
+                    name: "TimeSynchronization", id: 0x38, conformance: "O", element: "serverCluster",
                     xref: { document: "device", section: "8.2.4" }
                 }),
                 Requirement({
@@ -36557,9 +36553,14 @@ export const SpecMatter = Matter({
                 Requirement({
                     name: "WindowCovering", id: 0x102, conformance: "M", element: "serverCluster",
                     xref: { document: "device", section: "8.3.4" },
+
                     children: [
-                        Requirement({ name: "GoToLiftPercentage", conformance: "Matter", element: "commandField" }),
-                        Requirement({ name: "GoToTiltPercentage", conformance: "Matter", element: "commandField" })
+                        Requirement({
+                            name: "GoToLiftPercentageLiftPercent100thsValue", conformance: "Matter", element: "commandField"
+                        }),
+                        Requirement({
+                            name: "GoToTiltPercentageTiltPercent100thsValue", conformance: "Matter", element: "commandField"
+                        })
                     ]
                 })
             ]
@@ -36647,11 +36648,11 @@ export const SpecMatter = Matter({
                     xref: { document: "device", section: "9.1.4" }
                 }),
                 Requirement({
-                    name: "TimeSynchronization", id: 0x38, conformance: "P, O", element: "serverCluster",
+                    name: "TimeSynchronization", id: 0x38, conformance: "O", element: "serverCluster",
                     xref: { document: "device", section: "9.1.4" }
                 }),
                 Requirement({
-                    name: "TimeSynchronization", id: 0x38, conformance: "P, O", element: "clientCluster",
+                    name: "TimeSynchronization", id: 0x38, conformance: "O", element: "clientCluster",
                     xref: { document: "device", section: "9.1.4" }
                 }),
                 Requirement({

@@ -446,7 +446,7 @@ function inferCurve(key: Key, bytes: number) {
                 break;
 
             default:
-                throw new KeyError("Cannot infer named curve from key length");
+                throw new KeyError(`Cannot infer named curve from key length ${bytes}`);
         }
     }
 }
@@ -482,7 +482,7 @@ export function Key(properties: Partial<Key>) {
     // Codecs allow for binary read/write on base-64 fields
     Object.entries(Base64Codecs).forEach(([alias, target]) => {
         Object.defineProperty(that, alias, {
-            get: () => that[target] !== undefined && Base64.decode(that[target] as string),
+            get: () => that[target] !== undefined && Base64.decode(that[target]),
             set: value => (that[target] = value === undefined ? undefined : Base64.encode(value, true)),
         });
         assign(alias);

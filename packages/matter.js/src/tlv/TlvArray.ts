@@ -5,12 +5,15 @@
  */
 
 import { UnexpectedDataError } from "../common/MatterError.js";
-import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import {
+    ValidationDatatypeMismatchError,
+    ValidationError,
+    ValidationOutOfBoundsError,
+} from "../common/ValidationError.js";
 import { deepCopy } from "../util/DeepCopy.js";
 import { serialize } from "../util/String.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
+import { TlvEncodingOptions, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 
 export type LengthConstraints = {
     minLength?: number;
@@ -38,9 +41,9 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
         super();
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: T[], tag?: TlvTag, forWriteInteraction?: boolean): void {
+    override encodeTlvInternal(writer: TlvWriter, value: T[], tag?: TlvTag, options?: TlvEncodingOptions): void {
         writer.writeTag({ type: TlvType.Array }, tag);
-        value.forEach(element => this.elementSchema.encodeTlvInternal(writer, element, undefined, forWriteInteraction));
+        value.forEach(element => this.elementSchema.encodeTlvInternal(writer, element, undefined, options));
         writer.writeTag({ type: TlvType.EndOfContainer });
     }
 
@@ -82,20 +85,23 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
     }
 
     override validate(data: T[]): void {
-        if (!Array.isArray(data)) throw new ValidationError(`Expected array, got ${typeof data}.`);
+        if (!Array.isArray(data)) throw new ValidationDatatypeMismatchError(`Expected array, got ${typeof data}.`);
         if (data.length > this.maxLength)
-            throw new ValidationError(`Array ${serialize(data)} is too long: ${data.length}, max ${this.maxLength}.`);
-        if (data.length < this.minLength)
-            throw new ValidationError(`Array ${serialize(data)} is too short: ${data.length}, min ${this.minLength}.`);
-        data.forEach((element, index) => {
-            tryCatch(
-                () => this.elementSchema.validate(element),
-                ValidationError,
-                error => {
-                    error.fieldName = `[${index}]${error.fieldName !== undefined ? `.${error.fieldName}` : ""}`;
-                    throw error;
-                },
+            throw new ValidationOutOfBoundsError(
+                `Array ${serialize(data)} is too long: ${data.length}, max ${this.maxLength}.`,
             );
+        if (data.length < this.minLength)
+            throw new ValidationOutOfBoundsError(
+                `Array ${serialize(data)} is too short: ${data.length}, min ${this.minLength}.`,
+            );
+        data.forEach((element, index) => {
+            try {
+                this.elementSchema.validate(element);
+            } catch (e) {
+                ValidationError.accept(e);
+                e.fieldName = `[${index}]${e.fieldName !== undefined ? `.${e.fieldName}` : ""}`;
+                throw e;
+            }
         });
     }
 

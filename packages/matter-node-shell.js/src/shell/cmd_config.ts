@@ -214,7 +214,7 @@ async function doLogLevel(
             break;
         case "set":
             if (value === undefined) {
-                console.log(`Can not change Loglevel for ${logtype}: New Loglevel value not provided`);
+                console.log(`Cannot change Loglevel for ${logtype}: New Loglevel value not provided`);
                 return;
             }
             await theNode.Store.set(storageKey, value);
@@ -243,7 +243,7 @@ async function doLogfilePath(
             break;
         case "set":
             if (value === undefined) {
-                console.log(`Can not change Logfile path: new path not provided`);
+                console.log(`Cannot change Logfile path: new path not provided`);
                 return;
             }
             await theNode.Store.set("LogFile", value);
@@ -270,7 +270,7 @@ async function doBleHci(
             break;
         case "set":
             if (value === undefined) {
-                console.log(`Can not change HCI ID: New HCI ID value not provided`);
+                console.log(`Cannot change HCI ID: New HCI ID value not provided`);
                 return;
             }
             await theNode.Store.set("BleHciId", value);
@@ -303,7 +303,7 @@ async function doWifiCredentials(
             break;
         case "set":
             if (wifiSsid === undefined || wifiPassword === undefined) {
-                console.log(`Can not change Wi-Fi credentials: New values not provided`);
+                console.log(`Cannot change Wi-Fi credentials: New values not provided`);
                 return;
             }
             await theNode.Store.set("WiFiSsid", wifiSsid);
@@ -345,7 +345,7 @@ async function doThreadCredentials(
             break;
         case "set":
             if (threadName === undefined || threadOperationalDataset === undefined) {
-                console.log(`Can not change Thread network credentials: New values not provided`);
+                console.log(`Cannot change Thread network credentials: New values not provided`);
                 return;
             }
             await theNode.Store.set("ThreadName", threadName);

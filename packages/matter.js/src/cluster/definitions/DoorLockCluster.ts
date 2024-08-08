@@ -38,6 +38,174 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace DoorLock {
     /**
+     * These are optional features supported by DoorLockCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 5.2.4
+     */
+    export enum Feature {
+        /**
+         * PinCredential (PIN)
+         *
+         * If the User Feature is also supported then any PIN Code stored in the lock shall be associated with a User.
+         *
+         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
+         * and Schedules are all associated with a User index and not directly with a PIN index. A User index may have
+         * several credentials associated with it.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.1
+         */
+        PinCredential = "PinCredential",
+
+        /**
+         * RfidCredential (RID)
+         *
+         * If the User Feature is also supported then any RFID credential stored in the lock shall be associated with a
+         * User.
+         *
+         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
+         * and Schedules are all associated with a User index and not directly with a RFID index. A User
+         *
+         * Index may have several credentials associated with it.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.2
+         */
+        RfidCredential = "RfidCredential",
+
+        /**
+         * FingerCredentials (FGP)
+         *
+         * Currently the cluster only defines the metadata format for notifications when a fingerprint/ finger vein
+         * credential is used to access the lock and doesn’t describe how to create fingerprint/finger vein
+         * credentials. If the Users feature is also supported then the User that a fingerprint/finger vein is
+         * associated with can also have its UserType, UserStatus and Schedule modified.
+         *
+         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
+         * and Schedules are all associated with a User index and not directly with a Finger index. A User Index may
+         * have several credentials associated with it.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.3
+         */
+        FingerCredentials = "FingerCredentials",
+
+        /**
+         * Logging (LOG)
+         *
+         * If Events are not supported the logging feature shall replace the Event reporting structure. If Events are
+         * supported the logging feature shall NOT be supported.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.4
+         */
+        Logging = "Logging",
+
+        /**
+         * WeekDayAccessSchedules (WDSCH)
+         *
+         * If the User feature is supported then Week Day Schedules are applied to a User and not a credential.
+         *
+         * Week Day Schedules are used to restrict access to a specified time window on certain days of the week. The
+         * schedule is repeated each week. When a schedule is cleared this clears the access restrictions and grants
+         * unrestricted access to the user. The lock may automatically adjust the UserType when a schedule is created
+         * or cleared.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.5
+         */
+        WeekDayAccessSchedules = "WeekDayAccessSchedules",
+
+        /**
+         * DoorPositionSensor (DPS)
+         *
+         * If this feature is supported this indicates that the lock has the ability to determine the position of the
+         * door which is separate from the state of the lock.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.6
+         */
+        DoorPositionSensor = "DoorPositionSensor",
+
+        /**
+         * FaceCredentials (FACE)
+         *
+         * Currently the cluster only defines the metadata format for notifications when a face recognition, iris, or
+         * retina credential is used to access the lock and doesn’t describe how to create face recognition, iris, or
+         * retina credentials. If the Users feature is also supported then the User that a face recognition, iris, or
+         * retina credential is associated with can also have its UserType, UserStatus and Schedule modified.
+         *
+         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
+         * and Schedules are all associated with a User and not directly with a credential.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.7
+         */
+        FaceCredentials = "FaceCredentials",
+
+        /**
+         * CredentialOverTheAirAccess (COTA)
+         *
+         * If this feature is supported then the lock supports the ability to verify a credential provided in a
+         * lock/unlock command. Currently the cluster only supports providing the PIN credential to the lock/unlock
+         * commands. If this feature is supported then the PIN Credential feature shall also be supported.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.8
+         */
+        CredentialOverTheAirAccess = "CredentialOverTheAirAccess",
+
+        /**
+         * User (USR)
+         *
+         * If the User Feature is supported then a lock employs a User database. A User within the User database is
+         * used to associate credentials and schedules to single user record within the lock. This also means the
+         * UserType and UserStatus fields are associated with a User and not a credential.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.9
+         */
+        User = "User",
+
+        /**
+         * Notification (NOT)
+         *
+         * This is a feature used before support of events. This feature supports notification commands and masks used
+         * to filter these notifications.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.10
+         */
+        Notification = "Notification",
+
+        /**
+         * YearDayAccessSchedules (YDSCH)
+         *
+         * If the User feature is supported then Year Day Schedules are applied to a User and not a credential.
+         *
+         * Year Day Schedules are used to restrict access to a specified date and time window. When a schedule is
+         * cleared this clears the access restrictions and grants unrestricted access to the user. The lock may
+         * automatically adjust the UserType when a schedule is created or cleared.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.11
+         */
+        YearDayAccessSchedules = "YearDayAccessSchedules",
+
+        /**
+         * HolidaySchedules (HDSCH)
+         *
+         * This feature is used to setup Holiday Schedule in the lock device. A Holiday Schedule sets a start and stop
+         * end date/time for the lock to use the specified operating mode set by the Holiday Schedule.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.12
+         */
+        HolidaySchedules = "HolidaySchedules",
+
+        /**
+         * Unbolting (UBOLT)
+         *
+         * Locks that support this feature differentiate between unbolting and unlocking. The Unbolt Door command
+         * retracts the bolt without pulling the latch. The Unlock Door command fully unlocks the door by retracting
+         * the bolt and briefly pulling the latch. While the latch is pulled, the lock state changes to Unlatched.
+         * Locks without unbolting support don’t differentiate between unbolting and unlocking and perform the same
+         * operation for both commands.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.13
+         */
+        Unbolting = "Unbolting"
+    }
+
+    /**
      * This enumeration shall indicate the current door state.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.6.12
@@ -4001,174 +4169,6 @@ export namespace DoorLock {
             unboltDoor: Command(0x27, TlvUnboltDoorRequest, 0x27, TlvNoResponse, { timed: true })
         }
     });
-
-    /**
-     * These are optional features supported by DoorLockCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 5.2.4
-     */
-    export enum Feature {
-        /**
-         * PinCredential (PIN)
-         *
-         * If the User Feature is also supported then any PIN Code stored in the lock shall be associated with a User.
-         *
-         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
-         * and Schedules are all associated with a User index and not directly with a PIN index. A User index may have
-         * several credentials associated with it.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.1
-         */
-        PinCredential = "PinCredential",
-
-        /**
-         * RfidCredential (RID)
-         *
-         * If the User Feature is also supported then any RFID credential stored in the lock shall be associated with a
-         * User.
-         *
-         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
-         * and Schedules are all associated with a User index and not directly with a RFID index. A User
-         *
-         * Index may have several credentials associated with it.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.2
-         */
-        RfidCredential = "RfidCredential",
-
-        /**
-         * FingerCredentials (FGP)
-         *
-         * Currently the cluster only defines the metadata format for notifications when a fingerprint/ finger vein
-         * credential is used to access the lock and doesn’t describe how to create fingerprint/finger vein
-         * credentials. If the Users feature is also supported then the User that a fingerprint/finger vein is
-         * associated with can also have its UserType, UserStatus and Schedule modified.
-         *
-         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
-         * and Schedules are all associated with a User index and not directly with a Finger index. A User Index may
-         * have several credentials associated with it.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.3
-         */
-        FingerCredentials = "FingerCredentials",
-
-        /**
-         * Logging (LOG)
-         *
-         * If Events are not supported the logging feature shall replace the Event reporting structure. If Events are
-         * supported the logging feature shall NOT be supported.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.4
-         */
-        Logging = "Logging",
-
-        /**
-         * WeekDayAccessSchedules (WDSCH)
-         *
-         * If the User feature is supported then Week Day Schedules are applied to a User and not a credential.
-         *
-         * Week Day Schedules are used to restrict access to a specified time window on certain days of the week. The
-         * schedule is repeated each week. When a schedule is cleared this clears the access restrictions and grants
-         * unrestricted access to the user. The lock may automatically adjust the UserType when a schedule is created
-         * or cleared.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.5
-         */
-        WeekDayAccessSchedules = "WeekDayAccessSchedules",
-
-        /**
-         * DoorPositionSensor (DPS)
-         *
-         * If this feature is supported this indicates that the lock has the ability to determine the position of the
-         * door which is separate from the state of the lock.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.6
-         */
-        DoorPositionSensor = "DoorPositionSensor",
-
-        /**
-         * FaceCredentials (FACE)
-         *
-         * Currently the cluster only defines the metadata format for notifications when a face recognition, iris, or
-         * retina credential is used to access the lock and doesn’t describe how to create face recognition, iris, or
-         * retina credentials. If the Users feature is also supported then the User that a face recognition, iris, or
-         * retina credential is associated with can also have its UserType, UserStatus and Schedule modified.
-         *
-         * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus
-         * and Schedules are all associated with a User and not directly with a credential.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.7
-         */
-        FaceCredentials = "FaceCredentials",
-
-        /**
-         * CredentialOverTheAirAccess (COTA)
-         *
-         * If this feature is supported then the lock supports the ability to verify a credential provided in a
-         * lock/unlock command. Currently the cluster only supports providing the PIN credential to the lock/unlock
-         * commands. If this feature is supported then the PIN Credential feature shall also be supported.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.8
-         */
-        CredentialOverTheAirAccess = "CredentialOverTheAirAccess",
-
-        /**
-         * User (USR)
-         *
-         * If the User Feature is supported then a lock employs a User database. A User within the User database is
-         * used to associate credentials and schedules to single user record within the lock. This also means the
-         * UserType and UserStatus fields are associated with a User and not a credential.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.9
-         */
-        User = "User",
-
-        /**
-         * Notification (NOT)
-         *
-         * This is a feature used before support of events. This feature supports notification commands and masks used
-         * to filter these notifications.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.10
-         */
-        Notification = "Notification",
-
-        /**
-         * YearDayAccessSchedules (YDSCH)
-         *
-         * If the User feature is supported then Year Day Schedules are applied to a User and not a credential.
-         *
-         * Year Day Schedules are used to restrict access to a specified date and time window. When a schedule is
-         * cleared this clears the access restrictions and grants unrestricted access to the user. The lock may
-         * automatically adjust the UserType when a schedule is created or cleared.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.11
-         */
-        YearDayAccessSchedules = "YearDayAccessSchedules",
-
-        /**
-         * HolidaySchedules (HDSCH)
-         *
-         * This feature is used to setup Holiday Schedule in the lock device. A Holiday Schedule sets a start and stop
-         * end date/time for the lock to use the specified operating mode set by the Holiday Schedule.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.12
-         */
-        HolidaySchedules = "HolidaySchedules",
-
-        /**
-         * Unbolting (UBOLT)
-         *
-         * Locks that support this feature differentiate between unbolting and unlocking. The Unbolt Door command
-         * retracts the bolt without pulling the latch. The Unlock Door command fully unlocks the door by retracting
-         * the bolt and briefly pulling the latch. While the latch is pulled, the lock state changes to Unlatched.
-         * Locks without unbolting support don’t differentiate between unbolting and unlocking and perform the same
-         * operation for both commands.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 5.2.4.13
-         */
-        Unbolting = "Unbolting"
-    }
 
     /**
      * These elements and properties are present in all DoorLock clusters.

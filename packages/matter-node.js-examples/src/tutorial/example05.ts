@@ -6,7 +6,7 @@ const node = await ServerNode.create();
 
 const light = await node.add(OnOffLightDevice);
 
-await node.bringOnline();
+await node.start();
 
 await light.act(async agent => {
     await agent.onOff.toggle();

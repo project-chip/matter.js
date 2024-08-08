@@ -19,6 +19,7 @@ export class InsecureSession<T> extends Session<T> {
     readonly #initiatorNodeId: NodeId;
     readonly closingAfterExchangeFinished = false;
     readonly #context: T;
+    readonly supportsMRP = true;
 
     constructor(args: {
         context: T;

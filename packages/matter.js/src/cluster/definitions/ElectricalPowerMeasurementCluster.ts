@@ -21,6 +21,58 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ElectricalPowerMeasurement {
     /**
+     * These are optional features supported by ElectricalPowerMeasurementCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 2.13.4
+     */
+    export enum Feature {
+        /**
+         * DirectCurrent (DIRC)
+         *
+         * This feature indicates the cluster can measure a direct current.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 2.13.4.1
+         */
+        DirectCurrent = "DirectCurrent",
+
+        /**
+         * AlternatingCurrent (ALTC)
+         *
+         * This feature indicates the cluster can measure an alternating current.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 2.13.4.2
+         */
+        AlternatingCurrent = "AlternatingCurrent",
+
+        /**
+         * PolyphasePower (POLY)
+         *
+         * This feature indicates the cluster represents the collective measurements for a Polyphase power supply.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 2.13.4.3
+         */
+        PolyphasePower = "PolyphasePower",
+
+        /**
+         * Harmonics (HARM)
+         *
+         * This feature indicates the cluster can measure the harmonics of an alternating current.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 2.13.4.4
+         */
+        Harmonics = "Harmonics",
+
+        /**
+         * PowerQuality (PWRQ)
+         *
+         * This feature indicates the cluster can measure the harmonic phases of an alternating current.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 2.13.4.5
+         */
+        PowerQuality = "PowerQuality"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 2.13.5.3
      */
     export const TlvHarmonicMeasurement = TlvObject({
@@ -492,58 +544,6 @@ export namespace ElectricalPowerMeasurement {
             neutralCurrent: OptionalAttribute(0x12, TlvNullable(TlvInt64), { default: null })
         }
     });
-
-    /**
-     * These are optional features supported by ElectricalPowerMeasurementCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 2.13.4
-     */
-    export enum Feature {
-        /**
-         * DirectCurrent (DIRC)
-         *
-         * This feature indicates the cluster can measure a direct current.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.13.4.1
-         */
-        DirectCurrent = "DirectCurrent",
-
-        /**
-         * AlternatingCurrent (ALTC)
-         *
-         * This feature indicates the cluster can measure an alternating current.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.13.4.2
-         */
-        AlternatingCurrent = "AlternatingCurrent",
-
-        /**
-         * PolyphasePower (POLY)
-         *
-         * This feature indicates the cluster represents the collective measurements for a Polyphase power supply.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.13.4.3
-         */
-        PolyphasePower = "PolyphasePower",
-
-        /**
-         * Harmonics (HARM)
-         *
-         * This feature indicates the cluster can measure the harmonics of an alternating current.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.13.4.4
-         */
-        Harmonics = "Harmonics",
-
-        /**
-         * PowerQuality (PWRQ)
-         *
-         * This feature indicates the cluster can measure the harmonic phases of an alternating current.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 2.13.4.5
-         */
-        PowerQuality = "PowerQuality"
-    }
 
     /**
      * These elements and properties are present in all ElectricalPowerMeasurement clusters.

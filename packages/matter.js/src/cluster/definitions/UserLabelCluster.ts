@@ -35,7 +35,7 @@ export namespace UserLabel {
                 { persistent: true, default: [], writeAcl: AccessLevel.Manage }
             )
         }
-    })
+    });
 
     /**
      * This cluster provides a feature to tag an endpoint with zero or more labels.

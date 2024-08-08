@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationOutOfBoundsError, validatorOf } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
-import { fromMEI } from "./ManufacturerExtensibleIdentifier.js";
+import { Mei } from "./ManufacturerExtensibleIdentifier.js";
 
 /**
  * An Attribute ID is a 32 bit number and indicates an attribute defined in a cluster specification.
@@ -25,11 +24,11 @@ export function AttributeId(attributeId: number, validate = true): AttributeId {
     if (attributeId >= 0xf000 && attributeId <= 0xfffe) {
         return attributeId as AttributeId;
     }
-    const { typeSuffix } = fromMEI(attributeId);
+    const { typeSuffix } = Mei.fromMei(attributeId);
     if (typeSuffix >= 0x0000 && typeSuffix <= 0x4fff) {
         return attributeId as AttributeId;
     }
-    throw new ValidationError(`Invalid attribute ID: ${attributeId}`);
+    throw new ValidationOutOfBoundsError(`Invalid attribute ID: ${attributeId}`);
 }
 
 export namespace AttributeId {
@@ -37,16 +36,7 @@ export namespace AttributeId {
         return attributeId >= 0xf000 && attributeId <= 0xfffe;
     };
 
-    export const isValid = (attributeId: number): attributeId is AttributeId => {
-        return tryCatch(
-            () => {
-                AttributeId(attributeId);
-                return true;
-            },
-            ValidationError,
-            false,
-        );
-    };
+    export const isValid = validatorOf(AttributeId);
 }
 
 /** Tlv schema for an Attribute Id. */

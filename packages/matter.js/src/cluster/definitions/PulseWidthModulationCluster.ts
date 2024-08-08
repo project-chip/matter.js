@@ -13,7 +13,7 @@ import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace PulseWidthModulation {
-    export const Base = { ...LevelControl.Base, id: 0x1c, name: "PulseWidthModulation" }
+    export const Base = { ...LevelControl.Base, id: 0x1c, name: "PulseWidthModulation" } as const;
 
     /**
      * @see {@link Cluster}
@@ -24,7 +24,7 @@ export namespace PulseWidthModulation {
     );
 
     /**
-     * This alias specializes the semantics of {@link LevelControl.Cluster}.
+     * This alias specializes the semantics of {@link LevelControl.Base}.
      *
      * PulseWidthModulationCluster supports optional features that you can enable with the
      * PulseWidthModulationCluster.with() factory method.
@@ -39,7 +39,11 @@ export namespace PulseWidthModulation {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const CompleteInstance = MutableCluster({ ...LevelControl.Complete, id: 0x1c });
+    export const CompleteInstance = MutableCluster({
+        ...LevelControl.Complete,
+        id: 0x1c,
+        name: "PulseWidthModulation"
+    });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}
     export const Complete: Complete = CompleteInstance;

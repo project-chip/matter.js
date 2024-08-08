@@ -7,9 +7,9 @@
 import { MatterDevice } from "../MatterDevice.js";
 import { AccessLevel } from "../cluster/Cluster.js";
 import { AccessControlCluster } from "../cluster/definitions/index.js";
-import { AnyAttributeServer, AttributeServer } from "../cluster/server/AttributeServer.js";
+import { AnyAttributeServer, AttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
 import { CommandServer } from "../cluster/server/CommandServer.js";
-import { EventServer } from "../cluster/server/EventServer.js";
+import { AnyEventServer } from "../cluster/server/EventServer.js";
 import { Message } from "../codec/MessageCodec.js";
 import { InternalError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
@@ -25,6 +25,7 @@ import { AttributePath, CommandPath, EventPath, InteractionServer } from "../pro
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { Endpoint } from "./Endpoint.js";
 
 const logger = Logger.get("LegacyInteractionServer");
 
@@ -46,7 +47,7 @@ export class LegacyInteractionServer extends InteractionServer {
         if (this.#aclManager !== undefined) {
             return this.#aclManager;
         }
-        const rootEndpoint = this.#endpointStructure.getEndpoint(EndpointNumber(0));
+        const rootEndpoint = this.#endpointStructure.getEndpoint(EndpointNumber(0)) as Endpoint;
         if (rootEndpoint === undefined) {
             throw new InternalError("Root endpoint must exist.");
         }
@@ -92,13 +93,24 @@ export class LegacyInteractionServer extends InteractionServer {
         endpoint: EndpointInterface,
     ) {
         this.#assertAccess(path, exchange, attribute.readAcl);
-        return super.readAttribute(path, attribute, exchange, isFabricFiltered, message, endpoint);
+        const data = await super.readAttribute(path, attribute, exchange, isFabricFiltered, message, endpoint);
+        if (attribute instanceof FabricScopedAttributeServer && !isFabricFiltered) {
+            const { value, version } = data;
+            return {
+                value: attribute.sanitizeFabricSensitiveFields(
+                    value,
+                    (exchange.session as SecureSession<MatterDevice>).fabric,
+                ),
+                version,
+            };
+        }
+        return data;
     }
 
     protected override async readEvent(
         path: EventPath,
         eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
-        event: EventServer<any, any>,
+        event: AnyEventServer<any, any>,
         exchange: MessageExchange<MatterDevice>,
         isFabricFiltered: boolean,
         message: Message,

@@ -5,7 +5,7 @@
  */
 
 import { Diagnostic, Logger } from "@project-chip/matter.js/log";
-import { NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
+import { MAX_UDP_MESSAGE_SIZE, NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as dgram from "dgram";
 import { NetworkNode } from "./NetworkNode.js";
@@ -97,6 +97,8 @@ export class UdpChannelNode implements UdpChannel {
         }
         return new UdpChannelNode(socket, netInterfaceZone);
     }
+
+    readonly maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
 
     constructor(
         private readonly socket: dgram.Socket,

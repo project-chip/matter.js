@@ -402,13 +402,13 @@ describe("AttributeServerTest", () => {
 
         it("should throw an error if init value is invalid and no default specified", () => {
             expect(() => create({ defaultValue: undefined, schema: TlvUInt8.bound({ min: 0, max: 2 }) })).throws(
-                "Attribute value to initialize for test can not be undefined.",
+                "Attribute value to initialize for test cannot be undefined.",
             );
         });
 
         it("should throw an error if init value and default value is invalid", () => {
             expect(() => create({ schema: TlvUInt8.bound({ min: 0, max: 2 }) })).throws(
-                'Validation error for attribute "test": (Validation/135) Invalid value: 4 is above the maximum, 2.',
+                'Validation error for attribute "test": (ValidationOutOfBoundsError/135) Invalid value: 4 is above the maximum, 2.',
             );
         });
 
@@ -418,7 +418,7 @@ describe("AttributeServerTest", () => {
                 setter: () => true,
             });
             expect(() => server.setLocal(11)).throw(
-                'Validation error for attribute "test": (Validation/135) Invalid value: 11 is above the maximum, 3.',
+                'Validation error for attribute "test": (ValidationOutOfBoundsError/135) Invalid value: 11 is above the maximum, 3.',
             );
         });
 
@@ -554,7 +554,7 @@ describe("AttributeServerTest", () => {
             await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             expect(() => server.getLocalForFabric(testFabric)).throw(
-                'Fabric scoped attribute "test" can not be read locally when a custom getter is defined.',
+                'Fabric scoped attribute "test" cannot be read locally when a custom getter is defined.',
             );
         });
 

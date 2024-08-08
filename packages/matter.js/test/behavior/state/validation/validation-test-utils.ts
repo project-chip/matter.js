@@ -6,7 +6,7 @@
 
 import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
 import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
-import { DataModelPath } from "../../../../src/endpoint/DataModelPath.js";
+import { DataModelPath } from "../../../../src/model/definitions/DataModelPath.js";
 import { AttributeModel, ClusterModel, FeatureSet, FieldElement, FieldModel } from "../../../../src/model/index.js";
 import { FeatureMap } from "../../../../src/model/standard/elements/FeatureMap.js";
 import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
@@ -71,10 +71,10 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
     // Create cluster
     const cluster = new ClusterModel({
         name: "Test",
-        supportedFeatures: new FeatureSet(supports),
 
         children: [features ?? new AttributeModel(FeatureMap), ...fields],
     });
+    cluster.supportedFeatures = supports;
 
     // Obtain a manager
     const root = new RootSupervisor(cluster);

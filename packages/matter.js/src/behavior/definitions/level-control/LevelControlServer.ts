@@ -75,7 +75,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
     get currentLevel(): number {
         if (this.state.currentLevel === null) {
             throw new StatusResponseError(
-                "The currentLevel value is null, so we can not operate on it.",
+                "The currentLevel value is null, so we cannot operate on it.",
                 StatusCode.Failure,
             );
         }

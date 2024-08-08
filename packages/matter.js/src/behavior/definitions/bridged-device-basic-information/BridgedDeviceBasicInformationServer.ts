@@ -7,8 +7,11 @@
 import { ImplementationError } from "../../../common/MatterError.js";
 import { DeviceTypeId } from "../../../datatype/DeviceTypeId.js";
 import { AggregatorEndpoint } from "../../../endpoint/definitions/system/AggregatorEndpoint.js";
+import { Logger } from "../../../log/Logger.js";
 import { DescriptorServer } from "../descriptor/DescriptorServer.js";
 import { BridgedDeviceBasicInformationBehavior } from "./BridgedDeviceBasicInformationBehavior.js";
+
+const logger = Logger.get("BridgedDeviceBasicInformationServer");
 
 const BRIDGED_NODE_DEVICE_TYPE = DeviceTypeId(0x13);
 const BRIDGED_NODE_REVISION = 2;
@@ -27,6 +30,14 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
             this.reactTo(this.endpoint.lifecycle.installed, this.#configurePart, { once: true });
         }
         this.reactTo(this.events.reachable$Changed, this.#emitReachableChange);
+
+        if (
+            this.state.uniqueId !== undefined &&
+            this.state.serialNumber !== undefined &&
+            this.state.uniqueId === this.state.serialNumber
+        ) {
+            logger.warn("uniqueId and serialNumber shall not be the same.");
+        }
     }
 
     /**
@@ -40,7 +51,7 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
      * Per the specification, BridgedDeviceBasicInformation may only appear on bridged nodes, and bridged nodes may only
      * appear under aggregator nodes.
      *
-     * Therefore this default implementation of BridgedDeviceBasicInformation injects the BridgedNode device type on the
+     * Therefore, this default implementation of BridgedDeviceBasicInformation injects the BridgedNode device type on the
      * associated {@link Endpoint} and asserts that its parent is a {@link AggregatorEndpoint}.
      */
     async #configurePart() {

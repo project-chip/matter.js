@@ -18,6 +18,28 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace EthernetNetworkDiagnostics {
     /**
+     * These are optional features supported by EthernetNetworkDiagnosticsCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 11.16.4
+     */
+    export enum Feature {
+        /**
+         * PacketCounts (PKTCNT)
+         *
+         * Node makes available the counts for the number of received and transmitted packets on the ethernet interface.
+         */
+        PacketCounts = "PacketCounts",
+
+        /**
+         * ErrorCounts (ERRCNT)
+         *
+         * Node makes available the counts for the number of errors that have occurred during the reception and
+         * transmission of packets on the ethernet interface.
+         */
+        ErrorCounts = "ErrorCounts"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Core} § 11.16.5.1
      */
     export enum PhyRate {
@@ -156,28 +178,6 @@ export namespace EthernetNetworkDiagnostics {
             resetCounts: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
     });
-
-    /**
-     * These are optional features supported by EthernetNetworkDiagnosticsCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 11.16.4
-     */
-    export enum Feature {
-        /**
-         * PacketCounts (PKTCNT)
-         *
-         * Node makes available the counts for the number of received and transmitted packets on the ethernet interface.
-         */
-        PacketCounts = "PacketCounts",
-
-        /**
-         * ErrorCounts (ERRCNT)
-         *
-         * Node makes available the counts for the number of errors that have occurred during the reception and
-         * transmission of packets on the ethernet interface.
-         */
-        ErrorCounts = "ErrorCounts"
-    }
 
     /**
      * These elements and properties are present in all EthernetNetworkDiagnostics clusters.

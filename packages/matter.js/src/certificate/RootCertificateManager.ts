@@ -12,8 +12,8 @@ import { NodeId } from "../datatype/NodeId.js";
 import { Logger } from "../log/Logger.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { Time } from "../time/Time.js";
-import { AsyncConstruction, asyncNew } from "../util/AsyncConstruction.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { Construction, asyncNew } from "../util/Construction.js";
 import { toHex } from "../util/Number.js";
 import {
     CertificateManager,
@@ -33,20 +33,21 @@ export class RootCertificateManager {
     private rootKeyIdentifier = Crypto.hash(this.rootKeyPair.publicKey).slice(0, 20);
     private rootCertBytes = this.generateRootCert();
     private nextCertificateId = BigInt(1);
-    #construction: AsyncConstruction<RootCertificateManager>;
+    #construction: Construction<RootCertificateManager>;
 
     get construction() {
         return this.#construction;
     }
 
-    static async create(storage: StorageContext) {
-        return asyncNew(RootCertificateManager, storage);
+    static async create(options: StorageContext | RootCertificateManager.Data) {
+        return asyncNew(RootCertificateManager, options);
     }
 
-    constructor(storage: StorageContext) {
-        this.#construction = AsyncConstruction(this, async () => {
-            // Read from storage if we have them stored, else store the just generated data
-            const certValues = await storage.values();
+    constructor(options: StorageContext | RootCertificateManager.Data) {
+        this.#construction = Construction(this, async () => {
+            // Use provided root certificate data or read from storage if we have them stored, else store the just generated data
+            const certValues = options instanceof StorageContext ? await options.values() : options;
+
             if (
                 typeof certValues.rootCertId === "bigint" &&
                 (ArrayBuffer.isView(certValues.rootKeyPair) || typeof certValues.rootKeyPair === "object") &&
@@ -62,19 +63,33 @@ export class RootCertificateManager {
                 logger.debug(`Loaded root certificate with ID ${this.rootCertId} from storage`);
                 return;
             }
+
             logger.debug(`Created new root certificate with ID ${this.rootCertId}`);
-            await storage.set({
-                rootCertId: this.rootCertId,
-                rootKeyPair: this.rootKeyPair.keyPair,
-                rootKeyIdentifier: this.rootKeyIdentifier,
-                rootCertBytes: this.rootCertBytes,
-                nextCertificateId: this.nextCertificateId,
-            });
+
+            if (options instanceof StorageContext) {
+                await options.set({
+                    rootCertId: this.rootCertId,
+                    rootKeyPair: this.rootKeyPair.keyPair,
+                    rootKeyIdentifier: this.rootKeyIdentifier,
+                    rootCertBytes: this.rootCertBytes,
+                    nextCertificateId: this.nextCertificateId,
+                });
+            }
         });
     }
 
-    getRootCert() {
+    get rootCert() {
         return this.rootCertBytes;
+    }
+
+    get data(): RootCertificateManager.Data {
+        return {
+            rootCertId: this.rootCertId,
+            rootKeyPair: this.rootKeyPair.keyPair,
+            rootKeyIdentifier: this.rootKeyIdentifier,
+            rootCertBytes: this.rootCertBytes,
+            nextCertificateId: this.nextCertificateId,
+        };
     }
 
     private generateRootCert() {
@@ -139,4 +154,14 @@ export class RootCertificateManager {
 
         return TlvOperationalCertificate.encode({ ...unsignedCertificate, signature });
     }
+}
+
+export namespace RootCertificateManager {
+    export type Data = {
+        rootCertId: bigint;
+        rootKeyPair: BinaryKeyPair;
+        rootKeyIdentifier: ByteArray;
+        rootCertBytes: ByteArray;
+        nextCertificateId: bigint;
+    };
 }

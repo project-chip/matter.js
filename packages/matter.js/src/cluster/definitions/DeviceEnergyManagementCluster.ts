@@ -30,6 +30,208 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace DeviceEnergyManagement {
     /**
+     * These are optional features supported by DeviceEnergyManagementCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 9.2.4
+     */
+    export enum Feature {
+        /**
+         * PowerAdjustment (PA)
+         *
+         * For Energy Smart Appliances (ESA) the definition of being 'smart' mandates that they can report their
+         * current power adjustment capability and have an EMS request a temporary adjustment. This may typically be to
+         * curtail power requirements during peak periods, but can also be used to turn on an ESA if there is excess
+         * renewable or local generation (Solar PV).
+         *
+         * For example, a home may have solar PV which often produces more power than the home requires,
+         *
+         * resulting in the excess power flowing into the grid. This excess power naturally fluctuates when clouds pass
+         * overhead and other loads in the home are switched on and off.
+         *
+         * EVSE Example: An EMS may therefore be able to turn on the EVSE (if the vehicle is plugged in) and can start
+         * charging the vehicle, and periodically modify the charging power depending on PV generation and other home
+         * loads, so as to minimize import and export to the grid.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.1
+         */
+        PowerAdjustment = "PowerAdjustment",
+
+        /**
+         * PowerForecastReporting (PFR)
+         *
+         * For Energy Smart Appliances (ESA) the definition of being 'smart' implies that they can report their
+         * indicative forecast power demands or generation, to a greater or lesser extent. For some ESAs this is highly
+         * predictable (in terms of both power and time), in other appliances this is more challenging and only a basic
+         * level of forecast is possible.
+         *
+         * Forecasts are defined from a current time, using a slot format, where the slot is akin to a relatively
+         * constant operating mode.
+         *
+         * Washing machine example: a washing machine may have stages of a washing cycle: heating, tumbling, rinse and
+         * spin stages. At each stage, the approximate minimum and maximum power consumption may be known, as well as
+         * the duration of that stage.
+         *
+         * In some circumstances the ESA may allow the stage to be delayed or paused (subject to safety and
+         * manufacturer’s discretion and user preferences).
+         *
+         * Typically, appliances with a heating element cannot have their power consumption adjusted and can only be
+         * paused or delayed.
+         *
+         * Some ESAs may not be flexible other than a delayed cycle start (for example, once the washing cycle has been
+         * started then they run continuously until the cycle completes).
+         *
+         * Appliances that only support the PowerForecastReporting and not any of the adjustment features may indicate
+         * that they are not flexible in the forecast slot format.
+         *
+         * The PowerForecastReporting and the adjustment features aim to align to the [SAREF4ENER] ontology.
+         *
+         * Inverter driven ESAs: some inverter driven ESAs can consume or generate a variable amount of power.
+         *
+         * For example, a single phase EVSE can be adjusted in the range of 6-32Amps in 0.6 Amp steps in EU or on a
+         * hardwired 120V supply in the range of 6-15 Amps in US.
+         *
+         * For example, a home battery may be adjusted to charge or discharge in steps of 1W.
+         *
+         * For example, a heat pump may be able to modulate its compressor inverter between 20-100% of its rated power.
+         *
+         * The ESA indicates its power adjustment range and its nominal power consumption as part of its Forecast.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.2
+         */
+        PowerForecastReporting = "PowerForecastReporting",
+
+        /**
+         * StateForecastReporting (SFR)
+         *
+         * Some ESAs do not know their actual power consumption, but do know the state of operation. Like the
+         * PowerForecastingReporting feature, this uses the same slot structure mechanism to indicate a change in state
+         * vs time.
+         *
+         * An external observing EMS may have access to real-time meter readings, and could learn the typical power
+         * consumption based on the advertised internal state of the ESA.
+         *
+         * To enable this capability, the ESA shall report its internal operational state using an manufacturer
+         * specific value.
+         *
+         * Once the EMS has built a model of the state vs observed power consumption, it may request a forecast
+         * adjustment for particular times of the day, encouraging the ESA to use power at alternative times.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.3
+         */
+        StateForecastReporting = "StateForecastReporting",
+
+        /**
+         * StartTimeAdjustment (STA)
+         *
+         * ESAs which support the Start Time Adjustment feature, allow an EMS to recommend a change to the start time
+         * of the energy transfer that the ESA has previously suggested it would use.
+         *
+         * Washing machine example: A Washing Machine may have been set to start a wash cycle at 9pm when the variable
+         * tariff normally reduces.
+         *
+         * However, the EMS is aware that a grid event has occurred, making it cheaper to run the cycle at a later
+         * time, but the washing machine is not aware of this.
+         *
+         * The EMS first requests the Forecast data from each of its registered ESAs. It determines that the washing
+         * machine has a power profile suggesting it will start the wash cycle at 9pm, but the EMS now knows that the
+         * grid event means it will be cheaper to delay the start until 11pm.
+         *
+         * The EMS can then optimize the cost by asking the washing machine to delay starting the wash cycle until 11pm.
+         *
+         * It does this by sending a StartTimeAdjustRequest to the washing machine to request delaying the start of the
+         * washing cycle.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.4
+         */
+        StartTimeAdjustment = "StartTimeAdjustment",
+
+        /**
+         * Pausable (PAU)
+         *
+         * ESAs which support the Pausable feature, allow an EMS to recommend a pause in the middle of a forecast power
+         * profile that the ESA is currently using.
+         *
+         * Washing machine example: A Washing Machine is in operation, and starting its water heating step.
+         *
+         * However, the EMS becomes aware from the smart meter that the total home load on the grid is close to
+         * exceeding its allowed total grid load.
+         *
+         * The EMS first requests the Forecast data from each of its registered ESAs. It determines that the washing
+         * machine has a power profile suggesting its current step in the wash cycle is using power to heat the water,
+         * but that this step can be paused.
+         *
+         * The EMS can then reduce the grid load by asking the washing machine to pause the wash cycle for a short
+         * duration.
+         *
+         * It does this by sending a PauseRequest to the washing machine to request pausing the current step of the
+         * forecast power usage for a period to allow other home loads to finish before resuming the washing cycle.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.5
+         */
+        Pausable = "Pausable",
+
+        /**
+         * ForecastAdjustment (FA)
+         *
+         * ESAs which support the Forecast adjustment feature, allow an EMS to recommend a change to the start,
+         * duration and/or power level limits of the steps of the power profile that the ESA has previously suggested
+         * it would use.
+         *
+         * Heat pump and Solar PV example: A heat pump may have the ability to heat hot water as well as heating the
+         * home. The heat pump scheduling system may have determined that the home will be unoccupied during the day,
+         * or that the indoor temperature is above the set-point and so it knows that it will not need to heat the home.
+         *
+         * However, the hot water tank is likely to need to be reheated before the homeowner comes home in the evening.
+         * The heat pump is not aware that the property also has a solar PV inverter which is also an ESA that is
+         * communicating with the EMS.
+         *
+         * The EMS first requests the Forecast data from each of its registered ESAs. It determines that the heat pump
+         * has a power profile suggesting it needs to heat hot water around 6pm. The solar PV inverter has forecast
+         * that it will generate 3.6kW of power during the middle of the day and into the afternoon before the sun goes
+         * down.
+         *
+         * The EMS can then optimize the home considering other non-ESA loads and can ask the heat pump to heat the hot
+         * water around 3pm when it has forecast that excess solar power will be available.
+         *
+         * It does this by sending a ModifyForecastRequest to the heat pump and asks the heat pump to expect to run at
+         * a lower power consumption (within the solar excess power) which requires the heat pump to run for a longer
+         * duration to achieve its required energy demand.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.6
+         */
+        ForecastAdjustment = "ForecastAdjustment",
+
+        /**
+         * ConstraintBasedAdjustment (CON)
+         *
+         * ESAs which support the Constraint-Based Adjustment feature allow an EMS to inform the ESA of periods during
+         * which power usage should be modified (for example when the EMS has been made aware that the grid supplier
+         * has requested reduced energy usage due to overall peak grid demand) and may cause the ESA to modify the
+         * intended power profile has previously suggested it would use.
+         *
+         * EVSE example: An EVSE scheduling system may have determined that the vehicle would be charged starting at a
+         * moderate rate at 1am, so that it has enough charge by the time it is needed later that morning.
+         *
+         * However, the DSR service provider has informed the EMS that due to high forecast winds it is now forecast
+         * that there will be very cheap energy available from wind generation between 2am and 3am.
+         *
+         * The EMS first requests the Forecast data from each of its registered ESAs. It determines that the
+         *
+         * EVSE has a power profile suggesting it plans to start charging the vehicle at 1am.
+         *
+         * The EMS can then try to reduce the cost of charging the EV by informing the EVSE of the desire to increase
+         * the charging between scheduled times.
+         *
+         * It does this by sending a RequestConstraintBasedForecast to the EVSE and asks it to run at a higher
+         * NominalPower consumption during the constraint period, which may require it to decrease its charge rate
+         * outside the constraint period to achieve its required energy demand.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.7
+         */
+        ConstraintBasedAdjustment = "ConstraintBasedAdjustment"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Cluster} § 9.2.7.9
      */
     export const TlvPowerAdjust = TlvObject({
@@ -1276,208 +1478,6 @@ export namespace DeviceEnergyManagement {
     });
 
     /**
-     * These are optional features supported by DeviceEnergyManagementCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 9.2.4
-     */
-    export enum Feature {
-        /**
-         * PowerAdjustment (PA)
-         *
-         * For Energy Smart Appliances (ESA) the definition of being 'smart' mandates that they can report their
-         * current power adjustment capability and have an EMS request a temporary adjustment. This may typically be to
-         * curtail power requirements during peak periods, but can also be used to turn on an ESA if there is excess
-         * renewable or local generation (Solar PV).
-         *
-         * For example, a home may have solar PV which often produces more power than the home requires,
-         *
-         * resulting in the excess power flowing into the grid. This excess power naturally fluctuates when clouds pass
-         * overhead and other loads in the home are switched on and off.
-         *
-         * EVSE Example: An EMS may therefore be able to turn on the EVSE (if the vehicle is plugged in) and can start
-         * charging the vehicle, and periodically modify the charging power depending on PV generation and other home
-         * loads, so as to minimize import and export to the grid.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.1
-         */
-        PowerAdjustment = "PowerAdjustment",
-
-        /**
-         * PowerForecastReporting (PFR)
-         *
-         * For Energy Smart Appliances (ESA) the definition of being 'smart' implies that they can report their
-         * indicative forecast power demands or generation, to a greater or lesser extent. For some ESAs this is highly
-         * predictable (in terms of both power and time), in other appliances this is more challenging and only a basic
-         * level of forecast is possible.
-         *
-         * Forecasts are defined from a current time, using a slot format, where the slot is akin to a relatively
-         * constant operating mode.
-         *
-         * Washing machine example: a washing machine may have stages of a washing cycle: heating, tumbling, rinse and
-         * spin stages. At each stage, the approximate minimum and maximum power consumption may be known, as well as
-         * the duration of that stage.
-         *
-         * In some circumstances the ESA may allow the stage to be delayed or paused (subject to safety and
-         * manufacturer’s discretion and user preferences).
-         *
-         * Typically, appliances with a heating element cannot have their power consumption adjusted and can only be
-         * paused or delayed.
-         *
-         * Some ESAs may not be flexible other than a delayed cycle start (for example, once the washing cycle has been
-         * started then they run continuously until the cycle completes).
-         *
-         * Appliances that only support the PowerForecastReporting and not any of the adjustment features may indicate
-         * that they are not flexible in the forecast slot format.
-         *
-         * The PowerForecastReporting and the adjustment features aim to align to the [SAREF4ENER] ontology.
-         *
-         * Inverter driven ESAs: some inverter driven ESAs can consume or generate a variable amount of power.
-         *
-         * For example, a single phase EVSE can be adjusted in the range of 6-32Amps in 0.6 Amp steps in EU or on a
-         * hardwired 120V supply in the range of 6-15 Amps in US.
-         *
-         * For example, a home battery may be adjusted to charge or discharge in steps of 1W.
-         *
-         * For example, a heat pump may be able to modulate its compressor inverter between 20-100% of its rated power.
-         *
-         * The ESA indicates its power adjustment range and its nominal power consumption as part of its Forecast.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.2
-         */
-        PowerForecastReporting = "PowerForecastReporting",
-
-        /**
-         * StateForecastReporting (SFR)
-         *
-         * Some ESAs do not know their actual power consumption, but do know the state of operation. Like the
-         * PowerForecastingReporting feature, this uses the same slot structure mechanism to indicate a change in state
-         * vs time.
-         *
-         * An external observing EMS may have access to real-time meter readings, and could learn the typical power
-         * consumption based on the advertised internal state of the ESA.
-         *
-         * To enable this capability, the ESA shall report its internal operational state using an manufacturer
-         * specific value.
-         *
-         * Once the EMS has built a model of the state vs observed power consumption, it may request a forecast
-         * adjustment for particular times of the day, encouraging the ESA to use power at alternative times.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.3
-         */
-        StateForecastReporting = "StateForecastReporting",
-
-        /**
-         * StartTimeAdjustment (STA)
-         *
-         * ESAs which support the Start Time Adjustment feature, allow an EMS to recommend a change to the start time
-         * of the energy transfer that the ESA has previously suggested it would use.
-         *
-         * Washing machine example: A Washing Machine may have been set to start a wash cycle at 9pm when the variable
-         * tariff normally reduces.
-         *
-         * However, the EMS is aware that a grid event has occurred, making it cheaper to run the cycle at a later
-         * time, but the washing machine is not aware of this.
-         *
-         * The EMS first requests the Forecast data from each of its registered ESAs. It determines that the washing
-         * machine has a power profile suggesting it will start the wash cycle at 9pm, but the EMS now knows that the
-         * grid event means it will be cheaper to delay the start until 11pm.
-         *
-         * The EMS can then optimize the cost by asking the washing machine to delay starting the wash cycle until 11pm.
-         *
-         * It does this by sending a StartTimeAdjustRequest to the washing machine to request delaying the start of the
-         * washing cycle.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.4
-         */
-        StartTimeAdjustment = "StartTimeAdjustment",
-
-        /**
-         * Pausable (PAU)
-         *
-         * ESAs which support the Pausable feature, allow an EMS to recommend a pause in the middle of a forecast power
-         * profile that the ESA is currently using.
-         *
-         * Washing machine example: A Washing Machine is in operation, and starting its water heating step.
-         *
-         * However, the EMS becomes aware from the smart meter that the total home load on the grid is close to
-         * exceeding its allowed total grid load.
-         *
-         * The EMS first requests the Forecast data from each of its registered ESAs. It determines that the washing
-         * machine has a power profile suggesting its current step in the wash cycle is using power to heat the water,
-         * but that this step can be paused.
-         *
-         * The EMS can then reduce the grid load by asking the washing machine to pause the wash cycle for a short
-         * duration.
-         *
-         * It does this by sending a PauseRequest to the washing machine to request pausing the current step of the
-         * forecast power usage for a period to allow other home loads to finish before resuming the washing cycle.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.5
-         */
-        Pausable = "Pausable",
-
-        /**
-         * ForecastAdjustment (FA)
-         *
-         * ESAs which support the Forecast adjustment feature, allow an EMS to recommend a change to the start,
-         * duration and/or power level limits of the steps of the power profile that the ESA has previously suggested
-         * it would use.
-         *
-         * Heat pump and Solar PV example: A heat pump may have the ability to heat hot water as well as heating the
-         * home. The heat pump scheduling system may have determined that the home will be unoccupied during the day,
-         * or that the indoor temperature is above the set-point and so it knows that it will not need to heat the home.
-         *
-         * However, the hot water tank is likely to need to be reheated before the homeowner comes home in the evening.
-         * The heat pump is not aware that the property also has a solar PV inverter which is also an ESA that is
-         * communicating with the EMS.
-         *
-         * The EMS first requests the Forecast data from each of its registered ESAs. It determines that the heat pump
-         * has a power profile suggesting it needs to heat hot water around 6pm. The solar PV inverter has forecast
-         * that it will generate 3.6kW of power during the middle of the day and into the afternoon before the sun goes
-         * down.
-         *
-         * The EMS can then optimize the home considering other non-ESA loads and can ask the heat pump to heat the hot
-         * water around 3pm when it has forecast that excess solar power will be available.
-         *
-         * It does this by sending a ModifyForecastRequest to the heat pump and asks the heat pump to expect to run at
-         * a lower power consumption (within the solar excess power) which requires the heat pump to run for a longer
-         * duration to achieve its required energy demand.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.6
-         */
-        ForecastAdjustment = "ForecastAdjustment",
-
-        /**
-         * ConstraintBasedAdjustment (CON)
-         *
-         * ESAs which support the Constraint-Based Adjustment feature allow an EMS to inform the ESA of periods during
-         * which power usage should be modified (for example when the EMS has been made aware that the grid supplier
-         * has requested reduced energy usage due to overall peak grid demand) and may cause the ESA to modify the
-         * intended power profile has previously suggested it would use.
-         *
-         * EVSE example: An EVSE scheduling system may have determined that the vehicle would be charged starting at a
-         * moderate rate at 1am, so that it has enough charge by the time it is needed later that morning.
-         *
-         * However, the DSR service provider has informed the EMS that due to high forecast winds it is now forecast
-         * that there will be very cheap energy available from wind generation between 2am and 3am.
-         *
-         * The EMS first requests the Forecast data from each of its registered ESAs. It determines that the
-         *
-         * EVSE has a power profile suggesting it plans to start charging the vehicle at 1am.
-         *
-         * The EMS can then try to reduce the cost of charging the EV by informing the EVSE of the desire to increase
-         * the charging between scheduled times.
-         *
-         * It does this by sending a RequestConstraintBasedForecast to the EVSE and asks it to run at a higher
-         * NominalPower consumption during the constraint period, which may require it to decrease its charge rate
-         * outside the constraint period to achieve its required energy demand.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 9.2.4.7
-         */
-        ConstraintBasedAdjustment = "ConstraintBasedAdjustment"
-    }
-
-    /**
      * These elements and properties are present in all DeviceEnergyManagement clusters.
      */
     export const Base = MutableCluster.Component({
@@ -1725,7 +1725,7 @@ export namespace DeviceEnergyManagement {
              *
              * @see {@link MatterSpecification.v13.Cluster} § 9.2.8.2
              */
-            esaCanGenerate: FixedAttribute(0x1, TlvBoolean, { default: true }),
+            esaCanGenerate: FixedAttribute(0x1, TlvBoolean, { default: false }),
 
             /**
              * Indicates the current state of the ESA.

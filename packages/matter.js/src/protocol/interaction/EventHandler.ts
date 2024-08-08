@@ -15,7 +15,7 @@ import { Logger } from "../../log/Logger.js";
 import { Storage, StorageOperationResult } from "../../storage/Storage.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { AsyncConstruction } from "../../util/AsyncConstruction.js";
+import { Construction } from "../../util/Construction.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { TlvEventFilter, TlvEventPath } from "./InteractionProtocol.js";
 
@@ -54,7 +54,7 @@ export class EventHandler<S extends Storage = any> {
         [EventPriority.Info]: new Array<EventStorageData<any>>(),
         [EventPriority.Debug]: new Array<EventStorageData<any>>(),
     };
-    #construction: AsyncConstruction<EventHandler>;
+    #construction: Construction<EventHandler>;
 
     get construction() {
         return this.#construction;
@@ -67,7 +67,7 @@ export class EventHandler<S extends Storage = any> {
     }
 
     constructor(private readonly eventStorage: StorageContext<S>) {
-        this.#construction = AsyncConstruction(this, async () => {
+        this.#construction = Construction(this, async () => {
             this.eventNumber = await this.eventStorage.get("lastEventNumber", this.eventNumber);
             logger.debug(`Set/Restore last event number: ${this.eventNumber}`);
         });
@@ -102,9 +102,7 @@ export class EventHandler<S extends Storage = any> {
         );
 
         if (filterForFabricIndex !== undefined) {
-            return events.filter(
-                event => !("fabricIndex" in event.data) || event.data.fabricIndex === filterForFabricIndex,
-            );
+            return events.filter(({ data }) => !("fabricIndex" in data) || data.fabricIndex === filterForFabricIndex);
         }
 
         return events;

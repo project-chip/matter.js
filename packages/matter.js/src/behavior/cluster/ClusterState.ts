@@ -5,6 +5,10 @@
  */
 
 import type { ClusterType } from "../../cluster/ClusterType.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
+import { CommandId } from "../../datatype/CommandId.js";
+import { EventId } from "../../datatype/EventId.js";
+import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import type { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import type { Behavior } from "../Behavior.js";
 import type { ClusterOf } from "./ClusterBehaviorUtil.js";
@@ -13,6 +17,22 @@ import type { ClusterOf } from "./ClusterBehaviorUtil.js";
  * Instance type for complete (endpoint + fabric) state.
  */
 export type ClusterState<C extends ClusterType, B extends Behavior.Type> = ClusterState.Type<C, B>;
+
+/**
+ * State values for global attributes.
+ *
+ * These properties are present in the state object for all cluster behaviors.  We manage them automatically and they
+ * would add unnecessary noise in the API so we omit them from public types.  But they are accessible in TypeScript by
+ * casting state to GlobalAttributeState.
+ */
+export interface GlobalAttributeState {
+    clusterRevision: number;
+    featureMap: TypeFromPartialBitSchema<BitSchema>;
+    attributeList: AttributeId[];
+    acceptedCommandList: CommandId[];
+    generatedCommandList: CommandId[];
+    eventList: EventId[];
+}
 
 export namespace ClusterState {
     /**

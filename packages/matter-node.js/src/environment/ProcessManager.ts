@@ -42,6 +42,12 @@ export class ProcessManager implements Destructable {
         this.runtime.started.on(this.startListener);
         this.runtime.stopped.on(this.stopListener);
         this.runtime.crashed.on(this.crashListener);
+
+        if (this.hasUnhandledErrorSupport) {
+            process.addListener("uncaughtExceptionMonitor", event => {
+                Logger.reportUnhandledError(event);
+            });
+        }
     }
 
     close() {
@@ -61,6 +67,10 @@ export class ProcessManager implements Destructable {
 
     protected get hasExitCodeSupport() {
         return this.env.vars.get("runtime.exitcode", true);
+    }
+
+    protected get hasUnhandledErrorSupport() {
+        return this.env.vars.get("runtime.unhandlederrors", true);
     }
 
     protected startListener = () => {

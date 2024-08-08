@@ -5,7 +5,7 @@
  */
 
 /**
- * Utility for tracking location in the Matter data model used for diagnostics.
+ * Utility for tracking location in the Matter data model.  This location is used for diagnostics.
  *
  * The path consists of a sequence of IDs, optionally with type information.
  */

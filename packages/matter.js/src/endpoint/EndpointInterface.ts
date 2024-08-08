@@ -4,14 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
+import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 
 /**
  * The primary interface for Matter.js endpoint implementations.
@@ -31,33 +29,15 @@ export interface EndpointInterface {
     close(): void;
     setStructureChangedCallback(callback: () => void): void;
 
-    addClusterServer<A extends Attributes, E extends Events>(server: ClusterServerObj<A, E>): void;
+    addClusterServer(server: ClusterServer): void;
     hasClusterServer(cluster: ClusterType): boolean;
-    getClusterServer<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(
-        cluster: Cluster<F, SF, A, C, E>,
-    ): ClusterServerObj<A, E> | undefined;
-    getClusterServerById(clusterId: ClusterId): ClusterServerObj<Attributes, Events> | undefined;
-    getAllClusterServers(): ClusterServerObj<Attributes, Events>[];
+    getClusterServer<T extends ClusterType>(cluster: T): ClusterServer<T> | undefined;
+    getClusterServerById(clusterId: ClusterId): ClusterServer | undefined;
+    getAllClusterServers(): ClusterServer[];
 
-    addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-        client: ClusterClientObj<F, A, C, E>,
-    ): void;
-    getClusterClient<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(
-        cluster: Cluster<F, SF, A, C, E>,
-    ): ClusterClientObj<F, A, C, E> | undefined;
-    getAllClusterClients(): ClusterClientObj<any, Attributes, Commands, Events>[];
+    addClusterClient(client: ClusterClientObj): void;
+    getClusterClient<const T extends ClusterType>(cluster: T): ClusterClientObj<T> | undefined;
+    getAllClusterClients(): ClusterClientObj[];
 
     addChildEndpoint(endpoint: EndpointInterface): void;
     getChildEndpoint(id: EndpointNumber): EndpointInterface | undefined;

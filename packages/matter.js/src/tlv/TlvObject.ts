@@ -4,16 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, UnexpectedDataError } from "../common/MatterError.js";
-import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ImplementationError, InternalError, UnexpectedDataError } from "../common/MatterError.js";
+import {
+    ValidationDatatypeMismatchError,
+    ValidationError,
+    ValidationMandatoryFieldMissingError,
+    ValidationOutOfBoundsError,
+} from "../common/ValidationError.js";
 import { FabricIndex } from "../model/standard/elements/FabricIndex.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Merge } from "../util/Type.js";
 import { TlvAny } from "./TlvAny.js";
 import { LengthConstraints } from "./TlvArray.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
+import { TlvEncodingOptions, TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 export interface FieldType<T> {
     id: number;
@@ -80,54 +84,60 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
         }
     }
 
-    #encodeEntryToTlv(writer: TlvWriter, name: string, value: TypeFromFields<F>, forWriteInteraction?: boolean) {
+    #encodeEntryToTlv(writer: TlvWriter, name: string, value: TypeFromFields<F>, options?: TlvEncodingOptions) {
         const { id, schema, optional: isOptional, repeated: isRepeated } = this.fieldDefinitions[name];
+        const { forWriteInteraction = false, allowMissingFieldsForNonFabricFilteredRead = false } = options ?? {};
+        if (forWriteInteraction && allowMissingFieldsForNonFabricFilteredRead) {
+            throw new InternalError(
+                "Encode options cannot indicate a write interaction and a fabric filtered read interaction at the same time.",
+            );
+        }
         const fieldValue = (value as any)[name];
         if (fieldValue === undefined) {
-            if (!isOptional) {
+            if (!isOptional && !allowMissingFieldsForNonFabricFilteredRead) {
                 if (forWriteInteraction && id === <number>FabricIndex.id) {
                     // FabricIndex field should not be included in encoded data for write interactions
                     return;
                 }
-                throw new ValidationError(`Missing mandatory field ${name}`, name);
+                throw new ValidationMandatoryFieldMissingError(`Missing mandatory field ${name}`, name);
             }
             return;
         }
         if (isRepeated) {
             if (!Array.isArray(fieldValue)) {
-                throw new ValidationError(`Repeated field ${name} should be an array.`, name);
+                throw new ValidationDatatypeMismatchError(`Repeated field ${name} should be an array.`, name);
             }
             for (const element of fieldValue) {
-                schema.encodeTlvInternal(writer, element, { id }, forWriteInteraction);
+                schema.encodeTlvInternal(writer, element, { id }, options);
             }
         } else {
-            schema.encodeTlvInternal(writer, fieldValue, { id }, forWriteInteraction);
+            schema.encodeTlvInternal(writer, fieldValue, { id }, options);
         }
     }
 
     /**
      * Encode the object as Structure, by the order of field definitions.
      */
-    #encodeStructure(writer: TlvWriter, value: TypeFromFields<F>, forWriteInteraction?: boolean) {
+    #encodeStructure(writer: TlvWriter, value: TypeFromFields<F>, options?: TlvEncodingOptions) {
         for (const name in this.fieldDefinitions) {
-            this.#encodeEntryToTlv(writer, name, value, forWriteInteraction);
+            this.#encodeEntryToTlv(writer, name, value, options);
         }
     }
 
     /**
      * Encode the object as List, by the order of the fields in the object.
      */
-    #encodeList(writer: TlvWriter, value: TypeFromFields<F>, forWriteInteraction?: boolean) {
+    #encodeList(writer: TlvWriter, value: TypeFromFields<F>, options?: TlvEncodingOptions) {
         const encodedFields = new Set<string>();
         // Encode object fields
         for (const name of Object.keys(value)) {
-            this.#encodeEntryToTlv(writer, name, value, forWriteInteraction);
+            this.#encodeEntryToTlv(writer, name, value, options);
             encodedFields.add(name);
         }
         // Verify the potentially missing fields
         for (const name in this.fieldDefinitions) {
             if (encodedFields.has(name)) continue;
-            this.#encodeEntryToTlv(writer, name, value, forWriteInteraction);
+            this.#encodeEntryToTlv(writer, name, value, options);
         }
     }
 
@@ -135,15 +145,15 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
         writer: TlvWriter,
         value: TypeFromFields<F>,
         tag?: TlvTag,
-        forWriteInteraction?: boolean,
+        options?: TlvEncodingOptions,
     ): void {
         writer.writeTag({ type: this.type }, tag);
 
         if (this.type === TlvType.Structure) {
             // Encode in order of field definitions
-            this.#encodeStructure(writer, value, forWriteInteraction);
+            this.#encodeStructure(writer, value, options);
         } else {
-            this.#encodeList(writer, value, forWriteInteraction);
+            this.#encodeList(writer, value, options);
         }
 
         writer.writeTag({ type: TlvType.EndOfContainer });
@@ -202,42 +212,40 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
                 if (optional) {
                     continue;
                 }
-                throw new ValidationError(`Missing mandatory field ${name}`, name);
+                throw new ValidationMandatoryFieldMissingError(`Missing mandatory field ${name}`, name);
             }
             if (isRepeated) {
                 const { minLength = 2, maxLength = 65535 } = this.fieldDefinitions[name] as RepeatedFieldType<any>;
                 if (!Array.isArray(data)) {
-                    throw new ValidationError(`Repeated field ${name} should be an array.`, name);
+                    throw new ValidationDatatypeMismatchError(`Repeated field ${name} should be an array.`, name);
                 }
                 if (data.length > maxLength)
-                    throw new ValidationError(
+                    throw new ValidationOutOfBoundsError(
                         `Repeated field list for ${name} is too long: ${data.length}, max ${maxLength}.`,
                         name,
                     );
                 if (data.length < minLength)
-                    throw new ValidationError(
+                    throw new ValidationOutOfBoundsError(
                         `Repeated field list for ${name} is too short: ${data.length}, min ${minLength}.`,
                         name,
                     );
                 for (const element of data) {
-                    tryCatch(
-                        () => schema.validate(element),
-                        ValidationError,
-                        error => {
-                            error.fieldName = `${name}${error.fieldName !== undefined ? `.${error.fieldName}` : ""}`;
-                            throw error;
-                        },
-                    );
+                    try {
+                        schema.validate(element);
+                    } catch (e) {
+                        ValidationError.accept(e);
+                        e.fieldName = `${name}${e.fieldName !== undefined ? `.${e.fieldName}` : ""}`;
+                        throw e;
+                    }
                 }
             } else {
-                tryCatch(
-                    () => schema.validate(data),
-                    ValidationError,
-                    error => {
-                        error.fieldName = `${name}${error.fieldName !== undefined ? `.${error.fieldName}` : ""}`;
-                        throw error;
-                    },
-                );
+                try {
+                    schema.validate(data);
+                } catch (e) {
+                    ValidationError.accept(e);
+                    e.fieldName = `${name}${e.fieldName !== undefined ? `.${e.fieldName}` : ""}`;
+                    throw e;
+                }
             }
         }
     }

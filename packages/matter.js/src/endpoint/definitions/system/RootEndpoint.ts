@@ -86,133 +86,133 @@ export interface RootEndpoint extends Identity<typeof RootEndpointDefinition> {}
 
 export namespace RootRequirements {
     /**
-     * The BasicInformation cluster is required by the Matter specification
+     * The BasicInformation cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link BasicInformationServer} for convenience.
      */
     export const BasicInformationServer = BaseBasicInformationServer;
 
     /**
-     * The AccessControl cluster is required by the Matter specification
+     * The AccessControl cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link AccessControlServer} for convenience.
      */
     export const AccessControlServer = BaseAccessControlServer;
 
     /**
-     * The GroupKeyManagement cluster is required by the Matter specification
+     * The GroupKeyManagement cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupKeyManagementServer} for convenience.
      */
     export const GroupKeyManagementServer = BaseGroupKeyManagementServer;
 
     /**
-     * The GeneralCommissioning cluster is required by the Matter specification
+     * The GeneralCommissioning cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link GeneralCommissioningServer} for convenience.
      */
     export const GeneralCommissioningServer = BaseGeneralCommissioningServer;
 
     /**
-     * The AdministratorCommissioning cluster is required by the Matter specification
+     * The AdministratorCommissioning cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link AdministratorCommissioningServer} for convenience.
      */
     export const AdministratorCommissioningServer = BaseAdministratorCommissioningServer;
 
     /**
-     * The OperationalCredentials cluster is required by the Matter specification
+     * The OperationalCredentials cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link OperationalCredentialsServer} for convenience.
      */
     export const OperationalCredentialsServer = BaseOperationalCredentialsServer;
 
     /**
-     * The GeneralDiagnostics cluster is required by the Matter specification
+     * The GeneralDiagnostics cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link GeneralDiagnosticsServer} for convenience.
      */
     export const GeneralDiagnosticsServer = BaseGeneralDiagnosticsServer;
 
     /**
-     * The PowerSourceConfiguration cluster is optional per the Matter specification
+     * The PowerSourceConfiguration cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link PowerSourceConfigurationServer} for convenience.
      */
     export const PowerSourceConfigurationServer = BasePowerSourceConfigurationServer;
 
     /**
-     * The TimeSynchronization cluster is optional per the Matter specification
+     * The TimeSynchronization cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TimeSynchronizationServer} for convenience.
      */
     export const TimeSynchronizationServer = BaseTimeSynchronizationServer;
 
     /**
-     * The NetworkCommissioning cluster is optional per the Matter specification
+     * The NetworkCommissioning cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link NetworkCommissioningServer} for convenience.
      */
     export const NetworkCommissioningServer = BaseNetworkCommissioningServer;
 
     /**
-     * The LocalizationConfiguration cluster is optional per the Matter specification
+     * The LocalizationConfiguration cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link LocalizationConfigurationServer} for convenience.
      */
     export const LocalizationConfigurationServer = BaseLocalizationConfigurationServer;
 
     /**
-     * The TimeFormatLocalization cluster is optional per the Matter specification
+     * The TimeFormatLocalization cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TimeFormatLocalizationServer} for convenience.
      */
     export const TimeFormatLocalizationServer = BaseTimeFormatLocalizationServer;
 
     /**
-     * The UnitLocalization cluster is optional per the Matter specification
+     * The UnitLocalization cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link UnitLocalizationServer} for convenience.
      */
     export const UnitLocalizationServer = BaseUnitLocalizationServer;
 
     /**
-     * The DiagnosticLogs cluster is optional per the Matter specification
+     * The DiagnosticLogs cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link DiagnosticLogsServer} for convenience.
      */
     export const DiagnosticLogsServer = BaseDiagnosticLogsServer;
 
     /**
-     * The SoftwareDiagnostics cluster is optional per the Matter specification
+     * The SoftwareDiagnostics cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link SoftwareDiagnosticsServer} for convenience.
      */
     export const SoftwareDiagnosticsServer = BaseSoftwareDiagnosticsServer;
 
     /**
-     * The EthernetNetworkDiagnostics cluster is optional per the Matter specification
+     * The EthernetNetworkDiagnostics cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link EthernetNetworkDiagnosticsServer} for convenience.
      */
     export const EthernetNetworkDiagnosticsServer = BaseEthernetNetworkDiagnosticsServer;
 
     /**
-     * The WiFiNetworkDiagnostics cluster is optional per the Matter specification
+     * The WiFiNetworkDiagnostics cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link WiFiNetworkDiagnosticsServer} for convenience.
      */
     export const WiFiNetworkDiagnosticsServer = BaseWiFiNetworkDiagnosticsServer;
 
     /**
-     * The ThreadNetworkDiagnostics cluster is optional per the Matter specification
+     * The ThreadNetworkDiagnostics cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ThreadNetworkDiagnosticsServer} for convenience.
      */
     export const ThreadNetworkDiagnosticsServer = BaseThreadNetworkDiagnosticsServer;
 
     /**
-     * The IcdManagement cluster is optional per the Matter specification
+     * The IcdManagement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IcdManagementServer} for convenience.
      */

@@ -18,7 +18,6 @@ export class NodeLifecycle extends EndpointLifecycle {
     #commissioned = Observable<[context: ActionContext]>();
     #decommissioned = Observable<[context: ActionContext]>();
     #initialized = Observable<[isCommissioned: boolean]>();
-    #partError = Observable<[endpoint: Endpoint, error: Error], boolean | undefined>();
     #isOnline = false;
     #isCommissioned = false;
 
@@ -89,16 +88,5 @@ export class NodeLifecycle extends EndpointLifecycle {
      */
     get decommissioned() {
         return this.#decommissioned;
-    }
-
-    /**
-     * Emits for unhandled errors in {@link Endpoint} initialization.
-     *
-     * By default these errors causes node activity to terminate.  This may not be desirable for nodes with many parts
-     * that function independently.  If you install a listener here returning false the node will will treat the
-     * endpoint that crashed as incapacitated but otherwise continue operation.
-     */
-    get endpointError() {
-        return this.#partError;
     }
 }

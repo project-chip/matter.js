@@ -13,7 +13,7 @@ export const wtf = {
 
         // We process args and environment manually so we don't need dependencies and can install wtfnode as early as
         // possible
-        if (process.argv.indexOf("--wtf") === -1 && !process.env.MATTER_WTF) {
+        if (!process.argv.includes("--wtf") && !process.env.MATTER_WTF) {
             return;
         }
 

@@ -56,91 +56,91 @@ export interface PumpDevice extends Identity<typeof PumpDeviceDefinition> {}
 
 export namespace PumpRequirements {
     /**
-     * The OnOff cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link OnOffServer} for convenience.
      */
     export const OnOffServer = BaseOnOffServer;
 
     /**
-     * The PumpConfigurationAndControl cluster is required by the Matter specification
+     * The PumpConfigurationAndControl cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link PumpConfigurationAndControlServer} for convenience.
      */
     export const PumpConfigurationAndControlServer = BasePumpConfigurationAndControlServer;
 
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The LevelControl cluster is optional per the Matter specification
+     * The LevelControl cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link LevelControlServer} for convenience.
      */
     export const LevelControlServer = BaseLevelControlServer;
 
     /**
-     * The Groups cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The ScenesManagement cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ScenesManagementServer} for convenience.
      */
     export const ScenesManagementServer = BaseScenesManagementServer;
 
     /**
-     * The TemperatureMeasurement cluster is optional per the Matter specification
+     * The TemperatureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureMeasurementServer} for convenience.
      */
     export const TemperatureMeasurementServer = BaseTemperatureMeasurementServer;
 
     /**
-     * The PressureMeasurement cluster is optional per the Matter specification
+     * The PressureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link PressureMeasurementServer} for convenience.
      */
     export const PressureMeasurementServer = BasePressureMeasurementServer;
 
     /**
-     * The FlowMeasurement cluster is optional per the Matter specification
+     * The FlowMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link FlowMeasurementServer} for convenience.
      */
     export const FlowMeasurementServer = BaseFlowMeasurementServer;
 
     /**
-     * The TemperatureMeasurement cluster is optional per the Matter specification
+     * The TemperatureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureMeasurementBehavior} for convenience.
      */
     export const TemperatureMeasurementBehavior = BaseTemperatureMeasurementBehavior;
 
     /**
-     * The PressureMeasurement cluster is optional per the Matter specification
+     * The PressureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link PressureMeasurementBehavior} for convenience.
      */
     export const PressureMeasurementBehavior = BasePressureMeasurementBehavior;
 
     /**
-     * The FlowMeasurement cluster is optional per the Matter specification
+     * The FlowMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link FlowMeasurementBehavior} for convenience.
      */
     export const FlowMeasurementBehavior = BaseFlowMeasurementBehavior;
 
     /**
-     * The OccupancySensing cluster is optional per the Matter specification
+     * The OccupancySensing cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link OccupancySensingBehavior} for convenience.
      */

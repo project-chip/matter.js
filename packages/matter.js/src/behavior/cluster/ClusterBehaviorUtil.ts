@@ -7,7 +7,8 @@
 import { Attribute } from "../../cluster/Cluster.js";
 import { ClusterType } from "../../cluster/ClusterType.js";
 import { ImplementationError } from "../../common/MatterError.js";
-import { AttributeModel, ClusterModel, ElementTag, FeatureSet, Matter, Metatype } from "../../model/index.js";
+import { ClusterModel, ElementTag, FeatureSet, Matter, Metatype, ValueModel } from "../../model/index.js";
+import { FeatureMap } from "../../model/standard/elements/FeatureMap.js";
 import { GeneratedClass } from "../../util/GeneratedClass.js";
 import { AsyncObservable } from "../../util/Observable.js";
 import { camelize } from "../../util/String.js";
@@ -16,6 +17,18 @@ import { DerivedState } from "../state/StateType.js";
 import { Val } from "../state/Val.js";
 import { Schema } from "../supervision/Schema.js";
 import type { ClusterBehavior } from "./ClusterBehavior.js";
+
+const KNOWN_DEFAULTS = Symbol("knownDefaults");
+
+/**
+ * This is an internal utility used to track default values that we've erased due to conformance.  We reuse in
+ * derivatives if the property is once again enabled.
+ *
+ * We cast the state constructor to this type so [KNOWN_DEFAULTS] becomes a static field on the state class.
+ */
+interface HasKnownDefaults {
+    [KNOWN_DEFAULTS]?: Val.Struct;
+}
 
 /**
  * Create a non-functional instance of a {@link Behavior} for introspection purposes.
@@ -98,6 +111,8 @@ export type ExtensionInterfaceOf<B extends Behavior.Type> = B extends { Extensio
 /**
  * Create a new state subclass that inherits relevant default values from a base Behavior.Type and adds new default
  * values from cluster attributes.
+ *
+ * Note - we only use the cluster here for default values
  */
 function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior.Type, namesUsed: Set<string>) {
     const BaseState = base["State"];
@@ -106,17 +121,9 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
     }
 
     const oldDefaults = new BaseState() as Record<string, any>;
-    const statePrefix = `${camelize(cluster.name)}.state`;
+    let knownDefaults = (BaseState as HasKnownDefaults)[KNOWN_DEFAULTS];
 
-    const newAttributes = {} as Record<string, ClusterType.Attribute>;
-    for (const name in cluster.attributes) {
-        const attribute = cluster.attributes[name];
-        if (isGlobal(attribute)) {
-            continue;
-        }
-        newAttributes[name] = attribute;
-    }
-
+    // Determine the set of features so we can test attribute applicability
     let featuresAvailable, featuresSupported;
     if (schema instanceof ClusterModel) {
         const normalized = FeatureSet.normalize(schema.featureMap, schema.supportedFeatures);
@@ -127,52 +134,86 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
         featuresSupported = new FeatureSet();
     }
 
+    // Index schema members by name
+    const props = {} as Record<string, ValueModel[]>;
+    for (const member of schema.activeMembers) {
+        const name = camelize(member.name);
+        if (props[name]) {
+            props[name].push(member);
+        } else {
+            props[name] = [member];
+        }
+    }
+
     // For each new attribute, inject the attribute's default if we don't already have a value, then inject a descriptor
     const defaults = {} as Record<string, any>;
-    for (const name in newAttributes) {
+    for (const name in props) {
         // Determine whether attribute applies based on conformance.  If it doesn't, make sure to overwrite any existing
         // value from previous configurations as otherwise conformance may not pass
-        const attrs = schema.all(AttributeModel, camelize(name, true));
-        if (attrs.length) {
-            let applies = false;
-            for (const attr of attrs) {
-                if (attr.effectiveConformance.isApplicable(featuresAvailable, featuresSupported)) {
-                    applies = true;
-                    break;
-                }
-            }
-            if (!applies) {
-                if (oldDefaults[name] !== undefined) {
-                    defaults[name] = undefined;
-                }
-                continue;
+        const attrs = props[name];
+        let propSchema;
+        let applies = false;
+
+        // Determine whether the attribute applies
+        for (const attr of attrs) {
+            if (attr.effectiveConformance.isApplicable(featuresAvailable, featuresSupported)) {
+                propSchema = attr;
+                applies = true;
+                break;
             }
         }
 
-        // Attribute applies.  Make sure a default value is present
+        // If the attribute doesn't apply, erase any previous default
+        if (!applies) {
+            if (oldDefaults[name] !== undefined) {
+                // Save the default value so we can recreate it if a future derivative re-enables this element
+                if (!knownDefaults) {
+                    knownDefaults = {};
+                } else if (knownDefaults === (BaseState as HasKnownDefaults)[KNOWN_DEFAULTS]) {
+                    knownDefaults = { ...knownDefaults };
+                }
+                knownDefaults[name] = oldDefaults[name];
+
+                // Now clear the default value
+                defaults[name] = undefined;
+            }
+            continue;
+        }
+
+        // Attribute applies
+        const attribute = cluster.attributes[name];
+
+        // The feature map value requires a special case because it's encoded in the "supportedFeatures" cluster
+        // property
+        if (attribute?.id === FeatureMap.id) {
+            defaults[name] = cluster.supportedFeatures;
+            continue;
+        }
+
+        // Make sure a default value is present
         defaults[name] = selectDefaultValue(
-            oldDefaults[name],
-            cluster.attributes[name],
-            schema.get(AttributeModel, camelize(name, true)),
+            oldDefaults[name] === undefined ? knownDefaults?.[name] : oldDefaults[name],
+            attribute,
+            propSchema,
         );
     }
 
     for (const name in defaults) {
-        if (namesUsed.has(name)) {
-            throw new ImplementationError(`Conflicting definitions of property ${statePrefix}.${name}`);
-        }
+        // Convey the name to the event generator
         namesUsed.add(name);
     }
 
-    return DerivedState({
+    const StateType = DerivedState({
         name: `${cluster.name}$State`,
         base: base.State,
         values: defaults,
     });
-}
 
-function isGlobal(attribute: ClusterType.Attribute) {
-    return attribute.id === 0xfe || (attribute.id >= 0xfff0 && attribute.id <= 0xffff);
+    if (knownDefaults) {
+        (StateType as HasKnownDefaults)[KNOWN_DEFAULTS] = knownDefaults;
+    }
+
+    return StateType;
 }
 
 /**
@@ -278,40 +319,43 @@ function createDefaultCommandDescriptors(cluster: ClusterType, base: Behavior.Ty
     return result;
 }
 
-/**
- * TODO - currently we inject default values for attributes even if they're optional, thus indicating support.
- * Developer may override by setting the default to undefined, but it may be desirable to instead set the default to
- * undefined if the attribute is not mandatory
- */
-function selectDefaultValue(oldDefault: Val, clusterAttr: Attribute<any, any>, schemaAttr?: AttributeModel) {
-    if (oldDefault) {
+function selectDefaultValue(oldDefault: Val, clusterAttr?: Attribute<any, any>, schemaProp?: ValueModel) {
+    if (oldDefault !== undefined) {
         return oldDefault;
     }
 
-    if (clusterAttr.optional) {
+    // Use cluster attribute rather than model attribute because currently "enable" modifies the cluster, not the schema
+    if (clusterAttr?.optional) {
         return;
     }
 
-    if (clusterAttr.default !== undefined) {
+    // Use cluster attribute rather than model attribute because currently "set" modifies the cluster, not the schema
+    if (clusterAttr?.default !== undefined) {
         return clusterAttr.default;
     }
 
-    if (!schemaAttr) {
+    // Following checks use the schema
+    if (!schemaProp) {
         return;
     }
 
-    if (schemaAttr.nullable) {
+    if (schemaProp.nullable) {
         return null;
+    }
+
+    const effectiveDefault = schemaProp.effectiveDefault;
+    if (effectiveDefault) {
+        return effectiveDefault;
     }
 
     // TODO - skip the following defaults if conformance is not absolutely mandatory.  This is pretty limited, may need
     // to use more sophisticated evaluation if insufficient
-    const conformance = schemaAttr.effectiveConformance;
-    if (!conformance.mandatory) {
+    const conformance = schemaProp.effectiveConformance;
+    if (!conformance.isMandatory) {
         return;
     }
 
-    switch (schemaAttr.effectiveMetatype) {
+    switch (schemaProp.effectiveMetatype) {
         case Metatype.bitmap:
         case Metatype.object:
             // This is not a very good default but it is better than undefined

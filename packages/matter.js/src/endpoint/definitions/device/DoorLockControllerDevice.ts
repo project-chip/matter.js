@@ -27,28 +27,28 @@ export interface DoorLockControllerDevice extends Identity<typeof DoorLockContro
 
 export namespace DoorLockControllerRequirements {
     /**
-     * The TimeSynchronization cluster is optional per the Matter specification
+     * The TimeSynchronization cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TimeSynchronizationServer} for convenience.
      */
     export const TimeSynchronizationServer = BaseTimeSynchronizationServer;
 
     /**
-     * The DoorLock cluster is required by the Matter specification
+     * The DoorLock cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link DoorLockBehavior} for convenience.
      */
     export const DoorLockBehavior = BaseDoorLockBehavior;
 
     /**
-     * The Groups cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link GroupsBehavior} for convenience.
      */
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The ScenesManagement cluster is optional per the Matter specification
+     * The ScenesManagement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link ScenesManagementBehavior} for convenience.
      */

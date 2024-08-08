@@ -35,7 +35,7 @@ export interface MicrowaveOvenDevice extends Identity<typeof MicrowaveOvenDevice
 
 export namespace MicrowaveOvenRequirements {
     /**
-     * The OperationalState cluster is required by the Matter specification
+     * The OperationalState cluster is required by the Matter specification.
      *
      * This version of {@link OperationalStateServer} is specialized per the specification.
      */
@@ -43,28 +43,28 @@ export namespace MicrowaveOvenRequirements {
         .alter({ attributes: { countdownTime: { optional: false } } });
 
     /**
-     * The MicrowaveOvenMode cluster is required by the Matter specification
+     * The MicrowaveOvenMode cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link MicrowaveOvenModeServer} for convenience.
      */
     export const MicrowaveOvenModeServer = BaseMicrowaveOvenModeServer;
 
     /**
-     * The MicrowaveOvenControl cluster is required by the Matter specification
+     * The MicrowaveOvenControl cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link MicrowaveOvenControlServer} for convenience.
      */
     export const MicrowaveOvenControlServer = BaseMicrowaveOvenControlServer;
 
     /**
-     * The Identify cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The FanControl cluster is optional per the Matter specification
+     * The FanControl cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link FanControlServer} for convenience.
      */

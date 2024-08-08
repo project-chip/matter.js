@@ -90,14 +90,15 @@ describe("MessageCounter", () => {
         it("persisted counter constructor throws in negative value in storage", async () => {
             await testStorageContext.set("counter", -1);
             await expect(PersistedMessageCounter.create(testStorageContext, "counter")).rejectedWith(
-                "PersistedMessageCounter unavailable due to initialization error", // Invalid message counter value: -1PersistedMessageCounter unavailable due to initialization error
+                "Invalid message counter value: -1",
             );
         });
 
         it("persisted counter constructor throws in too large value in storage", async () => {
-            await testStorageContext.set("counter", MAX_COUNTER_VALUE_32BIT + 1);
+            const tooLarge = MAX_COUNTER_VALUE_32BIT + 1;
+            await testStorageContext.set("counter", tooLarge);
             await expect(PersistedMessageCounter.create(testStorageContext, "counter")).rejectedWith(
-                "PersistedMessageCounter unavailable due to initialization error", // `Invalid message counter value: ${MAX_COUNTER_VALUE_32BIT + 1}`,
+                `Invalid message counter value: ${tooLarge}`,
             );
         });
     });

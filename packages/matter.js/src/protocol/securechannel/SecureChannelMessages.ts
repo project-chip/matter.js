@@ -127,4 +127,7 @@ export enum GeneralStatusCode {
 
     /** Unrecoverable data loss or corruption has occurred. */
     DataLoss = 16,
+
+    /** Message size is larger than the recipient can handle. */
+    MessageTooLarge = 17,
 }

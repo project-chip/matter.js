@@ -10,7 +10,6 @@ import { InstanceBroadcaster } from "../../../common/InstanceBroadcaster.js";
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { TransportInterface } from "../../../common/TransportInterface.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
-import { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
 import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
@@ -22,6 +21,7 @@ import { ServerStore } from "../../../node/server/storage/ServerStore.js";
 import { ExchangeManager } from "../../../protocol/ExchangeManager.js";
 import { SessionManager } from "../../../session/SessionManager.js";
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
+import { ProductDescriptionServer } from "../product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
 
@@ -38,7 +38,6 @@ function convertNetworkEnvironmentType(type: string | number) {
  * Handles network functionality for {@link NodeServer}.
  */
 export class ServerNetworkRuntime extends NetworkRuntime {
-    #rootServer?: EndpointServer;
     #interactionServer?: TransactionalInteractionServer;
     #matterDevice?: MatterDevice;
     #mdnsBroadcaster?: MdnsInstanceBroadcaster;
@@ -49,16 +48,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
     override get owner() {
         return super.owner as ServerNode;
-    }
-
-    /**
-     * Access the {@link EndpointServer} for the root endpoint.
-     */
-    get rootServer() {
-        if (!this.#rootServer) {
-            this.#rootServer = EndpointServer.forEndpoint(this.owner);
-        }
-        return this.#rootServer;
     }
 
     /**
@@ -85,21 +74,21 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         }));
     }
 
-    get networkInterfaces(): NetworkInterfaceDetailed[] {
+    async getNetworkInterfaces(): Promise<NetworkInterfaceDetailed[]> {
         const network = this.owner.env.get(Network);
 
-        const interfaces = network.getNetInterfaces(this.networkInterfaceConfiguration);
+        const interfaces = await network.getNetInterfaces(this.networkInterfaceConfiguration);
         const interfaceDetails = new Array<NetworkInterfaceDetailed>();
-        interfaces.forEach(({ name, type }) => {
-            const details = network.getIpMac(name);
+        for (const { name, type } of interfaces) {
+            const details = await network.getIpMac(name);
             if (details !== undefined) {
                 interfaceDetails.push({ name, type, ...details });
             }
-        });
+        }
         return interfaceDetails;
     }
 
-    async openAdvertisementWindow() {
+    openAdvertisementWindow() {
         if (!this.#matterDevice) {
             throw new InternalError("Server runtime device instance is missing");
         }
@@ -107,13 +96,13 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#matterDevice.startAnnouncement();
     }
 
-    async announceNow() {
+    announceNow() {
         if (!this.#matterDevice) {
             throw new InternalError("Server runtime device instance is missing");
         }
 
         // TODO - see comment in startAdvertising
-        await this.#matterDevice.announce(true);
+        return this.#matterDevice.announce(true);
     }
 
     /**
@@ -257,7 +246,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#primaryNetInterface?.port ?? 0;
     }
 
-    async endCommissioning() {
+    endCommissioning() {
         if (this.#matterDevice !== undefined) {
             return this.#matterDevice.endCommissioning();
         }
@@ -265,8 +254,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
     protected override async start() {
         const mdnsScanner = (await this.owner.env.load(MdnsService)).scanner;
+        await this.owner.act("start-network", agent => agent.load(ProductDescriptionServer));
 
-        this.#interactionServer = new TransactionalInteractionServer(this.owner);
+        this.#interactionServer = await TransactionalInteractionServer.create(this.owner);
 
         const { sessionStorage, fabricStorage } = this.owner.env.get(ServerStore);
 
@@ -285,6 +275,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             (_fabricIndex: FabricIndex) => {
                 // Wired differently using SessionBehavior
             },
+            { maxPathsPerInvoke: this.#interactionServer.maxPathsPerInvoke },
         );
         this.#matterDevice = matterDevice;
         matterDevice.addProtocolHandler(this.#interactionServer);
@@ -302,7 +293,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         this.owner.env.set(FabricManager, matterDevice.fabricManager);
         this.owner.env.set(ExchangeManager, this.#matterDevice.exchangeManager);
 
-        await this.owner.act(agent => agent.load(SessionsBehavior));
+        await this.owner.act("load-sessions", agent => agent.load(SessionsBehavior));
         this.owner.eventsOf(CommissioningBehavior).commissioned.on(() => this.endUncommissionedMode());
 
         await this.addTransports(matterDevice);
@@ -333,9 +324,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         await this.#interactionServer?.[Symbol.asyncDispose]();
         this.#interactionServer = undefined;
-
-        await this.#rootServer?.[Symbol.asyncDispose]();
-        this.#rootServer = undefined;
 
         if (this.#commissionedListener) {
             const commissionedListener = this.#commissionedListener;

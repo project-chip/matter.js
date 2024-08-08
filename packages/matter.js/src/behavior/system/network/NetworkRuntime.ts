@@ -6,7 +6,7 @@
 
 import { ImplementationError } from "../../../common/MatterError.js";
 import type { Node } from "../../../node/Node.js";
-import { createPromise } from "../../../util/Promises.js";
+import { Construction } from "../../../util/Construction.js";
 import { NodeActivity } from "../../context/NodeActivity.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
 
@@ -14,42 +14,31 @@ import { NetworkBehavior } from "./NetworkBehavior.js";
  * Base class for networking implementation.
  */
 export abstract class NetworkRuntime {
+    #construction: Construction<NetworkRuntime>;
     #owner: Node;
-    #closing: Promise<void>;
-    #resolveClosing: () => void;
-    #closed: Promise<void>;
-    #resolveClosed: () => void;
+
+    get construction() {
+        return this.#construction;
+    }
 
     constructor(owner: Node) {
         this.#owner = owner;
-
-        const { promise: closing, resolver: resolveClosing } = createPromise<void>();
-        this.#closing = closing;
-        this.#resolveClosing = resolveClosing;
-
-        const { promise: closed, resolver: resolveClosed } = createPromise<void>();
-        this.#closed = closed;
-        this.#resolveClosed = resolveClosed;
 
         const internals = owner.behaviors.internalsOf(NetworkBehavior);
         if (internals.runtime) {
             throw new ImplementationError("Network is already active");
         }
         internals.runtime = this;
+
+        this.#construction = Construction(this);
     }
 
-    async run() {
-        try {
-            await this.start();
+    async [Construction.construct]() {
+        await this.start();
+        await this.#owner.act(agent => this.owner.lifecycle.online.emit(agent.context));
+    }
 
-            await this.#owner.act(agent => this.owner.lifecycle.online.emit(agent.context));
-        } catch (e) {
-            await this.#stop();
-            throw e;
-        }
-
-        await this.#closing;
-
+    async [Construction.destruct]() {
         this.blockNewActivity();
         const activity = this.#owner.env.get(NodeActivity);
         if (activity.isActive) {
@@ -57,25 +46,15 @@ export abstract class NetworkRuntime {
         }
 
         try {
-            await this.#stop();
+            await this.stop();
         } finally {
-            await this.#owner.act(agent => this.owner.lifecycle.offline.emit(agent.context));
+            this.#owner.behaviors.internalsOf(NetworkBehavior).runtime = undefined;
         }
-
-        this.#resolveClosed();
+        await this.#owner.act(agent => this.owner.lifecycle.offline.emit(agent.context));
     }
 
     async close() {
-        this.#resolveClosing();
-        await this.#closed;
-    }
-
-    async #stop() {
-        try {
-            await this.stop();
-        } finally {
-            await this.#owner.act(agent => (agent.get(NetworkBehavior).internal.runtime = undefined));
-        }
+        await this.construction.close();
     }
 
     abstract operationalPort: number;

@@ -135,9 +135,11 @@ describe("TlvArray", () => {
                         test();
                     } catch (error) {
                         hasThrown = true;
-                        expect(error instanceof ValidationError).true;
+                        expect(error).instanceof(ValidationError);
                         if (error instanceof ValidationError) {
-                            expect(error.message).equal("(Validation/135) Expected string, got number.");
+                            expect(error.message).equal(
+                                "(ValidationDatatypeMismatchError/128) Expected string, got number.",
+                            );
                             expect(error.fieldName).equal(`[${throwException}]`);
                         }
                     }

@@ -15,6 +15,7 @@ import { ModeSelectServer } from "@project-chip/matter.js/behavior/definitions/m
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OccupancySensingServer } from "@project-chip/matter.js/behavior/definitions/occupancy-sensing";
 import { PowerSourceServer } from "@project-chip/matter.js/behavior/definitions/power-source";
+import { PowerTopologyServer } from "@project-chip/matter.js/behavior/definitions/power-topology";
 import { PressureMeasurementServer } from "@project-chip/matter.js/behavior/definitions/pressure-measurement";
 import { PumpConfigurationAndControlServer } from "@project-chip/matter.js/behavior/definitions/pump-configuration-and-control";
 import { RelativeHumidityMeasurementServer } from "@project-chip/matter.js/behavior/definitions/relative-humidity-measurement";
@@ -24,8 +25,10 @@ import { ThermostatUserInterfaceConfigurationServer } from "@project-chip/matter
 import { TimeFormatLocalizationServer } from "@project-chip/matter.js/behavior/definitions/time-format-localization";
 import { UnitLocalizationServer } from "@project-chip/matter.js/behavior/definitions/unit-localization";
 import { UserLabelServer } from "@project-chip/matter.js/behavior/definitions/user-label";
+import { AirQualityServer } from "@project-chip/matter.js/behaviors/air-quality";
 import {
     AdministratorCommissioning,
+    AirQuality,
     BasicInformation,
     ColorControl,
     LevelControl,
@@ -33,20 +36,25 @@ import {
     NetworkCommissioning,
     OccupancySensing,
     PowerSource,
+    PowerTopology,
     PumpConfigurationAndControl,
+    ResourceMonitoring,
     Switch,
     ThermostatUserInterfaceConfiguration,
     TimeFormatLocalization,
     WindowCovering,
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
-import { DimmableLightDevice } from "@project-chip/matter.js/devices/DimmableLightDevice";
+import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
+import { TestActivatedCarbonFilterMonitoringServer } from "./cluster/TestActivatedCarbonFilterMonitoringServer.js";
+import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsServer.js";
+import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitoringServer.js";
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
 import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
@@ -93,7 +101,7 @@ export class AllClustersTestInstance implements TestInstance {
         */
 
         try {
-            await this.serverNode.bringOnline();
+            await this.serverNode.start();
             const { qrPairingCode } = this.serverNode.state.commissioning.pairingCodes;
             // Magic logging chip testing waits for
             console.log(`SetupQRCode: [${qrPairingCode}]`);
@@ -125,11 +133,20 @@ export class AllClustersTestInstance implements TestInstance {
 
         const networkId = new ByteArray(32);
 
+        let deviceTestEnableKey = ByteArray.fromHex("00112233445566778899aabbccddeeff");
+        const argsEnableKeyIndex = process.argv.indexOf("--enable-key");
+        if (argsEnableKeyIndex !== -1) {
+            deviceTestEnableKey = ByteArray.fromHex(process.argv[argsEnableKeyIndex + 1]);
+        }
+
         const serverNode = await ServerNode.create(
             ServerNode.RootEndpoint.with(
                 //BasicInformationServer.enable({ events: { shutDown: true, leave: true } }),
                 // We upgrade the AdminCommissioningCluster to also allow Basic Commissioning, so we can use for more testcases
                 AdministratorCommissioningServer.with("Basic"),
+                TestGeneralDiagnosticsServer.enable({
+                    events: { hardwareFaultChange: true, radioFaultChange: true, networkFaultChange: true },
+                }),
                 LocalizationConfigurationServer,
 
                 NetworkCommissioningServer.with("EthernetNetworkInterface"), // Set the correct Ethernet network Commissioning cluster
@@ -175,6 +192,15 @@ export class AllClustersTestInstance implements TestInstance {
                         primaryColor: BasicInformation.Color.Purple,
                     },
                     reachable: true,
+                    maxPathsPerInvoke: 10,
+                },
+                generalDiagnostics: {
+                    totalOperationalHours: 0, // set to enable it
+                    activeHardwareFaults: [], // set to enable it
+                    activeRadioFaults: [], // set to enable it
+                    activeNetworkFaults: [], // set to enable it
+                    testEventTriggersEnabled: true, // Enable Test events
+                    deviceTestEnableKey,
                 },
                 localizationConfiguration: {
                     activeLocale: "en-US",
@@ -200,7 +226,14 @@ export class AllClustersTestInstance implements TestInstance {
         );
 
         const endpoint1 = new Endpoint(
-            DimmableLightDevice.with(
+            OnOffLightDevice.with(
+                AirQualityServer.with(
+                    AirQuality.Feature.Fair,
+                    AirQuality.Feature.Moderate,
+                    AirQuality.Feature.VeryPoor,
+                    AirQuality.Feature.ExtremelyPoor,
+                ),
+                TestActivatedCarbonFilterMonitoringServer,
                 BooleanStateServer.enable({ events: { stateChange: true } }),
                 ColorControlServer.with(
                     ColorControl.Feature.HueSaturation,
@@ -211,6 +244,7 @@ export class AllClustersTestInstance implements TestInstance {
                 ),
                 FixedLabelServer,
                 FlowMeasurementServer,
+                TestHepaFilterMonitoringServer,
                 TestIdentifyServer,
                 IlluminanceMeasurementServer,
                 TestLevelControlServer.with(
@@ -221,6 +255,7 @@ export class AllClustersTestInstance implements TestInstance {
                 ModeSelectServer.with(ModeSelect.Feature.OnOff),
                 OccupancySensingServer,
                 PowerSourceServer.with(PowerSource.Feature.Battery),
+                PowerTopologyServer.with(PowerTopology.Feature.SetTopology, PowerTopology.Feature.DynamicPowerFlow),
                 PressureMeasurementServer,
                 PumpConfigurationAndControlServer.with(PumpConfigurationAndControl.Feature.ConstantPressure),
                 RelativeHumidityMeasurementServer,
@@ -233,6 +268,22 @@ export class AllClustersTestInstance implements TestInstance {
             {
                 number: EndpointNumber(1),
                 id: "onoff1",
+                activatedCarbonFilterMonitoring: {
+                    condition: 20,
+                    degradationDirection: ResourceMonitoring.DegradationDirection.Down,
+                    changeIndication: ResourceMonitoring.ChangeIndication.Critical,
+                    inPlaceIndicator: true,
+                    lastChangedTime: null,
+                    replacementProductList: [
+                        {
+                            productIdentifierType: ResourceMonitoring.ProductIdentifierType.Ean,
+                            productIdentifierValue: "1234567890123",
+                        },
+                    ],
+                },
+                airQuality: {
+                    airQuality: AirQuality.AirQualityEnum.Fair,
+                },
                 booleanState: {
                     stateValue: false,
                 },
@@ -286,6 +337,19 @@ export class AllClustersTestInstance implements TestInstance {
                     maxMeasuredValue: 100,
                     tolerance: 0,
                 },
+                hepaFilterMonitoring: {
+                    condition: 20,
+                    degradationDirection: ResourceMonitoring.DegradationDirection.Down,
+                    changeIndication: ResourceMonitoring.ChangeIndication.Warning,
+                    inPlaceIndicator: true,
+                    lastChangedTime: null,
+                    replacementProductList: [
+                        {
+                            productIdentifierType: ResourceMonitoring.ProductIdentifierType.Ean,
+                            productIdentifierValue: "1234567890123",
+                        },
+                    ],
+                },
                 illuminanceMeasurement: {
                     tolerance: 0,
                     lightSensorType: null,
@@ -331,6 +395,10 @@ export class AllClustersTestInstance implements TestInstance {
                     batChargeLevel: PowerSource.BatChargeLevel.Ok,
                     batReplacementNeeded: false,
                     batReplaceability: PowerSource.BatReplaceability.NotReplaceable,
+                },
+                powerTopology: {
+                    availableEndpoints: [EndpointNumber(1)],
+                    activeEndpoints: [EndpointNumber(1)],
                 },
                 pumpConfigurationAndControl: {
                     effectiveOperationMode: PumpConfigurationAndControl.OperationMode.Normal,

@@ -8,8 +8,8 @@ import { AccessLevel } from "../../../cluster/Cluster.js";
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { Crypto } from "../../../crypto/Crypto.js";
 import { ClusterId } from "../../../datatype/ClusterId.js";
-import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { Logger } from "../../../log/Logger.js";
+import { DataModelPath } from "../../../model/definitions/DataModelPath.js";
 import { deepCopy } from "../../../util/DeepCopy.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { Observable } from "../../../util/Observable.js";
@@ -165,8 +165,7 @@ export namespace Datasource {
     }
 
     /**
-     * The interface {@link Datasource} uses to read and write non-volatile
-     * values.
+     * The interface {@link Datasource} uses to read and write non-volatile values.
      */
     export interface Store {
         /**

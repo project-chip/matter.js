@@ -115,7 +115,7 @@ export const MySchema = new ClusterModel({
                 FieldElement({
                     name: "AWE",
                     constraint: "0",
-                    description: "MoreAwesome",
+                    description: "Awesome",
                     details: "That which makes me more awesome.",
                 }),
             ],

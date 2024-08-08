@@ -57,7 +57,7 @@ export namespace TemperatureMeasurement {
              */
             tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 }), { default: 0 })
         }
-    })
+    });
 
     /**
      * This cluster provides an interface to temperature measurement functionality, including configuration and

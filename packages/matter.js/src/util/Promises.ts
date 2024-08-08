@@ -80,9 +80,18 @@ export class PromiseTimeoutError extends MatterError {
  * @param promise a promise that resolves or rejects when the timed task completes
  * @param cancel invoked on timeout (default implementation throws {@link PromiseTimeoutError})
  */
-export async function withTimeout<T>(timeoutMs: number, promise: Promise<T>, cancel?: () => void): Promise<T> {
-    if (!cancel) {
-        cancel = () => {
+export async function withTimeout<T>(
+    timeoutMs: number,
+    promise: Promise<T>,
+    cancel?: AbortController | (() => void),
+): Promise<T> {
+    let cancelFn;
+    if (typeof cancel === "function") {
+        cancelFn = cancel;
+    } else if (typeof cancel?.abort === "function") {
+        cancelFn = () => cancel.abort();
+    } else {
+        cancelFn = () => {
             throw new PromiseTimeoutError();
         };
     }
@@ -91,7 +100,7 @@ export async function withTimeout<T>(timeoutMs: number, promise: Promise<T>, can
 
     // Sub-promise 1, the timer
     const timeout = new Promise<void>((resolve, reject) => {
-        const timer = Time.getTimer("promise-timeout", timeoutMs, () => reject(cancel));
+        const timer = Time.getTimer("promise-timeout", timeoutMs, () => reject(cancelFn));
 
         cancelTimer = () => {
             timer.stop();
@@ -138,7 +147,7 @@ export const MaybePromise = {
      * Determine whether a {@link MaybePromiseLike} is a {@link Promise}.
      */
     is<T>(value: MaybePromise<T>): value is PromiseLike<T> {
-        // We can not use isObject because this could collide with valid values here
+        // We cannot use isObject because this could collide with valid values here
         return typeof value === "object" && value !== null && typeof (value as { then?: unknown }).then === "function";
     },
 

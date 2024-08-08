@@ -13,9 +13,6 @@ import { CryptoNode } from "./CryptoNode.js";
 try {
     Crypto.get();
 } catch (error) {
-    if (error instanceof NoProviderError) {
-        Crypto.get = singleton(() => new CryptoNode());
-    } else {
-        throw error;
-    }
+    NoProviderError.accept(error);
+    Crypto.get = singleton(() => new CryptoNode());
 }

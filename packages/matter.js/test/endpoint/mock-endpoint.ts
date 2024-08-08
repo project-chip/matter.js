@@ -2,6 +2,7 @@ import { Behavior } from "../../src/behavior/Behavior.js";
 import { InternalError } from "../../src/common/MatterError.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
+import { Environment } from "../../src/environment/Environment.js";
 import { deepCopy } from "../../src/util/DeepCopy.js";
 import { Observer } from "../../src/util/Observable.js";
 import { MockEndpointType } from "../behavior/mock-behavior.js";
@@ -39,15 +40,17 @@ const activeParts = new Set<MockEndpoint<any>>();
 // });
 
 export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
-    constructor(definition: T | Endpoint.Configuration<T>);
+    constructor(definition: T | MockEndpoint.Configuration<T>);
 
-    constructor(type: T, options: Endpoint.Options<T>);
+    constructor(type: T, options: MockEndpoint.Options<T>);
 
-    constructor(definition: T | Endpoint.Configuration<T>, options?: Endpoint.Options<T>) {
+    constructor(definition: T | MockEndpoint.Configuration<T>, options?: MockEndpoint.Options<T>) {
         const config = Endpoint.configurationFor(definition, options);
 
         if (!("owner" in config)) {
-            config.owner = new MockServerNode();
+            config.owner = new MockServerNode(MockServerNode.RootEndpoint, {
+                environment: config.environment as Environment | undefined,
+            });
         }
 
         super(config);
@@ -96,16 +99,23 @@ export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
         return capturedEvents;
     }
 
-    static create<const T extends EndpointType>(definition: T | Endpoint.Configuration<T>): Promise<MockEndpoint<T>>;
+    static create<const T extends EndpointType>(
+        definition: T | MockEndpoint.Configuration<T>,
+    ): Promise<MockEndpoint<T>>;
 
-    static create<const T extends EndpointType>(type: T, options: Endpoint.Configuration<T>): Promise<MockEndpoint<T>>;
+    static create<const T extends EndpointType>(type: T, options: MockEndpoint.Options<T>): Promise<MockEndpoint<T>>;
 
-    static async create(definition: EndpointType | Endpoint.Configuration, options?: Endpoint.Options) {
+    static async create(definition: EndpointType | MockEndpoint.Configuration, options?: MockEndpoint.Options) {
         const endpoint = new MockEndpoint(Endpoint.configurationFor(definition, options));
-        return await endpoint.construction;
+        return await endpoint.construction.ready;
     }
 
     static async createWith<T extends Behavior.Type>(type: T) {
         return await MockEndpoint.create(MockEndpointType.with(type));
     }
+}
+
+export namespace MockEndpoint {
+    export type Options<T extends EndpointType = EndpointType> = Endpoint.Options<T> & { environment?: Environment };
+    export type Configuration<T extends EndpointType = EndpointType> = Endpoint.Configuration<T, Options<T>>;
 }

@@ -11,7 +11,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ### **WORK_IN_PROGRESS**
 
--   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
+-   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3.0.1. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
 
 -   Matter.js Parser and Code generator:
     -   Feature: We now generate all Matter datatypes and elements. This includes some we defined by hand previously and those introduced by the Matter 1.2 and Matter 1.3 specifications.
@@ -26,31 +26,79 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Breaking: We've removed a few deprecated definitions for unused Matter elements such as the Scenes cluster.
     -   Breaking: Globals.ts previously defined core datatypes for the Matter object model. These are now generated and individually importable.
     -   Breaking: We've removed a few old draft datatypes defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip) that were abandoned, renamed or are still "draft" as of Matter 1.3.
+    -   Breaking: Some types related to ClusterServer are simplified.  This should be largely transparent but the template arguments are slightly different
     -   Feature: Adds all elements (clusters, attributes, events, commands, device types and datatypes) introduced in Matter 1.2 and Matter 1.3.
 -   Matter-Core functionality:
     -   Breaking: Removes the discovery capability "softAccessPoint" as it was removed from the Matter specification
+    -   Breaking: Matter.js now requires node.js 18+
+    -   Breaking: We now target ES 2022 for transpiled output.  We have not adopted new language features but this does mean that we generate true class properties now
+    -   Breaking: We've removed the APIs `tryCatch` and `tryCatchAsync`.  These were used internally -- not part of any Matter related API -- but were exported
     -   Feature: Increase Data Model revision to 17 (introduced by Matter 1.2)
     -   Feature: Added Base64 encoding/decoding support to ByteArray
+    -   Feature: Added WildcardPathFlagsBitmap to Attribute expansion for read/subscribe Interactions
+    -   Feature: Added Matter 1.3 session params
+    -   Feature: Added support for Multi-Invokes for Matter 1.3 (default for now are 10 invokes till we have a better value)
     -   Enhancement: Update Session parameters in PASE/CASE to match Matter 1.3 specification
     -   Enhancement: Removes TCP and ICD TXT records from MDNS responses because both currently not supported and optional to reduce the size of the MDNS responses
     -   Enhancement: Adds encoding and decoding of custom TlvData in QR-Codes including extensible Schema support for the defined Matter fields
+    -   Enhancement: Optimizes Read and Subscribe handling for clients/controller to better match with specification
     -   Enhancement: Adds encoding/decoding support for multiple device information in one QR-Code
     -   Enhancement: Makes processing of manual Pairing codes more robust directly on decoding level
+    -   Enhancement: Refactored Message size handling to dynamically calculate payload size based on transport capabilities
+    -   Enhancement: Refactored and cleanup CASE and PASE and corrected handling in some places
+    -   Enhancement: Added BTP Idle timeout as defined in Matter specification
+    -   Enhancement: Enhanced default implementation of GeneralDiagnostics cluster with new convenience methods
+    -   Enhancement: Many more protocol and functionality syncs with matter specification 1.3
+    -   Enhancement: The Network methods that handles NetworkInterfaces are now "MaybePromise" to allow async implementations
     -   Enhancement/Fix: Several fixes and optimizations in Session and Message Exchange handling
+    -   Enhancement/Fix: Adjusted MRP behavior with chip and only use/expect MRP ion unreliable channels (UDP). Fixes BLE commissioning
+    -   Fix: Adjusted ValidationErrors to be more specific if they should return "InvalidAction" ot "ConstraintError".
+    -   Fix: Adjusted some returned errors to be more specific and to the specification (e.g. InvalidAction instead of Failure)
+    -   Fix: Fixed StandaloneAck handling to use an outstanding ack number as piggybacked ack number
+    -   Fix: Makes sure subscription maxInterval cannot exceed the matter defined maximum of 60mins
+    -   Fix: Synced attMtu handling with chip to always use MTU-3 bytes for BLE connections
 -   matter.js API:
+-   -   Breaking: Node.start() is now asynchronous and returns when the node is online. This is only breaking in that lack of await will result in an unhandled rejection. Node.bringOnline() is deprecated.
     -   Feature: Adds default implementations for i18n clusters including Localization, Time Format Localization and Unit Localization.
     -   Feature: Adds interactionBegin and interactionEnd events for ClusterBehaviors to demarcate online interactions that mutate state.
+    -   Feature: Any state value defined with schema is now configurable via the environment.
+    -   Feature: You may now mark endpoints as "non-essential" to prevent errors from incapacitating a node.
+    -   Enhancement: Various Endpoint methods throw the root cause when there is an error rather than logging the root cause and throwing a less descriptive error.
+-   matter.js Controller API:
+    -   Breaking: commissionNode() in CommissioningController now returns the Node-ID and not the PairedNode instance.
+    -   Breaking: AttributeClient now throws an exception when an attribute should be subscribed which is not reporting updates via subscriptions
+    -   Feature: (Experimental!) Adds PaseCommissioner to allow to execute the initial (PASE based) commissioning process separately from the operational completion of the commissioning process, also allowed to be BLE only.
+    -   Feature: Allows to complete the commissioning process for a node where this process was started by a PASE commissioner
+    -   Feature: Allows to commission a node without directly connecting to it
+    -   Enhancement: Always read attributes that do not report changes via subscriptions (including all unknown Attributes)
+    -   Fix: Fixes Node reconnection when disconnected before
+    -   Fix: Makes sure to always use the BLE scanner when required
 -   matter.js Legacy API:
     -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
     -   Removal: We removed old Scenes cluster implementation which was never fully implemented or used by any Matter controller
 -   matter.js-react-native:
-    -   Feature: Introduces new package that provides a React Native compatible platform Implementations for Matter.js. This package is still in development and should be considered experimental for now! Currently supports UDP, BLE and Crypto platform features. A In-memory storage is used for now because a react-native persisting Storage backend is missing currently.
+    -   Feature: Introduces new package that provides a React Native compatible platform Implementations for Matter.js. This package is still in development and should be considered experimental for now! Currently it supports UDP, BLE, AsyncStorage and Crypto platform features.
 -   matter.js chip and python Testing:
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 
+### 0.9.4 (2024-07-19)
+
+-   Matter-Core functionality:
+    -   Feature: Allows to generate Certification declarations flagged as provisional for certification purposes
+    -   Feature: Allows to disable mandatory field checks on TLV encoding when handling fabric sensitive structs
+    -   Fix: Makes sure to remove fabric sensitive fields and events when they are not allowed to be read or subscribed
+    -   Fix: Makes sure to handle commissioning related cases with PASE sessions correctly regarding temporarily added fabrics and certificates
+    -   Fix: Verifies provided trusted root certificates completely
+
+### 0.9.3 (2024-06-26)
+
+-   Matter-Core functionality:
+    -   Fix: Makes sure to clear all subscriptions from the subscriber noe and not only the current session when not keeping subscriptions
+
 ### 0.9.2 (2026-06-20)
-- Matter-Core functionality:
-    - Enhancement: Added some more certification relevant checks in Interaction server
+
+-   Matter-Core functionality:
+    -   Enhancement: Added some more certification relevant checks in Interaction server
 
 ### 0.9.1 (2024-06-01)
 
@@ -442,7 +490,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Examples/Reference implementations:
         -   The reference implementations are moved to example directory and details moved into own [README.md](./packages/matter-node.js-examples/README.md) file
         -   the "npm run matter" command got renamed to "npm run matter-device" (same for binary usage
-        -   Add hints for all imports in the examples to show what the corresponding "matter-node.js" import would be (because they can not be used directly for build reasons)
+        -   Add hints for all imports in the examples to show what the corresponding "matter-node.js" import would be (because they cannot be used directly for build reasons)
         -   Added the "npm run matter-\*" commands also to the base package.json
         -   Added parameter -clearstorage to start with an empty storage
 

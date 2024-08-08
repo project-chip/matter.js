@@ -66,7 +66,7 @@ export class CommissioningBehavior extends Behavior {
 
         this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline);
 
-        this.reactTo((this.endpoint as Node).lifecycle.treeReady, this.#initializeNode);
+        this.reactTo((this.endpoint as Node).lifecycle.partsReady, this.#initializeNode);
     }
 
     override [Symbol.asyncDispose]() {
@@ -146,7 +146,6 @@ export class CommissioningBehavior extends Behavior {
     #handleSessionClosed() {
         const sessions = this.agent.get(SessionsBehavior);
         if (Object.keys(sessions.state.sessions).length === 0) {
-            // Do we need to remove this listener? I think now
             this.#triggerFactoryReset();
         }
     }

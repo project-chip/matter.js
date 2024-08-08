@@ -32,7 +32,9 @@ import {
 import {
     Pm1ConcentrationMeasurementServer as BasePm1ConcentrationMeasurementServer
 } from "../../../behavior/definitions/pm1-concentration-measurement/Pm1ConcentrationMeasurementServer.js";
-import { Pm2Server as BasePm2Server } from "../../../behavior/definitions/pm2/Pm2Server.js";
+import {
+    Pm25ConcentrationMeasurementServer as BasePm25ConcentrationMeasurementServer
+} from "../../../behavior/definitions/pm25-concentration-measurement/Pm25ConcentrationMeasurementServer.js";
 import {
     Pm10ConcentrationMeasurementServer as BasePm10ConcentrationMeasurementServer
 } from "../../../behavior/definitions/pm10-concentration-measurement/Pm10ConcentrationMeasurementServer.js";
@@ -58,35 +60,35 @@ export interface AirQualitySensorDevice extends Identity<typeof AirQualitySensor
 
 export namespace AirQualitySensorRequirements {
     /**
-     * The Identify cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The AirQuality cluster is required by the Matter specification
+     * The AirQuality cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link AirQualityServer} for convenience.
      */
     export const AirQualityServer = BaseAirQualityServer;
 
     /**
-     * The TemperatureMeasurement cluster is optional per the Matter specification
+     * The TemperatureMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link TemperatureMeasurementServer} for convenience.
      */
     export const TemperatureMeasurementServer = BaseTemperatureMeasurementServer;
 
     /**
-     * The RelativeHumidityMeasurement cluster is optional per the Matter specification
+     * The RelativeHumidityMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link RelativeHumidityMeasurementServer} for convenience.
      */
     export const RelativeHumidityMeasurementServer = BaseRelativeHumidityMeasurementServer;
 
     /**
-     * The CarbonMonoxideConcentrationMeasurement cluster is optional per the Matter specification
+     * The CarbonMonoxideConcentrationMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link CarbonMonoxideConcentrationMeasurementServer} for
      * convenience.
@@ -94,7 +96,7 @@ export namespace AirQualitySensorRequirements {
     export const CarbonMonoxideConcentrationMeasurementServer = BaseCarbonMonoxideConcentrationMeasurementServer;
 
     /**
-     * The CarbonDioxideConcentrationMeasurement cluster is optional per the Matter specification
+     * The CarbonDioxideConcentrationMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link CarbonDioxideConcentrationMeasurementServer} for
      * convenience.
@@ -102,7 +104,7 @@ export namespace AirQualitySensorRequirements {
     export const CarbonDioxideConcentrationMeasurementServer = BaseCarbonDioxideConcentrationMeasurementServer;
 
     /**
-     * The NitrogenDioxideConcentrationMeasurement cluster is optional per the Matter specification
+     * The NitrogenDioxideConcentrationMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link NitrogenDioxideConcentrationMeasurementServer} for
      * convenience.
@@ -110,14 +112,14 @@ export namespace AirQualitySensorRequirements {
     export const NitrogenDioxideConcentrationMeasurementServer = BaseNitrogenDioxideConcentrationMeasurementServer;
 
     /**
-     * The OzoneConcentrationMeasurement cluster is optional per the Matter specification
+     * The OzoneConcentrationMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link OzoneConcentrationMeasurementServer} for convenience.
      */
     export const OzoneConcentrationMeasurementServer = BaseOzoneConcentrationMeasurementServer;
 
     /**
-     * The FormaldehydeConcentrationMeasurement cluster is optional per the Matter specification
+     * The FormaldehydeConcentrationMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link FormaldehydeConcentrationMeasurementServer} for
      * convenience.
@@ -125,35 +127,35 @@ export namespace AirQualitySensorRequirements {
     export const FormaldehydeConcentrationMeasurementServer = BaseFormaldehydeConcentrationMeasurementServer;
 
     /**
-     * The Pm1ConcentrationMeasurement cluster is optional per the Matter specification
+     * The Pm1ConcentrationMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link Pm1ConcentrationMeasurementServer} for convenience.
      */
     export const Pm1ConcentrationMeasurementServer = BasePm1ConcentrationMeasurementServer;
 
     /**
-     * The Pm2 cluster is optional per the Matter specification
+     * The Pm25ConcentrationMeasurement cluster is optional per the Matter specification.
      *
-     * We provide this alias to the default implementation {@link Pm2Server} for convenience.
+     * We provide this alias to the default implementation {@link Pm25ConcentrationMeasurementServer} for convenience.
      */
-    export const Pm2Server = BasePm2Server;
+    export const Pm25ConcentrationMeasurementServer = BasePm25ConcentrationMeasurementServer;
 
     /**
-     * The Pm10ConcentrationMeasurement cluster is optional per the Matter specification
+     * The Pm10ConcentrationMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link Pm10ConcentrationMeasurementServer} for convenience.
      */
     export const Pm10ConcentrationMeasurementServer = BasePm10ConcentrationMeasurementServer;
 
     /**
-     * The RadonConcentrationMeasurement cluster is optional per the Matter specification
+     * The RadonConcentrationMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation {@link RadonConcentrationMeasurementServer} for convenience.
      */
     export const RadonConcentrationMeasurementServer = BaseRadonConcentrationMeasurementServer;
 
     /**
-     * The TotalVolatileOrganicCompoundsConcentrationMeasurement cluster is optional per the Matter specification
+     * The TotalVolatileOrganicCompoundsConcentrationMeasurement cluster is optional per the Matter specification.
      *
      * We provide this alias to the default implementation
      * {@link TotalVolatileOrganicCompoundsConcentrationMeasurementServer} for convenience.
@@ -175,7 +177,7 @@ export namespace AirQualitySensorRequirements {
             OzoneConcentrationMeasurement: OzoneConcentrationMeasurementServer,
             FormaldehydeConcentrationMeasurement: FormaldehydeConcentrationMeasurementServer,
             Pm1ConcentrationMeasurement: Pm1ConcentrationMeasurementServer,
-            Pm2: Pm2Server,
+            Pm25ConcentrationMeasurement: Pm25ConcentrationMeasurementServer,
             Pm10ConcentrationMeasurement: Pm10ConcentrationMeasurementServer,
             RadonConcentrationMeasurement: RadonConcentrationMeasurementServer,
             TotalVolatileOrganicCompoundsConcentrationMeasurement: TotalVolatileOrganicCompoundsConcentrationMeasurementServer

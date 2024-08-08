@@ -21,6 +21,7 @@ describe("AttributeDataEncoder", () => {
         it("tag compress with dataVersion handling", () => {
             const data: AttributeReportPayload[] = [
                 {
+                    hasFabricSensitiveData: false,
                     attributeData: {
                         path: {
                             endpointId: EndpointNumber(0),
@@ -33,6 +34,7 @@ describe("AttributeDataEncoder", () => {
                     },
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeData: {
                         path: {
                             endpointId: EndpointNumber(0),
@@ -46,6 +48,7 @@ describe("AttributeDataEncoder", () => {
                     attributeStatus: undefined,
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeData: {
                         path: {
                             endpointId: EndpointNumber(0),
@@ -58,6 +61,7 @@ describe("AttributeDataEncoder", () => {
                     },
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeData: {
                         path: {
                             endpointId: EndpointNumber(0),
@@ -70,6 +74,7 @@ describe("AttributeDataEncoder", () => {
                     },
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeStatus: {
                         path: {
                             endpointId: EndpointNumber(0),
@@ -80,6 +85,7 @@ describe("AttributeDataEncoder", () => {
                     },
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeStatus: {
                         path: {
                             endpointId: EndpointNumber(0),
@@ -90,6 +96,7 @@ describe("AttributeDataEncoder", () => {
                     },
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeStatus: {
                         path: {
                             endpointId: EndpointNumber(1),
@@ -104,6 +111,7 @@ describe("AttributeDataEncoder", () => {
 
             expect(compressedData).deep.equal([
                 {
+                    hasFabricSensitiveData: false,
                     attributeData: {
                         path: {
                             endpointId: EndpointNumber(0),
@@ -118,6 +126,7 @@ describe("AttributeDataEncoder", () => {
                     attributeStatus: undefined,
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeData: {
                         path: {
                             clusterId: ClusterId(0x28),
@@ -131,6 +140,7 @@ describe("AttributeDataEncoder", () => {
                     attributeStatus: undefined,
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeData: {
                         path: {
                             clusterId: ClusterId(0x28),
@@ -144,6 +154,7 @@ describe("AttributeDataEncoder", () => {
                     attributeStatus: undefined,
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeStatus: {
                         path: {
                             clusterId: ClusterId(0x28),
@@ -155,6 +166,7 @@ describe("AttributeDataEncoder", () => {
                     attributeData: undefined,
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeData: {
                         path: {
                             clusterId: ClusterId(0x29),
@@ -168,6 +180,7 @@ describe("AttributeDataEncoder", () => {
                     attributeStatus: undefined,
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeStatus: {
                         path: {
                             clusterId: ClusterId(0x99),
@@ -179,6 +192,7 @@ describe("AttributeDataEncoder", () => {
                     attributeData: undefined,
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeStatus: {
                         path: {
                             endpointId: EndpointNumber(1),
@@ -197,6 +211,7 @@ describe("AttributeDataEncoder", () => {
     describe("chunk arrays for DataReports", () => {
         it("chunk array", () => {
             const data: AttributeReportPayload = {
+                hasFabricSensitiveData: false,
                 attributeData: {
                     path: {
                         endpointId: EndpointNumber(0),
@@ -212,6 +227,7 @@ describe("AttributeDataEncoder", () => {
 
             expect(chunkedData).deep.equal([
                 {
+                    hasFabricSensitiveData: false,
                     attributeData: {
                         path: {
                             endpointId: EndpointNumber(0),
@@ -225,6 +241,7 @@ describe("AttributeDataEncoder", () => {
                     },
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeData: {
                         path: {
                             endpointId: EndpointNumber(0),
@@ -238,6 +255,7 @@ describe("AttributeDataEncoder", () => {
                     },
                 },
                 {
+                    hasFabricSensitiveData: false,
                     attributeData: {
                         path: {
                             endpointId: EndpointNumber(0),

@@ -122,8 +122,9 @@ function createConstructor({ name, base, args, mixins }: ConstructorOptions) {
     // Have to use eval if we don't want every class to be called "GeneratedClass" in the debugger but we can ensure
     // this won't be abused.
     //
-    // "name" is the only input to this function that appears textually in the eval.
-    if (!name.match(/^[a-z0-9$_]+$/i)) {
+    // "name" is the only input to this function that appears textually in the eval.  We limit it to letters, numbers,
+    // "$" and "_".
+    if (!name.match(/^(?:\p{L}|[0-9$_])+$/u)) {
         throw new InternalError("Refusing to generate class with untrustworthy name");
     }
 

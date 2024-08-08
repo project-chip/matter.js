@@ -62,18 +62,18 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
     private async handleSigma1(server: MatterDevice, messenger: CaseServerMessenger) {
         logger.info(`Received pairing request from ${messenger.getChannelName()}`);
         // Generate pairing info
-        const random = Crypto.getRandom();
+        const responderRandom = Crypto.getRandom();
 
         // Read and process sigma 1
         const { sigma1Bytes, sigma1 } = await messenger.readSigma1();
         const {
-            sessionId: peerSessionId,
+            initiatorSessionId: peerSessionId,
             resumptionId: peerResumptionId,
-            resumeMic: peerResumeMic,
+            initiatorResumeMic: peerResumeMic,
             destinationId,
-            random: peerRandom,
-            ecdhPublicKey: peerEcdhPublicKey,
-            sessionParams: sessionParameters,
+            initiatorRandom: peerRandom,
+            initiatorEcdhPublicKey: peerEcdhPublicKey,
+            initiatorSessionParams,
         } = sigma1;
 
         // Try to resume a previous session
@@ -94,10 +94,10 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             Crypto.decrypt(peerResumeKey, peerResumeMic, RESUME1_MIC_NONCE);
 
             // All good! Create secure session
-            const sessionId = await server.getNextAvailableSessionId();
+            const responderSessionId = await server.getNextAvailableSessionId();
             const secureSessionSalt = ByteArray.concat(peerRandom, peerResumptionId);
             const secureSession = await server.sessionManager.createSecureSession({
-                sessionId,
+                sessionId: responderSessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
@@ -105,7 +105,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 salt: secureSessionSalt,
                 isInitiator: false,
                 isResumption: true,
-                sessionParameters,
+                peerSessionParameters: initiatorSessionParams,
                 caseAuthenticatedTags,
             });
 
@@ -114,7 +114,12 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             const resumeKey = await Crypto.hkdf(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
             const resumeMic = Crypto.encrypt(resumeKey, new ByteArray(0), RESUME2_MIC_NONCE);
             try {
-                await messenger.sendSigma2Resume({ resumptionId, resumeMic, sessionId });
+                await messenger.sendSigma2Resume({
+                    resumptionId,
+                    resumeMic,
+                    responderSessionId,
+                    responderSessionParams: server.sessionParameters, // responder session parameters
+                });
             } catch (error) {
                 // If we fail to send the resume, we destroy the session
                 await secureSession.destroy(false);
@@ -141,18 +146,19 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             // TODO: Pass through a group id?
             const fabric = server.findFabricFromDestinationId(destinationId, peerRandom);
             const { operationalCert: nodeOpCert, intermediateCACert, operationalIdentityProtectionKey } = fabric;
-            const { publicKey: ecdhPublicKey, sharedSecret } = Crypto.ecdhGeneratePublicKeyAndSecret(peerEcdhPublicKey);
+            const { publicKey: responderEcdhPublicKey, sharedSecret } =
+                Crypto.ecdhGeneratePublicKeyAndSecret(peerEcdhPublicKey);
             const sigma2Salt = ByteArray.concat(
                 operationalIdentityProtectionKey,
-                random,
-                ecdhPublicKey,
+                responderRandom,
+                responderEcdhPublicKey,
                 Crypto.hash(sigma1Bytes),
             );
             const sigma2Key = await Crypto.hkdf(sharedSecret, sigma2Salt, KDFSR2_INFO);
             const signatureData = TlvSignedData.encode({
                 nodeOpCert,
                 intermediateCACert,
-                ecdhPublicKey,
+                ecdhPublicKey: responderEcdhPublicKey,
                 peerEcdhPublicKey,
             });
             const signature = fabric.sign(signatureData);
@@ -163,13 +169,13 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 resumptionId,
             });
             const encrypted = Crypto.encrypt(sigma2Key, encryptedData, TBE_DATA2_NONCE);
-            const sessionId = await server.getNextAvailableSessionId();
+            const responderSessionId = await server.getNextAvailableSessionId();
             const sigma2Bytes = await messenger.sendSigma2({
-                random,
-                sessionId,
-                ecdhPublicKey,
+                responderRandom,
+                responderSessionId,
+                responderEcdhPublicKey,
                 encrypted,
-                sessionParams: sessionParameters,
+                responderSessionParams: server.sessionParameters, // responder session parameters
             });
 
             // Read and process sigma 3
@@ -195,7 +201,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 nodeOpCert: peerNewOpCert,
                 intermediateCACert: peerIntermediateCACert,
                 ecdhPublicKey: peerEcdhPublicKey,
-                peerEcdhPublicKey: ecdhPublicKey,
+                peerEcdhPublicKey: responderEcdhPublicKey,
             });
             const {
                 ellipticCurvePublicKey: peerPublicKey,
@@ -214,7 +220,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
             const secureSession = await server.sessionManager.createSecureSession({
-                sessionId,
+                sessionId: responderSessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
@@ -222,7 +228,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 salt: secureSessionSalt,
                 isInitiator: false,
                 isResumption: false,
-                sessionParameters,
+                peerSessionParameters: initiatorSessionParams,
                 caseAuthenticatedTags,
             });
             logger.info(

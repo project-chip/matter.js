@@ -12,7 +12,7 @@ import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Pm1ConcentrationMeasurement {
-    export const Base = { ...ConcentrationMeasurement.Base, id: 0x42c, name: "Pm1ConcentrationMeasurement" }
+    export const Base = { ...ConcentrationMeasurement.Base, id: 0x42c, name: "Pm1ConcentrationMeasurement" } as const;
 
     /**
      * @see {@link Cluster}
@@ -20,7 +20,7 @@ export namespace Pm1ConcentrationMeasurement {
     export const ClusterInstance = MutableCluster.ExtensibleOnly(Base);
 
     /**
-     * This alias specializes the semantics of {@link ConcentrationMeasurement.Cluster}.
+     * This alias specializes the semantics of {@link ConcentrationMeasurement.Base}.
      *
      * Per the Matter specification you cannot use {@link Pm1ConcentrationMeasurementCluster} without enabling certain
      * feature combinations. You must use the {@link with} factory method to obtain a working cluster.
@@ -35,7 +35,11 @@ export namespace Pm1ConcentrationMeasurement {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const CompleteInstance = MutableCluster({ ...ConcentrationMeasurement.Complete, id: 0x42c });
+    export const CompleteInstance = MutableCluster({
+        ...ConcentrationMeasurement.Complete,
+        id: 0x42c,
+        name: "Pm1ConcentrationMeasurement"
+    });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}
     export const Complete: Complete = CompleteInstance;

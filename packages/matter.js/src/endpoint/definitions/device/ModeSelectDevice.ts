@@ -20,7 +20,7 @@ export interface ModeSelectDevice extends Identity<typeof ModeSelectDeviceDefini
 
 export namespace ModeSelectRequirements {
     /**
-     * The ModeSelect cluster is required by the Matter specification
+     * The ModeSelect cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link ModeSelectServer} for convenience.
      */

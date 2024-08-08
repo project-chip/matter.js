@@ -4,21 +4,27 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { BasicInformationBehavior } from "../../src/behavior/definitions/basic-information/BasicInformationBehavior.js";
 import { DescriptorBehavior } from "../../src/behavior/definitions/descriptor/DescriptorBehavior.js";
 import { PumpConfigurationAndControlServer } from "../../src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlServer.js";
+import { CommissioningBehavior } from "../../src/behavior/system/commissioning/CommissioningBehavior.js";
 import { AttestationCertificateManager } from "../../src/certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "../../src/certificate/CertificationDeclarationManager.js";
 import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
 import { PumpConfigurationAndControl } from "../../src/cluster/definitions/PumpConfigurationAndControlCluster.js";
 import { DnsCodec, DnsMessage, DnsRecordType } from "../../src/codec/DnsCodec.js";
+import { CrashedDependenciesError } from "../../src/common/Lifecycle.js";
 import { Crypto } from "../../src/crypto/Crypto.js";
 import { Key, PrivateKey } from "../../src/crypto/Key.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
+import { LightSensorDevice } from "../../src/endpoint/definitions/device/LightSensorDevice.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { PumpDevice } from "../../src/endpoint/definitions/device/PumpDevice.js";
 import { AggregatorEndpoint } from "../../src/endpoint/definitions/system/AggregatorEndpoint.js";
+import { EndpointBehaviorsError, EndpointPartsError } from "../../src/endpoint/errors.js";
+import { Environment } from "../../src/environment/Environment.js";
 import { FabricManager } from "../../src/fabric/FabricManager.js";
 import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
 import { ServerNode } from "../../src/node/ServerNode.js";
@@ -49,44 +55,99 @@ describe("ServerNode", () => {
         commissionForFabricNumber = undefined;
     });
 
-    it("starts and stops and emits correct lifecycle changes", async () => {
-        const node = new MockServerNode();
+    describe("emits correct lifecycle changes", () => {
+        function instrument(node: ServerNode) {
+            const changes = new Array<[string, string?]>();
 
-        const changes = new Array<[string, string?]>();
-
-        node.lifecycle.changed.on((type, endpoint) => {
-            changes.push([type, endpoint.toString()]);
-        });
-
-        node.lifecycle.online.on(() => {
-            node.env.runtime.cancel();
-        });
-
-        for (const event of ["online", "offline", "ready", "treeReady"] as const) {
-            node.lifecycle[event].on(() => {
-                changes.push([event]);
+            node.lifecycle.changed.on((type, endpoint) => {
+                changes.push([type, endpoint.toString()]);
             });
+
+            for (const event of ["online", "offline", "ready", "partsReady"] as const) {
+                node.lifecycle[event].on(() => {
+                    changes.push([event]);
+                });
+            }
+
+            return changes;
         }
 
-        await node.add(OnOffLightDevice);
+        it("with part at startup", async () => {
+            const node = new MockServerNode({ parts: [OnOffLightDevice] });
 
-        await MockTime.resolve(node.run());
+            const changes = instrument(node);
 
-        expect(changes).deep.equals([
-            ["ready", "node0"],
-            ["ready"],
-            ["installed", "node0.?"],
-            ["idAssigned", "node0.part0"],
-            ["numberAssigned", "node0.part0"],
-            ["treeReady", "node0.part0"],
-            ["treeReady", "node0"],
-            ["treeReady"],
-            ["ready", "node0.part0"],
-            ["online"],
-            ["offline"],
-            ["destroyed", "node0.part0"],
-            ["destroyed", "node0"],
-        ]);
+            await node.start();
+            await node.close();
+
+            expect(changes).deep.equals([
+                ["ready", "node0"],
+                ["ready"],
+                ["installed", "node0.?"],
+                ["idAssigned", "node0.part0"],
+                ["numberAssigned", "node0.part0"],
+                ["ready", "node0.part0"],
+                ["partsReady", "node0.part0"],
+                ["partsReady", "node0"],
+                ["partsReady"],
+                ["online"],
+                ["offline"],
+                ["destroyed", "node0.part0"],
+                ["destroyed", "node0"],
+            ]);
+        });
+
+        it("with part added before online", async () => {
+            const node = new MockServerNode({});
+
+            const changes = instrument(node);
+
+            await node.add(OnOffLightDevice);
+            await node.start();
+            await node.close();
+
+            expect(changes).deep.equals([
+                ["ready", "node0"],
+                ["ready"],
+                ["partsReady", "node0"],
+                ["partsReady"],
+                ["installed", "node0.?"],
+                ["idAssigned", "node0.part0"],
+                ["numberAssigned", "node0.part0"],
+                ["ready", "node0.part0"],
+                ["partsReady", "node0.part0"],
+                ["online"],
+                ["offline"],
+                ["destroyed", "node0.part0"],
+                ["destroyed", "node0"],
+            ]);
+        });
+
+        it("with part added after online", async () => {
+            const node = new MockServerNode({});
+
+            const changes = instrument(node);
+
+            await node.start();
+            await node.add(OnOffLightDevice);
+            await node.close();
+
+            expect(changes).deep.equals([
+                ["ready", "node0"],
+                ["ready"],
+                ["partsReady", "node0"],
+                ["partsReady"],
+                ["online"],
+                ["installed", "node0.?"],
+                ["idAssigned", "node0.part0"],
+                ["numberAssigned", "node0.part0"],
+                ["ready", "node0.part0"],
+                ["partsReady", "node0.part0"],
+                ["offline"],
+                ["destroyed", "node0.part0"],
+                ["destroyed", "node0"],
+            ]);
+        });
     });
 
     it("announces and expires correctly", async () => {
@@ -156,11 +217,7 @@ describe("ServerNode", () => {
     it("commissions", async () => {
         const { node } = await commission();
 
-        node.cancel();
-
-        if (node.lifecycle.isOnline) {
-            await MockTime.resolve(node.lifecycle.offline);
-        }
+        await MockTime.resolve(node.cancel());
 
         await node.close();
     });
@@ -234,12 +291,6 @@ describe("ServerNode", () => {
         });
         expect(commissioningServer2CertificateProviderCalled).equals(true);
 
-        node.cancel();
-
-        if (node.lifecycle.isOnline) {
-            await MockTime.resolve(node.lifecycle.offline);
-        }
-
         await node.close();
     });
 
@@ -268,13 +319,52 @@ describe("ServerNode", () => {
         if (node.lifecycle.isOnline) {
             await MockTime.resolve(node.lifecycle.offline);
         }
-
         // ...then go back online
         await MockTime.resolve(node.lifecycle.online);
 
         await commission(node);
 
         await node.close();
+    });
+
+    async function testFactoryReset(mode: "online" | "offline-after-commission" | "offline") {
+        let node: MockServerNode;
+        if (mode !== "offline") {
+            ({ node } = await commission());
+        } else {
+            node = await MockServerNode.createOnline({ online: false });
+        }
+
+        if (mode === "offline-after-commission") {
+            await node.cancel();
+        }
+
+        await node.factoryReset();
+
+        // Confirm previous online state is resumed
+        expect(node.lifecycle.isOnline).equals(mode === "online");
+
+        // Confirm basic state information is present
+        expect(node.stateOf(BasicInformationBehavior).vendorName).equals("Matter.js Test Vendor");
+
+        // Confirm pairing codes are available
+        const pairingCodes = node.stateOf(CommissioningBehavior).pairingCodes;
+        expect(typeof pairingCodes).equals("object");
+        expect(typeof pairingCodes.manualPairingCode).equals("string");
+
+        await node.close();
+    }
+
+    it("factory resets when offline after commission", async () => {
+        await testFactoryReset("offline-after-commission");
+    });
+
+    it("factory resets when online after commission", async () => {
+        await testFactoryReset("online");
+    });
+
+    it("factory resets when offline without commission", async () => {
+        await testFactoryReset("offline");
     });
 
     it("commissions twice", async () => {
@@ -304,12 +394,6 @@ describe("ServerNode", () => {
         expect(lastCommissionedFabricIndex).equals(2);
         expect(lastFabricsCount).equals(2);
 
-        node.cancel();
-
-        if (node.lifecycle.isOnline) {
-            await MockTime.resolve(node.lifecycle.offline);
-        }
-
         await node.close();
     });
 
@@ -336,10 +420,71 @@ describe("ServerNode", () => {
         expect(node.stateOf(DescriptorBehavior).partsList).deep.equals([aggregator.number, light.number, pump.number]);
         expect(aggregator.stateOf(DescriptorBehavior).partsList).deep.equals([light.number, pump.number]);
 
-        expect(light.stateOf(DescriptorBehavior).serverList).deep.equals([3, 4, 98, 6, 29]);
+        expect(light.stateOf(DescriptorBehavior).serverList).deep.equals([3, 4, 6, 29]);
         expect(pump.stateOf(DescriptorBehavior).serverList).deep.equals([6, 3, 512, 29]);
 
         await node.close();
+    });
+
+    describe("crashes gracefully", () => {
+        const badNodeEnv = new Environment("test");
+        badNodeEnv.vars.set("behaviors.basicInformation.version", "not a number");
+
+        const badEndpointEnv = new Environment("test");
+        badEndpointEnv.vars.set("behaviors.illuminancemeasurement.diet", "duck food");
+
+        describe("during behavior error on creation", () => {
+            it("from root behavior error", async () => {
+                await expect(
+                    MockServerNode.create(MockServerNode.RootEndpoint, { environment: badNodeEnv }),
+                ).rejectedWith(EndpointBehaviorsError);
+            });
+
+            it("from behavior error on child during node create", async () => {
+                await expect(
+                    MockServerNode.create(MockServerNode.RootEndpoint, {
+                        environment: badEndpointEnv,
+                        parts: [new Endpoint(LightSensorDevice)],
+                    }),
+                ).rejectedWith(EndpointPartsError);
+            });
+
+            it("from behavior on child after node create", async () => {
+                const node = await MockServerNode.create(MockServerNode.RootEndpoint, { environment: badEndpointEnv });
+                await expect(node.add(new Endpoint(LightSensorDevice))).rejectedWith(EndpointBehaviorsError);
+            });
+        });
+
+        describe("when coming online", () => {
+            it("from root behavior error", async () => {
+                await expect(
+                    MockServerNode.createOnline({
+                        config: { type: MockServerNode.RootEndpoint, environment: badNodeEnv },
+                        device: undefined,
+                    }),
+                ).rejectedWith(EndpointBehaviorsError, "Behaviors have errors");
+            });
+
+            it("from behavior error on child during startup", async () => {
+                await expect(
+                    MockServerNode.createOnline({
+                        config: { type: MockServerNode.RootEndpoint, environment: badEndpointEnv, id: "foo" },
+                        device: LightSensorDevice,
+                    }),
+                ).rejectedWith(EndpointBehaviorsError, "Behaviors have errors");
+            });
+
+            it("from behavior error on child added after startup", async () => {
+                const node = await MockServerNode.createOnline({
+                    config: { type: MockServerNode.RootEndpoint, environment: badEndpointEnv },
+                    device: undefined,
+                });
+                await expect(node.add(LightSensorDevice)).rejectedWith(
+                    CrashedDependenciesError,
+                    "Behaviors have errors",
+                );
+            });
+        });
     });
 });
 

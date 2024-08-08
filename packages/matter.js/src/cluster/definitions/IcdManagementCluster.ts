@@ -31,6 +31,43 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace IcdManagement {
     /**
+     * These are optional features supported by IcdManagementCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 9.17.4
+     */
+    export enum Feature {
+        /**
+         * CheckInProtocolSupport (CIP)
+         *
+         * When this feature is supported, the device shall support all the associated commands and attributes to
+         * properly support the Check-In Protocol.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 9.17.4.1
+         */
+        CheckInProtocolSupport = "CheckInProtocolSupport",
+
+        /**
+         * UserActiveModeTrigger (UAT)
+         *
+         * This feature is supported if and only if the device has a user active mode trigger.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 9.17.4.2
+         */
+        UserActiveModeTrigger = "UserActiveModeTrigger",
+
+        /**
+         * LongIdleTimeSupport (LITS)
+         *
+         * This feature is supported if and only the device is a Long Idle Time ICD.
+         *
+         * NOTE In this version of the specification, the support for the feature is provisional.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 9.17.4.3
+         */
+        LongIdleTimeSupport = "LongIdleTimeSupport"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Core} § 9.17.5.2
      */
     export const TlvMonitoringRegistration = TlvObject({
@@ -459,43 +496,6 @@ export namespace IcdManagement {
             stayActiveRequest: Command(0x3, TlvStayActiveRequest, 0x4, TlvStayActiveResponse)
         }
     });
-
-    /**
-     * These are optional features supported by IcdManagementCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 9.17.4
-     */
-    export enum Feature {
-        /**
-         * CheckInProtocolSupport (CIP)
-         *
-         * When this feature is supported, the device shall support all the associated commands and attributes to
-         * properly support the Check-In Protocol.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.4.1
-         */
-        CheckInProtocolSupport = "CheckInProtocolSupport",
-
-        /**
-         * UserActiveModeTrigger (UAT)
-         *
-         * This feature is supported if and only if the device has a user active mode trigger.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.4.2
-         */
-        UserActiveModeTrigger = "UserActiveModeTrigger",
-
-        /**
-         * LongIdleTimeSupport (LITS)
-         *
-         * This feature is supported if and only the device is a Long Idle Time ICD.
-         *
-         * NOTE In this version of the specification, the support for the feature is provisional.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 9.17.4.3
-         */
-        LongIdleTimeSupport = "LongIdleTimeSupport"
-    }
 
     /**
      * These elements and properties are present in all IcdManagement clusters.

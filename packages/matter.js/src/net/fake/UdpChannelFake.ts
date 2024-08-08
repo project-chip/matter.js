@@ -7,7 +7,7 @@
 import { Listener } from "../../common/TransportInterface.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { NetworkError } from "../Network.js";
-import { UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
+import { MAX_UDP_MESSAGE_SIZE, UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
 import { NetworkFake } from "./NetworkFake.js";
 import { FAKE_INTERFACE_NAME, SimulatedNetwork } from "./SimulatedNetwork.js";
 
@@ -17,7 +17,7 @@ export class UdpChannelFake implements UdpChannel {
         { listeningAddress, listeningPort, netInterface, type }: UdpChannelOptions,
     ) {
         const { ipV4, ipV6 } = network.getIpMac(netInterface ?? FAKE_INTERFACE_NAME);
-        const localAddress = type === "udp4" ? ipV4[0] : ipV6[0] ?? ipV4[0];
+        const localAddress = type === "udp4" ? ipV4[0] : (ipV6[0] ?? ipV4[0]);
         if (localAddress === undefined) {
             throw new NetworkError("No matching IP on the specified interface");
         }
@@ -27,6 +27,7 @@ export class UdpChannelFake implements UdpChannel {
     private readonly netListeners = new Array<Listener>();
     private readonly simulatedNetwork = SimulatedNetwork.get();
     private readonly listeningPort: number;
+    readonly maxPayloadSize = MAX_UDP_MESSAGE_SIZE;
 
     constructor(
         private readonly localAddress: string,

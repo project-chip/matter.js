@@ -8,8 +8,8 @@ import { AccessLevel } from "../cluster/Cluster.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { SubjectId } from "../datatype/SubjectId.js";
-import { DataModelPath } from "../endpoint/DataModelPath.js";
 import { Access } from "../model/aspects/index.js";
+import { DataModelPath } from "../model/definitions/DataModelPath.js";
 import { ElementTag } from "../model/index.js";
 import { ValueModel } from "../model/models/index.js";
 import { StatusCode } from "../protocol/interaction/StatusCode.js";
@@ -271,7 +271,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                 }
 
                 if (location?.owningFabric && location.owningFabric !== session.fabric) {
-                    throw new WriteError(
+                    throw new ReadError(
                         location,
                         "Permission denied: Owning/accessing fabric mismatch",
                         StatusCode.UnsupportedAccess,
@@ -291,7 +291,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                 return false;
             }
 
-            if (session.fabricFiltered && location?.owningFabric && location.owningFabric !== session.fabric) {
+            if (location?.owningFabric && location.owningFabric !== session.fabric) {
                 return false;
             }
 

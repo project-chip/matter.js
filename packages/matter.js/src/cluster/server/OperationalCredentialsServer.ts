@@ -16,14 +16,14 @@ import { CertificateError } from "../../certificate/CertificateManager.js";
 import { MatterFabricInvalidAdminSubjectError } from "../../common/FailsafeContext.js";
 import { MatterFabricConflictError } from "../../common/FailsafeTimer.js";
 import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
-import { tryCatch } from "../../common/TryCatchHandler.js";
 import { ValidationError } from "../../common/ValidationError.js";
+import { CryptoVerifyError } from "../../crypto/Crypto.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { PublicKeyError } from "../../fabric/Fabric.js";
 import { FabricTableFullError } from "../../fabric/FabricManager.js";
 import { Logger } from "../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
-import { NoAssociatedFabricError, assertSecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession } from "../../session/SecureSession.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
@@ -74,9 +74,7 @@ export const OperationalCredentialsClusterHandler: (
     };
 
     const assureCertification = async () => {
-        if (!cert().construction.ready) {
-            return cert().construction;
-        }
+        await cert().construction;
     };
 
     return {
@@ -209,6 +207,7 @@ export const OperationalCredentialsClusterHandler: (
                         debugText: error.message,
                     };
                 } else if (
+                    error instanceof CryptoVerifyError ||
                     error instanceof CertificateError ||
                     error instanceof ValidationError ||
                     error instanceof UnexpectedDataError
@@ -317,10 +316,28 @@ export const OperationalCredentialsClusterHandler: (
             return session.context.getFabrics().length;
         },
 
-        trustedRootCertificatesAttributeGetter: ({ session, isFabricFiltered }) => {
-            if (session === undefined || !session.isSecure) return []; // ???
-            const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
-            return fabrics.map(fabric => fabric.rootCert);
+        trustedRootCertificatesAttributeGetter: ({ session }) => {
+            if (session === undefined || !session.isSecure) {
+                logger.debug(`trustedRootCertificatesAttributeGetter: session not set or not secure ${!!session}`);
+                return [];
+            } // ???
+            if (!session.isSecure)
+                throw new MatterFlowError("addOperationalCert should be called on a secure session.");
+
+            const rootCerts = session.context.getFabrics().map(fabric => fabric.rootCert);
+
+            const device = session.context;
+            if (device.isFailsafeArmed()) {
+                const failsafeContext = device.failsafeContext;
+                const temporaryRootCert = failsafeContext.rootCert;
+                if (temporaryRootCert !== undefined) {
+                    logger.debug(`Add temporary trusted root certificate to the list.`);
+                    rootCerts.push(temporaryRootCert);
+                } else {
+                    logger.debug(`No temporary trusted root certificate to be added.`);
+                }
+            }
+            return rootCerts;
         },
 
         currentFabricIndexAttributeGetter: ({ session }) => {
@@ -332,13 +349,8 @@ export const OperationalCredentialsClusterHandler: (
         updateNoc: async ({ request: { nocValue, icacValue }, attributes: { nocs, fabrics }, session }) => {
             assertSecureSession(session);
 
-            tryCatch(
-                () => session.associatedFabric,
-                NoAssociatedFabricError,
-                () => {
-                    throw new StatusResponseError("No associated fabric existing", StatusCode.UnsupportedAccess);
-                },
-            );
+            // Assert associated fabric is present
+            session.associatedFabric;
 
             const device = session.context;
 
@@ -394,6 +406,7 @@ export const OperationalCredentialsClusterHandler: (
             } catch (error) {
                 logger.info("building fabric for update failed", error);
                 if (
+                    error instanceof CryptoVerifyError ||
                     error instanceof CertificateError ||
                     error instanceof ValidationError ||
                     error instanceof UnexpectedDataError
@@ -415,14 +428,7 @@ export const OperationalCredentialsClusterHandler: (
         updateFabricLabel: async ({ request: { label }, attributes: { fabrics }, session }) => {
             assertSecureSession(session, "updateOperationalCert should be called on a secure session.");
 
-            const fabric = tryCatch(
-                () => session.associatedFabric,
-                NoAssociatedFabricError,
-                () => {
-                    throw new StatusResponseError("No associated fabric existing", StatusCode.UnsupportedAccess);
-                },
-            );
-
+            const fabric = session.associatedFabric;
             const currentFabricIndex = fabric.fabricIndex;
             const device = session.context;
             const conflictingLabelFabric = device
@@ -476,7 +482,13 @@ export const OperationalCredentialsClusterHandler: (
             };
         },
 
-        addTrustedRootCertificate: async ({ request: { rootCaCertificate }, session }) => {
+        addTrustedRootCertificate: async ({
+            request: { rootCaCertificate },
+            attributes: { trustedRootCertificates },
+            session,
+        }) => {
+            assertSecureSession(session);
+
             const failsafeContext = session.context.failsafeContext;
 
             if (failsafeContext.hasRootCert) {
@@ -488,7 +500,7 @@ export const OperationalCredentialsClusterHandler: (
 
             if (failsafeContext.fabricIndex !== undefined) {
                 throw new StatusResponseError(
-                    `Can not add trusted root certificates after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
+                    `Cannot add trusted root certificates after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
                     StatusCode.ConstraintError,
                 );
             }
@@ -498,6 +510,7 @@ export const OperationalCredentialsClusterHandler: (
             } catch (error) {
                 logger.info("setting root certificate failed", error);
                 if (
+                    error instanceof CryptoVerifyError ||
                     error instanceof CertificateError ||
                     error instanceof ValidationError ||
                     error instanceof UnexpectedDataError
@@ -506,6 +519,8 @@ export const OperationalCredentialsClusterHandler: (
                 }
                 throw error;
             }
+
+            trustedRootCertificates.updated(session);
         },
     };
 };

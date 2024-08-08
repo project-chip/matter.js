@@ -104,21 +104,27 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         // Read pbkdfRequest and send pbkdfResponse
         const {
             requestPayload,
-            request: { random: peerRandom, sessionParams, passcodeId, hasPbkdfParameters, sessionId: peerSessionId },
+            request: {
+                initiatorRandom,
+                initiatorSessionParams,
+                passcodeId,
+                hasPbkdfParameters,
+                initiatorSessionId: peerSessionId,
+            },
         } = await messenger.readPbkdfParamRequest();
         if (passcodeId !== DEFAULT_PASSCODE_ID) {
             throw new UnexpectedDataError(`Unsupported passcode ID ${passcodeId}.`);
         }
 
-        const sessionId = await server.getNextAvailableSessionId(); // Responder Session Id
-        const random = Crypto.getRandom();
+        const responderSessionId = await server.getNextAvailableSessionId(); // Responder Session Id
+        const responderRandom = Crypto.getRandom();
 
         const responsePayload = await messenger.sendPbkdfParamResponse({
-            peerRandom,
-            random,
-            sessionId,
-            sessionParams,
+            initiatorRandom,
+            responderRandom,
+            responderSessionId,
             pbkdfParameters: hasPbkdfParameters ? undefined : this.pbkdfParameters,
+            responderSessionParams: server.sessionParameters, // responder session parameters
         });
 
         // Process pake1 and send pake2
@@ -136,7 +142,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
 
         // All good! Creating the secure PASE session
         await server.sessionManager.createSecureSession({
-            sessionId,
+            sessionId: responderSessionId,
             fabric: undefined,
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
             peerSessionId,
@@ -144,9 +150,9 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             salt: new ByteArray(0),
             isInitiator: false,
             isResumption: false,
-            sessionParameters: sessionParams,
+            peerSessionParameters: initiatorSessionParams,
         });
-        logger.info(`Session ${sessionId} created with ${messenger.getChannelName()}.`);
+        logger.info(`Session ${responderSessionId} created with ${messenger.getChannelName()}.`);
 
         await messenger.sendSuccess();
         await messenger.close();

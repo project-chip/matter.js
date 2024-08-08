@@ -284,7 +284,7 @@ export const MediaPlayback = Cluster({
 
                 Field({
                     name: "AudioAdvanceUnmuted", id: 0x8, type: "bool", conformance: "AA", constraint: "desc",
-                    default: true,
+                    default: false,
 
                     details: "This field shall indicate whether audio is unmuted by the player due to a FF or REW command. This " +
                         "field is only meaningful when the PlaybackSpeed is present and not equal to 0 (paused) or 1 (normal " +
@@ -365,7 +365,7 @@ export const MediaPlayback = Cluster({
             xref: { document: "cluster", section: "6.10.7.7" },
 
             children: [Field({
-                name: "AudioAdvanceUnmuted", id: 0x0, type: "bool", conformance: "AA", default: true,
+                name: "AudioAdvanceUnmuted", id: 0x0, type: "bool", conformance: "AA", default: false,
                 details: "This field shall indicate whether audio should be unmuted by the player during rewind." +
                     "\n" +
                     "A value of true does not guarantee that audio can be heard by the user since the speaker may be " +
@@ -394,7 +394,7 @@ export const MediaPlayback = Cluster({
             xref: { document: "cluster", section: "6.10.7.8" },
 
             children: [Field({
-                name: "AudioAdvanceUnmuted", id: 0x0, type: "bool", conformance: "AA", default: true,
+                name: "AudioAdvanceUnmuted", id: 0x0, type: "bool", conformance: "AA", default: false,
                 details: "This field shall indicate whether audio should be unmuted by the player during fast forward." +
                     "\n" +
                     "A value of true does not guarantee that audio can be heard by the user since the speaker may be " +

@@ -28,16 +28,16 @@ import {
 } from "./AttributeServer.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
-import { EventServer } from "./EventServer.js";
+import { FabricSensitiveEventServer } from "./EventServer.js";
 
 const logger = Logger.get("AccessControlClusterServer");
 
 export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof AccessControlCluster> = () => {
     let accessControlEntryChangedEvent:
-        | EventServer<AccessControl.AccessControlEntryChangedEvent, SyncStorage>
+        | FabricSensitiveEventServer<AccessControl.AccessControlEntryChangedEvent, SyncStorage>
         | undefined = undefined;
     let accessControlExtensionChangedEvent:
-        | EventServer<AccessControl.AccessControlExtensionChangedEvent, SyncStorage>
+        | FabricSensitiveEventServer<AccessControl.AccessControlExtensionChangedEvent, SyncStorage>
         | undefined = undefined;
 
     return {

@@ -49,10 +49,12 @@ export namespace Specification {
     /**
      * The default specification revision for Matter.js.
      */
-    export const REVISION = "1.3";
+    export const REVISION = "1.3.0.1";
 
     /**
      * Binary version of specification revision defined by Basic Information Cluster.
+     *
+     * Currently spec says least significant octet is "reserved", so we don't stick the .1 into it.
      */
     export const SPECIFICATION_VERSION = 0x01030000;
 
@@ -64,5 +66,5 @@ export namespace Specification {
     /**
      * Interaction model revision associated with the default revision of Matter.
      */
-    export const INTERACTION_MODEL_REVISION = 11; // For now still Matter 1.2, change to 12 when relevant features are included
+    export const INTERACTION_MODEL_REVISION = 12;
 }

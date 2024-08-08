@@ -232,6 +232,7 @@ const OnOffDevice = isSocket
 let RootEndpoint = ServerNode.RootEndpoint.with(TestGeneralDiagnosticsServer);
 
 let wifiOrThreadAdded = false;
+let threadAdded = false;
 if (Ble.enabled) {
     // matter.js will create a Ethernet-only device by default when ut comes to Network Commissioning Features.
     // To offer e.g. a "Wi-Fi only device" (or any other combination) we need to override the Network Commissioning
@@ -245,6 +246,7 @@ if (Ble.enabled) {
     } else if (environment.vars.has("ble.thread.fake")) {
         RootEndpoint = RootEndpoint.with(DummyThreadNetworkCommissioningServer);
         wifiOrThreadAdded = true;
+        threadAdded = true;
     }
 } else {
     RootEndpoint = RootEndpoint.with(
@@ -297,6 +299,9 @@ const server = await ServerNode.create(RootEndpoint, {
         networks: [{ networkId: networkId, connected: !wifiOrThreadAdded }],
         scanMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
         connectMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
+        supportedWifiBands: wifiOrThreadAdded && !threadAdded ? [NetworkCommissioning.WiFiBand["2G4"]] : undefined,
+        supportedThreadFeatures: wifiOrThreadAdded && threadAdded ? { isFullThreadDevice: true } : undefined,
+        threadVersion: wifiOrThreadAdded && threadAdded ? 4 : undefined, // means: Thread 1.3
     },
     myFancyFunctionality: {
         myFancyValue: 0,
@@ -381,7 +386,7 @@ logEndpoint(EndpointServer.forEndpoint(server));
  * node enters his online state. Alternatively, we could also use `await server.run()` which
  * resolves when the node goes offline again, but we want to execute code afterwards, so we use start() here
  */
-await server.bringOnline();
+await server.start();
 
 console.log("Initial Fabrics", server.state.operationalCredentials.fabrics);
 
@@ -429,7 +434,7 @@ if (!server.lifecycle.isCommissioned) {
 }
 
 /**
- * To correctly tear down the now we can use server[Symbol.asyncDispose]().
+ * To correctly tear down the server we can use server.close().
  */
 process.on("SIGINT", () => {
     // Clean up on CTRL-C

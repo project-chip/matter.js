@@ -6,14 +6,18 @@
 
 import { MatterDevice } from "../../../src/MatterDevice.js";
 import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
+import { OnOffServer } from "../../../src/behavior/definitions/on-off/OnOffServer.js";
 import { NetworkServer } from "../../../src/behavior/system/network/NetworkServer.js";
 import { AccessControl } from "../../../src/cluster/definitions/AccessControlCluster.js";
 import { BasicInformation } from "../../../src/cluster/definitions/BasicInformationCluster.js";
 import { NetworkCommissioning } from "../../../src/cluster/definitions/NetworkCommissioningCluster.js";
+import { OnOff } from "../../../src/cluster/definitions/OnOffCluster.js";
 import { OperationalCredentials } from "../../../src/cluster/definitions/OperationalCredentialsCluster.js";
+import { Status } from "../../../src/cluster/globals/Status.js";
 import { Message, SessionType } from "../../../src/codec/MessageCodec.js";
 import { AttributeId } from "../../../src/datatype/AttributeId.js";
 import { ClusterId } from "../../../src/datatype/ClusterId.js";
+import { CommandId } from "../../../src/datatype/CommandId.js";
 import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
 import { FabricId } from "../../../src/datatype/FabricId.js";
 import { FabricIndex } from "../../../src/datatype/FabricIndex.js";
@@ -24,11 +28,16 @@ import { OnOffLightDevice } from "../../../src/endpoint/definitions/device/OnOff
 import { Fabric, FabricBuilder } from "../../../src/fabric/Fabric.js";
 import { FabricManager } from "../../../src/fabric/FabricManager.js";
 import { AcceptedCommandList } from "../../../src/model/standard/elements/AcceptedCommandList.js";
+import { GeneratedCommandList } from "../../../src/model/standard/elements/GeneratedCommandList.js";
+import { FeatureMap } from "../../../src/model/standard/elements/index.js";
 import { ExchangeManager } from "../../../src/protocol/ExchangeManager.js";
 import { MessageExchange } from "../../../src/protocol/MessageExchange.js";
 import { InteractionServerMessenger, MessageType } from "../../../src/protocol/interaction/InteractionMessenger.js";
 import {
     TlvDataReport,
+    TlvInvokeRequest,
+    TlvInvokeResponseData,
+    TlvInvokeResponseForSend,
     TlvReadRequest,
     TlvStatusResponse,
     TlvSubscribeRequest,
@@ -145,6 +154,44 @@ async function performRead(
     return result.attributeReportsPayload?.[0]?.attributeData?.payload;
 }
 
+const BarelyMockedMessenger = {
+    sendStatus: _code => {},
+    sendDataReport: async (_report, _forFabricFilteredRead) => {},
+    send: async (_type, _message) => {},
+    close: async () => {},
+} as InteractionServerMessenger;
+
+const BarelyMockedMessage = {
+    packetHeader: { sessionType: SessionType.Unicast },
+} as Message;
+
+async function performInvoke(
+    node: MockServerNode,
+    fabric: Fabric,
+    request: TypeFromSchema<typeof TlvInvokeRequest>["invokeRequests"][number],
+    responder: (value: TypeFromSchema<typeof TlvInvokeResponseData>) => void,
+) {
+    const { exchange, interactionServer } = await connect(node, fabric);
+
+    await interactionServer.handleInvokeRequest(
+        exchange,
+        {
+            invokeRequests: [request],
+            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            suppressResponse: false,
+            timedRequest: false,
+        },
+        {
+            ...BarelyMockedMessenger,
+            send: async (_type, message) => {
+                const response = TlvInvokeResponseForSend.decode(message).invokeResponses[0];
+                responder(TlvInvokeResponseData.decodeTlv(response));
+            },
+        } as InteractionServerMessenger,
+        BarelyMockedMessage,
+    );
+}
+
 async function performSubscribe(
     node: MockServerNode,
     fabric: Fabric,
@@ -152,19 +199,7 @@ async function performSubscribe(
 ) {
     const { exchange, interactionServer } = await connect(node, fabric);
 
-    await interactionServer.handleSubscribeRequest(
-        exchange,
-        request,
-        {
-            sendStatus: _code => {},
-            sendDataReport: async _report => {},
-            send: async (_type, _message) => {},
-            close: async () => {},
-        } as InteractionServerMessenger,
-        {
-            packetHeader: { sessionType: SessionType.Unicast },
-        } as Message,
-    );
+    await interactionServer.handleSubscribeRequest(exchange, request, BarelyMockedMessenger, BarelyMockedMessage);
 }
 
 // This is AccessControl.AccessControlEntryStruct but not sure how to remove fabric index from payload so just
@@ -192,14 +227,6 @@ async function readAcls(node: MockServerNode, fabric: Fabric, isFabricFiltered: 
         endpointId: EndpointNumber(0),
         clusterId: AccessControl.Cluster.id,
         attributeId: AttributeId(AccessControl.Cluster.attributes.acl.id),
-    });
-}
-
-async function readCommandList(node: MockServerNode, cluster: number, endpoint = 1) {
-    return await performRead(node, await createFabric(node, 1), false, {
-        endpointId: EndpointNumber(endpoint),
-        clusterId: ClusterId(cluster),
-        attributeId: AttributeId(AcceptedCommandList.id),
     });
 }
 
@@ -240,11 +267,11 @@ describe("ClusterServerBacking", () => {
         const fabric2Acls = await readAcls(node, fabric2, true);
         expect(fabric2Acls).deep.equals([{ privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 2 }]);
 
-        const allAcls = await readAcls(node, fabric1, false);
+        const allAclsReadAsFabric1 = await readAcls(node, fabric1, false);
 
-        expect(allAcls).deep.equals([
+        expect(allAclsReadAsFabric1).deep.equals([
             { privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 1 },
-            { privilege: 5, authMode: 2, subjects: null, targets: null, fabricIndex: 2 },
+            { privilege: undefined, authMode: undefined, subjects: undefined, targets: undefined, fabricIndex: 2 },
         ]);
 
         await node.close();
@@ -308,18 +335,16 @@ describe("ClusterServerBacking", () => {
         expect(report?.attributeReports?.length).equals(2);
         expect(report?.eventReports).equals(undefined);
 
-        // Confirm the first report is for Fabrics
-        const fabricsReport = report?.attributeReports?.[0]?.attributeData;
+        // Confirm the second report is for Fabrics (because of async-ness is a bit delayed)
+        const fabricsReport = report?.attributeReports?.[1]?.attributeData;
         expect(fabricsReport?.path).deep.equals(FABRICS_PATH);
-        expect(
-            (
-                fabricsReport?.data &&
-                OperationalCredentials.Cluster.attributes.fabrics.schema.decodeTlv(fabricsReport?.data)
-            )?.map(({ fabricIndex }) => fabricIndex),
-        ).deep.equals([1, 2]);
+        const decodedFabrics =
+            fabricsReport?.data &&
+            OperationalCredentials.Cluster.attributes.fabrics.schema.decodeTlv(fabricsReport?.data);
+        expect(decodedFabrics?.map(({ fabricIndex }) => fabricIndex)).deep.equals([1, 2]);
 
-        // Confirm the second report is for CommissionedFabrics
-        const commissionedFabricsReport = report?.attributeReports?.[1]?.attributeData;
+        // Confirm the first report is for CommissionedFabrics
+        const commissionedFabricsReport = report?.attributeReports?.[0]?.attributeData;
         expect(commissionedFabricsReport?.path).deep.equals(COMMISSIONED_FABRICS_PATH);
         expect(
             commissionedFabricsReport?.data &&
@@ -348,26 +373,103 @@ describe("ClusterServerBacking", () => {
         await node.close();
     });
 
-    describe("AcceptedCommandList", () => {
-        it("indicates support only for implemented methods", async () => {
-            class MyServer extends WifiCommissioningServer {
-                override scanNetworks(): NetworkCommissioning.ScanNetworksResponse {
-                    return {
-                        networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-                    };
-                }
+    it("indicates support only for implemented commands", async () => {
+        class MyServer extends WifiCommissioningServer {
+            override scanNetworks(): NetworkCommissioning.ScanNetworksResponse {
+                return {
+                    networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                };
             }
+        }
 
-            const MyDevice = OnOffLightDevice.with(MyServer);
+        const MyDevice = OnOffLightDevice.with(MyServer);
 
-            const node = await MockServerNode.createOnline({ device: MyDevice });
+        const node = await MockServerNode.createOnline({ device: MyDevice });
 
-            const commands = await readCommandList(node, NetworkCommissioning.Cluster.id, 1);
+        const fabric = await createFabric(node, 1);
 
-            expect(commands).deep.equals([
-                NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks
-                    .requestId,
-            ]);
+        const commands = await performRead(node, fabric, false, {
+            endpointId: EndpointNumber(1),
+            clusterId: ClusterId(NetworkCommissioning.Cluster.id),
+            attributeId: AttributeId(AcceptedCommandList.id),
         });
+
+        expect(commands).deep.equals([
+            NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks.requestId,
+        ]);
+
+        const commandResponds = await performRead(node, fabric, false, {
+            endpointId: EndpointNumber(1),
+            clusterId: ClusterId(NetworkCommissioning.Cluster.id),
+            attributeId: AttributeId(GeneratedCommandList.id),
+        });
+
+        expect(commandResponds).deep.equals([
+            NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks.responseId,
+        ]);
+    });
+
+    it("publishes correct feature map", async () => {
+        const MyServer = OnOffServer.with("Lighting");
+
+        const MyDevice = OnOffLightDevice.with(MyServer);
+
+        const node = await MockServerNode.createOnline({ device: MyDevice });
+
+        const featureMap = await performRead(node, await createFabric(node, 1), false, {
+            endpointId: EndpointNumber(1),
+            clusterId: ClusterId(OnOff.Cluster.id),
+            attributeId: AttributeId(FeatureMap.id),
+        });
+
+        expect(() => {
+            OnOff.Cluster.attributes.featureMap.schema.validate(featureMap);
+        }).not.throws();
+
+        expect({ ...featureMap }).deep.equals({
+            lighting: true,
+            deadFrontBehavior: false,
+            offOnly: false,
+        });
+    });
+
+    it("invokes", async () => {
+        let received: undefined | OnOff.OffWithEffectRequest;
+        let sent: undefined | TypeFromSchema<typeof TlvInvokeResponseData>;
+
+        class MyServer extends OnOffServer.with("Lighting") {
+            override offWithEffect(request: OnOff.OffWithEffectRequest) {
+                received = request;
+            }
+        }
+
+        const MyDevice = OnOffLightDevice.with(MyServer);
+
+        const node = await MockServerNode.createOnline({ device: MyDevice });
+
+        await performInvoke(
+            node,
+            await createFabric(node, 1),
+            {
+                commandPath: {
+                    endpointId: EndpointNumber(1),
+                    clusterId: OnOff.Cluster.id,
+                    commandId: CommandId(OnOff.LightingComponent.commands.offWithEffect.requestId),
+                },
+
+                commandFields: OnOff.TlvOffWithEffectRequest.encodeTlv({
+                    effectIdentifier: 0,
+                    effectVariant: 1,
+                }),
+            },
+            response => {
+                sent = response;
+            },
+        );
+
+        expect(received).deep.equals({ effectIdentifier: 0, effectVariant: 1 });
+
+        // Nice, three nested fields called "status"
+        expect(sent?.status?.status.status).deep.equals(Status.Success);
     });
 });

@@ -6,4 +6,12 @@
 
 import { TimeNode } from "@project-chip/matter-node.js/time";
 
-export class TimeReactNative extends TimeNode {}
+export class TimeReactNative extends TimeNode {
+    set utility(_value: boolean) {
+        // Do nothing, Override utility function because React Native do not have ref/unref functionality
+    }
+
+    get utility(): boolean {
+        return false; // React Native do not have ref/unref functionality
+    }
+}

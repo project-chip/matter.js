@@ -104,7 +104,7 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
             return node;
         }
 
-        node.start();
+        await node.start();
 
         if (!node.lifecycle.isOnline) {
             await node.lifecycle.online;
@@ -143,7 +143,12 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
             hasActiveTimedInteraction: () => false,
             hasExpiredTimedInteraction: () => false,
             session: await this.createSession(options),
+            maxPayloadSize: 1000,
         } as unknown as MessageExchange<any>;
+    }
+
+    override async cancel() {
+        await MockTime.resolve(super.cancel());
     }
 
     override async close() {

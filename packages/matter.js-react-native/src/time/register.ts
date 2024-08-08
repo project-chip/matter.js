@@ -15,9 +15,6 @@ try {
         /* Do nothing */
     });
 } catch (error) {
-    if (error instanceof NoProviderError) {
-        Time.get = singleton(() => new TimeReactNative());
-    } else {
-        throw error;
-    }
+    NoProviderError.accept(error);
+    Time.get = singleton(() => new TimeReactNative());
 }

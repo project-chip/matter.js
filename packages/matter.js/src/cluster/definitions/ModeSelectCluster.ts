@@ -28,6 +28,23 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ModeSelect {
     /**
+     * These are optional features supported by ModeSelectCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 1.9.4
+     */
+    export enum Feature {
+        /**
+         * OnOff (DEPONOFF)
+         *
+         * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
+         * endpoint. See OnMode for more information.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 1.9.4.1
+         */
+        OnOff = "OnOff"
+    }
+
+    /**
      * A Semantic Tag is meant to be interpreted by the client for the purpose the cluster serves.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 1.9.5.1
@@ -139,23 +156,6 @@ export namespace ModeSelect {
             onMode: WritableAttribute(0x5, TlvNullable(TlvUInt8), { persistent: true, default: null })
         }
     });
-
-    /**
-     * These are optional features supported by ModeSelectCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 1.9.4
-     */
-    export enum Feature {
-        /**
-         * OnOff (DEPONOFF)
-         *
-         * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
-         * endpoint. See OnMode for more information.
-         *
-         * @see {@link MatterSpecification.v13.Cluster} § 1.9.4.1
-         */
-        OnOff = "OnOff"
-    }
 
     /**
      * These elements and properties are present in all ModeSelect clusters.

@@ -15,6 +15,7 @@ import {
     BLE_MAXIMUM_BTP_MTU,
     BLE_MINIMUM_ATT_MTU,
     BTP_ACK_TIMEOUT_MS,
+    BTP_CONN_IDLE_TIMEOUT,
     BTP_MAXIMUM_WINDOW_SIZE,
     BTP_SEND_ACK_TIMEOUT_MS,
 } from "./BleConsts.js";
@@ -45,6 +46,10 @@ export class BtpSessionHandler {
         this.btpSendAckTimeoutTriggered(),
     );
     private isActive = true;
+    private idleTimeout = Time.getTimer("Central Device Idle Timer", BTP_CONN_IDLE_TIMEOUT, async () => {
+        logger.info("Central Device Connection Idle Timer expired, closing BTP session");
+        await this.close();
+    });
 
     /** Factory method to create a new BTPSessionHandler from a received handshake request */
     static async createFromHandshakeRequest(
@@ -57,7 +62,12 @@ export class BtpSessionHandler {
         // Decode handshake request
         const handshakeRequest = BtpCodec.decodeBtpHandshakeRequest(handshakeRequestPayload);
 
-        const { versions, attMtu: handshakeMtu, clientWindowSize } = handshakeRequest;
+        const {
+            versions,
+            attMtu: handshakeMtu, // Number excluding 3 header bytes
+            clientWindowSize,
+        } = handshakeRequest;
+        logger.debug(`Received BTP handshake request:`, Diagnostic.dict({ maxDataSize, ...handshakeRequest }));
 
         // Verify handshake request and choose the highest supported version for both parties
         const version = BTP_SUPPORTED_VERSIONS.find(version => versions.includes(version));
@@ -68,7 +78,6 @@ export class BtpSessionHandler {
 
         let attMtu = BLE_MINIMUM_ATT_MTU;
         if (maxDataSize !== undefined) {
-            maxDataSize += 3; // This is without the 3 bytes GATT PDU header
             if (maxDataSize > BLE_MINIMUM_ATT_MTU) {
                 if (handshakeMtu <= BLE_MINIMUM_ATT_MTU) {
                     attMtu = Math.min(maxDataSize, BLE_MAXIMUM_BTP_MTU);
@@ -78,7 +87,7 @@ export class BtpSessionHandler {
             }
         }
 
-        const fragmentSize = attMtu - 3; // Each GATT PDU used by the BTP protocol introduces 3 byte header overhead.
+        const fragmentSize = attMtu; // The attMtu is the maximum size of a single ATT packet, so use as fragmentSize
         const windowSize = Math.min(BTP_MAXIMUM_WINDOW_SIZE, clientWindowSize);
 
         // Generate and send out handshake response
@@ -88,13 +97,13 @@ export class BtpSessionHandler {
             windowSize,
         });
 
-        logger.debug(`Sending BTP handshake response: ${handshakeResponse.toHex()}`);
         logger.debug(
-            `Sending BTP packet: ${Diagnostic.dict({
+            `Sending BTP handshake response:`,
+            Diagnostic.dict({
                 version,
                 attMtu,
                 windowSize,
-            })}`,
+            }),
         );
 
         const btpSession = new BtpSessionHandler(
@@ -120,8 +129,10 @@ export class BtpSessionHandler {
     ) {
         const handshakeRequest = BtpCodec.decodeBtpHandshakeResponsePayload(handshakeResponsePayload);
 
+        logger.debug("Handshake request", Diagnostic.dict(handshakeRequest));
+
         const { version, attMtu: handshakeMtu, windowSize } = handshakeRequest;
-        const fragmentSize = handshakeMtu - 3; // Each GATT PDU used by the BTP protocol introduces 3 byte header overhead.
+        const fragmentSize = Math.min(handshakeMtu, BLE_MAXIMUM_BTP_MTU);
 
         return new BtpSessionHandler(
             "central",
@@ -146,7 +157,7 @@ export class BtpSessionHandler {
      * @param handleMatterMessagePayload Callback to handle a Matter message payload
      */
     constructor(
-        role: "central" | "peripheral",
+        private readonly role: "central" | "peripheral",
         btpVersion: number,
         private readonly fragmentSize: number,
         private readonly clientWindowSize: number,
@@ -287,10 +298,9 @@ export class BtpSessionHandler {
         } catch (error) {
             logger.error(`Error while handling incoming BTP data: ${error}`);
             await this.close();
-            if (!(error instanceof BtpProtocolError)) {
-                // If no BTP protocol error, rethrow
-                throw error;
-            }
+
+            // If no BTP protocol error, rethrow
+            BtpProtocolError.accept(error);
         }
     }
 
@@ -386,6 +396,13 @@ export class BtpSessionHandler {
             if (!this.ackReceiveTimer.isRunning) {
                 this.ackReceiveTimer.start(); // starts the timer
             }
+            if (this.role === "central") {
+                // Restart idle timer when sending unique data
+                if (this.idleTimeout.isRunning) {
+                    this.idleTimeout.stop();
+                }
+                this.idleTimeout.start();
+            }
 
             // Remove the message from the queue if it is the last segment
             if (isEndingSegment) {
@@ -406,6 +423,7 @@ export class BtpSessionHandler {
     public async close() {
         this.sendAckTimer.stop();
         this.ackReceiveTimer.stop();
+        this.idleTimeout.stop();
         if (this.isActive) {
             logger.debug(`Closing BTP session`);
             this.isActive = false;

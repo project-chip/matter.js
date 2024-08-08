@@ -6,6 +6,7 @@
 
 import colors from "ansi-colors";
 import { Progress } from "../util/progress.js";
+import { FailureDetail } from "./failure-detail.js";
 
 export type Stats = {
     total: number;
@@ -19,21 +20,14 @@ export interface Reporter {
     beginTest(name: string, stats?: Stats): void;
     failTest(name: string, detail: FailureDetail): void;
     endRun(stats?: Stats): void;
-    failRun(message: string, stack?: string): void;
+    failRun(detail: FailureDetail): void;
 }
 
-export type FailureDetail = {
-    message: string;
-    diff?: string;
-    stack?: string;
-    logs?: string;
-};
-
-export type Failure = {
+export interface Failure {
     suite: string[];
     test: string;
     detail: FailureDetail;
-};
+}
 
 export abstract class ProgressReporter implements Reporter {
     private run = "";
@@ -48,7 +42,7 @@ export abstract class ProgressReporter implements Reporter {
         this.suite = [];
         this.failures = [];
         if (!supportsSuites) {
-            this.progress.update(this.summarize(stats));
+            this.progress.update(this.#summarize(stats));
         }
     }
 
@@ -56,12 +50,12 @@ export abstract class ProgressReporter implements Reporter {
         this.suite = name;
     }
 
-    beginTest(_name: string, stats?: Stats): void {
-        // Only update once per suite to keep the line count down in GH action logs
-        const title = this.suite[0];
+    beginTest(name: string, stats?: Stats): void {
+        // If not a TTY, only update once per suite to keep the line count down for e.g. GH action logs
+        const title = process.stdout.isTTY ? this.#formatName(this.suite, name) : this.suite[0];
         if (this.lastTitle !== title) {
             this.lastTitle = title;
-            this.progress.update(this.summarize(stats), title);
+            this.progress.update(this.#summarize(stats), title);
         }
     }
 
@@ -73,20 +67,20 @@ export abstract class ProgressReporter implements Reporter {
         });
     }
 
-    abstract failRun(message: string, stack?: string): void;
+    abstract failRun(detail: FailureDetail): void;
 
     endRun(stats?: Stats): void {
         if (this.failures.length) {
-            this.progress.failure(this.summarize(stats));
-            this.dumpFailures();
+            this.progress.failure(this.#summarize(stats));
+            this.#dumpFailures();
         } else if (stats && !stats.complete) {
             this.progress.failure("No tests found");
         } else {
-            this.progress.success(this.summarize(stats));
+            this.progress.success(this.#summarize(stats));
         }
     }
 
-    private summarize(stats?: Stats) {
+    #summarize(stats?: Stats) {
         let statStr;
         if (stats) {
             const complete = colors.dim(`${stats.complete}/${stats.total}`);
@@ -99,26 +93,18 @@ export abstract class ProgressReporter implements Reporter {
         return `${colors.bold(this.run)}${statStr}`;
     }
 
-    private dumpFailures() {
+    #dumpFailures() {
         for (let i = 0; i < this.failures.length; i++) {
             const failure = this.failures[i];
-            const index = colors.redBright(`Failure ${colors.bold((i + 1).toString())} of ${this.failures.length}`);
-            process.stdout.write(`\n${index} ${failure.suite.join(" ➡ ")} ➡ ${colors.bold(failure.test)}\n\n`);
+            const index = `Failure ${colors.bold((i + 1).toString())} of ${this.failures.length}`;
+            process.stdout.write(`\n${index} ${this.#formatName(failure.suite, failure.test)}\n\n`);
 
-            process.stdout.write(`  ${failure.detail.message}\n\n`);
-
-            if (failure.detail.diff) {
-                process.stdout.write(`      ${failure.detail.diff.replace(/\n/gm, "\n      ")}\n\n`);
-            }
-
-            if (failure.detail.stack) {
-                process.stdout.write(`  ${colors.dim(failure.detail.stack.replace(/\n/gm, "\n  "))}\n\n`);
-            }
-
-            if (failure.detail.logs) {
-                process.stdout.write(`  ${failure.detail.logs.replace(/\n/gm, "\n  ")}\n\n`);
-            }
+            FailureDetail.dump(failure.detail, "  ");
         }
+    }
+
+    #formatName(suite: string[], test: string) {
+        return `${suite.join(" ➡ ")} ➡ ${colors.bold(test)}`;
     }
 }
 
@@ -152,7 +138,7 @@ export class ConsoleProxyReporter implements Reporter {
         proxy("failTest", name, detail);
     }
 
-    failRun(message: string, stack?: string) {
-        proxy("failRun", message, stack);
+    failRun(detail: FailureDetail) {
+        proxy("failRun", detail);
     }
 }

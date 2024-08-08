@@ -6,7 +6,7 @@
 
 import { ImplementationError } from "../../../../common/MatterError.js";
 import { FabricIndex } from "../../../../datatype/FabricIndex.js";
-import { Access, AttributeModel, ElementTag, Metatype, ValueModel } from "../../../../model/index.js";
+import { Access, ElementTag, Metatype, ValueModel } from "../../../../model/index.js";
 import { GeneratedClass } from "../../../../util/GeneratedClass.js";
 import { camelize } from "../../../../util/String.js";
 import { isObject } from "../../../../util/Type.js";
@@ -33,11 +33,7 @@ export function StructManager(owner: RootSupervisor, schema: Schema): ValueSuper
     let hasFabricIndex = false;
 
     // Scan the schema and configure each member (field or attribute) as a property
-    for (const member of schema.members) {
-        if (AttributeModel.isGlobal(member) || member.isDeprecated) {
-            continue;
-        }
-
+    for (const member of schema.activeMembers) {
         const name = camelize(member.name);
 
         const { access, descriptor } = configureProperty(owner, member);
@@ -50,8 +46,13 @@ export function StructManager(owner: RootSupervisor, schema: Schema): ValueSuper
         }
     }
 
+    let name = schema.name;
+    if (schema.tag === ElementTag.Cluster && !name.endsWith("$State")) {
+        name = `${name}$State`;
+    }
+
     const Wrapper = GeneratedClass({
-        name: schema.tag === ElementTag.Cluster ? `${schema.name}$State` : `${schema.name}`,
+        name,
 
         initialize(this: Wrapper, ref: Val.Reference, session: ValueSupervisor.Session) {
             // Only objects are acceptable
@@ -211,10 +212,11 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
                 }
 
                 if (!this[SESSION].acceptInvalid && validate) {
-                    // Note: We validate fully for nested structs but *not* for the current struct.  This is because choice
-                    // conformance may be violated temporarily as individual fields change.
+                    // Note: We validate fully for nested structs but *not* for the current struct.  This is because
+                    // choice conformance may be violated temporarily as individual fields change.
                     //
-                    // Also, validating fully would require us to validate across all properties for every property write.
+                    // Also, validating fully would require us to validate across all properties for every property
+                    // write.
                     //
                     // I think this is OK for now.  If it becomes an issue we'll probably want to wire in a separate
                     // validation step that is performed on commit when choice conformance is in play.
@@ -224,8 +226,8 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
                             siblings: struct,
                         });
                     } catch (e) {
-                        // Undo our change on error.  Rollback will take care of this when transactional but this handles
-                        // the cases of 1.) no transaction, and 2.) error is caught within transaction
+                        // Undo our change on error.  Rollback will take care of this when transactional but this
+                        // handles the cases of 1.) no transaction, and 2.) error is caught within transaction
                         target[name] = oldValue;
 
                         throw e;

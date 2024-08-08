@@ -11,11 +11,7 @@ import { ValueModel } from "./ValueModel.js";
 
 export class DatatypeModel extends ValueModel implements DatatypeElement {
     override tag: DatatypeElement.Tag = DatatypeElement.Tag;
-    override id?: undefined;
-
-    override get members() {
-        return this.children;
-    }
+    declare id: undefined;
 
     get definesFields() {
         switch (this.effectiveMetatype) {

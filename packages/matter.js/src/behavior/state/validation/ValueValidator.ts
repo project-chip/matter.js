@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../../endpoint/DataModelPath.js";
+import { DataModelPath } from "../../../model/definitions/DataModelPath.js";
 import { AttributeModel, ClusterModel, Metatype, ValueModel } from "../../../model/index.js";
+import { FeatureMap } from "../../../model/standard/elements/FeatureMap.js";
 import { StatusCode } from "../../../protocol/interaction/StatusCode.js";
 import { camelize } from "../../../util/String.js";
 import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
@@ -54,6 +55,10 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
             validator = createSimpleValidator(schema, assertNumeric);
             break;
 
+        case Metatype.boolean:
+            validator = createSimpleValidator(schema, assertBoolean);
+            break;
+
         case Metatype.string:
             validator = createSimpleValidator(schema, assertString);
             break;
@@ -70,18 +75,23 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
             validator = createListValidator(schema, factory);
             break;
 
-        case Metatype.boolean:
         case Metatype.date:
         case Metatype.any:
             break;
 
         case undefined:
-            if (schema.type === undefined) {
+            const type = schema.effectiveType;
+            if (type === undefined) {
+                if (schema.isDisallowed) {
+                    // We do not need to validate types for disallowed members and the specification may not include
+                    // them
+                    break;
+                }
                 throw new SchemaImplementationError(DataModelPath(schema.path), `No type defined`);
             }
             throw new SchemaImplementationError(
                 DataModelPath(schema.path),
-                `Cannot determine metatype for type ${schema.type}`,
+                `Cannot determine metatype for type "${type}"`,
             );
 
         default:
@@ -115,7 +125,7 @@ function createNullValidator(
 }
 
 function createEnumValidator(schema: ValueModel): ValueSupervisor.Validate | undefined {
-    const valid = new Set(schema.members.map(member => member.id).filter(e => e !== undefined));
+    const valid = new Set(schema.activeMembers.map(member => member.id).filter(e => e !== undefined));
 
     const constraint = schema.effectiveConstraint;
     const constraintValidator = constraint.in
@@ -135,7 +145,7 @@ function createEnumValidator(schema: ValueModel): ValueSupervisor.Validate | und
 function createBitmapValidator(schema: ValueModel): ValueSupervisor.Validate | undefined {
     const fields = {} as Record<string, { schema: ValueModel; max: number }>;
 
-    for (const field of schema.members) {
+    for (const field of schema.activeMembers) {
         const constraint = field.effectiveConstraint;
         let max;
         if (typeof constraint.min === "number" && typeof constraint.max === "number") {
@@ -143,7 +153,13 @@ function createBitmapValidator(schema: ValueModel): ValueSupervisor.Validate | u
         } else {
             max = 1;
         }
-        fields[camelize(field.name)] = {
+        let name;
+        if (field?.parent?.id === FeatureMap.id) {
+            name = camelize(field.description ?? field.name);
+        } else {
+            name = camelize(field.name);
+        }
+        fields[name] = {
             schema: field,
             max,
         };
@@ -199,7 +215,7 @@ function createSimpleValidator(
 function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSupervisor.Validate | undefined {
     const validators = {} as Record<string, ValueSupervisor.Validate>;
 
-    for (const field of schema.members) {
+    for (const field of schema.activeMembers) {
         // Skip deprecated, and global attributes we currently handle in lower levels
         if (field.isDeprecated || AttributeModel.isGlobal(field)) {
             continue;

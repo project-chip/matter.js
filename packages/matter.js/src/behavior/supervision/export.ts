@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "../../endpoint/DataModelPath.js";
+export * from "../../model/definitions/DataModelPath.js";
 export * from "./BehaviorSupervisor.js";
 export * from "./RootSupervisor.js";
 export * from "./Schema.js";

@@ -62,7 +62,7 @@ export namespace FlowMeasurement {
              */
             tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 }), { default: 0 })
         }
-    })
+    });
 
     /**
      * This cluster provides an interface to flow measurement functionality, including configuration and provision of

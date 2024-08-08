@@ -271,8 +271,6 @@ export namespace DiagnosticLogs {
      * once for the Node. The Node SHOULD also implement the BDX Initiator and BDX Sender roles as defined in the BDX
      * Protocol.
      *
-     * NOTE Support for Diagnostic Logs cluster is provisional.
-     *
      * @see {@link MatterSpecification.v13.Core} § 11.11
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}

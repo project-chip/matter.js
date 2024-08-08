@@ -61,7 +61,7 @@ export class ModeSelectServerLogic extends ModeSelectServerBase {
     }
 
     override changeToMode({ newMode }: ModeSelect.ChangeToModeRequest) {
-        this.#assertModeValue("NewMode", newMode); // Generates INVALID_COMMAND on errorx
+        this.#assertModeValue("NewMode", newMode); // Generates INVALID_COMMAND on error
 
         this.state.currentMode = newMode;
     }

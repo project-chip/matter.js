@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { tryCatch } from "../common/TryCatchHandler.js";
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationOutOfBoundsError, validatorOf } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
-import { fromMEI } from "./ManufacturerExtensibleIdentifier.js";
+import { Mei } from "./ManufacturerExtensibleIdentifier.js";
 
 /**
  * A Device type ID is a 32-bit number that defines the type of the device.
@@ -22,24 +21,15 @@ export function DeviceTypeId(deviceTypeId: number, validate = true): DeviceTypeI
     if (!validate) {
         return deviceTypeId as DeviceTypeId;
     }
-    const { typeSuffix } = fromMEI(deviceTypeId);
+    const { typeSuffix } = Mei.fromMei(deviceTypeId);
     if (typeSuffix >= 0x0000 && typeSuffix <= 0xbfff) {
         return deviceTypeId as DeviceTypeId;
     }
-    throw new ValidationError(`Invalid device type ID: ${deviceTypeId}`);
+    throw new ValidationOutOfBoundsError(`Invalid device type ID: ${deviceTypeId}`);
 }
 
 export namespace DeviceTypeId {
-    export const isValid = (deviceTypeId: number): deviceTypeId is DeviceTypeId => {
-        return tryCatch(
-            () => {
-                DeviceTypeId(deviceTypeId);
-                return true;
-            },
-            ValidationError,
-            false,
-        );
-    };
+    export const isValid = validatorOf(DeviceTypeId);
 }
 
 /** Tlv schema for a Device type ID. */

@@ -5,10 +5,15 @@
  */
 
 import { GeneralDiagnostics } from "../../../cluster/definitions/GeneralDiagnosticsCluster.js";
+import { ImplementationError } from "../../../common/MatterError.js";
+import { CommandId } from "../../../datatype/CommandId.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
+import { Logger } from "../../../log/Logger.js";
 import { FieldElement } from "../../../model/elements/FieldElement.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
+import { TlvInvokeResponse } from "../../../protocol/interaction/InteractionProtocol.js";
+import { INTERACTION_MODEL_REVISION } from "../../../protocol/interaction/InteractionServer.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { Time, Timer } from "../../../time/Time.js";
 import { ByteArray } from "../../../util/ByteArray.js";
@@ -19,10 +24,28 @@ import { NetworkServer } from "../../system/network/NetworkServer.js";
 import { NetworkCommissioningServer } from "../network-commissioning/NetworkCommissioningServer.js";
 import { GeneralDiagnosticsBehavior } from "./GeneralDiagnosticsBehavior.js";
 
+const logger = Logger.get("GeneralDiagnosticsServer");
+
+// Enable DataModelTest feature by default because we use MaxPathsPerInvoke > 1 by default
+const Base = GeneralDiagnosticsBehavior.with(GeneralDiagnostics.Feature.DataModelTest);
+
 /**
  * This is the default server implementation of GeneralDiagnosticsBehavior.
+ *
+ * The implementation provides convenience methods to register and clear hardware, radio, and network faults and to
+ * handle test Event triggers.
+ *
+ * To handle test Event triggers please override the triggerTestEvent method. If these test events are used in
+ * certification please also set the EnableKey in the enhanced state as `deviceTestEnableKey`.
+ *
+ * To register or clear hardware, radio, and network faults, please use the provided convenience methods:
+ * * registerHardwareFault and clearHardwareFault
+ * * registerRadioFault and clearRadioFault
+ * * registerNetworkFault and clearNetworkFault
+ * If you want to send events when faults are registered or cleared you need to enable these events when the Root
+ * Endpoint gets initialized.
  */
-export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
+export class GeneralDiagnosticsServer extends Base {
     protected declare internal: GeneralDiagnosticsServer.Internal;
     declare state: GeneralDiagnosticsServer.State;
 
@@ -36,6 +59,11 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
     override initialize() {
         if (this.state.testEventTriggersEnabled === undefined) {
             this.state.testEventTriggersEnabled = false;
+        } else if (this.state.testEventTriggersEnabled) {
+            if (this.state.deviceTestEnableKey.every(byte => byte === 0)) {
+                throw new ImplementationError("Test event triggers are enabled but no deviceTestEnableKey is set.");
+            }
+            logger.warn("Test event triggers are enabled. Make sure to disable them in production.");
         }
 
         if (this.state.rebootCount === undefined) {
@@ -44,13 +72,10 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
             this.state.rebootCount++;
         }
 
-        // TODO with 1.3:
-        //   Check DataModelTest feature vs MaxPathsPerInvoke attribute of the Basic Information Cluster has a value > 1.
-
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
         if (lifecycle.online !== undefined) {
-            this.reactTo(lifecycle.online, this.#online);
+            this.reactTo(lifecycle.online, this.#online, { lock: true });
         }
 
         if (this.events.activeHardwareFaults$Changed !== undefined) {
@@ -64,18 +89,83 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
         }
     }
 
+    #validateTestEnabledKey(enableKey: ByteArray) {
+        if (enableKey.every(byte => byte === 0)) {
+            throw new StatusResponseError("Invalid test enable key, all zeros", StatusCode.ConstraintError);
+        }
+        enableKey.forEach((byte, index) => {
+            if (byte !== this.state.deviceTestEnableKey[index]) {
+                throw new StatusResponseError("Invalid test enable key", StatusCode.ConstraintError);
+            }
+        });
+    }
+
     override testEventTrigger({ eventTrigger, enableKey }: GeneralDiagnostics.TestEventTriggerRequest) {
-        throw new StatusResponseError(
-            `Unsupported test event trigger ${enableKey.toHex()}/${eventTrigger}`,
-            StatusCode.InvalidCommand,
-        );
+        this.#validateTestEnabledKey(enableKey);
+
+        this.triggerTestEvent(eventTrigger);
+    }
+
+    protected triggerTestEvent(eventTrigger: number | bigint) {
+        throw new StatusResponseError(`Unsupported test event trigger ${eventTrigger}`, StatusCode.InvalidCommand);
     }
 
     override timeSnapshot() {
-        const time = Time.now().getTime();
+        const time = Time.nowMs();
         return {
-            systemTimeMs: time,
+            systemTimeMs: time - this.internal.bootUpTime,
             posixTimeMs: time,
+        };
+    }
+
+    override payloadTestRequest({
+        enableKey,
+        value,
+        count,
+    }: GeneralDiagnostics.PayloadTestRequest): GeneralDiagnostics.PayloadTestResponse {
+        this.#validateTestEnabledKey(enableKey);
+
+        if (!this.state.testEventTriggersEnabled) {
+            throw new StatusResponseError("Test event triggers are disabled", StatusCode.ConstraintError);
+        }
+
+        const payload = new ByteArray(count).fill(value);
+
+        // In our case encoding is done completely on an upper layer, so we need to build a dummy single response to get the size
+        // Formal note: This is not 100% accurate and we might be some bytes to huge (moreChunkedMessages, commandRef)
+        // but near enough
+        const responseSize = TlvInvokeResponse.encode({
+            suppressResponse: false,
+            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            moreChunkedMessages: true,
+            invokeResponses: [
+                {
+                    command: {
+                        commandPath: {
+                            endpointId: this.endpoint.number,
+                            clusterId: GeneralDiagnostics.Complete.id,
+                            commandId: CommandId(0x04), // Hardcode for now
+                        },
+                        commandRef: 0,
+                        commandFields: GeneralDiagnostics.TlvPayloadTestResponse.encodeTlv({
+                            payload,
+                        }),
+                    },
+                },
+            ],
+        }).length;
+
+        const exchange = this.context.exchange;
+        if (exchange === undefined) {
+            throw new ImplementationError(`Illegal operation outside exchange context`);
+        }
+
+        if (responseSize > exchange.maxPayloadSize) {
+            throw new StatusResponseError("Response too large", StatusCode.ResourceExhausted);
+        }
+
+        return {
+            payload,
         };
     }
 
@@ -193,7 +283,7 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
         );
     }
 
-    #online() {
+    async #online() {
         this.events.bootReason.emit(
             { bootReason: this.state.bootReason ?? GeneralDiagnostics.BootReason.Unspecified },
             this.context,
@@ -209,7 +299,7 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
             this.callback(this.#updateTotalOperationalHoursCounter),
         ).start();
 
-        this.#updateNetworkList();
+        await this.#updateNetworkList();
     }
 
     #updateTotalOperationalHoursCounter() {
@@ -219,12 +309,12 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
         this.internal.lastTotalOperationalHoursCounterUpdateTime = now;
     }
 
-    #updateNetworkList() {
+    async #updateNetworkList() {
         const mdnsService = this.endpoint.env.get(MdnsService);
         const mdnsLimitedToNetworkInterfaces = mdnsService.limitedToNetInterface;
 
         const networkRuntime = this.endpoint.behaviors.internalsOf(NetworkServer).runtime;
-        const systemNetworkInterfaces = networkRuntime.networkInterfaces;
+        const systemNetworkInterfaces = await networkRuntime.getNetworkInterfaces();
 
         // Determine the network type for all interfaces based on the Network Commissioning Server on the root endpoint
         // TODO: Find a way if needed to handle devices connected with multiple technologies and report that correctly
@@ -299,9 +389,12 @@ export namespace GeneralDiagnosticsServer {
         lastTotalOperationalHoursTimer: Timer | undefined;
     }
 
-    export class State extends GeneralDiagnosticsBehavior.State {
+    export class State extends Base.State {
         /** Internal counter of the total operational hours, counted in seconds, updated every 5 minutes. */
         totalOperationalHoursCounter: number = 0;
+
+        /** The TestEnableKey set for this device for the test commands. Default means "not enabled"." */
+        deviceTestEnableKey = new ByteArray(16).fill(0);
 
         [Val.properties](endpoint: Endpoint, _session: ValueSupervisor.Session) {
             return {
@@ -335,6 +428,7 @@ export namespace GeneralDiagnosticsServer {
     }
 
     export declare const ExtensionInterface: {
+        triggerTestEvent: (eventTrigger: number | bigint) => void;
         registerHardwareFault: (
             current: GeneralDiagnostics.HardwareFault[],
             previous: GeneralDiagnostics.HardwareFault[],

@@ -45,11 +45,17 @@ export class UdpInterface implements NetInterface {
 }
 
 class UdpConnection implements Channel<ByteArray> {
+    readonly isReliable = false;
+
     constructor(
         private readonly server: UdpChannel,
         private readonly peerAddress: string,
         private readonly peerPort: number,
     ) {}
+
+    get maxPayloadSize() {
+        return this.server.maxPayloadSize;
+    }
 
     send(data: ByteArray) {
         return this.server.send(this.peerAddress, this.peerPort, data);

@@ -13,10 +13,14 @@ import { ValueModel } from "./ValueModel.js";
 
 export class FieldModel extends PropertyModel implements FieldElement {
     override tag: FieldElement.Tag = FieldElement.Tag;
-    override id?: Mei;
+    declare id?: Mei;
 
     constructor(definition: FieldElement.Properties) {
         super(definition);
+    }
+
+    get fabricSensitive() {
+        return this.effectiveAccess.fabricSensitive;
     }
 
     /**

@@ -7,12 +7,12 @@
 import { MatterDevice } from "../../MatterDevice.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { ImplementationError, InternalError, MatterError } from "../../common/MatterError.js";
-import { tryCatch } from "../../common/TryCatchHandler.js";
 import { ValidationError } from "../../common/ValidationError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
-import { Endpoint as EndpointInterface } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
+import { AttributeModel, ClusterModel, DatatypeModel, MatterModel } from "../../model/index.js";
 import { FabricIndex } from "../../model/standard/elements/FabricIndex.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
@@ -21,10 +21,13 @@ import { Session } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
 import { MaybePromise } from "../../util/Promises.js";
+import { camelize } from "../../util/String.js";
 import { AccessLevel, Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
 import { ClusterDatasource } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("AttributeServer");
+
+const FabricIndexName = camelize(FabricIndex.name);
 
 /**
  * Thrown when an operation cannot complete because fabric information is
@@ -170,7 +173,7 @@ export abstract class BaseAttributeServer<T> {
                 )}. Restore to default ${Logger.toJSON(defaultValue)}`,
             );
             if (defaultValue === undefined) {
-                throw new ImplementationError(`Attribute value to initialize for ${name} can not be undefined.`);
+                throw new ImplementationError(`Attribute value to initialize for ${name} cannot be undefined.`);
             }
             this.validateWithSchema(defaultValue);
             this.value = defaultValue;
@@ -178,14 +181,19 @@ export abstract class BaseAttributeServer<T> {
         this.defaultValue = this.value;
     }
 
+    get hasFabricSensitiveData() {
+        return false;
+    }
+
     validateWithSchema(value: T) {
         try {
             this.schema.validate(value);
-        } catch (error) {
-            if (error instanceof ValidationError) {
-                error.message = `Validation error for attribute "${this.name}"${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}: ${error.message}`;
-            }
-            throw error;
+        } catch (e) {
+            ValidationError.accept(e);
+
+            // Handle potential error cases where a custom validator is used.
+            e.message = `Validation error for attribute "${this.name}"${e.fieldName !== undefined ? ` in field ${e.fieldName}` : ""}: ${e.message}`;
+            throw e;
         }
     }
 
@@ -314,7 +322,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
      */
     init(value: T | undefined) {
         if (value === undefined) {
-            throw new InternalError(`Can not initialize fixed attribute "${this.name}" with undefined value.`);
+            throw new InternalError(`Cannot initialize fixed attribute "${this.name}" with undefined value.`);
         }
         this.validateWithSchema(value);
         this.value = value;
@@ -476,7 +484,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
             value = this.getter(undefined, this.endpoint);
         }
         if (value === undefined) {
-            throw new InternalError(`Can not initialize attribute "${this.name}" with undefined value.`);
+            throw new InternalError(`Cannot initialize attribute "${this.name}" with undefined value.`);
         }
         this.validator(value, undefined, this.endpoint);
         this.value = value;
@@ -572,11 +580,16 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      */
     updated(session: SecureSession<MatterDevice>) {
         const oldValue = this.value ?? this.defaultValue;
-        this.value = tryCatch(
-            () => this.get(session, false),
-            NoAssociatedFabricError, // Handle potential error cases where the session does not have a fabric assigned.
-            this.value ?? this.defaultValue,
-        );
+        try {
+            this.value = this.get(session, false);
+        } catch (e) {
+            NoAssociatedFabricError.accept(e);
+
+            // Handle potential error cases where the session does not have a fabric assigned.
+            if (this.value === undefined) {
+                this.value = this.defaultValue;
+            }
+        }
         this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
 
@@ -727,6 +740,7 @@ export function genericFabricScopedAttributeSetter<T>(
 export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     private readonly isCustomGetter: boolean;
     private readonly isCustomSetter: boolean;
+    private readonly fabricSensitiveElementsToRemove = new Array<string>();
 
     constructor(
         id: AttributeId,
@@ -814,6 +828,69 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         );
         this.isCustomGetter = isCustomGetter;
         this.isCustomSetter = isCustomSetter;
+
+        this.#determineSensitiveFieldsToRemove();
+    }
+
+    #determineSensitiveFieldsToRemove() {
+        const clusterFromModel = MatterModel.standard.get(ClusterModel, this.cluster.id);
+        if (clusterFromModel === undefined) {
+            logger.debug(`${this.cluster.name}: Cluster for Fabric scoped element not found in Model, ignore`);
+            return;
+        }
+        const attributeFromModel = clusterFromModel.get(AttributeModel, this.id);
+        if (attributeFromModel === undefined) {
+            logger.debug(
+                `${this.cluster.name}.${this.id}: Attribute for Fabric scoped element not found in Model, ignore`,
+            );
+            return;
+        }
+        if (!attributeFromModel.fabricScoped) {
+            logger.debug(`${this.cluster.name}.${this.id}: Attribute is not Fabric scoped in model, ignore`);
+            return;
+        }
+        if (attributeFromModel.children.length !== 1) {
+            logger.debug(`${this.cluster.name}.${this.id}: Attribute has not exactly one child, ignore`);
+            return;
+        }
+        const type = attributeFromModel.children[0].type;
+        if (type === undefined) {
+            logger.debug(`${this.cluster.name}.${this.id}: Attribute field has no type, ignore`);
+            return;
+        }
+        const dataType = clusterFromModel.get(DatatypeModel, type);
+        if (dataType === undefined) {
+            logger.debug(`${this.cluster.name}.${this.id}: DataType ${type} not found in model, ignore`);
+            return;
+        }
+        dataType.children
+            .filter(field => field.fabricSensitive)
+            .forEach(field => this.fabricSensitiveElementsToRemove.push(camelize(field.name)));
+    }
+
+    override get hasFabricSensitiveData() {
+        return this.fabricSensitiveElementsToRemove.length > 0;
+    }
+
+    /**
+     * Sanitize the value of the attribute by removing fabric sensitive fields that do not belong to the
+     * associated fabric
+     */
+    sanitizeFabricSensitiveFields(value: T, associatedFabric?: Fabric) {
+        if (this.fabricSensitiveElementsToRemove.length && Array.isArray(value)) {
+            // Get the associated Fabric Index or uses -1 when no Fabric is associated because this value will
+            // never be in the struct
+            const associatedFabricIndex = associatedFabric?.fabricIndex ?? -1;
+            return value.map(data => {
+                if (data[FabricIndexName] !== associatedFabricIndex) {
+                    const result = { ...data };
+                    this.fabricSensitiveElementsToRemove.forEach(fieldName => delete result[fieldName]);
+                    return result;
+                }
+                return data;
+            });
+        }
+        return value;
     }
 
     /**
@@ -822,7 +899,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      */
     override init(value: T | undefined) {
         if (value !== undefined) {
-            throw new InternalError(`Can not initialize fabric scoped attribute "${this.name}" with a value.`);
+            throw new InternalError(`Cannot initialize fabric scoped attribute "${this.name}" with a value.`);
         }
     }
 
@@ -878,14 +955,14 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     /**
      * Set the value of the attribute locally for a fabric. This method should be used locally in the code and does not
      * include the ACL check.
-     * If a setter is defined this method can not be used!
+     * If a setter is defined this method cannot be used!
      * If a validator is defined the value is validated before it is stored.
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
     setLocalForFabric(value: T, fabric: Fabric) {
         if (this.isCustomSetter) {
             throw new FabricScopeError(
-                `Fabric scoped attribute "${this.name}" can not be set locally when a custom setter is defined.`,
+                `Fabric scoped attribute "${this.name}" cannot be set locally when a custom setter is defined.`,
             );
         }
         this.validator(value, undefined, this.endpoint);
@@ -911,11 +988,15 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      */
     updatedLocalForFabric(fabric: Fabric) {
         const oldValue = this.value ?? this.defaultValue;
-        this.value = tryCatch(
-            () => this.getLocalForFabric(fabric),
-            FabricScopeError, // Handle potential error cases where a custom getter is used.
-            this.value ?? this.defaultValue,
-        );
+        try {
+            this.value = this.getLocalForFabric(fabric);
+        } catch (e) {
+            FabricScopeError.accept(e);
+
+            if (this.value === undefined) {
+                this.value = this.defaultValue;
+            }
+        }
         this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
 
@@ -927,7 +1008,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     getLocalForFabric(fabric: Fabric): T {
         if (this.isCustomGetter) {
             throw new FabricScopeError(
-                `Fabric scoped attribute "${this.name}" can not be read locally when a custom getter is defined.`,
+                `Fabric scoped attribute "${this.name}" cannot be read locally when a custom getter is defined.`,
             );
         }
         return genericFabricScopedAttributeGetterFromFabric(fabric, this.cluster, this.name, this.defaultValue);

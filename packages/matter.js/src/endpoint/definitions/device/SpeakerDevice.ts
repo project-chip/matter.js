@@ -34,14 +34,14 @@ export interface SpeakerDevice extends Identity<typeof SpeakerDeviceDefinition> 
 
 export namespace SpeakerRequirements {
     /**
-     * The OnOff cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link OnOffServer} for convenience.
      */
     export const OnOffServer = BaseOnOffServer;
 
     /**
-     * The LevelControl cluster is required by the Matter specification
+     * The LevelControl cluster is required by the Matter specification.
      *
      * We provide this alias to the default implementation {@link LevelControlServer} for convenience.
      */

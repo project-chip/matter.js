@@ -47,7 +47,7 @@ export namespace WakeOnLan {
              */
             linkLocalAddress: OptionalFixedAttribute(0x1, TlvByteString)
         }
-    })
+    });
 
     /**
      * This cluster provides an interface for managing low power mode on a device that supports the Wake On LAN or Wake

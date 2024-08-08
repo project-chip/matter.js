@@ -5,7 +5,6 @@
  */
 
 import { Logger } from "../log/Logger.js";
-import { AsyncConstructable } from "./AsyncConstruction.js";
 
 const logger = Logger.get("Mutex");
 
@@ -59,7 +58,9 @@ export class Mutex implements PromiseLike<unknown> {
                 }
 
                 this.#cancel = cancel;
-                return this.initiateTask(task).finally((this.#cancel = undefined));
+                return this.initiateTask(task).finally(() => {
+                    this.#cancel = undefined;
+                });
             });
         }
     }
@@ -88,24 +89,12 @@ export class Mutex implements PromiseLike<unknown> {
     }
 
     /**
-     * Default error handling crashes the component if it is AsyncConstructable.  Otherwise the error is simply logged.
-     */
-    protected handleError(cause: any) {
-        const construction = (this.#owner as AsyncConstructable<any>).construction;
-        if (typeof construction?.crashed === "function") {
-            construction.crashed(cause);
-        } else {
-            logger.error(`Error in ${this.#owner} worker:`, cause);
-        }
-    }
-
-    /**
      * Execute a task immediately if it is a function.
      */
     protected async initiateTask(task: PromiseLike<unknown> | (() => PromiseLike<unknown>)) {
         if (typeof task === "function") {
             task = task();
         }
-        return Promise.resolve(task).catch(cause => this.handleError(cause));
+        return Promise.resolve(task).catch(cause => logger.error(`Error initializing ${this.#owner} worker:`, cause));
     }
 }

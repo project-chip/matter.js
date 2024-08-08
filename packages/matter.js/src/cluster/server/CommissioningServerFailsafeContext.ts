@@ -6,10 +6,11 @@
 
 import { FailsafeContext } from "../../common/FailsafeContext.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { Endpoint } from "../../device/Endpoint.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { asyncNew } from "../../util/AsyncConstruction.js";
+import { asyncNew } from "../../util/Construction.js";
 import { BasicInformation } from "../definitions/BasicInformationCluster.js";
 import { GeneralCommissioning } from "../definitions/GeneralCommissioningCluster.js";
 import { NetworkCommissioning } from "../definitions/NetworkCommissioningCluster.js";
@@ -19,18 +20,18 @@ import { OperationalCredentials } from "../definitions/OperationalCredentialsClu
  * {@link FailsafeContext} implementation for {@link EndpointInterface} API.
  */
 export class CommissioningServerFailsafeContext extends FailsafeContext {
-    #rootEndpoint: EndpointInterface;
+    #rootEndpoint: Endpoint;
     #storedNetworkClusterState = new Map<
         EndpointNumber,
         TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfo>[]
     >();
 
-    constructor(rootEndpoint: EndpointInterface, options: FailsafeContext.Options) {
+    constructor(rootEndpoint: Endpoint, options: FailsafeContext.Options) {
         super(options);
         this.#rootEndpoint = rootEndpoint;
     }
 
-    static async create(rootEndpoint: EndpointInterface, options: FailsafeContext.Options) {
+    static async create(rootEndpoint: Endpoint, options: FailsafeContext.Options) {
         return asyncNew(this, rootEndpoint, options);
     }
 
@@ -67,7 +68,7 @@ export class CommissioningServerFailsafeContext extends FailsafeContext {
         generalCommissioningCluster?.setBreadcrumbAttribute(0);
     }
 
-    async #storeEndpointState(endpoint: EndpointInterface) {
+    async #storeEndpointState(endpoint: Endpoint) {
         // TODO: When implementing Network clusters we somehow need to make sure that a "temporary" network
         //  configuration is not persisted to disk. The NetworkClusterHandlers need to make sure it is only persisted
         //  when the commissioning is completed.
@@ -80,7 +81,7 @@ export class CommissioningServerFailsafeContext extends FailsafeContext {
         }
     }
 
-    async #restoreEndpointState(endpoint: EndpointInterface) {
+    async #restoreEndpointState(endpoint: Endpoint) {
         const endpointId = endpoint.getNumber();
         const networkState = this.#storedNetworkClusterState.get(endpointId);
         if (networkState !== undefined) {

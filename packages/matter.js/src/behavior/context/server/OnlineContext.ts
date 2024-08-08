@@ -90,6 +90,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                 context = {
                     ...options,
                     session,
+                    exchange,
                     subject,
                     fabric,
                     transaction,

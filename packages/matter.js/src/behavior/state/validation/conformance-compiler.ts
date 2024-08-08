@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../../endpoint/DataModelPath.js";
+import { DataModelPath } from "../../../model/definitions/DataModelPath.js";
 import { Conformance, FeatureSet, FieldValue, Metatype, ValueModel } from "../../../model/index.js";
 import { camelize } from "../../../util/String.js";
 import { AccessControl } from "../../AccessControl.js";
@@ -538,7 +538,7 @@ export function astToFunction(
         mainValidator: ValueSupervisor.Validate | undefined,
     ): ValueSupervisor.Validate | undefined {
         // If there are no members we can't enforce anything
-        const members = schema.members;
+        const members = schema.activeMembers;
         if (!members.length) {
             return mainValidator;
         }

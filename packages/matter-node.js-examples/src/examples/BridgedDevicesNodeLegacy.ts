@@ -185,7 +185,7 @@ class BridgedDevice {
 
             const name = `OnOff ${onOffDevice instanceof OnOffPluginUnitDevice ? "Socket" : "Light"} ${i}`;
             aggregator.addBridgedDevice(onOffDevice, {
-                nodeLabel: name,
+                nodeLabel: name, // Main end user name for the device
                 productName: name,
                 productLabel: name,
                 serialNumber: `node-matter-${uniqueId}-${i}`,

@@ -69,7 +69,7 @@ export const AirQualitySensorDt = DeviceType({
             xref: { document: "device", section: "7.10.4" }
         }),
         Requirement({
-            name: "Pm2", id: 0x42a, conformance: "O", element: "serverCluster",
+            name: "Pm25ConcentrationMeasurement", id: 0x42a, conformance: "O", element: "serverCluster",
             xref: { document: "device", section: "7.10.4" }
         }),
         Requirement({

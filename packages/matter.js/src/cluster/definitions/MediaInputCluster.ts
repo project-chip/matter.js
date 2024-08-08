@@ -20,6 +20,20 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace MediaInput {
     /**
+     * These are optional features supported by MediaInputCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 6.9.4
+     */
+    export enum Feature {
+        /**
+         * NameUpdates (NU)
+         *
+         * Supports updates to the input names
+         */
+        NameUpdates = "NameUpdates"
+    }
+
+    /**
      * Input to the MediaInput renameInput command
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.9.7.4
@@ -135,20 +149,6 @@ export namespace MediaInput {
             renameInput: Command(0x3, TlvRenameInputRequest, 0x3, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
     });
-
-    /**
-     * These are optional features supported by MediaInputCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.9.4
-     */
-    export enum Feature {
-        /**
-         * NameUpdates (NU)
-         *
-         * Supports updates to the input names
-         */
-        NameUpdates = "NameUpdates"
-    }
 
     /**
      * These elements and properties are present in all MediaInput clusters.

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../endpoint/DataModelPath.js";
+import { DataModelPath } from "../../model/definitions/DataModelPath.js";
 import { AsyncObservable } from "../../util/Observable.js";
 import type { AccessControl } from "../AccessControl.js";
 import { ActionTracer } from "../context/ActionTracer.js";
@@ -62,6 +62,11 @@ export interface ValueSupervisor {
      * Apply changes.  Does not validate perform validation.
      */
     readonly patch: ValueSupervisor.Patch;
+
+    /**
+     * Convert a JS value to the appropriate JS type for the schema.
+     */
+    readonly cast: ValueSupervisor.Cast;
 }
 
 export namespace ValueSupervisor {
@@ -97,4 +102,6 @@ export namespace ValueSupervisor {
     export type Manage = (reference: Val.Reference, session: Session) => Val;
 
     export type Patch = (changes: Val.Collection, target: Val.Collection, path: DataModelPath) => Val;
+
+    export type Cast = (value: Val) => Val;
 }

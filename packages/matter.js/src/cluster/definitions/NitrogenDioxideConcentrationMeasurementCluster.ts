@@ -16,7 +16,7 @@ export namespace NitrogenDioxideConcentrationMeasurement {
         ...ConcentrationMeasurement.Base,
         id: 0x413,
         name: "NitrogenDioxideConcentrationMeasurement"
-    }
+    } as const;
 
     /**
      * @see {@link Cluster}
@@ -24,7 +24,7 @@ export namespace NitrogenDioxideConcentrationMeasurement {
     export const ClusterInstance = MutableCluster.ExtensibleOnly(Base);
 
     /**
-     * This alias specializes the semantics of {@link ConcentrationMeasurement.Cluster}.
+     * This alias specializes the semantics of {@link ConcentrationMeasurement.Base}.
      *
      * Per the Matter specification you cannot use {@link NitrogenDioxideConcentrationMeasurementCluster} without
      * enabling certain feature combinations. You must use the {@link with} factory method to obtain a working cluster.
@@ -40,7 +40,11 @@ export namespace NitrogenDioxideConcentrationMeasurement {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const CompleteInstance = MutableCluster({ ...ConcentrationMeasurement.Complete, id: 0x413 });
+    export const CompleteInstance = MutableCluster({
+        ...ConcentrationMeasurement.Complete,
+        id: 0x413,
+        name: "NitrogenDioxideConcentrationMeasurement"
+    });
 
     export interface Complete extends Identity<typeof CompleteInstance> {}
     export const Complete: Complete = CompleteInstance;

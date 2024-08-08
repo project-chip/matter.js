@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -18,7 +18,7 @@ export type CaseAuthenticatedTag = Branded<number, "CaseAuthenticatedTag">;
 
 export function CaseAuthenticatedTag(id: number): CaseAuthenticatedTag {
     if ((id & 0xffff) === 0) {
-        throw new ValidationError("CaseAuthenticatedTag version number must not be 0.");
+        throw new ValidationOutOfBoundsError("CaseAuthenticatedTag version number must not be 0.");
     }
     return id as CaseAuthenticatedTag;
 }
@@ -31,19 +31,19 @@ export namespace CaseAuthenticatedTag {
     export const increaseVersion = (tag: CaseAuthenticatedTag) => {
         const version = getVersion(tag);
         if (version === 0xffff) {
-            throw new ValidationError("CaseAuthenticatedTag version number must not exceed 0xffff.");
+            throw new ValidationOutOfBoundsError("CaseAuthenticatedTag version number must not exceed 0xffff.");
         }
         return CaseAuthenticatedTag(tag + 1);
     };
 
     export const validateNocTagList = (tags: CaseAuthenticatedTag[]) => {
         if (tags.length > 3) {
-            throw new ValidationError(`Too many CaseAuthenticatedTags (${tags.length}).`);
+            throw new ValidationOutOfBoundsError(`Too many CaseAuthenticatedTags (${tags.length}).`);
         }
         // Get only the tags: upper 16 bits are identifier value, lower 16 bits are tag version
         const tagIdentifierValues = new Set<number>(tags.map(cat => CaseAuthenticatedTag.getIdentifyValue(cat)));
         if (tagIdentifierValues.size !== tags.length) {
-            throw new ValidationError("CASEAuthenticatedTags field contains duplicate identifier values.");
+            throw new ValidationOutOfBoundsError("CASEAuthenticatedTags field contains duplicate identifier values.");
         }
     };
 }
@@ -63,7 +63,7 @@ class TlvCaseAuthenticatedTagSchema extends TlvWrapper<CaseAuthenticatedTag, num
 
         // verify that lower 16 bit are not 0
         if ((value & 0xffff) === 0) {
-            throw new ValidationError("CaseAuthenticatedTag version number must not be 0.");
+            throw new ValidationOutOfBoundsError("CaseAuthenticatedTag version number must not be 0.");
         }
     }
 }

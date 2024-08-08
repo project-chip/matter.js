@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationError } from "../common/ValidationError.js";
+import { ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -22,7 +22,7 @@ export function VendorId(vendorId: number, validate = true): VendorId {
     if (!validate || (vendorId >= 0 && vendorId <= 0xfff4)) {
         return vendorId as VendorId;
     }
-    throw new ValidationError(`Invalid vendor ID: ${vendorId}`);
+    throw new ValidationOutOfBoundsError(`Invalid vendor ID: ${vendorId}`);
 }
 
 export namespace VendorId {

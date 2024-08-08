@@ -65,7 +65,7 @@ export namespace RelativeHumidityMeasurement {
              */
             tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 }))
         }
-    })
+    });
 
     /**
      * This is a base cluster. The server cluster provides an interface to water content measurement functionality. The

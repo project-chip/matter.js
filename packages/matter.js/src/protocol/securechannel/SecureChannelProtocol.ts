@@ -12,6 +12,7 @@ import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { CaseServer } from "../../session/case/CaseServer.js";
 import { MaximumPasePairingErrorsReachedError, PaseServer } from "../../session/pase/PaseServer.js";
+import { StatusCode, StatusResponseError } from "../interaction/StatusCode.js";
 import {
     GeneralStatusCode,
     MessageType,
@@ -36,9 +37,13 @@ export class StatusReportOnlySecureChannelProtocol implements ProtocolHandler<an
                 await this.handleInitialStatusReport(exchange, message);
                 break;
             default:
-                throw new MatterFlowError(
-                    `Unexpected initial message on secure channel protocol: ${messageType.toString(16)}`,
-                );
+                // We silently ignore incoming Standalone Ack messages that we do not expect here
+                if (messageType !== MessageType.StandaloneAck) {
+                    throw new StatusResponseError(
+                        `Unexpected initial message on secure channel protocol: ${messageType.toString(16)}`,
+                        StatusCode.InvalidAction,
+                    );
+                }
         }
     }
 
@@ -115,12 +120,10 @@ export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol
                 try {
                     await this.paseCommissioner.onNewExchange(exchange);
                 } catch (error) {
-                    if (error instanceof MaximumPasePairingErrorsReachedError) {
-                        logger.info("Maximum number of PASE pairing errors reached, cancelling commissioning.");
-                        await this.commissioningCancelledCallback();
-                    } else {
-                        throw error;
-                    }
+                    MaximumPasePairingErrorsReachedError.accept(error);
+
+                    logger.info("Maximum number of PASE pairing errors reached, cancelling commissioning.");
+                    await this.commissioningCancelledCallback();
                 }
                 break;
             case MessageType.Sigma1:

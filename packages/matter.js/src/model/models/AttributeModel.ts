@@ -14,7 +14,11 @@ export const GLOBAL_IDS = new Set([0xfffd, 0xfffc, 0xfffb, 0xfffa, 0xfff9, 0xfff
 
 export class AttributeModel extends PropertyModel implements AttributeElement {
     override tag: AttributeElement.Tag = AttributeElement.Tag;
-    override id!: Mei;
+    declare id: Mei;
+
+    get readable() {
+        return this.effectiveAccess.readable;
+    }
 
     get writable() {
         return !this.fixed && this.effectiveAccess.writable;
@@ -28,6 +32,10 @@ export class AttributeModel extends PropertyModel implements AttributeElement {
         return !!this.effectiveQuality.fixed;
     }
 
+    get changesOmitted() {
+        return this.effectiveQuality.changesOmitted;
+    }
+
     constructor(definition: AttributeElement.Properties) {
         super(definition);
     }
@@ -38,6 +46,10 @@ export class AttributeModel extends PropertyModel implements AttributeElement {
 
     static isGlobal(model: Model) {
         return model instanceof AttributeModel && GLOBAL_IDS.has(model.id);
+    }
+
+    static get globalIds() {
+        return GLOBAL_IDS;
     }
 
     static Tag = AttributeElement.Tag;

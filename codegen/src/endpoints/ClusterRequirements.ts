@@ -57,7 +57,7 @@ export class ClusterRequirements {
     }
 
     private ingestFeature(requirement: RequirementModel) {
-        if (!requirement.mandatory) {
+        if (!requirement.isMandatory) {
             return;
         }
         let feature = this.cluster.featureMap.children.find(
@@ -89,7 +89,7 @@ export class ClusterRequirements {
             return;
         }
 
-        if (requirement.mandatory) {
+        if (requirement.isMandatory) {
             alteration.optional = false;
         }
 

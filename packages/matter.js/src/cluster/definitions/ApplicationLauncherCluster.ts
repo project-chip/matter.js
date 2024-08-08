@@ -21,6 +21,21 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ApplicationLauncher {
     /**
+     * These are optional features supported by ApplicationLauncherCluster.
+     *
+     * @see {@link MatterSpecification.v13.Cluster} § 6.4.4
+     */
+    export enum Feature {
+        /**
+         * ApplicationPlatform (AP)
+         *
+         * Support for attributes and commands required for endpoint to support launching any application within the
+         * supported application catalogs
+         */
+        ApplicationPlatform = "ApplicationPlatform"
+    }
+
+    /**
      * This indicates a global identifier for an Application given a catalog.
      *
      * @see {@link MatterSpecification.v13.Cluster} § 6.4.5.2
@@ -213,21 +228,6 @@ export namespace ApplicationLauncher {
             catalogList: Attribute(0x0, TlvArray(TlvUInt16), { persistent: true, default: [] })
         }
     });
-
-    /**
-     * These are optional features supported by ApplicationLauncherCluster.
-     *
-     * @see {@link MatterSpecification.v13.Cluster} § 6.4.4
-     */
-    export enum Feature {
-        /**
-         * ApplicationPlatform (AP)
-         *
-         * Support for attributes and commands required for endpoint to support launching any application within the
-         * supported application catalogs
-         */
-        ApplicationPlatform = "ApplicationPlatform"
-    }
 
     /**
      * These elements and properties are present in all ApplicationLauncher clusters.

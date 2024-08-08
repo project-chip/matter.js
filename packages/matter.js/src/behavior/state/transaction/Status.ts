@@ -55,7 +55,7 @@ export enum Status {
 
 export namespace Status {
     export function assert(transaction: Transaction, acceptable: Status[], target: Status) {
-        if (acceptable.indexOf(transaction.status) === -1) {
+        if (!acceptable.includes(transaction.status)) {
             throw new TransactionFlowError(
                 `Cannot transition transaction from ${formatStatus(transaction.status)} to ${formatStatus(target)}`,
             );

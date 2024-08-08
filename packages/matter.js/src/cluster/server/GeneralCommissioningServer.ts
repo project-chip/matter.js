@@ -5,10 +5,8 @@
  */
 
 import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
-import { tryCatch } from "../../common/TryCatchHandler.js";
 import { Logger } from "../../log/Logger.js";
-import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
-import { NoAssociatedFabricError, assertSecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession } from "../../session/SecureSession.js";
 import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
 import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
@@ -75,15 +73,13 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 breadcrumb.setLocal(breadcrumbStep);
             }
         } catch (error) {
-            if (error instanceof MatterFlowError) {
-                logger.debug(`Error while arming failSafe timer`, error);
-                return {
-                    errorCode: GeneralCommissioning.CommissioningError.BusyWithOtherAdmin,
-                    debugText: error.message,
-                };
-            } else {
-                throw error;
-            }
+            MatterFlowError.accept(error);
+
+            logger.debug(`Error while arming failSafe timer`, error);
+            return {
+                errorCode: GeneralCommissioning.CommissioningError.BusyWithOtherAdmin,
+                debugText: error.message,
+            };
         }
         return SuccessResponse;
     },
@@ -161,13 +157,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
     },
 
     commissioningComplete: async ({ session, attributes: { breadcrumb } }) => {
-        const fabric = tryCatch(
-            () => session.associatedFabric,
-            NoAssociatedFabricError,
-            () => {
-                throw new StatusResponseError("No associated fabric existing", StatusCode.UnsupportedAccess);
-            },
-        );
+        const fabric = session.associatedFabric;
 
         if (session.isPase) {
             return {

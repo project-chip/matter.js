@@ -34,6 +34,53 @@ import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace TimeSynchronization {
     /**
+     * These are optional features supported by TimeSynchronizationCluster.
+     *
+     * @see {@link MatterSpecification.v13.Core} § 11.17.5
+     */
+    export enum Feature {
+        /**
+         * TimeZone (TZ)
+         *
+         * Allows a server to translate a UTC time to a local time using the time zone and daylight savings time (DST)
+         * offsets. If a server supports the TimeZone feature, it shall support the SetTimeZone and SetDSTOffset
+         * commands, and TimeZone and DSTOffset attributes, and shall expose the local time through the LocalTime
+         * attribute.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 11.17.5.1
+         */
+        TimeZone = "TimeZone",
+
+        /**
+         * NtpClient (NTPC)
+         *
+         * Allows a node to use NTP/SNTP for time synchronization.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 11.17.5.2
+         */
+        NtpClient = "NtpClient",
+
+        /**
+         * NtpServer (NTPS)
+         *
+         * Allows a Node to host an NTP server for the network so that other Nodes can achieve a high accuracy time
+         * synchronization within the network. See Section 11.17.15, “Acting as an NTP Server”.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 11.17.5.3
+         */
+        NtpServer = "NtpServer",
+
+        /**
+         * TimeSyncClient (TSC)
+         *
+         * This node also supports a time synchronization client and can connect to and read time from other nodes.
+         *
+         * @see {@link MatterSpecification.v13.Core} § 11.17.5.4
+         */
+        TimeSyncClient = "TimeSyncClient"
+    }
+
+    /**
      * @see {@link MatterSpecification.v13.Core} § 11.17.6.4
      */
     export const TlvTrustedTimeSource = TlvObject({
@@ -576,7 +623,7 @@ export namespace TimeSynchronization {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.8.13
              */
-            supportsDnsResolve: FixedAttribute(0xc, TlvBoolean, { default: true })
+            supportsDnsResolve: FixedAttribute(0xc, TlvBoolean, { default: false })
         },
 
         commands: {
@@ -798,56 +845,9 @@ export namespace TimeSynchronization {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.17.8.10
              */
-            ntpServerAvailable: Attribute(0x9, TlvBoolean, { default: true })
+            ntpServerAvailable: Attribute(0x9, TlvBoolean, { default: false })
         }
     });
-
-    /**
-     * These are optional features supported by TimeSynchronizationCluster.
-     *
-     * @see {@link MatterSpecification.v13.Core} § 11.17.5
-     */
-    export enum Feature {
-        /**
-         * TimeZone (TZ)
-         *
-         * Allows a server to translate a UTC time to a local time using the time zone and daylight savings time (DST)
-         * offsets. If a server supports the TimeZone feature, it shall support the SetTimeZone and SetDSTOffset
-         * commands, and TimeZone and DSTOffset attributes, and shall expose the local time through the LocalTime
-         * attribute.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 11.17.5.1
-         */
-        TimeZone = "TimeZone",
-
-        /**
-         * NtpClient (NTPC)
-         *
-         * Allows a node to use NTP/SNTP for time synchronization.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 11.17.5.2
-         */
-        NtpClient = "NtpClient",
-
-        /**
-         * NtpServer (NTPS)
-         *
-         * Allows a Node to host an NTP server for the network so that other Nodes can achieve a high accuracy time
-         * synchronization within the network. See Section 11.17.15, “Acting as an NTP Server”.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 11.17.5.3
-         */
-        NtpServer = "NtpServer",
-
-        /**
-         * TimeSyncClient (TSC)
-         *
-         * This node also supports a time synchronization client and can connect to and read time from other nodes.
-         *
-         * @see {@link MatterSpecification.v13.Core} § 11.17.5.4
-         */
-        TimeSyncClient = "TimeSyncClient"
-    }
 
     /**
      * These elements and properties are present in all TimeSynchronization clusters.

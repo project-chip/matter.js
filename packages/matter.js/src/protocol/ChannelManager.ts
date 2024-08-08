@@ -6,7 +6,6 @@
 
 import { Channel } from "../common/Channel.js";
 import { MatterError } from "../common/MatterError.js";
-import { tryCatchAsync } from "../common/TryCatchHandler.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
@@ -44,6 +43,7 @@ export class ChannelManager {
     }
 
     async setChannel(fabric: Fabric, nodeId: NodeId, channel: MessageChannel<any>) {
+        channel.closeCallback = async () => this.removeChannel(fabric, nodeId, channel.session);
         const channelsKey = this.#getChannelKey(fabric, nodeId);
         const currentChannels = this.#channels.get(channelsKey) ?? [];
         if (currentChannels.length >= this.#caseSessionsPerFabricAndNode) {
@@ -74,7 +74,7 @@ export class ChannelManager {
             results = results.filter(channel => channel.session.id === session.id);
         }
         if (results.length === 0) throw new NoChannelError(`Can't find a channel to node ${nodeId}`);
-        return results[results.length - 1]; // Return the latest added channel
+        return results[results.length - 1]; // Return the latest added channel (or the one belonging to the session requested)
     }
 
     /**
@@ -104,8 +104,15 @@ export class ChannelManager {
     async removeChannel(fabric: Fabric, nodeId: NodeId, session: Session<any>) {
         const channelsKey = this.#getChannelKey(fabric, nodeId);
         const fabricChannels = this.#channels.get(channelsKey) ?? [];
-        const channelEntry = fabricChannels.find(({ session: entrySession }) => entrySession.id === session.id);
-        await channelEntry?.close();
+        const channelEntryIndex = fabricChannels.findIndex(
+            ({ session: entrySession }) => entrySession.id === session.id,
+        );
+        const channelEntry = fabricChannels.splice(channelEntryIndex, 1)[0];
+        if (channelEntry === undefined) {
+            return;
+        }
+        await channelEntry.close();
+        this.#channels.set(channelsKey, fabricChannels);
     }
 
     private getOrCreateAsPaseChannel(byteArrayChannel: Channel<ByteArray>, session: Session<any>) {
@@ -129,17 +136,19 @@ export class ChannelManager {
             return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }
 
-        return tryCatchAsync(
-            async () => this.getChannel(fabric, nodeId, session),
-            NoChannelError,
-            async () => {
-                const result = new MessageChannel(byteArrayChannel, session, async () =>
-                    this.removeChannel(fabric, nodeId, session),
-                );
-                await this.setChannel(fabric, nodeId, result);
-                return result;
-            },
+        // Try to get
+        try {
+            return this.getChannel(fabric, nodeId, session);
+        } catch (e) {
+            NoChannelError.accept(e);
+        }
+
+        // Need to create
+        const result = new MessageChannel(byteArrayChannel, session, async () =>
+            this.removeChannel(fabric, nodeId, session),
         );
+        await this.setChannel(fabric, nodeId, result);
+        return result;
     }
 
     async close() {

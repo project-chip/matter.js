@@ -7,7 +7,7 @@
 import { InternalError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { StorageContext } from "../storage/StorageContext.js";
-import { AsyncConstruction, asyncNew } from "../util/AsyncConstruction.js";
+import { Construction, asyncNew } from "../util/Construction.js";
 
 /** Maximum 32 bit counter value. */
 export const MAX_COUNTER_VALUE_32BIT = 0xfffffffe;
@@ -78,7 +78,7 @@ export class MessageCounter {
 
 /** Enhanced Message counter that can be persisted and will be initialized from the persisted value (if existing). */
 export class PersistedMessageCounter extends MessageCounter {
-    #construction: AsyncConstruction<PersistedMessageCounter>;
+    #construction: Construction<PersistedMessageCounter>;
 
     get construction() {
         return this.#construction;
@@ -106,7 +106,7 @@ export class PersistedMessageCounter extends MessageCounter {
         rolloverInfoDifference = ROLLOVER_INFO_DIFFERENCE,
     ) {
         super(aboutToRolloverCallback, rolloverInfoDifference);
-        this.#construction = AsyncConstruction(this, async () => {
+        this.#construction = Construction(this, async () => {
             if (await storageContext.has(storageKey)) {
                 this.messageCounter = await storageContext.get<number>(storageKey);
                 if (this.messageCounter < 0 || this.messageCounter > MAX_COUNTER_VALUE_32BIT) {

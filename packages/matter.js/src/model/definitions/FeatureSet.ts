@@ -18,11 +18,17 @@ export class FeatureSet extends Set<FeatureSet.Flag> {
      * string]: true }
      */
     constructor(definition?: FeatureSet.Definition) {
+        if (typeof definition === "string") {
+            super([definition]);
+            return;
+        }
+
         if (definition && typeof (definition as any)[Symbol.iterator] !== "function") {
             definition = Object.entries(definition)
                 .filter(([_k, v]) => v)
                 .map(([k]) => k);
         }
+
         super(definition as Iterable<any>);
     }
 

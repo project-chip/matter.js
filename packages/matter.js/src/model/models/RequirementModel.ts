@@ -18,8 +18,8 @@ const QUALITY: unique symbol = Symbol("quality");
 
 export class RequirementModel extends Model implements RequirementElement {
     override tag: RequirementElement.Tag = RequirementElement.Tag;
-    element!: RequirementElement.ElementType;
-    default?: any;
+    declare element: RequirementElement.ElementType;
+    declare default?: any;
 
     override get discriminator() {
         return this.element;
@@ -83,7 +83,7 @@ export class RequirementModel extends Model implements RequirementElement {
     /**
      * Is the element mandatory?
      */
-    get mandatory() {
-        return this.conformance.mandatory;
+    get isMandatory() {
+        return this.conformance.isMandatory;
     }
 }

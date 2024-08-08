@@ -19,6 +19,10 @@ export class StatusResponseError extends MatterError {
     ) {
         super();
 
-        this.message = `(${code}) ${message}`;
+        this.message = `(${code}${clusterCode !== undefined ? `/${clusterCode}` : ""}) ${message}`;
+    }
+
+    static is(error: unknown, ...codes: StatusCode[]): error is StatusResponseError {
+        return error instanceof StatusResponseError && (!codes.length || codes.includes(error.code));
     }
 }
