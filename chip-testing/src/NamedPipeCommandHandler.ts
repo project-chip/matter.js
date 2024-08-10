@@ -26,7 +26,7 @@ export class NamedPipeCommandHandler {
         this.#namedPipeSocket = new Socket({ fd: this.#namedPipe.fd });
         console.log(`Named pipe created: ${this.#namedPipeName}`);
 
-        this.#namedPipeSocket.on("data", async dataBuf => {
+        this.#namedPipeSocket.on("data", dataBuf => {
             let data: Record<string, unknown>;
             try {
                 data = JSON.parse(dataBuf.toString());
@@ -41,7 +41,9 @@ export class NamedPipeCommandHandler {
                 return;
             }
 
-            await this.#handleNamedPipeData(data as NamedPipeCommand);
+            this.#handleNamedPipeData(data as NamedPipeCommand).catch(error =>
+                console.error("Error handling named pipe data:", error),
+            );
         });
 
         this.#namedPipeSocket.on("error", err => {
@@ -55,7 +57,7 @@ export class NamedPipeCommandHandler {
 
     async close() {
         try {
-            this.#namedPipe?.close();
+            await this.#namedPipe?.close();
         } catch (error) {
             console.log("Error closing named pipe:", error);
         }
