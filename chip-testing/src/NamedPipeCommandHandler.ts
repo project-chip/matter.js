@@ -20,13 +20,11 @@ export class NamedPipeCommandHandler {
         this.#serverNode = serverNode;
     }
 
-    #openSocket() {
-        if (this.#namedPipe === undefined) {
-            throw new Error("Named pipe not open");
-        }
+    async #openSocket() {
         if (this.#stopping) {
             return;
         }
+        this.#namedPipe = await open(this.#namedPipeName, constants.O_RDONLY | constants.O_NONBLOCK);
         this.#namedPipeSocket = new Socket({ fd: this.#namedPipe.fd });
         console.log(`Named pipe created: ${this.#namedPipeName}`);
 
@@ -56,15 +54,14 @@ export class NamedPipeCommandHandler {
 
         this.#namedPipeSocket.on("close", () => {
             console.log("Named pipe closed");
-            this.#openSocket(); // Open new Socket for next command
+            this.#openSocket().catch(error => console.log("Error on reopening named pipe", error)); // Open new Socket for next command
         });
     }
 
     async listen() {
         execSync(`mkfifo ${this.#namedPipeName}`);
 
-        this.#namedPipe = await open(this.#namedPipeName, constants.O_RDONLY | constants.O_NONBLOCK);
-        this.#openSocket();
+        await this.#openSocket();
     }
 
     async close() {
