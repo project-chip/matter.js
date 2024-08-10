@@ -13,16 +13,20 @@ export class NamedPipeCommandHandler {
     #namedPipe?: FileHandle;
     #namedPipeSocket?: Socket;
     #serverNode: ServerNode;
+    #stopping = false;
 
     constructor(namedPipeName: string, serverNode: ServerNode) {
         this.#namedPipeName = namedPipeName;
         this.#serverNode = serverNode;
     }
 
-    async listen() {
-        execSync(`mkfifo ${this.#namedPipeName}`);
-
-        this.#namedPipe = await open(this.#namedPipeName, constants.O_RDONLY | constants.O_NONBLOCK);
+    #openSocket() {
+        if (this.#namedPipe === undefined) {
+            throw new Error("Named pipe not open");
+        }
+        if (this.#stopping) {
+            return;
+        }
         this.#namedPipeSocket = new Socket({ fd: this.#namedPipe.fd });
         console.log(`Named pipe created: ${this.#namedPipeName}`);
 
@@ -52,10 +56,19 @@ export class NamedPipeCommandHandler {
 
         this.#namedPipeSocket.on("close", () => {
             console.log("Named pipe closed");
+            this.#openSocket(); // Open new Socket for next command
         });
     }
 
+    async listen() {
+        execSync(`mkfifo ${this.#namedPipeName}`);
+
+        this.#namedPipe = await open(this.#namedPipeName, constants.O_RDONLY | constants.O_NONBLOCK);
+        this.#openSocket();
+    }
+
     async close() {
+        this.#stopping = true;
         try {
             await this.#namedPipe?.close();
         } catch (error) {
@@ -70,7 +83,7 @@ export class NamedPipeCommandHandler {
         const name = data.Name;
 
         const endpointId = data.EndpointId;
-        let endpoint: Endpoint | undefined = undefined;
+        let endpoint: Endpoint | undefined;
         if (endpointId !== undefined) {
             // Find the endpoint instance if an EndpointId is set
             this.#serverNode.visit(visitedEndpoint => {
@@ -95,6 +108,12 @@ export class NamedPipeCommandHandler {
                     throw new Error(`Endpoint ${endpointId} not existing`);
                 }
                 SwitchSimulator.simulateActionSwitchMultiPress(endpoint, data);
+                break;
+            case "SimulateLatchPosition":
+                if (endpoint === undefined) {
+                    throw new Error(`Endpoint ${endpointId} not existing`);
+                }
+                await endpoint.set({ switch: { rawPosition: data.PositionId } });
                 break;
             default:
                 console.log(`Unknown named pipe command: ${name}`);

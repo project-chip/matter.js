@@ -15,4 +15,13 @@ export type SimulateActionSwitchMultiPressCommand = {
     MultiPressNumPresses: number;
 };
 
-export type NamedPipeCommand = SimulateActionSwitchLongPressCommand | SimulateActionSwitchMultiPressCommand;
+export type SimulateLatchedPositionCommand = {
+    Name: "SimulateLatchPosition";
+    EndpointId: number;
+    PositionId: number;
+};
+
+export type NamedPipeCommand =
+    | SimulateActionSwitchLongPressCommand
+    | SimulateActionSwitchMultiPressCommand
+    | SimulateLatchedPositionCommand;
