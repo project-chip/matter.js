@@ -26,11 +26,13 @@ import { TimeFormatLocalizationServer } from "@project-chip/matter.js/behavior/d
 import { UnitLocalizationServer } from "@project-chip/matter.js/behavior/definitions/unit-localization";
 import { UserLabelServer } from "@project-chip/matter.js/behavior/definitions/user-label";
 import { AirQualityServer } from "@project-chip/matter.js/behaviors/air-quality";
+import { DescriptorServer } from "@project-chip/matter.js/behaviors/descriptor";
 import {
     AdministratorCommissioning,
     AirQuality,
     BasicInformation,
     ColorControl,
+    Descriptor,
     LevelControl,
     ModeSelect,
     NetworkCommissioning,
@@ -261,6 +263,7 @@ export class AllClustersTestInstance implements TestInstance {
                     ColorControl.Feature.Xy,
                     ColorControl.Feature.ColorTemperature,
                 ),
+                DescriptorServer.with(Descriptor.Feature.TagList),
                 FixedLabelServer,
                 FlowMeasurementServer,
                 TestHepaFilterMonitoringServer,
@@ -343,6 +346,16 @@ export class AllClustersTestInstance implements TestInstance {
                     colorPointBy: 0,
                     colorPointBIntensity: 0,
                     managedTransitionTimeHandling: true, // enable transition management
+                },
+                descriptor: {
+                    tagList: [
+                        {
+                            mfgCode: null,
+                            namespaceId: 0x07, // Standard Namespaces. Common Numbering
+                            tag: 0x01, // One
+                            label: "EP3",
+                        },
+                    ],
                 },
                 fixedLabel: {
                     labelList: [
@@ -474,6 +487,7 @@ export class AllClustersTestInstance implements TestInstance {
 
         const endpoint3 = new Endpoint(
             OnOffLightDevice.with(
+                DescriptorServer.with(Descriptor.Feature.TagList),
                 SwitchServer.with(
                     Switch.Feature.MomentarySwitch,
                     Switch.Feature.MomentarySwitchRelease,
@@ -484,6 +498,16 @@ export class AllClustersTestInstance implements TestInstance {
             {
                 number: EndpointNumber(3),
                 id: "ep3",
+                descriptor: {
+                    tagList: [
+                        {
+                            mfgCode: null,
+                            namespaceId: 0x07, // Standard Namespaces. Common Numbering
+                            tag: 0x03, // Three
+                            label: "EP3",
+                        },
+                    ],
+                },
                 switch: {
                     rawPosition: 0,
                     longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
