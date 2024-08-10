@@ -51,19 +51,19 @@ import { Environment, StorageService } from "@project-chip/matter.js/environment
 import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
-import * as net from "node:net";
-import { TestInstance } from "./GenericTestApp.js";
 import { TestActivatedCarbonFilterMonitoringServer } from "./cluster/TestActivatedCarbonFilterMonitoringServer.js";
 import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsServer.js";
 import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitoringServer.js";
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
 import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
+import { TestInstance } from "./GenericTestApp.js";
+import { NamedPipeCommandHandler } from "./NamedPipeCommandHandler.js";
 
 export class AllClustersTestInstance implements TestInstance {
-    serverNode: ServerNode | undefined;
+    serverNode?: ServerNode;
     protected appName: string;
-    #namedPipeServer?: net.Server;
+    #namedPipeHandler?: NamedPipeCommandHandler;
 
     constructor(
         public storage: Storage,
@@ -76,35 +76,26 @@ export class AllClustersTestInstance implements TestInstance {
         this.appName = options.appName;
     }
 
-    #setupNamedPipe() {
-        this.#namedPipeServer = net.createServer();
-
-        this.#namedPipeServer.on("connection", socket => {
-            console.log("Named pipe connected");
-            socket.on("data", data => {
-                console.log("Named pipe data:", data.toString());
-            });
-        });
-        this.#namedPipeServer.on("error", err => {
-            console.log("Named pipe error:", err);
-        });
-        this.#namedPipeServer.on("close", () => {
-            console.log("Named pipe closed");
-        });
-
-        const namedPipe = `/tmp/chip_all_clusters_fifo_${process.pid}`;
-        this.#namedPipeServer.listen({ path: namedPipe, readableAll: true, writableAll: true }, () =>
-            console.log(`listening on ${namedPipe}`),
-        );
+    async #setupNamedPipe() {
+        if (this.serverNode === undefined) {
+            throw new Error("ServerNode not initialized, cannot setup NamedPipeCommandHandler.");
+        }
+        try {
+            this.#namedPipeHandler = new NamedPipeCommandHandler(
+                `/tmp/chip_all_clusters_fifo_${process.pid}`,
+                this.serverNode,
+            );
+            await this.#namedPipeHandler.listen();
+        } catch (error) {
+            console.log("Error creating named pipe:", error);
+        }
     }
 
     /** Set up the test instance MatterServer. */
     async setup() {
         try {
-            //await this.storageManager.initialize(); // hacky but works
-
             this.serverNode = await this.setupServer();
-            this.#setupNamedPipe();
+            await this.#setupNamedPipe();
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
             console.log(error);
@@ -148,8 +139,11 @@ export class AllClustersTestInstance implements TestInstance {
         //this.serverNode.cancel();
         //await this.serverNode.lifecycle.act;
         this.serverNode = undefined;
-        this.#namedPipeServer?.close();
-        this.#namedPipeServer = undefined;
+        try {
+            await this.#namedPipeHandler?.close();
+        } catch (error) {
+            console.log("Error closing named pipe:", error);
+        }
         console.log(`======> ${this.appName}: Instance stopped`);
     }
 
@@ -284,7 +278,7 @@ export class AllClustersTestInstance implements TestInstance {
                 PressureMeasurementServer,
                 PumpConfigurationAndControlServer.with(PumpConfigurationAndControl.Feature.ConstantPressure),
                 RelativeHumidityMeasurementServer,
-                SwitchServer.with(Switch.Feature.LatchingSwitch), // More not possible with Chip right now
+                SwitchServer.with(Switch.Feature.LatchingSwitch),
                 TemperatureMeasurementServer,
                 ThermostatUserInterfaceConfigurationServer,
                 UserLabelServer,
@@ -292,7 +286,7 @@ export class AllClustersTestInstance implements TestInstance {
             ),
             {
                 number: EndpointNumber(1),
-                id: "onoff1",
+                id: "ep1",
                 activatedCarbonFilterMonitoring: {
                     condition: 20,
                     degradationDirection: ResourceMonitoring.DegradationDirection.Down,
@@ -477,6 +471,26 @@ export class AllClustersTestInstance implements TestInstance {
             },
         );
         await serverNode.add(endpoint1);
+
+        const endpoint3 = new Endpoint(
+            OnOffLightDevice.with(
+                SwitchServer.with(
+                    Switch.Feature.MomentarySwitch,
+                    Switch.Feature.MomentarySwitchRelease,
+                    Switch.Feature.MomentarySwitchLongPress,
+                    Switch.Feature.MomentarySwitchMultiPress,
+                ),
+            ),
+            {
+                number: EndpointNumber(3),
+                id: "ep3",
+                switch: {
+                    rawPosition: 0,
+                    longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
+                },
+            },
+        );
+        await serverNode.add(endpoint3);
 
         return serverNode;
     }
