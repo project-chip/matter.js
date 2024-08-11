@@ -491,8 +491,8 @@ export class AllClustersTestInstance implements TestInstance {
                 SwitchServer.with(
                     Switch.Feature.MomentarySwitch,
                     Switch.Feature.MomentarySwitchRelease,
-                    Switch.Feature.MomentarySwitchLongPress,
-                    //Switch.Feature.MomentarySwitchMultiPress,
+                    //Switch.Feature.MomentarySwitchLongPress, //MS & MSR & MSL works in testing
+                    Switch.Feature.MomentarySwitchMultiPress,
                 ),
             ),
             {

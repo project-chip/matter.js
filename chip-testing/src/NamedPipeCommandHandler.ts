@@ -27,8 +27,11 @@ export class NamedPipeCommandHandler {
         if (this.#namedPipe !== undefined) {
             try {
                 await this.#namedPipe.close();
-            } catch (error) {
-                console.log("Error closing named pipe:", error);
+            } catch (error: any) {
+                // EBADF can happen if the pipe is already closed from outside, so ignore that case
+                if (error.code !== "EBADF") {
+                    console.log("Error closing named pipe:", error);
+                }
             }
         }
 
