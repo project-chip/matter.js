@@ -61,6 +61,9 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
         name = `${cluster.name}Behavior`;
     }
 
+    // Mutation of schema will almost certainly result in logic errors so ensure that can't happen
+    schema.freeze();
+
     return GeneratedClass({
         name,
         base,

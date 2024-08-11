@@ -105,6 +105,11 @@ export class Conformance extends Aspect<Conformance.Definition> {
     override toString() {
         return Conformance.serialize(this.ast);
     }
+
+    override freeze() {
+        freezeAst(this.ast);
+        super.freeze();
+    }
 }
 
 export namespace Conformance {
@@ -645,4 +650,47 @@ function computeApplicability(features: Set<string>, supportedFeatures: Set<stri
         return true;
     }
     return processNode(ast);
+}
+
+function freezeAst(ast: Conformance.Ast) {
+    switch (ast.type) {
+        case Conformance.Operator.OR:
+        case Conformance.Operator.XOR:
+        case Conformance.Operator.AND:
+        case Conformance.Operator.EQ:
+        case Conformance.Operator.NE:
+        case Conformance.Operator.GT:
+        case Conformance.Operator.LT:
+        case Conformance.Operator.GTE:
+        case Conformance.Operator.LTE:
+            freezeAst(ast.param.lhs);
+            freezeAst(ast.param.rhs);
+            Object.freeze(ast.param);
+            break;
+
+        case Conformance.Operator.NOT:
+        case Conformance.Special.OptionalIf:
+            freezeAst(ast.param);
+            break;
+
+        case Conformance.Special.Value:
+            if (typeof ast.param === "object" && ast.param !== null) {
+                Object.freeze(ast.param);
+            }
+            break;
+
+        case Conformance.Special.Choice:
+            freezeAst(ast.param.expr);
+            Object.freeze(ast.param);
+            break;
+
+        case Conformance.Special.Group:
+            for (const entry of ast.param) {
+                freezeAst(entry);
+            }
+            Object.freeze(ast.param);
+            break;
+    }
+
+    Object.freeze(ast);
 }

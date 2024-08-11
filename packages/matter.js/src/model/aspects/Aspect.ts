@@ -9,9 +9,8 @@ import { serialize } from "../../util/String.js";
 import { DefinitionError } from "../definitions/DefinitionError.js";
 
 /**
- * An "aspect" is metadata about a Matter element that affects implementation
- * behavior.  Aspects are mostly "qualities" in the Matter specification except
- * for "constraint" which is not formally described as a quality.
+ * An "aspect" is metadata about a Matter element that affects implementation behavior.  Aspects are mostly "qualities"
+ * in the Matter specification except for "constraint" which is not formally described as a quality.
  */
 export abstract class Aspect<D> {
     definition: D;
@@ -78,5 +77,9 @@ export abstract class Aspect<D> {
 
         const constructor = this.constructor as new (definition: any) => Aspect<D>;
         return new constructor(definition) as This;
+    }
+
+    freeze() {
+        Object.freeze(this);
     }
 }

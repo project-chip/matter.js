@@ -28,7 +28,7 @@ import { Schema } from "./Schema.js";
 export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSupervisor {
     const logical = options.schema ?? Schema.empty;
 
-    // Copy children for the
+    // Copy children so we can extend
     const children = logical.children.map(child => child.clone());
 
     // Add fields for programmatic extensions
@@ -50,6 +50,8 @@ export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSup
             children,
         });
     }
+
+    schema.freeze();
 
     return new RootSupervisor(schema);
 }

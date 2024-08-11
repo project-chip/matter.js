@@ -60,6 +60,11 @@ export interface Children<M extends Model = Model, E extends AnyElement = AnyEle
      * Models invoke this when their name changes so we can update internal bookkeeping.
      */
     updateName(child: Model, oldName: string): void;
+
+    /**
+     * Freeze the set of children.
+     */
+    freeze(): void;
 }
 
 type IndexEntry = Model | Model[];
@@ -478,6 +483,13 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
         });
     }
 
+    function freeze() {
+        for (const child of self) {
+            (child as Model).freeze();
+        }
+        Object.freeze(children);
+    }
+
     const self = new Proxy(children, {
         get: (_target, p, receiver) => {
             if (typeof p === "string" && p.match(/^[0-9]+$/)) {
@@ -512,6 +524,9 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
 
                 case "splice":
                     return splice;
+
+                case "freeze":
+                    return freeze;
 
                 case "toString":
                     return () => `[Children: ${children.length}]`;

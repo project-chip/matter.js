@@ -413,6 +413,20 @@ export abstract class Model {
         }
     }
 
+    /**
+     * Freeze the model hierarchy rooted at this model.
+     *
+     * When using a model as operational schema we implement various optimizations that assume the schema is immutable.
+     * This function enforces that assumption.
+     *
+     * To make changes to a frozen model use {@link clone}.
+     */
+    freeze() {
+        Object.freeze(this);
+        this.children.freeze();
+        this.base?.freeze();
+    }
+
     toString() {
         return `${this.tag}${this.type ? `<${this.type}>` : ""}#${this.path}`;
     }
