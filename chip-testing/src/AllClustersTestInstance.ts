@@ -491,8 +491,8 @@ export class AllClustersTestInstance implements TestInstance {
                 SwitchServer.with(
                     Switch.Feature.MomentarySwitch,
                     Switch.Feature.MomentarySwitchRelease,
-                    //Switch.Feature.MomentarySwitchLongPress, //MS & MSR & MSL works in testing
-                    Switch.Feature.MomentarySwitchMultiPress,
+                    Switch.Feature.MomentarySwitchLongPress, //MS & MSR & MSL works in testing
+                    //Switch.Feature.MomentarySwitchMultiPress, // Can not be tested right now because https://github.com/project-chip/connectedhomeip/issues/34923
                 ),
             ),
             {
@@ -510,8 +510,8 @@ export class AllClustersTestInstance implements TestInstance {
                 },
                 switch: {
                     rawPosition: 0,
-                    //longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
-                    multiPressDelay: 700,
+                    longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
+                    //multiPressDelay: 700,
                 },
             },
         );

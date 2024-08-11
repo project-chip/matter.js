@@ -919,6 +919,37 @@ describe("SwitchServer", () => {
             await device.set({ switch: { longPressDelay: 100, multiPressDelay: 150, multiPressMax: 3 } });
         });
 
+        it("Test long Press with 2 positions", async () => {
+            await doTestPress(device, 110, [
+                {
+                    name: "initialPress",
+                    value: { newPosition: 1 },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    oldValue: 0,
+                    newValue: 1,
+                },
+                {
+                    name: "longPress",
+                    value: {
+                        newPosition: 1,
+                    },
+                },
+                {
+                    name: "longRelease",
+                    value: {
+                        previousPosition: 1,
+                    },
+                },
+                {
+                    name: "currentPosition$Changed",
+                    oldValue: 1,
+                    newValue: 0,
+                },
+            ]);
+        });
+
         it("Test one short Press with 2 positions", async () => {
             const events = createEventCatcher(device);
 
