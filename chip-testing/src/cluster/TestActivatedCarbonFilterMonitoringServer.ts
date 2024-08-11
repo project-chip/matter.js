@@ -7,9 +7,9 @@ import { ActivatedCarbonFilterMonitoringServer } from "@project-chip/matter.js/b
 import { ResourceMonitoring } from "@project-chip/matter.js/cluster";
 
 const TestActivatedCarbonFilterMonitoringServerBase = ActivatedCarbonFilterMonitoringServer.with(
-    "Condition",
+    ResourceMonitoring.Feature.Condition,
     // "Warning", // Do not use here to test both cases, the Activated Carbon Filter test will include it
-    "ReplacementProductList",
+    ResourceMonitoring.Feature.ReplacementProductList,
 );
 
 export class TestActivatedCarbonFilterMonitoringServer extends TestActivatedCarbonFilterMonitoringServerBase {

@@ -6,23 +6,33 @@
 
 import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
 import { BooleanStateServer } from "@project-chip/matter.js/behavior/definitions/boolean-state";
+import { CarbonDioxideConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/carbon-dioxide-concentration-measurement";
+import { CarbonMonoxideConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/carbon-monoxide-concentration-measurement";
 import { ColorControlServer } from "@project-chip/matter.js/behavior/definitions/color-control";
 import { FixedLabelServer } from "@project-chip/matter.js/behavior/definitions/fixed-label";
 import { FlowMeasurementServer } from "@project-chip/matter.js/behavior/definitions/flow-measurement";
+import { FormaldehydeConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/formaldehyde-concentration-measurement";
 import { IlluminanceMeasurementServer } from "@project-chip/matter.js/behavior/definitions/illuminance-measurement";
 import { LocalizationConfigurationServer } from "@project-chip/matter.js/behavior/definitions/localization-configuration";
 import { ModeSelectServer } from "@project-chip/matter.js/behavior/definitions/mode-select";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
+import { NitrogenDioxideConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/nitrogen-dioxide-concentration-measurement";
 import { OccupancySensingServer } from "@project-chip/matter.js/behavior/definitions/occupancy-sensing";
+import { OzoneConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/ozone-concentration-measurement";
+import { Pm1ConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/pm1-concentration-measurement";
+import { Pm10ConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/pm10-concentration-measurement";
+import { Pm25ConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/pm25-concentration-measurement";
 import { PowerSourceServer } from "@project-chip/matter.js/behavior/definitions/power-source";
 import { PowerTopologyServer } from "@project-chip/matter.js/behavior/definitions/power-topology";
 import { PressureMeasurementServer } from "@project-chip/matter.js/behavior/definitions/pressure-measurement";
 import { PumpConfigurationAndControlServer } from "@project-chip/matter.js/behavior/definitions/pump-configuration-and-control";
+import { RadonConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/radon-concentration-measurement";
 import { RelativeHumidityMeasurementServer } from "@project-chip/matter.js/behavior/definitions/relative-humidity-measurement";
 import { SwitchServer } from "@project-chip/matter.js/behavior/definitions/switch";
 import { TemperatureMeasurementServer } from "@project-chip/matter.js/behavior/definitions/temperature-measurement";
 import { ThermostatUserInterfaceConfigurationServer } from "@project-chip/matter.js/behavior/definitions/thermostat-user-interface-configuration";
 import { TimeFormatLocalizationServer } from "@project-chip/matter.js/behavior/definitions/time-format-localization";
+import { TotalVolatileOrganicCompoundsConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/total-volatile-organic-compounds-concentration-measurement";
 import { UnitLocalizationServer } from "@project-chip/matter.js/behavior/definitions/unit-localization";
 import { UserLabelServer } from "@project-chip/matter.js/behavior/definitions/user-label";
 import { AirQualityServer } from "@project-chip/matter.js/behaviors/air-quality";
@@ -32,6 +42,7 @@ import {
     AirQuality,
     BasicInformation,
     ColorControl,
+    ConcentrationMeasurement,
     Descriptor,
     LevelControl,
     ModeSelect,
@@ -256,6 +267,16 @@ export class AllClustersTestInstance implements TestInstance {
                 ),
                 TestActivatedCarbonFilterMonitoringServer,
                 BooleanStateServer.enable({ events: { stateChange: true } }),
+                CarbonDioxideConcentrationMeasurementServer.with(
+                    "NumericMeasurement",
+                    "PeakMeasurement",
+                    "AverageMeasurement",
+                ),
+                CarbonMonoxideConcentrationMeasurementServer.with(
+                    ConcentrationMeasurement.Feature.LevelIndication,
+                    ConcentrationMeasurement.Feature.MediumLevel,
+                    ConcentrationMeasurement.Feature.CriticalLevel,
+                ),
                 ColorControlServer.with(
                     ColorControl.Feature.HueSaturation,
                     ColorControl.Feature.EnhancedHue,
@@ -266,6 +287,14 @@ export class AllClustersTestInstance implements TestInstance {
                 DescriptorServer.with(Descriptor.Feature.TagList),
                 FixedLabelServer,
                 FlowMeasurementServer,
+                FormaldehydeConcentrationMeasurementServer.with(
+                    ConcentrationMeasurement.Feature.LevelIndication,
+                    ConcentrationMeasurement.Feature.MediumLevel,
+                    ConcentrationMeasurement.Feature.CriticalLevel,
+                    ConcentrationMeasurement.Feature.NumericMeasurement,
+                    ConcentrationMeasurement.Feature.PeakMeasurement,
+                    ConcentrationMeasurement.Feature.AverageMeasurement,
+                ),
                 TestHepaFilterMonitoringServer,
                 TestIdentifyServer,
                 IlluminanceMeasurementServer,
@@ -275,15 +304,71 @@ export class AllClustersTestInstance implements TestInstance {
                     LevelControl.Feature.Frequency,
                 ),
                 ModeSelectServer.with(ModeSelect.Feature.OnOff),
+                NitrogenDioxideConcentrationMeasurementServer.with(
+                    ConcentrationMeasurement.Feature.LevelIndication,
+                    ConcentrationMeasurement.Feature.MediumLevel,
+                    ConcentrationMeasurement.Feature.CriticalLevel,
+                    ConcentrationMeasurement.Feature.NumericMeasurement,
+                    ConcentrationMeasurement.Feature.PeakMeasurement,
+                    ConcentrationMeasurement.Feature.AverageMeasurement,
+                ),
                 OccupancySensingServer,
+                OzoneConcentrationMeasurementServer.with(
+                    ConcentrationMeasurement.Feature.LevelIndication,
+                    ConcentrationMeasurement.Feature.MediumLevel,
+                    ConcentrationMeasurement.Feature.CriticalLevel,
+                    ConcentrationMeasurement.Feature.NumericMeasurement,
+                    ConcentrationMeasurement.Feature.PeakMeasurement,
+                    ConcentrationMeasurement.Feature.AverageMeasurement,
+                ),
+                Pm1ConcentrationMeasurementServer.with(
+                    ConcentrationMeasurement.Feature.LevelIndication,
+                    ConcentrationMeasurement.Feature.MediumLevel,
+                    ConcentrationMeasurement.Feature.CriticalLevel,
+                    ConcentrationMeasurement.Feature.NumericMeasurement,
+                    ConcentrationMeasurement.Feature.PeakMeasurement,
+                    ConcentrationMeasurement.Feature.AverageMeasurement,
+                ),
+                Pm10ConcentrationMeasurementServer.with(
+                    ConcentrationMeasurement.Feature.LevelIndication,
+                    ConcentrationMeasurement.Feature.MediumLevel,
+                    ConcentrationMeasurement.Feature.CriticalLevel,
+                    ConcentrationMeasurement.Feature.NumericMeasurement,
+                    ConcentrationMeasurement.Feature.PeakMeasurement,
+                    ConcentrationMeasurement.Feature.AverageMeasurement,
+                ),
+                Pm25ConcentrationMeasurementServer.with(
+                    ConcentrationMeasurement.Feature.LevelIndication,
+                    ConcentrationMeasurement.Feature.MediumLevel,
+                    ConcentrationMeasurement.Feature.CriticalLevel,
+                    ConcentrationMeasurement.Feature.NumericMeasurement,
+                    ConcentrationMeasurement.Feature.PeakMeasurement,
+                    ConcentrationMeasurement.Feature.AverageMeasurement,
+                ),
                 PowerSourceServer.with(PowerSource.Feature.Battery),
                 PowerTopologyServer.with(PowerTopology.Feature.SetTopology, PowerTopology.Feature.DynamicPowerFlow),
                 PressureMeasurementServer,
                 PumpConfigurationAndControlServer.with(PumpConfigurationAndControl.Feature.ConstantPressure),
+                RadonConcentrationMeasurementServer.with(
+                    ConcentrationMeasurement.Feature.LevelIndication,
+                    ConcentrationMeasurement.Feature.MediumLevel,
+                    ConcentrationMeasurement.Feature.CriticalLevel,
+                    ConcentrationMeasurement.Feature.NumericMeasurement,
+                    ConcentrationMeasurement.Feature.PeakMeasurement,
+                    ConcentrationMeasurement.Feature.AverageMeasurement,
+                ),
                 RelativeHumidityMeasurementServer,
                 SwitchServer.with(Switch.Feature.LatchingSwitch),
                 TemperatureMeasurementServer,
                 ThermostatUserInterfaceConfigurationServer,
+                TotalVolatileOrganicCompoundsConcentrationMeasurementServer.with(
+                    "LevelIndication",
+                    "MediumLevel",
+                    "CriticalLevel",
+                    "NumericMeasurement",
+                    "PeakMeasurement",
+                    "AverageMeasurement",
+                ),
                 UserLabelServer,
                 TestWindowCoveringServer,
             ),
@@ -308,6 +393,22 @@ export class AllClustersTestInstance implements TestInstance {
                 },
                 booleanState: {
                     stateValue: false,
+                },
+                carbonDioxideConcentrationMeasurement: {
+                    measuredValue: 12.34,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
+                    peakMeasuredValue: 34.56,
+                    peakMeasuredValueWindow: 10000,
+                    averageMeasuredValue: 23.45,
+                    averageMeasuredValueWindow: 1000,
+                    uncertainty: 1.5,
+                    measurementUnit: ConcentrationMeasurement.MeasurementUnit.Ppm,
+                    measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
+                },
+                carbonMonoxideConcentrationMeasurement: {
+                    measurementMedium: ConcentrationMeasurement.MeasurementMedium.Air,
+                    levelValue: ConcentrationMeasurement.LevelValue.Critical,
                 },
                 colorControl: {
                     coupleColorTempToLevelMinMireds: 0,
@@ -369,6 +470,19 @@ export class AllClustersTestInstance implements TestInstance {
                     maxMeasuredValue: 100,
                     tolerance: 0,
                 },
+                formaldehydeConcentrationMeasurement: {
+                    measuredValue: 12.34,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
+                    peakMeasuredValue: 34.56,
+                    peakMeasuredValueWindow: 10000,
+                    averageMeasuredValue: 23.45,
+                    averageMeasuredValueWindow: 1000,
+                    uncertainty: 1.5,
+                    measurementUnit: ConcentrationMeasurement.MeasurementUnit.Ppm,
+                    measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
+                    levelValue: ConcentrationMeasurement.LevelValue.Critical,
+                },
                 hepaFilterMonitoring: {
                     condition: 20,
                     degradationDirection: ResourceMonitoring.DegradationDirection.Down,
@@ -415,10 +529,75 @@ export class AllClustersTestInstance implements TestInstance {
                     startUpMode: 4,
                     onMode: 7,
                 },
+                nitrogenDioxideConcentrationMeasurement: {
+                    measuredValue: 12.34,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
+                    peakMeasuredValue: 34.56,
+                    peakMeasuredValueWindow: 10000,
+                    averageMeasuredValue: 23.45,
+                    averageMeasuredValueWindow: 1000,
+                    uncertainty: 1.5,
+                    measurementUnit: ConcentrationMeasurement.MeasurementUnit.Ppm,
+                    measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
+                    levelValue: ConcentrationMeasurement.LevelValue.Critical,
+                },
                 occupancySensing: {
                     occupancySensorType: OccupancySensing.OccupancySensorType.Pir,
                     occupancySensorTypeBitmap: { pir: true },
                     occupancy: { occupied: true },
+                },
+                ozoneConcentrationMeasurement: {
+                    measuredValue: 12.34,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
+                    peakMeasuredValue: 34.56,
+                    peakMeasuredValueWindow: 10000,
+                    averageMeasuredValue: 23.45,
+                    averageMeasuredValueWindow: 1000,
+                    uncertainty: 1.5,
+                    measurementUnit: ConcentrationMeasurement.MeasurementUnit.Ppm,
+                    measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
+                    levelValue: ConcentrationMeasurement.LevelValue.Critical,
+                },
+                pm1ConcentrationMeasurement: {
+                    measuredValue: 12.34,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
+                    peakMeasuredValue: 34.56,
+                    peakMeasuredValueWindow: 10000,
+                    averageMeasuredValue: 23.45,
+                    averageMeasuredValueWindow: 1000,
+                    uncertainty: 1.5,
+                    measurementUnit: ConcentrationMeasurement.MeasurementUnit.Ppm,
+                    measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
+                    levelValue: ConcentrationMeasurement.LevelValue.Critical,
+                },
+                pm10ConcentrationMeasurement: {
+                    measuredValue: 12.34,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
+                    peakMeasuredValue: 34.56,
+                    peakMeasuredValueWindow: 10000,
+                    averageMeasuredValue: 23.45,
+                    averageMeasuredValueWindow: 1000,
+                    uncertainty: 1.5,
+                    measurementUnit: ConcentrationMeasurement.MeasurementUnit.Ppm,
+                    measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
+                    levelValue: ConcentrationMeasurement.LevelValue.Critical,
+                },
+                pm25ConcentrationMeasurement: {
+                    measuredValue: 12.34,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
+                    peakMeasuredValue: 34.56,
+                    peakMeasuredValueWindow: 10000,
+                    averageMeasuredValue: 23.45,
+                    averageMeasuredValueWindow: 1000,
+                    uncertainty: 1.5,
+                    measurementUnit: ConcentrationMeasurement.MeasurementUnit.Ppm,
+                    measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
+                    levelValue: ConcentrationMeasurement.LevelValue.Critical,
                 },
                 powerSource: {
                     status: PowerSource.PowerSourceStatus.Active,
@@ -447,6 +626,19 @@ export class AllClustersTestInstance implements TestInstance {
                     operationMode: PumpConfigurationAndControl.OperationMode.Normal,
                     controlMode: PumpConfigurationAndControl.ControlMode.ConstantPressure,
                 },
+                radonConcentrationMeasurement: {
+                    measuredValue: 12.34,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
+                    peakMeasuredValue: 34.56,
+                    peakMeasuredValueWindow: 10000,
+                    averageMeasuredValue: 23.45,
+                    averageMeasuredValueWindow: 1000,
+                    uncertainty: 1.5,
+                    measurementUnit: ConcentrationMeasurement.MeasurementUnit.Ppm,
+                    measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
+                    levelValue: ConcentrationMeasurement.LevelValue.Critical,
+                },
                 relativeHumidityMeasurement: {
                     tolerance: 0,
                     minMeasuredValue: 0,
@@ -463,6 +655,19 @@ export class AllClustersTestInstance implements TestInstance {
                 },
                 userLabel: {
                     labelList: [{ label: "foo", value: "bar" }],
+                },
+                totalVolatileOrganicCompoundsConcentrationMeasurement: {
+                    measuredValue: 12.34,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
+                    peakMeasuredValue: 34.56,
+                    peakMeasuredValueWindow: 10000,
+                    averageMeasuredValue: 23.45,
+                    averageMeasuredValueWindow: 1000,
+                    uncertainty: 1.5,
+                    measurementUnit: ConcentrationMeasurement.MeasurementUnit.Ppm,
+                    measurementMedium: ConcentrationMeasurement.MeasurementMedium.Water,
+                    levelValue: ConcentrationMeasurement.LevelValue.Critical,
                 },
                 windowCovering: {
                     type: WindowCovering.WindowCoveringType.TiltBlindLift,
