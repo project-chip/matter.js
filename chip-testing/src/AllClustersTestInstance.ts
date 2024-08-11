@@ -492,7 +492,7 @@ export class AllClustersTestInstance implements TestInstance {
                     Switch.Feature.MomentarySwitch,
                     Switch.Feature.MomentarySwitchRelease,
                     Switch.Feature.MomentarySwitchLongPress,
-                    Switch.Feature.MomentarySwitchMultiPress,
+                    //Switch.Feature.MomentarySwitchMultiPress,
                 ),
             ),
             {
