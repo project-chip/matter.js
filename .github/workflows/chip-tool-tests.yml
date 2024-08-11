@@ -41,7 +41,7 @@ jobs:
       chip-tests-required: ${{ steps.check-trigger.outputs.chip-tests-required || steps.check-rebuild.outputs.chip-tests-required || steps.check-long-tests.outputs.chip-tests-required  }}
       chip-tool-rebuild: ${{ steps.check-rebuild.outputs.chip-tool-rebuild }}
       chip-long-tests-required: ${{ steps.check-long-tests.outputs.chip-long-tests-required }}
-      chip-slowapp-tests-required: ${{ steps.check-long-tests.outputs.chip-slowapp-tests-required }}
+      chip-slowapp-tests-required: ${{ steps.check-long-tests.outputs.chip-slowapp-tests-required || steps.check-slowapp-tests.outputs.chip-slowapp-tests-required }}
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
@@ -66,6 +66,9 @@ jobs:
               - "packages/matter.js/src/behavior/definitions/color-control/**"
               - "packages/matter.js/src/behavior/definitions/level-control/**"
               - "packages/matter.js/src/behavior/definitions/window-covering/**"
+              - "packages/matter.js/src/cluster/definitions/ColorControlCluster.ts"
+              - "packages/matter.js/src/cluster/definitions/LevelControlCluster.ts"
+              - "packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts"
 
       - uses: dorny/paths-filter@v3
         id: changes-long-tests
@@ -83,7 +86,7 @@ jobs:
         id: check-trigger
         run: echo "chip-tests-required=true" >> $GITHUB_OUTPUT
 
-      - if: ${{ (github.event_name != 'schedule' && (steps.changes-long-tests.outputs.src == 'true' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests-long]') == true)) }}
+      - if: ${{ (github.event_name != 'schedule' && (steps.changes-slowapp-tests.outputs.src == 'true' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests-long]') == true)) }}
         name: Enable slow App tests if needed
         id: check-slowapp-tests
         run: |
