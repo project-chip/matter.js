@@ -348,7 +348,6 @@ jobs:
         run: |
           cd connectedhomeip
           mkdir -p out/trace_data
-          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestApp.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1 --trace-to json:${TRACE_APP}.json" --script "src/python_testing/TC_SWTCH.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --endpoint 3 --trace-to json:${TRACE_TEST_JSON}.json --trace-to perfetto:${TRACE_TEST_PERFETTO}.perfetto --PICS src/app/tests/suites/certification/ci-pics-values"'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_AccessChecker.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_ACE_1_2.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_ACE_1_3.py'
@@ -370,6 +369,7 @@ jobs:
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_PWRTL_2_1.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SC_3_6.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SC_7_1.py'
+          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SWTCH.py'
 
   python-repl-tests-legacy:
     needs: [prepare-chip-build]
