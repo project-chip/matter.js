@@ -11,6 +11,7 @@ import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
 import { Logger } from "../../../log/Logger.js";
 import { FieldElement } from "../../../model/elements/FieldElement.js";
+import { ClusterModel } from "../../../model/index.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { TlvInvokeResponse } from "../../../protocol/interaction/InteractionProtocol.js";
 import { INTERACTION_MODEL_REVISION } from "../../../protocol/interaction/InteractionServer.js";
@@ -28,6 +29,10 @@ const logger = Logger.get("GeneralDiagnosticsServer");
 
 // Enable DataModelTest feature by default because we use MaxPathsPerInvoke > 1 by default
 const Base = GeneralDiagnosticsBehavior.with(GeneralDiagnostics.Feature.DataModelTest);
+
+// Enhance the Schema to store the real operational hours counter we internally use and persist this
+const schema = Base.schema?.clone() as ClusterModel;
+schema.add(FieldElement({ name: "totalOperationalHoursCounter", type: "uint64", quality: "N" }));
 
 /**
  * This is the default server implementation of GeneralDiagnosticsBehavior.
@@ -48,13 +53,7 @@ const Base = GeneralDiagnosticsBehavior.with(GeneralDiagnostics.Feature.DataMode
 export class GeneralDiagnosticsServer extends Base {
     protected declare internal: GeneralDiagnosticsServer.Internal;
     declare state: GeneralDiagnosticsServer.State;
-
-    static {
-        // Enhance the Schema to store the real operational hours counter we internally use and persist this
-        GeneralDiagnosticsServer.schema?.children.push(
-            FieldElement({ name: "totalOperationalHoursCounter", type: "uint64", quality: "N" }),
-        );
-    }
+    schema = schema;
 
     override initialize() {
         if (this.state.testEventTriggersEnabled === undefined) {

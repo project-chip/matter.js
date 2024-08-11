@@ -304,6 +304,14 @@ export abstract class ValueModel extends Model implements ValueElement {
         return result as AnyElement;
     }
 
+    override freeze() {
+        this.constraint.freeze();
+        this.conformance.freeze();
+        this.access.freeze();
+        this.quality.freeze();
+        super.freeze();
+    }
+
     constructor(definition: ValueElement.Properties) {
         super(definition);
 
