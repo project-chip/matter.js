@@ -353,7 +353,7 @@ export class AllClustersTestInstance implements TestInstance {
                             mfgCode: null,
                             namespaceId: 0x07, // Standard Namespaces. Common Numbering
                             tag: 0x01, // One
-                            label: "EP3",
+                            label: "EP1",
                         },
                     ],
                 },
