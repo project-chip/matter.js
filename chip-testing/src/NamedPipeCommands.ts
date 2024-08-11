@@ -1,18 +1,20 @@
-export type SimulateActionSwitchLongPressCommand = {
-    Name: "SimulateActionSwitchLongPress";
+export type SimulateLongPressCommand = {
+    Name: "SimulateLongPress";
     EndpointId: number;
     ButtonId: number;
     LongPressDelayMillis: number;
     LongPressDurationMillis: number;
 };
 
-export type SimulateActionSwitchMultiPressCommand = {
-    Name: "SimulateActionSwitchMultiPress";
+export type SimulateMultiPressCommand = {
+    Name: "SimulateMultiPress";
     EndpointId: number;
     ButtonId: number;
     MultiPressPressedTimeMillis: number;
     MultiPressReleasedTimeMillis: number;
     MultiPressNumPresses: number;
+    FeatureMap: number;
+    MultiPressMax: number;
 };
 
 export type SimulateLatchedPositionCommand = {
@@ -21,7 +23,4 @@ export type SimulateLatchedPositionCommand = {
     PositionId: number;
 };
 
-export type NamedPipeCommand =
-    | SimulateActionSwitchLongPressCommand
-    | SimulateActionSwitchMultiPressCommand
-    | SimulateLatchedPositionCommand;
+export type NamedPipeCommand = SimulateLongPressCommand | SimulateMultiPressCommand | SimulateLatchedPositionCommand;

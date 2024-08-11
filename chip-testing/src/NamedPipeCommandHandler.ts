@@ -103,17 +103,17 @@ export class NamedPipeCommandHandler {
         }
 
         switch (name) {
-            case "SimulateActionSwitchLongPress":
+            case "SimulateLongPress":
                 if (endpoint === undefined) {
                     throw new Error(`Endpoint ${endpointId} not existing`);
                 }
-                SwitchSimulator.simulateActionSwitchLongPress(endpoint, data);
+                SwitchSimulator.simulateLongPress(endpoint, data);
                 break;
-            case "SimulateActionSwitchMultiPress":
+            case "SimulateMultiPress":
                 if (endpoint === undefined) {
                     throw new Error(`Endpoint ${endpointId} not existing`);
                 }
-                SwitchSimulator.simulateActionSwitchMultiPress(endpoint, data);
+                SwitchSimulator.simulateMultiPress(endpoint, data);
                 break;
             case "SimulateLatchPosition":
                 if (endpoint === undefined) {
