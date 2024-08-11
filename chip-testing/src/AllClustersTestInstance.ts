@@ -192,7 +192,6 @@ export class AllClustersTestInstance implements TestInstance {
                         primaryColor: BasicInformation.Color.Purple,
                     },
                     reachable: true,
-                    maxPathsPerInvoke: 10,
                 },
                 generalDiagnostics: {
                     totalOperationalHours: 0, // set to enable it

@@ -604,7 +604,7 @@ export namespace BasicInformation {
              *
              * @see {@link MatterSpecification.v13.Core} § 11.1.5.23
              */
-            maxPathsPerInvoke: FixedAttribute(0x16, TlvUInt16.bound({ min: 1 }), { default: 1 })
+            maxPathsPerInvoke: FixedAttribute(0x16, TlvUInt16, { default: 0 })
         },
 
         events: {

@@ -299,7 +299,7 @@ export const BasicInformation = Cluster({
 
         Attribute({
             name: "MaxPathsPerInvoke", id: 0x16, type: "uint16", access: "R V", conformance: "M",
-            constraint: "min 1", default: 1, quality: "F",
+            constraint: "min 0", default: 0, quality: "F",
 
             details: "Indicates the maximum number of elements in a single InvokeRequests list (see Section 8.8.2, " +
                 "“Invoke Request Action”) that the Node is able to process. Note that since this attribute may " +
