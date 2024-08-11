@@ -35,5 +35,8 @@ import "./TimeSynchronizationOverrides.js";
 import "./UserLabelOverrides.js";
 import "./WindowCoveringOverrides.js";
 import "./any.js";
+import "./namespace.js";
+import "./semtag.js";
 import "./subject-id.js";
+import "./tag.js";
 import "./todOverrides.js";

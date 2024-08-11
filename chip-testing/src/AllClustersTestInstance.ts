@@ -26,11 +26,13 @@ import { TimeFormatLocalizationServer } from "@project-chip/matter.js/behavior/d
 import { UnitLocalizationServer } from "@project-chip/matter.js/behavior/definitions/unit-localization";
 import { UserLabelServer } from "@project-chip/matter.js/behavior/definitions/user-label";
 import { AirQualityServer } from "@project-chip/matter.js/behaviors/air-quality";
+import { DescriptorServer } from "@project-chip/matter.js/behaviors/descriptor";
 import {
     AdministratorCommissioning,
     AirQuality,
     BasicInformation,
     ColorControl,
+    Descriptor,
     LevelControl,
     ModeSelect,
     NetworkCommissioning,
@@ -51,18 +53,19 @@ import { Environment, StorageService } from "@project-chip/matter.js/environment
 import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
-import { TestInstance } from "./GenericTestApp.js";
 import { TestActivatedCarbonFilterMonitoringServer } from "./cluster/TestActivatedCarbonFilterMonitoringServer.js";
 import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsServer.js";
 import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitoringServer.js";
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
 import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
+import { TestInstance } from "./GenericTestApp.js";
+import { NamedPipeCommandHandler } from "./NamedPipeCommandHandler.js";
 
 export class AllClustersTestInstance implements TestInstance {
-    serverNode: ServerNode | undefined;
-    //storageManager: StorageManager;
+    serverNode?: ServerNode;
     protected appName: string;
+    #namedPipeHandler?: NamedPipeCommandHandler;
 
     constructor(
         public storage: Storage,
@@ -72,16 +75,29 @@ export class AllClustersTestInstance implements TestInstance {
             passcode?: number;
         },
     ) {
-        //this.storageManager = new StorageManager(storage);
         this.appName = options.appName;
+    }
+
+    async #setupNamedPipe() {
+        if (this.serverNode === undefined) {
+            throw new Error("ServerNode not initialized, cannot setup NamedPipeCommandHandler.");
+        }
+        try {
+            this.#namedPipeHandler = new NamedPipeCommandHandler(
+                `/tmp/chip_all_clusters_fifo_${process.pid}`,
+                this.serverNode,
+            );
+            await this.#namedPipeHandler.listen();
+        } catch (error) {
+            console.log("Error creating named pipe:", error);
+        }
     }
 
     /** Set up the test instance MatterServer. */
     async setup() {
         try {
-            //await this.storageManager.initialize(); // hacky but works
-
             this.serverNode = await this.setupServer();
+            await this.#setupNamedPipe();
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
             console.log(error);
@@ -125,6 +141,11 @@ export class AllClustersTestInstance implements TestInstance {
         //this.serverNode.cancel();
         //await this.serverNode.lifecycle.act;
         this.serverNode = undefined;
+        try {
+            await this.#namedPipeHandler?.close();
+        } catch (error) {
+            console.log("Error closing named pipe:", error);
+        }
         console.log(`======> ${this.appName}: Instance stopped`);
     }
 
@@ -242,6 +263,7 @@ export class AllClustersTestInstance implements TestInstance {
                     ColorControl.Feature.Xy,
                     ColorControl.Feature.ColorTemperature,
                 ),
+                DescriptorServer.with(Descriptor.Feature.TagList),
                 FixedLabelServer,
                 FlowMeasurementServer,
                 TestHepaFilterMonitoringServer,
@@ -259,7 +281,7 @@ export class AllClustersTestInstance implements TestInstance {
                 PressureMeasurementServer,
                 PumpConfigurationAndControlServer.with(PumpConfigurationAndControl.Feature.ConstantPressure),
                 RelativeHumidityMeasurementServer,
-                SwitchServer.with(Switch.Feature.LatchingSwitch), // More not possible with Chip right now
+                SwitchServer.with(Switch.Feature.LatchingSwitch),
                 TemperatureMeasurementServer,
                 ThermostatUserInterfaceConfigurationServer,
                 UserLabelServer,
@@ -267,7 +289,7 @@ export class AllClustersTestInstance implements TestInstance {
             ),
             {
                 number: EndpointNumber(1),
-                id: "onoff1",
+                id: "ep1",
                 activatedCarbonFilterMonitoring: {
                     condition: 20,
                     degradationDirection: ResourceMonitoring.DegradationDirection.Down,
@@ -324,6 +346,16 @@ export class AllClustersTestInstance implements TestInstance {
                     colorPointBy: 0,
                     colorPointBIntensity: 0,
                     managedTransitionTimeHandling: true, // enable transition management
+                },
+                descriptor: {
+                    tagList: [
+                        {
+                            mfgCode: null,
+                            namespaceId: 0x07, // Standard Namespaces. Common Numbering
+                            tag: 0x01, // One
+                            label: "EP1",
+                        },
+                    ],
                 },
                 fixedLabel: {
                     labelList: [
@@ -452,6 +484,38 @@ export class AllClustersTestInstance implements TestInstance {
             },
         );
         await serverNode.add(endpoint1);
+
+        const endpoint3 = new Endpoint(
+            OnOffLightDevice.with(
+                DescriptorServer.with(Descriptor.Feature.TagList),
+                SwitchServer.with(
+                    Switch.Feature.MomentarySwitch,
+                    Switch.Feature.MomentarySwitchRelease,
+                    Switch.Feature.MomentarySwitchLongPress, //MS & MSR & MSL works in testing
+                    //Switch.Feature.MomentarySwitchMultiPress, // Can not be tested right now because https://github.com/project-chip/connectedhomeip/issues/34923
+                ),
+            ),
+            {
+                number: EndpointNumber(3),
+                id: "ep3",
+                descriptor: {
+                    tagList: [
+                        {
+                            mfgCode: null,
+                            namespaceId: 0x07, // Standard Namespaces. Common Numbering
+                            tag: 0x03, // Three
+                            label: "EP3",
+                        },
+                    ],
+                },
+                switch: {
+                    rawPosition: 0,
+                    longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
+                    //multiPressDelay: 700,
+                },
+            },
+        );
+        await serverNode.add(endpoint3);
 
         return serverNode;
     }

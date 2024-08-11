@@ -182,7 +182,9 @@ export class SwitchServerLogic extends SwitchServerBase {
                 this.state.multiPressDelay,
                 this.callback(this.#handleMultiPressComplete),
             ).start();
-            this.internal.previousMultiPressPosition = this.internal.previouslyReportedPosition;
+            if (this.internal.previouslyReportedPosition !== this.state.momentaryNeutralPosition) {
+                this.internal.previousMultiPressPosition = this.internal.previouslyReportedPosition;
+            }
         }
         // Store the currently processed position to be used as "previous" in some events
         this.internal.previouslyReportedPosition = newPosition;
