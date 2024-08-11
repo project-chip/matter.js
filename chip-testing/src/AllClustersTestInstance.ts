@@ -511,6 +511,7 @@ export class AllClustersTestInstance implements TestInstance {
                 switch: {
                     rawPosition: 0,
                     //longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
+                    multiPressDelay: 700,
                 },
             },
         );
