@@ -36,14 +36,12 @@ import { TotalVolatileOrganicCompoundsConcentrationMeasurementServer } from "@pr
 import { UnitLocalizationServer } from "@project-chip/matter.js/behavior/definitions/unit-localization";
 import { UserLabelServer } from "@project-chip/matter.js/behavior/definitions/user-label";
 import { AirQualityServer } from "@project-chip/matter.js/behaviors/air-quality";
-import { DescriptorServer } from "@project-chip/matter.js/behaviors/descriptor";
 import {
     AdministratorCommissioning,
     AirQuality,
     BasicInformation,
     ColorControl,
     ConcentrationMeasurement,
-    Descriptor,
     LevelControl,
     ModeSelect,
     NetworkCommissioning,
@@ -58,6 +56,7 @@ import {
     WindowCovering,
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
+import { GenericSwitchDevice } from "@project-chip/matter.js/devices/GenericSwitchDevice";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
@@ -284,7 +283,6 @@ export class AllClustersTestInstance implements TestInstance {
                     ColorControl.Feature.Xy,
                     ColorControl.Feature.ColorTemperature,
                 ),
-                DescriptorServer.with(Descriptor.Feature.TagList),
                 FixedLabelServer,
                 FlowMeasurementServer,
                 FormaldehydeConcentrationMeasurementServer.with(
@@ -447,16 +445,6 @@ export class AllClustersTestInstance implements TestInstance {
                     colorPointBy: 0,
                     colorPointBIntensity: 0,
                     managedTransitionTimeHandling: true, // enable transition management
-                },
-                descriptor: {
-                    tagList: [
-                        {
-                            mfgCode: null,
-                            namespaceId: 0x07, // Standard Namespaces. Common Numbering
-                            tag: 0x01, // One
-                            label: "EP1",
-                        },
-                    ],
                 },
                 fixedLabel: {
                     labelList: [
@@ -691,8 +679,7 @@ export class AllClustersTestInstance implements TestInstance {
         await serverNode.add(endpoint1);
 
         const endpoint3 = new Endpoint(
-            OnOffLightDevice.with(
-                DescriptorServer.with(Descriptor.Feature.TagList),
+            GenericSwitchDevice.with(
                 SwitchServer.with(
                     Switch.Feature.MomentarySwitch,
                     Switch.Feature.MomentarySwitchRelease,
@@ -703,16 +690,6 @@ export class AllClustersTestInstance implements TestInstance {
             {
                 number: EndpointNumber(3),
                 id: "ep3",
-                descriptor: {
-                    tagList: [
-                        {
-                            mfgCode: null,
-                            namespaceId: 0x07, // Standard Namespaces. Common Numbering
-                            tag: 0x03, // Three
-                            label: "EP3",
-                        },
-                    ],
-                },
                 switch: {
                     rawPosition: 0,
                     longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
