@@ -43,7 +43,7 @@ export class DescriptorServer extends DescriptorBehavior {
         // Initialize ServerList
         this.state.serverList = this.#serverList;
 
-        // Initialize device type list.  This includes the part's device type but also any base device types
+        // Initialize device type list
         if (!this.state.deviceTypeList.length) {
             const partType = this.endpoint.type;
             this.state.deviceTypeList = [
@@ -52,20 +52,23 @@ export class DescriptorServer extends DescriptorBehavior {
                     revision: partType.deviceRevision,
                 },
             ];
-            for (
-                let base = MatterModel.standard.get(DeviceTypeModel, partType.deviceType)?.base;
-                base;
-                { base } = base
-            ) {
-                if (!(base instanceof DeviceTypeModel) || base.id === undefined) {
-                    continue;
-                }
 
-                this.state.deviceTypeList.push({
-                    deviceType: DeviceTypeId(base.id),
-                    revision: base.revision,
-                });
-            }
+            // For complete semantics it would be better to include all inherited device types.  However there is
+            // typical spec-level confusion that makes this of questionable practical utility so omitting for now
+            // for (
+            //     let base = MatterModel.standard.get(DeviceTypeModel, partType.deviceType)?.base;
+            //     base;
+            //     { base } = base
+            // ) {
+            //     if (!(base instanceof DeviceTypeModel) || base.id === undefined) {
+            //         continue;
+            //     }
+
+            //     this.state.deviceTypeList.push({
+            //         deviceType: DeviceTypeId(base.id),
+            //         revision: base.revision,
+            //     });
+            // }
         }
     }
 
@@ -97,6 +100,8 @@ export class DescriptorServer extends DescriptorBehavior {
 
     /**
      * Add semantic tags.  This is a shortcut for deduped insert into the tagList cluster attribute.
+     *
+     * You must enable the "TagList" feature to use this method.
      */
     addTags(...tags: Semtag[]) {
         // TODO - should automatically enable the feature if it's not enabled

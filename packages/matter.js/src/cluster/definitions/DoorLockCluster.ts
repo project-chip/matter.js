@@ -1387,7 +1387,13 @@ export namespace DoorLock {
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.14
      */
     export const TlvSetWeekDayScheduleRequest = TlvObject({
-        weekDayIndexScheduleId: TlvField(0, TlvUInt8.bound({ min: 1 })),
+        /**
+         * This field shall indicate the index of the Week Day schedule.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.14.1
+         */
+        weekDayIndex: TlvField(0, TlvUInt8.bound({ min: 1 })),
+
         userIndexUserId: TlvField(1, TlvUInt16.bound({ min: 1 })),
 
         /**
@@ -1444,7 +1450,7 @@ export namespace DoorLock {
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.15
      */
     export const TlvGetWeekDayScheduleRequest = TlvObject({
-        weekDayIndexScheduleId: TlvField(0, TlvUInt8.bound({ min: 1 })),
+        weekDayIndex: TlvField(0, TlvUInt8.bound({ min: 1 })),
         userIndexUserId: TlvField(1, TlvUInt16.bound({ min: 1 }))
     });
 
@@ -1463,7 +1469,13 @@ export namespace DoorLock {
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.16
      */
     export const TlvGetWeekDayScheduleResponse = TlvObject({
-        weekDayIndexScheduleId: TlvField(0, TlvUInt8.bound({ min: 1 })),
+        /**
+         * This field shall indicate the index of the Week Day schedule.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.16.1
+         */
+        weekDayIndex: TlvField(0, TlvUInt8.bound({ min: 1 })),
+
         userIndexUserId: TlvField(1, TlvUInt16.bound({ min: 1 })),
 
         /**
@@ -1532,7 +1544,14 @@ export namespace DoorLock {
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.17
      */
     export const TlvClearWeekDayScheduleRequest = TlvObject({
-        weekDayIndexScheduleId: TlvField(0, TlvUInt8),
+        /**
+         * This field shall indicate the Week Day schedule index to clear or 0xFE to clear all Week Day schedules for
+         * the specified user.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.17.1
+         */
+        weekDayIndex: TlvField(0, TlvUInt8),
+
         userIndexUserId: TlvField(1, TlvUInt16.bound({ min: 1 }))
     });
 
@@ -1549,7 +1568,13 @@ export namespace DoorLock {
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.18
      */
     export const TlvSetYearDayScheduleRequest = TlvObject({
-        yearDayIndexScheduleId: TlvField(0, TlvUInt8.bound({ min: 1 })),
+        /**
+         * This field shall indicate the index of the Year Day schedule.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.18.1
+         */
+        yearDayIndex: TlvField(0, TlvUInt8.bound({ min: 1 })),
+
         userIndexUserId: TlvField(1, TlvUInt16.bound({ min: 1 })),
 
         /**
@@ -1583,7 +1608,7 @@ export namespace DoorLock {
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.19
      */
     export const TlvGetYearDayScheduleRequest = TlvObject({
-        yearDayIndexScheduleId: TlvField(0, TlvUInt8.bound({ min: 1 })),
+        yearDayIndex: TlvField(0, TlvUInt8.bound({ min: 1 })),
         userIndexUserId: TlvField(1, TlvUInt16.bound({ min: 1 }))
     });
 
@@ -1602,7 +1627,13 @@ export namespace DoorLock {
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.20
      */
     export const TlvGetYearDayScheduleResponse = TlvObject({
-        yearDayIndexScheduleId: TlvField(0, TlvUInt8.bound({ min: 1 })),
+        /**
+         * This field shall indicate the index of the Year Day schedule.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.20.1
+         */
+        yearDayIndex: TlvField(0, TlvUInt8.bound({ min: 1 })),
+
         userIndexUserId: TlvField(1, TlvUInt16.bound({ min: 1 })),
 
         /**
@@ -1658,7 +1689,14 @@ export namespace DoorLock {
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.21
      */
     export const TlvClearYearDayScheduleRequest = TlvObject({
-        yearDayIndexScheduleId: TlvField(0, TlvUInt8),
+        /**
+         * This field shall indicate the Year Day schedule index to clear or 0xFE to clear all Year Day schedules for
+         * the specified user.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.21.1
+         */
+        yearDayIndex: TlvField(0, TlvUInt8),
+
         userIndexUserId: TlvField(1, TlvUInt16.bound({ min: 1 }))
     });
 
@@ -1733,7 +1771,12 @@ export namespace DoorLock {
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.22
      */
     export const TlvSetHolidayScheduleRequest = TlvObject({
-        holidayIndexHolidayScheduleId: TlvField(0, TlvUInt8.bound({ min: 1 })),
+        /**
+         * This field shall indicate the index of the Holiday schedule.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.22.1
+         */
+        holidayIndex: TlvField(0, TlvUInt8.bound({ min: 1 })),
 
         /**
          * This field shall indicate the starting time for the Holiday Day schedule in Epoch Time in Seconds with local
@@ -1772,9 +1815,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.23
      */
-    export const TlvGetHolidayScheduleRequest = TlvObject({
-        holidayIndexHolidayScheduleId: TlvField(0, TlvUInt8.bound({ min: 1 }))
-    });
+    export const TlvGetHolidayScheduleRequest = TlvObject({ holidayIndex: TlvField(0, TlvUInt8.bound({ min: 1 })) });
 
     /**
      * Input to the DoorLock getHolidaySchedule command
@@ -1791,7 +1832,12 @@ export namespace DoorLock {
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.24
      */
     export const TlvGetHolidayScheduleResponse = TlvObject({
-        holidayIndexHolidayScheduleId: TlvField(0, TlvUInt8.bound({ min: 1 })),
+        /**
+         * This field shall indicate the index of the Holiday schedule.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.24.1
+         */
+        holidayIndex: TlvField(0, TlvUInt8.bound({ min: 1 })),
 
         /**
          * Status shall be one of the following values:
@@ -1853,7 +1899,14 @@ export namespace DoorLock {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.25
      */
-    export const TlvClearHolidayScheduleRequest = TlvObject({ holidayIndexHolidayScheduleId: TlvField(0, TlvUInt8) });
+    export const TlvClearHolidayScheduleRequest = TlvObject({
+        /**
+         * This field shall indicate the Holiday schedule index to clear or 0xFE to clear all Holiday schedules.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.25.1
+         */
+        holidayIndex: TlvField(0, TlvUInt8)
+    });
 
     /**
      * Input to the DoorLock clearHolidaySchedule command
@@ -1959,7 +2012,15 @@ export namespace DoorLock {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.9
      */
-    export const TlvClearPinCodeRequest = TlvObject({ pinSlotIndexUserId: TlvField(0, TlvUInt16) });
+    export const TlvClearPinCodeRequest = TlvObject({
+        /**
+         * This field shall specify a valid PIN code slot index or 0xFFFE to indicate all PIN code slots shall be
+         * cleared.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.9.1
+         */
+        pinSlotIndex: TlvField(0, TlvUInt16)
+    });
 
     /**
      * Input to the DoorLock clearPinCode command
@@ -2343,7 +2404,15 @@ export namespace DoorLock {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.32
      */
-    export const TlvClearRfidCodeRequest = TlvObject({ rfidSlotIndexUserId: TlvField(0, TlvUInt16) });
+    export const TlvClearRfidCodeRequest = TlvObject({
+        /**
+         * This field shall indicate a valid RFID code slot index or 0xFFFE to indicate all RFID code slots shall be
+         * cleared.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.32.1
+         */
+        rfidSlotIndex: TlvField(0, TlvUInt16)
+    });
 
     /**
      * Input to the DoorLock clearRfidCode command
@@ -2723,7 +2792,22 @@ export namespace DoorLock {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.1
      */
-    export const TlvLockDoorRequest = TlvObject({ pinCodePinRfidCode: TlvOptionalField(0, TlvByteString) });
+    export const TlvLockDoorRequest = TlvObject({
+        /**
+         * If the RequirePINforRemoteOperation attribute is True then PINCode field shall be provided and the door lock
+         * shall NOT grant access if it is not provided.
+         *
+         * If the PINCode field is provided, the door lock shall verify PINCode before granting access regardless of
+         * the value of RequirePINForRemoteOperation attribute.
+         *
+         * When the PINCode field is provided an invalid PIN will count towards the WrongCodeEntryLimit and the
+         * UserCodeTemporaryDisableTime will be triggered if the WrongCodeEntryLimit is exceeded. The lock shall ignore
+         * any attempts to lock/unlock the door until the UserCodeTemporaryDisableTime expires.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.1.1
+         */
+        pinCode: TlvOptionalField(0, TlvByteString)
+    });
 
     /**
      * Input to the DoorLock lockDoor command
@@ -2737,7 +2821,14 @@ export namespace DoorLock {
      *
      * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.2
      */
-    export const TlvUnlockDoorRequest = TlvObject({ pinCodePinRfidCode: TlvOptionalField(0, TlvByteString) });
+    export const TlvUnlockDoorRequest = TlvObject({
+        /**
+         * See PINCode field.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.2.1
+         */
+        pinCode: TlvOptionalField(0, TlvByteString)
+    });
 
     /**
      * Input to the DoorLock unlockDoor command
@@ -2760,7 +2851,12 @@ export namespace DoorLock {
          */
         timeout: TlvField(0, TlvUInt16),
 
-        pinCodePinRfidCode: TlvOptionalField(1, TlvByteString)
+        /**
+         * See PINCode field.
+         *
+         * @see {@link MatterSpecification.v13.Cluster} § 5.2.10.3.2
+         */
+        pinCode: TlvOptionalField(1, TlvByteString)
     });
 
     /**

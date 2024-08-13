@@ -132,8 +132,9 @@ describe("DescriptorServer", () => {
 
         expect(light.state.descriptor.deviceTypeList).deep.equals([
             { deviceType: 268, revision: 4 },
-            { deviceType: 257, revision: 3 },
-            { deviceType: 256, revision: 3 },
+            // Code to add these is currently disabled
+            // { deviceType: 257, revision: 3 },
+            // { deviceType: 256, revision: 3 },
         ]);
     });
 

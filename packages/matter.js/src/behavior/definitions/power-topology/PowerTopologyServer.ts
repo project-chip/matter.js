@@ -9,6 +9,8 @@ import { PowerTopology } from "../../../cluster/definitions/PowerTopologyCluster
 import { ImplementationError } from "../../../common/MatterError.js";
 import { EndpointNumber } from "../../../datatype/EndpointNumber.js";
 import { DescriptorServer } from "../descriptor/DescriptorServer.js";
+import { ElectricalEnergyMeasurementBehavior } from "../electrical-energy-measurement/ElectricalEnergyMeasurementBehavior.js";
+import { ElectricalPowerMeasurementBehavior } from "../electrical-power-measurement/ElectricalPowerMeasurementBehavior.js";
 import { PowerTopologyBehavior } from "./PowerTopologyBehavior.js";
 
 const PowerTopologyBase = PowerTopologyBehavior.with(
@@ -27,7 +29,9 @@ const PowerTopologyBase = PowerTopologyBehavior.with(
  */
 export class PowerTopologyServerLogic extends PowerTopologyBase {
     override initialize(): void {
-        this.agent.get(DescriptorServer).addDeviceTypes("ElectricalSensor");
+        if (this.agent.has(ElectricalPowerMeasurementBehavior) || this.agent.has(ElectricalEnergyMeasurementBehavior)) {
+            this.agent.get(DescriptorServer).addDeviceTypes("ElectricalSensor");
+        }
 
         this.#assertActiveEndpointsAllowed(this.state.activeEndpoints);
 
