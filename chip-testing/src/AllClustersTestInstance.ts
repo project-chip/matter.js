@@ -694,8 +694,8 @@ export class AllClustersTestInstance implements TestInstance {
                 id: "ep3",
                 descriptor: {
                     deviceTypeList: [
-                        { deviceType: 0x0101, revision: 3 },
                         { deviceType: 0x0100, revision: 3 },
+                        { deviceType: 0x0101, revision: 3 },
                     ],
                 },
                 switch: {
