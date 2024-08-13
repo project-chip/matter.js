@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-tools",
-    "version": "0.10.0-alpha.0-20240812-5ae22fff",
+    "version": "0.10.0-alpha.0-20240813-10402111",
     "description": "Matter.js tooling",
     "type": "module",
     "scripts": {
