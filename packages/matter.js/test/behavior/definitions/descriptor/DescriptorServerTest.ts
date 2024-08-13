@@ -12,6 +12,7 @@ import { ClusterId } from "../../../../src/datatype/ClusterId.js";
 import { DeviceTypeId } from "../../../../src/datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../../../../src/datatype/EndpointNumber.js";
 import { Endpoint } from "../../../../src/endpoint/Endpoint.js";
+import { ColorTemperatureLightDevice } from "../../../../src/endpoint/definitions/device/ColorTemperatureLightDevice.js";
 import { OnOffLightDevice } from "../../../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { OnOffLightSwitchDevice } from "../../../../src/endpoint/definitions/device/OnOffLightSwitchDevice.js";
 import { AggregatorEndpoint } from "../../../../src/endpoint/definitions/system/AggregatorEndpoint.js";
@@ -119,6 +120,21 @@ describe("DescriptorServer", () => {
         expect(parent.state.descriptor.partsList.length).equals(0);
 
         expect(partsState.partsList).deep.equals([]);
+    });
+
+    it("fully populates device types", async () => {
+        const light = await MockEndpoint.create(ColorTemperatureLightDevice, {
+            colorControl: {
+                coupleColorTempToLevelMinMireds: 0,
+                startUpColorTemperatureMireds: 0,
+            },
+        });
+
+        expect(light.state.descriptor.deviceTypeList).deep.equals([
+            { deviceType: 268, revision: 4 },
+            { deviceType: 257, revision: 3 },
+            { deviceType: 256, revision: 3 },
+        ]);
     });
 
     describe("adds parts automatically with indexed grandparent and parent", () => {

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
+import { DescriptorServer } from "../descriptor/DescriptorServer.js";
 import { DeviceEnergyManagementBehavior } from "./DeviceEnergyManagementBehavior.js";
 
 /**
@@ -15,4 +14,10 @@ import { DeviceEnergyManagementBehavior } from "./DeviceEnergyManagementBehavior
  * default. You should use {@link DeviceEnergyManagementServer.with} to specialize the class for the features your
  * implementation supports.
  */
-export class DeviceEnergyManagementServer extends DeviceEnergyManagementBehavior {}
+export class DeviceEnergyManagementServer extends DeviceEnergyManagementBehavior {
+    override initialize() {
+        // Technically ElectricalSensor also requires Device EnergyManagementMode (as of Matter 1.3) but no other device
+        // type requires DeviceEnergyManagement
+        this.agent.get(DescriptorServer).addDeviceTypes("ElectricalSensor");
+    }
+}

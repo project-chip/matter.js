@@ -9,6 +9,7 @@ import { ClusterComposer } from "../../cluster/mutation/ClusterComposer.js";
 import { ElementModifier } from "../../cluster/mutation/ElementModifier.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import type { Agent } from "../../endpoint/Agent.js";
+import { TypeFromBitSchema } from "../../schema/BitmapSchema.js";
 import { AsyncObservable, EventEmitter, Observable } from "../../util/Observable.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { Behavior } from "../Behavior.js";
@@ -319,7 +320,7 @@ export namespace ClusterBehavior {
                 /**
                  * Supported features as a flag object.
                  */
-                features: C["supportedFeatures"];
+                features: TypeFromBitSchema<C["features"]>;
 
                 [Symbol.asyncDispose](): MaybePromise<void>;
             };
