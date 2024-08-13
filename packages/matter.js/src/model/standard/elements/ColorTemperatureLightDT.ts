@@ -10,7 +10,8 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const ColorTemperatureLightDt = DeviceType({
-    name: "ColorTemperatureLight", id: 0x10c, type: "DimmableLight", classification: "simple",
+    name: "ColorTemperatureLight", id: 0x10c, type: "DimmableLight", category: "Lighting",
+    classification: "simple",
     details: "A Color Temperature Light is a lighting device that is capable of being switched on or off, the " +
         "intensity of its light adjusted, and its color temperature adjusted by means of a bound controller " +
         "device such as a Color Dimmer Switch.",
@@ -68,6 +69,6 @@ export const ColorTemperatureLightDt = DeviceType({
             xref: { document: "device", section: "4.3.4" }
         })
     ]
-});
+})
 
 Matter.children.push(ColorTemperatureLightDt);

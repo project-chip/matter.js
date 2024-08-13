@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const AggregatorDt = DeviceType({
-    name: "Aggregator", id: 0xe, classification: "simple",
+    name: "Aggregator", id: 0xe, category: "Generic", classification: "simple",
 
     details: "This device type aggregates endpoints as a collection. Clusters on the endpoint indicating this " +
         "device type provide functionality for the collection of descendent endpoints present in the " +

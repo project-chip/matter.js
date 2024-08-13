@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const CastingVideoPlayerDt = DeviceType({
-    name: "CastingVideoPlayer", id: 0x23, classification: "simple",
+    name: "CastingVideoPlayer", id: 0x23, category: "Media", classification: "simple",
 
     details: "This defines conformance to the Casting Video Player device type." +
         "\n" +

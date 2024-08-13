@@ -10,7 +10,8 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const DimmerSwitchDt = DeviceType({
-    name: "DimmerSwitch", id: 0x104, type: "OnOffLightSwitch", classification: "simple",
+    name: "DimmerSwitch", id: 0x104, type: "OnOffLightSwitch", category: "Switches and Controls",
+    classification: "simple",
     details: "A Dimmer Switch is a controller device that, when bound to a lighting device such as a Dimmable " +
         "Light, is capable of being used to switch the device on or off and adjust the intensity of the " +
         "light being emitted.",
@@ -46,6 +47,6 @@ export const DimmerSwitchDt = DeviceType({
             xref: { document: "device", section: "6.2.4" }
         })
     ]
-});
+})
 
 Matter.children.push(DimmerSwitchDt);

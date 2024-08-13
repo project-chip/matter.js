@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const WaterLeakDetectorDt = DeviceType({
-    name: "WaterLeakDetector", id: 0x43, classification: "simple",
+    name: "WaterLeakDetector", id: 0x43, category: "Sensor", classification: "simple",
     details: "This defines conformance to the Water Leak Detector device type.",
     xref: { document: "device", section: "7.12" },
 

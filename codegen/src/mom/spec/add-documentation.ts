@@ -55,12 +55,13 @@ function extractUsefulDocumentation(p: HTMLElement) {
         .replace(/\s\s+/, "  ")
         .replace(/This attribute shall (?:indicate|represent)/, "Indicates")
         .replace(/This attribute shall be null/, "Null")
+        .replace(/The following tags are defined in this namespace\./, "")
+        .replace(/This section contains the (.*) as part of the semantic tag feature\./i, "")
         .trim();
 }
 
 /**
- * Similarly to what we do within paragraphs, look for obvious word splits
- * spanning paragraphs and reassemble.
+ * Similarly to what we do within paragraphs, look for obvious word splits spanning paragraphs and reassemble.
  */
 function mergeSplitParagraphs(paragraphs: string[]) {
     for (let i = 0; i < paragraphs.length - 1; i++) {

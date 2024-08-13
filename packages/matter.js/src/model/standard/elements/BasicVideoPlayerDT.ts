@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const BasicVideoPlayerDt = DeviceType({
-    name: "BasicVideoPlayer", id: 0x28, classification: "simple",
+    name: "BasicVideoPlayer", id: 0x28, category: "Media", classification: "simple",
 
     details: "This defines conformance to the Basic Video Player device type." +
         "\n" +

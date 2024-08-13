@@ -10,7 +10,8 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const ExtendedColorLightDt = DeviceType({
-    name: "ExtendedColorLight", id: 0x10d, type: "ColorTemperatureLight", classification: "simple",
+    name: "ExtendedColorLight", id: 0x10d, type: "ColorTemperatureLight", category: "Lighting",
+    classification: "simple",
     details: "An Extended Color Light is a lighting device that is capable of being switched on or off, the " +
         "intensity of its light adjusted, and its color adjusted by means of a bound controller device such " +
         "as a Color Dimmer Switch or Control Bridge. The device supports adjustment of color by means of " +
@@ -75,6 +76,6 @@ export const ExtendedColorLightDt = DeviceType({
             xref: { document: "device", section: "4.4.4" }
         })
     ]
-});
+})
 
 Matter.children.push(ExtendedColorLightDt);

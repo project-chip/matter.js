@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const ModeSelectDt = DeviceType({
-    name: "ModeSelect", id: 0x27, classification: "simple",
+    name: "ModeSelect", id: 0x27, category: "Generic", classification: "simple",
     details: "This defines conformance to the Mode Select device type.",
     xref: { document: "device", section: "11.1" },
 

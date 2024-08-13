@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const MicrowaveOvenDt = DeviceType({
-    name: "MicrowaveOven", id: 0x79, classification: "simple",
+    name: "MicrowaveOven", id: 0x79, category: "Appliances", classification: "simple",
     details: "This defines conformance to the Microwave Oven device type." +
         "\n" +
         "A Microwave Oven is a device with the primary function of heating foods and beverages using a " +

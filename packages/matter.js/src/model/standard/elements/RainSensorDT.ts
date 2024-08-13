@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const RainSensorDt = DeviceType({
-    name: "RainSensor", id: 0x44, classification: "simple",
+    name: "RainSensor", id: 0x44, category: "Sensor", classification: "simple",
     details: "This defines conformance to the Rain Sensor device type.",
     xref: { document: "device", section: "7.13" },
 

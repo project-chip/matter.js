@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const BridgedNodeDt = DeviceType({
-    name: "BridgedNode", id: 0x13, classification: "utility",
+    name: "BridgedNode", id: 0x13, category: "Utility", classification: "utility",
     details: "This defines conformance for a Bridged Node root endpoint. This endpoint is akin to a \"read me " +
         "first\" endpoint that describes itself and any other endpoints that make up the Bridged Node. A " +
         "Bridged Node endpoint represents a device on a foreign network, but is not the root endpoint of the " +

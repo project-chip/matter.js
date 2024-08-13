@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const DeviceEnergyManagementDt = DeviceType({
-    name: "DeviceEnergyManagement", id: 0x50d, classification: "utility",
+    name: "DeviceEnergyManagement", id: 0x50d, category: "Utility", classification: "utility",
     details: "A Device Energy Management device provides reporting and optionally adjustment of the electrical " +
         "power planned on being consumed or produced by the device.",
     xref: { document: "device", section: "2.7" },

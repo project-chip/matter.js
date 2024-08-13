@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const AirQualitySensorDt = DeviceType({
-    name: "AirQualitySensor", id: 0x2c, classification: "simple",
+    name: "AirQualitySensor", id: 0x2c, category: "Sensor", classification: "simple",
     details: "This defines conformance for the Air Quality Sensor device type." +
         "\n" +
         "An air quality sensor is a device designed to monitor and measure various parameters related to the " +

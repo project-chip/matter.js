@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const WindowCoveringDt = DeviceType({
-    name: "WindowCovering", id: 0x202, classification: "simple",
+    name: "WindowCovering", id: 0x202, category: "Closure", classification: "simple",
     details: "This defines conformance to the Window Covering device type.",
     xref: { document: "device", section: "8.3" },
 

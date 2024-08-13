@@ -15,7 +15,9 @@ import {
     DatatypeElement as Datatype,
     EventElement as Event,
     DeviceTypeElement as DeviceType,
-    RequirementElement as Requirement
+    RequirementElement as Requirement,
+    SemanticNamespaceElement as SemanticNamespace,
+    SemanticTagElement as SemanticTag
 } from "@project-chip/matter.js/model";
 
 export const SpecMatter = Matter({
@@ -35019,7 +35021,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "RootNode", id: 0x16, classification: "node",
+            name: "RootNode", id: 0x16, category: "Utility", classification: "node",
 
             details: "This defines conformance for a root node endpoint (see System Model specification). This endpoint " +
                 "is akin to a \"read me first\" endpoint that describes itself and the other endpoints that make up " +
@@ -35142,7 +35144,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "PowerSource", id: 0x11, classification: "utility",
+            name: "PowerSource", id: 0x11, category: "Utility", classification: "utility",
             xref: { document: "device", section: "2.2" },
 
             children: [
@@ -35161,7 +35163,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "OtaRequestor", id: 0x12, classification: "utility",
+            name: "OtaRequestor", id: 0x12, category: "Utility", classification: "utility",
             details: "An OTA Requestor is a device that is capable of receiving an OTA software update.",
             xref: { document: "device", section: "2.3" },
 
@@ -35185,7 +35187,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "OtaProvider", id: 0x14, classification: "utility",
+            name: "OtaProvider", id: 0x14, category: "Utility", classification: "utility",
             details: "An OTA Provider is a node that is capable of providing an OTA software update to other nodes on the " +
                 "same fabric.",
             xref: { document: "device", section: "2.4" },
@@ -35210,7 +35212,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "BridgedNode", id: 0x13, classification: "utility",
+            name: "BridgedNode", id: 0x13, category: "Utility", classification: "utility",
             details: "This defines conformance for a Bridged Node root endpoint. This endpoint is akin to a \"read me " +
                 "first\" endpoint that describes itself and any other endpoints that make up the Bridged Node. A " +
                 "Bridged Node endpoint represents a device on a foreign network, but is not the root endpoint of the " +
@@ -35242,7 +35244,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "ElectricalSensor", id: 0x510, classification: "utility",
+            name: "ElectricalSensor", id: 0x510, category: "Utility", classification: "utility",
             details: "An Electrical Sensor device measures the electrical power and/or energy being imported and/or " +
                 "exported.",
             xref: { document: "device", section: "2.6" },
@@ -35271,7 +35273,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "DeviceEnergyManagement", id: 0x50d, classification: "utility",
+            name: "DeviceEnergyManagement", id: 0x50d, category: "Utility", classification: "utility",
             details: "A Device Energy Management device provides reporting and optionally adjustment of the electrical " +
                 "power planned on being consumed or produced by the device.",
             xref: { document: "device", section: "2.7" },
@@ -35296,7 +35298,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "OnOffLight", id: 0x100, classification: "simple",
+            name: "OnOffLight", id: 0x100, category: "Lighting", classification: "simple",
             details: "The On/Off Light is a lighting device that is capable of being switched on or off by means of a " +
                 "bound controller device such as an On/Off Light Switch or a Dimmer Switch. In addition, an on/off " +
                 "light is also capable of being switched by means of a bound occupancy sensor.",
@@ -35351,7 +35353,8 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "DimmableLight", id: 0x101, type: "OnOffLight", classification: "simple",
+            name: "DimmableLight", id: 0x101, type: "OnOffLight", category: "Lighting",
+            classification: "simple",
             details: "A Dimmable Light is a lighting device that is capable of being switched on or off and the intensity " +
                 "of its light adjusted by means of a bound controller device such as a Dimmer Switch or a Color " +
                 "Dimmer Switch. In addition, a Dimmable Light device is also capable of being switched by means of a " +
@@ -35407,7 +35410,8 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "ColorTemperatureLight", id: 0x10c, type: "DimmableLight", classification: "simple",
+            name: "ColorTemperatureLight", id: 0x10c, type: "DimmableLight", category: "Lighting",
+            classification: "simple",
             details: "A Color Temperature Light is a lighting device that is capable of being switched on or off, the " +
                 "intensity of its light adjusted, and its color temperature adjusted by means of a bound controller " +
                 "device such as a Color Dimmer Switch.",
@@ -35471,7 +35475,8 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "ExtendedColorLight", id: 0x10d, type: "ColorTemperatureLight", classification: "simple",
+            name: "ExtendedColorLight", id: 0x10d, type: "ColorTemperatureLight", category: "Lighting",
+            classification: "simple",
             details: "An Extended Color Light is a lighting device that is capable of being switched on or off, the " +
                 "intensity of its light adjusted, and its color adjusted by means of a bound controller device such " +
                 "as a Color Dimmer Switch or Control Bridge. The device supports adjustment of color by means of " +
@@ -35542,7 +35547,8 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "OnOffPlugInUnit", id: 0x10a, classification: "simple",
+            name: "OnOffPlugInUnit", id: 0x10a, category: "Smart Plugs/Outlets and other Actuators",
+            classification: "simple",
             details: "An On/Off Plug-in Unit is a device that provides power to another device that is plugged into it, " +
                 "and is capable of switching that provided power on or off.",
             xref: { document: "device", section: "5.1" },
@@ -35596,7 +35602,8 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "DimmablePlugInUnit", id: 0x10b, classification: "simple",
+            name: "DimmablePlugInUnit", id: 0x10b, category: "Smart Plugs/Outlets and other Actuators",
+            classification: "simple",
             details: "A Dimmable Plug-In Unit is a device that provides power to another device that is plugged into it, " +
                 "and is capable of being switched on or off and have its level adjusted. The Dimmable Plug-in Unit " +
                 "is typically used to control a conventional non-communicating light through its mains connection " +
@@ -35652,7 +35659,8 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "Pump", id: 0x303, classification: "simple",
+            name: "Pump", id: 0x303, category: "Smart Plugs/Outlets and other Actuators",
+            classification: "simple",
             details: "A Pump device is a pump that may have variable speed. It may have optional built-in sensors and a " +
                 "regulation mechanism. It is typically used for pumping fluids like water.",
             xref: { document: "device", section: "5.3" },
@@ -35721,7 +35729,8 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "WaterValve", id: 0x42, classification: "simple",
+            name: "WaterValve", id: 0x42, category: "Smart Plugs/Outlets and other Actuators",
+            classification: "simple",
             details: "This defines conformance to the Water Valve device type.",
             xref: { document: "device", section: "5.4" },
 
@@ -35753,7 +35762,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "OnOffLightSwitch", id: 0x103, classification: "simple",
+            name: "OnOffLightSwitch", id: 0x103, category: "Switches and Controls", classification: "simple",
             details: "An On/Off Light Switch is a controller device that, when bound to a lighting device such as an " +
                 "On/Off Light, is capable of being used to switch the device on or off.",
             xref: { document: "device", section: "6.1" },
@@ -35790,7 +35799,8 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "DimmerSwitch", id: 0x104, type: "OnOffLightSwitch", classification: "simple",
+            name: "DimmerSwitch", id: 0x104, type: "OnOffLightSwitch", category: "Switches and Controls",
+            classification: "simple",
             details: "A Dimmer Switch is a controller device that, when bound to a lighting device such as a Dimmable " +
                 "Light, is capable of being used to switch the device on or off and adjust the intensity of the " +
                 "light being emitted.",
@@ -35832,7 +35842,8 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "ColorDimmerSwitch", id: 0x105, type: "DimmerSwitch", classification: "simple",
+            name: "ColorDimmerSwitch", id: 0x105, type: "DimmerSwitch", category: "Switches and Controls",
+            classification: "simple",
             details: "A Color Dimmer Switch is a controller device that, when bound to a lighting device such as an " +
                 "Extended Color Light, is capable of being used to adjust the color of the light being emitted.",
             xref: { document: "device", section: "6.3" },
@@ -35877,7 +35888,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "ControlBridge", id: 0x840, classification: "simple",
+            name: "ControlBridge", id: 0x840, category: "Switches and Controls", classification: "simple",
             details: "A Control Bridge is a controller device that, when bound to a lighting device such as an Extended " +
                 "Color Light, is capable of being used to switch the device on or off, adjust the intensity of the " +
                 "light being emitted and adjust the color of the light being emitted. In addition, a Control Bridge " +
@@ -35932,7 +35943,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "PumpController", id: 0x304, classification: "simple",
+            name: "PumpController", id: 0x304, category: "Switches and Controls", classification: "simple",
             details: "A Pump Controller device is capable of configuring and controlling a Pump device.",
             xref: { document: "device", section: "6.5" },
 
@@ -35992,7 +36003,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "GenericSwitch", id: 0xf, classification: "simple",
+            name: "GenericSwitch", id: 0xf, category: "Switches and Controls", classification: "simple",
             details: "This defines conformance for the Generic Switch device type.",
             xref: { document: "device", section: "6.6" },
 
@@ -36016,7 +36027,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "ContactSensor", id: 0x15, classification: "simple",
+            name: "ContactSensor", id: 0x15, category: "Sensor", classification: "simple",
             details: "This defines conformance to the Contact Sensor device type.",
             xref: { document: "device", section: "7.1" },
 
@@ -36044,7 +36055,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "LightSensor", id: 0x106, classification: "simple",
+            name: "LightSensor", id: 0x106, category: "Sensor", classification: "simple",
             details: "A Light Sensor device is a measurement and sensing device that is capable of measuring and " +
                 "reporting the intensity of light (illuminance) to which the sensor is being subjected.",
             xref: { document: "device", section: "7.2" },
@@ -36069,7 +36080,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "OccupancySensor", id: 0x107, classification: "simple",
+            name: "OccupancySensor", id: 0x107, category: "Sensor", classification: "simple",
             details: "An Occupancy Sensor is a measurement and sensing device that is capable of measuring and reporting " +
                 "the occupancy state in a designated area.",
             xref: { document: "device", section: "7.3" },
@@ -36094,7 +36105,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "TemperatureSensor", id: 0x302, classification: "simple",
+            name: "TemperatureSensor", id: 0x302, category: "Sensor", classification: "simple",
             details: "A Temperature Sensor device reports measurements of temperature.",
             xref: { document: "device", section: "7.4" },
 
@@ -36118,7 +36129,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "PressureSensor", id: 0x305, classification: "simple",
+            name: "PressureSensor", id: 0x305, category: "Sensor", classification: "simple",
             details: "A Pressure Sensor device measures and reports the pressure of a fluid.",
             xref: { document: "device", section: "7.5" },
 
@@ -36142,7 +36153,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "FlowSensor", id: 0x306, classification: "simple",
+            name: "FlowSensor", id: 0x306, category: "Sensor", classification: "simple",
             details: "A Flow Sensor device measures and reports the flow rate of a fluid.",
             xref: { document: "device", section: "7.6" },
 
@@ -36166,7 +36177,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "HumiditySensor", id: 0x307, classification: "simple",
+            name: "HumiditySensor", id: 0x307, category: "Sensor", classification: "simple",
             details: "A humidity sensor (in most cases a Relative humidity sensor) reports humidity measurements.",
             xref: { document: "device", section: "7.7" },
 
@@ -36190,7 +36201,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "OnOffSensor", id: 0x850, classification: "simple",
+            name: "OnOffSensor", id: 0x850, category: "Sensor", classification: "simple",
             details: "An On/Off Sensor is a measurement and sensing device that, when bound to a lighting device such as " +
                 "a Dimmable Light, is capable of being used to switch the device on or off.",
             xref: { document: "device", section: "7.8" },
@@ -36235,7 +36246,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "SmokeCoAlarm", id: 0x76, classification: "simple",
+            name: "SmokeCoAlarm", id: 0x76, category: "Sensor", classification: "simple",
 
             details: "A Smoke CO Alarm device is capable of sensing smoke, carbon monoxide or both. It is capable of " +
                 "issuing a visual and audible alert to indicate elevated concentration of smoke or carbon monoxide." +
@@ -36288,7 +36299,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "AirQualitySensor", id: 0x2c, classification: "simple",
+            name: "AirQualitySensor", id: 0x2c, category: "Sensor", classification: "simple",
             details: "This defines conformance for the Air Quality Sensor device type." +
                 "\n" +
                 "An air quality sensor is a device designed to monitor and measure various parameters related to the " +
@@ -36367,7 +36378,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "WaterFreezeDetector", id: 0x41, classification: "simple",
+            name: "WaterFreezeDetector", id: 0x41, category: "Sensor", classification: "simple",
             details: "This defines conformance to the Water Freeze Detector device type.",
             xref: { document: "device", section: "7.11" },
 
@@ -36396,7 +36407,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "WaterLeakDetector", id: 0x43, classification: "simple",
+            name: "WaterLeakDetector", id: 0x43, category: "Sensor", classification: "simple",
             details: "This defines conformance to the Water Leak Detector device type.",
             xref: { document: "device", section: "7.12" },
 
@@ -36425,7 +36436,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "RainSensor", id: 0x44, classification: "simple",
+            name: "RainSensor", id: 0x44, category: "Sensor", classification: "simple",
             details: "This defines conformance to the Rain Sensor device type.",
             xref: { document: "device", section: "7.13" },
 
@@ -36454,7 +36465,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "DoorLock", id: 0xa, classification: "simple",
+            name: "DoorLock", id: 0xa, category: "Closure", classification: "simple",
             details: "A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by " +
                 "means of a manual or a remote method.",
             xref: { document: "device", section: "8.1" },
@@ -36493,7 +36504,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "DoorLockController", id: 0xb, classification: "simple",
+            name: "DoorLockController", id: 0xb, category: "Closure", classification: "simple",
             details: "A Door Lock Controller is a device capable of controlling a door lock.",
             xref: { document: "device", section: "8.2" },
 
@@ -36525,7 +36536,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "WindowCovering", id: 0x202, classification: "simple",
+            name: "WindowCovering", id: 0x202, category: "Closure", classification: "simple",
             details: "This defines conformance to the Window Covering device type.",
             xref: { document: "device", section: "8.3" },
 
@@ -36567,7 +36578,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "WindowCoveringController", id: 0x203, classification: "simple",
+            name: "WindowCoveringController", id: 0x203, category: "Closure", classification: "simple",
             details: "A Window Covering Controller is a device that controls an automatic window covering.",
             xref: { document: "device", section: "8.4" },
 
@@ -36603,7 +36614,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "Thermostat", id: 0x301, classification: "simple",
+            name: "Thermostat", id: 0x301, category: "HVAC", classification: "simple",
             details: "A Thermostat device is capable of having either built-in or separate sensors for temperature, " +
                 "humidity or occupancy. It allows the desired temperature to be set either remotely or locally. The " +
                 "thermostat is capable of sending heating and/or cooling requirement notifications to a " +
@@ -36671,7 +36682,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "Fan", id: 0x2b, classification: "simple",
+            name: "Fan", id: 0x2b, category: "HVAC", classification: "simple",
             details: "A Fan device is typically standalone or mounted on a ceiling or wall and is used to circulate air " +
                 "in a room.",
             xref: { document: "device", section: "9.2" },
@@ -36701,7 +36712,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "AirPurifier", id: 0x2d, classification: "simple",
+            name: "AirPurifier", id: 0x2d, category: "HVAC", classification: "simple",
             details: "An Air Purifier is a standalone device that is designed to clean the air in a room." +
                 "\n" +
                 "It is a device that has a fan to control the air speed while it is operating. Optionally, it can " +
@@ -36740,7 +36751,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "BasicVideoPlayer", id: 0x28, classification: "simple",
+            name: "BasicVideoPlayer", id: 0x28, category: "Media", classification: "simple",
 
             details: "This defines conformance to the Basic Video Player device type." +
                 "\n" +
@@ -36825,7 +36836,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "CastingVideoPlayer", id: 0x23, classification: "simple",
+            name: "CastingVideoPlayer", id: 0x23, category: "Media", classification: "simple",
 
             details: "This defines conformance to the Casting Video Player device type." +
                 "\n" +
@@ -36929,7 +36940,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "Speaker", id: 0x22, classification: "simple",
+            name: "Speaker", id: 0x22, category: "Media", classification: "simple",
 
             details: "This defines conformance to the Speaker device type. This feature controls the speaker volume of " +
                 "the device." +
@@ -36967,7 +36978,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "ContentApp", id: 0x24, classification: "simple",
+            name: "ContentApp", id: 0x24, category: "Media", classification: "simple",
             details: "This defines conformance to the Content App device type." +
                 "\n" +
                 "A Content App is usually an application built by a Content Provider. A Casting Video Player with a " +
@@ -37035,7 +37046,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "CastingVideoClient", id: 0x29, classification: "simple",
+            name: "CastingVideoClient", id: 0x29, category: "Media", classification: "simple",
             details: "This defines conformance to the Casting Video Client device type." +
                 "\n" +
                 "A Casting Video Client is a client that can launch content on a Casting Video Player, for example, " +
@@ -37122,7 +37133,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "VideoRemoteControl", id: 0x2a, classification: "simple",
+            name: "VideoRemoteControl", id: 0x2a, category: "Media", classification: "simple",
             details: "This defines conformance to the Video Remote Control device type." +
                 "\n" +
                 "A Video Remote Control is a client that can control a Video Player, for example, a traditional " +
@@ -37197,7 +37208,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "ModeSelect", id: 0x27, classification: "simple",
+            name: "ModeSelect", id: 0x27, category: "Generic", classification: "simple",
             details: "This defines conformance to the Mode Select device type.",
             xref: { document: "device", section: "11.1" },
 
@@ -37217,7 +37228,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "Aggregator", id: 0xe, classification: "simple",
+            name: "Aggregator", id: 0xe, category: "Generic", classification: "simple",
 
             details: "This device type aggregates endpoints as a collection. Clusters on the endpoint indicating this " +
                 "device type provide functionality for the collection of descendent endpoints present in the " +
@@ -37251,7 +37262,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "RoboticVacuumCleaner", id: 0x74, classification: "simple",
+            name: "RoboticVacuumCleaner", id: 0x74, category: "Robotic", classification: "simple",
             details: "This defines conformance for the Robotic Vacuum Cleaner device type.",
             xref: { document: "device", section: "12.1" },
 
@@ -37283,7 +37294,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "LaundryWasher", id: 0x73, classification: "simple",
+            name: "LaundryWasher", id: 0x73, category: "Appliances", classification: "simple",
             details: "A Laundry Washer represents a device that is capable of laundering consumer items. Any laundry " +
                 "washer product may utilize this device type." +
                 "\n" +
@@ -37333,7 +37344,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "Refrigerator", id: 0x70, classification: "simple",
+            name: "Refrigerator", id: 0x70, category: "Appliances", classification: "simple",
             details: "A refrigerator represents a device that contains one or more cabinets that are capable of chilling " +
                 "or freezing food. Examples of consumer products that may make use of this device type include " +
                 "refrigerators, freezers, and wine coolers.",
@@ -37370,7 +37381,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "RoomAirConditioner", id: 0x72, classification: "simple",
+            name: "RoomAirConditioner", id: 0x72, category: "Appliances", classification: "simple",
             details: "This defines conformance to the Room Air Conditioner device type." +
                 "\n" +
                 "A Room Air Conditioner is a device with the primary function of controlling the air temperature in " +
@@ -37427,7 +37438,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "TemperatureControlledCabinet", id: 0x71, classification: "simple",
+            name: "TemperatureControlledCabinet", id: 0x71, category: "Appliances", classification: "simple",
             details: "A Temperature Controlled Cabinet only exists composed as part of another device type. It represents " +
                 "a single cabinet that is capable of having its temperature controlled. Such a cabinet may be " +
                 "chilling or freezing food, for example as part of a refrigerator, freezer, wine chiller, or other " +
@@ -37498,7 +37509,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "Dishwasher", id: 0x75, classification: "simple",
+            name: "Dishwasher", id: 0x75, category: "Appliances", classification: "simple",
             details: "A dishwasher is a device that is generally installed in residential homes and is capable of washing " +
                 "dishes, cutlery, and other items associate with food preparation and consumption. The device can be " +
                 "permanently installed or portable and can have variety of filling and draining methods.",
@@ -37547,7 +37558,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "LaundryDryer", id: 0x7c, classification: "simple",
+            name: "LaundryDryer", id: 0x7c, category: "Appliances", classification: "simple",
             details: "A Laundry Dryer represents a device that is capable of drying laundry items.",
             xref: { document: "device", section: "13.6" },
 
@@ -37594,7 +37605,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "CookSurface", id: 0x77, classification: "simple",
+            name: "CookSurface", id: 0x77, category: "Appliances", classification: "simple",
             details: "A Cook Surface device type represents a heating object on a cooktop or other similar device. It " +
                 "shall only be used when composed as part of another device type.",
             xref: { document: "device", section: "13.7" },
@@ -37624,7 +37635,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "Cooktop", id: 0x78, classification: "simple",
+            name: "Cooktop", id: 0x78, category: "Appliances", classification: "simple",
             details: "A cooktop is a cooking surface that heats food either by transferring currents from an " +
                 "electromagnetic field located below the glass surface directly to the magnetic induction cookware " +
                 "placed above or through traditional gas or electric burners.",
@@ -37651,7 +37662,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "Oven", id: 0x7b, classification: "simple",
+            name: "Oven", id: 0x7b, category: "Appliances", classification: "simple",
             details: "An oven represents a device that contains one or more cabinets, and optionally a single cooktop, " +
                 "that are all capable of heating food. Examples of consumer products implementing this device type " +
                 "include ovens, wall ovens, convection ovens, etc.",
@@ -37673,7 +37684,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "ExtractorHood", id: 0x7a, classification: "simple",
+            name: "ExtractorHood", id: 0x7a, category: "Appliances", classification: "simple",
 
             details: "An Extractor Hood is a device that is generally installed above a cooking surface in residential " +
                 "kitchens. An Extractor Hood’s primary purpose is to reduce odors that arise during the cooking " +
@@ -37730,7 +37741,7 @@ export const SpecMatter = Matter({
         }),
 
         DeviceType({
-            name: "MicrowaveOven", id: 0x79, classification: "simple",
+            name: "MicrowaveOven", id: 0x79, category: "Appliances", classification: "simple",
             details: "This defines conformance to the Microwave Oven device type." +
                 "\n" +
                 "A Microwave Oven is a device with the primary function of heating foods and beverages using a " +
@@ -37771,6 +37782,298 @@ export const SpecMatter = Matter({
                 Requirement({
                     name: "MicrowaveOvenControl", id: 0x5f, conformance: "M", element: "serverCluster",
                     xref: { document: "device", section: "13.11.6" }
+                })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "Closure", id: 0x1, mfgCode: undefined,
+            details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
+                "association with a feature of a Closure, e.g. the button to activate opening a garage door.",
+            xref: { document: "namespace", section: "2" },
+            children: [
+                SemanticTag({ name: "Opening", id: 0x0, description: "Move toward open position" }),
+                SemanticTag({ name: "Closing", id: 0x1, description: "Move toward closed position" }),
+                SemanticTag({ name: "Stop", id: 0x2, description: "Stop any movement" })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "CompassDirection", id: 0x2, mfgCode: undefined,
+            details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
+                "association with a movement into a certain compass direction. Note the difference with Chapter 4, " +
+                "Common Compass Location Semantic Tag Namespace.",
+            xref: { document: "namespace", section: "3" },
+
+            children: [
+                SemanticTag({ name: "Northward", id: 0x0 }),
+                SemanticTag({ name: "North-Eastward", id: 0x1 }),
+                SemanticTag({ name: "Eastward", id: 0x2 }),
+                SemanticTag({ name: "South-Eastward", id: 0x3 }),
+                SemanticTag({ name: "Southward", id: 0x4 }),
+                SemanticTag({ name: "South-Westward", id: 0x5 }),
+                SemanticTag({ name: "Westward", id: 0x6 }),
+                SemanticTag({ name: "North-Westward", id: 0x7 })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "CompassLocation", id: 0x3, mfgCode: undefined,
+            details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
+                "association with a position in a certain compass direction (e.g. an outdoor sensor in the North " +
+                "garden). Note the difference with Chapter 3, Common Compass Direction Semantic Tag Namespace.",
+            xref: { document: "namespace", section: "4" },
+
+            children: [
+                SemanticTag({ name: "North", id: 0x0 }),
+                SemanticTag({ name: "North-East", id: 0x1 }),
+                SemanticTag({ name: "East", id: 0x2 }),
+                SemanticTag({ name: "South-East", id: 0x3 }),
+                SemanticTag({ name: "South", id: 0x4 }),
+                SemanticTag({ name: "South-West", id: 0x5 }),
+                SemanticTag({ name: "West", id: 0x6 }),
+                SemanticTag({ name: "North-West", id: 0x7 })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "Direction", id: 0x4, mfgCode: undefined,
+            details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
+                "association with a movement in a certain direction relative to the device. Note the difference with " +
+                "Chapter 9, Common Position Semantic Tag Namespace.",
+            xref: { document: "namespace", section: "5" },
+
+            children: [
+                SemanticTag({ name: "Upward", id: 0x0 }),
+                SemanticTag({ name: "Downward", id: 0x1 }),
+                SemanticTag({ name: "Leftward", id: 0x2 }),
+                SemanticTag({ name: "Rightward", id: 0x3 }),
+                SemanticTag({ name: "Forward", id: 0x4 }),
+                SemanticTag({ name: "Backward", id: 0x5 })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "Level", id: 0x5, mfgCode: undefined,
+            details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
+                "association with a certain level for a feature of a device (e.g. a button to set the speed of a " +
+                "fan).",
+            xref: { document: "namespace", section: "6" },
+            children: [
+                SemanticTag({ name: "Low", id: 0x0 }),
+                SemanticTag({ name: "Medium", id: 0x1 }),
+                SemanticTag({ name: "High", id: 0x2 })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "Location", id: 0x6, mfgCode: undefined,
+            details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
+                "association with a location of a device (e.g. an outdoor temperature sensor).",
+            xref: { document: "namespace", section: "7" },
+
+            children: [
+                SemanticTag({
+                    name: "Indoor", id: 0x0,
+                    description: "Element is indoors or related to indoor equipment/conditions (e.g. the \"indoor\" temperature)."
+                }),
+                SemanticTag({
+                    name: "Outdoor", id: 0x1,
+                    description: "Element is outdoors or related to outdoor equipment/conditions (e.g. the \"outdoor\" temperature)."
+                }),
+                SemanticTag({
+                    name: "Inside", id: 0x2,
+                    description: "Element is located inside the equipment (e.g. a sensor \"inside\" a cabinet)."
+                }),
+                SemanticTag({
+                    name: "Outside", id: 0x3,
+                    description: "Element is located outside the equipment (e.g. a sensor \"outside\" a cabinet)"
+                })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "Number", id: 0x7, mfgCode: undefined,
+            details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
+                "association with a certain numeric feature of a device (e.g. a numeric input button).",
+            xref: { document: "namespace", section: "8" },
+
+            children: [
+                SemanticTag({ name: "Zero", id: 0x0 }),
+                SemanticTag({ name: "One", id: 0x1 }),
+                SemanticTag({ name: "Two", id: 0x2 }),
+                SemanticTag({ name: "Three", id: 0x3 }),
+                SemanticTag({ name: "Four", id: 0x4 }),
+                SemanticTag({ name: "Five", id: 0x5 }),
+                SemanticTag({ name: "Six", id: 0x6 }),
+                SemanticTag({ name: "Seven", id: 0x7 }),
+                SemanticTag({ name: "Eight", id: 0x8 }),
+                SemanticTag({ name: "Nine", id: 0x9 }),
+                SemanticTag({ name: "Ten", id: 0xa })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "Position", id: 0x8, mfgCode: undefined,
+
+            details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
+                "association with a position relative to the device (e.g. the temperature sensor in the top drawer " +
+                "of a refrigerator, or location of the buttons on a multi-button switch device). Note the difference " +
+                "with Chapter 5, Common Direction Semantic Tag Namespace." +
+                "\n" +
+                "When multiple endpoints are used for device types, and the associated consumer-facing locations of " +
+                "those endpoints are organized in a straight line, grid or matrix, these endpoints SHOULD be " +
+                "allocated in top-to-bottom, left-to-right order." +
+                "\n" +
+                "For grids or arrays larger than 3 elements in any direction, the Row and Column tags SHOULD be used." +
+                "\n" +
+                "If the Row or Column tags are used, the Label field in the same Semantic Tag structure shall be " +
+                "filled with a number comprised of Arabic numerals encoded as a string to indicate the row/column of " +
+                "the item. Number words (e.g. \"one\", \"two\", etc.) shall NOT be used to describe the position of the " +
+                "item. The first row/column shall use Label \"1\".",
+
+            xref: { document: "namespace", section: "9" },
+
+            children: [
+                SemanticTag({ name: "Left", id: 0x0 }),
+                SemanticTag({ name: "Right", id: 0x1 }),
+                SemanticTag({ name: "Top", id: 0x2 }),
+                SemanticTag({ name: "Bottom", id: 0x3 }),
+                SemanticTag({ name: "Middle", id: 0x4 }),
+                SemanticTag({ name: "Row", id: 0x5, description: "Numeric value provided in Label field" }),
+                SemanticTag({ name: "Column", id: 0x6, description: "Numeric value provided in Label field" })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "ElectricalMeasurement", id: 0xa, mfgCode: undefined,
+            details: "The tags contained in this namespace are restricted for use in the electrical measurement domain " +
+                "and shall NOT be used in any other domain or context.",
+            xref: { document: "namespace", section: "10" },
+
+            children: [
+                SemanticTag({ name: "DC", id: 0x0, description: "Indicates values measured for a DC load" }),
+                SemanticTag({
+                    name: "AC", id: 0x1,
+                    description: "Indicates values measured for a single-phase AC load, or values measured for the collective load on a polyphase AC power supply"
+                }),
+                SemanticTag({
+                    name: "ACPhase1", id: 0x2,
+                    description: "Indicates values measured for an AC load on phase 1 of a polyphase power supply"
+                }),
+                SemanticTag({
+                    name: "ACPhase2", id: 0x3,
+                    description: "Indicates values measured for an AC load on phase 2 of a polyphase power supply"
+                }),
+                SemanticTag({
+                    name: "ACPhase3", id: 0x4,
+                    description: "Indicates values measured for an AC load on phase 3 of a polyphase power supply"
+                })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "Laundry", id: 0xe, mfgCode: undefined,
+            details: "The tags contained in this namespace are restricted for use in the laundry domain and shall NOT be " +
+                "used in any other domain or context.",
+            xref: { document: "namespace", section: "11" },
+
+            children: [
+                SemanticTag({ name: "Normal", id: 0x0 }),
+                SemanticTag({ name: "Light Dry", id: 0x1 }),
+                SemanticTag({ name: "Extra Dry", id: 0x2 }),
+                SemanticTag({ name: "No Dry", id: 0x3 })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "PowerSource", id: 0xf, mfgCode: undefined,
+            details: "The tags contained in this namespace are restricted for use in the power source domain and shall " +
+                "NOT be used in any other domain or context.",
+            xref: { document: "namespace", section: "12" },
+
+            children: [
+                SemanticTag({
+                    name: "Unknown", id: 0x0,
+                    description: "The Power Source cluster is related to power provided from an unknown source"
+                }),
+
+                SemanticTag({
+                    name: "Grid", id: 0x1,
+                    description: "The Power Source cluster is related to power provided from the electrical grid",
+                    details: "Power Source clusters with this tag shall implement the WIRED feature.",
+                    xref: { document: "namespace", section: "12.1" }
+                }),
+
+                SemanticTag({
+                    name: "Solar", id: 0x2,
+                    description: "The Power Source cluster is related to power provided from a solar panel array",
+                    details: "Power Source clusters with this tag shall implement the WIRED feature.",
+                    xref: { document: "namespace", section: "12.2" }
+                }),
+
+                SemanticTag({
+                    name: "Battery", id: 0x3,
+                    description: "The Power Source cluster is related to power provided from a battery",
+                    details: "Power Source clusters with this tag shall implement the BAT feature.",
+                    xref: { document: "namespace", section: "12.3" }
+                }),
+
+                SemanticTag({
+                    name: "EV", id: 0x4,
+                    description: "The Power Source cluster is related to power provided from an electric vehicle",
+                    details: "Power Source clusters with this tag shall implement the BAT feature.",
+                    xref: { document: "namespace", section: "12.4" }
+                })
+            ]
+        }),
+
+        SemanticNamespace({
+            name: "Refrigerator", id: 0x41, mfgCode: undefined,
+            details: "The tags contained in this namespace are restricted for use in the refrigerator domain and shall " +
+                "NOT be used in any other domain or context.",
+            xref: { document: "namespace", section: "13" },
+            children: [SemanticTag({ name: "Refrigerator", id: 0x0 }), SemanticTag({ name: "Freezer", id: 0x1 })]
+        }),
+
+        SemanticNamespace({
+            name: "RoomAirConditioner", id: 0x42, mfgCode: undefined,
+            details: "The tags contained in this namespace are restricted for use in the room air conditioner domain and " +
+                "shall NOT be used in any other domain or context.",
+            xref: { document: "namespace", section: "14" },
+            children: [SemanticTag({ name: "Evaporator", id: 0x0 }), SemanticTag({ name: "Condenser", id: 0x1 })]
+        }),
+
+        SemanticNamespace({
+            name: "Switches", id: 0x43, mfgCode: undefined,
+
+            details: "The tags contained in this namespace are restricted for use in the switches domain and shall NOT be " +
+                "used in any other domain or context. They are intended to indicate the function of a button on a " +
+                "switch device to allow a client to make an optimized user interface which matches the actual device " +
+                "without requiring a-priori knowledge of the layout of each specific switch device." +
+                "\n" +
+                "Please see the rules for applying these and other tags for switch devices, e.g. from the Common " +
+                "Position Namespace and the Common Number Namespace in the Generic Switch device type section in the " +
+                "Device Library.",
+
+            xref: { document: "namespace", section: "15" },
+
+            children: [
+                SemanticTag({ name: "On", id: 0x0 }),
+                SemanticTag({ name: "Off", id: 0x1 }),
+                SemanticTag({ name: "Toggle", id: 0x2 }),
+                SemanticTag({ name: "Up", id: 0x3, description: "e.g. dim up (light)" }),
+                SemanticTag({ name: "Down", id: 0x4, description: "e.g. dim down (light)" }),
+                SemanticTag({ name: "Next", id: 0x5, description: "e.g. select next scene" }),
+                SemanticTag({ name: "Previous", id: 0x6, description: "e.g. select previous scene" }),
+                SemanticTag({ name: "Enter/OK/Select", id: 0x7 }),
+
+                SemanticTag({
+                    name: "Custom", id: 0x8, description: "Textual description provided in Label field",
+                    details: "When this value is used, the Label field in the same Semantic Tag structure shall be filled with a " +
+                        "textual description of the function indicated on the button, such as a label or icon printed on the " +
+                        "button, e.g. \"dining\".",
+                    xref: { document: "namespace", section: "15.1" }
                 })
             ]
         })
