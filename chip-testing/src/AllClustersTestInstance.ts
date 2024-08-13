@@ -9,6 +9,7 @@ import { BooleanStateServer } from "@project-chip/matter.js/behavior/definitions
 import { CarbonDioxideConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/carbon-dioxide-concentration-measurement";
 import { CarbonMonoxideConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/carbon-monoxide-concentration-measurement";
 import { ColorControlServer } from "@project-chip/matter.js/behavior/definitions/color-control";
+import { DescriptorServer } from "@project-chip/matter.js/behavior/definitions/descriptor";
 import { FixedLabelServer } from "@project-chip/matter.js/behavior/definitions/fixed-label";
 import { FlowMeasurementServer } from "@project-chip/matter.js/behavior/definitions/flow-measurement";
 import { FormaldehydeConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/formaldehyde-concentration-measurement";
@@ -56,7 +57,7 @@ import {
     WindowCovering,
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
-import { GenericSwitchDevice } from "@project-chip/matter.js/devices/GenericSwitchDevice";
+import { DimmableLightDevice } from "@project-chip/matter.js/devices/DimmableLightDevice";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
@@ -679,7 +680,8 @@ export class AllClustersTestInstance implements TestInstance {
         await serverNode.add(endpoint1);
 
         const endpoint3 = new Endpoint(
-            GenericSwitchDevice.with(
+            DimmableLightDevice.with(
+                DescriptorServer,
                 SwitchServer.with(
                     Switch.Feature.MomentarySwitch,
                     Switch.Feature.MomentarySwitchRelease,
@@ -690,6 +692,12 @@ export class AllClustersTestInstance implements TestInstance {
             {
                 number: EndpointNumber(3),
                 id: "ep3",
+                descriptor: {
+                    deviceTypeList: [
+                        { deviceType: 0x0101, revision: 3 },
+                        { deviceType: 0x0100, revision: 3 },
+                    ],
+                },
                 switch: {
                     rawPosition: 0,
                     longPressDelay: 5000, // Expected by the Python test framework to simulate a long press
