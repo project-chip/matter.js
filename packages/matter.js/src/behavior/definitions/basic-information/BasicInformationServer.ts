@@ -19,12 +19,15 @@ import { BasicInformationBehavior } from "./BasicInformationBehavior.js";
 
 const logger = Logger.get("BasicInformationServer");
 
+// Enable Events support by the Default implementation and tweak the maxPathsPerInvoke to 0 to have default handling
+const Base = BasicInformationBehavior.enable({
+    events: { startUp: true, shutDown: true, leave: true },
+}).set({ maxPathsPerInvoke: 0 });
+
 /**
  * This is the default server implementation of BasicInformationBehavior.
  */
-export class BasicInformationServer extends BasicInformationBehavior.enable({
-    events: { startUp: true, shutDown: true, leave: true },
-}) {
+export class BasicInformationServer extends Base {
     override initialize() {
         const state = this.state;
 
@@ -57,7 +60,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         setDefault("hardwareVersionString", state.hardwareVersion.toString());
         setDefault("softwareVersionString", state.softwareVersion.toString());
         setDefault("specificationVersion", Specification.SPECIFICATION_VERSION);
-        setDefault("maxPathsPerInvoke", DEFAULT_MAX_PATHS_PER_INVOKE); // TODO: This do not work because default is 1
+        setDefault("maxPathsPerInvoke", DEFAULT_MAX_PATHS_PER_INVOKE);
 
         const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
