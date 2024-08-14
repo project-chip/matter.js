@@ -117,19 +117,19 @@ export class NamedPipeCommandHandler {
                 if (endpoint === undefined) {
                     throw new Error(`Endpoint ${endpointId} not existing`);
                 }
-                SwitchSimulator.simulateLongPress(endpoint, data);
+                await SwitchSimulator.simulateLongPress(endpoint, data);
                 break;
             case "SimulateMultiPress":
                 if (endpoint === undefined) {
                     throw new Error(`Endpoint ${endpointId} not existing`);
                 }
-                SwitchSimulator.simulateMultiPress(endpoint, data);
+                await SwitchSimulator.simulateMultiPress(endpoint, data);
                 break;
             case "SimulateLatchPosition":
                 if (endpoint === undefined) {
                     throw new Error(`Endpoint ${endpointId} not existing`);
                 }
-                await endpoint.setStateOf(SwitchServer, { rawPosition: data.PositionId });
+                await endpoint.setStateOf(SwitchServer, { currentPosition: data.PositionId });
                 break;
             default:
                 console.log(`Unknown named pipe command: ${name}`);
