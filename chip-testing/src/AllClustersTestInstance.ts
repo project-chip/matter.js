@@ -63,6 +63,7 @@ import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
+import { NumberTag } from "@project-chip/matter.js/tags/NumberTag";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { TestActivatedCarbonFilterMonitoringServer } from "./cluster/TestActivatedCarbonFilterMonitoringServer.js";
 import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsServer.js";
@@ -449,14 +450,7 @@ export class AllClustersTestInstance implements TestInstance {
                     managedTransitionTimeHandling: true, // enable transition management
                 },
                 descriptor: {
-                    tagList: [
-                        {
-                            mfgCode: null,
-                            namespaceId: 0x07, // Standard Namespaces. Common Numbering
-                            tag: 0x01, // One
-                            label: "EP1",
-                        },
-                    ],
+                    tagList: [NumberTag.One],
                 },
                 fixedLabel: {
                     labelList: [
@@ -706,9 +700,7 @@ export class AllClustersTestInstance implements TestInstance {
                 descriptor: {
                     tagList: [
                         {
-                            mfgCode: null,
-                            namespaceId: 0x07, // Standard Namespaces. Common Numbering
-                            tag: 0x03, // Three
+                            ...NumberTag.Three,
                             label: "EP3",
                         },
                     ],
