@@ -41,7 +41,7 @@ export class SwitchSimulator {
         if (action) {
             this.#endpoint
                 .setStateOf(SwitchServer, {
-                    rawPosition: action.position,
+                    currentPosition: action.position,
                 })
                 .then(
                     () => {
@@ -71,9 +71,13 @@ export class SwitchSimulator {
      *   - "LongPressDelayMillis": Time in milliseconds before the LongPress
      *   - "LongPressDurationMillis": Total duration in milliseconds from start of the press to LongRelease
      */
-    static simulateLongPress(endpoint: Endpoint, command: SimulateLongPressCommand) {
+    static async simulateLongPress(endpoint: Endpoint, command: SimulateLongPressCommand) {
         const simulator = new SwitchSimulator(endpoint);
 
+        // Configure cluster according to tests
+        await endpoint.setStateOf(SwitchServer, { longPressDelay: command.LongPressDelayMillis });
+
+        // Execute tests
         simulator.executeActions([
             { position: command.ButtonId, delay: command.LongPressDurationMillis }, // LongPressDelayMillis is ignored because just used to send the LogPress event?
             { position: NEUTRAL_SWITCH_POSITION },
@@ -97,7 +101,7 @@ export class SwitchSimulator {
      *   - "FeatureMap":  The feature map to simulate
      *   - "MultiPressMax": max number of presses (from attribute).
      */
-    static simulateMultiPress(endpoint: Endpoint, command: SimulateMultiPressCommand) {
+    static async simulateMultiPress(endpoint: Endpoint, command: SimulateMultiPressCommand) {
         const simulator = new SwitchSimulator(endpoint);
 
         const features = BitmapSchema({
@@ -117,6 +121,10 @@ export class SwitchSimulator {
             ]);*/
             throw new Error("ActionSwitch not supported, so should never be called for now.");
         } else {
+            // Configure cluster according to tests
+            await endpoint.setStateOf(SwitchServer, { multiPressDelay: command.MultiPressReleasedTimeMillis + 500 });
+
+            // Collect test steps
             const actions: { position: number; delay?: number }[] = [];
 
             for (let i = 0; i < command.MultiPressNumPresses; i++) {
@@ -134,6 +142,7 @@ export class SwitchSimulator {
 
             actions.push({ position: NEUTRAL_SWITCH_POSITION });
 
+            // Execute test
             simulator.executeActions(actions);
         }
     }
