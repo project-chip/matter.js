@@ -6,3 +6,4 @@
 
 export * from "./EndpointType.js";
 export * from "./MutableEndpoint.js";
+export * from "./SemanticNamespace.js";

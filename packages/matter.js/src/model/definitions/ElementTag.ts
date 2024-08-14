@@ -21,8 +21,11 @@ export enum ElementTag {
     Datatype = "datatype",
     Field = "field",
 
-    // Device cluster element requirement - not formally an "element" in the
-    // specification
+    // Semantic tag information - not formally "elements" in the specification
+    SemanticNamespace = "semanticNamespace",
+    SemanticTag = "semanticTag",
+
+    // Device cluster element requirement - not formally an "element" in the specification
     Requirement = "requirement",
 
     // Root element type - not formally part of specification

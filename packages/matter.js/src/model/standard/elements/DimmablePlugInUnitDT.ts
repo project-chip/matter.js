@@ -10,7 +10,8 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const DimmablePlugInUnitDt = DeviceType({
-    name: "DimmablePlugInUnit", id: 0x10b, classification: "simple",
+    name: "DimmablePlugInUnit", id: 0x10b, category: "Smart Plugs/Outlets and other Actuators",
+    classification: "simple",
     details: "A Dimmable Plug-In Unit is a device that provides power to another device that is plugged into it, " +
         "and is capable of being switched on or off and have its level adjusted. The Dimmable Plug-in Unit " +
         "is typically used to control a conventional non-communicating light through its mains connection " +
@@ -60,6 +61,6 @@ export const DimmablePlugInUnitDt = DeviceType({
             xref: { document: "device", section: "5.2.4" }
         })
     ]
-});
+})
 
 Matter.children.push(DimmablePlugInUnitDt);

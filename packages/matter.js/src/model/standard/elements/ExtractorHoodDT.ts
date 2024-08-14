@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const ExtractorHoodDt = DeviceType({
-    name: "ExtractorHood", id: 0x7a, classification: "simple",
+    name: "ExtractorHood", id: 0x7a, category: "Appliances", classification: "simple",
 
     details: "An Extractor Hood is a device that is generally installed above a cooking surface in residential " +
         "kitchens. An Extractor Hood’s primary purpose is to reduce odors that arise during the cooking " +

@@ -11,6 +11,7 @@ import { hideBin } from "yargs/helpers";
 import { BehaviorFile } from "./endpoints/BehaviorFile.js";
 import { EndpointFile } from "./endpoints/EndpointFile.js";
 import { InterfaceFile } from "./endpoints/InterfaceFile.js";
+import { SemanticNamespaceFile } from "./endpoints/SemanticNamespaceFile.js";
 import { ServerFile } from "./endpoints/ServerFile.js";
 import { TsFile } from "./util/TsFile.js";
 import "./util/setup.js";
@@ -66,8 +67,12 @@ if (args.endpoints) {
 
         endpointExports.addReexport(`${file.name}.js`);
     }
-    if (args.save) {
-        endpointExports.save();
+    for (const ns of MatterModel.standard.semanticNamespaces) {
+        const file = new SemanticNamespaceFile(ns);
+        if (args.save) {
+            file.save();
+        }
+        endpointExports.addReexport(`${file.name}.js`);
     }
 }
 

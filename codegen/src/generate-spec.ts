@@ -31,7 +31,8 @@ import { SpecFile } from "./mom/spec/spec-file.js";
 const args = await yargs(hideBin(process.argv))
     .usage(USAGE)
     .option("clusters", { type: "boolean", describe: "ingest clusters" })
-    .option("devices", { type: "boolean", describe: "ingest devices" })
+    .option("devices", { type: "boolean", describe: "ingest device types" })
+    .option("namespaces", { type: "boolean", describe: "ingest semantic namespaces" })
     .option("save", { type: "boolean", describe: "writes the generated model to disk" })
     .option("path", { type: "string", describe: "path to spec index or directory of indices" })
     .option("document", {
@@ -43,8 +44,8 @@ const args = await yargs(hideBin(process.argv))
     .wrap(null) // Grr ESM version word wrap is broken so we just wrap manually to 79 chars
     .strict().argv;
 
-if (!args.clusters && !args.devices) {
-    args.clusters = args.devices = true;
+if (!args.clusters && !args.devices && !args.namespaces) {
+    args.clusters = args.devices = args.namespaces = true;
     if (args.save === undefined && args.document === undefined) {
         args.save = true;
     }
@@ -75,6 +76,10 @@ for (const file of files) {
 
     if (args.devices) {
         file.ingestDevices(intermediate);
+    }
+
+    if (args.namespaces) {
+        file.ingestNamespaces(intermediate);
     }
 }
 

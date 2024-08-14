@@ -53,6 +53,9 @@ function elementIdentifierName(element: Model) {
     if (element.tag === ElementTag.DeviceType) {
         return `${element.name}DT`;
     }
+    if (element.tag === ElementTag.SemanticNamespace) {
+        return `${element.name}NS`;
+    }
     return element.name;
 }
 

@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const DoorLockDt = DeviceType({
-    name: "DoorLock", id: 0xa, classification: "simple",
+    name: "DoorLock", id: 0xa, category: "Closure", classification: "simple",
     details: "A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by " +
         "means of a manual or a remote method.",
     xref: { document: "device", section: "8.1" },

@@ -5,7 +5,7 @@
  */
 
 import { MatterElement } from "../elements/index.js";
-import { Specification } from "../index.js";
+import { SemanticNamespaceModel, Specification } from "../index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Matter } from "../standard/index.js";
 import { AttributeModel } from "./AttributeModel.js";
@@ -56,6 +56,13 @@ export class MatterModel extends Model implements MatterElement {
     }
 
     /**
+     * Semantic tag namespaces.
+     */
+    get semanticNamespaces() {
+        return this.all(SemanticNamespaceModel);
+    }
+
+    /**
      * Global datatypes.
      */
     get datatypes() {
@@ -101,7 +108,14 @@ export class MatterModel extends Model implements MatterElement {
 }
 
 export namespace MatterModel {
-    export type Child = ClusterModel | DeviceTypeModel | FieldModel | DatatypeModel | AttributeModel | FabricModel;
+    export type Child =
+        | ClusterModel
+        | DeviceTypeModel
+        | FieldModel
+        | DatatypeModel
+        | AttributeModel
+        | FabricModel
+        | SemanticNamespaceModel;
 }
 
 ModelTraversal.fallbackScope = MatterModel.standard;

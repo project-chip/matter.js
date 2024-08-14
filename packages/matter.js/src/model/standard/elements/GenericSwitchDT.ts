@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const GenericSwitchDt = DeviceType({
-    name: "GenericSwitch", id: 0xf, classification: "simple",
+    name: "GenericSwitch", id: 0xf, category: "Switches and Controls", classification: "simple",
     details: "This defines conformance for the Generic Switch device type.",
     xref: { document: "device", section: "6.6" },
 

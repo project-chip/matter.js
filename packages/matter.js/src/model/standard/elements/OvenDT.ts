@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const OvenDt = DeviceType({
-    name: "Oven", id: 0x7b, classification: "simple",
+    name: "Oven", id: 0x7b, category: "Appliances", classification: "simple",
     details: "An oven represents a device that contains one or more cabinets, and optionally a single cooktop, " +
         "that are all capable of heating food. Examples of consumer products implementing this device type " +
         "include ovens, wall ovens, convection ovens, etc.",

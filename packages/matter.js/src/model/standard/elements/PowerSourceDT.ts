@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const PowerSourceDt = DeviceType({
-    name: "PowerSource", id: 0x11, classification: "utility",
+    name: "PowerSource", id: 0x11, category: "Utility", classification: "utility",
     xref: { document: "device", section: "2.2" },
 
     children: [

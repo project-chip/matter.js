@@ -19,4 +19,6 @@ import "./FieldValidator.js";
 import "./MatterValidator.js";
 import "./NodeValidator.js";
 import "./RequirementValidator.js";
+import "./SemanticNamespaceValidator.js";
+import "./SemanticTagValidator.js";
 import "./ValueValidator.js";

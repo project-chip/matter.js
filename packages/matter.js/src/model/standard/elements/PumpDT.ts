@@ -10,7 +10,8 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const PumpDt = DeviceType({
-    name: "Pump", id: 0x303, classification: "simple",
+    name: "Pump", id: 0x303, category: "Smart Plugs/Outlets and other Actuators",
+    classification: "simple",
     details: "A Pump device is a pump that may have variable speed. It may have optional built-in sensors and a " +
         "regulation mechanism. It is typically used for pumping fluids like water.",
     xref: { document: "device", section: "5.3" },
@@ -73,6 +74,6 @@ export const PumpDt = DeviceType({
             xref: { document: "device", section: "5.3.4" }
         })
     ]
-});
+})
 
 Matter.children.push(PumpDt);

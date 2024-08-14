@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const LightSensorDt = DeviceType({
-    name: "LightSensor", id: 0x106, classification: "simple",
+    name: "LightSensor", id: 0x106, category: "Sensor", classification: "simple",
     details: "A Light Sensor device is a measurement and sensing device that is capable of measuring and " +
         "reporting the intensity of light (illuminance) to which the sensor is being subjected.",
     xref: { document: "device", section: "7.2" },
