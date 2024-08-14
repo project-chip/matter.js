@@ -6,6 +6,7 @@
 
 import { Behavior } from "../behavior/Behavior.js";
 import { ActionContext } from "../behavior/context/ActionContext.js";
+import { DescriptorBehavior } from "../behavior/definitions/descriptor/DescriptorBehavior.js";
 import { GeneratedClass } from "../util/GeneratedClass.js";
 import { MaybePromise } from "../util/Promises.js";
 import type { Endpoint } from "./Endpoint.js";
@@ -165,6 +166,8 @@ export namespace Agent {
 
     export type Instance<T extends EndpointType = EndpointType.Empty> = Agent & {
         readonly [K in keyof T["behaviors"] & string]: InstanceType<T["behaviors"][K]>;
+    } & {
+        readonly descriptor: DescriptorBehavior;
     };
 
     /**

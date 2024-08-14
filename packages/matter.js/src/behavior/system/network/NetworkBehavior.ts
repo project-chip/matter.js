@@ -8,7 +8,7 @@ import { Behavior } from "../../Behavior.js";
 import type { NetworkRuntime } from "./NetworkRuntime.js";
 
 /**
- * NetworkingBehavior is the component of Matter.js that handles online connectivity for a Matter Node.
+ * NetworkingBehavior is the component of Matter.js that handles online connectivity for a Matter node.
  *
  * NetworkingBehavior does not have an associated Matter cluster.  It is exclusive to Matter.js.
  */

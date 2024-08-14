@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { SwitchServer } from "@project-chip/matter.js/behaviors/switch";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { isObject } from "@project-chip/matter.js/util";
@@ -122,7 +129,7 @@ export class NamedPipeCommandHandler {
                 if (endpoint === undefined) {
                     throw new Error(`Endpoint ${endpointId} not existing`);
                 }
-                await endpoint.set({ switch: { rawPosition: data.PositionId } });
+                await endpoint.setStateOf(SwitchServer, { rawPosition: data.PositionId });
                 break;
             default:
                 console.log(`Unknown named pipe command: ${name}`);

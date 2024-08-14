@@ -58,12 +58,16 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Fix: Makes sure subscription maxInterval cannot exceed the matter defined maximum of 60mins
     -   Fix: Synced attMtu handling with chip to always use MTU-3 bytes for BLE connections
 -   matter.js API:
--   -   Breaking: Node.start() is now asynchronous and returns when the node is online. This is only breaking in that lack of await will result in an unhandled rejection. Node.bringOnline() is deprecated.
+    -   Breaking: Node.start() is now asynchronous and returns when the node is online. This is only breaking in that lack of await will result in an unhandled rejection. Node.bringOnline() is deprecated.
     -   Feature: Adds default implementations for i18n clusters including Localization, Time Format Localization and Unit Localization.
     -   Feature: Adds interactionBegin and interactionEnd events for ClusterBehaviors to demarcate online interactions that mutate state.
     -   Feature: Any state value defined with schema is now configurable via the environment.
     -   Feature: You may now mark endpoints as "non-essential" to prevent errors from incapacitating a node.
+    -   Feature: Utility device types are added automatically to the endpoints when the relevant clusters (like PowerSource or ElectricalSensor) are existing on the endpoint
+    -   Feature: Adds DescriptorServer#addTag to make adding tags more convenient
+    -   Feature: Modifies DescriptorServer#addDeviceType to accept device type name to simplify avoidance of cyclical dependencies
     -   Enhancement: Various Endpoint methods throw the root cause when there is an error rather than logging the root cause and throwing a less descriptive error.
+    -   Enhancement: Explicitly defines DescriptorServer as an endpoint requirement so attributes are configurable in TS directly
 -   matter.js Controller API:
     -   Breaking: commissionNode() in CommissioningController now returns the Node-ID and not the PairedNode instance.
     -   Breaking: AttributeClient now throws an exception when an attribute should be subscribed which is not reporting updates via subscriptions
