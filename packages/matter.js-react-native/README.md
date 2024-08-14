@@ -4,7 +4,15 @@
 
 Matter protocol for react-native.
 
-[!Note] This package is still in development and should be considered experimental and not usable for production usage until it got validated that all functionality works as expected.
+[!Note] This package is still in development and should be considered experimental and not suited for production usage!
+
+## Status of the package
+The main idea of this package is to provide a react-native implementation of the matter protocol and also proof the 
+extensibility of the matter.js library. Currently a full commissioning process was not successfully tested. WHen you 
+try to use it feel free to report where the process stops for you with which error message.
+
+
+## Dependencies
 
 This package uses the following react-native libraries to provide the needed functionality:
 - react-native-quick-crypto
