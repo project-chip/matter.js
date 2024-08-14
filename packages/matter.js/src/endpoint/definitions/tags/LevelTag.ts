@@ -16,5 +16,5 @@ import { SemanticNamespace } from "../../type/SemanticNamespace.js";
  */
 export const LevelTag = SemanticNamespace({
     id: 0x5,
-    tags: { Low: { id: 0x0, name: "Low" }, Medium: { id: 0x1, name: "Medium" }, High: { id: 0x2, name: "High" } }
+    tags: { Low: { id: 0x0, label: "Low" }, Medium: { id: 0x1, label: "Medium" }, High: { id: 0x2, label: "High" } }
 });

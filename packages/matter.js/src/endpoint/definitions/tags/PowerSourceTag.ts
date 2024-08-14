@@ -21,7 +21,7 @@ export const PowerSourceTag = SemanticNamespace({
         /**
          * The Power Source cluster is related to power provided from an unknown source
          */
-        Unknown: { id: 0x0, name: "Unknown" },
+        Unknown: { id: 0x0, label: "Unknown" },
 
         /**
          * The Power Source cluster is related to power provided from the electrical grid
@@ -30,7 +30,7 @@ export const PowerSourceTag = SemanticNamespace({
          *
          * @see {@link MatterSpecification.v13.Namespace} § 12.1
          */
-        Grid: { id: 0x1, name: "Grid" },
+        Grid: { id: 0x1, label: "Grid" },
 
         /**
          * The Power Source cluster is related to power provided from a solar panel array
@@ -39,7 +39,7 @@ export const PowerSourceTag = SemanticNamespace({
          *
          * @see {@link MatterSpecification.v13.Namespace} § 12.2
          */
-        Solar: { id: 0x2, name: "Solar" },
+        Solar: { id: 0x2, label: "Solar" },
 
         /**
          * The Power Source cluster is related to power provided from a battery
@@ -48,7 +48,7 @@ export const PowerSourceTag = SemanticNamespace({
          *
          * @see {@link MatterSpecification.v13.Namespace} § 12.3
          */
-        Battery: { id: 0x3, name: "Battery" },
+        Battery: { id: 0x3, label: "Battery" },
 
         /**
          * The Power Source cluster is related to power provided from an electric vehicle
@@ -57,6 +57,6 @@ export const PowerSourceTag = SemanticNamespace({
          *
          * @see {@link MatterSpecification.v13.Namespace} § 12.4
          */
-        Ev: { id: 0x4, name: "EV" }
+        Ev: { id: 0x4, label: "EV" }
     }
 });

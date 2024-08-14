@@ -30,20 +30,20 @@ export const PositionTag = SemanticNamespace({
     id: 0x8,
 
     tags: {
-        Left: { id: 0x0, name: "Left" },
-        Right: { id: 0x1, name: "Right" },
-        Top: { id: 0x2, name: "Top" },
-        Bottom: { id: 0x3, name: "Bottom" },
-        Middle: { id: 0x4, name: "Middle" },
+        Left: { id: 0x0, label: "Left" },
+        Right: { id: 0x1, label: "Right" },
+        Top: { id: 0x2, label: "Top" },
+        Bottom: { id: 0x3, label: "Bottom" },
+        Middle: { id: 0x4, label: "Middle" },
 
         /**
          * Numeric value provided in Label field
          */
-        Row: { id: 0x5, name: "Row" },
+        Row: { id: 0x5, label: "Row" },
 
         /**
          * Numeric value provided in Label field
          */
-        Column: { id: 0x6, name: "Column" }
+        Column: { id: 0x6, label: "Column" }
     }
 });

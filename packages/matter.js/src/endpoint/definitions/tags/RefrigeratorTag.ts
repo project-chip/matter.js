@@ -16,5 +16,5 @@ import { SemanticNamespace } from "../../type/SemanticNamespace.js";
  */
 export const RefrigeratorTag = SemanticNamespace({
     id: 0x41,
-    tags: { Refrigerator: { id: 0x0, name: "Refrigerator" }, Freezer: { id: 0x1, name: "Freezer" } }
+    tags: { Refrigerator: { id: 0x0, label: "Refrigerator" }, Freezer: { id: 0x1, label: "Freezer" } }
 });

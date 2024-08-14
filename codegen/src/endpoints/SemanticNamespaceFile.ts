@@ -30,7 +30,7 @@ export class SemanticNamespaceFile extends TsFile {
             tag.document(tagModel);
 
             tag.atom("id", `0x${tagModel.id.toString(16)}`);
-            tag.atom("name", JSON.stringify(tagModel.name));
+            tag.atom("label", JSON.stringify(tagModel.name));
         }
     }
 }
