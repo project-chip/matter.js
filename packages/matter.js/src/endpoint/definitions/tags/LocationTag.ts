@@ -21,21 +21,21 @@ export const LocationTag = SemanticNamespace({
         /**
          * Element is indoors or related to indoor equipment/conditions (e.g. the "indoor" temperature).
          */
-        Indoor: { id: 0x0, name: "Indoor" },
+        Indoor: { id: 0x0, label: "Indoor" },
 
         /**
          * Element is outdoors or related to outdoor equipment/conditions (e.g. the "outdoor" temperature).
          */
-        Outdoor: { id: 0x1, name: "Outdoor" },
+        Outdoor: { id: 0x1, label: "Outdoor" },
 
         /**
          * Element is located inside the equipment (e.g. a sensor "inside" a cabinet).
          */
-        Inside: { id: 0x2, name: "Inside" },
+        Inside: { id: 0x2, label: "Inside" },
 
         /**
          * Element is located outside the equipment (e.g. a sensor "outside" a cabinet)
          */
-        Outside: { id: 0x3, name: "Outside" }
+        Outside: { id: 0x3, label: "Outside" }
     }
 });

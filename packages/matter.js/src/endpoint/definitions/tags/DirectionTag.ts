@@ -19,11 +19,11 @@ export const DirectionTag = SemanticNamespace({
     id: 0x4,
 
     tags: {
-        Upward: { id: 0x0, name: "Upward" },
-        Downward: { id: 0x1, name: "Downward" },
-        Leftward: { id: 0x2, name: "Leftward" },
-        Rightward: { id: 0x3, name: "Rightward" },
-        Forward: { id: 0x4, name: "Forward" },
-        Backward: { id: 0x5, name: "Backward" }
+        Upward: { id: 0x0, label: "Upward" },
+        Downward: { id: 0x1, label: "Downward" },
+        Leftward: { id: 0x2, label: "Leftward" },
+        Rightward: { id: 0x3, label: "Rightward" },
+        Forward: { id: 0x4, label: "Forward" },
+        Backward: { id: 0x5, label: "Backward" }
     }
 });

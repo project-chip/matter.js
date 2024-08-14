@@ -18,16 +18,16 @@ export const NumberTag = SemanticNamespace({
     id: 0x7,
 
     tags: {
-        Zero: { id: 0x0, name: "Zero" },
-        One: { id: 0x1, name: "One" },
-        Two: { id: 0x2, name: "Two" },
-        Three: { id: 0x3, name: "Three" },
-        Four: { id: 0x4, name: "Four" },
-        Five: { id: 0x5, name: "Five" },
-        Six: { id: 0x6, name: "Six" },
-        Seven: { id: 0x7, name: "Seven" },
-        Eight: { id: 0x8, name: "Eight" },
-        Nine: { id: 0x9, name: "Nine" },
-        Ten: { id: 0xa, name: "Ten" }
+        Zero: { id: 0x0, label: "Zero" },
+        One: { id: 0x1, label: "One" },
+        Two: { id: 0x2, label: "Two" },
+        Three: { id: 0x3, label: "Three" },
+        Four: { id: 0x4, label: "Four" },
+        Five: { id: 0x5, label: "Five" },
+        Six: { id: 0x6, label: "Six" },
+        Seven: { id: 0x7, label: "Seven" },
+        Eight: { id: 0x8, label: "Eight" },
+        Nine: { id: 0x9, label: "Nine" },
+        Ten: { id: 0xa, label: "Ten" }
     }
 });

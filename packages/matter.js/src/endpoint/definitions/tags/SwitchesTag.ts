@@ -23,31 +23,31 @@ export const SwitchesTag = SemanticNamespace({
     id: 0x43,
 
     tags: {
-        On: { id: 0x0, name: "On" },
-        Off: { id: 0x1, name: "Off" },
-        Toggle: { id: 0x2, name: "Toggle" },
+        On: { id: 0x0, label: "On" },
+        Off: { id: 0x1, label: "Off" },
+        Toggle: { id: 0x2, label: "Toggle" },
 
         /**
          * e.g. dim up (light)
          */
-        Up: { id: 0x3, name: "Up" },
+        Up: { id: 0x3, label: "Up" },
 
         /**
          * e.g. dim down (light)
          */
-        Down: { id: 0x4, name: "Down" },
+        Down: { id: 0x4, label: "Down" },
 
         /**
          * e.g. select next scene
          */
-        Next: { id: 0x5, name: "Next" },
+        Next: { id: 0x5, label: "Next" },
 
         /**
          * e.g. select previous scene
          */
-        Previous: { id: 0x6, name: "Previous" },
+        Previous: { id: 0x6, label: "Previous" },
 
-        EnterOkSelect: { id: 0x7, name: "Enter/OK/Select" },
+        EnterOkSelect: { id: 0x7, label: "Enter/OK/Select" },
 
         /**
          * Textual description provided in Label field
@@ -58,6 +58,6 @@ export const SwitchesTag = SemanticNamespace({
          *
          * @see {@link MatterSpecification.v13.Namespace} § 15.1
          */
-        Custom: { id: 0x8, name: "Custom" }
+        Custom: { id: 0x8, label: "Custom" }
     }
 });

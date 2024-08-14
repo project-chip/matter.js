@@ -16,5 +16,5 @@ import { SemanticNamespace } from "../../type/SemanticNamespace.js";
  */
 export const RoomAirConditionerTag = SemanticNamespace({
     id: 0x42,
-    tags: { Evaporator: { id: 0x0, name: "Evaporator" }, Condenser: { id: 0x1, name: "Condenser" } }
+    tags: { Evaporator: { id: 0x0, label: "Evaporator" }, Condenser: { id: 0x1, label: "Condenser" } }
 });

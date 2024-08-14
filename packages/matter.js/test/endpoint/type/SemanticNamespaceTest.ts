@@ -13,8 +13,8 @@ describe("SemanticNamespace", () => {
         const ns = SemanticNamespace({
             id: 4,
             tags: {
-                Foo: { id: 1, name: "Foo" },
-                Bar: { id: 2, name: "WAT dunno" },
+                Foo: { id: 1, label: "Foo" },
+                Bar: { id: 2, label: "WAT dunno" },
             },
         });
 
@@ -44,8 +44,8 @@ describe("SemanticNamespace", () => {
             id: 4,
             mfgCode: 17,
             tags: {
-                Foo: { id: 1, name: "Foo" },
-                Bar: { id: 2, name: "WAT dunno" },
+                Foo: { id: 1, label: "Foo" },
+                Bar: { id: 2, label: "WAT dunno" },
             },
         });
 

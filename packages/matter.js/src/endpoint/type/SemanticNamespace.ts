@@ -23,13 +23,13 @@ export function SemanticNamespace<const T extends SemanticNamespace.Definition>(
     const mfgCode = definition.mfgCode ? VendorId(definition.mfgCode) : null;
 
     for (const key in tags) {
-        const { id, name } = definition.tags[key];
+        const { id: tag, label } = definition.tags[key];
 
         result[key] = {
             namespaceId,
             mfgCode,
-            tag: id,
-            label: name,
+            tag,
+            label,
         };
     }
 
@@ -41,7 +41,7 @@ export namespace SemanticNamespace {
         id: number;
         mfgCode?: number;
         tags: {
-            [name: string]: { id: number; name: string };
+            [name: string]: { id: number; label: string };
         };
     }
 

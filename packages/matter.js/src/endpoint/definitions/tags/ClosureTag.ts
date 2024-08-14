@@ -21,16 +21,16 @@ export const ClosureTag = SemanticNamespace({
         /**
          * Move toward open position
          */
-        Opening: { id: 0x0, name: "Opening" },
+        Opening: { id: 0x0, label: "Opening" },
 
         /**
          * Move toward closed position
          */
-        Closing: { id: 0x1, name: "Closing" },
+        Closing: { id: 0x1, label: "Closing" },
 
         /**
          * Stop any movement
          */
-        Stop: { id: 0x2, name: "Stop" }
+        Stop: { id: 0x2, label: "Stop" }
     }
 });
