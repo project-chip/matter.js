@@ -5,6 +5,7 @@
  */
 
 import { Behavior } from "../../behavior/Behavior.js";
+import { DescriptorBehavior } from "../../behavior/definitions/descriptor/DescriptorBehavior.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { camelize } from "../../util/String.js";
 
@@ -76,6 +77,8 @@ export namespace SupportedBehaviors {
      */
     export type StateOf<SB extends SupportedBehaviors> = {
         [K in keyof SB]: Behavior.StateOf<SB[K]>;
+    } & {
+        descriptor: Behavior.StateOf<typeof DescriptorBehavior>;
     };
 
     /**
@@ -90,6 +93,8 @@ export namespace SupportedBehaviors {
      */
     export type InputStateOf<SB extends SupportedBehaviors> = {
         [K in keyof SB]?: Behavior.InputStateOf<SB[K]>;
+    } & {
+        descriptor?: Behavior.InputStateOf<typeof DescriptorBehavior>;
     };
 
     /**
@@ -97,6 +102,8 @@ export namespace SupportedBehaviors {
      */
     export type StatePatchOf<SB extends SupportedBehaviors> = {
         [K in keyof SB]?: Behavior.PatchStateOf<SB[K]>;
+    } & {
+        descriptor?: Behavior.PatchStateOf<typeof DescriptorBehavior>;
     };
 }
 

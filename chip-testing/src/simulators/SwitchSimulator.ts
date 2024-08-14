@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { SwitchServer } from "@project-chip/matter.js/behaviors/switch";
 import { Switch } from "@project-chip/matter.js/cluster";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { BitFlag, BitmapSchema } from "@project-chip/matter.js/schema";
@@ -33,10 +40,8 @@ export class SwitchSimulator {
         const action = this.#switchActions.shift();
         if (action) {
             this.#endpoint
-                .set({
-                    switch: {
-                        rawPosition: action.position,
-                    },
+                .setStateOf(SwitchServer, {
+                    rawPosition: action.position,
                 })
                 .then(
                     () => {

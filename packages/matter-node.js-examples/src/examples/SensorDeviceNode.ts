@@ -96,7 +96,7 @@ async function main() {
      * In this case we directly use the default command implementation from matter.js. Check out the DeviceNodeFull example
      * to see how to customize the command handlers.
      */
-    let endpoint: Endpoint;
+    let endpoint: Endpoint<TemperatureSensorDevice | HumiditySensorDevice>;
     if (isTemperature) {
         endpoint = new Endpoint(TemperatureSensorDevice, {
             id: "tempsensor",

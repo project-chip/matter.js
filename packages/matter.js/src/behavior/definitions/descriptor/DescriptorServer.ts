@@ -5,11 +5,14 @@
  */
 
 import { Descriptor } from "../../../cluster/definitions/DescriptorCluster.js";
+import { Semtag } from "../../../cluster/globals/Semtag.js";
+import { ImplementationError } from "../../../common/MatterError.js";
 import { ClusterId } from "../../../datatype/ClusterId.js";
 import { DeviceTypeId } from "../../../datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../../../datatype/EndpointNumber.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { EndpointLifecycle } from "../../../endpoint/properties/EndpointLifecycle.js";
+import { DeviceTypeModel, MatterModel } from "../../../model/index.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { IndexBehavior } from "../../system/index/IndexBehavior.js";
@@ -40,6 +43,7 @@ export class DescriptorServer extends DescriptorBehavior {
         // Initialize ServerList
         this.state.serverList = this.#serverList;
 
+        // Initialize device type list
         if (!this.state.deviceTypeList.length) {
             const partType = this.endpoint.type;
             this.state.deviceTypeList = [
@@ -48,23 +52,81 @@ export class DescriptorServer extends DescriptorBehavior {
                     revision: partType.deviceRevision,
                 },
             ];
+
+            // For complete semantics it would be better to include all inherited device types.  However there is
+            // typical spec-level confusion that makes this of questionable practical utility so omitting for now
+            // for (
+            //     let base = MatterModel.standard.get(DeviceTypeModel, partType.deviceType)?.base;
+            //     base;
+            //     { base } = base
+            // ) {
+            //     if (!(base instanceof DeviceTypeModel) || base.id === undefined) {
+            //         continue;
+            //     }
+
+            //     this.state.deviceTypeList.push({
+            //         deviceType: DeviceTypeId(base.id),
+            //         revision: base.revision,
+            //     });
+            // }
         }
     }
 
     /**
      * Extend device type metadata.  This is a shortcut for deduped insert into the deviceTypeList cluster attribute.
+     *
+     * @param deviceTypes an array of objects or named device types as defined in {@link MatterModel.standard}
      */
-    addDeviceTypes(...deviceTypes: DescriptorServer.DeviceType[]) {
+    addDeviceTypes(...deviceTypes: (DescriptorServer.DeviceType | string)[]) {
         const list = this.state.deviceTypeList;
-        nextInput: for (const newDeviceType of deviceTypes) {
-            for (const existingDeviceType of this.state.deviceTypeList) {
+
+        nextInput: for (let newDeviceType of deviceTypes) {
+            if (typeof newDeviceType === "string") {
+                const dt = MatterModel.standard.get(DeviceTypeModel, newDeviceType);
+                if (dt === undefined) {
+                    throw new ImplementationError(`Device type ${newDeviceType} not found`);
+                }
+                newDeviceType = { deviceType: DeviceTypeId(dt.id), revision: dt.revision };
+            }
+
+            for (const existingDeviceType of list) {
                 if (isDeepEqual(newDeviceType, existingDeviceType)) {
                     continue nextInput;
                 }
             }
             list.push(newDeviceType);
         }
-        this.state.deviceTypeList = list;
+    }
+
+    /**
+     * Add semantic tags.  This is a shortcut for deduped insert into the tagList cluster attribute.
+     *
+     * You must enable the "TagList" feature to use this method.
+     */
+    addTags(...tags: Semtag[]) {
+        // TODO - should automatically enable the feature if it's not enabled
+        if (!this.features.tagList) {
+            throw new ImplementationError('You must enable the descriptor "TagList" feature to set tags');
+        }
+
+        const list = (this.state as unknown as { tagList: Semtag[] }).tagList;
+
+        nextInput: for (const newTag of tags) {
+            for (const existingTag of list) {
+                if (
+                    existingTag.mfgCode === newTag.mfgCode &&
+                    existingTag.namespaceId === newTag.namespaceId &&
+                    existingTag.tag === newTag.tag
+                ) {
+                    if (existingTag.label !== newTag.label && newTag.label !== null && newTag.label !== undefined) {
+                        existingTag.label = newTag.label;
+                        continue nextInput;
+                    }
+                }
+            }
+
+            list.push(newTag);
+        }
     }
 
     /**

@@ -11652,9 +11652,22 @@ export const SpecMatter = Matter({
                         "\n" +
                         "† The PIN/RFID Code is an obsolete field name, use PINCode instead.",
                     xref: { document: "cluster", section: "5.2.10.1" },
-                    children: [
-                        Field({ name: "PinCodePinRfidCode", id: 0x0, type: "octstr", conformance: "[COTA & PIN]" })
-                    ]
+
+                    children: [Field({
+                        name: "PinCode", id: 0x0, type: "octstr", conformance: "[COTA & PIN]",
+
+                        details: "If the RequirePINforRemoteOperation attribute is True then PINCode field shall be provided and the " +
+                            "door lock shall NOT grant access if it is not provided." +
+                            "\n" +
+                            "If the PINCode field is provided, the door lock shall verify PINCode before granting access " +
+                            "regardless of the value of RequirePINForRemoteOperation attribute." +
+                            "\n" +
+                            "When the PINCode field is provided an invalid PIN will count towards the WrongCodeEntryLimit and " +
+                            "the UserCodeTemporaryDisableTime will be triggered if the WrongCodeEntryLimit is exceeded. The lock " +
+                            "shall ignore any attempts to lock/unlock the door until the UserCodeTemporaryDisableTime expires.",
+
+                        xref: { document: "cluster", section: "5.2.10.1.1" }
+                    })]
                 }),
 
                 Command({
@@ -11673,9 +11686,11 @@ export const SpecMatter = Matter({
                         "† The PIN/RFID Code is an obsolete field name, use PINCode instead.",
 
                     xref: { document: "cluster", section: "5.2.10.2" },
-                    children: [
-                        Field({ name: "PinCodePinRfidCode", id: 0x0, type: "octstr", conformance: "[COTA & PIN]" })
-                    ]
+                    children: [Field({
+                        name: "PinCode", id: 0x0, type: "octstr", conformance: "[COTA & PIN]",
+                        details: "See PINCode field.",
+                        xref: { document: "cluster", section: "5.2.10.2.1" }
+                    })]
                 }),
 
                 Command({
@@ -11707,7 +11722,11 @@ export const SpecMatter = Matter({
                             xref: { document: "cluster", section: "5.2.10.3.1" }
                         }),
 
-                        Field({ name: "PinCodePinRfidCode", id: 0x1, type: "octstr", conformance: "[COTA & PIN]" })
+                        Field({
+                            name: "PinCode", id: 0x1, type: "octstr", conformance: "[COTA & PIN]",
+                            details: "See PINCode field.",
+                            xref: { document: "cluster", section: "5.2.10.3.2" }
+                        })
                     ]
                 }),
 
@@ -11874,9 +11893,13 @@ export const SpecMatter = Matter({
                         "set to UnrestrictedUser and all schedules shall be cleared.",
 
                     xref: { document: "cluster", section: "5.2.10.9" },
+
                     children: [Field({
-                        name: "PinSlotIndexUserId", id: 0x0, type: "uint16", conformance: "M",
-                        constraint: "1 to numberOfPinUsersSupported, 65534"
+                        name: "PinSlotIndex", id: 0x0, type: "uint16", conformance: "M",
+                        constraint: "1 to numberOfPinUsersSupported, 65534",
+                        details: "This field shall specify a valid PIN code slot index or 0xFFFE to indicate all PIN code slots shall " +
+                            "be cleared.",
+                        xref: { document: "cluster", section: "5.2.10.9.1" }
                     })]
                 }),
 
@@ -11968,9 +11991,12 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "WeekDayIndexScheduleId", id: 0x0, type: "uint8", conformance: "M",
-                            constraint: "1 to numberOfWeekDaySchedulesSupportedPerUser"
+                            name: "WeekDayIndex", id: 0x0, type: "uint8", conformance: "M",
+                            constraint: "1 to numberOfWeekDaySchedulesSupportedPerUser",
+                            details: "This field shall indicate the index of the Week Day schedule.",
+                            xref: { document: "cluster", section: "5.2.10.14.1" }
                         }),
+
                         Field({
                             name: "UserIndexUserId", id: 0x1, type: "uint16", conformance: "M",
                             constraint: "1 to numberOfTotalUsersSupported"
@@ -12021,7 +12047,7 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "WeekDayIndexScheduleId", id: 0x0, type: "uint8", conformance: "M",
+                            name: "WeekDayIndex", id: 0x0, type: "uint8", conformance: "M",
                             constraint: "1 to numberOfWeekDaySchedulesSupportedPerUser"
                         }),
                         Field({
@@ -12041,9 +12067,12 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "WeekDayIndexScheduleId", id: 0x0, type: "uint8", conformance: "M",
-                            constraint: "1 to numberOfWeekDaySchedulesSupportedPerUser"
+                            name: "WeekDayIndex", id: 0x0, type: "uint8", conformance: "M",
+                            constraint: "1 to numberOfWeekDaySchedulesSupportedPerUser",
+                            details: "This field shall indicate the index of the Week Day schedule.",
+                            xref: { document: "cluster", section: "5.2.10.16.1" }
                         }),
+
                         Field({
                             name: "UserIndexUserId", id: 0x1, type: "uint16", conformance: "M",
                             constraint: "1 to numberOfTotalUsersSupported"
@@ -12112,9 +12141,13 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "WeekDayIndexScheduleId", id: 0x0, type: "uint8", conformance: "M",
-                            constraint: "1 to numberOfWeekDaySchedulesSupportedPerUser, 254"
+                            name: "WeekDayIndex", id: 0x0, type: "uint8", conformance: "M",
+                            constraint: "1 to numberOfWeekDaySchedulesSupportedPerUser, 254",
+                            details: "This field shall indicate the Week Day schedule index to clear or 0xFE to clear all Week Day " +
+                                "schedules for the specified user.",
+                            xref: { document: "cluster", section: "5.2.10.17.1" }
                         }),
+
                         Field({
                             name: "UserIndexUserId", id: 0x1, type: "uint16", conformance: "M",
                             constraint: "1 to numberOfTotalUsersSupported"
@@ -12140,9 +12173,12 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "YearDayIndexScheduleId", id: 0x0, type: "uint8", conformance: "M",
-                            constraint: "1 to numberOfYearDaySchedulesSupportedPerUser"
+                            name: "YearDayIndex", id: 0x0, type: "uint8", conformance: "M",
+                            constraint: "1 to numberOfYearDaySchedulesSupportedPerUser",
+                            details: "This field shall indicate the index of the Year Day schedule.",
+                            xref: { document: "cluster", section: "5.2.10.18.1" }
                         }),
+
                         Field({
                             name: "UserIndexUserId", id: 0x1, type: "uint16", conformance: "M",
                             constraint: "1 to numberOfTotalUsersSupported"
@@ -12176,7 +12212,7 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "YearDayIndexScheduleId", id: 0x0, type: "uint8", conformance: "M",
+                            name: "YearDayIndex", id: 0x0, type: "uint8", conformance: "M",
                             constraint: "1 to numberOfYearDaySchedulesSupportedPerUser"
                         }),
                         Field({
@@ -12196,9 +12232,12 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "YearDayIndexScheduleId", id: 0x0, type: "uint8", conformance: "M",
-                            constraint: "1 to numberOfYearDaySchedulesSupportedPerUser"
+                            name: "YearDayIndex", id: 0x0, type: "uint8", conformance: "M",
+                            constraint: "1 to numberOfYearDaySchedulesSupportedPerUser",
+                            details: "This field shall indicate the index of the Year Day schedule.",
+                            xref: { document: "cluster", section: "5.2.10.20.1" }
                         }),
+
                         Field({
                             name: "UserIndexUserId", id: 0x1, type: "uint16", conformance: "M",
                             constraint: "1 to numberOfTotalUsersSupported"
@@ -12258,9 +12297,13 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "YearDayIndexScheduleId", id: 0x0, type: "uint8", conformance: "M",
-                            constraint: "1 to numberOfYearDaySchedulesSupportedPerUser, 254"
+                            name: "YearDayIndex", id: 0x0, type: "uint8", conformance: "M",
+                            constraint: "1 to numberOfYearDaySchedulesSupportedPerUser, 254",
+                            details: "This field shall indicate the Year Day schedule index to clear or 0xFE to clear all Year Day " +
+                                "schedules for the specified user.",
+                            xref: { document: "cluster", section: "5.2.10.21.1" }
                         }),
+
                         Field({
                             name: "UserIndexUserId", id: 0x1, type: "uint16", conformance: "M",
                             constraint: "1 to numberOfTotalUsersSupported"
@@ -12280,8 +12323,10 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "HolidayIndexHolidayScheduleId", id: 0x0, type: "uint8", conformance: "M",
-                            constraint: "1 to numberOfHolidaySchedulesSupported"
+                            name: "HolidayIndex", id: 0x0, type: "uint8", conformance: "M",
+                            constraint: "1 to numberOfHolidaySchedulesSupported",
+                            details: "This field shall indicate the index of the Holiday schedule.",
+                            xref: { document: "cluster", section: "5.2.10.22.1" }
                         }),
 
                         Field({
@@ -12316,7 +12361,7 @@ export const SpecMatter = Matter({
                         "† The Holiday Schedule ID is an obsolete field name, use HolidayIndex instead.",
                     xref: { document: "cluster", section: "5.2.10.23" },
                     children: [Field({
-                        name: "HolidayIndexHolidayScheduleId", id: 0x0, type: "uint8", conformance: "M",
+                        name: "HolidayIndex", id: 0x0, type: "uint8", conformance: "M",
                         constraint: "1 to numberOfHolidaySchedulesSupported"
                     })]
                 }),
@@ -12330,8 +12375,10 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "HolidayIndexHolidayScheduleId", id: 0x0, type: "uint8", conformance: "M",
-                            constraint: "1 to numberOfHolidaySchedulesSupported"
+                            name: "HolidayIndex", id: 0x0, type: "uint8", conformance: "M",
+                            constraint: "1 to numberOfHolidaySchedulesSupported",
+                            details: "This field shall indicate the index of the Holiday schedule.",
+                            xref: { document: "cluster", section: "5.2.10.24.1" }
                         }),
 
                         Field({
@@ -12387,9 +12434,13 @@ export const SpecMatter = Matter({
                         "\n" +
                         "† The Holiday Schedule ID is an obsolete field name, use HolidayIndex instead.",
                     xref: { document: "cluster", section: "5.2.10.25" },
+
                     children: [Field({
-                        name: "HolidayIndexHolidayScheduleId", id: 0x0, type: "uint8", conformance: "M",
-                        constraint: "1 to numberOfHolidaySchedulesSupported, 254"
+                        name: "HolidayIndex", id: 0x0, type: "uint8", conformance: "M",
+                        constraint: "1 to numberOfHolidaySchedulesSupported, 254",
+                        details: "This field shall indicate the Holiday schedule index to clear or 0xFE to clear all Holiday " +
+                            "schedules.",
+                        xref: { document: "cluster", section: "5.2.10.25.1" }
                     })]
                 }),
 
@@ -12544,9 +12595,13 @@ export const SpecMatter = Matter({
                         "set to UnrestrictedUser and all schedules shall be cleared.",
 
                     xref: { document: "cluster", section: "5.2.10.32" },
+
                     children: [Field({
-                        name: "RfidSlotIndexUserId", id: 0x0, type: "uint16", conformance: "M",
-                        constraint: "1 to numberOfRfidUsersSupported, 65534"
+                        name: "RfidSlotIndex", id: 0x0, type: "uint16", conformance: "M",
+                        constraint: "1 to numberOfRfidUsersSupported, 65534",
+                        details: "This field shall indicate a valid RFID code slot index or 0xFFFE to indicate all RFID code slots " +
+                            "shall be cleared.",
+                        xref: { document: "cluster", section: "5.2.10.32.1" }
                     })]
                 }),
 
