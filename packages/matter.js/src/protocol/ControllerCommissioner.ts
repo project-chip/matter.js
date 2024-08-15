@@ -766,7 +766,7 @@ export class ControllerCommissioner {
             const anyNetworkInterface =
                 this.collectedCommissioningData.networkFeatures.length === 0 ||
                 this.collectedCommissioningData.networkFeatures.some(
-                    ({ value: { ethernetNetworkInterface, wiFiNetworkInterface } }) => 
+                    ({ value: { ethernetNetworkInterface, wiFiNetworkInterface } }) =>
                         ethernetNetworkInterface === true || wiFiNetworkInterface === true,
                 );
             const anyInterfaceConnected =
