@@ -763,17 +763,18 @@ export class ControllerCommissioner {
             this.commissioningOptions.threadNetwork === undefined
         ) {
             // Check if we have no networkCommissioning cluster or an Ethernet one
-            const anyEthernetInterface =
+            const anyNetworkInterface =
                 this.collectedCommissioningData.networkFeatures.length === 0 ||
                 this.collectedCommissioningData.networkFeatures.some(
-                    ({ value: { ethernetNetworkInterface } }) => ethernetNetworkInterface === true,
+                    ({ value: { ethernetNetworkInterface, wiFiNetworkInterface } }) => 
+                        ethernetNetworkInterface === true || wiFiNetworkInterface === true,
                 );
             const anyInterfaceConnected =
                 this.collectedCommissioningData.networkStatus.length === 0 ||
                 this.collectedCommissioningData.networkStatus.some(({ value }) =>
                     value.some(({ connected }) => connected),
                 );
-            if (!anyEthernetInterface && !anyInterfaceConnected) {
+            if (!anyNetworkInterface && !anyInterfaceConnected) {
                 throw new CommissioningError(
                     "No Wi-Fi/Thread network credentials are configured for commissioning and no Ethernet interface is available on the device and no interface already connected.",
                 );
