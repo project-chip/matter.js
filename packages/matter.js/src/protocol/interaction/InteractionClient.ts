@@ -1020,4 +1020,8 @@ export class InteractionClient {
     get session() {
         return this.exchangeProvider.session;
     }
+
+    get channelType() {
+        return this.exchangeProvider.channelType;
+    }
 }
