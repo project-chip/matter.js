@@ -10,8 +10,8 @@ import {
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID,
-    BLE_MAX_MATTER_PAYLOAD_SIZE,
     BTP_CONN_RSP_TIMEOUT_MS,
+    BleChannel,
     BleError,
     BtpFlowError,
     BtpSessionHandler,
@@ -126,7 +126,7 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
  * Note: Bleno is only supporting a single connection at a time right now - mainly because it also only can announce
  * one BLE device at a time!
  */
-export class BlenoBleServer implements Channel<ByteArray> {
+export class BlenoBleServer extends BleChannel<ByteArray> {
     private state = "unknown";
     isAdvertising = false;
     private additionalAdvertisingData: Buffer = Buffer.alloc(0);
@@ -144,10 +144,9 @@ export class BlenoBleServer implements Channel<ByteArray> {
     );
 
     private readonly matterBleService;
-    readonly maxPayloadSize = BLE_MAX_MATTER_PAYLOAD_SIZE;
-    readonly isReliable = true; // BTP is reliable
 
     constructor(options?: BleOptions) {
+        super();
         this.matterBleService = initializeBleno(this, options?.hciId);
 
         // Write Bleno into this class
@@ -402,6 +401,6 @@ export class BlenoBleServer implements Channel<ByteArray> {
 
     // Channel<ByteArray>
     get name() {
-        return `ble://${this.clientAddress}`;
+        return `${this.type}://${this.clientAddress}`;
     }
 }
