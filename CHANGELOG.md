@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	### __WORK IN PROGRESS__
 -->
 
-### **WORK_IN_PROGRESS**
+### __WORK IN PROGRESS__
 
 -   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3.0.1. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
 
@@ -76,6 +76,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Feature: Allows to complete the commissioning process for a node where this process was started by a PASE commissioner
     -   Feature: Allows to commission a node without directly connecting to it
     -   Enhancement: Always read attributes that do not report changes via subscriptions (including all unknown Attributes)
+    -   Fix: Skips network commissioning during commissioning when the commissioning is already using an IP based channel (like UDP)
     -   Fix: Fixes Node reconnection when disconnected before
     -   Fix: Makes sure to always use the BLE scanner when required
 -   matter.js Legacy API:
