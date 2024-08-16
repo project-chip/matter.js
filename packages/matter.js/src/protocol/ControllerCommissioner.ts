@@ -277,6 +277,10 @@ export class ControllerCommissioner {
                     stepLogic: () => this.configureNetworkThread(),
                 });
             }
+        } else {
+            logger.info(
+                `Skipping NetworkCommissioning steps because the device is already on IP network (${this.interactionClient.channelType})`,
+            );
         }
 
         this.commissioningSteps.push({
