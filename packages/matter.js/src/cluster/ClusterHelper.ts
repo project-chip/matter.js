@@ -178,16 +178,23 @@ export function resolveAttributeName({
     return `${endpointClusterName}/${attribute.name}(${toHex(attributeId)})`;
 }
 
-export function resolveEventName({ nodeId, endpointId, clusterId, eventId }: TypeFromSchema<typeof TlvEventPath>) {
+export function resolveEventName({
+    nodeId,
+    endpointId,
+    clusterId,
+    eventId,
+    isUrgent,
+}: TypeFromSchema<typeof TlvEventPath>) {
+    const isUrgentStr = isUrgent ? "!" : "";
     const endpointClusterName = resolveEndpointClusterName(nodeId, endpointId, clusterId);
     if (endpointId === undefined || clusterId === undefined || eventId === undefined) {
-        return `${endpointClusterName}/${toHex(eventId)}`;
+        return `${isUrgentStr}${endpointClusterName}/${toHex(eventId)}`;
     }
     const event = getClusterEventById(getClusterById(clusterId), eventId);
     if (event === undefined) {
-        return `${endpointClusterName}/unknown(${toHex(eventId)})`;
+        return `${isUrgentStr}${endpointClusterName}/unknown(${toHex(eventId)})`;
     }
-    return `${endpointClusterName}/${event.name}(${toHex(eventId)})`;
+    return `${isUrgentStr}${endpointClusterName}/${event.name}(${toHex(eventId)})`;
 }
 
 export function resolveCommandName({ endpointId, clusterId, commandId }: TypeFromSchema<typeof TlvCommandPath>) {
