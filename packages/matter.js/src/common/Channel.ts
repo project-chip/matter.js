@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export enum ChannelType {
+    UDP = "udp",
+    BLE = "ble",
+    TCP = "tcp",
+}
+
 export interface Channel<T> {
     /** Maximum Payload size for this channel */
     maxPayloadSize: number;
@@ -13,6 +19,8 @@ export interface Channel<T> {
 
     /** Channel name */
     name: string;
+
+    type: ChannelType;
 
     /** Method to send data to the remote endpoint */
     send(data: T): Promise<void>;
