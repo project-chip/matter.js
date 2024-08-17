@@ -50,7 +50,7 @@ export function ClusterClient<const T extends ClusterType>(
             isFabricFiltered = true,
         ) => {
             try {
-                return await (attributes as any)[attributeName].get(isFabricFiltered, alwaysRequestFromRemote);
+                return await (attributes as any)[attributeName].get(alwaysRequestFromRemote, isFabricFiltered);
             } catch (e) {
                 if (StatusResponseError.is(e, StatusCode.UnsupportedAttribute)) {
                     return undefined;

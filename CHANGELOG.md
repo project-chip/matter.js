@@ -78,6 +78,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Enhancement: Always read attributes that do not report changes via subscriptions (including all unknown Attributes)
     -   Fix: Fixes Node reconnection when disconnected before
     -   Fix: Makes sure to always use the BLE scanner when required
+    -   Fix: Prevents reading subscribed attributes from remote if not requested and needed
 -   matter.js Legacy API:
     -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
     -   Removal: We removed old Scenes cluster implementation which was never fully implemented or used by any Matter controller
