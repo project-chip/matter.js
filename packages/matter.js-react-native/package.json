@@ -36,7 +36,7 @@
     "dependencies": {
         "@project-chip/matter-node.js": "0.10.0-alpha.0-20240825-d5b4ec2c",
         "@project-chip/matter.js": "0.10.0-alpha.0-20240825-d5b4ec2c",
-        "@react-native-async-storage/async-storage": "^1.23.1",
+        "@react-native-async-storage/async-storage": "^2.0.0",
         "@react-native-community/netinfo": "^11.3.2",
         "@types/jwk-to-pem": "^2.0.3",
         "@types/node": "^22.2.0",
