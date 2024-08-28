@@ -64,17 +64,6 @@ jobs:
         run: |
           rm -rf connectedhomeip
 
-      - name: Patch for building docs
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const file = fs.readFileSync('./node_modules/buffer/index.d.ts', 'utf8');
-            fs.writeFileSync('./node_modules/buffer/index.d.ts', file.replace('concat(list: Buffer[], totalLength?: number): Buffer;', 'concat(...list: Buffer[]): Buffer;'), 'utf8');
-
-      - name: Build Docs
-        run: npm run build-doc
-
       - name: Determine the version bump
         id: version
         uses: actions/github-script@v7
