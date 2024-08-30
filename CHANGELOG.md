@@ -11,7 +11,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ### __WORK IN PROGRESS__
 
--   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3.0.1. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
+-   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3.0.1. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js.
 
 -   Matter.js Parser and Code generator:
     -   Feature: We now generate all Matter datatypes and elements. This includes some we defined by hand previously and those introduced by the Matter 1.2 and Matter 1.3 specifications.
@@ -80,6 +80,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Fix: Fixes Node reconnection when disconnected before
     -   Fix: Makes sure to always use the BLE scanner when required
     -   Fix: Prevents reading subscribed attributes from remote if not requested and needed
+    -   Fix: (digitaldan) Makes sure to re-use the same callbacks and options for a re-subscription of a Paired Node
 -   matter.js Legacy API:
     -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
     -   Removal: We removed old Scenes cluster implementation which was never fully implemented or used by any Matter controller
