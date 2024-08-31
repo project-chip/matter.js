@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-tools",
-    "version": "0.10.0-alpha.0-20240827-5e428cb3",
+    "version": "0.10.0",
     "description": "Matter.js tooling",
     "type": "module",
     "scripts": {
@@ -55,8 +55,8 @@
         "yargs": "^17.7.2"
     },
     "optionalDependencies": {
-        "v8-profiler-next": "^1.10.0",
-        "@esbuild/linux-x64": "^0.23.1"
+        "@esbuild/linux-x64": "^0.23.1",
+        "v8-profiler-next": "^1.10.0"
     },
     "devDependencies": {
         "@types/chai": "^4.3.16",
