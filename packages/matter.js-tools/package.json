@@ -55,7 +55,8 @@
         "yargs": "^17.7.2"
     },
     "optionalDependencies": {
-        "v8-profiler-next": "^1.10.0"
+        "v8-profiler-next": "^1.10.0",
+        "@esbuild/linux-x64": "^0.23.1"
     },
     "devDependencies": {
         "@types/chai": "^4.3.16",
