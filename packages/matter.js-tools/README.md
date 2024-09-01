@@ -3,12 +3,14 @@
 This package supports build, test and execution infrastructure for other
 `@project-chip/matter.js` packages.
 
+> This package supports all Node.js LTS versions starting with 18.x
+
 ## Rational
 
 Matter.js consists of a large number of generated TypeScript files.  We support
 multiple module formats targeting disparate JavaScript runtimes including Node
 and web browsers.  We publish a moderate (and growing) number of packages to
-NPM.  We support Linux, Windows and Mac OS.
+NPM.  We support Linux, Windows and MacOS.
 
 Previously, TSC analysis and test times had become quite slow.  A proliferation
 of configuration files for TSC and test framework was adding significant

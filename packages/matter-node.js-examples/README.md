@@ -2,9 +2,9 @@
 
 [![license](https://img.shields.io/badge/license-Apache2-green.svg?style=flat)](https://raw.githubusercontent.com/mfucci/node-matter/master/LICENSE)
 
-This project provides a set of reference implementations to offer several types of Matter device nodes or also a controller.
+This project provides a set of reference implementations to show several types of Matter device nodes or also a controller implementation.
 
-> This package requires Node 18+
+> This package supports all Node.js LTS versions starting with 18.x
 
 # matter-node.js Usage examples / Reference implementations
 

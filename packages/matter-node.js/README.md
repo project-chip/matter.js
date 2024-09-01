@@ -2,27 +2,27 @@
 
 [![license](https://img.shields.io/badge/license-Apache2-green.svg?style=flat)](https://raw.githubusercontent.com/mfucci/node-matter/master/LICENSE) 
 
-Matter protocol for node.js with no native dependencies (and very limited dependencies).
+Matter protocol for Node.js with no native dependencies (and very limited dependencies).
 
-> This package requires Node 18+
+> This package supports all Node.js LTS versions starting with 18.x
 
-This package is meant to be used as library as basis for Node.js based implementation of Matter Device and controller functionality
+This package contains the specific Platform implementations to allow running Matter Devices and Controllers on Node.js. It is designed to be used in addition to the @project-chip/matter.js package to enable Node.js specific functionality.
  
-A basic CLI reference implementation of a Matter Device and Controller (might be split in own package soon) is available in the [matter-node.js-examples](../matter-node.js-examples/README.md) package.
+Some usage ready examples of a Matter Device and Controller (might be split in own package soon) are available in the [matter-node.js-examples](../matter-node.js-examples/README.md) package.
 
 For questions on how to use or pair Matter devices or controllers please refer to the [base package Readme](../../README.md#pairing-and-usage-information)! Especially for Google special steps are needed and mostly Hub devices are needed.
 
 ## Exported functionality
-This library enhances Matter.js and implements the needed native functionality using Node.js 16+ as platform. The library exports the added Node.js specific implementations as named exports.
-Ideally you only need to import the main functionality as very first import of your application using
+Ideally you only need to import the main functionality as very first import of your application to register the Node.js environment functionalities.
+
+Use
 
 ```javascript
 import "@project-chip/matter-node.js";
 ```
-
 to automatically register all needed Node.js specific features for the Environment and initialize the default environment.
 
-Most other functions should be imported from the @project-chip/matter.js package (unless it's Node.js specific functionality).
+Most other functions should be imported from the @project-chip/matter.js package (unless it's Node.js specific functionality only needed in some special cases).
 
 For more details please refer to the [API Documentation](../../docs/matter-node.js).
 
@@ -38,7 +38,7 @@ For more details please refer to the [API Documentation](../../docs/matter-node.
 | `@project-chip/matter-node.js/util`        | Exports Basic Utility functionality and enhance it by adding some Node.js specific functionality                                                  |
 
 ### Unchanged Re-Exports from Matter.js (Deprecated! Only used for Legacy API)
-The re-exports are deprecated as of 0.8+ release of matter.js. Please change your code to use these imports from matter.js directly and make sure to sync the versions of both packages (matter-node.js and matter.js) in your dependencies to not point to different versions!
+The re-exports are deprecated as of 0.8+ release of matter.js. Please change your code to use these imports from matter.js directly and make sure to sync the versions of both packages (matter-node.js and matter.js) in your dependencies to always point to the same version!
 
 | Export                                       | Description                                                                      |
 |----------------------------------------------|----------------------------------------------------------------------------------|

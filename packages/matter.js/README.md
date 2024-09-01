@@ -2,15 +2,18 @@
 
 Implementation of Matter protocol in typescript with no native dependencies (and very limited dependencies).
 
-This is the JavaScript only Core of the Matter protocol. It is used by other projects to implement Matter Nodes and Clients and add the relevant specific implementations for Network and other elements.
+This is the JavaScript-only Core of the Matter protocol. It is used by other projects to implement Matter Nodes and Clients and add the relevant specific implementations for Network and other elements.
+
+> This package supports all Node.js LTS versions starting with 18.x
 
 The following features are abstracted away to allow to be implemented environment specific:
 
 -   Network (UDP/MDNS)
--   Crypto (to be split out)
+-   Crypto
 -   Storage
 -   Date/Timer
 -   Logger (Default uses "console")
+-   Environment (Process and Configuration handling)
 
 ## Exported functionality
 
@@ -29,7 +32,7 @@ This library exports the Matter protocol functionality as well as some helper fu
 | `@project-chip/matter.js/device`        | Exports Matter Device relevant classes (Legacy API!)                                                                                                                                                |
 | `@project-chip/matter.js/devices`       | Exports Matter Device type classes (NEW API!)                                                                                                                                                       |
 | `@project-chip/matter.js/endpoint`      | Exports Matter Endpoint structure classes (NEW API!)                                                                                                                                                |
-| `@project-chip/matter-.js/environment`  | Exports environment functionalities, which handes central functions like MDNS and configuration                                                                                                     |
+| `@project-chip/matter-.js/environment`  | Exports environment functionalities, which handles central functions like MDNS and configuration                                                                                                    |
 | `@project-chip/matter.js/elements`      | Exports every standard Matter element defined by the [Matter Object Model](./src/model/README.md)                                                                                                   |
 | `@project-chip/matter.js/fabric`        | Exports Matter-Fabric functionality                                                                                                                                                                 |
 | `@project-chip/matter.js/interaction`   | Exports Matter Interaction protocol functionality                                                                                                                                                   |
@@ -45,6 +48,7 @@ This library exports the Matter protocol functionality as well as some helper fu
 | `@project-chip/matter.js/session`       | Exports Session and Secure-Session functionality                                                                                                                                                    |
 | `@project-chip/matter.js/spec`          | Exports Matter Specification References                                                                                                                                                             |
 | `@project-chip/matter.js/storage`       | Exports Basic Storage abstract functionality that needs to be implemented platform specific!                                                                                                        |
+| `@project-chip/matter.js/tags`          | Exports Semantic Tag Standard namespace definitions of the Matter specification                                                                                                                     |
 | `@project-chip/matter.js/time`          | Exports Basic Time/Timer abstract functionality that needs to be implemented platform specific!                                                                                                     |
 | `@project-chip/matter.js/tlv`           | Exports Matter TLV type definitions                                                                                                                                                                 |
 | `@project-chip/matter.js/util`          | Exports Basic Utility functionality                                                                                                                                                                 |
