@@ -37,7 +37,15 @@ matter.js serves various purposes and can be employed for:
 
 Explore the versatile capabilities of matter.js and adapt it to your specific use cases!
 
-## Compatibility
+## Compatibility to Matter Standard
+
+The Matter standard evolves continuously and delivers two updates per year. matter.js tries to follow the standard as closely as possible. The following list provides an overview which matter.js version is implementing which Matter standard version:
+- **Matter 1.0**: matter.js up to 0.7.x
+- **Matter 1.1**: matter.js 0.8.x - 0.9.x
+- **Matter 1.2**: skipped
+- **Matter 1.3**: matter.js 0.10.x and higher
+
+## Compatibility to Ecosystems 
 
 Devices created with matter.js/matter-node.js have been tested with:
 
@@ -70,10 +78,10 @@ Please report any outdated or newly discovered information on compatible ecosyst
 This repository contains multiple packages (and because of this it is a monorepo). The packages are contained in the `packages` directory and are all published separately to NPM.
 
 - **[matter.js](./packages/matter.js)**: the core Matter implementation in typescript which is JavaScript only and has no native dependencies. It is build and published as CommonJS and ES6 variants in one package.
-- **[matter-node.js](./packages/matter-node.js)**: a node.js implementation of a Matter DeviceNode and ControllerNode which also re-exports all matter.js exports and so can be used as only dependency. It is build and published as CommonJS and ES6 variants in one package.
-- **[matter-node-ble.js](./packages/matter-node-ble.js)**: a node.js based implementation of BLE features for matter-node.js to allow commissioning via BLE (Device and Controller). It is build and published as CommonJS and ES6 variants in one package.
-- **[matter-node-shell.js](./packages/matter-node-shell.js)**: a node.js based Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
-- **[matter-node.js-examples](./packages/matter-node.js-examples)**: Reference implementations of Matter devices and controller as CLI scripts using matter-node.js and matter-node-ble.js
+- **[matter-node.js](./packages/matter-node.js)**: Node.js specific platform implementations to enable running Matter devices or Controller with Node.js. This package is build and published as CommonJS and ES6 variants in one package and meant to be used together with the matter.js package.
+- **[matter-node-ble.js](./packages/matter-node-ble.js)**: Node.js based implementation of BLE features for matter-node.js to allow commissioning via BLE (Device and Controller). It is build and published as CommonJS and ES6 variants in one package and meant to be used together with the matter.js and the matter-node.js package.
+- **[matter-node-shell.js](./packages/matter-node-shell.js)**: a Node.js based Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface running on Node.js.
+- **[matter-node.js-examples](./packages/matter-node.js-examples)**: Reference implementations of several usage ready Matter devices and controller as CLI scripts running on Node.js.
 - **[matter.js-react-native](./packages/matter.js-react-native)**: An implementation of the platform specific parts needed for matter.js using react-native.
 - **[matter.js-tools](./packages/matter.js-tools)**: Tools used internally to build, test and run the project which incorporates on-the-fly Typescript building. You most likely do not need these tools for your projects but are free to use them.
 

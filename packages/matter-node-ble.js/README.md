@@ -4,11 +4,11 @@
 
 Matter BLE support using bleno for Peripheral/Device side and noble (not implemented yet) for Central/Controller side.
 
-> This package requires Node 16+
+> This package supports all Node.js LTS versions starting with 18.x
 
-This package implements all needed Interfaces and classes to enable BLE Support for matter.js. It implements a class BluetoothNode which can be used as singleton Ble instance.
+This package contains the specific Platform implementations for Bluetooth LE with Node.js. It is designed to be used in addition to the @project-chip/matter.js and @project-chip/matter-node.js packages to enable BLE specific functionality.
 
-## Prerquisites and Limitations
+## Prerequisites and Limitations
 
 The used packages have some limitations and prerequisites. Please check the Readme's of the packages for more details:
 * [bleno](https://github.com/abandonware/bleno#readme)
@@ -19,6 +19,26 @@ The used packages have some limitations and prerequisites. Please check the Read
   * For Linux: https://github.com/abandonware/noble#running-without-rootsudo-linux-specific
   * When using Device and Controller in parallel: https://github.com/abandonware/noble#bleno-compatibility-linux-specific (NOBLE_MULTI_ROLE might be needed to set)
   * Please also see common issues and solutions: https://github.com/abandonware/noble#common-problems
+
+## How to use this package
+This package is designed to be used in addition to matter.ja and matter-node.js to enable BLE support. It is not intended to be used standalone.
+
+Add this package to your package dependencies and make sure it is exactly the same version as matter.js and matter-node.js.
+
+In your code you register the BLE instance by using:
+```javascript
+import { BleNode } from "@project-chip/matter-node-ble.js/ble";
+import { Ble } from "@project-chip/matter.js/ble";
+
+Ble.get = singleton(
+    () =>
+        new BleNode({
+          // hciId: 1, // If you need to change it from default 0 on linux systems
+        }),
+);
+```
+
+The relevant classes in matter.js will detect the registration and use the BLE instance for BLE operations if needed.
 
 ## How to choose the HCI device (Linux)
 

@@ -1,8 +1,8 @@
 # matter.js Node Shell
 
-STATUS: Work In Progress (WIP)
-
 This project provides a light-weight node.js implementation of a Matter shell application like the chip-tool from the official Matter-SDK.
+
+> This package supports all Node.js LTS versions starting with 18.x
 
 ## Install
 
