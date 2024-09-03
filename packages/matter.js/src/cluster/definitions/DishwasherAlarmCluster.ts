@@ -19,7 +19,7 @@ import {
 import { TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { AlarmBase } from "./AlarmBaseCluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace DishwasherAlarm {

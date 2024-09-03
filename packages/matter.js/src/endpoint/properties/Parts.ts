@@ -4,12 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Lifecycle } from "../../common/Lifecycle.js";
-import { ImplementationError } from "../../common/MatterError.js";
-import { Logger } from "../../log/Logger.js";
+import {
+    BasicSet,
+    Construction,
+    ImplementationError,
+    Lifecycle,
+    Logger,
+    MutableSet,
+    ObservableSet,
+} from "@project-chip/matter.js-general";
 import { IdentityConflictError, IdentityService } from "../../node/server/IdentityService.js";
-import { Construction } from "../../util/Construction.js";
-import { BasicSet, MutableSet, ObservableSet } from "../../util/Set.js";
 import { Agent } from "../Agent.js";
 import { Endpoint } from "../Endpoint.js";
 import { EndpointPartsError, PartNotFoundError } from "../errors.js";

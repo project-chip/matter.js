@@ -4,10 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError } from "../../common/MatterError.js";
+import { camelize, isDeepEqual, MatterError, serialize } from "@project-chip/matter.js-general";
 import { BitFlags } from "../../schema/BitmapSchema.js";
-import { isDeepEqual } from "../../util/DeepEqual.js";
-import { camelize, serialize } from "../../util/String.js";
 import { ClusterType } from "../ClusterType.js";
 
 export class IllegalClusterError extends MatterError {}

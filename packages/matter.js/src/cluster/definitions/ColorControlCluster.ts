@@ -13,7 +13,6 @@ import {
     TlvNoResponse,
     OptionalAttribute,
     OptionalWritableAttribute,
-    AccessLevel,
     WritableAttribute,
     FixedAttribute,
     OptionalFixedAttribute
@@ -23,8 +22,9 @@ import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { BitFlag, BitField } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvString } from "../../tlv/TlvString.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ColorControl {

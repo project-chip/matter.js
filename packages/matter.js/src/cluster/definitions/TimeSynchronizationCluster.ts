@@ -11,7 +11,6 @@ import {
     Attribute,
     Command,
     TlvNoResponse,
-    AccessLevel,
     Event,
     EventPriority,
     FixedAttribute,
@@ -23,13 +22,14 @@ import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvInt32, TlvEpochUs, TlvEnum, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace TimeSynchronization {

@@ -4,9 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../../model/definitions/DataModelPath.js";
-import { Conformance, FeatureSet, FieldValue, Metatype, ValueModel } from "../../../model/index.js";
-import { camelize } from "../../../util/String.js";
+import { camelize } from "@project-chip/matter.js-general";
+import {
+    Conformance,
+    DataModelPath,
+    FeatureSet,
+    FieldValue,
+    Metatype,
+    ValueModel,
+} from "@project-chip/matter.js-model";
 import { AccessControl } from "../../AccessControl.js";
 import { ConformanceError, SchemaImplementationError } from "../../errors.js";
 import { Schema } from "../../supervision/Schema.js";

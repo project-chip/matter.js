@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { MessageType } from "../../protocol/securechannel/SecureChannelMessages.js";
@@ -12,7 +13,6 @@ import {
     SecureChannelMessenger,
 } from "../../protocol/securechannel/SecureChannelMessenger.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { ByteArray } from "../../util/ByteArray.js";
 import {
     TlvPasePake1,
     TlvPasePake2,
@@ -22,7 +22,7 @@ import {
 } from "./PaseMessages.js";
 
 export const DEFAULT_PASSCODE_ID = 0;
-export const SPAKE_CONTEXT = ByteArray.fromString("CHIP PAKE V1 Commissioning");
+export const SPAKE_CONTEXT = Bytes.fromString("CHIP PAKE V1 Commissioning");
 
 type PbkdfParamRequest = TypeFromSchema<typeof TlvPbkdfParamRequest>;
 type PbkdfParamResponse = TypeFromSchema<typeof TlvPbkdfParamResponse>;

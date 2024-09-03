@@ -10,7 +10,7 @@ import { MutableCluster } from "../mutation/MutableCluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Attribute } from "../Cluster.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace AirQuality {

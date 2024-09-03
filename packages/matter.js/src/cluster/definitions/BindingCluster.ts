@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { WritableFabricScopedAttribute, AccessLevel } from "../Cluster.js";
+import { WritableFabricScopedAttribute } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvOptionalField, TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
@@ -16,7 +16,8 @@ import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { Identity } from "../../util/Type.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Binding {

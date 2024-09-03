@@ -3,6 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { Merge } from "@project-chip/matter.js-general";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
@@ -12,7 +13,6 @@ import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js
 import { TlvEventFilter } from "../../protocol/interaction/InteractionProtocol.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { Merge } from "../../util/Type.js";
 import {
     Attribute,
     AttributeJsType,

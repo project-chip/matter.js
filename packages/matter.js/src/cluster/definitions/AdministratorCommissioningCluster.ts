@@ -7,17 +7,18 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { Command, TlvNoResponse, AccessLevel, Attribute } from "../Cluster.js";
+import { Command, TlvNoResponse, Attribute } from "../Cluster.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvUInt16, TlvEnum, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace AdministratorCommissioning {

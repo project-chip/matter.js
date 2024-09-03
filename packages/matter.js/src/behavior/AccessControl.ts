@@ -4,14 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessLevel } from "../cluster/Cluster.js";
+import { Access, AccessLevel, DataModelPath, ElementTag, ValueModel } from "@project-chip/matter.js-model";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { SubjectId } from "../datatype/SubjectId.js";
-import { Access } from "../model/aspects/index.js";
-import { DataModelPath } from "../model/definitions/DataModelPath.js";
-import { ElementTag } from "../model/index.js";
-import { ValueModel } from "../model/models/index.js";
 import { StatusCode } from "../protocol/interaction/StatusCode.js";
 import { InvokeError, ReadError, SchemaImplementationError, WriteError } from "./errors.js";
 import { Schema } from "./supervision/Schema.js";

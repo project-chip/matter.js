@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError } from "@project-chip/matter.js-general";
 import { ClusterType } from "../../../cluster/ClusterType.js";
 import { PowerTopology } from "../../../cluster/definitions/PowerTopologyCluster.js";
-import { ImplementationError } from "../../../common/MatterError.js";
 import { EndpointNumber } from "../../../datatype/EndpointNumber.js";
 import { DescriptorServer } from "../descriptor/DescriptorServer.js";
 import { ElectricalEnergyMeasurementBehavior } from "../electrical-energy-measurement/ElectricalEnergyMeasurementBehavior.js";

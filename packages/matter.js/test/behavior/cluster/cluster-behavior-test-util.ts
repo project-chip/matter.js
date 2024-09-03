@@ -4,6 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MaybePromise } from "@project-chip/matter.js-general";
+import {
+    AttributeElement,
+    ClusterModel,
+    CommandElement,
+    EventElement,
+    FieldElement,
+} from "@project-chip/matter.js-model";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import {
     Attribute,
@@ -16,18 +24,10 @@ import {
     TlvNoResponse,
 } from "../../../src/cluster/Cluster.js";
 import { MutableCluster } from "../../../src/cluster/mutation/MutableCluster.js";
-import {
-    AttributeElement,
-    ClusterModel,
-    CommandElement,
-    EventElement,
-    FieldElement,
-} from "../../../src/model/index.js";
 import { BitFlag } from "../../../src/schema/BitmapSchema.js";
 import { TlvBoolean } from "../../../src/tlv/TlvBoolean.js";
 import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
 import { TlvString } from "../../../src/tlv/TlvString.js";
-import { MaybePromise } from "../../../src/util/Promises.js";
 
 export namespace My {
     export enum Feature {

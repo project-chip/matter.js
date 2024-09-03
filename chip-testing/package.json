@@ -20,6 +20,7 @@
         "build-clean": "matter-build --clean"
     },
     "dependencies": {
+        "@project-chip/matter.js-general": "*",
         "@project-chip/matter-node.js": "*",
         "@project-chip/matter.js": "*",
         "@project-chip/matter.js-tools": "*"

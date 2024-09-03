@@ -7,33 +7,32 @@
 
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { createFileLogger } from "@project-chip/matter-node.js/log";
+import { LogFormat, LogLevel, Logger, singleton } from "@project-chip/matter.js-general";
 import { Ble } from "@project-chip/matter.js/ble";
-import { Format, Level, Logger } from "@project-chip/matter.js/log";
-import { singleton } from "@project-chip/matter.js/util";
 import yargs from "yargs/yargs";
 import { MatterNode } from "./MatterNode.js";
 import { Shell } from "./shell/Shell";
 
 const PROMPT = "matter-node> ";
 const logger = Logger.get("Shell");
-if (process.stdin?.isTTY) Logger.format = Format.ANSI;
+if (process.stdin?.isTTY) Logger.format = LogFormat.ANSI;
 
 let theNode: MatterNode;
 
 export function setLogLevel(identifier: string, level: string): void {
-    let logLevel = Level.INFO;
+    let logLevel = LogLevel.INFO;
     switch (level) {
         case "fatal":
-            logLevel = Level.FATAL;
+            logLevel = LogLevel.FATAL;
             break;
         case "error":
-            logLevel = Level.ERROR;
+            logLevel = LogLevel.ERROR;
             break;
         case "warn":
-            logLevel = Level.WARN;
+            logLevel = LogLevel.WARN;
             break;
         case "debug":
-            logLevel = Level.DEBUG;
+            logLevel = LogLevel.DEBUG;
             break;
     }
     Logger.setDefaultLoglevelForLogger(identifier, logLevel);
@@ -104,8 +103,8 @@ async function main() {
                     const storedLogFileName = await theNode.Store.get<string>("LogFile");
                     if (storedLogFileName !== undefined) {
                         Logger.addLogger("file", await createFileLogger(storedLogFileName), {
-                            defaultLogLevel: await theNode.Store.get<Level>("LoglevelFile", Level.DEBUG),
-                            logFormat: Format.PLAIN,
+                            defaultLogLevel: await theNode.Store.get<LogLevel>("LoglevelFile", LogLevel.DEBUG),
+                            logFormat: LogFormat.PLAIN,
                         });
                     }
                 }

@@ -15,7 +15,7 @@ import { TlvUInt8, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace OperationalState {

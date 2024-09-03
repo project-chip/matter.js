@@ -4,13 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
+import {
+    Bytes,
+    DataReader,
+    DataWriter,
+    Diagnostic,
+    Endian,
+    NotImplementedError,
+    UnexpectedDataError,
+} from "@project-chip/matter.js-general";
 import { GroupId } from "../datatype/GroupId.js";
 import { NodeId } from "../datatype/NodeId.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { ByteArray, Endian } from "../util/ByteArray.js";
-import { DataReader } from "../util/DataReader.js";
-import { DataWriter } from "../util/DataWriter.js";
 
 export interface PacketHeader {
     sessionId: number;
@@ -40,8 +44,8 @@ export interface PayloadHeader {
 
 export interface Packet {
     header: PacketHeader;
-    messageExtension?: ByteArray;
-    applicationPayload: ByteArray;
+    messageExtension?: Uint8Array;
+    applicationPayload: Uint8Array;
 }
 
 export interface DecodedPacket extends Packet {
@@ -50,8 +54,8 @@ export interface DecodedPacket extends Packet {
 export interface Message {
     packetHeader: PacketHeader;
     payloadHeader: PayloadHeader;
-    securityExtension?: ByteArray;
-    payload: ByteArray;
+    securityExtension?: Uint8Array;
+    payload: Uint8Array;
 }
 
 export interface DecodedMessage extends Message {
@@ -90,11 +94,11 @@ const enum SecurityFlag {
 }
 
 export class MessageCodec {
-    static decodePacket(data: ByteArray): DecodedPacket {
+    static decodePacket(data: Uint8Array): DecodedPacket {
         const reader = new DataReader(data, Endian.Little);
         const header = this.decodePacketHeader(reader);
 
-        let messageExtension: ByteArray | undefined = undefined;
+        let messageExtension: Uint8Array | undefined = undefined;
         if (header.hasMessageExtensions) {
             const extensionLength = reader.readUInt16();
             messageExtension = reader.readByteArray(extensionLength);
@@ -111,7 +115,7 @@ export class MessageCodec {
     static decodePayload({ header, applicationPayload }: DecodedPacket): DecodedMessage {
         const reader = new DataReader(applicationPayload, Endian.Little);
         const payloadHeader = this.decodePayloadHeader(reader);
-        let securityExtension: ByteArray | undefined = undefined;
+        let securityExtension: Uint8Array | undefined = undefined;
         if (payloadHeader.hasSecuredExtension) {
             const extensionLength = reader.readUInt16();
             securityExtension = reader.readByteArray(extensionLength);
@@ -131,15 +135,15 @@ export class MessageCodec {
 
         return {
             header: packetHeader,
-            applicationPayload: ByteArray.concat(this.encodePayloadHeader(payloadHeader), payload),
+            applicationPayload: Bytes.concat(this.encodePayloadHeader(payloadHeader), payload),
         };
     }
 
-    static encodePacket({ header, applicationPayload, messageExtension }: Packet): ByteArray {
+    static encodePacket({ header, applicationPayload, messageExtension }: Packet): Uint8Array {
         if (messageExtension !== undefined || header.hasMessageExtensions) {
             throw new NotImplementedError(`Message extensions not supported when encoding a packet.`);
         }
-        return ByteArray.concat(this.encodePacketHeader(header), applicationPayload);
+        return Bytes.concat(this.encodePacketHeader(header), applicationPayload);
     }
 
     private static decodePacketHeader(reader: DataReader<Endian.Little>): DecodedPacketHeader {

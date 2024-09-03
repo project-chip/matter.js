@@ -4,11 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../../../../common/MatterError.js";
-import { DataModelPath } from "../../../../model/definitions/DataModelPath.js";
-import { Metatype, ValueModel } from "../../../../model/index.js";
-import { camelize } from "../../../../util/String.js";
-import { isObject } from "../../../../util/Type.js";
+import { camelize, ImplementationError, isObject } from "@project-chip/matter.js-general";
+import { DataModelPath, Metatype, ValueModel } from "@project-chip/matter.js-model";
 import { SchemaImplementationError, WriteError } from "../../../errors.js";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { Schema } from "../../../supervision/Schema.js";

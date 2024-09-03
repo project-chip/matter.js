@@ -9,7 +9,6 @@
 import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     Command,
-    AccessLevel,
     Attribute,
     OptionalAttribute,
     TlvNoResponse,
@@ -21,12 +20,13 @@ import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
 import { TlvUInt8, TlvUInt16, TlvEnum, TlvUInt64, TlvUInt32, TlvSysTimeMS, TlvPosixMs } from "../../tlv/TlvNumber.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace GeneralDiagnostics {

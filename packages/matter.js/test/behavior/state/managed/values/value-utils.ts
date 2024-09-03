@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { camelize, Identity, MaybePromise, Observable } from "@project-chip/matter.js-general";
+import { DataModelPath, DatatypeModel, FieldElement } from "@project-chip/matter.js-model";
 import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
 import { OnlineContext } from "../../../../../src/behavior/context/server/OnlineContext.js";
 import { Val } from "../../../../../src/behavior/state/Val.js";
@@ -11,12 +13,6 @@ import { Datasource } from "../../../../../src/behavior/state/managed/Datasource
 import { RootSupervisor } from "../../../../../src/behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../../../../src/behavior/supervision/ValueSupervisor.js";
 import { Endpoint } from "../../../../../src/endpoint/Endpoint.js";
-import { DataModelPath } from "../../../../../src/model/definitions/DataModelPath.js";
-import { DatatypeModel, FieldElement } from "../../../../../src/model/index.js";
-import { Observable } from "../../../../../src/util/Observable.js";
-import { MaybePromise } from "../../../../../src/util/Promises.js";
-import { camelize } from "../../../../../src/util/String.js";
-import { Identity } from "../../../../../src/util/Type.js";
 
 /**
  * Create schema for a single field.

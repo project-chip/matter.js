@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Observable, Observer } from "@project-chip/matter.js-general";
+import { MaybePromise } from "@project-chip/matter.js-general";
 import type { Endpoint } from "../endpoint/Endpoint.js";
-import type { Observable, Observer } from "../util/Observable.js";
-import { MaybePromise } from "../util/Promises.js";
 import type { Behavior } from "./Behavior.js";
 import { Resource } from "./state/transaction/Resource.js";
 

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Branded, Merge } from "@project-chip/matter.js-general";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
-import { Branded, Merge } from "../util/Type.js";
 
 // ClusterType is duplicative of Cluster.  At some point we may migrate away from Cluster entirely but until we do we
 // use Cluster definitions where feasible to ease compatibility

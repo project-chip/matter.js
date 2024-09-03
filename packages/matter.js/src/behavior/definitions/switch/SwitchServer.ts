@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Observable, Time, Timer } from "@project-chip/matter.js-general";
+import { ClusterModel, FieldElement } from "@project-chip/matter.js-model";
 import { ClusterType } from "../../../cluster/ClusterType.js";
 import { Switch } from "../../../cluster/definitions/SwitchCluster.js";
-import { FieldElement } from "../../../model/elements/FieldElement.js";
-import { ClusterModel } from "../../../model/index.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
-import { Time, Timer } from "../../../time/Time.js";
-import { Observable } from "../../../util/Observable.js";
 import { ActionContext } from "../../context/ActionContext.js";
 import { SwitchBehavior } from "./SwitchBehavior.js";
 

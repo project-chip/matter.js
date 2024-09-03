@@ -30,6 +30,7 @@ import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { GeneralDiagnostics } from "@project-chip/matter-node.js/cluster";
 import { createFileLogger } from "@project-chip/matter-node.js/log";
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
+import { LogLevel, Logger, Time, logLevelFromString, singleton } from "@project-chip/matter.js-general";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OnOffServer } from "@project-chip/matter.js/behavior/definitions/on-off";
 import { Ble } from "@project-chip/matter.js/ble";
@@ -42,11 +43,8 @@ import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { RootRequirements } from "@project-chip/matter.js/endpoint/definitions";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { FabricAction } from "@project-chip/matter.js/fabric";
-import { Level, Logger, levelFromString } from "@project-chip/matter.js/log";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { QrCode } from "@project-chip/matter.js/schema";
-import { Time } from "@project-chip/matter.js/time";
-import { ByteArray, singleton } from "@project-chip/matter.js/util";
 import { execSync } from "child_process";
 import { DummyThreadNetworkCommissioningServer } from "./cluster/DummyThreadNetworkCommissioningServer.js";
 import { DummyWifiNetworkCommissioningServer } from "./cluster/DummyWifiNetworkCommissioningServer.js";
@@ -104,7 +102,7 @@ function executeCommand(scriptParamName: string) {
 const logFile = environment.vars.string("logfile.filename");
 if (logFile !== undefined) {
     Logger.addLogger("filelogger", await createFileLogger(logFile), {
-        defaultLogLevel: levelFromString(environment.vars.string("logfile.loglevel")) ?? Level.DEBUG,
+        defaultLogLevel: logLevelFromString(environment.vars.string("logfile.loglevel")) ?? LogLevel.DEBUG,
     });
 }
 
@@ -254,7 +252,7 @@ if (Ble.enabled) {
     );
 }
 
-const networkId = new ByteArray(32);
+const networkId = new Uint8Array(32);
 // Physical devices appear as "nodes" on a Matter network.  As a device implementer you use a NodeServer to bring a
 // device online.
 //

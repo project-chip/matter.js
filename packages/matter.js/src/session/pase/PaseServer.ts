@@ -4,18 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterDevice } from "../../MatterDevice.js";
-import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
-import { Crypto, ec } from "../../crypto/Crypto.js";
-import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
+import {
+    Bytes,
+    Crypto,
+    ec,
+    Logger,
+    MatterFlowError,
+    PbkdfParameters,
+    Spake2p,
+    Time,
+    Timer,
+    UnexpectedDataError,
+} from "@project-chip/matter.js-general";
 import { NodeId } from "../../datatype/NodeId.js";
-import { Logger } from "../../log/Logger.js";
+import { MatterDevice } from "../../MatterDevice.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureChannelMessages.js";
 import { ChannelStatusResponseError } from "../../protocol/securechannel/SecureChannelMessenger.js";
-import { Time, Timer } from "../../time/Time.js";
-import { ByteArray } from "../../util/ByteArray.js";
 import { DEFAULT_PASSCODE_ID, PaseServerMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 
 const { bytesToNumberBE } = ec;
@@ -36,7 +42,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         return new PaseServer(w0, L, pbkdfParameters);
     }
 
-    static fromVerificationValue(verificationValue: ByteArray, pbkdfParameters?: PbkdfParameters) {
+    static fromVerificationValue(verificationValue: Uint8Array, pbkdfParameters?: PbkdfParameters) {
         const w0 = bytesToNumberBE(verificationValue.slice(0, 32));
         const L = verificationValue.slice(32, 32 + 65);
         return new PaseServer(w0, L, pbkdfParameters);
@@ -44,7 +50,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
 
     constructor(
         private readonly w0: bigint,
-        private readonly L: ByteArray,
+        private readonly L: Uint8Array,
         private readonly pbkdfParameters?: PbkdfParameters,
     ) {}
 
@@ -136,7 +142,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
 
         // Read and process pake3
         const { verifier } = await messenger.readPasePake3();
-        if (!verifier.equals(hAY)) {
+        if (!Bytes.areEqual(verifier, hAY)) {
             throw new UnexpectedDataError("Received incorrect key confirmation from the initiator.");
         }
 
@@ -147,7 +153,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
             peerSessionId,
             sharedSecret: Ke,
-            salt: new ByteArray(0),
+            salt: new Uint8Array(0),
             isInitiator: false,
             isResumption: false,
             peerSessionParameters: initiatorSessionParams,

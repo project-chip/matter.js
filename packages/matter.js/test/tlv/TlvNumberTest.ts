@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { ValidationError } from "../../src/common/ValidationError.js";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
 import {
@@ -15,7 +16,6 @@ import {
     TlvUInt32,
     TlvUInt64,
 } from "../../src/tlv/TlvNumber.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 type CodecVectorNumber<I, E> = {
     [valueDescription: string]: { schema: TlvNumberSchema; encoded: I; decoded: E };
@@ -52,13 +52,13 @@ describe("TlvNumber", () => {
         for (const valueDescription in codecVectorNumber) {
             const { schema, encoded, decoded } = codecVectorNumber[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(schema.encode(decoded).toHex()).equal(encoded);
+                expect(Bytes.toHex(schema.encode(decoded))).equal(encoded);
             });
         }
         for (const valueDescription in codecVectorNumeric) {
             const { schema, encoded, decoded } = codecVectorNumeric[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(schema.encode(decoded).toHex()).equal(encoded);
+                expect(Bytes.toHex(schema.encode(decoded))).equal(encoded);
             });
         }
     });
@@ -84,20 +84,20 @@ describe("TlvNumber", () => {
         for (const valueDescription in codecVectorNumber) {
             const { schema, encoded, decoded } = codecVectorNumber[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(schema.decode(ByteArray.fromHex(encoded))).equal(decoded);
+                expect(schema.decode(Bytes.fromHex(encoded))).equal(decoded);
             });
         }
         for (const valueDescription in codecVectorNumeric) {
             const { schema, encoded, decoded } = codecVectorNumeric[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(schema.decode(ByteArray.fromHex(encoded))).equal(decoded);
+                expect(schema.decode(Bytes.fromHex(encoded))).equal(decoded);
             });
         }
     });
 
     describe("decode", () => {
         it("decodes a 8 bytes small value as a number", () => {
-            expect(TlvUInt32.decode(ByteArray.fromHex("070100000000000000"))).equal(1);
+            expect(TlvUInt32.decode(Bytes.fromHex("070100000000000000"))).equal(1);
         });
     });
 

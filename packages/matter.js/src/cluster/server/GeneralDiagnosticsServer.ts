@@ -4,13 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NotImplementedError } from "../../common/MatterError.js";
+import {
+    Bytes,
+    ipv4ToBytes,
+    ipv6ToBytes,
+    NamedHandler,
+    Network,
+    NetworkInterfaceDetailed,
+    NotImplementedError,
+    Time,
+} from "@project-chip/matter.js-general";
 import { WrapCommandHandler } from "../../device/Device.js";
-import { Network, NetworkInterfaceDetailed } from "../../net/Network.js";
-import { Time } from "../../time/Time.js";
-import { ByteArray } from "../../util/ByteArray.js";
-import { iPv4ToByteArray, iPv6ToByteArray } from "../../util/Ip.js";
-import { NamedHandler } from "../../util/NamedHandler.js";
 import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "../definitions/GeneralDiagnosticsCluster.js";
 import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServer } from "./ClusterServer.js";
@@ -60,9 +64,9 @@ export const GeneralDiagnosticsClusterHandler: () => Promise<
                         isOperational: true,
                         offPremiseServicesReachableIPv4: null, // null means unknown or not supported
                         offPremiseServicesReachableIPv6: null, // null means unknown or not supported
-                        hardwareAddress: ByteArray.fromHex(mac.replace(/[^\da-fA-F]/g, "")),
-                        iPv4Addresses: ipV4.slice(0, 4).map(ip => iPv4ToByteArray(ip)),
-                        iPv6Addresses: ipV6.slice(0, 8).map(ip => iPv6ToByteArray(ip)),
+                        hardwareAddress: Bytes.fromHex(mac.replace(/[^\da-fA-F]/g, "")),
+                        iPv4Addresses: ipV4.slice(0, 4).map(ip => ipv4ToBytes(ip)),
+                        iPv6Addresses: ipV6.slice(0, 8).map(ip => ipv6ToBytes(ip)),
                         type: type ?? GeneralDiagnostics.InterfaceType.Ethernet,
                     })),
             );

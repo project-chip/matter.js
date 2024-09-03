@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NoProviderError } from "@project-chip/matter.js/common";
-import { Time } from "@project-chip/matter.js/time";
-import { singleton } from "@project-chip/matter.js/util";
+import { NoProviderError, singleton, Time } from "@project-chip/matter.js-general";
 import { TimeReactNative } from "./TimeReactNative.js";
 
 // Check if Time singleton is already registered and has a getTimer logic (so not DefaultTime) and auto register if not

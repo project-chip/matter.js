@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js/common";
-import { Specification } from "@project-chip/matter.js/model";
-import { serialize } from "@project-chip/matter.js/util";
+import { InternalError, serialize } from "@project-chip/matter.js-general";
+import { Specification } from "../../../packages/model/dist/esm/definitions/Specification.js";
 import { readMatterFile, relative, writeMatterFile } from "./file.js";
 import { asObjectKey, wordWrap } from "./string.js";
 

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js/common";
-import { ClusterModel, DatatypeModel, Model } from "@project-chip/matter.js/model";
+import { InternalError } from "@project-chip/matter.js-general";
+import { ClusterModel, DatatypeModel, Model } from "@project-chip/matter.js-model";
 import { Scope } from "../clusters/Scope.js";
 import { TsFile } from "./TsFile.js";
 import { camelize } from "./string.js";

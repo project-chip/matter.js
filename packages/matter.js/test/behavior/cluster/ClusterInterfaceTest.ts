@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MaybePromise } from "@project-chip/matter.js-general";
 import { ClusterInterface } from "../../../src/behavior/cluster/ClusterInterface.js";
 import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
 import { ClusterType } from "../../../src/cluster/ClusterType.js";
 import { BitFlag } from "../../../src/schema/BitmapSchema.js";
-import { MaybePromise } from "../../../src/util/Promises.js";
 import { MyCluster } from "./cluster-behavior-test-util.js";
 
 const FeaturedCluster = ClusterType({

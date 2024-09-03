@@ -38,7 +38,7 @@ import {
 } from "../../../behavior/definitions/occupancy-sensing/OccupancySensingBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * A Thermostat device is capable of having either built-in or separate sensors for temperature, humidity or occupancy.

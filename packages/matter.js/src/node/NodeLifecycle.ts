@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AsyncObservable, Observable } from "@project-chip/matter.js-general";
 import { ActionContext } from "../behavior/context/ActionContext.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
 import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
-import { AsyncObservable, Observable } from "../util/Observable.js";
 
 /**
  * Extended lifecycle information that only applies to root endpoints.

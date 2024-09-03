@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { StorageBackendMemory, StorageContext } from "@project-chip/matter.js-general";
 import { NodeId } from "@project-chip/matter.js/datatype";
-import { SessionManager, SessionParameters } from "@project-chip/matter.js/session";
-import { StorageBackendMemory, StorageContext } from "@project-chip/matter.js/storage";
-import { ByteArray } from "@project-chip/matter.js/util";
+import { SessionManager } from "@project-chip/matter.js/session";
 import * as assert from "assert";
 
-const DUMMY_BYTEARRAY = new ByteArray();
+const DUMMY_BYTEARRAY = new Uint8Array();
 
 describe("SessionManager", () => {
     describe("getNextAvailableSessionId", () => {

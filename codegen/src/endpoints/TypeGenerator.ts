@@ -4,10 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { int64, uint64 } from "@project-chip/matter.js/elements";
-import { Metatype, ValueModel } from "@project-chip/matter.js/model";
+import { int64, Metatype, uint64, ValueModel } from "@project-chip/matter.js-model";
 import { ScopeFile } from "../util/ScopeFile.js";
-import { Block } from "../util/TsFile.js";
 
 /**
  * Generates TS types from models.
@@ -15,10 +13,7 @@ import { Block } from "../util/TsFile.js";
  * Unlike TlvGenerator the TypeGenerator creates native TS types.
  */
 export class TypeGenerator {
-    constructor(
-        private file: ScopeFile,
-        private definitions: Block,
-    ) {}
+    constructor(private file: ScopeFile) {}
 
     reference(model: ValueModel | undefined, emptyAs = "any"): string {
         model = model?.definingModel;
@@ -46,8 +41,7 @@ export class TypeGenerator {
                 return "boolean";
 
             case Metatype.bytes:
-                this.definitions.file.addImport(`#/util/ByteArray.js`);
-                return "ByteArray";
+                return "Uint8Array";
 
             case Metatype.integer:
                 if (metabase.isGlobal && (metabase.name === uint64.name || metabase.name === int64.name)) {

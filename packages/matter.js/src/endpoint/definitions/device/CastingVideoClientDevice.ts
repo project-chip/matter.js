@@ -49,7 +49,7 @@ import {
 import { MessagesBehavior as BaseMessagesBehavior } from "../../../behavior/definitions/messages/MessagesBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * This defines conformance to the Casting Video Client device type.

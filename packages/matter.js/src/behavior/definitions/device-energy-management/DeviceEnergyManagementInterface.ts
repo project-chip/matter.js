@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MaybePromise } from "../../../util/Promises.js";
+import { MaybePromise } from "@project-chip/matter.js-general";
 import { DeviceEnergyManagement } from "../../../cluster/definitions/DeviceEnergyManagementCluster.js";
 
 export namespace DeviceEnergyManagementInterface {

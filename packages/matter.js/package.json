@@ -33,7 +33,9 @@
         "embed-examples": "embedme **/README.md"
     },
     "dependencies": {
-        "@noble/curves": "^1.5.0"
+        "@noble/curves": "^1.5.0",
+        "@project-chip/matter.js-general": "0.10.1-alpha.0-20240903-7cffa11d",
+        "@project-chip/matter.js-model": "0.10.1-alpha.0-20240903-7cffa11d"
     },
     "devDependencies": {
         "@project-chip/matter.js-tools": "*",
@@ -138,12 +140,12 @@
         },
         "./model": {
             "import": {
-                "types": "./dist/esm/model/index.d.ts",
-                "default": "./dist/esm/model/index.js"
+                "types": "./dist/esm/model/export.d.ts",
+                "default": "./dist/esm/model/export.js"
             },
             "require": {
-                "types": "./dist/cjs/model/index.d.ts",
-                "default": "./dist/cjs/model/index.js"
+                "types": "./dist/cjs/model/export.d.ts",
+                "default": "./dist/cjs/model/export.js"
             }
         },
         "./securechannel": {

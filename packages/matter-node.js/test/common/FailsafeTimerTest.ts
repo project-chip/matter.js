@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { createPromise } from "@project-chip/matter.js-general";
 import { FailsafeTimer } from "@project-chip/matter.js/common";
-import { createPromise } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 
 // TODO identify more cases that are not handled by chip tool tests

@@ -9,7 +9,7 @@
 import { MutableCluster } from "../mutation/MutableCluster.js";
 import { LevelControl } from "./LevelControlCluster.js";
 import { ClusterType } from "../ClusterType.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace PulseWidthModulation {

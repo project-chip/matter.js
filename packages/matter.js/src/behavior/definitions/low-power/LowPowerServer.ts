@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Observable } from "../../../util/Observable.js";
+import { Observable } from "@project-chip/matter.js-general";
 import { LowPowerBehavior } from "./LowPowerBehavior.js";
 
 /**

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, Logger, NetInterface, Time, TransportInterface, createPromise } from "@project-chip/matter.js-general";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
@@ -20,11 +21,7 @@ import {
     BtpSessionHandler,
 } from "@project-chip/matter.js/ble";
 import { BtpCodec } from "@project-chip/matter.js/codec";
-import { Channel, InternalError, Listener, ServerAddress } from "@project-chip/matter.js/common";
-import { Logger } from "@project-chip/matter.js/log";
-import { NetInterface } from "@project-chip/matter.js/net";
-import { Time } from "@project-chip/matter.js/time";
-import { ByteArray, createPromise } from "@project-chip/matter.js/util";
+import { Channel, InternalError, ServerAddress } from "@project-chip/matter.js/common";
 import {
     BleErrorCode,
     Characteristic,
@@ -38,9 +35,9 @@ const logger = Logger.get("BleChannel");
 
 export class ReactNativeBleCentralInterface implements NetInterface {
     private openChannels: Map<ServerAddress, Device> = new Map();
-    private onMatterMessageListener: ((socket: Channel<ByteArray>, data: ByteArray) => void) | undefined;
+    private onMatterMessageListener: ((socket: Channel<Uint8Array>, data: Uint8Array) => void) | undefined;
 
-    async openChannel(address: ServerAddress): Promise<Channel<ByteArray>> {
+    async openChannel(address: ServerAddress): Promise<Channel<Uint8Array>> {
         if (address.type !== "ble") {
             throw new InternalError(`Unsupported address type ${address.type}.`);
         }
@@ -84,7 +81,7 @@ export class ReactNativeBleCentralInterface implements NetInterface {
 
             let characteristicC1ForWrite: Characteristic | undefined;
             let characteristicC2ForSubscribe: Characteristic | undefined;
-            let additionalCommissioningRelatedData: ByteArray | undefined;
+            let additionalCommissioningRelatedData: Uint8Array | undefined;
 
             for (const characteristic of characteristics) {
                 // Loop through each characteristic and match them to the UUIDs that we know about.
@@ -107,9 +104,7 @@ export class ReactNativeBleCentralInterface implements NetInterface {
                             logger.debug("reading additional commissioning related data");
                             const characteristicWithValue = await service.readCharacteristic(characteristic.uuid);
                             if (characteristicWithValue.value !== null) {
-                                additionalCommissioningRelatedData = ByteArray.fromBase64(
-                                    characteristicWithValue.value,
-                                );
+                                additionalCommissioningRelatedData = Bytes.fromBase64(characteristicWithValue.value);
                             } else {
                                 logger.debug("no value in characteristic C3");
                             }
@@ -135,7 +130,7 @@ export class ReactNativeBleCentralInterface implements NetInterface {
         throw new BleError(`No Matter service found on peripheral ${peripheral.id}`);
     }
 
-    onData(listener: (socket: Channel<ByteArray>, data: ByteArray) => void): Listener {
+    onData(listener: (socket: Channel<Uint8Array>, data: Uint8Array) => void): TransportInterface.Listener {
         this.onMatterMessageListener = listener;
         return {
             close: async () => await this.close(),
@@ -149,13 +144,13 @@ export class ReactNativeBleCentralInterface implements NetInterface {
     }
 }
 
-export class ReactNativeBleChannel extends BleChannel<ByteArray> {
+export class ReactNativeBleChannel extends BleChannel<Uint8Array> {
     static async create(
         peripheral: Device,
         characteristicC1ForWrite: Characteristic,
         characteristicC2ForSubscribe: Characteristic,
-        onMatterMessageListener: (socket: Channel<ByteArray>, data: ByteArray) => void,
-        _additionalCommissioningRelatedData?: ByteArray,
+        onMatterMessageListener: (socket: Channel<Uint8Array>, data: Uint8Array) => void,
+        _additionalCommissioningRelatedData?: Uint8Array,
     ): Promise<ReactNativeBleChannel> {
         let mtu = peripheral.mtu ?? 0;
         if (mtu > BLE_MAXIMUM_BTP_MTU) {
@@ -168,7 +163,9 @@ export class ReactNativeBleChannel extends BleChannel<ByteArray> {
             clientWindowSize: BTP_MAXIMUM_WINDOW_SIZE,
         });
         logger.debug(`sending BTP handshake request: ${Logger.toJSON(btpHandshakeRequest)}`);
-        characteristicC1ForWrite = await characteristicC1ForWrite.writeWithResponse(btpHandshakeRequest.toBase64());
+        characteristicC1ForWrite = await characteristicC1ForWrite.writeWithResponse(
+            Bytes.toBase64(btpHandshakeRequest),
+        );
 
         const btpHandshakeTimeout = Time.getTimer("BLE handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, async () => {
             await peripheral.cancelConnection();
@@ -177,7 +174,7 @@ export class ReactNativeBleChannel extends BleChannel<ByteArray> {
 
         logger.debug("subscribing to C2 characteristic");
 
-        const { promise: handshakeResponseReceivedPromise, resolver } = createPromise<ByteArray>();
+        const { promise: handshakeResponseReceivedPromise, resolver } = createPromise<Uint8Array>();
 
         let handshakeReceived = false;
         const handshakeSubscription = characteristicC2ForSubscribe.monitor((error, characteristic) => {
@@ -194,12 +191,12 @@ export class ReactNativeBleChannel extends BleChannel<ByteArray> {
                 logger.debug("C2 characteristic value is null");
                 return;
             }
-            const data = ByteArray.fromBase64(characteristicData);
-            logger.debug(`received first data on C2: ${data.toHex()}`);
+            const data = Bytes.fromBase64(characteristicData);
+            logger.debug(`received first data on C2: ${Bytes.toHex(data)}`);
 
             if (data[0] === 0x65 && data[1] === 0x6c && data.length === 6) {
                 // Check if the first two bytes and length match the Matter handshake
-                logger.info(`Received Matter handshake response: ${data.toHex()}.`);
+                logger.info(`Received Matter handshake response: ${Bytes.toHex(data)}.`);
                 btpHandshakeTimeout.stop();
                 resolver(data);
             }
@@ -211,10 +208,10 @@ export class ReactNativeBleChannel extends BleChannel<ByteArray> {
 
         let connectionCloseExpected = false;
         const btpSession = await BtpSessionHandler.createAsCentral(
-            new ByteArray(handshakeResponse),
+            new Uint8Array(handshakeResponse),
             // callback to write data to characteristic C1
             async data => {
-                characteristicC1ForWrite = await characteristicC1ForWrite.writeWithResponse(data.toBase64());
+                characteristicC1ForWrite = await characteristicC1ForWrite.writeWithResponse(Bytes.toBase64(data));
             },
             // callback to disconnect the BLE connection
             async () => {
@@ -247,10 +244,10 @@ export class ReactNativeBleChannel extends BleChannel<ByteArray> {
                 logger.debug("C2 characteristic value is null");
                 return;
             }
-            const data = ByteArray.fromBase64(characteristicData);
-            logger.debug(`received data on C2: ${data.toHex}`);
+            const data = Bytes.fromBase64(characteristicData);
+            logger.debug(`received data on C2: ${Bytes.toHex(data)}`);
 
-            void btpSession.handleIncomingBleData(new ByteArray(data));
+            void btpSession.handleIncomingBleData(new Uint8Array(data));
         });
 
         const bleChannel = new ReactNativeBleChannel(peripheral, btpSession);
@@ -278,7 +275,7 @@ export class ReactNativeBleChannel extends BleChannel<ByteArray> {
      *
      * @param data
      */
-    async send(data: ByteArray) {
+    async send(data: Uint8Array) {
         if (!this.connected) {
             logger.debug("Cannot send data because not connected to peripheral.");
             return;
@@ -289,7 +286,7 @@ export class ReactNativeBleChannel extends BleChannel<ByteArray> {
         await this.btpSession.sendMatterMessage(data);
     }
 
-    // Channel<ByteArray>
+    // Channel<Uint8Array>
     get name() {
         return `ble://${this.peripheral.id}`;
     }

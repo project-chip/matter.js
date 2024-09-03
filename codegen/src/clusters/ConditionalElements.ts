@@ -11,7 +11,7 @@ import {
     Model,
     translateBitmap,
     VarianceCondition,
-} from "@project-chip/matter.js/model";
+} from "@project-chip/matter.js-model";
 import { serialize } from "../util/string.js";
 
 export type ConditionBitmap = {

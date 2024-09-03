@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./Base64Codec.js";
+export { Base64, DerCodec, DerKey, DnsCodec, type DerNode } from "@project-chip/matter.js-general";
 export * from "./BtpCodec.js";
-export * from "./DerCodec.js";
-export * from "./DnsCodec.js";
 export * from "./MessageCodec.js";

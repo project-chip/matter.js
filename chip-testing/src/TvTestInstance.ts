@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, Storage } from "@project-chip/matter.js-general";
 import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
 import { ApplicationBasicServer } from "@project-chip/matter.js/behavior/definitions/application-basic";
 import { WakeOnLanServer } from "@project-chip/matter.js/behavior/definitions/wake-on-lan";
@@ -13,8 +14,6 @@ import { DimmableLightDevice } from "@project-chip/matter.js/devices/DimmableLig
 import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
-import { Storage } from "@project-chip/matter.js/storage";
-import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
 import { TestLowPowerServer } from "./cluster/TestLowPowerServer.js";
 
@@ -153,7 +152,7 @@ export class TvTestInstance implements TestInstance {
                 },
                 wakeOnLan: {
                     macAddress: "000000000000",
-                    linkLocalAddress: ByteArray.fromHex("00000000000000000000000000000000"),
+                    linkLocalAddress: Bytes.fromHex("00000000000000000000000000000000"),
                 },
             },
         );

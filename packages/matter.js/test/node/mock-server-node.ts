@@ -4,43 +4,46 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    Bytes,
+    Crypto,
+    Environment,
+    Key,
+    MaybePromise,
+    MockNetwork,
+    Network,
+    PrivateKey,
+    StorageBackendMemory,
+    StorageService,
+} from "@project-chip/matter.js-general";
 import { MatterDevice } from "../../src/MatterDevice.js";
 import { OnlineContext } from "../../src/behavior/context/server/OnlineContext.js";
-import { Crypto } from "../../src/crypto/Crypto.js";
-import { Key, PrivateKey } from "../../src/crypto/Key.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { Agent } from "../../src/endpoint/Agent.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
-import { Environment } from "../../src/environment/Environment.js";
-import { StorageService } from "../../src/environment/StorageService.js";
-import { Network } from "../../src/net/Network.js";
-import { NetworkFake } from "../../src/net/fake/NetworkFake.js";
 import { Node } from "../../src/node/Node.js";
 import { ServerNode } from "../../src/node/ServerNode.js";
 import { MessageExchange } from "../../src/protocol/MessageExchange.js";
 import { SessionManager } from "../../src/session/SessionManager.js";
-import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
-import { MaybePromise } from "../../src/util/Promises.js";
 
 // These are temporary until we get proper crypto.subtle support
 Crypto.get().sign = () => {
-    return new ByteArray(32);
+    return new Uint8Array(32);
 };
 Crypto.get().hash = () => {
-    return new ByteArray(32);
+    return new Uint8Array(32);
 };
 Crypto.get().createKeyPair = () => {
-    const SEC1_KEY = ByteArray.fromHex(
+    const SEC1_KEY = Bytes.fromHex(
         "30770201010420aef3484116e9481ec57be0472df41bf499064e5024ad869eca5e889802d48075a00a06082a8648ce3d030107a144034200043c398922452b55caf389c25bd1bca4656952ccb90e8869249ad8474653014cbf95d687965e036b521c51037e6b8cedefca1eb44046694fa08882eed6519decba",
     );
 
     return Key({ sec1: SEC1_KEY }) as PrivateKey;
 };
 Crypto.get().hkdf = async () => {
-    return new ByteArray(16);
+    return new Uint8Array(16);
 };
 
 export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends ServerNode<T> {
@@ -115,7 +118,7 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
 
     static createNetwork(lastIdentifierByte: number) {
         const byte = lastIdentifierByte.toString(16).padStart(2, "0");
-        return new NetworkFake(`00:11:22:33:44:${byte}`, [
+        return new MockNetwork(`00:11:22:33:44:${byte}`, [
             `1111:2222:3333:4444:5555:6666:7777:88${byte}`,
             `10.10.10.${lastIdentifierByte}`,
         ]);
@@ -127,8 +130,8 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
             fabric: undefined,
             peerNodeId: NodeId(0),
             peerSessionId: 1,
-            sharedSecret: new ByteArray(),
-            salt: new ByteArray(),
+            sharedSecret: new Uint8Array(),
+            salt: new Uint8Array(),
             isInitiator: false,
             isResumption: false,
             ...options,

@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Observable, Time, Timer } from "@project-chip/matter.js-general";
 import { Identify } from "../../../cluster/definitions/IdentifyCluster.js";
-import { Time, Timer } from "../../../time/Time.js";
-import { Observable } from "../../../util/Observable.js";
 import { IdentifyBehavior } from "./IdentifyBehavior.js";
 
 /**

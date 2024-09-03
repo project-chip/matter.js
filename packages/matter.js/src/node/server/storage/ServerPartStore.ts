@@ -1,12 +1,14 @@
+import {
+    Construction,
+    ImplementationError,
+    StorageContext,
+    SupportedStorageTypes,
+} from "@project-chip/matter.js-general";
 import { Val } from "../../../behavior/state/Val.js";
 import { Datasource } from "../../../behavior/state/managed/Datasource.js";
-import { ImplementationError } from "../../../common/MatterError.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { DatasourceStore } from "../../../endpoint/storage/DatasourceStore.js";
 import { PartStore } from "../../../endpoint/storage/PartStore.js";
-import { StorageContext } from "../../../storage/StorageContext.js";
-import { SupportedStorageTypes } from "../../../storage/StringifyTools.js";
-import { Construction } from "../../../util/Construction.js";
 
 const NUMBER_KEY = "__number__";
 

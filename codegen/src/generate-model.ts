@@ -6,9 +6,8 @@
 
 // Generates the runtime Matter model
 
+import { InternalError, Logger } from "@project-chip/matter.js-general";
 import { LocalMatter } from "@project-chip/matter.js-intermediate-models";
-import { InternalError } from "@project-chip/matter.js/common";
-import { Logger } from "@project-chip/matter.js/log";
 import {
     AttributeModel,
     DatatypeModel,
@@ -19,8 +18,7 @@ import {
     Model,
     Specification,
     TraverseMap,
-} from "@project-chip/matter.js/model";
-import { camelize } from "@project-chip/matter.js/util";
+} from "@project-chip/matter.js-model";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { generateElement } from "./mom/common/generate-element.js";
@@ -29,6 +27,7 @@ import { TsFile } from "./util/TsFile.js";
 import { clean } from "./util/file.js";
 import { finalizeModel } from "./util/finalize-model.js";
 import "./util/setup.js";
+import { camelize } from "./util/string.js";
 export const CLUSTER_SUFFIX = "Element";
 
 const logger = Logger.get("generate-model");
@@ -70,7 +69,7 @@ function generateElementFile(element: Model) {
 
     const exportName = camelize(name, name[0] < "a" || name[0] > "z");
 
-    generateElement(file, "#/model/elements/index.js", element, `export const ${exportName} = `);
+    generateElement(file, "#model/elements/index.js", element, `export const ${exportName} = `);
 
     file.atom(`Matter.children.push(${exportName})`);
 

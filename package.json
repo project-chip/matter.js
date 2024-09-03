@@ -2,7 +2,9 @@
   "name": "matter.js-monorepo",
   "private": true,
   "workspaces": [
-    "packages/matter.js-tools",
+    "packages/tools",
+    "packages/general",
+    "packages/model",
     "packages/matter.js",
     "packages/matter-node.js",
     "packages/matter-node-ble.js",
@@ -15,9 +17,9 @@
   ],
   "scripts": {
     "prepare": "npm run build-clean",
-    "clean": "node packages/matter.js-tools/bin/build.js --workspaces clean",
-    "build": "node packages/matter.js-tools/bin/build.js --workspaces",
-    "build-clean": "node packages/matter.js-tools/bin/build.js --workspaces --clean",
+    "clean": "node packages/tools/bin/build.js --workspaces clean",
+    "build": "node packages/tools/bin/build.js --workspaces",
+    "build-clean": "node packages/tools/bin/build.js --workspaces --clean",
     "build-doc": "npm run build-doc --workspaces --if-present",
     "test": "npm run -s test --workspaces --if-present",
     "lint": "eslint \"**/*.ts\"",

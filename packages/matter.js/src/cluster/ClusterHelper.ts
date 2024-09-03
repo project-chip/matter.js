@@ -3,20 +3,19 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { Diagnostic, Logger } from "@project-chip/matter.js-general";
 import { AttributeId } from "../datatype/AttributeId.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { CommandId } from "../datatype/CommandId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { EventId } from "../datatype/EventId.js";
 import { NodeId } from "../datatype/NodeId.js";
-import { Logger } from "../log/Logger.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "../protocol/interaction/InteractionProtocol.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Attribute, Cluster, Command, Event } from "./Cluster.js";
 import { ClusterRegistry } from "./ClusterRegistry.js";
 
 // Ensure all clusters register
-import { Diagnostic } from "../log/Diagnostic.js";
 import "./definitions/index.js";
 
 const logger = Logger.get("ClusterHelper");

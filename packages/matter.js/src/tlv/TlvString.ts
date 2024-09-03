@@ -4,11 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, UnexpectedDataError } from "../common/MatterError.js";
+import { InternalError, maxValue, minValue, serialize, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { ValidationDatatypeMismatchError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { maxValue, minValue } from "../util/Number.js";
-import { serialize } from "../util/String.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
@@ -48,8 +45,8 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     override validate(value: TlvToPrimitive[T]): void {
         if (this.type === TlvType.Utf8String && typeof value !== "string")
             throw new ValidationDatatypeMismatchError(`Expected string, got ${typeof value}.`);
-        if (this.type === TlvType.ByteString && !(value instanceof ByteArray))
-            throw new ValidationDatatypeMismatchError(`Expected ByteArray, got ${typeof value}.`);
+        if (this.type === TlvType.ByteString && !(value instanceof Uint8Array))
+            throw new ValidationDatatypeMismatchError(`Expected Uint8Array, got ${typeof value}.`);
         if (value.length > this.maxLength)
             throw new ValidationOutOfBoundsError(
                 `String ${serialize(value)} is too long: ${value.length}, max ${this.maxLength}.`,

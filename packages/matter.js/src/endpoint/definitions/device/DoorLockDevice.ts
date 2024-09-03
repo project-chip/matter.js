@@ -14,7 +14,7 @@ import {
 } from "../../../behavior/definitions/scenes-management/ScenesManagementServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by means of a manual or

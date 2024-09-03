@@ -4,15 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Destructable } from "../../../common/Lifecycle.js";
-import { ImplementationError } from "../../../common/MatterError.js";
-import { Environment } from "../../../environment/Environment.js";
-import { StorageService } from "../../../environment/StorageService.js";
-import { Diagnostic } from "../../../log/Diagnostic.js";
-import { Logger } from "../../../log/Logger.js";
-import { StorageContext } from "../../../storage/StorageContext.js";
-import { StorageManager } from "../../../storage/StorageManager.js";
-import { Construction, asyncNew } from "../../../util/Construction.js";
+import {
+    Construction,
+    Destructable,
+    Diagnostic,
+    Environment,
+    ImplementationError,
+    Logger,
+    StorageContext,
+    StorageManager,
+    StorageService,
+    asyncNew,
+} from "@project-chip/matter.js-general";
 
 const logger = Logger.get("ControllerStore");
 

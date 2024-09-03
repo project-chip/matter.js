@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "@project-chip/matter.js/common";
-import { Time, Timer, TimerCallback } from "@project-chip/matter.js/time";
+import { ImplementationError, Time, Timer } from "@project-chip/matter.js-general";
 
 class TimerNode implements Timer {
     #timerId: NodeJS.Timeout | undefined;
@@ -19,7 +18,7 @@ class TimerNode implements Timer {
     constructor(
         readonly name: string,
         readonly intervalMs: number,
-        private readonly callback: TimerCallback,
+        private readonly callback: Timer.Callback,
         readonly isPeriodic: boolean,
     ) {
         if (intervalMs < 0 || intervalMs > 2147483647) {
@@ -78,11 +77,11 @@ export class TimeNode extends Time {
         return this.now().getTime();
     }
 
-    getTimer(name: string, durationMs: number, callback: TimerCallback): Timer {
+    getTimer(name: string, durationMs: number, callback: Timer.Callback): Timer {
         return new TimerNode(name, durationMs, callback, false);
     }
 
-    getPeriodicTimer(name: string, intervalMs: number, callback: TimerCallback): Timer {
+    getPeriodicTimer(name: string, intervalMs: number, callback: Timer.Callback): Timer {
         return new TimerNode(name, intervalMs, callback, true);
     }
 }

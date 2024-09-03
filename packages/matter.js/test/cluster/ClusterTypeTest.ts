@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Branded } from "@project-chip/matter.js-general";
 import {
     Attribute,
     Cluster,
@@ -15,7 +16,6 @@ import {
 import { ClusterType } from "../../src/cluster/ClusterType.js";
 import { TlvNumberSchema, TlvUInt8 } from "../../src/tlv/TlvNumber.js";
 import { TlvSchema } from "../../src/tlv/TlvSchema.js";
-import { Branded } from "../../src/util/Type.js";
 import { stripFunctions } from "./mutation/util.js";
 
 const BaseFoo = {

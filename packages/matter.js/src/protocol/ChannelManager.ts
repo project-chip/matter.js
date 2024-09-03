@@ -4,14 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel } from "../common/Channel.js";
-import { MatterError } from "../common/MatterError.js";
+import { Channel, Logger, MatterError } from "@project-chip/matter.js-general";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { Logger } from "../log/Logger.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
-import { ByteArray } from "../util/ByteArray.js";
 import { MessageChannel } from "./ExchangeManager.js";
 
 const logger = Logger.get("ChannelManager");
@@ -115,7 +112,7 @@ export class ChannelManager {
         this.#channels.set(channelsKey, fabricChannels);
     }
 
-    private getOrCreateAsPaseChannel(byteArrayChannel: Channel<ByteArray>, session: Session<any>) {
+    private getOrCreateAsPaseChannel(byteArrayChannel: Channel<Uint8Array>, session: Session<any>) {
         const msgChannel = new MessageChannel(
             byteArrayChannel,
             session,
@@ -125,7 +122,7 @@ export class ChannelManager {
         return msgChannel;
     }
 
-    async getOrCreateChannel(byteArrayChannel: Channel<ByteArray>, session: Session<any>) {
+    async getOrCreateChannel(byteArrayChannel: Channel<Uint8Array>, session: Session<any>) {
         if (!session.isSecure) {
             return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }

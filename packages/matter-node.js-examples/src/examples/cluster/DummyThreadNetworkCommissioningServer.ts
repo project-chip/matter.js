@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, Logger } from "@project-chip/matter.js-general";
 import { GeneralCommissioningBehavior } from "@project-chip/matter.js/behavior/definitions/general-commissioning";
 import { NetworkCommissioningBehavior } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { NetworkCommissioning } from "@project-chip/matter.js/cluster";
-import { Logger } from "@project-chip/matter.js/log";
-import { ByteArray } from "@project-chip/matter.js/util";
 
-const firstNetworkId = new ByteArray(32);
+const firstNetworkId = new Uint8Array(32);
 
 /**
  * This represents a Dummy version of a Thread Network Commissioning Cluster Server without real thread related logic, beside
@@ -41,7 +40,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
                 networkName: this.endpoint.env.vars.string("ble.thread.networkName"),
                 channel: this.endpoint.env.vars.number("ble.thread.channel"),
                 version: 130,
-                extendedAddress: ByteArray.fromString(
+                extendedAddress: Bytes.fromString(
                     (this.endpoint.env.vars.string("ble.thread.address") ?? "000000000000").toLowerCase(),
                 ),
                 rssi: -50,
@@ -61,7 +60,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
         breadcrumb,
     }: NetworkCommissioning.AddOrUpdateThreadNetworkRequest) {
         console.log(
-            `---> addOrUpdateThreadNetwork called on NetworkCommissioning cluster: ${operationalDataset.toHex()} ${breadcrumb}`,
+            `---> addOrUpdateThreadNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(operationalDataset)} ${breadcrumb}`,
         );
 
         this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
@@ -83,7 +82,9 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
     }
 
     override removeNetwork({ networkId, breadcrumb }: NetworkCommissioning.RemoveNetworkRequest) {
-        console.log(`---> removeNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
+        console.log(
+            `---> removeNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${breadcrumb}`,
+        );
 
         this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
@@ -104,7 +105,9 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
     }
 
     override async connectNetwork({ networkId, breadcrumb }: NetworkCommissioning.ConnectNetworkRequest) {
-        console.log(`---> connectNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
+        console.log(
+            `---> connectNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${breadcrumb}`,
+        );
 
         this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
@@ -133,7 +136,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
 
     override reorderNetwork({ networkId, networkIndex, breadcrumb }: NetworkCommissioning.ReorderNetworkRequest) {
         console.log(
-            `---> reorderNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${networkIndex} ${breadcrumb}`,
+            `---> reorderNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${networkIndex} ${breadcrumb}`,
         );
 
         // Simulate successful connection

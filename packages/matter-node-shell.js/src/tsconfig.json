@@ -1,5 +1,5 @@
 {
-    "extends": "../../matter.js-tools/tsconfig.base.json",
+    "extends": "../../tools/tsconfig.base.json",
     "compilerOptions": {
         "outDir": "../dist/cjs",
         "types": ["node"]

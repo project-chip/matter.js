@@ -12,7 +12,7 @@ import {
 } from "../../../behavior/definitions/illuminance-measurement/IlluminanceMeasurementServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * A Light Sensor device is a measurement and sensing device that is capable of measuring and reporting the intensity

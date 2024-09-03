@@ -4,6 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    AsyncObservable,
+    BasicObservable,
+    EventEmitter,
+    ImplementationError,
+    MaybePromise,
+    Observable,
+} from "@project-chip/matter.js-general";
+import { AttributeElement, ClusterModel } from "@project-chip/matter.js-model";
 import { Behavior } from "../../../src/behavior/Behavior.js";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
@@ -15,15 +24,11 @@ import { StateType } from "../../../src/behavior/state/StateType.js";
 import { Attribute } from "../../../src/cluster/Cluster.js";
 import { ClusterType } from "../../../src/cluster/ClusterType.js";
 import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";
-import { ImplementationError } from "../../../src/common/MatterError.js";
 import { ClusterId } from "../../../src/datatype/ClusterId.js";
-import { AttributeElement, ClusterModel } from "../../../src/model/index.js";
 import { TlvBoolean } from "../../../src/tlv/TlvBoolean.js";
 import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
 import { TlvInt32 } from "../../../src/tlv/TlvNumber.js";
 import { TlvString } from "../../../src/tlv/TlvString.js";
-import { AsyncObservable, BasicObservable, EventEmitter, Observable } from "../../../src/util/Observable.js";
-import { MaybePromise } from "../../../src/util/Promises.js";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
 

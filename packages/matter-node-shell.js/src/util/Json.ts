@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
+import { ValueModel } from "@project-chip/matter.js-model";
 import { ValidationDatatypeMismatchError } from "@project-chip/matter.js/common";
-import { ValueModel } from "@project-chip/matter.js/model";
-import { ByteArray } from "@project-chip/matter.js/util";
 import { camelize } from "./String";
 
 export function convertJsonDataWithModel(model: ValueModel, data: any): any {
@@ -41,7 +41,7 @@ export function convertJsonDataWithModel(model: ValueModel, data: any): any {
         case "bytes":
             if (typeof data === "string") {
                 // ByteArray encoded as hex-String ... so convert to ByteArray
-                return ByteArray.fromHex(data);
+                return Bytes.fromHex(data);
             }
             break;
     }

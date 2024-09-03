@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../../../model/definitions/DataModelPath.js";
-import { ClusterModel, Metatype, UnsupportedCastError, ValueModel } from "../../../../model/index.js";
-import { camelize } from "../../../../util/String.js";
+import { camelize } from "@project-chip/matter.js-general";
+import { ClusterModel, DataModelPath, Metatype, UnsupportedCastError, ValueModel } from "@project-chip/matter.js-model";
 import { SchemaImplementationError } from "../../../errors.js";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { Schema } from "../../../supervision/Schema.js";
@@ -21,7 +20,7 @@ export function ValueCaster(schema: Schema, owner: RootSupervisor) {
 
     switch (metatype) {
         case Metatype.object:
-            return StructCaster(schema as ValueModel | ClusterModel, owner);
+            return StructCaster(schema, owner);
 
         case Metatype.array:
             return ListCaster(schema as ValueModel, owner);

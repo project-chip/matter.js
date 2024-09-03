@@ -38,6 +38,7 @@
         "typescript": "~5.5.3"
     },
     "dependencies": {
+        "@project-chip/matter.js-general": "*",
         "@project-chip/matter.js": "*",
         "node-localstorage": "^3.0.5"
     },

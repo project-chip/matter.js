@@ -4,11 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, InternalError } from "../../common/MatterError.js";
+import type { Observable, Observer } from "@project-chip/matter.js-general";
+import { ImplementationError, InternalError, Logger, MaybePromise } from "@project-chip/matter.js-general";
 import { Endpoint } from "../../endpoint/Endpoint.js";
-import { Logger } from "../../log/Logger.js";
-import type { Observable, Observer } from "../../util/Observable.js";
-import { MaybePromise } from "../../util/Promises.js";
 import { Reactor } from "../Reactor.js";
 import { ActionContext } from "../context/ActionContext.js";
 import { Contextual } from "../context/Contextual.js";

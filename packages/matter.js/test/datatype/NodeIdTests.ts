@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError } from "../../src/common/MatterError.js";
+import { UnexpectedDataError } from "@project-chip/matter.js-general";
 import { CaseAuthenticatedTag } from "../../src/datatype/CaseAuthenticatedTag.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 

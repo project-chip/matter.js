@@ -5,10 +5,9 @@
  */
 
 import { NodeCommissioningOptions } from "@project-chip/matter.js";
+import { Logger, MatterError } from "@project-chip/matter.js-general";
 import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter.js/cluster";
-import { MatterError } from "@project-chip/matter.js/common";
 import { NodeId } from "@project-chip/matter.js/datatype";
-import { Logger } from "@project-chip/matter.js/log";
 import { ManualPairingCodeCodec, QrCode } from "@project-chip/matter.js/schema";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";

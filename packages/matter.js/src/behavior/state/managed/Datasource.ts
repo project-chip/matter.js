@@ -4,16 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessLevel } from "../../../cluster/Cluster.js";
-import { ImplementationError, InternalError } from "../../../common/MatterError.js";
-import { Crypto } from "../../../crypto/Crypto.js";
+import {
+    Crypto,
+    deepCopy,
+    ImplementationError,
+    InternalError,
+    isDeepEqual,
+    Logger,
+    MaybePromise,
+    Observable,
+} from "@project-chip/matter.js-general";
+import { AccessLevel, DataModelPath } from "@project-chip/matter.js-model";
 import { ClusterId } from "../../../datatype/ClusterId.js";
-import { Logger } from "../../../log/Logger.js";
-import { DataModelPath } from "../../../model/definitions/DataModelPath.js";
-import { deepCopy } from "../../../util/DeepCopy.js";
-import { isDeepEqual } from "../../../util/DeepEqual.js";
-import { Observable } from "../../../util/Observable.js";
-import { MaybePromise } from "../../../util/Promises.js";
 import { AccessControl } from "../../AccessControl.js";
 import { ExpiredReferenceError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";

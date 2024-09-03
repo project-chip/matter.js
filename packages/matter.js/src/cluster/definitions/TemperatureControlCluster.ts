@@ -14,7 +14,7 @@ import { TlvString } from "../../tlv/TlvString.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace TemperatureControl {

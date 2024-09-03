@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterModel, ClusterVariance, CommandModel, MatterModel } from "@project-chip/matter.js/model";
-import { decamelize } from "@project-chip/matter.js/util";
+import { decamelize } from "@project-chip/matter.js-general";
+import { ClusterModel, ClusterVariance, CommandModel, MatterModel } from "@project-chip/matter.js-model";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { BehaviorFile } from "./endpoints/BehaviorFile.js";

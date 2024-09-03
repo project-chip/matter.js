@@ -4,17 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
 import {
+    Cache,
     InterfaceType,
+    isIPv6,
+    Logger,
     Network,
     NetworkError,
     NetworkInterface,
     NetworkInterfaceDetails,
+    onSameNetwork,
     UdpChannel,
     UdpChannelOptions,
-} from "@project-chip/matter.js/net";
-import { Cache, isIPv6, onSameNetwork } from "@project-chip/matter.js/util";
+} from "@project-chip/matter.js-general";
 import { NetworkInterfaceInfo, networkInterfaces } from "os";
 import { UdpChannelNode } from "./UdpChannelNode.js";
 

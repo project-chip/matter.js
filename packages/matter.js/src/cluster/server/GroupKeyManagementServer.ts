@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../../common/MatterError.js";
+import { ImplementationError } from "@project-chip/matter.js-general";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { GroupKeyManagement } from "../definitions/GroupKeyManagementCluster.js";

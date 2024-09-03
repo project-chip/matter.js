@@ -18,7 +18,7 @@ dgram.createSocket = (...args: any[]) => {
 
     const originalSend = socket.send;
     socket.send = (
-        buffer: ByteArray,
+        buffer: Uint8Array,
         port: number,
         address: string,
         callback: (error: Error | null, bytes: number) => void,
@@ -26,17 +26,19 @@ dgram.createSocket = (...args: any[]) => {
     return socket;
 };
 
-import { Logger } from "@project-chip/matter.js/log";
 import {
+    AsyncCache,
     InterfaceType,
+    isIPv6,
+    Logger,
     Network,
     NetworkError,
     NetworkInterface,
     NetworkInterfaceDetails,
+    onSameNetwork,
     UdpChannel,
     UdpChannelOptions,
-} from "@project-chip/matter.js/net";
-import { AsyncCache, ByteArray, isIPv6, onSameNetwork } from "@project-chip/matter.js/util";
+} from "@project-chip/matter.js-general";
 import { fetch as fetchNetworkInfo } from "@react-native-community/netinfo";
 import { UdpChannelReactNative } from "./UdpChannelReactNative.js";
 

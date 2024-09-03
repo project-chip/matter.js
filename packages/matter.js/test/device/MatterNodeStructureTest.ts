@@ -4,6 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    Bytes,
+    ImplementationError,
+    serialize,
+    StorageBackendMemory,
+    StorageContext,
+    StorageManager,
+} from "@project-chip/matter.js-general";
+import { ClusterModel, MatterModel, Specification } from "@project-chip/matter.js-model";
 import { CommissioningServer } from "../../src/CommissioningServer.js";
 import { AccessControlCluster } from "../../src/cluster/definitions/AccessControlCluster.js";
 import { AdministratorCommissioning } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
@@ -26,7 +35,6 @@ import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
 import { GeneralCommissioningClusterHandler } from "../../src/cluster/server/GeneralCommissioningServer.js";
 import { GroupKeyManagementClusterHandler } from "../../src/cluster/server/GroupKeyManagementServer.js";
 import { OperationalCredentialsClusterHandler } from "../../src/cluster/server/OperationalCredentialsServer.js";
-import { ImplementationError } from "../../src/common/MatterError.js";
 import { DeviceTypeId } from "../../src/datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
@@ -37,15 +45,9 @@ import { RootEndpoint } from "../../src/device/Device.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
-import { ClusterModel, MatterModel, Specification } from "../../src/model/index.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
 import { attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
-import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
-import { StorageContext } from "../../src/storage/StorageContext.js";
-import { StorageManager } from "../../src/storage/StorageManager.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
-import { serialize } from "../../src/util/String.js";
-import { DUMMY_KEY, PRIVATE_KEY } from "../crypto/test-util.js";
+import { DUMMY_KEY, PRIVATE_KEY } from "../support/mock-keys.js";
 
 function addRequiredRootClusters(
     rootEndpoint: Endpoint,
@@ -99,9 +101,9 @@ function addRequiredRootClusters(
                 },
                 OperationalCredentialsClusterHandler({
                     privateKey: DUMMY_KEY,
-                    certificate: ByteArray.fromHex("00"),
-                    intermediateCertificate: ByteArray.fromHex("00"),
-                    declaration: ByteArray.fromHex("00"),
+                    certificate: Bytes.fromHex("00"),
+                    intermediateCertificate: Bytes.fromHex("00"),
+                    declaration: Bytes.fromHex("00"),
                 }),
             ),
         );
@@ -131,13 +133,11 @@ function addRequiredRootClusters(
                 maxNetworks: 1,
                 interfaceEnabled: true,
                 lastConnectErrorValue: 0,
-                lastNetworkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
+                lastNetworkId: Bytes.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
                 lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                 networks: [
                     {
-                        networkId: ByteArray.fromHex(
-                            "0000000000000000000000000000000000000000000000000000000000000000",
-                        ),
+                        networkId: Bytes.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
                         connected: true,
                     },
                 ],
@@ -306,9 +306,9 @@ async function commissioningServer({ storage, values }: { storage?: boolean; val
         },
         certificates: {
             privateKey: PRIVATE_KEY,
-            certificate: ByteArray.fromHex("00"),
-            intermediateCertificate: ByteArray.fromHex("00"),
-            declaration: ByteArray.fromHex("00"),
+            certificate: Bytes.fromHex("00"),
+            intermediateCertificate: Bytes.fromHex("00"),
+            declaration: Bytes.fromHex("00"),
         },
     });
 

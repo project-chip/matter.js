@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
-import { DeviceTypeElement, DeviceTypeModel } from "@project-chip/matter.js/model";
-import { describeList } from "@project-chip/matter.js/util";
+import { Logger } from "@project-chip/matter.js-general";
+import { DeviceTypeElement, DeviceTypeModel } from "@project-chip/matter.js-model";
 import { Block, TsFile } from "../util/TsFile.js";
 import { clean } from "../util/file.js";
-import { serialize } from "../util/string.js";
+import { describeList, serialize } from "../util/string.js";
 import { RequirementGenerator } from "./RequirementGenerator.js";
 
 const logger = Logger.get("EndpointFile");
@@ -112,7 +111,7 @@ export class EndpointFile extends TsFile {
             }
         }
 
-        this.addImport("#/util/Type.js", "Identity");
+        this.addImport("@project-chip/matter.js-general", "Identity");
         const intf = this.interfaceLocation.atom(
             `export interface ${this.definitionName} extends Identity<typeof ${this.definitionName}Definition> {}`,
         );

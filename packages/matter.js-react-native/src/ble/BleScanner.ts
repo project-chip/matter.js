@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, createPromise, Logger, Time, Timer } from "@project-chip/matter.js-general";
 import { BleError } from "@project-chip/matter.js/ble";
 import { BtpCodec } from "@project-chip/matter.js/codec";
 import { CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "@project-chip/matter.js/common";
 import { VendorId } from "@project-chip/matter.js/datatype";
-import { Logger } from "@project-chip/matter.js/log";
-import { Time, Timer } from "@project-chip/matter.js/time";
-import { ByteArray, createPromise } from "@project-chip/matter.js/util";
 import { Device } from "react-native-ble-plx";
 import { ReactNativeBleClient } from "./ReactNativeBleClient.js";
 
@@ -91,9 +89,9 @@ export class BleScanner implements Scanner {
         this.finishWaiter(queryKey, true);
     }
 
-    private handleDiscoveredDevice(peripheral: Device, manufacturerServiceData: ByteArray) {
+    private handleDiscoveredDevice(peripheral: Device, manufacturerServiceData: Uint8Array) {
         logger.debug(
-            `Discovered device ${peripheral.id} "${peripheral.localName}" ${manufacturerServiceData?.toHex()}`,
+            `Discovered device ${peripheral.id} "${peripheral.localName}" ${manufacturerServiceData === undefined ? undefined : Bytes.toHex(manufacturerServiceData)}`,
         );
 
         try {

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js/common";
-import { AttributeElement, DatatypeElement, FieldElement, Metatype, ValueElement } from "@project-chip/matter.js/model";
+import { InternalError } from "@project-chip/matter.js-general";
+import { AttributeElement, DatatypeElement, FieldElement, Metatype, ValueElement } from "@project-chip/matter.js-model";
 import { ByteSize, Identifier, Integer, Str } from "./html-translators.js";
 import { repairTypeIdentifier } from "./repairs/type-repairs.js";
 import { GlobalReference } from "./spec-types.js";

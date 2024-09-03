@@ -3,8 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { UnexpectedDataError } from "../common/MatterError.js";
-import { ByteArray } from "../util/ByteArray.js";
+import { UnexpectedDataError } from "@project-chip/matter.js-general";
 
 class GaloisField {
     private readonly exp = new Array<number>();
@@ -72,13 +71,13 @@ class GaloisField {
 export class ReedSolomon {
     private readonly galoisField = new GaloisField();
 
-    computeErrorCorrection(data: ByteArray, ecLength: number) {
+    computeErrorCorrection(data: Uint8Array, ecLength: number) {
         const { length } = data;
         if (length + ecLength > this.galoisField.size) throw new UnexpectedDataError("Message is too long");
 
         const generator = this.generatePolynom(ecLength);
         const { length: generatorLength } = generator;
-        const buffer = new ByteArray(length + generatorLength - 1);
+        const buffer = new Uint8Array(length + generatorLength - 1);
         buffer.set(data, 0);
         for (let i = 0; i < length; i++) {
             const coef = buffer[i];

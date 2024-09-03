@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "@project-chip/matter.js/crypto";
+import { Crypto } from "@project-chip/matter.js-general";
 import { CryptoNode } from "../src/crypto/CryptoNode.js";
 
 const TheCrypto = new CryptoNode();

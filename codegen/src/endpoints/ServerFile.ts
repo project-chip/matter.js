@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
-import { ClusterModel, ClusterVariance } from "@project-chip/matter.js/model";
+import { Logger } from "@project-chip/matter.js-general";
+import { ClusterModel, ClusterVariance } from "@project-chip/matter.js-model";
 import { TsFile } from "../util/TsFile.js";
 
 const logger = Logger.get("BehaviorServerFile");

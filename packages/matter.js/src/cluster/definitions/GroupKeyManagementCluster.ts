@@ -10,7 +10,6 @@ import { MutableCluster } from "../mutation/MutableCluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import {
     WritableFabricScopedAttribute,
-    AccessLevel,
     FabricScopedAttribute,
     FixedAttribute,
     Command,
@@ -22,11 +21,12 @@ import { TlvGroupId } from "../../datatype/GroupId.js";
 import { TlvUInt16, TlvEnum, TlvEpochUs } from "../../tlv/TlvNumber.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace GroupKeyManagement {

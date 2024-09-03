@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../../common/MatterError.js";
-import { Constraint, FieldValue, Metatype, ValueModel } from "../../../model/index.js";
+import { InternalError } from "@project-chip/matter.js-general";
+import { Constraint, FieldValue, Metatype, ValueModel } from "@project-chip/matter.js-model";
 import { ConstraintError } from "../../errors.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../Val.js";

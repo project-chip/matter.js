@@ -5,7 +5,6 @@
  */
 
 import { CommissioningFlowType } from "../../../schema/PairingCodeSchema.js";
-import type { ByteArray } from "../../../util/ByteArray.js";
 import { ProductDescription } from "../product-description/ProductDescription.js";
 
 /**
@@ -42,6 +41,6 @@ export namespace CommissioningOptions {
         /**
          * Vendor-specific BLE advertisement data.
          */
-        readonly additionalBleAdvertisementData?: ByteArray;
+        readonly additionalBleAdvertisementData?: Uint8Array;
     }
 }

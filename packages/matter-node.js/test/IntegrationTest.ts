@@ -7,6 +7,18 @@
 import * as assert from "assert";
 
 import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
+import {
+    Bytes,
+    createPromise,
+    Crypto,
+    MockNetwork,
+    Network,
+    singleton,
+    StorageBackendMemory,
+    StorageManager,
+    Time,
+} from "@project-chip/matter.js-general";
+import { Specification } from "@project-chip/matter.js-model";
 import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
 import {
     AdministratorCommissioning,
@@ -21,7 +33,6 @@ import {
     OnOffCluster,
     OperationalCredentials,
 } from "@project-chip/matter.js/cluster";
-import { Crypto } from "@project-chip/matter.js/crypto";
 import {
     CaseAuthenticatedTag,
     ClusterId,
@@ -42,12 +53,7 @@ import {
     InteractionClientMessenger,
 } from "@project-chip/matter.js/interaction";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
-import { Specification } from "@project-chip/matter.js/model";
-import { Network, NetworkFake } from "@project-chip/matter.js/net";
 import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
-import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
-import { Time } from "@project-chip/matter.js/time";
-import { ByteArray, createPromise, singleton } from "@project-chip/matter.js/util";
 import { CryptoNode } from "../src/crypto/CryptoNode.js";
 import { TimeNode } from "../src/time/TimeNode.js";
 
@@ -58,8 +64,8 @@ const CLIENT_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:beef";
 //const CLIENT_IPv4 = "192.168.200.2";
 const CLIENT_MAC = "CA:FE:00:00:BE:EF";
 
-const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv6]);
-const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IPv6]);
+const serverNetwork = new MockNetwork(SERVER_MAC, [SERVER_IPv6]);
+const clientNetwork = new MockNetwork(CLIENT_MAC, [CLIENT_IPv6]);
 
 const deviceName = "Matter end-to-end device";
 const deviceType = DeviceTypeId(257); /* Dimmable bulb */
@@ -178,13 +184,11 @@ describe("Integration Test", () => {
                     maxNetworks: 1,
                     interfaceEnabled: true,
                     lastConnectErrorValue: 0,
-                    lastNetworkId: ByteArray.fromHex(
-                        "0000000000000000000000000000000000000000000000000000000000000000",
-                    ),
+                    lastNetworkId: Bytes.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
                     lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                     networks: [
                         {
-                            networkId: ByteArray.fromHex(
+                            networkId: Bytes.fromHex(
                                 "0000000000000000000000000000000000000000000000000000000000000000",
                             ),
                             connected: true,
@@ -393,11 +397,11 @@ describe("Integration Test", () => {
                 );
                 const promise = adminCommissioningCluster.openCommissioningWindow(
                     {
-                        salt: new ByteArray(32),
+                        salt: new Uint8Array(32),
                         commissioningTimeout: 180,
                         discriminator: 0,
                         iterations: 1000,
-                        pakePasscodeVerifier: new ByteArray(97),
+                        pakePasscodeVerifier: new Uint8Array(97),
                     },
                     { timedRequestTimeoutMs: 1 },
                 );
@@ -447,11 +451,11 @@ describe("Integration Test", () => {
                 assert.ok(adminCommissioningCluster);
                 await adminCommissioningCluster.openCommissioningWindow(
                     {
-                        salt: new ByteArray(32),
+                        salt: new Uint8Array(32),
                         commissioningTimeout: 180,
                         discriminator: 0,
                         iterations: 1000,
-                        pakePasscodeVerifier: new ByteArray(97),
+                        pakePasscodeVerifier: new Uint8Array(97),
                     },
                     { timedRequestTimeoutMs: 5000 },
                 );

@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { FixedAttribute, Command, AccessLevel, Attribute, WritableAttribute } from "../Cluster.js";
+import { FixedAttribute, Command, Attribute, WritableAttribute } from "../Cluster.js";
 import { TlvUInt8, TlvUInt64, TlvEnum, TlvBitmap, TlvUInt16, TlvInt8, TlvInt32 } from "../../tlv/TlvNumber.js";
 import { TlvOptionalField, TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
@@ -15,8 +15,9 @@ import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace NetworkCommissioning {

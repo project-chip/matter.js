@@ -11,13 +11,12 @@ import {
 } from "@project-chip/matter.js/cluster";
 import { EndpointNumber } from "@project-chip/matter.js/datatype";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
-import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 
 describe("FailsafeContext", () => {
     describe("Store and restore Endpoint data", () => {
         it("2 Network cluster data are restored", async () => {
-            const networkId = new ByteArray(32);
+            const networkId = new Uint8Array(32);
             const networkServer1 = ClusterServer(
                 NetworkCommissioning.Cluster.with("EthernetNetworkInterface"),
                 {
@@ -63,7 +62,7 @@ describe("FailsafeContext", () => {
             });
 
             // Now lets change network details
-            const newNetworkId = new ByteArray(32);
+            const newNetworkId = new Uint8Array(32);
             newNetworkId[0] = 1;
             networkServer1.setNetworksAttribute([{ networkId: newNetworkId, connected: false }]);
             networkServer2.setNetworksAttribute([{ networkId: newNetworkId, connected: true }]);

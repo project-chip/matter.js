@@ -7,13 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { Attribute, Command, TlvNoResponse, AccessLevel, OptionalAttribute } from "../Cluster.js";
+import { Attribute, Command, TlvNoResponse, OptionalAttribute } from "../Cluster.js";
 import { TlvUInt64, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace EthernetNetworkDiagnostics {

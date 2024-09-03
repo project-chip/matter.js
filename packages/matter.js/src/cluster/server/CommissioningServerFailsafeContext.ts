@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { asyncNew } from "@project-chip/matter.js-general";
 import { FailsafeContext } from "../../common/FailsafeContext.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { asyncNew } from "../../util/Construction.js";
 import { BasicInformation } from "../definitions/BasicInformationCluster.js";
 import { GeneralCommissioning } from "../definitions/GeneralCommissioningCluster.js";
 import { NetworkCommissioning } from "../definitions/NetworkCommissioningCluster.js";

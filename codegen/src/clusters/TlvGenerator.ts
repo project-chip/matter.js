@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js/common";
-import { octstr, status } from "@project-chip/matter.js/elements";
+import { InternalError } from "@project-chip/matter.js-general";
 import {
     ClusterModel,
     CommandModel,
@@ -16,8 +15,10 @@ import {
     MatterModel,
     Metatype,
     Model,
+    octstr,
+    status,
     ValueModel,
-} from "@project-chip/matter.js/model";
+} from "@project-chip/matter.js-model";
 import { ScopeFile } from "../util/ScopeFile.js";
 import { Block, Entry } from "../util/TsFile.js";
 import { asObjectKey, camelize, serialize } from "../util/string.js";

@@ -6,8 +6,8 @@
 
 export const INTERMEDIATE_PATH = "models";
 
-import { Logger } from "@project-chip/matter.js/log";
-import { MatterElement, MatterModel } from "@project-chip/matter.js/model";
+import { Logger } from "@project-chip/matter.js-general";
+import { MatterElement, MatterModel } from "@project-chip/matter.js-model";
 import { TsFile } from "../../util/TsFile.js";
 import { finalizeModel } from "../../util/finalize-model.js";
 import { camelize } from "../../util/string.js";
@@ -57,7 +57,7 @@ export class IntermediateModel {
             const file = new TsFile(`#intermediate/v${this.#version}/${this.#source}`);
             generateElement(
                 file,
-                "@project-chip/matter.js/model",
+                "@project-chip/matter.js-model",
                 matter,
                 `export const ${camelize(this.#source, true)}Matter = `,
             );

@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { EventEmitter, Observable } from "@project-chip/matter.js-general";
 import { NodeId } from "../../../datatype/NodeId.js";
 import { ExposedFabricInformation } from "../../../fabric/Fabric.js";
 import type { ServerNode } from "../../../node/ServerNode.js";
 import { SecureSession } from "../../../session/SecureSession.js";
 import { SessionManager } from "../../../session/SessionManager.js";
-import { EventEmitter, Observable } from "../../../util/Observable.js";
 import { Behavior } from "../../Behavior.js";
 
 /**

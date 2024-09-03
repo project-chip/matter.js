@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MaybePromise, serialize } from "@project-chip/matter.js-general";
 import { ActionTracer } from "@project-chip/matter.js/behavior/context";
 import { Environment } from "@project-chip/matter.js/environment";
-import { MaybePromise, serialize } from "@project-chip/matter.js/util";
 import { FileHandle, open } from "fs/promises";
 import { resolve } from "path";
 

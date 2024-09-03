@@ -7,20 +7,21 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { FabricScopedAttribute, AccessLevel, FixedAttribute, Attribute, Command, TlvNoResponse } from "../Cluster.js";
+import { FabricScopedAttribute, FixedAttribute, Attribute, Command, TlvNoResponse } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvFabricIndex, FabricIndex } from "../../datatype/FabricIndex.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvFabricId } from "../../datatype/FabricId.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvSubjectId } from "../../datatype/SubjectId.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace OperationalCredentials {

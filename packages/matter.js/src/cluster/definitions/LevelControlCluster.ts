@@ -11,18 +11,18 @@ import {
     Attribute,
     OptionalAttribute,
     WritableAttribute,
-    AccessLevel,
     Command,
     TlvNoResponse,
     OptionalWritableAttribute
 } from "../Cluster.js";
 import { TlvUInt16, TlvUInt8, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { ClusterType } from "../ClusterType.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace LevelControl {

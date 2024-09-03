@@ -31,7 +31,7 @@ import {
 } from "../../../behavior/definitions/flow-measurement/FlowMeasurementBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * A Pump Controller device is capable of configuring and controlling a Pump device.

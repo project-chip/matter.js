@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterDevice } from "../../src/MatterDevice.js";
-import { AccessLevel } from "../../src/cluster/Cluster.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
 import {
     AttributeServer,
@@ -21,14 +20,14 @@ import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { EndpointInterface } from "../../src/endpoint/EndpointInterface.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
+import { MatterDevice } from "../../src/MatterDevice.js";
 import { SecureSession } from "../../src/session/SecureSession.js";
 import { Session } from "../../src/session/Session.js";
 import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
 import { TlvSchema } from "../../src/tlv/TlvSchema.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
-import { DUMMY_KEY } from "../crypto/test-util.js";
+import { DUMMY_KEY } from "../support/mock-keys.js";
 
-const ZERO = new ByteArray(1);
+const ZERO = new Uint8Array(1);
 
 class MockClusterDatasource implements ClusterDatasource {
     #version = 0;

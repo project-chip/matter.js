@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterFlowError } from "@project-chip/matter.js-general";
 import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
-import { MatterFlowError } from "../common/MatterError.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateUnencryptedWithRollover } from "../protocol/MessageReceptionState.js";
-import { ByteArray } from "../util/ByteArray.js";
 import { NoAssociatedFabricError } from "./SecureSession.js";
 import { Session, SessionContext, SessionParameterOptions } from "./Session.js";
 import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
@@ -55,7 +54,7 @@ export class InsecureSession<T extends SessionContext> extends Session<T> {
         return MessageCodec.encodePayload(message);
     }
 
-    get attestationChallengeKey(): ByteArray {
+    get attestationChallengeKey(): Uint8Array {
         throw new MatterFlowError("Not supported on an unsecure session");
     }
 

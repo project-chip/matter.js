@@ -26,6 +26,7 @@ export * from "./server/AdministratorCommissioningServer.js";
 export * from "./server/AttributeServer.js";
 export * from "./server/ClusterServer.js";
 // Export all Server classes
+export { AccessLevel } from "@project-chip/matter.js-model";
 export * from "./server/ClusterServerTypes.js";
 export * from "./server/CommandServer.js";
 export * from "./server/CommissioningServerFailsafeContext.js";

@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as Elements from "@project-chip/matter.js/elements";
-import { Model } from "@project-chip/matter.js/model";
 import {
     FLOAT32_MAX,
     FLOAT32_MIN,
@@ -22,7 +20,9 @@ import {
     UINT32_MAX,
     UINT64_MAX,
     UINT8_MAX,
-} from "@project-chip/matter.js/util";
+} from "@project-chip/matter.js-general";
+import * as Elements from "@project-chip/matter.js-model";
+import { Model } from "@project-chip/matter.js-model";
 
 function special(type: string, category: "datatype" | "number" = "datatype") {
     return { type, category };

@@ -4,7 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./Crypto.js";
-export * from "./CryptoConstants.js";
-export * from "./Key.js";
-export * from "./Spake2p.js";
+export {
+    CRYPTO_AUTH_TAG_LENGTH,
+    CRYPTO_EC_CURVE,
+    CRYPTO_EC_KEY_BYTES,
+    CRYPTO_ENCRYPT_ALGORITHM,
+    CRYPTO_HASH_ALGORITHM,
+    CRYPTO_SYMMETRIC_KEY_LENGTH,
+    Crypto,
+    CryptoVerifyError,
+    Key,
+    PrivateKey,
+    PublicKey,
+    Spake2p,
+    type CryptoDsaEncoding,
+} from "@project-chip/matter.js-general";

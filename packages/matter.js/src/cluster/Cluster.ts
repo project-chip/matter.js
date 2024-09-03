@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError } from "../common/MatterError.js";
+import { MatterError, Merge } from "@project-chip/matter.js-general";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { AttributeId, TlvAttributeId } from "../datatype/AttributeId.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { CommandId, TlvCommandId } from "../datatype/CommandId.js";
@@ -15,20 +16,10 @@ import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
 import { TlvVoid } from "../tlv/TlvVoid.js";
-import { Merge } from "../util/Type.js";
 
 export class AttributeError extends MatterError {}
 
 export class EventError extends MatterError {}
-
-// This Enum needs to be in sync with the AccessControl.AccessControlEntryPrivilege enum!
-export enum AccessLevel {
-    View = 1,
-    ProxyView = 2,
-    Operate = 3,
-    Manage = 4,
-    Administer = 5,
-}
 
 export type ConditionalFeatureList<F extends BitSchema> = TypeFromPartialBitSchema<F>[];
 

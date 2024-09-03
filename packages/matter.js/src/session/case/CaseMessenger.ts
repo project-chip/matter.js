@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterFlowError } from "../../common/MatterError.js";
+import { MatterFlowError } from "@project-chip/matter.js-general";
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { MessageType } from "../../protocol/securechannel/SecureChannelMessages.js";

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Branded } from "@project-chip/matter.js-general";
 import { ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { Branded } from "../util/Type.js";
 
 /**
  * A CASE Authenticated Tag (CAT) is a special subject distinguished name within the Operational Certificate.

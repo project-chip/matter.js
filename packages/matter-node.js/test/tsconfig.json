@@ -1,5 +1,5 @@
 {
-    "extends": "../../matter.js-tools/tsconfig.base.json",
+    "extends": "../../tools/tsconfig.base.json",
     "compilerOptions": {
         "outDir": "../build/test",
         "types": ["node", "mocha", "@project-chip/matter.js-tools"]

@@ -3,7 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Logger } from "@project-chip/matter.js/log";
+import { Logger } from "@project-chip/matter.js-general";
 import {
     AnyElement,
     ClusterElement,
@@ -11,7 +11,7 @@ import {
     MatterModel,
     Metatype,
     ValueElement,
-} from "@project-chip/matter.js/model";
+} from "@project-chip/matter.js-model";
 import { readFileSync } from "fs";
 import { JSDOM } from "jsdom";
 import { homedir } from "os";

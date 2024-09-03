@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MaybePromise } from "@project-chip/matter.js-general";
+import { ClusterModel, DataModelPath, FeatureMap, FeatureSet, FieldElement } from "@project-chip/matter.js-model";
 import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
 import { OfflineContext } from "../../../../../src/behavior/context/server/OfflineContext.js";
 import { ConstraintError } from "../../../../../src/behavior/errors.js";
@@ -12,10 +14,6 @@ import { Val } from "../../../../../src/behavior/state/Val.js";
 import { RootSupervisor } from "../../../../../src/behavior/supervision/RootSupervisor.js";
 import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../../../../src/datatype/NodeId.js";
-import { DataModelPath } from "../../../../../src/model/definitions/DataModelPath.js";
-import { ClusterModel, FeatureSet, FieldElement } from "../../../../../src/model/index.js";
-import { FeatureMap } from "../../../../../src/model/standard/elements/FeatureMap.js";
-import { MaybePromise } from "../../../../../src/util/Promises.js";
 import { aclEndpoint, TestStruct } from "./value-utils.js";
 
 export type Nested = {

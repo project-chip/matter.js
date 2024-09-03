@@ -1,5 +1,5 @@
 {
-    "extends": "../../packages/matter.js-tools/tsconfig.base.json",
+    "extends": "../../packages/tools/tsconfig.base.json",
     "compilerOptions": {
         "outDir": "../dist/esm",
         "types": ["node"]

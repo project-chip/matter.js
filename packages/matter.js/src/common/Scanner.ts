@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ServerAddress, ServerAddressIp } from "@project-chip/matter.js-general";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { ServerAddress, ServerAddressIp } from "./ServerAddress.js";
 
 /**
  * All information exposed by a commissionable device via announcements.

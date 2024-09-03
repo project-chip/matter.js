@@ -7,17 +7,18 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { Attribute, Command, TlvNoResponse, AccessLevel, Event, EventPriority } from "../Cluster.js";
+import { Attribute, Command, TlvNoResponse, Event, EventPriority } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvUInt32, TlvUInt16, TlvEnum, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ContentControl {

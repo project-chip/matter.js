@@ -4,11 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Environment, Environmental, isObject, VariableService } from "@project-chip/matter.js-general";
 import { Behavior } from "../behavior/Behavior.js";
-import { Environment } from "../environment/Environment.js";
-import { Environmental } from "../environment/Environmental.js";
-import { VariableService } from "../environment/VariableService.js";
-import { isObject } from "../util/Type.js";
 import { Endpoint } from "./Endpoint.js";
 
 const NODE_SUBKEY = "nodes";

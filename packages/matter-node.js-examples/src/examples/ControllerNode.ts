@@ -21,6 +21,7 @@ import "@project-chip/matter-node.js";
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
 import { CommissioningController, NodeCommissioningOptions } from "@project-chip/matter.js";
+import { Logger, singleton, Time } from "@project-chip/matter.js-general";
 import { Ble } from "@project-chip/matter.js/ble";
 import {
     BasicInformationCluster,
@@ -32,11 +33,8 @@ import {
 import { NodeId } from "@project-chip/matter.js/datatype";
 import { NodeStateInformation } from "@project-chip/matter.js/device";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
-import { Logger } from "@project-chip/matter.js/log";
 import { CommissioningOptions } from "@project-chip/matter.js/protocol";
 import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
-import { Time } from "@project-chip/matter.js/time";
-import { singleton } from "@project-chip/matter.js/util";
 
 const logger = Logger.get("Controller");
 

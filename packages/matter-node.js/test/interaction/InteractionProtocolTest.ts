@@ -4,8 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "@project-chip/matter.js/crypto";
-
+import {
+    Crypto,
+    StorageBackendMemory,
+    StorageContext,
+    StorageManager,
+    SyncStorage,
+} from "@project-chip/matter.js-general";
+import { Specification } from "@project-chip/matter.js-model";
 import {
     AccessControlCluster,
     AccessLevel,
@@ -54,9 +60,7 @@ import {
     WriteRequest,
     WriteResponse,
 } from "@project-chip/matter.js/interaction";
-import { Specification } from "@project-chip/matter.js/model";
 import { TypeFromBitmapSchema, TypeFromPartialBitSchema } from "@project-chip/matter.js/schema";
-import { StorageBackendMemory, StorageContext, StorageManager, SyncStorage } from "@project-chip/matter.js/storage";
 import {
     TlvArray,
     TlvField,

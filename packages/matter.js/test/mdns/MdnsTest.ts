@@ -4,19 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DnsCodec, DnsMessageType } from "../../src/codec/DnsCodec.js";
+import {
+    Bytes,
+    createPromise,
+    DnsCodec,
+    DnsMessageType,
+    MockNetwork,
+    MockUdpChannel,
+    Network,
+    NetworkSimulator,
+    UdpChannel,
+} from "@project-chip/matter.js-general";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
 import { MdnsBroadcaster } from "../../src/mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "../../src/mdns/MdnsScanner.js";
-import { NetworkFake } from "../../src/net/fake/NetworkFake.js";
-import { FAKE_INTERFACE_NAME } from "../../src/net/fake/SimulatedNetwork.js";
-import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
-import { Network } from "../../src/net/Network.js";
-import { UdpChannel } from "../../src/net/UdpChannel.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
-import { createPromise } from "../../src/util/Promises.js";
 
 const SERVER_IPv4 = "192.168.200.1";
 const SERVER_IPv6 = "fe80::e777:4f5e:c61e:7314";
@@ -28,7 +31,7 @@ const PORT = 5540;
 const PORT2 = 5541;
 const PORT3 = 5542;
 
-const OPERATIONAL_ID = ByteArray.fromHex("0000000000000018");
+const OPERATIONAL_ID = Bytes.fromHex("0000000000000018");
 const NODE_ID = NodeId(BigInt(1));
 
 [
@@ -38,8 +41,8 @@ const NODE_ID = NodeId(BigInt(1));
 ].forEach(({ serverHasIpv4Addresses, testIpv4Enabled }) => {
     const serverIps = serverHasIpv4Addresses ? [SERVER_IPv4, SERVER_IPv6] : [SERVER_IPv6];
     const clientIps = testIpv4Enabled ? [CLIENT_IPv4] : [CLIENT_IPv6];
-    const serverNetwork = new NetworkFake(SERVER_MAC, serverIps);
-    const clientNetwork = new NetworkFake(CLIENT_MAC, clientIps);
+    const serverNetwork = new MockNetwork(SERVER_MAC, serverIps);
+    const clientNetwork = new MockNetwork(CLIENT_MAC, clientIps);
 
     const IPDnsRecords = [
         {
@@ -81,9 +84,9 @@ const NODE_ID = NodeId(BigInt(1));
             Network.get = () => clientNetwork;
             scanner = await MdnsScanner.create(Network.get(), {
                 enableIpv4: testIpv4Enabled,
-                netInterface: FAKE_INTERFACE_NAME,
+                netInterface: NetworkSimulator.INTERFACE_NAME,
             });
-            scannerChannel = await UdpChannelFake.create(serverNetwork, {
+            scannerChannel = await MockUdpChannel.create(serverNetwork, {
                 listeningPort: 5353,
                 listeningAddress: testIpv4Enabled ? "224.0.0.251" : "ff02::fb",
                 type: testIpv4Enabled ? "udp4" : "udp6",
@@ -92,9 +95,9 @@ const NODE_ID = NodeId(BigInt(1));
             Network.get = () => serverNetwork;
             broadcaster = await MdnsBroadcaster.create(Network.get(), {
                 enableIpv4: testIpv4Enabled,
-                multicastInterface: FAKE_INTERFACE_NAME,
+                multicastInterface: NetworkSimulator.INTERFACE_NAME,
             });
-            broadcasterChannel = await UdpChannelFake.create(clientNetwork, {
+            broadcasterChannel = await MockUdpChannel.create(clientNetwork, {
                 listeningPort: 5353,
                 listeningAddress: testIpv4Enabled ? "224.0.0.251" : "ff02::fb",
                 type: testIpv4Enabled ? "udp4" : "udp6",
@@ -128,7 +131,7 @@ const NODE_ID = NodeId(BigInt(1));
 
         describe("broadcaster", () => {
             it("it broadcasts the device fabric on one port and expires", async () => {
-                const { promise, resolver } = createPromise<ByteArray>();
+                const { promise, resolver } = createPromise<Uint8Array>();
                 const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
                     resolver(data),
                 );
@@ -202,7 +205,7 @@ const NODE_ID = NodeId(BigInt(1));
                 });
                 await listener.close();
 
-                const { promise: expiryPromise, resolver: expiryResolver } = createPromise<ByteArray>();
+                const { promise: expiryPromise, resolver: expiryResolver } = createPromise<Uint8Array>();
                 const expiryListener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
                     expiryResolver(data),
                 );
@@ -276,7 +279,7 @@ const NODE_ID = NodeId(BigInt(1));
             });
 
             it("it broadcasts the device commissionable info on one port", async () => {
-                const { promise, resolver } = createPromise<ByteArray>();
+                const { promise, resolver } = createPromise<Uint8Array>();
                 const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
                     resolver(data),
                 );
@@ -434,7 +437,7 @@ const NODE_ID = NodeId(BigInt(1));
             });
 
             it("it broadcasts the controller commissioner on one port", async () => {
-                const { promise, resolver } = createPromise<ByteArray>();
+                const { promise, resolver } = createPromise<Uint8Array>();
                 const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
                     resolver(data),
                 );
@@ -525,7 +528,7 @@ const NODE_ID = NodeId(BigInt(1));
 
             it("it allows announcements of multiple devices on different ports", async () => {
                 const { promise, resolver } = createPromise<void>();
-                const dataArr: ByteArray[] = [];
+                const dataArr: Uint8Array[] = [];
                 const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
                     dataArr.push(data);
                     if (dataArr.length === 3) resolver();
@@ -869,7 +872,7 @@ const NODE_ID = NodeId(BigInt(1));
             });
 
             it("the client queries the server record if it has not been announced before", async () => {
-                const sentData = new Array<ByteArray>();
+                const sentData = new Array<Uint8Array>();
                 const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
                     sentData.push(data),
                 );
@@ -919,7 +922,7 @@ const NODE_ID = NodeId(BigInt(1));
             });
 
             it("the client queries the server record and get correct response also with multiple announced instances", async () => {
-                const netData = new Array<ByteArray>();
+                const netData = new Array<Uint8Array>();
                 const listener = broadcasterChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
                     netData.push(data);
                 });

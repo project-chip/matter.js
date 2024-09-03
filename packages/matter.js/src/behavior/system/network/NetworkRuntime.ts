@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../../../common/MatterError.js";
+import { Construction, ImplementationError } from "@project-chip/matter.js-general";
 import type { Node } from "../../../node/Node.js";
-import { Construction } from "../../../util/Construction.js";
 import { NodeActivity } from "../../context/NodeActivity.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
 

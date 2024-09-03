@@ -4,12 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SchemaErrorPath, SchemaViolationError } from "../model/definitions/errors.js";
-import { ValueModel } from "../model/index.js";
-import { StatusCode } from "../protocol/interaction/StatusCode.js";
+import { SchemaErrorPath, ValueModel } from "@project-chip/matter.js-model";
+import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import { Schema } from "./supervision/Schema.js";
 
-export { SchemaImplementationError } from "../model/definitions/errors.js";
+export { SchemaImplementationError } from "@project-chip/matter.js-model";
+
+/**
+ * Thrown due operational schema violations.
+ */
+export class SchemaViolationError extends StatusResponseError {
+    constructor(prefix: string, path: SchemaErrorPath, message: string, code: StatusCode) {
+        const text = `${prefix} ${path.path ?? path}: ${message} (${code})`;
+        super(text, code);
+
+        // Remove default status code injection
+        this.message = text;
+    }
+}
 
 /**
  * Thrown for invalid reads.

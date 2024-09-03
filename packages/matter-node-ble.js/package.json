@@ -34,6 +34,7 @@
         "typescript": "~5.5.3"
     },
     "dependencies": {
+        "@project-chip/matter.js-general": "*",
         "@project-chip/matter.js": "*"
     },
     "optionalDependencies": {

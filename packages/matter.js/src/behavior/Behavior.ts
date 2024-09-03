@@ -4,14 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    EventEmitter,
+    GeneratedClass,
+    ImplementationError,
+    MaybePromise,
+    NotImplementedError,
+    Observable,
+} from "@project-chip/matter.js-general";
 import type { ClusterType } from "../cluster/ClusterType.js";
-import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
 import { Agent, INSTALL_BEHAVIOR } from "../endpoint/Agent.js";
-import "../polyfills/disposable.js";
 import { assertSecureSession } from "../session/SecureSession.js";
-import { GeneratedClass } from "../util/GeneratedClass.js";
-import { EventEmitter, Observable } from "../util/Observable.js";
-import { MaybePromise } from "../util/Promises.js";
 import { Reactor } from "./Reactor.js";
 import type { BehaviorBacking } from "./internal/BehaviorBacking.js";
 import { DerivedState, EmptyState } from "./state/StateType.js";

@@ -12,7 +12,7 @@ import {
 } from "../../../behavior/definitions/level-control/LevelControlServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * This defines conformance to the Speaker device type. This feature controls the speaker volume of the device.

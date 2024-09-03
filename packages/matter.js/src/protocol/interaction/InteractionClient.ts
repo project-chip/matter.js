@@ -4,6 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    ImplementationError,
+    Logger,
+    MatterFlowError,
+    Time,
+    Timer,
+    UnexpectedDataError,
+} from "@project-chip/matter.js-general";
 import { MatterController } from "../../MatterController.js";
 import {
     Attribute,
@@ -15,17 +23,14 @@ import {
     TlvNoResponse,
 } from "../../cluster/Cluster.js";
 import { resolveAttributeName, resolveCommandName, resolveEventName } from "../../cluster/ClusterHelper.js";
-import { ImplementationError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { EventNumber } from "../../datatype/EventNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
-import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
-import { Time, Timer, TimerCallback } from "../../time/Time.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
 import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
@@ -491,7 +496,7 @@ export class InteractionClient {
         knownDataVersion?: number;
         keepSubscriptions?: boolean;
         listener?: (value: AttributeJsType<A>, version: number) => void;
-        updateTimeoutHandler?: TimerCallback;
+        updateTimeoutHandler?: Timer.Callback;
     }): Promise<void> {
         const {
             endpointId,
@@ -575,7 +580,7 @@ export class InteractionClient {
         minimumEventNumber?: EventNumber;
         isFabricFiltered?: boolean;
         listener?: (value: DecodedEventData<T>) => void;
-        updateTimeoutHandler?: TimerCallback;
+        updateTimeoutHandler?: Timer.Callback;
     }): Promise<void> {
         return this.withMessenger<void>(async messenger => {
             const {
@@ -646,7 +651,7 @@ export class InteractionClient {
         isFabricFiltered?: boolean;
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
-        updateTimeoutHandler?: TimerCallback;
+        updateTimeoutHandler?: Timer.Callback;
     }): Promise<{
         attributeReports?: DecodedAttributeReportValue<any>[];
         eventReports?: DecodedEventReportValue<any>[];
@@ -689,7 +694,7 @@ export class InteractionClient {
         eventListener?: (data: DecodedEventReportValue<any>) => void;
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
-        updateTimeoutHandler?: TimerCallback;
+        updateTimeoutHandler?: Timer.Callback;
     }): Promise<{
         attributeReports?: DecodedAttributeReportValue<any>[];
         eventReports?: DecodedEventReportValue<any>[];
@@ -988,7 +993,7 @@ export class InteractionClient {
     private registerSubscriptionUpdateTimer(
         subscriptionId: number,
         maxInterval: number,
-        updateTimeoutHandler: TimerCallback,
+        updateTimeoutHandler: Timer.Callback,
     ) {
         if (!this.ownSubscriptionIds.has(subscriptionId)) {
             throw new MatterFlowError(

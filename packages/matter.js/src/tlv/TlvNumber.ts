@@ -3,10 +3,6 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { UnexpectedDataError } from "../common/MatterError.js";
-import { ValidationDatatypeMismatchError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
-import { BitSchema, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { Schema } from "../schema/Schema.js";
 import {
     FLOAT32_MAX,
     FLOAT32_MIN,
@@ -23,9 +19,13 @@ import {
     UINT32_MAX,
     UINT64_MAX,
     UINT8_MAX,
+    UnexpectedDataError,
     maxValue,
     minValue,
-} from "../util/Number.js";
+} from "@project-chip/matter.js-general";
+import { ValidationDatatypeMismatchError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
+import { BitSchema, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { Schema } from "../schema/Schema.js";
 import { TlvCodec, TlvLength, TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { TlvWrapper } from "./TlvWrapper.js";

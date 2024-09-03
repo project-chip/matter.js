@@ -5,22 +5,21 @@
  */
 
 import {
+    AsyncCache,
+    Diagnostic,
     DnsCodec,
     DnsMessage,
     DnsMessagePartiallyPreEncoded,
     DnsMessageType,
     DnsRecord,
     DnsRecordType,
+    isDeepEqual,
+    Logger,
     MAX_MDNS_MESSAGE_SIZE,
-} from "../codec/DnsCodec.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { Logger } from "../log/Logger.js";
-import { Network } from "../net/Network.js";
-import { UdpMulticastServer } from "../net/UdpMulticastServer.js";
-import { Time } from "../time/Time.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { AsyncCache } from "../util/Cache.js";
-import { isDeepEqual } from "../util/DeepEqual.js";
+    Network,
+    Time,
+    UdpMulticastServer,
+} from "@project-chip/matter.js-general";
 
 const logger = Logger.get("MdnsServer");
 
@@ -88,7 +87,7 @@ export class MdnsServer {
         return key.startsWith(`${port}-`);
     }
 
-    async #handleDnsMessage(messageBytes: ByteArray, remoteIp: string, netInterface: string) {
+    async #handleDnsMessage(messageBytes: Uint8Array, remoteIp: string, netInterface: string) {
         // This message was on a subnet not supported by this device
         if (netInterface === undefined) return;
         const records = await this.#records.get(netInterface);

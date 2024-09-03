@@ -1,7 +1,7 @@
 {
     "files": [],
     "references": [
-        { "path": "packages/matter.js-tools" },
+        { "path": "packages/tools" },
         { "path": "packages/matter.js" },
         { "path": "packages/matter.js-react-native"},
         { "path": "packages/matter-node.js" },

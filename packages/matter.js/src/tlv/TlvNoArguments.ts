@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError } from "../common/MatterError.js";
+import { UnexpectedDataError } from "@project-chip/matter.js-general";
 import { TlvTag } from "./TlvCodec.js";
 import { TlvObject } from "./TlvObject.js";
 import { TlvWriter } from "./TlvSchema.js";

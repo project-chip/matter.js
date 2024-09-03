@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FabricIndex } from "@project-chip/matter.js/elements/FabricIndex";
-import { Logger } from "@project-chip/matter.js/log";
-import { AnyElement, DatatypeElement, FieldElement, Metatype } from "@project-chip/matter.js/model";
+import { Logger } from "@project-chip/matter.js-general";
+import { AnyElement, DatatypeElement, FabricIndex, FieldElement, Metatype } from "@project-chip/matter.js-model";
 import { addDocumentation } from "./add-documentation.js";
 import {
     Bits,

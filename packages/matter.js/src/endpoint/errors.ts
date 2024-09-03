@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { describeList, MatterAggregateError, MatterError } from "@project-chip/matter.js-general";
 import type { BehaviorBacking } from "../behavior/internal/BehaviorBacking.js";
-import { MatterAggregateError, MatterError } from "../common/MatterError.js";
-import { describeList } from "../util/String.js";
 import type { Endpoint } from "./Endpoint.js";
 
 /**

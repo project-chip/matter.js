@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Environment } from "@project-chip/matter.js-general";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { EndpointBehaviorsError } from "../../src/endpoint/errors.js";
-import { Environment } from "../../src/environment/Environment.js";
 import { MockServerNode } from "../node/mock-server-node.js";
 import { MockEndpoint } from "./mock-endpoint.js";
 

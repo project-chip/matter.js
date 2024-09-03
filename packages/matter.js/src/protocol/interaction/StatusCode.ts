@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterError } from "@project-chip/matter.js-general";
 import { Status } from "../../cluster/globals/Status.js";
-import { MatterError } from "../../common/MatterError.js";
 
 export const StatusCode = Status;
 export type StatusCode = Status;
