@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js",
-    "version": "0.10.0-alpha.0-20240808-bb365a45",
+    "version": "0.10.1-alpha.0-20240903-7cffa11d",
     "description": "Matter protocol in pure js",
     "keywords": [
         "iot",
@@ -33,16 +33,16 @@
         "embed-examples": "embedme **/README.md"
     },
     "dependencies": {
-        "@noble/curves": "^1.4.2"
+        "@noble/curves": "^1.5.0"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.10.0-alpha.0-20240808-bb365a45",
+        "@project-chip/matter.js-tools": "0.10.1-alpha.0-20240903-7cffa11d",
         "@types/chai": "^4.3.16",
         "@types/mocha": "^10.0.7",
         "@types/wtfnode": "^0.7.3",
         "chai": "^4.4.1",
         "embedme": "^1.22.1",
-        "mocha": "^10.6.0",
+        "mocha": "^10.7.3",
         "typescript": "~5.5.3"
     },
     "files": [
@@ -84,6 +84,16 @@
             "require": {
                 "types": "./dist/cjs/endpoint/definitions/device/*.d.ts",
                 "default": "./dist/cjs/endpoint/definitions/device/*.js"
+            }
+        },
+        "./tags/*": {
+            "import": {
+                "types": "./dist/esm/endpoint/definitions/tags/*.d.ts",
+                "default": "./dist/esm/endpoint/definitions/tags/*.js"
+            },
+            "require": {
+                "types": "./dist/cjs/endpoint/definitions/tags/*.d.ts",
+                "default": "./dist/cjs/endpoint/definitions/tags/*.js"
             }
         },
         "./elements": {

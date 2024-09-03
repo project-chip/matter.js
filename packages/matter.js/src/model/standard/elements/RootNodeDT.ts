@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const RootNodeDt = DeviceType({
-    name: "RootNode", id: 0x16, classification: "node",
+    name: "RootNode", id: 0x16, category: "Utility", classification: "node",
 
     details: "This defines conformance for a root node endpoint (see System Model specification). This endpoint " +
         "is akin to a \"read me first\" endpoint that describes itself and the other endpoints that make up " +

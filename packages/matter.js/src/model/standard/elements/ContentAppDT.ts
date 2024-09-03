@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const ContentAppDt = DeviceType({
-    name: "ContentApp", id: 0x24, classification: "simple",
+    name: "ContentApp", id: 0x24, category: "Media", classification: "simple",
     details: "This defines conformance to the Content App device type." +
         "\n" +
         "A Content App is usually an application built by a Content Provider. A Casting Video Player with a " +

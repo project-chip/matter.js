@@ -1,2 +1,3 @@
 src/model/standard/elements/*.ts linguist-generated=true
 src/cluster/definitions/*.ts linguist-generated=true
+src/endpoint/definitions/*/*.ts linguist-generated=true

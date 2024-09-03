@@ -146,7 +146,12 @@ export class ClusterModel extends Model implements ClusterElement {
     set supportedFeatures(features: FeatureSet.Definition | undefined) {
         const featureSet = new FeatureSet(features);
 
-        const featureMap = this.featureMap;
+        let featureMap = this.featureMap;
+
+        if (featureMap.parent !== this) {
+            featureMap = featureMap.clone();
+            this.add(featureMap);
+        }
 
         for (const feature of featureMap.children) {
             const desc = feature.description && camelize(feature.description);
@@ -195,6 +200,11 @@ export class ClusterModel extends Model implements ClusterElement {
             result.quality = this.quality.valueOf();
         }
         return result as ClusterElement;
+    }
+
+    override freeze() {
+        this.quality.freeze();
+        super.freeze();
     }
 
     constructor(definition: ClusterElement.Properties) {

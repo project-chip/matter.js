@@ -6,12 +6,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 <!--
 	Placeholder for the next version (at the beginning of the line):
-	### __WORK IN PROGRESS__
+	## __WORK IN PROGRESS__
 -->
 
-### **WORK_IN_PROGRESS**
+## 0.10.0 (2024-08-31)
 
--   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3.0.1. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However some small code changes may be necessary depending on how you use Matter.js.
+-   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3.0.1. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js.
 
 -   Matter.js Parser and Code generator:
     -   Feature: We now generate all Matter datatypes and elements. This includes some we defined by hand previously and those introduced by the Matter 1.2 and Matter 1.3 specifications.
@@ -28,6 +28,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Breaking: We've removed a few old draft datatypes defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip) that were abandoned, renamed or are still "draft" as of Matter 1.3.
     -   Breaking: Some types related to ClusterServer are simplified.  This should be largely transparent but the template arguments are slightly different
     -   Feature: Adds all elements (clusters, attributes, events, commands, device types and datatypes) introduced in Matter 1.2 and Matter 1.3.
+    -   Feature: Adds all Standard Namespaces defined by Matter 1.3 
 -   Matter-Core functionality:
     -   Breaking: Removes the discovery capability "softAccessPoint" as it was removed from the Matter specification
     -   Breaking: Matter.js now requires node.js 18+
@@ -58,26 +59,33 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Fix: Makes sure subscription maxInterval cannot exceed the matter defined maximum of 60mins
     -   Fix: Synced attMtu handling with chip to always use MTU-3 bytes for BLE connections
 -   matter.js API:
--   -   Breaking: Node.start() is now asynchronous and returns when the node is online. This is only breaking in that lack of await will result in an unhandled rejection. Node.bringOnline() is deprecated.
+    -   Breaking: Node.start() is now asynchronous and returns when the node is online. This is only breaking in that lack of await will result in an unhandled rejection. Node.bringOnline() is deprecated.
     -   Feature: Adds default implementations for i18n clusters including Localization, Time Format Localization and Unit Localization.
     -   Feature: Adds interactionBegin and interactionEnd events for ClusterBehaviors to demarcate online interactions that mutate state.
     -   Feature: Any state value defined with schema is now configurable via the environment.
     -   Feature: You may now mark endpoints as "non-essential" to prevent errors from incapacitating a node.
+    -   Feature: Utility device types are added automatically to the endpoints when the relevant clusters (like PowerSource or ElectricalSensor) are existing on the endpoint
+    -   Feature: Adds DescriptorServer#addTag to make adding tags more convenient
+    -   Feature: Modifies DescriptorServer#addDeviceType to accept device type name to simplify avoidance of cyclical dependencies
     -   Enhancement: Various Endpoint methods throw the root cause when there is an error rather than logging the root cause and throwing a less descriptive error.
+    -   Enhancement: Explicitly defines DescriptorServer as an endpoint requirement so attributes are configurable in TS directly
 -   matter.js Controller API:
     -   Breaking: commissionNode() in CommissioningController now returns the Node-ID and not the PairedNode instance.
     -   Breaking: AttributeClient now throws an exception when an attribute should be subscribed which is not reporting updates via subscriptions
-    -   Feature: (Experimental!) Adds PaseCommissioner to allow to execute the initial (PASE based) commissioning process separately from the operational completion of the commissioning process, also allowed to be BLE only.
+    -   Feature: Adds PaseCommissioner to allow to execute the initial (PASE based) commissioning process separately from the operational completion of the commissioning process, also allowed to be BLE only.
     -   Feature: Allows to complete the commissioning process for a node where this process was started by a PASE commissioner
     -   Feature: Allows to commission a node without directly connecting to it
     -   Enhancement: Always read attributes that do not report changes via subscriptions (including all unknown Attributes)
+    -   Fix: Skips network commissioning during commissioning when the commissioning is already using an IP based channel (like UDP)
     -   Fix: Fixes Node reconnection when disconnected before
     -   Fix: Makes sure to always use the BLE scanner when required
+    -   Fix: Prevents reading subscribed attributes from remote if not requested and needed
+    -   Fix: (digitaldan) Makes sure to re-use the same callbacks and options for a re-subscription of a Paired Node
 -   matter.js Legacy API:
     -   Deprecation: We've deprecated the hand-generated device type definitions used by the pre-0.8.0 API in DeviceTypes.ts. These device type definitions remain at Matter 1.1.
     -   Removal: We removed old Scenes cluster implementation which was never fully implemented or used by any Matter controller
 -   matter.js-react-native:
-    -   Feature: Introduces new package that provides a React Native compatible platform Implementations for Matter.js. This package is still in development and should be considered experimental for now! Currently it supports UDP, BLE, AsyncStorage and Crypto platform features.
+    -   Feature: Introduces new package to provides a React Native compatible platform Implementations for Matter.js. This package is still in development and not fully working and should be considered experimental for now! Currently it tries to support UDP, BLE, AsyncStorage and Crypto platform features. See [README](./packages/matter.js-react-native/README.md) for more information.
 -   matter.js chip and python Testing:
     -   Includes updates and infrastructure improvements for Matter.js use of tests defined in [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 

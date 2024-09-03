@@ -19,4 +19,6 @@ export * from "./FieldElement.js";
 export * from "./MatterElement.js";
 export * from "./NodeElement.js";
 export * from "./RequirementElement.js";
+export * from "./SemanticNamespaceElement.js";
+export * from "./SemanticTagElement.js";
 export * from "./ValueElement.js";

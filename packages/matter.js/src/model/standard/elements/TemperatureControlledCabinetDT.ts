@@ -14,7 +14,7 @@ import {
 } from "../../elements/index.js";
 
 export const TemperatureControlledCabinetDt = DeviceType({
-    name: "TemperatureControlledCabinet", id: 0x71, classification: "simple",
+    name: "TemperatureControlledCabinet", id: 0x71, category: "Appliances", classification: "simple",
     details: "A Temperature Controlled Cabinet only exists composed as part of another device type. It represents " +
         "a single cabinet that is capable of having its temperature controlled. Such a cabinet may be " +
         "chilling or freezing food, for example as part of a refrigerator, freezer, wine chiller, or other " +

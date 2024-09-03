@@ -150,6 +150,13 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
         }
         return Constraint.serialize(this);
     }
+
+    override freeze() {
+        if (this.parts) {
+            Object.freeze(this.parts);
+        }
+        super.freeze();
+    }
 }
 
 export namespace Constraint {

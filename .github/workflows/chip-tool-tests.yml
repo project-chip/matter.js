@@ -41,7 +41,7 @@ jobs:
       chip-tests-required: ${{ steps.check-trigger.outputs.chip-tests-required || steps.check-rebuild.outputs.chip-tests-required || steps.check-long-tests.outputs.chip-tests-required  }}
       chip-tool-rebuild: ${{ steps.check-rebuild.outputs.chip-tool-rebuild }}
       chip-long-tests-required: ${{ steps.check-long-tests.outputs.chip-long-tests-required }}
-      chip-slowapp-tests-required: ${{ steps.check-long-tests.outputs.chip-slowapp-tests-required }}
+      chip-slowapp-tests-required: ${{ steps.check-long-tests.outputs.chip-slowapp-tests-required || steps.check-slowapp-tests.outputs.chip-slowapp-tests-required }}
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
@@ -66,6 +66,9 @@ jobs:
               - "packages/matter.js/src/behavior/definitions/color-control/**"
               - "packages/matter.js/src/behavior/definitions/level-control/**"
               - "packages/matter.js/src/behavior/definitions/window-covering/**"
+              - "packages/matter.js/src/cluster/definitions/ColorControlCluster.ts"
+              - "packages/matter.js/src/cluster/definitions/LevelControlCluster.ts"
+              - "packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts"
 
       - uses: dorny/paths-filter@v3
         id: changes-long-tests
@@ -83,7 +86,7 @@ jobs:
         id: check-trigger
         run: echo "chip-tests-required=true" >> $GITHUB_OUTPUT
 
-      - if: ${{ (github.event_name != 'schedule' && (steps.changes-long-tests.outputs.src == 'true' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests-long]') == true)) }}
+      - if: ${{ (github.event_name != 'schedule' && (steps.changes-slowapp-tests.outputs.src == 'true' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests-long]') == true)) }}
         name: Enable slow App tests if needed
         id: check-slowapp-tests
         run: |
@@ -124,7 +127,7 @@ jobs:
 
   # Execute the core cluster tests
   chip-tests-core:
-    needs: [prepare-chip-build]
+    needs: [prepare-chip-build, chip-tests-needed]
     if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
     steps:
@@ -157,7 +160,7 @@ jobs:
 
   # Execute the fast application cluster tests
   chip-tests-app-fast:
-    needs: [prepare-chip-build]
+    needs: [prepare-chip-build, chip-tests-needed]
     if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
     steps:
@@ -179,7 +182,7 @@ jobs:
               --runner chip_tool_python \
               --chip-tool ../bin/chip-tool \
               --log-level info \
-              --target-glob "{Test_TC_ACFREMON_*,Test_TC_AIRQUAL_*,Test_TC_APBSC_*,Test_TC_BOOL_*,Test_TC_FLABEL_*,Test_TC_FLW_*,Test_TC_HEPAFREMON_*,Test_TC_I_*,Test_TC_ILL_*,Test_TC_LCFG_*,Test_TC_LOWPOWER_*,Test_TC_LTIME_*,Test_TC_LUNIT_*,Test_TC_MOD_*,Test_TC_OCC_*,Test_TC_OO_*,Test_TC_PCC_*,Test_TC_PRS_*,Test_TC_PS_*,Test_TC_PWRTL_*,Test_TC_RH_*,Test_TC_SWTCH_*,Test_TC_TMP_*,Test_TC_TSUIC_*,Test_TC_ULABEL_*,Test_TC_WAKEONLAN_*,TestUserLabelCluster*}" \
+              --target-glob "{Test_TC_ACFREMON_*,Test_TC_AIRQUAL_*,Test_TC_APBSC_*,Test_TC_BOOL_*,Test_TC_*CONC_*,Test_TC_FLABEL_*,Test_TC_FLW_*,Test_TC_HEPAFREMON_*,Test_TC_I_*,Test_TC_ILL_*,Test_TC_LCFG_*,Test_TC_LOWPOWER_*,Test_TC_LTIME_*,Test_TC_LUNIT_*,Test_TC_MOD_*,Test_TC_OCC_*,Test_TC_OO_*,Test_TC_PCC_*,Test_TC_PRS_*,Test_TC_PS_*,Test_TC_PWRTL_*,Test_TC_RH_*,Test_TC_SWTCH_*,Test_TC_TMP_*,Test_TC_TSUIC_*,Test_TC_ULABEL_*,Test_TC_WAKEONLAN_*,TestUserLabelCluster*}" \
               --target-skip-glob "{Test_TC_OO_2_7}" \
               run \
               --iterations 1 \
@@ -190,8 +193,8 @@ jobs:
 
   # Execute the slower (because simulated) application cluster tests
   chip-tests-app-slow:
-    needs: [prepare-chip-build]
-    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-slowapp-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    needs: [prepare-chip-build, chip-tests-needed]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-slowapp-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out matter.js
@@ -222,7 +225,7 @@ jobs:
             '
 
   chip-tests-legacy:
-    needs: [prepare-chip-build]
+    needs: [prepare-chip-build, chip-tests-needed]
     if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
     steps:
@@ -253,7 +256,7 @@ jobs:
             '
 
   chip-tests-long:
-    needs: [prepare-chip-build]
+    needs: [prepare-chip-build, chip-tests-needed]
     if: ${{ github.repository == 'project-chip/matter.js' && needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
     runs-on: ubuntu-latest
     steps:
@@ -283,7 +286,7 @@ jobs:
             '
 
   chip-tests-long-legacy:
-    needs: [prepare-chip-build]
+    needs: [prepare-chip-build, chip-tests-needed]
     if: ${{ github.repository == 'project-chip/matter.js' && needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
     runs-on: ubuntu-latest
     steps:
@@ -313,7 +316,7 @@ jobs:
             '
 
   python-repl-tests:
-    needs: [prepare-chip-build]
+    needs: [prepare-chip-build, chip-tests-needed]
 
     env:
       TSAN_OPTIONS: "halt_on_error=1 suppressions=scripts/tests/chiptest/tsan-linux-suppressions.txt"
@@ -369,9 +372,10 @@ jobs:
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_PWRTL_2_1.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SC_3_6.py'
           scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SC_7_1.py'
+          scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --load-from-env /tmp/test_env.yaml --script src/python_testing/TC_SWTCH.py'
 
   python-repl-tests-legacy:
-    needs: [prepare-chip-build]
+    needs: [prepare-chip-build, chip-tests-needed]
 
     env:
       TSAN_OPTIONS: "halt_on_error=1 suppressions=scripts/tests/chiptest/tsan-linux-suppressions.txt"

@@ -11,8 +11,7 @@ import type { Endpoint } from "../../device/Endpoint.js";
 /**
  * Persistence backing for an {@link Endpoint}.
  *
- * This is the interface a {@link Endpoint} uses for reading and writing
- * non-volatile values.
+ * This is the interface a {@link Endpoint} uses for reading and writing non-volatile values.
  */
 export interface PartStore {
     /**

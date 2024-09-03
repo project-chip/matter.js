@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const RoboticVacuumCleanerDt = DeviceType({
-    name: "RoboticVacuumCleaner", id: 0x74, classification: "simple",
+    name: "RoboticVacuumCleaner", id: 0x74, category: "Robotic", classification: "simple",
     details: "This defines conformance for the Robotic Vacuum Cleaner device type.",
     xref: { document: "device", section: "12.1" },
 

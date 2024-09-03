@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const CastingVideoClientDt = DeviceType({
-    name: "CastingVideoClient", id: 0x29, classification: "simple",
+    name: "CastingVideoClient", id: 0x29, category: "Media", classification: "simple",
     details: "This defines conformance to the Casting Video Client device type." +
         "\n" +
         "A Casting Video Client is a client that can launch content on a Casting Video Player, for example, " +

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { SemanticNamespaceElement, SemanticTagElement } from "../index.js";
 import { AnyValueElement } from "./AnyValueElement.js";
 import { BaseElement } from "./BaseElement.js";
 import { ClusterElement } from "./ClusterElement.js";
@@ -25,6 +26,8 @@ export type AnyElement =
     | EndpointElement
     | FabricElement
     | NodeElement
+    | SemanticTagElement
+    | SemanticNamespaceElement
     | MatterElement;
 
 export namespace AnyElement {

@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-react-native",
-    "version": "0.10.0-alpha.0-20240808-bb365a45",
+    "version": "0.10.1-alpha.0-20240903-7cffa11d",
     "description": "Matter BLE support for node.js",
     "keywords": [
         "iot",
@@ -29,21 +29,21 @@
         "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.10.0-alpha.0-20240808-bb365a45",
+        "@project-chip/matter.js-tools": "0.10.1-alpha.0-20240903-7cffa11d",
         "ts-node": "^10.9.2",
         "typescript": "~5.5.3"
     },
     "dependencies": {
-        "@project-chip/matter-node.js": "0.10.0-alpha.0-20240808-bb365a45",
-        "@project-chip/matter.js": "0.10.0-alpha.0-20240808-bb365a45",
-        "@react-native-async-storage/async-storage": "^1.23.1",
+        "@project-chip/matter-node.js": "0.10.1-alpha.0-20240903-7cffa11d",
+        "@project-chip/matter.js": "0.10.1-alpha.0-20240903-7cffa11d",
+        "@react-native-async-storage/async-storage": "^2.0.0",
         "@react-native-community/netinfo": "^11.3.2",
         "@types/jwk-to-pem": "^2.0.3",
-        "@types/node": "^22.1.0",
+        "@types/node": "^22.5.2",
         "jwk-to-pem": "^2.0.5",
         "react-native-ble-plx": "^3.2.1",
         "react-native-polyfill-globals": "^3.1.0",
-        "react-native-quick-crypto": "^0.7.2",
+        "react-native-quick-crypto": "^0.7.4",
         "react-native-udp": "^4.1.7"
     },
     "overrides": {

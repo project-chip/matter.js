@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const VideoRemoteControlDt = DeviceType({
-    name: "VideoRemoteControl", id: 0x2a, classification: "simple",
+    name: "VideoRemoteControl", id: 0x2a, category: "Media", classification: "simple",
     details: "This defines conformance to the Video Remote Control device type." +
         "\n" +
         "A Video Remote Control is a client that can control a Video Player, for example, a traditional " +

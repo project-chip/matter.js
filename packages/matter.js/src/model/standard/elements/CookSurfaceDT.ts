@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const CookSurfaceDt = DeviceType({
-    name: "CookSurface", id: 0x77, classification: "simple",
+    name: "CookSurface", id: 0x77, category: "Appliances", classification: "simple",
     details: "A Cook Surface device type represents a heating object on a cooktop or other similar device. It " +
         "shall only be used when composed as part of another device type.",
     xref: { document: "device", section: "13.7" },

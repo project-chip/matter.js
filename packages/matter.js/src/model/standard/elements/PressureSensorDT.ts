@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const PressureSensorDt = DeviceType({
-    name: "PressureSensor", id: 0x305, classification: "simple",
+    name: "PressureSensor", id: 0x305, category: "Sensor", classification: "simple",
     details: "A Pressure Sensor device measures and reports the pressure of a fluid.",
     xref: { document: "device", section: "7.5" },
 

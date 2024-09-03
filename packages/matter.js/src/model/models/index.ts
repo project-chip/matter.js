@@ -18,4 +18,6 @@ export * from "./Model.js";
 export * from "./NodeModel.js";
 export * from "./PropertyModel.js";
 export * from "./RequirementModel.js";
+export * from "./SemanticNamespaceModel.js";
+export * from "./SemanticTagModel.js";
 export * from "./ValueModel.js";

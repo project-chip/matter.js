@@ -21,7 +21,7 @@ export function parseHeading(e: HTMLElement | null) {
         return undefined;
     }
 
-    const heading = Str(e);
+    const heading = Str(e)?.replace(/^chapter\s+/i, "");
     if (!heading) {
         return undefined;
     }
@@ -42,6 +42,7 @@ export type IndexDetail = {
     version: string;
     hasClusters: boolean;
     hasDevices: boolean;
+    hasNamespaces: boolean;
 };
 
 export function loadHtml(path: string) {
@@ -62,6 +63,7 @@ export function identifyDocument(path: string): IndexDetail {
     let spec: Specification;
     let hasClusters = false;
     let hasDevices = false;
+    let hasNamespaces = false;
     if (title.match(/matter specification/i)) {
         spec = Specification.Core;
         hasClusters = true;
@@ -73,6 +75,7 @@ export function identifyDocument(path: string): IndexDetail {
         hasDevices = true;
     } else if (title.match(/namespaces/i)) {
         spec = Specification.Namespace;
+        hasNamespaces = true;
     } else {
         throw new Error(`Matter specification name ${title} unrecognized in ${path}`);
     }
@@ -110,5 +113,6 @@ export function identifyDocument(path: string): IndexDetail {
         version,
         hasClusters,
         hasDevices,
+        hasNamespaces,
     };
 }

@@ -2,9 +2,16 @@
 
 [![license](https://img.shields.io/badge/license-Apache2-green.svg?style=flat)](https://raw.githubusercontent.com/mfucci/node-matter/master/LICENSE)
 
-Matter protocol for react-native.
+This package contains the specific Platform implementations to allow running Matter Devices and Controllers on React-Native. It is designed to be used in addition to the @project-chip/matter.js package to enable React-Native specific functionality.
 
-[!Note] This package is still in development and should be considered experimental and not usable for production usage until it got validated that all functionality works as expected.
+[!Note] This package is still in development and should be considered experimental and not suited for production usage!
+
+## Status of the package
+The main idea of this package is to provide a react-native implementation of the matter protocol and also proof the 
+extensibility of the matter.js library. Currently a full commissioning process was not successfully tested. WHen you 
+try to use it feel free to report where the process stops for you with which error message.
+
+## Dependencies
 
 This package uses the following react-native libraries to provide the needed functionality:
 - react-native-quick-crypto
@@ -13,7 +20,6 @@ This package uses the following react-native libraries to provide the needed fun
 - @react-native-community/netinfo
 - @react-native-async-storage/async-storage
   Please check these projects if special preparations need to be done for your developed app.
-
 
 ## Building
 

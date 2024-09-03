@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const LaundryDryerDt = DeviceType({
-    name: "LaundryDryer", id: 0x7c, classification: "simple",
+    name: "LaundryDryer", id: 0x7c, category: "Appliances", classification: "simple",
     details: "A Laundry Dryer represents a device that is capable of drying laundry items.",
     xref: { document: "device", section: "13.6" },
 

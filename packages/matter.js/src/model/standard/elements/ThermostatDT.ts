@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const ThermostatDt = DeviceType({
-    name: "Thermostat", id: 0x301, classification: "simple",
+    name: "Thermostat", id: 0x301, category: "HVAC", classification: "simple",
     details: "A Thermostat device is capable of having either built-in or separate sensors for temperature, " +
         "humidity or occupancy. It allows the desired temperature to be set either remotely or locally. The " +
         "thermostat is capable of sending heating and/or cooling requirement notifications to a " +

@@ -10,11 +10,11 @@ import {
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID,
     BLE_MAXIMUM_BTP_MTU,
-    BLE_MAX_MATTER_PAYLOAD_SIZE,
     BTP_CONN_RSP_TIMEOUT_MS,
     BTP_MAXIMUM_WINDOW_SIZE,
     BTP_SUPPORTED_VERSIONS,
     Ble,
+    BleChannel,
     BleError,
     BtpFlowError,
     BtpSessionHandler,
@@ -208,7 +208,7 @@ export class NobleBleCentralInterface implements NetInterface {
     }
 }
 
-export class NobleBleChannel implements Channel<ByteArray> {
+export class NobleBleChannel extends BleChannel<ByteArray> {
     static async create(
         peripheral: Peripheral,
         characteristicC1ForWrite: Characteristic,
@@ -283,13 +283,12 @@ export class NobleBleChannel implements Channel<ByteArray> {
     }
 
     private connected = true;
-    readonly maxPayloadSize = BLE_MAX_MATTER_PAYLOAD_SIZE;
-    readonly isReliable = true; // BTP is reliable
 
     constructor(
         private readonly peripheral: Peripheral,
         private readonly btpSession: BtpSessionHandler,
     ) {
+        super();
         peripheral.once("disconnect", () => {
             logger.debug(`Disconnected from peripheral ${peripheral.address}`);
             this.connected = false;
@@ -315,7 +314,7 @@ export class NobleBleChannel implements Channel<ByteArray> {
 
     // Channel<ByteArray>
     get name() {
-        return `ble://${this.peripheral.address}`;
+        return `${this.type}://${this.peripheral.address}`;
     }
 
     async close() {

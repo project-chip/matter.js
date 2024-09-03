@@ -16,6 +16,7 @@ import { GeneralCommissioning } from "../cluster/definitions/GeneralCommissionin
 import { NetworkCommissioning } from "../cluster/definitions/NetworkCommissioningCluster.js";
 import { OperationalCredentials } from "../cluster/definitions/OperationalCredentialsCluster.js";
 import { TimeSynchronizationCluster } from "../cluster/definitions/TimeSynchronizationCluster.js";
+import { ChannelType } from "../common/Channel.js";
 import { MatterError, UnexpectedDataError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { ClusterId } from "../datatype/ClusterId.js";
@@ -252,27 +253,34 @@ export class ControllerCommissioner {
             stepLogic: () => this.configureAccessControlLists(),
         });
 
-        this.commissioningSteps.push({
-            stepNumber: 11,
-            subStepNumber: 1,
-            name: "NetworkCommissioning.Validate",
-            stepLogic: () => this.validateNetwork(),
-        });
-        if (this.commissioningOptions.wifiNetwork !== undefined) {
+        // Care about Network commissioning only when we are on BLE, because else we are already on IP network
+        if (this.interactionClient.channelType === ChannelType.BLE) {
             this.commissioningSteps.push({
                 stepNumber: 11,
-                subStepNumber: 2,
-                name: "NetworkCommissioning.Wifi",
-                stepLogic: () => this.configureNetworkWifi(),
+                subStepNumber: 1,
+                name: "NetworkCommissioning.Validate",
+                stepLogic: () => this.validateNetwork(),
             });
-        }
-        if (this.commissioningOptions.threadNetwork !== undefined) {
-            this.commissioningSteps.push({
-                stepNumber: 11,
-                subStepNumber: 3,
-                name: "NetworkCommissioning.Thread",
-                stepLogic: () => this.configureNetworkThread(),
-            });
+            if (this.commissioningOptions.wifiNetwork !== undefined) {
+                this.commissioningSteps.push({
+                    stepNumber: 11,
+                    subStepNumber: 2,
+                    name: "NetworkCommissioning.Wifi",
+                    stepLogic: () => this.configureNetworkWifi(),
+                });
+            }
+            if (this.commissioningOptions.threadNetwork !== undefined) {
+                this.commissioningSteps.push({
+                    stepNumber: 11,
+                    subStepNumber: 3,
+                    name: "NetworkCommissioning.Thread",
+                    stepLogic: () => this.configureNetworkThread(),
+                });
+            }
+        } else {
+            logger.info(
+                `Skipping NetworkCommissioning steps because the device is already on IP network (${this.interactionClient.channelType})`,
+            );
         }
 
         this.commissioningSteps.push({

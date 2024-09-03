@@ -64,7 +64,7 @@ export interface ClusterReference extends HtmlReference {
 }
 
 /**
- * Intermediate representation of a device.
+ * Intermediate representation of a device type.
  */
 export interface DeviceReference extends HtmlReference {
     category?: string;

@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const ElectricalSensorDt = DeviceType({
-    name: "ElectricalSensor", id: 0x510, classification: "utility",
+    name: "ElectricalSensor", id: 0x510, category: "Utility", classification: "utility",
     details: "An Electrical Sensor device measures the electrical power and/or energy being imported and/or " +
         "exported.",
     xref: { document: "device", section: "2.6" },

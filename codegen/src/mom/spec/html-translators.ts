@@ -165,6 +165,18 @@ export const Code = (el: HTMLElement) => {
 
 /** Camelized identifier */
 export const Identifier = (el: HTMLElement) => {
+    // Remove any garbage following a blank line (following <br> tag)
+    let child = el.firstElementChild;
+    while (child && child?.firstElementChild?.tagName !== "BR") {
+        child = child.nextElementSibling;
+    }
+    while (child) {
+        const toRemove = child;
+
+        child = child.nextElementSibling;
+        toRemove.remove();
+    }
+
     let str = Code(el);
 
     // Strip everything following a subset of characters known to be inside what is properly a "key"

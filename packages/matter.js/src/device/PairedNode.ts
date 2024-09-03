@@ -374,7 +374,7 @@ export class PairedNode {
             updateTimeoutHandler: async () => {
                 logger.info(`Node ${this.nodeId}: Subscription update not received ...`);
                 try {
-                    await this.subscribeAllAttributesAndEvents();
+                    await this.subscribeAllAttributesAndEvents({ ...options, ignoreInitialTriggers: false });
                 } catch (error) {
                     logger.info(`Node ${this.nodeId}: Error resubscribing to all attributes and events`, error);
                     // TODO resume logic right now retries and discovers for 60s .. prolong this but without command repeating

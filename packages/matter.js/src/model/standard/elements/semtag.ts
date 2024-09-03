@@ -51,8 +51,8 @@ export const semtag = Datatype({
         }),
 
         Field({
-            name: "Label", id: 0x3, type: "string", conformance: "MfgCode != null, O", constraint: "max 64",
-            default: null, quality: "X",
+            name: "Label", id: 0x3, type: "string", conformance: "O", constraint: "max 64", default: null,
+            quality: "X",
 
             details: "The Label field, if present, shall contain human-readable text suitable for display on a client. " +
                 "The content of the Label field is defined by the manufacturer." +

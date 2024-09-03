@@ -215,9 +215,12 @@ export class MdnsScanner implements Scanner {
             );
             if (newQueries.length === 0) {
                 // All queries already sent out
-                logger.debug(`No new query records for query ${queryId}, keeping existing queries.`);
+                logger.debug(
+                    `No new query records for query ${queryId}, keeping existing queries and do not re-announce.`,
+                );
                 return;
             }
+            queries = [...newQueries, ...existingQueries];
             answers = [...activeExistingQuery.answers, ...answers];
         }
         this.#activeAnnounceQueries.set(queryId, { queries, answers });

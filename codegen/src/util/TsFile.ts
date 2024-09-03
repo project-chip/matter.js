@@ -40,6 +40,9 @@ function mapSpec(xref?: Specification.CrossReference) {
 
         case "device":
             return "MatterSpecification.v13.Device";
+
+        case "namespace":
+            return "MatterSpecification.v13.Namespace";
     }
 }
 

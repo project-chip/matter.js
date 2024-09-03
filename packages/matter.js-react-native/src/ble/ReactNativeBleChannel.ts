@@ -10,11 +10,11 @@ import {
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID,
     BLE_MAXIMUM_BTP_MTU,
-    BLE_MAX_MATTER_PAYLOAD_SIZE,
     BTP_CONN_RSP_TIMEOUT_MS,
     BTP_MAXIMUM_WINDOW_SIZE,
     BTP_SUPPORTED_VERSIONS,
     Ble,
+    BleChannel,
     BleError,
     BtpFlowError,
     BtpSessionHandler,
@@ -149,7 +149,7 @@ export class ReactNativeBleCentralInterface implements NetInterface {
     }
 }
 
-export class ReactNativeBleChannel implements Channel<ByteArray> {
+export class ReactNativeBleChannel extends BleChannel<ByteArray> {
     static async create(
         peripheral: Device,
         characteristicC1ForWrite: Characteristic,
@@ -259,13 +259,12 @@ export class ReactNativeBleChannel implements Channel<ByteArray> {
 
     private connected = true;
     private disconnectSubscription: Subscription;
-    readonly maxPayloadSize = BLE_MAX_MATTER_PAYLOAD_SIZE;
-    readonly isReliable = true; // BTP is reliable
 
     constructor(
         private readonly peripheral: Device,
         private readonly btpSession: BtpSessionHandler,
     ) {
+        super();
         this.disconnectSubscription = peripheral.onDisconnected(error => {
             logger.debug(`Disconnected from peripheral ${peripheral.id}: ${error}`);
             this.connected = false;

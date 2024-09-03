@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const CooktopDt = DeviceType({
-    name: "Cooktop", id: 0x78, classification: "simple",
+    name: "Cooktop", id: 0x78, category: "Appliances", classification: "simple",
     details: "A cooktop is a cooking surface that heats food either by transferring currents from an " +
         "electromagnetic field located below the glass surface directly to the magnetic induction cookware " +
         "placed above or through traditional gas or electric burners.",

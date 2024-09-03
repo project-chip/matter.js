@@ -7,9 +7,9 @@ import { HepaFilterMonitoringServer } from "@project-chip/matter.js/behavior/def
 import { ResourceMonitoring } from "@project-chip/matter.js/cluster";
 
 const TestHepaFilterMonitoringServerBase = HepaFilterMonitoringServer.with(
-    "Condition",
-    "Warning",
-    "ReplacementProductList",
+    ResourceMonitoring.Feature.Condition,
+    ResourceMonitoring.Feature.Warning,
+    ResourceMonitoring.Feature.ReplacementProductList,
 );
 
 export class TestHepaFilterMonitoringServer extends TestHepaFilterMonitoringServerBase {

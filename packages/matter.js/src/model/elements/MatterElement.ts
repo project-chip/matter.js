@@ -13,6 +13,7 @@ import { DeviceTypeElement } from "./DeviceTypeElement.js";
 import { FabricElement } from "./FabricElement.js";
 import { FieldElement } from "./FieldElement.js";
 import { NodeElement } from "./NodeElement.js";
+import { SemanticNamespaceElement } from "./SemanticNamespaceElement.js";
 
 /**
  * The root model element.
@@ -38,5 +39,6 @@ export namespace MatterElement {
         | NodeElement
         | DatatypeElement
         | FieldElement
-        | AttributeElement;
+        | AttributeElement
+        | SemanticNamespaceElement;
 }

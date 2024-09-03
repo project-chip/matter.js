@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const OtaRequestorDt = DeviceType({
-    name: "OtaRequestor", id: 0x12, classification: "utility",
+    name: "OtaRequestor", id: 0x12, category: "Utility", classification: "utility",
     details: "An OTA Requestor is a device that is capable of receiving an OTA software update.",
     xref: { document: "device", section: "2.3" },
 

@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const WaterFreezeDetectorDt = DeviceType({
-    name: "WaterFreezeDetector", id: 0x41, classification: "simple",
+    name: "WaterFreezeDetector", id: 0x41, category: "Sensor", classification: "simple",
     details: "This defines conformance to the Water Freeze Detector device type.",
     xref: { document: "device", section: "7.11" },
 

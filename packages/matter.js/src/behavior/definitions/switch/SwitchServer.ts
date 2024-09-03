@@ -7,6 +7,7 @@
 import { ClusterType } from "../../../cluster/ClusterType.js";
 import { Switch } from "../../../cluster/definitions/SwitchCluster.js";
 import { FieldElement } from "../../../model/elements/FieldElement.js";
+import { ClusterModel } from "../../../model/index.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { Time, Timer } from "../../../time/Time.js";
 import { Observable } from "../../../util/Observable.js";
@@ -19,6 +20,14 @@ const SwitchServerBase = SwitchBehavior.for(Switch.Complete).with(
     Switch.Feature.MomentarySwitchRelease,
     Switch.Feature.MomentarySwitchLongPress,
     Switch.Feature.MomentarySwitchMultiPress,
+);
+
+// Enhance Schema to define conformance for some of the additional state attributes
+const schema = SwitchServerBase.schema?.clone() as ClusterModel;
+schema.add(
+    FieldElement({ name: "longPressDelay", type: "uint32", quality: "M", conformance: "MSL" }),
+    FieldElement({ name: "multiPressDelay", type: "uint32", quality: "M", conformance: "MSM" }),
+    FieldElement({ name: "momentaryNeutralPosition", type: "uint8", quality: "O", conformance: "MS" }),
 );
 
 /**
@@ -47,15 +56,7 @@ export class SwitchServerLogic extends SwitchServerBase {
     protected declare internal: SwitchServerLogic.Internal;
     declare state: SwitchServerLogic.State;
     declare events: SwitchServerLogic.Events;
-
-    // Enhance Schema to define conformance for some of the additional state attributes
-    static {
-        SwitchServerLogic.schema?.children.push(
-            FieldElement({ name: "longPressDelay", type: "uint32", quality: "M", conformance: "MSL" }),
-            FieldElement({ name: "multiPressDelay", type: "uint32", quality: "M", conformance: "MSM" }),
-            FieldElement({ name: "momentaryNeutralPosition", type: "uint8", quality: "O", conformance: "MS" }),
-        );
-    }
+    schema = schema;
 
     override initialize() {
         this.state.rawPosition = this.state.currentPosition;
@@ -181,7 +182,9 @@ export class SwitchServerLogic extends SwitchServerBase {
                 this.state.multiPressDelay,
                 this.callback(this.#handleMultiPressComplete),
             ).start();
-            this.internal.previousMultiPressPosition = this.internal.previouslyReportedPosition;
+            if (this.internal.previouslyReportedPosition !== this.state.momentaryNeutralPosition) {
+                this.internal.previousMultiPressPosition = this.internal.previouslyReportedPosition;
+            }
         }
         // Store the currently processed position to be used as "previous" in some events
         this.internal.previouslyReportedPosition = newPosition;

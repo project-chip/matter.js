@@ -51,6 +51,10 @@ export class MessageChannel<ContextT> implements Channel<Message> {
         return this.channel.isReliable;
     }
 
+    get type() {
+        return this.channel.type;
+    }
+
     /**
      * Max Payload size of the exchange which bases on the maximum payload size of the channel. The full encoded matter
      * message payload sent here can be as huge as allowed by the channel.
@@ -386,5 +390,9 @@ export class ExchangeProvider {
 
     get session() {
         return this.channel.session;
+    }
+
+    get channelType() {
+        return this.channel.type;
     }
 }

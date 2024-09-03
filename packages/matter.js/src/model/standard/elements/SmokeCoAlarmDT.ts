@@ -10,7 +10,7 @@ import { Matter } from "../Matter.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const SmokeCoAlarmDt = DeviceType({
-    name: "SmokeCoAlarm", id: 0x76, classification: "simple",
+    name: "SmokeCoAlarm", id: 0x76, category: "Sensor", classification: "simple",
 
     details: "A Smoke CO Alarm device is capable of sensing smoke, carbon monoxide or both. It is capable of " +
         "issuing a visual and audible alert to indicate elevated concentration of smoke or carbon monoxide." +
