@@ -1494,74 +1494,76 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         if (oldMode === newMode) {
             return;
         }
-        switch (oldMode) {
-            case ColorControl.ColorMode.CurrentHueAndCurrentSaturation:
-                switch (newMode) {
-                    case ColorControl.ColorMode.CurrentXAndCurrentY:
-                        // Convert hue/saturation to xy
-                        const [x, y] = hsvToXy(this.hue, this.saturation);
-                        this.x = x;
-                        this.y = y;
-                        break;
-                    case ColorControl.ColorMode.ColorTemperatureMireds:
-                        // Convert hue/saturation to color temperature
-                        const mireds = hsvToMireds(this.hue, this.saturation);
-                        if (mireds === undefined) {
-                            logger.warn(
-                                `Could not convert hue/saturation (${this.hue}/${this.saturation}) to color temperature`,
-                            );
-                        } else {
-                            this.mireds = mireds;
-                        }
-                        break;
-                }
-                break;
-            case ColorControl.ColorMode.CurrentXAndCurrentY:
-                switch (newMode) {
-                    case ColorControl.ColorMode.CurrentHueAndCurrentSaturation:
-                        // Convert xy to hue/saturation
-                        const [hue, saturation] = hsvToXy(this.x, this.y);
-                        this.hue = hue;
-                        this.saturation = saturation;
-                        break;
-                    case ColorControl.ColorMode.ColorTemperatureMireds:
-                        // Convert xy to color temperature
-                        const mireds = xyToMireds(this.x, this.y);
-                        if (mireds === undefined) {
-                            logger.warn(`Could not convert xy ${this.x / this.y} to color temperature`);
-                        } else {
-                            this.mireds = mireds;
-                        }
-                        break;
-                }
-                break;
-            case ColorControl.ColorMode.ColorTemperatureMireds:
-                switch (newMode) {
-                    case ColorControl.ColorMode.CurrentHueAndCurrentSaturation:
-                        // Convert color temperature to hue/saturation
-                        const hsvResult = miredsToHsv(this.mireds);
-                        if (hsvResult === undefined) {
-                            logger.warn(`Could not convert color temperature ${this.mireds} to hue/saturation`);
-                        } else {
-                            const [hue, saturation] = hsvResult;
-                            this.hue = hue;
-                            this.saturation = saturation;
-                        }
-                        break;
-                    case ColorControl.ColorMode.CurrentXAndCurrentY:
-                        // Convert color temperature to xy
-                        const xyResult = miredsToXy(this.mireds);
-                        if (xyResult === undefined) {
-                            logger.warn("Could not convert color temperature to xy");
-                        } else {
-                            const [x, y] = xyResult;
+        MaybePromise.then(this.stopAllColorMovement(), () => {
+            switch (oldMode) {
+                case ColorControl.ColorMode.CurrentHueAndCurrentSaturation:
+                    switch (newMode) {
+                        case ColorControl.ColorMode.CurrentXAndCurrentY:
+                            // Convert hue/saturation to xy
+                            const [x, y] = hsvToXy(this.hue, this.saturation);
                             this.x = x;
                             this.y = y;
-                        }
-                        break;
-                }
-                break;
-        }
+                            break;
+                        case ColorControl.ColorMode.ColorTemperatureMireds:
+                            // Convert hue/saturation to color temperature
+                            const mireds = hsvToMireds(this.hue, this.saturation);
+                            if (mireds === undefined) {
+                                logger.warn(
+                                    `Could not convert hue/saturation (${this.hue}/${this.saturation}) to color temperature`,
+                                );
+                            } else {
+                                this.mireds = mireds;
+                            }
+                            break;
+                    }
+                    break;
+                case ColorControl.ColorMode.CurrentXAndCurrentY:
+                    switch (newMode) {
+                        case ColorControl.ColorMode.CurrentHueAndCurrentSaturation:
+                            // Convert xy to hue/saturation
+                            const [hue, saturation] = hsvToXy(this.x, this.y);
+                            this.hue = hue;
+                            this.saturation = saturation;
+                            break;
+                        case ColorControl.ColorMode.ColorTemperatureMireds:
+                            // Convert xy to color temperature
+                            const mireds = xyToMireds(this.x, this.y);
+                            if (mireds === undefined) {
+                                logger.warn(`Could not convert xy ${this.x / this.y} to color temperature`);
+                            } else {
+                                this.mireds = mireds;
+                            }
+                            break;
+                    }
+                    break;
+                case ColorControl.ColorMode.ColorTemperatureMireds:
+                    switch (newMode) {
+                        case ColorControl.ColorMode.CurrentHueAndCurrentSaturation:
+                            // Convert color temperature to hue/saturation
+                            const hsvResult = miredsToHsv(this.mireds);
+                            if (hsvResult === undefined) {
+                                logger.warn(`Could not convert color temperature ${this.mireds} to hue/saturation`);
+                            } else {
+                                const [hue, saturation] = hsvResult;
+                                this.hue = hue;
+                                this.saturation = saturation;
+                            }
+                            break;
+                        case ColorControl.ColorMode.CurrentXAndCurrentY:
+                            // Convert color temperature to xy
+                            const xyResult = miredsToXy(this.mireds);
+                            if (xyResult === undefined) {
+                                logger.warn("Could not convert color temperature to xy");
+                            } else {
+                                const [x, y] = xyResult;
+                                this.x = x;
+                                this.y = y;
+                            }
+                            break;
+                    }
+                    break;
+            }
+        });
     }
 
     /**
@@ -1757,6 +1759,9 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         maxValue: number,
         targetValue?: number,
     ) {
+        if (changeRate === 0) {
+            logger.warn(`Change rate for ${transitionType} is 0, nothing to do.`);
+        }
         let currentValue: number;
         switch (transitionType) {
             case "hue":
