@@ -336,7 +336,7 @@ jobs:
         run: |
           echo -n "" >/tmp/test_env.yaml
           echo "ALL_CLUSTERS_APP: ../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
-          echo "CHIP_LOCK_APP:../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
+          echo "CHIP_LOCK_APP: ../chip-testing/dist/esm/AllClustersTestApp.js" >> /tmp/test_env.yaml
           echo "ENERGY_MANAGEMENT_APP: not_available" >> /tmp/test_env.yaml
           echo "LIT_ICD_APP: not_available" >> /tmp/test_env.yaml
           echo "CHIP_MICROWAVE_OVEN_APP: not_available" >> /tmp/test_env.yaml
