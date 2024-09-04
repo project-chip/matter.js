@@ -25,17 +25,23 @@ matter.js employs [code generation approaches](./codegen) to ensure a comprehens
 
 matter.js serves various purposes and can be employed for:
 
-- **Developing Production-Ready Matter Devices or Bridges:**<br>Use JavaScript/TypeScript to create Matter devices or bridges for OS-based IoT products. The extensive typing information and documentation facilitate the easy implementation of required functionality while ensuring synchronization with the Matter specification.
+- **Developing Production-Ready Matter Devices or Bridges:**<br>Use JavaScript/TypeScript to create Matter devices or bridges for OS-based IoT products. The extensive typing information and documentation facilitate the easy implementation of required functionality while ensuring synchronization with the Matter specification. **If you plan to certify a device based on matter.js please see note below.**
 
-- **Developing Matter Controllers:**<br>Develop Matter controllers with JavaScript/TypeScript for OS-based IoT products. Post-commissioning (including BLE support), controllers can access all data from devices and control them. The API supports development with known typings of all clusters when endpoints and device types are known during development. It also allows generic programmatic access to all clusters and attributes. Typing information of custom clusters can be added to the controller or accessed generically with generic data parsing support.
+- **Developing Matter Controllers:**<br>Develop Matter controllers with JavaScript/TypeScript for OS-based IoT products. Post-commissioning (including BLE support), controllers can access all data from devices and control them. The API supports development with known typings of all clusters when endpoints and device types are known during development. It also allows generic programmatic access to all clusters and attributes. Typing information of custom clusters can be added to the controller or accessed generically with generic data parsing support. **If you plan to build/certify a controller based on matter.js please see note below.**
 
 - **Rapid Prototyping for Testing and Development:**<br>Enable rapid development of device or controller prototypes for testing and development purposes. JavaScript's nature and the convenient matter.js API make it easy to create prototypes. Testing different feature combinations or endpoint structures can be done quickly using JavaScript testing frameworks.
 
-- **Developing Bridges Between Matter and Other Ecosystems:**<br>Implement bridges between Matter and other ecosystems using JavaScript. Utilize the many available JavaScript libraries to easily bridge between ecosystems.
+- **Developing Bridges Between Matter and Other Ecosystems:**<br>Implement bridges between Matter and other ecosystems using JavaScript. Utilize the many available JavaScript libraries to easily bridge between ecosystems. **If you plan to certify a bridged device based on matter.js please see note below.**
 
 - **Using the Matter Shell Application as a Controller:**<br>Employ the Matter Shell application as a controller to interact with Matter devices via a CLI interface. Ideal for manual testing and development purposes.
 
 Explore the versatile capabilities of matter.js and adapt it to your specific use cases!
+
+### Note on Certification
+
+If you plan to officially certify a device, bridge or controller based on matter.js please contact us via E-Mail or Discord to get the latest information of the certification status of matter.js, supported and not yet supported features and consulting on the certification process.
+
+matter.js successfully passed certification already. There are still thinks to consider and to discuss when you plan to certify.
 
 ## Compatibility to Matter Standard
 
@@ -56,6 +62,8 @@ Devices created with matter.js/matter-node.js have been tested with:
 - **Samsung SmartThings (Station or Hub v2 and later)**: Fully working
 - **LG ThinQ**: Fully working, beside glitches in LG software sometimes
 - **Home Assistant - Matter integration**: Fully working
+- **Aqara Hub M3**: Aqara currently seem to not allow to pair test devices, so matter.js open source devices are not working with Aqara Hub M3. Please contact Aqara and request this feature.
+- **Yandex Smart Home**: Yandex currently seem to not allow to pair test devices, so matter.js open source devices are not working with Yandex SMart Home. Please contact Yandex and request this feature.
 
 Matter.js based projects show up as "uncertified test devices" in the ecosystems. This is because the devices are not certified by the Connectivity Standards Alliance (CSA) and are not part of the official Matter certification program. However, the devices are fully functional and can be used in the ecosystems. The ecosystems usually inform the user about the uncertified status of the device. Please see [Pairing and Usage Information](./docs/ECOSYSTEMS.md##pairing-and-usage-information) for more details.
 
