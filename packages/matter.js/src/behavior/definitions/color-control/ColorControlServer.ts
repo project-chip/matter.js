@@ -1494,6 +1494,7 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         if (oldMode === newMode) {
             return;
         }
+        this.stopAllColorMovement();
         switch (oldMode) {
             case ColorControl.ColorMode.CurrentHueAndCurrentSaturation:
                 switch (newMode) {
@@ -1757,6 +1758,9 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         maxValue: number,
         targetValue?: number,
     ) {
+        if (changeRate === 0) {
+            logger.warn(`Change rate for ${transitionType} is 0, nothing to do.`);
+        }
         let currentValue: number;
         switch (transitionType) {
             case "hue":
