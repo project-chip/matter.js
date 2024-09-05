@@ -387,9 +387,11 @@ export class PairedNode {
                     await this.subscribeAllAttributesAndEvents({ ...options, ignoreInitialTriggers: false });
                     this.setConnectionState(NodeStateInformation.Connected);
                 } catch (error) {
-                    logger.info(`Node ${this.nodeId}: Error resubscribing to all attributes and events`, error);
-                    // TODO resume logic right now retries and discovers for 60s .. prolong this but without command repeating
-                    this.interactionClient = undefined;
+                    logger.info(
+                        `Node ${this.nodeId}: Error resubscribing to all attributes and events. Try to reconnect`,
+                        error,
+                    );
+                    await this.reconnect();
                 }
             },
         });
