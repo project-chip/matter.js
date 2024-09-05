@@ -59,21 +59,27 @@ const logger = Logger.get("PairedNode");
 const STRUCTURE_UPDATE_TIMEOUT_MS = 5_000; // 5 seconds, TODO: Verify if this value makes sense in practice
 
 export enum NodeStateInformation {
-    /** Node is connected and all data is up-to-date. */
+    /**
+     * Node seems active nd last communications were successful and subscription updates were received and all data is
+     * up-to-date.
+     */
     Connected,
 
     /**
-     * Node is disconnected. Data are stale and interactions will most likely return an error. If controller instance
-     * is still active then the device will be reconnected once it is available again.
+     * Node is disconnected. This means that the node was not connected so far or the developer disconnected it by API
+     * call or the node is removed. A real disconnection can not be detected because the main Matter protocol uses UDP.
+     * Data are stale and interactions will most likely return an error.
      */
     Disconnected,
 
-    /** Node is reconnecting. Data are stale. It is yet unknown if the reconnection is successful. */
+    /**
+     * Node is reconnecting. This means that former communications failed, and we are trying to reach the device on
+     * known addresses. Data are stale. It is yet unknown if the reconnection is successful. */
     Reconnecting,
 
     /**
-     * The node could not be connected and the controller is now waiting for a MDNS announcement and tries every 10
-     * minutes to reconnect.
+     * The node seems offline because communication was not possible or is just initialized. The controller is now
+     * waiting for a MDNS announcement and tries every 10 minutes to reconnect.
      */
     WaitingForDeviceDiscovery,
 
@@ -84,7 +90,7 @@ export enum NodeStateInformation {
     StructureChanged,
 
     /**
-     * The node was just Decommissioned.
+     * The node was just Decommissioned. This is a final state.
      */
     Decommissioned,
 }
