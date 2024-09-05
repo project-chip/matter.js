@@ -8,7 +8,7 @@ import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { Status } from "../../cluster/globals/index.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
-import { ImplementationError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
+import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
 import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
 import {
@@ -413,21 +413,23 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     /** Implements a send method with an automatic reconnection mechanism */
     override async send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
         if (this.exchange.channel.closed) {
-            throw new ImplementationError("The exchange channel is closed. Please connect the device first.");
+            throw new RetransmissionLimitReachedError(
+                "The exchange channel is closed. Please connect the device first.",
+            );
         }
         try {
             return await this.exchange.send(messageType, payload, options);
         } catch (error) {
+            RetransmissionLimitReachedError.accept(error);
+
             // When retransmission failed (most likely due to a lost connection or invalid session),
             // try to reconnect if possible and resend the message once
-            if (error instanceof RetransmissionLimitReachedError) {
-                await this.exchange.close();
-                if (await this.exchangeProvider.reconnectChannel()) {
-                    this.exchange = this.exchangeProvider.initiateExchange();
-                    return await this.exchange.send(messageType, payload);
-                }
+            logger.info("Retransmission limit reached, trying to reconnect and resend the message.");
+            await this.exchange.close();
+            if (await this.exchangeProvider.reconnectChannel()) {
+                this.exchange = this.exchangeProvider.initiateExchange();
+                return await this.exchange.send(messageType, payload, options);
             }
-            throw error;
         }
     }
 
