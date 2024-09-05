@@ -48,11 +48,10 @@ export type ExchangeSendOptions = {
     expectAckOnly?: boolean;
 
     /**
-     * Define a minimum Response Timeout. This setting only increases the response timeout! The minimum four
-     * resubmissions are always done regardless of what is specified here. The logic will check if the timeout is
-     * reached after each resubmission, so it is not checked exact at the given timeout.
+     * Defined an expected processing time by the responder for the message. This is used to calculate the final
+     * timeout for responses together with the normal retransmission logic when MRP is used.
      */
-    minimumResponseTimeoutMs?: number;
+    expectedProcessingTimeMs?: number;
 
     /** Allows to specify if the send message requires to be acknowledged by the receiver or not. */
     requiresAck?: boolean;
@@ -81,6 +80,13 @@ const MRP_BACKOFF_THRESHOLD = 1;
 
 /** @see {@link MatterSpecification.v12.Core}, section 4.11.8 */
 const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
+
+/**
+ * Default expected processing time for a messages in milliseconds. The value is derived from kExpectedIMProcessingTime
+ * from chip implementation. This is basically the default used with different names, also kExpectedLowProcessingTime or
+ * kExpectedSigma1ProcessingTime.
+ */
+const DEFAULT_EXPECTED_PROCESSING_TIME_MS = 2_000;
 
 /**
  * Message size overhead of a Matter message:
@@ -312,7 +318,7 @@ export class MessageExchange<ContextT extends SessionContext> {
 
         const {
             expectAckOnly = false,
-            minimumResponseTimeoutMs,
+            expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS,
             requiresAck,
             includeAcknowledgeMessageId,
         } = options ?? {};
@@ -371,11 +377,7 @@ export class MessageExchange<ContextT extends SessionContext> {
             this.#retransmissionTimer = Time.getTimer(
                 "Message retransmission",
                 this.getResubmissionBackOffTime(0),
-                () =>
-                    this.retransmitMessage(
-                        message,
-                        minimumResponseTimeoutMs !== undefined ? Time.nowMs() + minimumResponseTimeoutMs : undefined,
-                    ),
+                () => this.retransmitMessage(message, expectedProcessingTimeMs),
             );
             const { promise, resolver, rejecter } = createPromise<Message>();
             ackPromise = promise;
@@ -420,23 +422,67 @@ export class MessageExchange<ContextT extends SessionContext> {
         return message;
     }
 
-    /** @see {@link MatterSpecification.v10.Core}, section 4.11.2.1 */
-    private getResubmissionBackOffTime(retransmissionCount: number) {
-        const baseInterval = this.session.isPeerActive() ? this.#activeIntervalMs : this.#idleIntervalMs;
+    /**
+     * Calculates the backoff time for a resubmission based on the current retransmission count.
+     * If no session parameters are provided, the parameters of the current session are used.
+     * If session parameters are provided, the method can be used to calculate the maximum backoff time for the other
+     * side of the exchange.
+     *
+     * @see {@link MatterSpecification.v10.Core}, section 4.11.2.1
+     */
+    private getResubmissionBackOffTime(retransmissionCount: number, sessionParameters?: SessionParameters) {
+        const { activeIntervalMs, idleIntervalMs } = sessionParameters ?? {
+            activeIntervalMs: this.#activeIntervalMs,
+            idleIntervalMs: this.#idleIntervalMs,
+        };
+        const baseInterval =
+            sessionParameters !== undefined || this.session.isPeerActive() ? activeIntervalMs : idleIntervalMs;
         return Math.floor(
             MRP_BACKOFF_MARGIN *
                 baseInterval *
                 Math.pow(MRP_BACKOFF_BASE, Math.max(0, retransmissionCount - MRP_BACKOFF_THRESHOLD)) *
-                (1 + Math.random() * MRP_BACKOFF_JITTER),
+                (1 + (sessionParameters !== undefined ? 1 : Math.random()) * MRP_BACKOFF_JITTER),
         );
     }
 
-    private retransmitMessage(message: Message, notTimeoutBeforeTimeMs?: number) {
+    #maximumPeerResponseTime(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS) {
+        // We use the expected processing time and deduct the time we already waited since last resubmission
+        let finalWaitTime = expectedProcessingTimeMs;
+
+        // and then add the time the other side needs for a full resubmission cycle under the assumption we are active
+        for (let i = 0; i < this.#maxTransmissions; i++) {
+            finalWaitTime += this.getResubmissionBackOffTime(i, this.session.context.sessionParameters);
+        }
+
+        // TODO: Also add any network latency buffer, for now lets consider it's included in the max already
+        return finalWaitTime;
+    }
+
+    private retransmitMessage(message: Message, expectedProcessingTimeMs?: number) {
         this.#retransmissionCounter++;
-        if (
-            this.#retransmissionCounter >= this.#maxTransmissions &&
-            (notTimeoutBeforeTimeMs === undefined || Time.nowMs() > notTimeoutBeforeTimeMs)
-        ) {
+        if (this.#retransmissionCounter >= this.#maxTransmissions) {
+            // Ok all 4 resubmissions are done, but we need to wait a bit longer because of processing time and
+            // the resubmissions from the other side
+            if (expectedProcessingTimeMs !== undefined) {
+                // We already have waited after the last message was sent, so deduct this time from the final wait time
+                const finalWaitTime =
+                    this.#maximumPeerResponseTime(expectedProcessingTimeMs) -
+                    (this.#retransmissionTimer?.intervalMs ?? 0);
+                if (finalWaitTime > 0) {
+                    this.#retransmissionCounter--; // We will not resubmit the message again
+                    logger.debug(
+                        `Wait additional ${finalWaitTime}ms for processing time and peer resubmissions after all our resubmissions`,
+                    );
+                    this.#retransmissionTimer = Time.getTimer(
+                        "Message wait time after resubmissions",
+                        finalWaitTime,
+                        () => this.retransmitMessage(message),
+                    ).start();
+                    return;
+                }
+            }
+
+            // All resubmissions done and no expected processing time, close directly
             if (this.#sentMessageToAck !== undefined && this.#sentMessageAckFailure !== undefined) {
                 this.#receivedMessageToAck = undefined;
                 this.#sentMessageAckFailure(new RetransmissionLimitReachedError());
@@ -464,7 +510,7 @@ export class MessageExchange<ContextT extends SessionContext> {
             .send(message)
             .then(() => {
                 this.#retransmissionTimer = Time.getTimer("Message retransmission", resubmissionBackoffTime, () =>
-                    this.retransmitMessage(message, notTimeoutBeforeTimeMs),
+                    this.retransmitMessage(message, expectedProcessingTimeMs),
                 ).start();
             })
             .catch(error => {
