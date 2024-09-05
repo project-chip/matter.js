@@ -9,6 +9,15 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   Matter-Core functionality:
+    -   Enhancement: Added an "expected processing time" for interactions to be executed by the peer
+    -   Enhancement: Added additional wait time after last resubmission was done to allow a full resubmission cycle from the peer
+    -   Enhancement: Optimized PASE/CASE message timing comparable to chip sdk (expects 30s processing time for crypto related calls)
+-   matter.js New API:
+    -   Fix: Optimized some special cases in the ColorControl cluster default implementation
+
 ## 0.10.0 (2024-08-31)
 
 -   IMPORTANT: This release upgrades Matter support from Matter 1.1 to the latest release, Matter 1.3.0.1. This includes BREAKING CHANGES in a number of areas due to specification changes and some improvements in how we define datatypes. For the most part these changes are transparent because they involve low-level APIs, implicit type names, or Matter features that were never adopted elsewhere. However, some small code changes may be necessary depending on how you use Matter.js.

@@ -5,7 +5,7 @@
  */
 
 import { NodeId } from "@project-chip/matter.js/datatype";
-import { SessionManager } from "@project-chip/matter.js/session";
+import { SessionManager, SessionParameters } from "@project-chip/matter.js/session";
 import { StorageBackendMemory, StorageContext } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
@@ -22,7 +22,10 @@ describe("SessionManager", () => {
             storage = new StorageBackendMemory();
             storageContext = new StorageContext(storage, ["context"]);
 
-            sessionManager = new SessionManager({}, storageContext);
+            sessionManager = new SessionManager(
+                { sessionParameters: {} as SessionParameters, handleResubmissionStarted: () => {} },
+                storageContext,
+            );
         });
 
         it("next number is increasing", async () => {

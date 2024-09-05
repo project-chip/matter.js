@@ -17,6 +17,7 @@ import {
     RetransmissionLimitReachedError,
     UnexpectedMessageError,
 } from "../../protocol/MessageExchange.js";
+import { SessionContext } from "../../session/Session.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { ByteArray } from "../../util/ByteArray.js";
@@ -70,7 +71,7 @@ export type WriteResponse = TypeFromSchema<typeof TlvWriteResponse>;
 
 const logger = Logger.get("InteractionMessenger");
 
-class InteractionMessenger<ContextT> {
+class InteractionMessenger<ContextT extends SessionContext> {
     constructor(protected exchange: MessageExchange<ContextT>) {}
 
     send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
@@ -84,13 +85,13 @@ class InteractionMessenger<ContextT> {
         );
     }
 
-    async waitForSuccess() {
+    async waitForSuccess(expectedProcessingTimeMs?: number) {
         // If the status is not Success, this would throw an Error.
-        await this.nextMessage(MessageType.StatusResponse);
+        await this.nextMessage(MessageType.StatusResponse, expectedProcessingTimeMs);
     }
 
-    async nextMessage(expectedMessageType?: number) {
-        const message = await this.exchange.nextMessage();
+    async nextMessage(expectedMessageType?: number, expectedProcessingTimeMs?: number) {
+        const message = await this.exchange.nextMessage(expectedProcessingTimeMs);
         const messageType = message.payloadHeader.messageType;
         this.throwIfErrorStatusMessage(message);
         if (expectedMessageType !== undefined && messageType !== expectedMessageType) {
@@ -462,13 +463,13 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         };
     }
 
-    async sendInvokeCommand(invokeRequest: InvokeRequest, minimumResponseTimeoutMs?: number) {
+    async sendInvokeCommand(invokeRequest: InvokeRequest, expectedProcessingTimeMs?: number) {
         if (invokeRequest.suppressResponse) {
             await this.requestWithSuppressedResponse(
                 MessageType.InvokeRequest,
                 TlvInvokeRequest,
                 invokeRequest,
-                minimumResponseTimeoutMs,
+                expectedProcessingTimeMs,
             );
         } else {
             return await this.request(
@@ -477,7 +478,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
                 MessageType.InvokeResponse,
                 TlvInvokeResponse,
                 invokeRequest,
-                minimumResponseTimeoutMs,
+                expectedProcessingTimeMs,
             );
         }
     }
@@ -507,11 +508,11 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         requestMessageType: number,
         requestSchema: TlvSchema<RequestT>,
         request: RequestT,
-        minimumResponseTimeoutMs?: number,
+        expectedProcessingTimeMs?: number,
     ): Promise<void> {
         await this.send(requestMessageType, requestSchema.encode(request), {
             expectAckOnly: true,
-            minimumResponseTimeoutMs,
+            expectedProcessingTimeMs,
         });
     }
 
@@ -521,13 +522,13 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         responseMessageType: number,
         responseSchema: TlvSchema<ResponseT>,
         request: RequestT,
-        minimumResponseTimeoutMs?: number,
+        expectedProcessingTimeMs?: number,
     ): Promise<ResponseT> {
         await this.send(requestMessageType, requestSchema.encode(request), {
             expectAckOnly: false,
-            minimumResponseTimeoutMs,
+            expectedProcessingTimeMs,
         });
-        const responseMessage = await this.nextMessage(responseMessageType);
+        const responseMessage = await this.nextMessage(responseMessageType, expectedProcessingTimeMs);
         return responseSchema.decode(responseMessage.payload);
     }
 }

@@ -7,7 +7,10 @@
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { MessageType } from "../../protocol/securechannel/SecureChannelMessages.js";
-import { SecureChannelMessenger } from "../../protocol/securechannel/SecureChannelMessenger.js";
+import {
+    DEFAULT_NORMAL_PROCESSING_TIME_MS,
+    SecureChannelMessenger,
+} from "../../protocol/securechannel/SecureChannelMessenger.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import {
@@ -29,12 +32,18 @@ type PasePake3 = TypeFromSchema<typeof TlvPasePake3>;
 
 export class PaseServerMessenger extends SecureChannelMessenger<MatterDevice> {
     async readPbkdfParamRequest() {
-        const { payload } = await this.nextMessage("PASE PbkdfParamRequest", MessageType.PbkdfParamRequest);
+        const { payload } = await this.nextMessage(
+            "PASE PbkdfParamRequest",
+            MessageType.PbkdfParamRequest,
+            DEFAULT_NORMAL_PROCESSING_TIME_MS,
+        );
         return { requestPayload: payload, request: TlvPbkdfParamRequest.decode(payload) };
     }
 
     async sendPbkdfParamResponse(response: PbkdfParamResponse) {
-        return this.send(response, MessageType.PbkdfParamResponse, TlvPbkdfParamResponse);
+        return this.send(response, MessageType.PbkdfParamResponse, TlvPbkdfParamResponse, {
+            expectedProcessingTimeMs: DEFAULT_NORMAL_PROCESSING_TIME_MS,
+        });
     }
 
     readPasePake1() {
@@ -52,11 +61,17 @@ export class PaseServerMessenger extends SecureChannelMessenger<MatterDevice> {
 
 export class PaseClientMessenger extends SecureChannelMessenger<MatterController> {
     sendPbkdfParamRequest(request: PbkdfParamRequest) {
-        return this.send(request, MessageType.PbkdfParamRequest, TlvPbkdfParamRequest);
+        return this.send(request, MessageType.PbkdfParamRequest, TlvPbkdfParamRequest, {
+            expectedProcessingTimeMs: DEFAULT_NORMAL_PROCESSING_TIME_MS,
+        });
     }
 
     async readPbkdfParamResponse() {
-        const { payload } = await this.nextMessage("PASE PbkdfParamResponse", MessageType.PbkdfParamResponse);
+        const { payload } = await this.nextMessage(
+            "PASE PbkdfParamResponse",
+            MessageType.PbkdfParamResponse,
+            DEFAULT_NORMAL_PROCESSING_TIME_MS,
+        );
         return { responsePayload: payload, response: TlvPbkdfParamResponse.decode(payload) };
     }
 

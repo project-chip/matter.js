@@ -57,7 +57,15 @@ export interface SessionParameters {
 
 export type SessionParameterOptions = Partial<SessionParameters>;
 
-export abstract class Session<T> {
+export interface SessionContext {
+    /** Own session parameters. */
+    sessionParameters: SessionParameters;
+
+    /** This method is called when a message is resubmitted the first time and can handle announcements or discoveries. */
+    handleResubmissionStarted(nodeId?: NodeId): void;
+}
+
+export abstract class Session<T extends SessionContext> {
     abstract get name(): string;
     abstract get closingAfterExchangeFinished(): boolean;
     timestamp = Time.nowMs();
@@ -130,6 +138,9 @@ export abstract class Session<T> {
         this.messageReceptionState.updateMessageCounter(messageCounter);
     }
 
+    /**
+     * The peer's session parameters.
+     */
     get parameters(): SessionParameters {
         const {
             idleIntervalMs,
