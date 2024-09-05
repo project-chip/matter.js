@@ -17,6 +17,7 @@ import {
     RetransmissionLimitReachedError,
     UnexpectedMessageError,
 } from "../../protocol/MessageExchange.js";
+import { SessionContext } from "../../session/Session.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { ByteArray } from "../../util/ByteArray.js";
@@ -70,7 +71,7 @@ export type WriteResponse = TypeFromSchema<typeof TlvWriteResponse>;
 
 const logger = Logger.get("InteractionMessenger");
 
-class InteractionMessenger<ContextT> {
+class InteractionMessenger<ContextT extends SessionContext> {
     constructor(protected exchange: MessageExchange<ContextT>) {}
 
     send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {

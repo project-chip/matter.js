@@ -7,6 +7,7 @@
 import { Message } from "../../codec/MessageCodec.js";
 import { MatterError, UnexpectedDataError } from "../../common/MatterError.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
+import { SessionContext } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import {
     GeneralStatusCode,
@@ -27,7 +28,7 @@ export class ChannelStatusResponseError extends MatterError {
     }
 }
 
-export class SecureChannelMessenger<ContextT> {
+export class SecureChannelMessenger<ContextT extends SessionContext> {
     constructor(protected readonly exchange: MessageExchange<ContextT>) {}
 
     async nextMessage(expectedMessageInfo: string, expectedMessageType?: number) {

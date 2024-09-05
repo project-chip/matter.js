@@ -50,6 +50,7 @@ import {
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,
     SESSION_IDLE_INTERVAL_MS,
+    SessionContext,
     SessionParameters,
 } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
@@ -101,7 +102,7 @@ const logger = Logger.get("MatterController");
  */
 export class PairRetransmissionLimitReachedError extends RetransmissionLimitReachedError {}
 
-export class MatterController {
+export class MatterController implements SessionContext {
     public static async create(options: {
         sessionStorage: StorageContext;
         rootCertificateStorage: StorageContext;
@@ -346,7 +347,7 @@ export class MatterController {
         return this.fabric.toStorageObject();
     }
 
-    /** Returns our default session parameters for us as a controller. */
+    /** Our own client/controller session parameters. */
     get sessionParameters(): SessionParameters {
         return {
             idleIntervalMs: SESSION_IDLE_INTERVAL_MS,

@@ -15,6 +15,7 @@ import {
     SESSION_ACTIVE_THRESHOLD_MS,
     SESSION_IDLE_INTERVAL_MS,
     Session,
+    SessionContext,
 } from "../session/Session.js";
 import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -89,8 +90,11 @@ const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
  */
 export const MATTER_MESSAGE_OVERHEAD = 26 + 12 + CRYPTO_AEAD_MIC_LENGTH_BYTES;
 
-export class MessageExchange<ContextT> {
-    static fromInitialMessage<ContextT>(channel: MessageChannel<ContextT>, initialMessage: Message) {
+export class MessageExchange<ContextT extends SessionContext> {
+    static fromInitialMessage<ContextT extends SessionContext>(
+        channel: MessageChannel<ContextT>,
+        initialMessage: Message,
+    ) {
         const { session } = channel;
         return new MessageExchange<ContextT>(
             session,
@@ -104,7 +108,11 @@ export class MessageExchange<ContextT> {
         );
     }
 
-    static initiate<ContextT>(channel: MessageChannel<ContextT>, exchangeId: number, protocolId: number) {
+    static initiate<ContextT extends SessionContext>(
+        channel: MessageChannel<ContextT>,
+        exchangeId: number,
+        protocolId: number,
+    ) {
         const { session } = channel;
         return new MessageExchange(
             session,

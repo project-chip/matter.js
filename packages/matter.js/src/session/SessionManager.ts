@@ -27,6 +27,7 @@ import {
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,
     SESSION_IDLE_INTERVAL_MS,
+    SessionContext,
     SessionParameterOptions,
     SessionParameters,
 } from "./Session.js";
@@ -62,7 +63,7 @@ type ResumptionStorageRecord = {
     caseAuthenticatedTags?: CaseAuthenticatedTag[];
 };
 
-export class SessionManager<ContextT> {
+export class SessionManager<ContextT extends SessionContext> {
     readonly #insecureSessions = new Map<NodeId, InsecureSession<ContextT>>();
     readonly #sessions = new BasicSet<SecureSession<ContextT>>();
     #nextSessionId = Crypto.getRandomUInt16();

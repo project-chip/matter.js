@@ -5,9 +5,10 @@
  */
 
 import { Message } from "../codec/MessageCodec.js";
+import { SessionContext } from "../session/Session.js";
 import { MessageExchange } from "./MessageExchange.js";
 
-export interface ProtocolHandler<ContextT> {
+export interface ProtocolHandler<ContextT extends SessionContext> {
     getId(): number;
     onNewExchange(exchange: MessageExchange<ContextT>, message: Message): Promise<void>;
     close(): Promise<void>;
