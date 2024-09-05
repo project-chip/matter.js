@@ -235,6 +235,9 @@ export class PairedNode {
     /** Ensure that the node is connected by creating a new InteractionClient if needed. */
     private async ensureConnection() {
         if (this.interactionClient !== undefined) return this.interactionClient;
+        if (this.connectionState === NodeStateInformation.Connected) {
+            this.setConnectionState(NodeStateInformation.Reconnecting);
+        }
         this.interactionClient = await this.reconnectInteractionClient();
         return this.interactionClient;
     }
@@ -379,8 +382,10 @@ export class PairedNode {
             },
             updateTimeoutHandler: async () => {
                 logger.info(`Node ${this.nodeId}: Subscription update not received ...`);
+                this.setConnectionState(NodeStateInformation.Reconnecting);
                 try {
                     await this.subscribeAllAttributesAndEvents({ ...options, ignoreInitialTriggers: false });
+                    this.setConnectionState(NodeStateInformation.Connected);
                 } catch (error) {
                     logger.info(`Node ${this.nodeId}: Error resubscribing to all attributes and events`, error);
                     // TODO resume logic right now retries and discovers for 60s .. prolong this but without command repeating
