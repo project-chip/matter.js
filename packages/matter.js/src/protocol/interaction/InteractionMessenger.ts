@@ -364,13 +364,32 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 }
 
 export class IncomingInteractionClientMessenger extends InteractionMessenger<MatterController> {
+    async waitFor(messageType: number, timeoutMs?: number) {
+        const message = await this.nextMessage(timeoutMs);
+        const {
+            payloadHeader: { messageType: receivedMessageType },
+        } = message;
+        if (receivedMessageType !== messageType) {
+            if (receivedMessageType === MessageType.StatusResponse) {
+                const statusCode = TlvStatusResponse.decode(message.payload).status;
+                throw new StatusResponseError(`Received status response ${statusCode}`, statusCode);
+            }
+            throw new MatterFlowError(
+                `Received unexpected message type ${receivedMessageType.toString(16)}. Expected ${messageType.toString(
+                    16,
+                )}`,
+            );
+        }
+        return message;
+    }
+
     async readDataReports(sendFinalAckMessage = true): Promise<DataReport> {
         let subscriptionId: number | undefined;
         const attributeValues: TypeFromSchema<typeof TlvAttributeReport>[] = [];
         const eventValues: TypeFromSchema<typeof TlvEventReport>[] = [];
 
         while (true) {
-            const dataReportMessage = await this.exchange.waitFor(MessageType.ReportData);
+            const dataReportMessage = await this.waitFor(MessageType.ReportData);
             const report = TlvDataReport.decode(dataReportMessage.payload);
             if (subscriptionId === undefined && report.subscriptionId !== undefined) {
                 subscriptionId = report.subscriptionId;
