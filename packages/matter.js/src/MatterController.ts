@@ -686,6 +686,10 @@ export class MatterController implements SessionContext {
         await this.fabricStorage?.set("fabric", this.fabric.toStorageObject());
     }
 
+    handleResubmissionStarted(_peerNodeId: NodeId) {
+        // TODO discover the device again
+    }
+
     private async reconnectLastKnownAddress(
         peerNodeId: NodeId,
         operationalAddress: ServerAddressIp,

@@ -453,7 +453,7 @@ export class MessageExchange<ContextT extends SessionContext> {
         this.session.notifyActivity(false);
 
         if (this.#retransmissionCounter === 1) {
-            // this.session.context.announce(); // TODO: announce
+            this.session.context.handleResubmissionStarted(this.session.nodeId);
         }
         const resubmissionBackoffTime = this.getResubmissionBackOffTime(this.#retransmissionCounter);
         logger.debug(

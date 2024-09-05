@@ -334,6 +334,11 @@ export class MatterDevice implements SessionContext {
         }
     }
 
+    handleResubmissionStarted(nodeId: NodeId) {
+        logger.debug(`Resubmission started, re-announce node ${nodeId}`);
+        this.announce(true).catch(error => logger.warn("Error sending announcement:", error));
+    }
+
     async announce(announceOnce = false) {
         if (!announceOnce) {
             // Stop announcement if duration is reached
