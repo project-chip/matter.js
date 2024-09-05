@@ -398,20 +398,6 @@ export class MessageExchange<ContextT> {
         return this.#messagesQueue.read();
     }
 
-    async waitFor(messageType: number, timeoutMs = 180_000) {
-        const message = await this.#messagesQueue.read(timeoutMs);
-        const {
-            payloadHeader: { messageType: receivedMessageType },
-        } = message;
-        if (receivedMessageType !== messageType)
-            throw new MatterFlowError(
-                `Received unexpected message type ${receivedMessageType.toString(16)}. Expected ${messageType.toString(
-                    16,
-                )}`,
-            );
-        return message;
-    }
-
     /** @see {@link MatterSpecification.v10.Core}, section 4.11.2.1 */
     private getResubmissionBackOffTime(retransmissionCount: number) {
         const baseInterval = this.session.isPeerActive() ? this.#activeIntervalMs : this.#idleIntervalMs;
