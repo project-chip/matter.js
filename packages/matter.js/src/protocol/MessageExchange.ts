@@ -16,6 +16,7 @@ import {
     SESSION_IDLE_INTERVAL_MS,
     Session,
     SessionContext,
+    SessionParameters,
 } from "../session/Session.js";
 import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -87,6 +88,12 @@ const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
  * kExpectedSigma1ProcessingTime.
  */
 const DEFAULT_EXPECTED_PROCESSING_TIME_MS = 2_000;
+
+/**
+ * The buffer time in milliseconds to add to the peer response time to also consider network delays and other factors.
+ * TODO: This is a pure guess and should be adjusted in the future.
+ */
+const PEER_RESPONSE_TIME_BUFFER_MS = 5_000;
 
 /**
  * Message size overhead of a Matter message:
@@ -404,8 +411,31 @@ export class MessageExchange<ContextT extends SessionContext> {
         }
     }
 
-    nextMessage() {
-        return this.#messagesQueue.read();
+    nextMessage(expectedProcessingTimeMs?: number) {
+        let timeout: number;
+        switch (this.channel.type) {
+            case "tcp":
+                // TCP uses 30s timeout according to chip sdk implementation, so do the same
+                timeout = 30_000;
+                break;
+            case "udp":
+                // UDP normally uses MRP, if not we have Group communication which normally have no responses
+                if (!this.#useMRP) {
+                    throw new MatterFlowError("No response expected for this message exchange because UDP and no MRP.");
+                }
+                timeout = this.#maximumPeerResponseTime(expectedProcessingTimeMs);
+                break;
+            case "ble":
+                // chip sdk uses BTP_ACK_TIMEOUT_MS which is wrong in my eyes, so we use static 30s as like TCP here
+                timeout = 30_000;
+                break;
+            default:
+                throw new MatterFlowError(
+                    `Can not calculate expected timeout for unknown channel type: ${this.channel.type}`,
+                );
+        }
+        timeout += PEER_RESPONSE_TIME_BUFFER_MS;
+        return this.#messagesQueue.read(timeout);
     }
 
     async waitFor(messageType: number, timeoutMs = 180_000) {
