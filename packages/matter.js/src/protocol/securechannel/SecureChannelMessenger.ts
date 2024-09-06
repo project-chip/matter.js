@@ -6,7 +6,8 @@
 
 import { Message } from "../../codec/MessageCodec.js";
 import { MatterError, UnexpectedDataError } from "../../common/MatterError.js";
-import { MessageExchange } from "../../protocol/MessageExchange.js";
+import { ExchangeSendOptions, MessageExchange } from "../../protocol/MessageExchange.js";
+import { SessionContext } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import {
     GeneralStatusCode,
@@ -27,11 +28,25 @@ export class ChannelStatusResponseError extends MatterError {
     }
 }
 
-export class SecureChannelMessenger<ContextT> {
+/** This value is used by chip SDK when performance wise heavy crypto operations are expected. */
+export const EXPECTED_CRYPTO_PROCESSING_TIME_MS = 30_000;
+
+/** This value is used by chip SDK when normal processing time is expected. */
+export const DEFAULT_NORMAL_PROCESSING_TIME_MS = 2_000;
+
+export class SecureChannelMessenger<ContextT extends SessionContext> {
     constructor(protected readonly exchange: MessageExchange<ContextT>) {}
 
-    async nextMessage(expectedMessageInfo: string, expectedMessageType?: number) {
-        const message = await this.exchange.nextMessage();
+    /**
+     * Waits for the next message and returns it.
+     * When no expectedProcessingTimeMs is provided, the default value of EXPECTED_CRYPTO_PROCESSING_TIME_MS is used.
+     */
+    async nextMessage(
+        expectedMessageInfo: string,
+        expectedMessageType?: number,
+        expectedProcessingTimeMs = EXPECTED_CRYPTO_PROCESSING_TIME_MS,
+    ) {
+        const message = await this.exchange.nextMessage(expectedProcessingTimeMs);
         const messageType = message.payloadHeader.messageType;
         this.throwIfErrorStatusReport(message, expectedMessageInfo);
         if (expectedMessageType !== undefined && messageType !== expectedMessageType)
@@ -41,18 +56,42 @@ export class SecureChannelMessenger<ContextT> {
         return message;
     }
 
-    async nextMessageDecoded<T>(expectedMessageType: number, schema: TlvSchema<T>, expectedMessageInfo: string) {
-        return schema.decode((await this.nextMessage(expectedMessageInfo, expectedMessageType)).payload);
+    /**
+     * Waits for the next message and decodes it.
+     * When no expectedProcessingTimeMs is provided, the default value of EXPECTED_CRYPTO_PROCESSING_TIME_MS is used.
+     */
+    async nextMessageDecoded<T>(
+        expectedMessageType: number,
+        schema: TlvSchema<T>,
+        expectedMessageInfo: string,
+        expectedProcessingTimeMs = EXPECTED_CRYPTO_PROCESSING_TIME_MS,
+    ) {
+        return schema.decode(
+            (await this.nextMessage(expectedMessageInfo, expectedMessageType, expectedProcessingTimeMs)).payload,
+        );
     }
 
-    async waitForSuccess(expectedMessageInfo: string) {
+    /**
+     * Waits for the next message and returns it.
+     * When no expectedProcessingTimeMs is provided, the default value of EXPECTED_CRYPTO_PROCESSING_TIME_MS is used.
+     */
+    async waitForSuccess(expectedMessageInfo: string, expectedProcessingTimeMs = EXPECTED_CRYPTO_PROCESSING_TIME_MS) {
         // If the status is not Success, this would throw an Error.
-        await this.nextMessage(expectedMessageInfo, MessageType.StatusReport);
+        await this.nextMessage(expectedMessageInfo, MessageType.StatusReport, expectedProcessingTimeMs);
     }
 
-    async send<T>(message: T, type: number, schema: TlvSchema<T>) {
+    /**
+     * Sends a message of the given type with the given payload.
+     * If no ExchangeSendOptions are provided, the expectedProcessingTimeMs will be set to
+     * EXPECTED_CRYPTO_PROCESSING_TIME_MS.
+     */
+    async send<T>(message: T, type: number, schema: TlvSchema<T>, options?: ExchangeSendOptions) {
+        options = {
+            ...options,
+            expectedProcessingTimeMs: options?.expectedProcessingTimeMs ?? EXPECTED_CRYPTO_PROCESSING_TIME_MS,
+        };
         const payload = schema.encode(message);
-        await this.exchange.send(type, payload);
+        await this.exchange.send(type, payload, options);
         return payload;
     }
 

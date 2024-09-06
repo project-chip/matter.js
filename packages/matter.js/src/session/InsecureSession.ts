@@ -12,10 +12,10 @@ import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateUnencryptedWithRollover } from "../protocol/MessageReceptionState.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { NoAssociatedFabricError } from "./SecureSession.js";
-import { Session, SessionParameterOptions } from "./Session.js";
+import { Session, SessionContext, SessionParameterOptions } from "./Session.js";
 import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 
-export class InsecureSession<T> extends Session<T> {
+export class InsecureSession<T extends SessionContext> extends Session<T> {
     readonly #initiatorNodeId: NodeId;
     readonly closingAfterExchangeFinished = false;
     readonly #context: T;

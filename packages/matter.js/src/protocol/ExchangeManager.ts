@@ -16,7 +16,7 @@ import { Logger } from "../log/Logger.js";
 import { UdpInterface } from "../net/UdpInterface.js";
 import { INTERACTION_PROTOCOL_ID } from "../protocol/interaction/InteractionServer.js";
 import { SecureSession } from "../session/SecureSession.js";
-import { Session } from "../session/Session.js";
+import { Session, SessionContext } from "../session/Session.js";
 import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { ChannelManager } from "./ChannelManager.js";
@@ -30,7 +30,7 @@ const logger = Logger.get("ExchangeManager");
 
 export class ChannelNotConnectedError extends MatterError {}
 
-export class MessageChannel<ContextT> implements Channel<Message> {
+export class MessageChannel<ContextT extends SessionContext> implements Channel<Message> {
     public closed = false;
     #closeCallback?: () => Promise<void>;
 
@@ -90,7 +90,7 @@ export class MessageChannel<ContextT> implements Channel<Message> {
     }
 }
 
-export class ExchangeManager<ContextT> {
+export class ExchangeManager<ContextT extends SessionContext> {
     private readonly exchangeCounter = new ExchangeCounter();
     private readonly exchanges = new Map<number, MessageExchange<ContextT>>();
     private readonly protocols = new Map<number, ProtocolHandler<ContextT>>();

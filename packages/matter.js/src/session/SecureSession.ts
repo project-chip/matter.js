@@ -18,7 +18,7 @@ import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusC
 import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { Session, SessionParameterOptions } from "./Session.js";
+import { Session, SessionContext, SessionParameterOptions } from "./Session.js";
 
 const logger = Logger.get("SecureSession");
 
@@ -31,7 +31,7 @@ export class NoAssociatedFabricError extends StatusResponseError {
     }
 }
 
-export class SecureSession<T> extends Session<T> {
+export class SecureSession<T extends SessionContext> extends Session<T> {
     readonly #subscriptions = new Array<SubscriptionHandler>();
     #closingAfterExchangeFinished = false;
     #sendCloseMessageWhenClosing = true;
@@ -47,7 +47,7 @@ export class SecureSession<T> extends Session<T> {
     #caseAuthenticatedTags: CaseAuthenticatedTag[];
     readonly supportsMRP = true;
 
-    static async create<T>(args: {
+    static async create<T extends SessionContext>(args: {
         context: T;
         id: number;
         fabric: Fabric | undefined;
@@ -332,7 +332,10 @@ export class SecureSession<T> extends Session<T> {
     }
 }
 
-export function assertSecureSession<T>(session: Session<T>, errorText?: string): asserts session is SecureSession<T> {
+export function assertSecureSession<T extends SessionContext>(
+    session: Session<T>,
+    errorText?: string,
+): asserts session is SecureSession<T> {
     if (!session.isSecure) {
         throw new MatterFlowError(errorText ?? "Insecure session in secure context");
     }

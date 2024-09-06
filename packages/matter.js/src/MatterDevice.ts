@@ -45,6 +45,7 @@ import {
     SESSION_ACTIVE_THRESHOLD_MS,
     SESSION_IDLE_INTERVAL_MS,
     Session,
+    SessionContext,
     SessionParameters,
 } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
@@ -57,7 +58,7 @@ import { Mutex } from "./util/Mutex.js";
 
 const logger = Logger.get("MatterDevice");
 
-export class MatterDevice {
+export class MatterDevice implements SessionContext {
     private readonly scanners = new Array<Scanner>();
     private readonly broadcasters = new Array<InstanceBroadcaster>();
     private readonly transportInterfaces = new Array<TransportInterface | NetInterface>();
@@ -73,6 +74,8 @@ export class MatterDevice {
     readonly #fabricManager: FabricManager;
     readonly #sessionManager: SessionManager<MatterDevice>;
     #failsafeContext?: FailsafeContext;
+
+    /** The own server session parameters. */
     readonly sessionParameters: SessionParameters;
 
     // Currently we do not put much effort into synchronizing announcements as it probably isn't really necessary.  But
@@ -329,6 +332,11 @@ export class MatterDevice {
         for (const broadcaster of this.broadcasters) {
             await broadcaster.expireFabricAnnouncement();
         }
+    }
+
+    handleResubmissionStarted(nodeId: NodeId) {
+        logger.debug(`Resubmission started, re-announce node ${nodeId}`);
+        this.announce(true).catch(error => logger.warn("Error sending announcement:", error));
     }
 
     async announce(announceOnce = false) {
