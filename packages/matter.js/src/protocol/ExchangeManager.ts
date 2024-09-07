@@ -233,6 +233,16 @@ export class ExchangeManager<ContextT extends SessionContext> {
             const protocolHandler = this.protocols.get(message.payloadHeader.protocolId);
 
             if (protocolHandler !== undefined && message.payloadHeader.isInitiatorMessage && !isDuplicate) {
+                if (
+                    message.payloadHeader.messageType == MessageType.StandaloneAck &&
+                    !message.payloadHeader.requiresAck
+                ) {
+                    logger.debug(
+                        `Ignoring unsolicited standalone ack message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId}.`,
+                    );
+                    return;
+                }
+
                 const exchange = MessageExchange.fromInitialMessage(
                     await this.channelManager.getOrCreateChannel(channel, session),
                     message,
