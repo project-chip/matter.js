@@ -216,7 +216,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
             } else {
                 logger.error(error);
             }
-            if (!isGroupSession) {
+            if (!isGroupSession && !(error instanceof RetransmissionLimitReachedError)) {
                 await this.sendStatus(errorStatusCode);
             }
         } finally {
