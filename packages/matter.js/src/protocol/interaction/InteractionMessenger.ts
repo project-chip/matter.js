@@ -213,10 +213,12 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
                 errorStatusCode = error.code;
+            } else if (error instanceof RetransmissionLimitReachedError) {
+                logger.info(error);
             } else {
-                logger.error(error);
+                logger.warn(error);
             }
-            if (!isGroupSession) {
+            if (!isGroupSession && !(error instanceof RetransmissionLimitReachedError)) {
                 await this.sendStatus(errorStatusCode);
             }
         } finally {
