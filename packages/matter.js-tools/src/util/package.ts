@@ -5,7 +5,7 @@
  */
 
 import { readFileSync, statSync } from "fs";
-import { readdir, stat } from "fs/promises";
+import { readdir, stat, writeFile } from "fs/promises";
 import { dirname, relative, resolve } from "path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
 import { Progress } from "./progress.js";
@@ -202,6 +202,10 @@ export class Package {
 
         const pkg = new Package({ path: resolve(resolveIn, "node_modules", subdir) });
         return pkg.resolveExport(segments.length ? segments.join("/") : ".", type);
+    }
+
+    async save() {
+        await writeFile(this.resolve("package.json"), JSON.stringify(this.json, undefined, 4));
     }
 }
 

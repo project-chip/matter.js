@@ -13,7 +13,11 @@ const SPINNER = "◐◓◑◒"; //"⡜⠔⠢⢣"; //["⚫︎", "⚪︎"]; "⡈�
 const SPINNER_INTERVAL = 100;
 
 function packageIdentity(pkg: Package) {
-    return `${colors.bold(pkg.json.name)}@${pkg.json.version}`;
+    let identity = colors.bold(pkg.json.name);
+    if (pkg.json.version) {
+        identity = `${identity}@${pkg.json.version}`;
+    }
+    return identity;
 }
 
 /**
