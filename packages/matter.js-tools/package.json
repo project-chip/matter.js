@@ -1,18 +1,20 @@
 {
     "name": "@project-chip/matter.js-tools",
-    "version": "0.10.1",
+    "version": "git",
     "description": "Matter.js tooling",
     "type": "module",
     "scripts": {
         "clean": "node bin/build.js clean",
         "build": "node bin/build.js",
         "build-clean": "node bin/build.js --clean",
-        "test": "node bin/test.js"
+        "test": "node bin/test.js",
+        "version": "node bin/version.js"
     },
     "bin": {
         "matter-build": "./bin/build.js",
         "matter-test": "./bin/test.js",
-        "matter-run": "./bin/run.js"
+        "matter-run": "./bin/run.js",
+        "matter-version": "./bin/version.js"
     },
     "exports": {
         ".": {
