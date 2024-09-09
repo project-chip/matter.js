@@ -33,7 +33,7 @@
         "embed-examples": "embedme **/README.md"
     },
     "dependencies": {
-        "@noble/curves": "^1.5.0"
+        "@noble/curves": "^1.6.0"
     },
     "devDependencies": {
         "@project-chip/matter.js-tools": "0.10.1",
