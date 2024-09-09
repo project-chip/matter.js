@@ -6,8 +6,8 @@
  */
 
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
-import { createFileLogger } from "@project-chip/matter-node.js/log";
 import { LogFormat, LogLevel, Logger, singleton } from "@project-chip/matter.js-general";
+import { createFileLogger } from "@project-chip/matter.js-nodejs";
 import { Ble } from "@project-chip/matter.js/ble";
 import yargs from "yargs/yargs";
 import { MatterNode } from "./MatterNode.js";

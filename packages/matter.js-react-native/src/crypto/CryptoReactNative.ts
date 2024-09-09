@@ -8,12 +8,8 @@ import { install } from "react-native-quick-crypto";
 
 install(); // Install the react-native crypto module
 
-import {
-    CRYPTO_HASH_ALGORITHM,
-    CryptoDsaEncoding,
-    CryptoNode,
-    CryptoVerifyError,
-} from "@project-chip/matter-node.js/crypto";
+import { CRYPTO_HASH_ALGORITHM, CryptoDsaEncoding, CryptoVerifyError } from "@project-chip/matter.js-general";
+import { CryptoNode } from "@project-chip/matter.js-nodejs";
 import jwk2pem from "jwk-to-pem";
 
 // @ts-expect-error No types but all fine

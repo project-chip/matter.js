@@ -34,7 +34,7 @@
         "typescript": "~5.5.3"
     },
     "dependencies": {
-        "@project-chip/matter-node.js": "*",
+        "@project-chip/matter.js-nodejs": "*",
         "@project-chip/matter.js": "*",
         "@react-native-async-storage/async-storage": "^2.0.0",
         "@react-native-community/netinfo": "^11.3.2",

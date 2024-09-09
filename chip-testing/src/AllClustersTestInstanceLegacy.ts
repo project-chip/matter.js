@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
+import { CommissioningServer, MatterServer } from "@project-chip/matter.js";
 
 import { Storage, StorageManager } from "@project-chip/matter.js-general";
 

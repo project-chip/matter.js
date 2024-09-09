@@ -24,17 +24,14 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import "@project-chip/matter-node.js";
+import { createFileLogger, requireMinNodeVersion } from "@project-chip/matter.js-nodejs";
 
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
-import { GeneralDiagnostics } from "@project-chip/matter-node.js/cluster";
-import { createFileLogger } from "@project-chip/matter-node.js/log";
-import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
 import { LogLevel, Logger, Time, logLevelFromString, singleton } from "@project-chip/matter.js-general";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OnOffServer } from "@project-chip/matter.js/behavior/definitions/on-off";
 import { Ble } from "@project-chip/matter.js/ble";
-import { NetworkCommissioning } from "@project-chip/matter.js/cluster";
+import { GeneralDiagnostics, NetworkCommissioning } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 import { logEndpoint } from "@project-chip/matter.js/device";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";

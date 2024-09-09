@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { getParameter } from "@project-chip/matter-node.js/util";
+import { getParameter } from "@project-chip/matter.js-nodejs";
 import {
     ClusterServer,
     ClusterServerObj,
