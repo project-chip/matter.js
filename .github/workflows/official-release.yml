@@ -81,8 +81,9 @@ jobs:
           result-encoding: string
           script: |
             const semver = require('semver');
+            const fs = require("fs");
 
-            const prevVersion = require(`${process.env.GITHUB_WORKSPACE}/lerna.json`).version;
+            const prevVersion = fs.readFile(`${process.env.GITHUB_WORKSPACE}/version.txt`, "utf8");
 
             const parsed = semver.parse(prevVersion);
 
@@ -125,12 +126,13 @@ jobs:
           git config --global user.email "github-automation@fischer-ka.de"
           git config --global user.name "Github Action"
           
-          git add .
-          git commit -m "v${VERSION}" && npx lerna version ${VERSION} --no-push --exact --ignore-scripts --no-commit-hooks --yes --amend --force-publish || npx lerna version ${VERSION} --exact --no-push --ignore-scripts --no-commit-hooks --yes --force-publish
+          npm run version -- --set ${VERSION}
+          git add version.txt
+          git commit -m "v${VERSION}"
 
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.PR_TOKEN }}
           commit-message: "[OFFICIAL RELEASE] ${{ steps.version.outputs.result }}"
