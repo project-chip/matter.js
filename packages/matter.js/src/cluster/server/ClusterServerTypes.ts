@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Merge, Storage, SupportedStorageTypes } from "@project-chip/matter.js-general";
 import { Message } from "../../codec/MessageCodec.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -15,9 +16,6 @@ import { Fabric } from "../../fabric/Fabric.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { Session } from "../../session/Session.js";
-import { Storage } from "../../storage/Storage.js";
-import { SupportedStorageTypes } from "../../storage/StringifyTools.js";
-import { Merge } from "../../util/Type.js";
 import { ClusterClientObj } from "../client/ClusterClientTypes.js";
 import {
     Attribute,

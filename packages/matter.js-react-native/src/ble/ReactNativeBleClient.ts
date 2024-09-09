@@ -4,10 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, Logger, MatterError } from "@project-chip/matter.js-general";
 import { BLE_MATTER_SERVICE_UUID } from "@project-chip/matter.js/ble";
-import { MatterError } from "@project-chip/matter.js/common";
-import { Logger } from "@project-chip/matter.js/log";
-import { ByteArray } from "@project-chip/matter.js/util";
 import { BleError, BleErrorCode, BleManager, State as BluetoothState, Device } from "react-native-ble-plx";
 
 const logger = Logger.get("ReactNativeBleClient");
@@ -17,11 +15,11 @@ export class BluetoothUnsupportedError extends MatterError {}
 
 export class ReactNativeBleClient {
     private readonly bleManager = new BleManager();
-    private readonly discoveredPeripherals = new Map<string, { peripheral: Device; matterServiceData: ByteArray }>();
+    private readonly discoveredPeripherals = new Map<string, { peripheral: Device; matterServiceData: Uint8Array }>();
     private shouldScan = false;
     private isScanning = false;
     private bleState = BluetoothState.Unknown;
-    private deviceDiscoveredCallback: ((peripheral: Device, manufacturerData: ByteArray) => void) | undefined;
+    private deviceDiscoveredCallback: ((peripheral: Device, manufacturerData: Uint8Array) => void) | undefined;
 
     constructor() {
         // this.bleMnager.setLogLevel(LogLevel.Verbose)
@@ -58,7 +56,7 @@ export class ReactNativeBleClient {
         });
     }
 
-    public setDiscoveryCallback(callback: (peripheral: Device, manufacturerData: ByteArray) => void) {
+    public setDiscoveryCallback(callback: (peripheral: Device, manufacturerData: Uint8Array) => void) {
         this.deviceDiscoveredCallback = callback;
         for (const { peripheral, matterServiceData } of this.discoveredPeripherals.values()) {
             this.deviceDiscoveredCallback(peripheral, matterServiceData);
@@ -118,7 +116,7 @@ export class ReactNativeBleClient {
             logger.info(`Peripheral ${peripheral.id} does not advertise Matter Service ... ignoring`);
             return;
         }
-        const matterServiceData = ByteArray.fromBase64(matterServiceDataBase64);
+        const matterServiceData = Bytes.fromBase64(matterServiceDataBase64);
         if (matterServiceData.length !== 8) {
             logger.info(`Peripheral ${peripheral.id} does not advertise Matter Service ... ignoring`);
             return;

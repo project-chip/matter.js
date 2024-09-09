@@ -10,7 +10,7 @@ import {
     SupportedStorageTypes,
     fromJson,
     toJson,
-} from "@project-chip/matter.js/storage";
+} from "@project-chip/matter.js-general";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export class StorageBackendAsyncStorage extends MaybeAsyncStorage {

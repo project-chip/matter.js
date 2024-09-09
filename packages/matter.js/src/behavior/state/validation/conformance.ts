@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FeatureSet, ValueModel } from "../../../model/index.js";
+import { FeatureSet, ValueModel } from "@project-chip/matter.js-model";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { astToFunction } from "./conformance-compiler.js";
 

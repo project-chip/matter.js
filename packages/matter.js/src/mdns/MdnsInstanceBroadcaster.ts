@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError } from "@project-chip/matter.js-general";
 import {
     CommissionerInstanceData,
     CommissioningModeInstanceData,
     InstanceBroadcaster,
 } from "../common/InstanceBroadcaster.js";
-import { ImplementationError } from "../common/MatterError.js";
 import { Fabric } from "../fabric/Fabric.js";
 import type { MdnsBroadcaster } from "./MdnsBroadcaster.js";
 

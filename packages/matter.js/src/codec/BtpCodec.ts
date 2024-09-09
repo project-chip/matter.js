@@ -4,12 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, DataReader, DataWriter, Endian } from "@project-chip/matter.js-general";
 import { BleError } from "../ble/Ble.js";
 import { BtpProtocolError } from "../ble/BtpSessionHandler.js";
-import { VendorId } from "../datatype/VendorId.js";
-import { ByteArray, Endian } from "../util/ByteArray.js";
-import { DataReader } from "../util/DataReader.js";
-import { DataWriter } from "../util/DataWriter.js";
 
 export interface BtpHandshakeRequest {
     versions: number[];
@@ -27,11 +24,11 @@ export interface BtpPacketPayload {
     ackNumber?: number;
     sequenceNumber: number;
     messageLength?: number;
-    segmentPayload?: ByteArray;
+    segmentPayload?: Uint8Array;
 }
 
 export interface DecodedBtpPacketPayload extends BtpPacketPayload {
-    segmentPayload: ByteArray;
+    segmentPayload: Uint8Array;
 }
 
 export interface BtpHeader {
@@ -69,12 +66,12 @@ export enum BtpOpcode {
 const HANDSHAKE_HEADER = 0b01100101;
 
 export class BtpCodec {
-    static decodeBtpHandshakeRequest(data: ByteArray): BtpHandshakeRequest {
+    static decodeBtpHandshakeRequest(data: Uint8Array): BtpHandshakeRequest {
         const reader = new DataReader(data, Endian.Little);
         return this.decodeHandshakeRequestPayload(reader);
     }
 
-    static decodeBtpPacket(data: ByteArray): DecodedBtpPacket {
+    static decodeBtpPacket(data: Uint8Array): DecodedBtpPacket {
         const reader = new DataReader(data, Endian.Little);
 
         const header = this.decodeBtpPacketHeader(reader);
@@ -85,11 +82,11 @@ export class BtpCodec {
         };
     }
 
-    static encodeBtpPacket({ header, payload }: BtpPacket): ByteArray {
-        return ByteArray.concat(this.encodeBtpPacketHeader(header), this.encodeBtpPacketPayload(header, payload));
+    static encodeBtpPacket({ header, payload }: BtpPacket): Uint8Array {
+        return Bytes.concat(this.encodeBtpPacketHeader(header), this.encodeBtpPacketPayload(header, payload));
     }
 
-    static encodeBtpHandshakeRequest({ versions, attMtu, clientWindowSize }: BtpHandshakeRequest): ByteArray {
+    static encodeBtpHandshakeRequest({ versions, attMtu, clientWindowSize }: BtpHandshakeRequest): Uint8Array {
         const writer = new DataWriter(Endian.Little);
         writer.writeUInt8(HANDSHAKE_HEADER);
         writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
@@ -102,7 +99,7 @@ export class BtpCodec {
         return writer.toByteArray();
     }
 
-    static encodeBtpHandshakeResponse({ version, attMtu, windowSize }: BtpHandshakeResponse): ByteArray {
+    static encodeBtpHandshakeResponse({ version, attMtu, windowSize }: BtpHandshakeResponse): Uint8Array {
         const writer = new DataWriter(Endian.Little);
         writer.writeUInt8(HANDSHAKE_HEADER);
         writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
@@ -128,7 +125,7 @@ export class BtpCodec {
     private static encodeBtpPacketPayload(
         { hasAckNumber, isBeginningSegment, isContinuingSegment, isEndingSegment }: BtpHeader,
         { ackNumber, sequenceNumber, messageLength, segmentPayload }: BtpPacketPayload,
-    ): ByteArray {
+    ): Uint8Array {
         const writer = new DataWriter(Endian.Little);
 
         // Validate Header against Payload fields to make sure they match together
@@ -214,7 +211,7 @@ export class BtpCodec {
         return { versions, attMtu, clientWindowSize };
     }
 
-    static decodeBtpHandshakeResponsePayload(data: ByteArray): BtpHandshakeResponse {
+    static decodeBtpHandshakeResponsePayload(data: Uint8Array): BtpHandshakeResponse {
         const reader = new DataReader(data, Endian.Little);
         const header = reader.readUInt8();
         if (header !== HANDSHAKE_HEADER) {
@@ -262,7 +259,7 @@ export class BtpCodec {
         isEndingSegment,
         isContinuingSegment,
         isBeginningSegment,
-    }: BtpHeader): ByteArray {
+    }: BtpHeader): Uint8Array {
         const writer = new DataWriter(Endian.Little);
 
         if (isHandshakeRequest || hasManagementOpcode) {
@@ -283,7 +280,7 @@ export class BtpCodec {
 
     static encodeBleAdvertisementData(
         discriminator: number,
-        vendorId: VendorId,
+        vendorId: number,
         productId: number,
         hasAdditionalAdvertisementData = false,
     ) {
@@ -302,7 +299,7 @@ export class BtpCodec {
         return writer.toByteArray();
     }
 
-    static decodeBleAdvertisementData(data: ByteArray) {
+    static decodeBleAdvertisementData(data: Uint8Array) {
         const reader = new DataReader(data, Endian.Little);
         if (
             reader.readUInt8() !== 0x02 ||
@@ -322,7 +319,7 @@ export class BtpCodec {
         return { discriminator, vendorId, productId, hasAdditionalAdvertisementData };
     }
 
-    static decodeBleAdvertisementServiceData(data: ByteArray) {
+    static decodeBleAdvertisementServiceData(data: Uint8Array) {
         const reader = new DataReader(data, Endian.Little);
         if (reader.readUInt8() !== 0x00) {
             throw new BleError("Invalid BLE advertisement data");

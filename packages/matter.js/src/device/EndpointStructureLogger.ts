@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic, Logger } from "@project-chip/matter.js-general";
 import { GlobalAttributes } from "../cluster/Cluster.js";
 import { SupportedAttributeClient, UnknownSupportedAttributeClient } from "../cluster/client/AttributeClient.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
@@ -11,8 +12,6 @@ import { SupportedEventClient, UnknownSupportedEventClient } from "../cluster/cl
 import { AnyAttributeServer, FabricScopeError } from "../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { Logger } from "../log/Logger.js";
 
 const logger = Logger.get("EndpointStructureLogger");
 

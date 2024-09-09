@@ -4,13 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, ReadOnlyError } from "../../../common/MatterError.js";
-import { Diagnostic } from "../../../log/Diagnostic.js";
-import { Logger } from "../../../log/Logger.js";
+import {
+    describeList,
+    Diagnostic,
+    ImplementationError,
+    Logger,
+    MaybePromise,
+    Observable,
+    ReadOnlyError,
+} from "@project-chip/matter.js-general";
 import { StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
-import { Observable } from "../../../util/Observable.js";
-import { MaybePromise } from "../../../util/Promises.js";
-import { describeList } from "../../../util/String.js";
 import { FinalizationError, TransactionDestroyedError, TransactionFlowError } from "./Errors.js";
 import type { Participant } from "./Participant.js";
 import type { Resource } from "./Resource.js";

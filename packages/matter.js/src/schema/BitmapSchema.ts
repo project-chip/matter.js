@@ -4,10 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError } from "../common/MatterError.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { capitalize } from "../util/String.js";
-import { Merge } from "../util/Type.js";
+import { capitalize, Merge, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { Schema } from "./Schema.js";
 
 const enum BitRangeType {
@@ -109,7 +106,7 @@ export class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBi
     }
 }
 
-export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, ByteArray> {
+export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, Uint8Array> {
     private readonly byteArrayLength: number;
     private readonly maskOffset: MaskOffsetFromBitSchema<T>;
 
@@ -137,7 +134,7 @@ export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<T
     }
 
     override encodeInternal(value: TypeFromBitSchema<T>) {
-        const result = new ByteArray(this.byteArrayLength);
+        const result = new Uint8Array(this.byteArrayLength);
         for (const name in this.bitSchemas) {
             const { type } = this.bitSchemas[name];
             let { bitOffset, byteOffset } = this.maskOffset[name];
@@ -161,7 +158,7 @@ export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<T
         return result;
     }
 
-    override decodeInternal(bitmap: ByteArray) {
+    override decodeInternal(bitmap: Uint8Array) {
         if (bitmap.length !== this.byteArrayLength)
             throw new UnexpectedDataError(`Unexpected length: ${bitmap.length}. Expected ${this.byteArrayLength}`);
         const result = {} as any;

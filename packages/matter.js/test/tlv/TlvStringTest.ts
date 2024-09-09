@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { ValidationError } from "../../src/common/ValidationError.js";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvByteString, TlvString } from "../../src/tlv/TlvString.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 type TestVector<I, E> = { [testName: string]: { input: I; out: E } };
 
@@ -28,25 +28,25 @@ describe("TlvString", () => {
         it("encodes a string", () => {
             const result = TlvString.encode("test");
 
-            expect(result.toHex()).equal("0c0474657374");
+            expect(Bytes.toHex(result)).equal("0c0474657374");
         });
 
         it("encodes a string that gets utf8 encoded", () => {
             const result = TlvString.encode("testè");
 
-            expect(result.toHex()).equal("0c0674657374c3a8");
+            expect(Bytes.toHex(result)).equal("0c0674657374c3a8");
         });
     });
 
     describe("decode", () => {
         it("decodes a string", () => {
-            const result = TlvString.decode(ByteArray.fromHex("0c0474657374"));
+            const result = TlvString.decode(Bytes.fromHex("0c0474657374"));
 
             expect(result).equal("test");
         });
 
         it("decodes a string that was utf8", () => {
-            const result = TlvString.decode(ByteArray.fromHex("0c0674657374c3a8"));
+            const result = TlvString.decode(Bytes.fromHex("0c0674657374c3a8"));
 
             expect(result).equal("testè");
         });
@@ -84,17 +84,17 @@ describe("TlvString", () => {
 describe("TlvByteString", () => {
     describe("encode", () => {
         it("encodes a byte string", () => {
-            const result = TlvByteString.encode(ByteArray.fromHex("0001"));
+            const result = TlvByteString.encode(Bytes.fromHex("0001"));
 
-            expect(result.toHex()).equal("10020001");
+            expect(Bytes.toHex(result)).equal("10020001");
         });
     });
 
     describe("decode", () => {
         it("decodes a byte string", () => {
-            const result = TlvByteString.decode(ByteArray.fromHex("10020001"));
+            const result = TlvByteString.decode(Bytes.fromHex("10020001"));
 
-            expect(result.toHex()).equal("0001");
+            expect(Bytes.toHex(result)).equal("0001");
         });
     });
 
@@ -104,7 +104,7 @@ describe("TlvByteString", () => {
         for (const testName in validateByteStringTestVector) {
             const { input, out: throwException } = validateByteStringTestVector[testName];
             it(testName, () => {
-                const test = () => BoundedInt.validate(ByteArray.fromHex(input));
+                const test = () => BoundedInt.validate(Bytes.fromHex(input));
                 if (throwException) {
                     expect(test).throw();
                 } else {
@@ -116,7 +116,7 @@ describe("TlvByteString", () => {
 
     describe("validation", () => {
         it("throws an error if the value is not a ByteString", () => {
-            expect(() => TlvByteString.validate(5 as any)).throw(ValidationError, "Expected ByteArray, got number.");
+            expect(() => TlvByteString.validate(5 as any)).throw(ValidationError, "Expected Uint8Array, got number.");
         });
 
         it("throws an error if the value is not a String", () => {

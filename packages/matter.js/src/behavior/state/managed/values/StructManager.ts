@@ -4,12 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../../../../common/MatterError.js";
+import { camelize, GeneratedClass, ImplementationError, isObject } from "@project-chip/matter.js-general";
+import { Access, ElementTag, Metatype, ValueModel } from "@project-chip/matter.js-model";
 import { FabricIndex } from "../../../../datatype/FabricIndex.js";
-import { Access, ElementTag, Metatype, ValueModel } from "../../../../model/index.js";
-import { GeneratedClass } from "../../../../util/GeneratedClass.js";
-import { camelize } from "../../../../util/String.js";
-import { isObject } from "../../../../util/Type.js";
 import { AccessControl } from "../../../AccessControl.js";
 import { PhantomReferenceError, SchemaImplementationError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";

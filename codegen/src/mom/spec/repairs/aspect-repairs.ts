@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Model } from "@project-chip/matter.js/model";
+import { Model } from "@project-chip/matter.js-model";
 
 export function repairConstraint(record: { constraint?: string }) {
     const { constraint } = record;

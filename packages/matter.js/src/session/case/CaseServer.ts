@@ -4,19 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, Crypto, Logger, PublicKey, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { MatterDevice } from "../../MatterDevice.js";
 import { TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
-import { UnexpectedDataError } from "../../common/MatterError.js";
-import { Crypto } from "../../crypto/Crypto.js";
-import { PublicKey } from "../../crypto/Key.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { FabricNotFoundError } from "../../fabric/FabricManager.js";
-import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureChannelMessages.js";
 import { ChannelStatusResponseError } from "../../protocol/securechannel/SecureChannelMessenger.js";
-import { ByteArray } from "../../util/ByteArray.js";
 import {
     KDFSR1_KEY_INFO,
     KDFSR2_INFO,
@@ -88,14 +84,14 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             const { sharedSecret, fabric, peerNodeId, caseAuthenticatedTags } = resumptionRecord;
             const peerResumeKey = await Crypto.hkdf(
                 sharedSecret,
-                ByteArray.concat(peerRandom, peerResumptionId),
+                Bytes.concat(peerRandom, peerResumptionId),
                 KDFSR1_KEY_INFO,
             );
             Crypto.decrypt(peerResumeKey, peerResumeMic, RESUME1_MIC_NONCE);
 
             // All good! Create secure session
             const responderSessionId = await server.getNextAvailableSessionId();
-            const secureSessionSalt = ByteArray.concat(peerRandom, peerResumptionId);
+            const secureSessionSalt = Bytes.concat(peerRandom, peerResumptionId);
             const secureSession = await server.sessionManager.createSecureSession({
                 sessionId: responderSessionId,
                 fabric,
@@ -110,9 +106,9 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             });
 
             // Generate sigma 2 resume
-            const resumeSalt = ByteArray.concat(peerRandom, resumptionId);
+            const resumeSalt = Bytes.concat(peerRandom, resumptionId);
             const resumeKey = await Crypto.hkdf(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
-            const resumeMic = Crypto.encrypt(resumeKey, new ByteArray(0), RESUME2_MIC_NONCE);
+            const resumeMic = Crypto.encrypt(resumeKey, new Uint8Array(0), RESUME2_MIC_NONCE);
             try {
                 await messenger.sendSigma2Resume({
                     resumptionId,
@@ -148,7 +144,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             const { operationalCert: nodeOpCert, intermediateCACert, operationalIdentityProtectionKey } = fabric;
             const { publicKey: responderEcdhPublicKey, sharedSecret } =
                 Crypto.ecdhGeneratePublicKeyAndSecret(peerEcdhPublicKey);
-            const sigma2Salt = ByteArray.concat(
+            const sigma2Salt = Bytes.concat(
                 operationalIdentityProtectionKey,
                 responderRandom,
                 responderEcdhPublicKey,
@@ -183,10 +179,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 sigma3Bytes,
                 sigma3: { encrypted: peerEncrypted },
             } = await messenger.readSigma3();
-            const sigma3Salt = ByteArray.concat(
-                operationalIdentityProtectionKey,
-                Crypto.hash([sigma1Bytes, sigma2Bytes]),
-            );
+            const sigma3Salt = Bytes.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes]));
             const sigma3Key = await Crypto.hkdf(sharedSecret, sigma3Salt, KDFSR3_INFO);
             const peerDecryptedData = Crypto.decrypt(sigma3Key, peerEncrypted, TBE_DATA3_NONCE);
             const {
@@ -215,7 +208,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
             // All good! Create secure session
-            const secureSessionSalt = ByteArray.concat(
+            const secureSessionSalt = Bytes.concat(
                 operationalIdentityProtectionKey,
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );

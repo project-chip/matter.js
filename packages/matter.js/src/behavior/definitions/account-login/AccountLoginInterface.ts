@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MaybePromise } from "../../../util/Promises.js";
+import { MaybePromise } from "@project-chip/matter.js-general";
 import { AccountLogin } from "../../../cluster/definitions/AccountLoginCluster.js";
 
 export namespace AccountLoginInterface {

@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Immutable, Lifecycle, UnsupportedDependencyError } from "@project-chip/matter.js-general";
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
-import { Lifecycle, UnsupportedDependencyError } from "../../../common/Lifecycle.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { FabricManager } from "../../../fabric/FabricManager.js";
 import { Node } from "../../../node/Node.js";
-import { Immutable } from "../../../util/Type.js";
 import { NetworkCommissioningBehavior } from "../network-commissioning/NetworkCommissioningBehavior.js";
 
 /**

@@ -9,7 +9,6 @@
 import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     FabricScopedAttribute,
-    AccessLevel,
     Attribute,
     FixedAttribute,
     Command,
@@ -23,10 +22,11 @@ import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvSubjectId } from "../../datatype/SubjectId.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvUInt32, TlvUInt16, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace IcdManagement {

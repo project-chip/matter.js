@@ -4,15 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    Bytes,
+    Crypto,
+    ec,
+    Logger,
+    PbkdfParameters,
+    Spake2p,
+    UnexpectedDataError,
+} from "@project-chip/matter.js-general";
 import { MatterController } from "../../MatterController.js";
 import { CommissioningOptions } from "../../behavior/system/commissioning/CommissioningOptions.js";
-import { UnexpectedDataError } from "../../common/MatterError.js";
-import { Crypto, ec } from "../../crypto/Crypto.js";
-import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
 import { NodeId } from "../../datatype/NodeId.js";
-import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
-import { ByteArray } from "../../util/ByteArray.js";
 import { DEFAULT_PASSCODE_ID, PaseClientMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 
 const { numberToBytesBE } = ec;
@@ -22,7 +26,7 @@ const logger = Logger.get("PaseClient");
 export class PaseClient {
     static async generatePakePasscodeVerifier(setupPinCode: number, pbkdfParameters: PbkdfParameters) {
         const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
-        return ByteArray.concat(numberToBytesBE(w0, 32), L);
+        return Bytes.concat(numberToBytesBE(w0, 32), L);
     }
 
     static generateRandomPasscode() {
@@ -73,7 +77,7 @@ export class PaseClient {
         // Process pack2 and send pake3
         const { y: Y, verifier } = await messenger.readPasePake2();
         const { Ke, hAY, hBX } = await spake2p.computeSecretAndVerifiersFromY(w1, X, Y);
-        if (!verifier.equals(hBX))
+        if (!Bytes.areEqual(verifier, hBX))
             throw new UnexpectedDataError("Received incorrect key confirmation from the receiver.");
         await messenger.sendPasePake3({ verifier: hAY });
 
@@ -85,7 +89,7 @@ export class PaseClient {
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
             peerSessionId: responderSessionId,
             sharedSecret: Ke,
-            salt: new ByteArray(0),
+            salt: new Uint8Array(0),
             isInitiator: true,
             isResumption: false,
             peerSessionParameters: sessionParameters,

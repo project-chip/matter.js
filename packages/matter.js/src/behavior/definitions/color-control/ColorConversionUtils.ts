@@ -3,7 +3,8 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { cropValueRange } from "../../../util/Number.js";
+
+import { cropValueRange } from "@project-chip/matter.js-general";
 import { kelvinToXyLookup } from "./kelvinToXy.js";
 
 /**

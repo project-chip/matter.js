@@ -22,7 +22,7 @@ import {
 } from "../../../behavior/definitions/dishwasher-alarm/DishwasherAlarmServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * A dishwasher is a device that is generally installed in residential homes and is capable of washing dishes, cutlery,

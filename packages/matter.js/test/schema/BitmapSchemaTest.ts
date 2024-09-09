@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { BitField, BitFieldEnum, BitFlag, BitmapSchema, ByteArrayBitmapSchema } from "../../src/schema/BitmapSchema.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 describe("BitmapSchema", () => {
     const enum EnumTest {
@@ -120,13 +120,13 @@ describe("ByteArrayBitmapSchema", () => {
                 number: 0x2000,
             });
 
-            expect(result.toHex()).equal("01c0");
+            expect(Bytes.toHex(result)).equal("01c0");
         });
     });
 
     describe("decode", () => {
         it("decodes a bitmap using the schema", () => {
-            const result = TestByteArrayBitmapSchema.decode(ByteArray.fromHex("01c0"));
+            const result = TestByteArrayBitmapSchema.decode(Bytes.fromHex("01c0"));
 
             expect(result).deep.equal({
                 flag1: true,

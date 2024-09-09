@@ -4,18 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    Construction,
+    Diagnostic,
+    DiagnosticSource,
+    Environment,
+    ImplementationError,
+    Logger,
+    RuntimeService,
+} from "@project-chip/matter.js-general";
 import { NodeActivity } from "../behavior/context/NodeActivity.js";
 import { NetworkRuntime } from "../behavior/system/network/NetworkRuntime.js";
-import { ImplementationError } from "../common/MatterError.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
 import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { EndpointType } from "../endpoint/type/EndpointType.js";
-import { Environment } from "../environment/Environment.js";
-import { RuntimeService } from "../environment/RuntimeService.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { DiagnosticSource } from "../log/DiagnosticSource.js";
-import { Logger } from "../log/Logger.js";
-import { Construction } from "../util/Construction.js";
 import { NodeLifecycle } from "./NodeLifecycle.js";
 
 const logger = Logger.get("Node");

@@ -4,21 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, ImplementationError, ipv4ToBytes, Logger, Time, Timer } from "@project-chip/matter.js-general";
+import { ClusterModel, FieldElement } from "@project-chip/matter.js-model";
 import { GeneralDiagnostics } from "../../../cluster/definitions/GeneralDiagnosticsCluster.js";
-import { ImplementationError } from "../../../common/MatterError.js";
 import { CommandId } from "../../../datatype/CommandId.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
-import { MdnsService } from "../../../environment/MdnsService.js";
-import { Logger } from "../../../log/Logger.js";
-import { FieldElement } from "../../../model/elements/FieldElement.js";
-import { ClusterModel } from "../../../model/index.js";
+import { MdnsService } from "../../../mdns/MdnsService.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { TlvInvokeResponse } from "../../../protocol/interaction/InteractionProtocol.js";
 import { INTERACTION_MODEL_REVISION } from "../../../protocol/interaction/InteractionServer.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
-import { Time, Timer } from "../../../time/Time.js";
-import { ByteArray } from "../../../util/ByteArray.js";
-import { iPv4ToByteArray, iPv6ToByteArray } from "../../../util/Ip.js";
 import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { NetworkServer } from "../../system/network/NetworkServer.js";
@@ -88,7 +83,7 @@ export class GeneralDiagnosticsServer extends Base {
         }
     }
 
-    #validateTestEnabledKey(enableKey: ByteArray) {
+    #validateTestEnabledKey(enableKey: Uint8Array) {
         if (enableKey.every(byte => byte === 0)) {
             throw new StatusResponseError("Invalid test enable key, all zeros", StatusCode.ConstraintError);
         }
@@ -128,7 +123,7 @@ export class GeneralDiagnosticsServer extends Base {
             throw new StatusResponseError("Test event triggers are disabled", StatusCode.ConstraintError);
         }
 
-        const payload = new ByteArray(count).fill(value);
+        const payload = new Uint8Array(count).fill(value);
 
         // In our case encoding is done completely on an upper layer, so we need to build a dummy single response to get the size
         // Formal note: This is not 100% accurate and we might be some bytes to huge (moreChunkedMessages, commandRef)
@@ -362,9 +357,9 @@ export class GeneralDiagnosticsServer extends Base {
                 isOperational: isOperationalReachable(name),
                 offPremiseServicesReachableIPv4: null, // null means unknown or not supported
                 offPremiseServicesReachableIPv6: null, // null means unknown or not supported
-                hardwareAddress: ByteArray.fromHex(mac.replace(/[^\da-fA-F]/g, "")),
-                iPv4Addresses: ipV4.slice(0, 4).map(ip => iPv4ToByteArray(ip)),
-                iPv6Addresses: ipV6.slice(0, 8).map(ip => iPv6ToByteArray(ip)),
+                hardwareAddress: Bytes.fromHex(mac.replace(/[^\da-fA-F]/g, "")),
+                iPv4Addresses: ipV4.slice(0, 4).map(ip => ipv4ToBytes(ip)),
+                iPv6Addresses: ipV6.slice(0, 8).map(ip => ipv4ToBytes(ip)),
                 type: type ?? networkType,
             }));
     }
@@ -393,7 +388,7 @@ export namespace GeneralDiagnosticsServer {
         totalOperationalHoursCounter: number = 0;
 
         /** The TestEnableKey set for this device for the test commands. Default means "not enabled"." */
-        deviceTestEnableKey = new ByteArray(16).fill(0);
+        deviceTestEnableKey = new Uint8Array(16).fill(0);
 
         [Val.properties](endpoint: Endpoint, _session: ValueSupervisor.Session) {
             return {

@@ -6,7 +6,7 @@
 
 import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
 
-import { Storage, StorageManager } from "@project-chip/matter.js/storage";
+import { Storage, StorageManager } from "@project-chip/matter.js-general";
 
 import {
     AdministratorCommissioning,
@@ -18,7 +18,6 @@ import {
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
-import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
 
 export class AllClustersTestInstanceLegacy implements TestInstance {
@@ -132,7 +131,7 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
             ),
         );
 
-        const networkId = new ByteArray(32);
+        const networkId = new Uint8Array(32);
         commissioningServer.addRootClusterServer(
             ClusterServer(
                 NetworkCommissioning.Cluster.with("EthernetNetworkInterface"),

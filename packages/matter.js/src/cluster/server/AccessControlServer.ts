@@ -4,22 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/MatterError.js";
+import { InternalError, isDeepEqual, Logger, SyncStorage } from "@project-chip/matter.js-general";
 import { CaseAuthenticatedTag } from "../../datatype/CaseAuthenticatedTag.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { DeviceTypeId } from "../../datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { NodeId } from "../../datatype/NodeId.js";
-import { Logger } from "../../log/Logger.js";
 import { AclExtensionEntry } from "../../protocol/interaction/AccessControlManager.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { TypeFromBitmapSchema } from "../../schema/BitmapSchema.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
-import { SyncStorage } from "../../storage/Storage.js";
 import { TlvType } from "../../tlv/TlvCodec.js";
 import { TlvTaggedList } from "../../tlv/TlvObject.js";
-import { isDeepEqual } from "../../util/DeepEqual.js";
 import { AccessControl, AccessControlCluster } from "../definitions/AccessControlCluster.js";
 import {
     genericFabricScopedAttributeGetter,

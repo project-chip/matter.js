@@ -5,9 +5,8 @@
  */
 
 import { require } from "@project-chip/matter-node-ble.js/require";
+import { Logger } from "@project-chip/matter.js-general";
 import { BLE_MATTER_SERVICE_UUID } from "@project-chip/matter.js/ble";
-import { Logger } from "@project-chip/matter.js/log";
-import { ByteArray } from "@project-chip/matter.js/util";
 import type { Peripheral } from "@stoprocent/noble";
 import { BleOptions } from "./BleNode.js";
 
@@ -30,12 +29,12 @@ function loadNoble(hciId?: number) {
 export class NobleBleClient {
     private readonly discoveredPeripherals = new Map<
         string,
-        { peripheral: Peripheral; matterServiceData: ByteArray }
+        { peripheral: Peripheral; matterServiceData: Uint8Array }
     >();
     private shouldScan = false;
     private isScanning = false;
     private nobleState = "unknown";
-    private deviceDiscoveredCallback: ((peripheral: Peripheral, manufacturerData: ByteArray) => void) | undefined;
+    private deviceDiscoveredCallback: ((peripheral: Peripheral, manufacturerData: Uint8Array) => void) | undefined;
 
     constructor(options?: BleOptions) {
         loadNoble(options?.hciId);
@@ -64,7 +63,7 @@ export class NobleBleClient {
         noble.on("scanStop", () => (this.isScanning = false));
     }
 
-    public setDiscoveryCallback(callback: (peripheral: Peripheral, manufacturerData: ByteArray) => void) {
+    public setDiscoveryCallback(callback: (peripheral: Peripheral, manufacturerData: Uint8Array) => void) {
         this.deviceDiscoveredCallback = callback;
         for (const { peripheral, matterServiceData } of this.discoveredPeripherals.values()) {
             this.deviceDiscoveredCallback(peripheral, matterServiceData);

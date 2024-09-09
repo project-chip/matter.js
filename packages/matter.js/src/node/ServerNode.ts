@@ -4,21 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Environment } from "@project-chip/matter.js-general";
+import {
+    Construction,
+    DiagnosticSource,
+    Identity,
+    MatterError,
+    asyncNew,
+    errorOf,
+} from "@project-chip/matter.js-general";
 import { CommissioningBehavior } from "../behavior/system/commissioning/CommissioningBehavior.js";
 import { NetworkServer } from "../behavior/system/network/NetworkServer.js";
 import { ServerNetworkRuntime } from "../behavior/system/network/ServerNetworkRuntime.js";
 import { ProductDescriptionServer } from "../behavior/system/product-description/ProductDescriptionServer.js";
 import { SessionsBehavior } from "../behavior/system/sessions/SessionsBehavior.js";
-import { MatterError } from "../common/MatterError.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
 import { EndpointServer } from "../endpoint/EndpointServer.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { EndpointInitializer } from "../endpoint/properties/EndpointInitializer.js";
-import type { Environment } from "../environment/Environment.js";
-import { DiagnosticSource } from "../log/DiagnosticSource.js";
-import { Construction, asyncNew } from "../util/Construction.js";
-import { errorOf } from "../util/Error.js";
-import { Identity } from "../util/Type.js";
 import { Node } from "./Node.js";
 import { IdentityService } from "./server/IdentityService.js";
 import { ServerEndpointInitializer } from "./server/ServerEndpointInitializer.js";

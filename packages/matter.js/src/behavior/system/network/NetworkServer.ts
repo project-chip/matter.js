@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError, Logger } from "@project-chip/matter.js-general";
 import { Ble } from "../../../ble/Ble.js";
-import { ImplementationError } from "../../../common/MatterError.js";
-import { Logger } from "../../../log/Logger.js";
 import { SubscriptionOptions } from "../../../protocol/interaction/SubscriptionOptions.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "../../../schema/PairingCodeSchema.js";

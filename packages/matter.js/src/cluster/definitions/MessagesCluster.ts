@@ -16,7 +16,7 @@ import { TlvEnum, TlvUInt16, TlvBitmap, TlvEpochS, TlvUInt64, TlvUInt32 } from "
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Messages {

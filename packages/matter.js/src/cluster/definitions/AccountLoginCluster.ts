@@ -7,12 +7,13 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { Command, AccessLevel, TlvNoResponse, OptionalEvent, EventPriority } from "../Cluster.js";
+import { Command, TlvNoResponse, OptionalEvent, EventPriority } from "../Cluster.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvNodeId } from "../../datatype/NodeId.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace AccountLogin {

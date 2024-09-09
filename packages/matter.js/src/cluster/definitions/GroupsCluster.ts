@@ -8,17 +8,18 @@
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { FixedAttribute, Command, AccessLevel, TlvNoResponse } from "../Cluster.js";
+import { FixedAttribute, Command, TlvNoResponse } from "../Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { StatusCode } from "../../protocol/interaction/StatusCode.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Groups {

@@ -10,7 +10,7 @@ import { MutableCluster } from "../mutation/MutableCluster.js";
 import { Attribute } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { Label } from "./LabelCluster.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace FixedLabel {

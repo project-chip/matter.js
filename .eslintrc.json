@@ -3,12 +3,7 @@
     "parserOptions": {
         "ecmaVersion": 2018, // Allows for the parsing of modern ECMAScript features
         "sourceType": "module", // Allows for the use of imports
-        "project": [
-            "packages/*/{src,test}/tsconfig.json",
-            "codegen/{src,test}/tsconfig.json",
-            "models/{src,test}/tsconfig.json",
-            "chip-testing/{src,test}/tsconfig.json"
-        ]
+        "project": [ "./tsconfig.eslint.json" ]
     },
     "extends": [
         "eslint:recommended",
@@ -23,7 +18,7 @@
     "env": {
         "node": true
     },
-    "ignorePatterns": ["*/dist/**/*", "*/build/**/*", "packages/*/dist/**/*", "packages/*/build/**/*"],
+    "ignorePatterns": ["*/node_modules/**/*", "*/dist/**/*", "*/build/**/*", "packages/*/dist/**/*", "packages/*/build/**/*", "models/*/**/*"],
     "rules": {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/ban-types": [

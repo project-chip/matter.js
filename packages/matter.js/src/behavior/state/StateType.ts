@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { GeneratedClass } from "../../util/GeneratedClass.js";
+import { GeneratedClass } from "@project-chip/matter.js-general";
 import { Val } from "./Val.js";
 
 /**

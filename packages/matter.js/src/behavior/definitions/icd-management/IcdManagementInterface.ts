@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MaybePromise } from "../../../util/Promises.js";
+import { MaybePromise } from "@project-chip/matter.js-general";
 import { IcdManagement } from "../../../cluster/definitions/IcdManagementCluster.js";
 
 export namespace IcdManagementInterface {

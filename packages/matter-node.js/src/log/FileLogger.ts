@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Level } from "@project-chip/matter.js/log";
+import { LogLevel } from "@project-chip/matter.js-general";
 import { open } from "fs/promises";
 
 /**
@@ -20,7 +20,7 @@ export async function createFileLogger(path: string) {
         () => void fileHandle.close().catch(err => err && console.error(`Failed to close log file: ${err}`)),
     );
 
-    return (_level: Level, formattedLog: string) => {
+    return (_level: LogLevel, formattedLog: string) => {
         try {
             writer.write(`${formattedLog}\n`);
         } catch (error) {

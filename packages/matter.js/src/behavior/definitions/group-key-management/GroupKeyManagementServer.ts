@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError } from "@project-chip/matter.js-general";
 import { GroupKeyManagement } from "../../../cluster/definitions/GroupKeyManagementCluster.js";
-import { ImplementationError } from "../../../common/MatterError.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { GroupKeyManagementBehavior } from "./GroupKeyManagementBehavior.js";
 

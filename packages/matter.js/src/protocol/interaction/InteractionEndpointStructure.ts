@@ -4,11 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError, InternalError, Observable } from "@project-chip/matter.js-general";
+import {
+    AcceptedCommandList,
+    AttributeList,
+    AttributeModel,
+    ClusterModel,
+    EventList,
+    GeneratedCommandList,
+    MatterModel,
+} from "@project-chip/matter.js-model";
 import { AnyAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AnyEventServer } from "../../cluster/server/EventServer.js";
-import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
@@ -17,13 +26,8 @@ import { EventId } from "../../datatype/EventId.js";
 import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { AttributeModel, ClusterModel, MatterModel } from "../../model/index.js";
-import { AttributeList } from "../../model/standard/elements/AttributeList.js";
-import { EventList } from "../../model/standard/elements/EventList.js";
-import { AcceptedCommandList, GeneratedCommandList } from "../../model/standard/elements/index.js";
 import { TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { Observable } from "../../util/Observable.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath, WildcardPathFlagsBitmap } from "./InteractionProtocol.js";
 import {
     AttributePath,

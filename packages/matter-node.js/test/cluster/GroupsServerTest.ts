@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { createPromise } from "@project-chip/matter.js-general";
 import {
     ClusterServer,
     ClusterServerObj,
@@ -18,7 +19,6 @@ import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import { StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
-import { createPromise } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil.js";
 

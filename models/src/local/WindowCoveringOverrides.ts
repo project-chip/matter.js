@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterElement as Cluster } from "@project-chip/matter.js/model";
+import { ClusterElement as Cluster } from "@project-chip/matter.js-model";
 import { LocalMatter } from "../local.js";
 
 LocalMatter.children.push(

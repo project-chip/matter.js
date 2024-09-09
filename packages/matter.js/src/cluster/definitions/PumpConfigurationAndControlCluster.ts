@@ -13,7 +13,6 @@ import {
     OptionalAttribute,
     Attribute,
     OptionalWritableAttribute,
-    AccessLevel,
     WritableAttribute,
     OptionalEvent,
     EventPriority
@@ -21,8 +20,9 @@ import {
 import { TlvInt16, TlvUInt16, TlvBitmap, TlvEnum, TlvUInt24, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace PumpConfigurationAndControl {

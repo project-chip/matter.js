@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { fromJson, StorageError, SupportedStorageTypes, SyncStorage, toJson } from "@project-chip/matter.js/storage";
+import { fromJson, StorageError, SupportedStorageTypes, SyncStorage, toJson } from "@project-chip/matter.js-general";
 import { LocalStorage } from "node-localstorage";
 
 export class StorageBackendDisk extends SyncStorage {

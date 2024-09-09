@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AsyncObservable, EventEmitter, MaybePromise, Observable } from "@project-chip/matter.js-general";
 import { Behavior } from "../../../src/behavior/Behavior.js";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import { ClusterOf } from "../../../src/behavior/cluster/ClusterBehaviorUtil.js";
@@ -13,8 +14,6 @@ import { BasicInformationBehavior } from "../../../src/behavior/definitions/basi
 import { BasicInformationServer } from "../../../src/behavior/definitions/basic-information/BasicInformationServer.js";
 import { ClusterType } from "../../../src/cluster/ClusterType.js";
 import { BasicInformation } from "../../../src/cluster/definitions/BasicInformationCluster.js";
-import { AsyncObservable, EventEmitter, Observable } from "../../../src/util/Observable.js";
-import { MaybePromise } from "../../../src/util/Promises.js";
 import { MyCluster, MySchema } from "./cluster-behavior-test-util.js";
 
 const MyClusterWithOptEvent = MyCluster.enable({ events: { optEv: true } });

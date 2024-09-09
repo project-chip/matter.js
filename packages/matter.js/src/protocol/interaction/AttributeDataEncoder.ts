@@ -3,12 +3,11 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { MatterFlowError } from "../../common/MatterError.js";
+import { Logger, MatterFlowError } from "@project-chip/matter.js-general";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
-import { Logger } from "../../log/Logger.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
 import { TlvEncodingOptions, TlvSchema, TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {

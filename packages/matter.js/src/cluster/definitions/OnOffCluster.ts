@@ -7,16 +7,17 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { Attribute, WritableAttribute, AccessLevel, Command, TlvNoResponse } from "../Cluster.js";
+import { Attribute, WritableAttribute, Command, TlvNoResponse } from "../Cluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvUInt16, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { ClusterType } from "../ClusterType.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace OnOff {

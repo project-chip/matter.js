@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic, ImplementationError, InternalError, MaybePromise } from "@project-chip/matter.js-general";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { MatterDevice } from "../../../MatterDevice.js";
-import { AccessLevel } from "../../../cluster/Cluster.js";
 import type { Message } from "../../../codec/MessageCodec.js";
-import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { NodeId } from "../../../datatype/NodeId.js";
 import { SubjectId } from "../../../datatype/SubjectId.js";
@@ -16,11 +16,9 @@ import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { EndpointInterface } from "../../../endpoint/EndpointInterface.js";
 import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
 import { EndpointType } from "../../../endpoint/type/EndpointType.js";
-import { Diagnostic } from "../../../log/Diagnostic.js";
 import { MessageExchange } from "../../../protocol/MessageExchange.js";
 import { StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
-import { MaybePromise } from "../../../util/Promises.js";
 import { AccessControl } from "../../AccessControl.js";
 import { AccessControlServer } from "../../definitions/access-control/AccessControlServer.js";
 import { Transaction } from "../../state/transaction/Transaction.js";

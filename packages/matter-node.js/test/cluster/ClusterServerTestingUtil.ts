@@ -4,18 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { PrivateKey } from "@project-chip/matter.js-general";
 import { asClusterServerInternal, ClusterServerObj, ClusterType } from "@project-chip/matter.js/cluster";
 import { Message } from "@project-chip/matter.js/codec";
-import { PrivateKey } from "@project-chip/matter.js/crypto";
 import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
 import { Endpoint } from "@project-chip/matter.js/device";
 import { Fabric } from "@project-chip/matter.js/fabric";
 import { StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
-import { ByteArray } from "@project-chip/matter.js/util";
 
-export const ZERO = new ByteArray(1);
-const PRIVATE_KEY = new ByteArray(32);
+export const ZERO = new Uint8Array(1);
+const PRIVATE_KEY = new Uint8Array(32);
 PRIVATE_KEY[31] = 1; // EC doesn't like all-zero private key
 export const KEY = PrivateKey(PRIVATE_KEY);
 

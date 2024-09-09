@@ -46,7 +46,7 @@ import {
 } from "../../../behavior/definitions/total-volatile-organic-compounds-concentration-measurement/TotalVolatileOrganicCompoundsConcentrationMeasurementServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * This defines conformance for the Air Quality Sensor device type.

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { ValidationDatatypeMismatchError } from "../../src/common/ValidationError.js";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvType } from "../../src/tlv/TlvCodec.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 type CodecVector<I, E> = { [valueDescription: string]: { encoded: I; decoded: E } };
 
@@ -38,7 +38,7 @@ describe("TlvAny", () => {
         for (const valueDescription in testVector) {
             const { encoded, decoded } = testVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(TlvAny.encode(decoded).toHex()).equal(encoded);
+                expect(Bytes.toHex(TlvAny.encode(decoded))).equal(encoded);
             });
         }
     });
@@ -56,7 +56,7 @@ describe("TlvAny", () => {
         for (const valueDescription in testVector) {
             const { encoded, decoded } = testVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(TlvAny.decode(ByteArray.fromHex(encoded))).deep.equal(decoded);
+                expect(TlvAny.decode(Bytes.fromHex(encoded))).deep.equal(decoded);
             });
         }
     });

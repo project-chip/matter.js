@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Network } from "@project-chip/matter.js-general";
 import { Environment, StorageService, VariableService } from "@project-chip/matter.js/environment";
-import { Network } from "@project-chip/matter.js/net";
 import { NetworkReactNative } from "../net/NetworkReactNative.js";
 import { StorageBackendAsyncStorage } from "../storage/StorageBackendAsyncStorage.js";
 

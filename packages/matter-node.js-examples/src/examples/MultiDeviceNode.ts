@@ -19,6 +19,7 @@
 import "@project-chip/matter-node.js";
 
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
+import { Time } from "@project-chip/matter.js-general";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 import { logEndpoint } from "@project-chip/matter.js/device";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
@@ -26,7 +27,6 @@ import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlug
 import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
-import { Time } from "@project-chip/matter.js/time";
 import { execSync } from "child_process";
 
 requireMinNodeVersion(16);

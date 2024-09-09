@@ -4,22 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
-import { BitField, BitFieldEnum, BitmapSchema } from "../schema/BitmapSchema.js";
-import { ByteArray, Endian } from "../util/ByteArray.js";
-import { DataReader } from "../util/DataReader.js";
-import { DataWriter } from "../util/DataWriter.js";
 import {
+    Bytes,
+    DataReader,
+    DataWriter,
+    Endian,
     INT16_MAX,
     INT16_MIN,
     INT32_MAX,
     INT32_MIN,
     INT8_MAX,
     INT8_MIN,
+    NotImplementedError,
     UINT16_MAX,
     UINT32_MAX,
     UINT8_MAX,
-} from "../util/Number.js";
+    UnexpectedDataError,
+} from "@project-chip/matter.js-general";
+import { BitField, BitFieldEnum, BitmapSchema } from "../schema/BitmapSchema.js";
 
 /**
  * TLV element types.
@@ -69,7 +71,7 @@ export type TlvToPrimitive = {
     [TlvType.Boolean]: never;
     [TlvType.Float]: number;
     [TlvType.Utf8String]: string;
-    [TlvType.ByteString]: ByteArray;
+    [TlvType.ByteString]: Uint8Array;
     [TlvType.Null]: null;
     [TlvType.Structure]: never;
     [TlvType.Array]: never;
@@ -402,7 +404,7 @@ export class TlvCodec {
             }
             case TlvType.Utf8String: {
                 const string = value as TlvToPrimitive[typeof typeLength.type];
-                const stringData = ByteArray.fromString(string);
+                const stringData = Bytes.fromString(string);
                 this.writeUInt(writer, typeLength.length, stringData.length);
                 return writer.writeByteArray(stringData);
             }
@@ -426,7 +428,7 @@ export class TlvCodec {
                 return this.getUIntByteLength(typeLength.length);
             case TlvType.Utf8String: {
                 const string = value as TlvToPrimitive[typeof typeLength.type];
-                const stringData = ByteArray.fromString(string);
+                const stringData = Bytes.fromString(string);
                 return this.getUIntByteLength(typeLength.length) + stringData.length;
             }
             case TlvType.ByteString: {

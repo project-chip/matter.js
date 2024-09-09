@@ -11,7 +11,7 @@ import { WritableAttribute } from "../Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace LaundryDryerControls {

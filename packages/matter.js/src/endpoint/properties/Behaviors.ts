@@ -4,6 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    camelize,
+    Construction,
+    describeList,
+    Diagnostic,
+    EventEmitter,
+    ImplementationError,
+    InternalError,
+    Lifecycle,
+    Logger,
+    MaybePromise,
+    ReadOnlyError,
+    UninitializedDependencyError,
+} from "@project-chip/matter.js-general";
+import { FeatureSet } from "@project-chip/matter.js-model";
 import { Behavior } from "../../behavior/Behavior.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ValidatedElements } from "../../behavior/cluster/ValidatedElements.js";
@@ -16,15 +31,6 @@ import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import { Val } from "../../behavior/state/Val.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { ClusterType } from "../../cluster/ClusterType.js";
-import { Lifecycle, UninitializedDependencyError } from "../../common/Lifecycle.js";
-import { ImplementationError, InternalError, ReadOnlyError } from "../../common/MatterError.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
-import { Logger } from "../../log/Logger.js";
-import { FeatureSet } from "../../model/index.js";
-import { Construction } from "../../util/Construction.js";
-import { EventEmitter } from "../../util/Observable.js";
-import { MaybePromise } from "../../util/Promises.js";
-import { camelize, describeList } from "../../util/String.js";
 import type { Agent } from "../Agent.js";
 import type { Endpoint } from "../Endpoint.js";
 import { EndpointVariableService } from "../EndpointVariableService.js";

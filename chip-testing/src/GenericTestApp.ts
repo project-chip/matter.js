@@ -6,8 +6,8 @@
  */
 
 import { getIntParameter, getParameter, hasParameter } from "@project-chip/matter-node.js/util";
+import { ClassExtends } from "@project-chip/matter.js-general";
 import { Environment } from "@project-chip/matter.js/environment";
-import { ClassExtends } from "@project-chip/matter.js/util";
 import { StorageBackendAsyncJsonFile } from "./storage/StorageBackendAsyncJsonFile.js";
 import { StorageBackendSyncJsonFile } from "./storage/StorageBackendSyncJsonFile.js";
 

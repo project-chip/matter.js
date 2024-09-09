@@ -10,7 +10,6 @@ import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     Attribute,
     OptionalWritableAttribute,
-    AccessLevel,
     Event,
     EventPriority,
     FixedAttribute,
@@ -22,6 +21,7 @@ import {
 } from "../Cluster.js";
 import { TlvEnum, TlvUInt32, TlvUInt16, TlvEpochS, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
@@ -33,7 +33,7 @@ import { StatusCode as GlobalStatusCode } from "../../protocol/interaction/Statu
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { ClusterType } from "../ClusterType.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace DoorLock {

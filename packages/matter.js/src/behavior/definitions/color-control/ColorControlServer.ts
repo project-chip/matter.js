@@ -4,17 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    addValueWithOverflow,
+    cropValueRange,
+    ImplementationError,
+    Logger,
+    MaybePromise,
+    Time,
+    Timer,
+} from "@project-chip/matter.js-general";
 import { ClusterType } from "../../../cluster/ClusterType.js";
 import { ColorControl } from "../../../cluster/definitions/ColorControlCluster.js";
 import { GeneralDiagnostics } from "../../../cluster/definitions/index.js";
-import { ImplementationError } from "../../../common/MatterError.js";
 import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
-import { Logger } from "../../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
-import { Time, Timer } from "../../../time/Time.js";
-import { addValueWithOverflow, cropValueRange } from "../../../util/Number.js";
-import { MaybePromise } from "../../../util/Promises.js";
 import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagnosticsBehavior.js";
 import { OnOffServer } from "../on-off/OnOffServer.js";
 import { ColorControlBehavior } from "./ColorControlBehavior.js";

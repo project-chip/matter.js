@@ -10,7 +10,6 @@ import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     FixedAttribute,
     WritableAttribute,
-    AccessLevel,
     OptionalFixedAttribute,
     OptionalWritableAttribute,
     OptionalAttribute,
@@ -21,13 +20,14 @@ import {
 import { TlvUInt16, TlvUInt32, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace BasicInformation {

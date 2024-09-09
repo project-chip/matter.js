@@ -6,27 +6,33 @@
 
 import {
     BitByteArray,
-    BYTES_KEY,
+    Bytes,
     ContextTagged,
     ContextTaggedBytes,
+    Crypto,
     DatatypeOverride,
     DerCodec,
+    DerKey,
     DerObject,
     DerType,
-    ELEMENTS_KEY,
-    OBJECT_ID_KEY,
+    ImplementationError,
+    Key,
+    Logger,
+    MatterError,
+    Pkcs7,
+    PublicKey,
     RawBytes,
-} from "../codec/DerCodec.js";
-import { ImplementationError, MatterError } from "../common/MatterError.js";
-import { Crypto } from "../crypto/Crypto.js";
-import { Key, PublicKey } from "../crypto/Key.js";
+    SHA256_CMS,
+    Time,
+    X509,
+    X520,
+    X962,
+} from "@project-chip/matter.js-general";
 import { CaseAuthenticatedTag, TlvCaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { FabricId, TlvFabricId } from "../datatype/FabricId.js";
 import { NodeId, TlvNodeId } from "../datatype/NodeId.js";
 import { TlvVendorId, VendorId } from "../datatype/VendorId.js";
-import { Logger } from "../log/Logger.js";
 import { BitFlag, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { Time } from "../time/Time.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvBitmap, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
@@ -40,8 +46,6 @@ import {
 } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { Pkcs7, SHA256_CMS, X509, X520, X962 } from "./CertificateDerTypes.js";
 
 const logger = Logger.get("CertificateManager");
 
@@ -70,24 +74,24 @@ export function jsToMatterDate(date: Date, addYears = 0) {
 }
 
 function intTo16Chars(value: bigint | number) {
-    const byteArray = new ByteArray(8);
-    const dataView = byteArray.getDataView();
+    const byteArray = new Uint8Array(8);
+    const dataView = Bytes.dataViewOf(byteArray);
     dataView.setBigUint64(0, typeof value === "bigint" ? value : BigInt(value));
-    return byteArray.toHex().toUpperCase();
+    return Bytes.toHex(byteArray).toUpperCase();
 }
 
 function uInt16To8Chars(value: number) {
-    const byteArray = new ByteArray(4);
-    const dataView = byteArray.getDataView();
+    const byteArray = new Uint8Array(4);
+    const dataView = Bytes.dataViewOf(byteArray);
     dataView.setUint32(0, value);
-    return byteArray.toHex().toUpperCase();
+    return Bytes.toHex(byteArray).toUpperCase();
 }
 
 function uInt16To4Chars(value: number) {
-    const byteArray = new ByteArray(2);
-    const dataView = byteArray.getDataView();
+    const byteArray = new Uint8Array(2);
+    const dataView = Bytes.dataViewOf(byteArray);
     dataView.setUint16(0, value);
-    return byteArray.toHex().toUpperCase();
+    return Bytes.toHex(byteArray).toUpperCase();
 }
 
 /**
@@ -297,7 +301,7 @@ export const TlvIntermediateCertificate = BaseMatterCertificate({
 const TlvBaseCertificate = BaseMatterCertificate();
 
 interface AttestationCertificateBase {
-    serialNumber: ByteArray;
+    serialNumber: Uint8Array;
     signatureAlgorithm: number;
     issuer: {};
     notBefore: number;
@@ -305,7 +309,7 @@ interface AttestationCertificateBase {
     subject: {};
     publicKeyAlgorithm: number;
     ellipticCurveIdentifier: number;
-    ellipticCurvePublicKey: ByteArray;
+    ellipticCurvePublicKey: Uint8Array;
     extensions: {
         basicConstraints: {
             isCa: boolean;
@@ -313,11 +317,11 @@ interface AttestationCertificateBase {
         };
         keyUsage: TypeFromPartialBitSchema<typeof ExtensionKeyUsageBitmap>;
         extendedKeyUsage?: number[];
-        subjectKeyIdentifier: ByteArray;
-        authorityKeyIdentifier: ByteArray;
-        futureExtension?: ByteArray[];
+        subjectKeyIdentifier: Uint8Array;
+        authorityKeyIdentifier: Uint8Array;
+        futureExtension?: Uint8Array[];
     };
-    signature: ByteArray;
+    signature: Uint8Array;
 }
 
 export interface DeviceAttestationCertificate extends AttestationCertificateBase {
@@ -549,13 +553,13 @@ function extensionsToAsn1(extensions: BaseCertificate["extensions"]) {
                 asn.extendedKeyUsage = X509.ExtendedKeyUsage(value as number[] | undefined);
                 break;
             case "subjectKeyIdentifier":
-                asn.subjectKeyIdentifier = X509.SubjectKeyIdentifier(value as ByteArray);
+                asn.subjectKeyIdentifier = X509.SubjectKeyIdentifier(value as Uint8Array);
                 break;
             case "authorityKeyIdentifier":
-                asn.authorityKeyIdentifier = X509.AuthorityKeyIdentifier(value as ByteArray);
+                asn.authorityKeyIdentifier = X509.AuthorityKeyIdentifier(value as Uint8Array);
                 break;
             case "futureExtension":
-                asn.futureExtension = RawBytes(ByteArray.concat(...((value as ByteArray[] | undefined) ?? [])));
+                asn.futureExtension = RawBytes(Bytes.concat(...((value as Uint8Array[] | undefined) ?? [])));
                 break;
         }
     });
@@ -563,7 +567,7 @@ function extensionsToAsn1(extensions: BaseCertificate["extensions"]) {
 }
 
 export class CertificateManager {
-    static #assertCertificateDerSize(certBytes: ByteArray) {
+    static #assertCertificateDerSize(certBytes: Uint8Array) {
         if (certBytes.length > MAX_DER_CERTIFICATE_SIZE) {
             throw new ImplementationError(
                 `Certificate to generate is too big: ${certBytes.length} bytes instead of max ${MAX_DER_CERTIFICATE_SIZE} bytes`,
@@ -685,8 +689,8 @@ export class CertificateManager {
     }
 
     static CertificationDeclarationToAsn1(
-        eContent: ByteArray,
-        subjectKeyIdentifier: ByteArray,
+        eContent: Uint8Array,
+        subjectKeyIdentifier: Uint8Array,
         privateKey: JsonWebKey,
     ) {
         const certificate = {
@@ -829,7 +833,7 @@ export class CertificateManager {
         }
 
         // The authority key identifier extension SHALL be equal to the subject key identifier extension.
-        if (!rootCert.extensions.authorityKeyIdentifier.equals(rootCert.extensions.subjectKeyIdentifier)) {
+        if (!Bytes.areEqual(rootCert.extensions.authorityKeyIdentifier, rootCert.extensions.subjectKeyIdentifier)) {
             throw new CertificateError(
                 `Root certificate authorityKeyIdentifier must be equal to subjectKeyIdentifier.`,
             );
@@ -939,7 +943,7 @@ export class CertificateManager {
         }
 
         // Validate authority key identifier against subject key identifier
-        if (!nocCert.extensions.authorityKeyIdentifier.equals(rootOrIcaCert.extensions.subjectKeyIdentifier)) {
+        if (!Bytes.areEqual(nocCert.extensions.authorityKeyIdentifier, rootOrIcaCert.extensions.subjectKeyIdentifier)) {
             throw new CertificateError(
                 `Noc certificate authorityKeyIdentifier must be equal to Root/Ica subjectKeyIdentifier.`,
             );
@@ -1057,7 +1061,7 @@ export class CertificateManager {
         }
 
         // Validate authority key identifier against subject key identifier
-        if (!icaCert.extensions.authorityKeyIdentifier.equals(rootCert.extensions.subjectKeyIdentifier)) {
+        if (!Bytes.areEqual(icaCert.extensions.authorityKeyIdentifier, rootCert.extensions.subjectKeyIdentifier)) {
             throw new CertificateError(
                 `Ica certificate authorityKeyIdentifier must be equal to root cert subjectKeyIdentifier.`,
             );
@@ -1085,29 +1089,35 @@ export class CertificateManager {
         });
     }
 
-    static getPublicKeyFromCsr(csr: ByteArray) {
-        const { [ELEMENTS_KEY]: rootElements } = DerCodec.decode(csr);
+    static getPublicKeyFromCsr(csr: Uint8Array) {
+        const { [DerKey.Elements]: rootElements } = DerCodec.decode(csr);
         if (rootElements?.length !== 3) throw new CertificateError("Invalid CSR data");
         const [requestNode, signAlgorithmNode, signatureNode] = rootElements;
 
         // Extract the public key
-        const { [ELEMENTS_KEY]: requestElements } = requestNode;
+        const { [DerKey.Elements]: requestElements } = requestNode;
         if (requestElements?.length !== 4) throw new CertificateError("Invalid CSR data");
         const [versionNode, _subjectNode, publicKeyNode] = requestElements;
-        const requestVersion = versionNode[BYTES_KEY][0];
+        const requestVersion = versionNode[DerKey.Bytes][0];
         if (requestVersion !== 0) throw new CertificateError(`Unsupported request version${requestVersion}`);
         // TODO: verify subject = { OrganisationName: "CSR" }
 
-        const { [ELEMENTS_KEY]: publicKeyElements } = publicKeyNode;
+        const { [DerKey.Elements]: publicKeyElements } = publicKeyNode;
         if (publicKeyElements?.length !== 2) throw new CertificateError("Invalid CSR data");
         const [_publicKeyTypeNode, publicKeyBytesNode] = publicKeyElements;
         // TODO: verify publicKey algorithm
-        const publicKey = publicKeyBytesNode[BYTES_KEY];
+        const publicKey = publicKeyBytesNode[DerKey.Bytes];
 
         // Verify the CSR signature
-        if (!X962.EcdsaWithSHA256[OBJECT_ID_KEY][BYTES_KEY].equals(signAlgorithmNode[ELEMENTS_KEY]?.[0]?.[BYTES_KEY]))
+        if (
+            signAlgorithmNode[DerKey.Elements]?.[0]?.[DerKey.Bytes] === undefined ||
+            !Bytes.areEqual(
+                X962.EcdsaWithSHA256[DerKey.ObjectId][DerKey.Bytes],
+                signAlgorithmNode[DerKey.Elements]?.[0]?.[DerKey.Bytes],
+            )
+        )
             throw new CertificateError("Unsupported signature type");
-        Crypto.verify(PublicKey(publicKey), DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
+        Crypto.verify(PublicKey(publicKey), DerCodec.encode(requestNode), signatureNode[DerKey.Bytes], "der");
 
         return publicKey;
     }

@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger, MatterFlowError } from "@project-chip/matter.js-general";
 import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
 import { GeneralCommissioning } from "../../../cluster/definitions/GeneralCommissioningCluster.js";
-import { MatterFlowError } from "../../../common/MatterError.js";
-import { Logger } from "../../../log/Logger.js";
 import type { Node } from "../../../node/Node.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
 import { AdministratorCommissioningServer } from "../administrator-commissioning/AdministratorCommissioningServer.js";

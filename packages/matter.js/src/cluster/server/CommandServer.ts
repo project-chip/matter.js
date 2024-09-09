@@ -4,17 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger } from "@project-chip/matter.js-general";
+import { AccessLevel, FabricIndex } from "@project-chip/matter.js-model";
 import { MatterDevice } from "../../MatterDevice.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { Logger } from "../../log/Logger.js";
-import { FabricIndex } from "../../model/standard/elements/FabricIndex.js";
 import { StatusCode } from "../../protocol/interaction/StatusCode.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { TlvSchema, TlvStream } from "../../tlv/TlvSchema.js";
-import { AccessLevel } from "../Cluster.js";
 
 const logger = Logger.get("CommandServer");
 

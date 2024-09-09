@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { PairRetransmissionLimitReachedError } from "../MatterController.js";
-import { MatterError } from "../common/MatterError.js";
+import { anyPromise, ClassExtends, Logger, MatterError, serverAddressToString } from "@project-chip/matter.js-general";
 import {
     AddressTypeFromDevice,
     CommissionableDevice,
@@ -14,14 +13,11 @@ import {
     OperationalDevice,
     Scanner,
 } from "../common/Scanner.js";
-import { serverAddressToString } from "../common/ServerAddress.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { Logger } from "../log/Logger.js";
+import { PairRetransmissionLimitReachedError } from "../MatterController.js";
 import { MdnsScanner } from "../mdns/MdnsScanner.js";
 import { CommissioningError } from "../protocol/ControllerCommissioner.js";
-import { anyPromise } from "../util/Promises.js";
-import { ClassExtends } from "../util/Type.js";
 
 const logger = Logger.get("ControllerDiscovery");
 

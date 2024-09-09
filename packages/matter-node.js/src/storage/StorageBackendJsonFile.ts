@@ -9,9 +9,9 @@ import {
     StorageBackendMemory,
     StorageError,
     SupportedStorageTypes,
+    Time,
     toJson,
-} from "@project-chip/matter.js/storage";
-import { Time } from "@project-chip/matter.js/time";
+} from "@project-chip/matter.js-general";
 import { readFile, writeFile } from "fs/promises";
 
 export class StorageBackendJsonFile extends StorageBackendMemory {

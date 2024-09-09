@@ -4,25 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InternalError, Logger, Time, Timer } from "@project-chip/matter.js-general";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { MatterDevice } from "../../MatterDevice.js";
 import {
     MAXIMUM_COMMISSIONING_TIMEOUT_S,
     MINIMUM_COMMISSIONING_TIMEOUT_S,
     PAKE_PASSCODE_VERIFIER_LENGTH,
 } from "../../behavior/definitions/administrator-commissioning/AdministratorCommissioningConstants.js";
-import { InternalError } from "../../common/MatterError.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { VendorId } from "../../datatype/VendorId.js";
-import { Logger } from "../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { Session } from "../../session/Session.js";
 import { PaseServer } from "../../session/pase/PaseServer.js";
-import { Time, Timer } from "../../time/Time.js";
 import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
-import { ByteArray } from "../../util/ByteArray.js";
-import { AccessLevel, Command, TlvNoResponse } from "../Cluster.js";
+import { Command, TlvNoResponse } from "../Cluster.js";
 import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
 import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
@@ -130,10 +128,10 @@ class AdministratorCommissioningManager {
      * This method opens an Enhanced Commissioning Window (A dynamic passcode is used which was provided by the caller).
      */
     async openEnhancedCommissioningWindow(
-        pakeVerifier: ByteArray,
+        pakeVerifier: Uint8Array,
         discriminator: number,
         iterations: number,
-        salt: ByteArray,
+        salt: Uint8Array,
         commissioningTimeout: number,
         session: Session<MatterDevice>,
     ) {

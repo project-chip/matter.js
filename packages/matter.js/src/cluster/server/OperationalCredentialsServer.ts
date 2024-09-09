@@ -6,6 +6,8 @@
 
 // TODO: Rename to NodeOperationalCredentialsServer to match with specs
 
+import { CryptoVerifyError, Logger, MatterFlowError, UnexpectedDataError } from "@project-chip/matter.js-general";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { DeviceCertification } from "../../behavior/definitions/operational-credentials/DeviceCertification.js";
 import {
     TlvAttestation,
@@ -15,19 +17,16 @@ import { ProductDescription } from "../../behavior/system/product-description/Pr
 import { CertificateError } from "../../certificate/CertificateManager.js";
 import { MatterFabricInvalidAdminSubjectError } from "../../common/FailsafeContext.js";
 import { MatterFabricConflictError } from "../../common/FailsafeTimer.js";
-import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { ValidationError } from "../../common/ValidationError.js";
-import { CryptoVerifyError } from "../../crypto/Crypto.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { PublicKeyError } from "../../fabric/Fabric.js";
 import { FabricTableFullError } from "../../fabric/FabricManager.js";
-import { Logger } from "../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
-import { AccessLevel, Command } from "../Cluster.js";
+import { Command } from "../Cluster.js";
 import { BasicInformation } from "../definitions/BasicInformationCluster.js";
 import { OperationalCredentials } from "../definitions/OperationalCredentialsCluster.js";
 import { AccessControl } from "../definitions/index.js";

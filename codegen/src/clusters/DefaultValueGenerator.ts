@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js/common";
-import { DefaultValue, Metatype, ValueModel } from "@project-chip/matter.js/model";
-import { Properties } from "@project-chip/matter.js/util";
+import { InternalError, Properties } from "@project-chip/matter.js-general";
+import { DefaultValue, Metatype, ValueModel } from "@project-chip/matter.js-model";
 import { camelize, serialize } from "../util/string.js";
 import { SpecializedNumbers, specializedNumberTypeFor } from "./NumberConstants.js";
 import { TlvGenerator } from "./TlvGenerator.js";

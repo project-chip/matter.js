@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { GeneratedClass, MaybePromise } from "@project-chip/matter.js-general";
 import { Behavior } from "../behavior/Behavior.js";
 import { ActionContext } from "../behavior/context/ActionContext.js";
 import { DescriptorBehavior } from "../behavior/definitions/descriptor/DescriptorBehavior.js";
-import { GeneratedClass } from "../util/GeneratedClass.js";
-import { MaybePromise } from "../util/Promises.js";
 import type { Endpoint } from "./Endpoint.js";
 import type { SupportedBehaviors } from "./properties/SupportedBehaviors.js";
 import { EndpointType } from "./type/EndpointType.js";

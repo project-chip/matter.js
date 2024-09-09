@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Time } from "@project-chip/matter.js-general";
 import { DecodedMessage, DecodedPacket, Message, Packet } from "../codec/MessageCodec.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionState } from "../protocol/MessageReceptionState.js";
-import { Time } from "../time/Time.js";
-import { ByteArray } from "../util/ByteArray.js";
 
 /**
  * Minimum amount of time between sender retries when the destination node is Active. This SHALL be greater than or
@@ -172,7 +171,7 @@ export abstract class Session<T extends SessionContext> {
     abstract associatedFabric: Fabric;
     abstract supportsMRP: boolean; // TODO: always false for Group Sessions
 
-    abstract decode(packet: DecodedPacket, aad?: ByteArray): DecodedMessage;
+    abstract decode(packet: DecodedPacket, aad?: Uint8Array): DecodedMessage;
     abstract encode(message: Message): Packet;
     abstract end(sendClose: boolean): Promise<void>;
     abstract destroy(sendClose?: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;

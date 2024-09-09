@@ -4,20 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    AsyncObservable,
+    Construction,
+    Logger,
+    MatterFlowError,
+    UnexpectedDataError,
+} from "@project-chip/matter.js-general";
 import type { MatterDevice } from "../MatterDevice.js";
 import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
 import { FabricManager } from "../fabric/FabricManager.js";
-import { Logger } from "../log/Logger.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { SessionManager } from "../session/SessionManager.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { Construction } from "../util/Construction.js";
-import { AsyncObservable } from "../util/Observable.js";
 import { FailsafeTimer, MatterFabricConflictError } from "./FailsafeTimer.js";
-import { MatterFlowError, UnexpectedDataError } from "./MatterError.js";
 import { ValidationError } from "./ValidationError.js";
 
 const logger = Logger.get("FailsafeContext");
@@ -190,7 +192,7 @@ export abstract class FailsafeContext {
     }
 
     /** Handles adding a trusted root certificate from Operational Credentials cluster. */
-    setRootCert(rootCert: ByteArray) {
+    setRootCert(rootCert: Uint8Array) {
         this.#fabricBuilder.setRootCert(rootCert);
     }
 
@@ -198,7 +200,7 @@ export abstract class FailsafeContext {
      * Build a new Fabric object based on an existing fabric for the "UpdateNoc" case of the Operational Credentials
      * cluster.
      */
-    async buildUpdatedFabric(nocValue: ByteArray, icacValue: ByteArray | undefined) {
+    async buildUpdatedFabric(nocValue: Uint8Array, icacValue: Uint8Array | undefined) {
         if (this.associatedFabric === undefined) {
             throw new MatterFlowError("No fabric associated with failsafe context, but we prepare an Fabric update.");
         }
@@ -209,10 +211,10 @@ export abstract class FailsafeContext {
 
     /** Build a new Fabric object for a new fabric for the "AddNoc" case of the Operational Credentials cluster. */
     async buildFabric(nocData: {
-        nocValue: ByteArray;
-        icacValue: ByteArray | undefined;
+        nocValue: Uint8Array;
+        icacValue: Uint8Array | undefined;
         adminVendorId: VendorId;
-        ipkValue: ByteArray;
+        ipkValue: Uint8Array;
         caseAdminSubject: NodeId;
     }) {
         const builder = this.#fabricBuilder;

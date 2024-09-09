@@ -4,17 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    Diagnostic,
+    EventEmitter,
+    ImplementationError,
+    Lifecycle,
+    Logger,
+    MatterFlowError,
+    Observable,
+} from "@project-chip/matter.js-general";
+import { DatatypeModel, FieldElement } from "@project-chip/matter.js-model";
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
-import { Lifecycle } from "../../../common/Lifecycle.js";
-import { ImplementationError, MatterFlowError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import type { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { ExposedFabricInformation } from "../../../fabric/Fabric.js";
 import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
-import { Diagnostic } from "../../../log/Diagnostic.js";
-import { Logger } from "../../../log/Logger.js";
-import { DatatypeModel, FieldElement } from "../../../model/index.js";
 import type { Node } from "../../../node/Node.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { ServerNode } from "../../../node/ServerNode.js";
@@ -26,8 +31,6 @@ import {
 } from "../../../schema/PairingCodeSchema.js";
 import { QrCode } from "../../../schema/QrCodeSchema.js";
 import { PaseClient } from "../../../session/pase/PaseClient.js";
-import { ByteArray } from "../../../util/ByteArray.js";
-import { EventEmitter, Observable } from "../../../util/Observable.js";
 import { Behavior } from "../../Behavior.js";
 import { ActionContext } from "../../context/ActionContext.js";
 import { BasicInformationBehavior } from "../../definitions/basic-information/BasicInformationBehavior.js";
@@ -287,7 +290,7 @@ export namespace CommissioningBehavior {
         passcode = -1;
         discriminator = -1;
         flowType = CommissioningFlowType.Standard;
-        additionalBleAdvertisementData?: ByteArray = undefined;
+        additionalBleAdvertisementData?: Uint8Array = undefined;
         pairingCodes = {} as PairingCodes;
 
         [Val.properties](endpoint: Endpoint) {

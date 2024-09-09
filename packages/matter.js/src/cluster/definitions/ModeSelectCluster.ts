@@ -23,7 +23,7 @@ import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ModeSelect {

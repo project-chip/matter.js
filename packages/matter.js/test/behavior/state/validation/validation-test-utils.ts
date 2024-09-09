@@ -4,13 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Properties } from "@project-chip/matter.js-general";
+import {
+    AttributeModel,
+    ClusterModel,
+    DataModelPath,
+    FeatureMap,
+    FeatureSet,
+    FieldElement,
+    FieldModel,
+} from "@project-chip/matter.js-model";
 import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
 import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
-import { DataModelPath } from "../../../../src/model/definitions/DataModelPath.js";
-import { AttributeModel, ClusterModel, FeatureSet, FieldElement, FieldModel } from "../../../../src/model/index.js";
-import { FeatureMap } from "../../../../src/model/standard/elements/FeatureMap.js";
 import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
-import { Properties } from "../../../../src/util/Type.js";
 
 export function Fields(
     ...definition: {

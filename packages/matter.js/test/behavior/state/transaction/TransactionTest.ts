@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MaybePromise } from "@project-chip/matter.js-general";
 import {
     FinalizationError,
     SynchronousTransactionConflictError,
@@ -14,7 +15,6 @@ import { Resource } from "../../../../src/behavior/state/transaction/Resource.js
 import { Status } from "../../../../src/behavior/state/transaction/Status.js";
 import { Transaction } from "../../../../src/behavior/state/transaction/Transaction.js";
 import { StatusCode, StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
-import { MaybePromise } from "../../../../src/util/Promises.js";
 
 class TestResource implements Resource {
     lockedBy?: Transaction;

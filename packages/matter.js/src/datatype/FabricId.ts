@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Branded, toBigInt } from "@project-chip/matter.js-general";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { toBigInt } from "../util/Number.js";
-import { Branded } from "../util/Type.js";
 
 /**
  * A Fabric ID is a 64-bit number that uniquely identifies the Fabric within the scope of

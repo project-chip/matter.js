@@ -5,6 +5,7 @@
  */
 
 import {
+    Bytes,
     CRYPTO_AUTH_TAG_LENGTH,
     CRYPTO_EC_CURVE,
     CRYPTO_EC_KEY_BYTES,
@@ -15,12 +16,11 @@ import {
     CryptoDsaEncoding,
     CryptoVerifyError,
     PrivateKey,
-} from "@project-chip/matter.js/crypto";
-import { ByteArray } from "@project-chip/matter.js/util";
+} from "@project-chip/matter.js-general";
 import * as crypto from "crypto";
 
 export class CryptoNode extends Crypto {
-    encrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray {
+    encrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array {
         const cipher = crypto.createCipheriv(CRYPTO_ENCRYPT_ALGORITHM, key, nonce, {
             authTagLength: CRYPTO_AUTH_TAG_LENGTH,
         });
@@ -29,10 +29,10 @@ export class CryptoNode extends Crypto {
         }
         const encrypted = cipher.update(data);
         cipher.final();
-        return ByteArray.concat(encrypted, cipher.getAuthTag());
+        return Bytes.concat(encrypted, cipher.getAuthTag());
     }
 
-    decrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray {
+    decrypt(key: Uint8Array, data: Uint8Array, nonce: Uint8Array, aad?: Uint8Array): Uint8Array {
         const cipher = crypto.createDecipheriv(CRYPTO_ENCRYPT_ALGORITHM, key, nonce, {
             authTagLength: CRYPTO_AUTH_TAG_LENGTH,
         });
@@ -43,83 +43,83 @@ export class CryptoNode extends Crypto {
         cipher.setAuthTag(data.slice(plaintextLength));
         const result = cipher.update(data.slice(0, plaintextLength));
         cipher.final();
-        return new ByteArray(result);
+        return new Uint8Array(result);
     }
 
-    getRandomData(length: number): ByteArray {
-        return new ByteArray(crypto.randomBytes(length));
+    getRandomData(length: number): Uint8Array {
+        return new Uint8Array(crypto.randomBytes(length));
     }
 
-    ecdhGeneratePublicKey(): { publicKey: ByteArray; ecdh: any } {
+    ecdhGeneratePublicKey(): { publicKey: Uint8Array; ecdh: any } {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
-        return { publicKey: new ByteArray(ecdh.getPublicKey()), ecdh: ecdh };
+        return { publicKey: new Uint8Array(ecdh.getPublicKey()), ecdh: ecdh };
     }
 
-    ecdhGeneratePublicKeyAndSecret(peerPublicKey: ByteArray): { publicKey: ByteArray; sharedSecret: ByteArray } {
+    ecdhGeneratePublicKeyAndSecret(peerPublicKey: Uint8Array): { publicKey: Uint8Array; sharedSecret: Uint8Array } {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
         return {
-            publicKey: new ByteArray(ecdh.getPublicKey()),
-            sharedSecret: new ByteArray(ecdh.computeSecret(peerPublicKey)),
+            publicKey: new Uint8Array(ecdh.getPublicKey()),
+            sharedSecret: new Uint8Array(ecdh.computeSecret(peerPublicKey)),
         };
     }
 
-    ecdhGenerateSecret(peerPublicKey: ByteArray, ecdh: crypto.ECDH): ByteArray {
-        return new ByteArray(ecdh.computeSecret(peerPublicKey));
+    ecdhGenerateSecret(peerPublicKey: Uint8Array, ecdh: crypto.ECDH): Uint8Array {
+        return new Uint8Array(ecdh.computeSecret(peerPublicKey));
     }
 
-    hash(data: ByteArray | ByteArray[]): ByteArray {
+    hash(data: Uint8Array | Uint8Array[]): Uint8Array {
         const hasher = crypto.createHash(CRYPTO_HASH_ALGORITHM);
         if (Array.isArray(data)) {
             data.forEach(chunk => hasher.update(chunk));
         } else {
             hasher.update(data);
         }
-        return new ByteArray(hasher.digest());
+        return new Uint8Array(hasher.digest());
     }
 
-    pbkdf2(secret: ByteArray, salt: ByteArray, iteration: number, keyLength: number): Promise<ByteArray> {
-        return new Promise<ByteArray>((resolver, rejecter) => {
+    pbkdf2(secret: Uint8Array, salt: Uint8Array, iteration: number, keyLength: number): Promise<Uint8Array> {
+        return new Promise<Uint8Array>((resolver, rejecter) => {
             crypto.pbkdf2(secret, salt, iteration, keyLength, CRYPTO_HASH_ALGORITHM, (error, key) => {
                 if (error !== null) rejecter(error);
-                resolver(new ByteArray(key));
+                resolver(new Uint8Array(key));
             });
         });
     }
 
     hkdf(
-        secret: ByteArray,
-        salt: ByteArray,
-        info: ByteArray,
+        secret: Uint8Array,
+        salt: Uint8Array,
+        info: Uint8Array,
         length: number = CRYPTO_SYMMETRIC_KEY_LENGTH,
-    ): Promise<ByteArray> {
-        return new Promise<ByteArray>((resolver, rejecter) => {
+    ): Promise<Uint8Array> {
+        return new Promise<Uint8Array>((resolver, rejecter) => {
             crypto.hkdf(CRYPTO_HASH_ALGORITHM, secret, salt, info, length, (error, key) => {
                 if (error !== null) rejecter(error);
-                resolver(new ByteArray(key));
+                resolver(new Uint8Array(key));
             });
         });
     }
 
-    hmac(key: ByteArray, data: ByteArray): ByteArray {
+    hmac(key: Uint8Array, data: Uint8Array): Uint8Array {
         const hmac = crypto.createHmac(CRYPTO_HASH_ALGORITHM, key);
         hmac.update(data);
-        return new ByteArray(hmac.digest());
+        return new Uint8Array(hmac.digest());
     }
 
     sign(
         privateKey: JsonWebKey,
-        data: ByteArray | ByteArray[],
+        data: Uint8Array | Uint8Array[],
         dsaEncoding: CryptoDsaEncoding = "ieee-p1363",
-    ): ByteArray {
+    ): Uint8Array {
         const signer = crypto.createSign(CRYPTO_HASH_ALGORITHM);
         if (Array.isArray(data)) {
             data.forEach(chunk => signer.update(chunk));
         } else {
             signer.update(data);
         }
-        return new ByteArray(
+        return new Uint8Array(
             signer.sign({
                 key: privateKey as any,
                 format: "jwk",
@@ -131,8 +131,8 @@ export class CryptoNode extends Crypto {
 
     verify(
         publicKey: JsonWebKey,
-        data: ByteArray,
-        signature: ByteArray,
+        data: Uint8Array,
+        signature: Uint8Array,
         dsaEncoding: CryptoDsaEncoding = "ieee-p1363",
     ) {
         const verifier = crypto.createVerify(CRYPTO_HASH_ALGORITHM);
@@ -155,7 +155,7 @@ export class CryptoNode extends Crypto {
 
         // The key exported from Node doesn't include most-significant bytes that are 0.  This doesn't affect how we
         // currently use keys but it's a little weird so 0 pad to avoid future confusion
-        const privateKey = new ByteArray(CRYPTO_EC_KEY_BYTES);
+        const privateKey = new Uint8Array(CRYPTO_EC_KEY_BYTES);
         const nodePrivateKey = ecdh.getPrivateKey();
         privateKey.set(nodePrivateKey, CRYPTO_EC_KEY_BYTES - nodePrivateKey.length);
 

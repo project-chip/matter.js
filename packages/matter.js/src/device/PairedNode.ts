@@ -7,10 +7,23 @@ import { CommissioningController } from "../CommissioningController.js";
 import { Attributes } from "../cluster/Cluster.js";
 import { ClusterClientObj, asClusterClientInternal, isClusterClient } from "../cluster/client/ClusterClientTypes.js";
 
+import {
+    AtLeastOne,
+    Crypto,
+    Diagnostic,
+    ImplementationError,
+    InternalError,
+    Logger,
+    MatterError,
+    Time,
+} from "@project-chip/matter.js-general";
 import { getClusterById } from "../cluster/ClusterHelper.js";
+import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClient } from "../cluster/client/ClusterClient.js";
+import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
 import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
 import { OperationalCredentials } from "../cluster/definitions/OperationalCredentialsCluster.js";
+import { AdministratorCommissioning } from "../cluster/definitions/index.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import {
     AttributeInitialValues,
@@ -18,28 +31,16 @@ import {
     ClusterServerObj,
     isClusterServer,
 } from "../cluster/server/ClusterServerTypes.js";
-import { ImplementationError, InternalError, MatterError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { NodeId } from "../datatype/NodeId.js";
-import { Logger } from "../log/Logger.js";
+import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import {
     DecodedAttributeReportValue,
     structureReadAttributeDataToClusterObject,
 } from "../protocol/interaction/AttributeDataDecoder.js";
-import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
-import { AtLeastOne } from "../util/Array.js";
-import { Aggregator } from "./Aggregator.js";
-import { ComposedDevice } from "./ComposedDevice.js";
-import { PairedDevice, RootEndpoint } from "./Device.js";
-
-import { ClusterType } from "../cluster/ClusterType.js";
-import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
-import { AdministratorCommissioning } from "../cluster/definitions/index.js";
-import { Crypto } from "../crypto/Crypto.js";
-import { EndpointInterface } from "../endpoint/EndpointInterface.js";
-import { Diagnostic } from "../log/Diagnostic.js";
 import { DecodedEventReportValue } from "../protocol/interaction/EventDataDecoder.js";
+import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
 import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import {
     CommissioningFlowType,
@@ -48,7 +49,9 @@ import {
     QrPairingCodeCodec,
 } from "../schema/PairingCodeSchema.js";
 import { PaseClient } from "../session/pase/PaseClient.js";
-import { Time } from "../time/Time.js";
+import { Aggregator } from "./Aggregator.js";
+import { ComposedDevice } from "./ComposedDevice.js";
+import { PairedDevice, RootEndpoint } from "./Device.js";
 import { DeviceTypeDefinition, DeviceTypes, UnknownDeviceType, getDeviceTypeDefinitionByCode } from "./DeviceTypes.js";
 import { Endpoint } from "./Endpoint.js";
 import { EndpointLoggingOptions, logEndpoint } from "./EndpointStructureLogger.js";

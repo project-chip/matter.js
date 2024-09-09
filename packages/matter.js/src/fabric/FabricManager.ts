@@ -4,13 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, MatterError, MatterFlowError } from "../common/MatterError.js";
-import { Key } from "../crypto/Key.js";
+import {
+    Bytes,
+    InternalError,
+    Key,
+    MatterError,
+    MatterFlowError,
+    MaybePromise,
+    Observable,
+    StorageContext,
+} from "@project-chip/matter.js-general";
 import { FabricIndex } from "../datatype/FabricIndex.js";
-import { StorageContext } from "../storage/StorageContext.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { Observable } from "../util/Observable.js";
-import { MaybePromise } from "../util/Promises.js";
 import { Fabric, FabricJsonObject } from "./Fabric.js";
 
 /** Specific Error for when a fabric is not found. */
@@ -107,10 +111,10 @@ export class FabricManager {
         return Array.from(this.#fabrics.values());
     }
 
-    findFabricFromDestinationId(destinationId: ByteArray, initiatorRandom: ByteArray) {
+    findFabricFromDestinationId(destinationId: Uint8Array, initiatorRandom: Uint8Array) {
         for (const fabric of this.#fabrics.values()) {
             const candidateDestinationId = fabric.getDestinationId(fabric.nodeId, initiatorRandom);
-            if (!candidateDestinationId.equals(destinationId)) continue;
+            if (!Bytes.areEqual(candidateDestinationId, destinationId)) continue;
             return fabric;
         }
 

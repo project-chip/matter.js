@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../../../common/MatterError.js";
+import { ImplementationError, Logger } from "@project-chip/matter.js-general";
 import { AggregatorEndpoint } from "../../../endpoint/definitions/system/AggregatorEndpoint.js";
-import { Logger } from "../../../log/Logger.js";
 import { DescriptorServer } from "../descriptor/DescriptorServer.js";
 import { BridgedDeviceBasicInformationBehavior } from "./BridgedDeviceBasicInformationBehavior.js";
 

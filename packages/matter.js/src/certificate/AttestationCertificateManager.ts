@@ -4,19 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "../crypto/Crypto.js";
-import { PrivateKey } from "../crypto/Key.js";
+import { Bytes, Crypto, PrivateKey, Time, toHex } from "@project-chip/matter.js-general";
 import { VendorId } from "../datatype/VendorId.js";
-import { Time } from "../time/Time.js";
-import { ByteArray } from "../util/ByteArray.js";
 import { CertificateManager, jsToMatterDate } from "./CertificateManager.js";
 import {
     TestCert_PAA_NoVID_PrivateKey,
     TestCert_PAA_NoVID_PublicKey,
     TestCert_PAA_NoVID_SKID,
 } from "./ChipPAAuthorities.js";
-
-import { toHex } from "../util/Number.js";
 
 function getPaiCommonName(vendorId: VendorId, productId?: number) {
     return `node-matter Dev PAI 0x${vendorId.toString(16).toUpperCase()} ${
@@ -70,7 +65,7 @@ export class AttestationCertificateManager {
     private generatePAACert(vendorId?: VendorId) {
         const now = Time.get().now();
         const unsignedCertificate = {
-            serialNumber: ByteArray.fromHex(toHex(this.paaCertId)),
+            serialNumber: Bytes.fromHex(toHex(this.paaCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
@@ -104,7 +99,7 @@ export class AttestationCertificateManager {
     private generatePAICert(vendorId: VendorId, productId?: number) {
         const now = Time.get().now();
         const unsignedCertificate = {
-            serialNumber: ByteArray.fromHex(toHex(this.paiCertId)),
+            serialNumber: Bytes.fromHex(toHex(this.paiCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
@@ -135,11 +130,11 @@ export class AttestationCertificateManager {
         return CertificateManager.productAttestationIntermediateCertToAsn1(unsignedCertificate, this.paaKeyPair);
     }
 
-    generateDaCert(publicKey: ByteArray, vendorId: VendorId, productId: number) {
+    generateDaCert(publicKey: Uint8Array, vendorId: VendorId, productId: number) {
         const now = Time.get().now();
         const certId = this.nextCertificateId++;
         const unsignedCertificate = {
-            serialNumber: ByteArray.fromHex(toHex(certId)),
+            serialNumber: Bytes.fromHex(toHex(certId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,

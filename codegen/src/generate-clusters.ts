@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
-import { ClusterModel, MatterModel } from "@project-chip/matter.js/model";
+import { Logger } from "@project-chip/matter.js-general";
+import { ClusterModel, MatterModel } from "@project-chip/matter.js-model";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { ClusterFile } from "./clusters/ClusterFile.js";

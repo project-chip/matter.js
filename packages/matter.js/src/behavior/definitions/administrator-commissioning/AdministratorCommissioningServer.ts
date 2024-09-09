@@ -4,15 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InternalError, Logger, Time, Timer } from "@project-chip/matter.js-general";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { MatterDevice } from "../../../MatterDevice.js";
-import { AccessLevel, Command, TlvNoResponse } from "../../../cluster/Cluster.js";
+import { Command, TlvNoResponse } from "../../../cluster/Cluster.js";
 import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
-import { InternalError } from "../../../common/MatterError.js";
-import { Logger } from "../../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { PaseServer } from "../../../session/pase/PaseServer.js";
-import { Time, Timer } from "../../../time/Time.js";
 import { TlvUInt16, TlvUInt32 } from "../../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../../tlv/TlvObject.js";
 import { TlvByteString } from "../../../tlv/TlvString.js";

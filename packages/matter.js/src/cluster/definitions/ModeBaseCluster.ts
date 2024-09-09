@@ -17,7 +17,7 @@ import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { StatusCode } from "../../protocol/interaction/StatusCode.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 export namespace ModeBase {
     /**

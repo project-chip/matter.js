@@ -4,18 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, Crypto, DerKey, PrivateKey, PublicKey, X962 } from "@project-chip/matter.js-general";
 import {
     CertificateManager,
     TlvIntermediateCertificate,
     TlvOperationalCertificate,
     TlvRootCertificate,
-    X962,
 } from "@project-chip/matter.js/certificate";
-import { BYTES_KEY, DerCodec, DerNode, ELEMENTS_KEY } from "@project-chip/matter.js/codec";
+import { DerCodec, DerNode } from "@project-chip/matter.js/codec";
 import { ValidationOutOfBoundsError } from "@project-chip/matter.js/common";
-import { Crypto, PrivateKey, PublicKey } from "@project-chip/matter.js/crypto";
 import { CaseAuthenticatedTag, FabricId, NodeId } from "@project-chip/matter.js/datatype";
-import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 import {
     CERTIFICATE_SETS,
@@ -39,19 +37,21 @@ describe("CertificateManager", () => {
             describe(`recodes Tlv for ${key}`, () => {
                 it("recode root certificate", () => {
                     const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
-                    expect(TlvRootCertificate.encode(rootTlv).toHex()).equal(certs.ROOT.TLV.toHex());
+                    expect(Bytes.toHex(TlvRootCertificate.encode(rootTlv))).equal(Bytes.toHex(certs.ROOT.TLV));
                 });
 
                 if ("ICAC" in certs) {
                     it("recode intermediate certificate", () => {
                         const icacTlv = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
-                        expect(TlvIntermediateCertificate.encode(icacTlv).toHex()).equal(certs.ICAC.TLV.toHex());
+                        expect(Bytes.toHex(TlvIntermediateCertificate.encode(icacTlv))).equal(
+                            Bytes.toHex(certs.ICAC.TLV),
+                        );
                     });
                 }
 
                 it("recode operational certificate", () => {
                     const nocTlv = TlvOperationalCertificate.decode(certs.NOC.TLV);
-                    expect(TlvOperationalCertificate.encode(nocTlv).toHex()).equal(certs.NOC.TLV.toHex());
+                    expect(Bytes.toHex(TlvOperationalCertificate.encode(nocTlv))).equal(Bytes.toHex(certs.NOC.TLV));
                 });
             });
         });
@@ -66,16 +66,16 @@ describe("CertificateManager", () => {
             describe(`generates the correct ASN1 bytes for ${key}`, () => {
                 it("encode root certificate", () => {
                     const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
-                    assert.equal(CertificateManager.rootCertToAsn1(rootTlv).toHex(), certs.ROOT.ASN1.toHex());
+                    assert.equal(Bytes.toHex(CertificateManager.rootCertToAsn1(rootTlv)), Bytes.toHex(certs.ROOT.ASN1));
                 });
 
                 if ("ICAC" in certs && "ASN1" in certs.ICAC) {
                     it("encode intermediate certificate", () => {
                         const icacTlv = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
                         assert.equal(
-                            CertificateManager.intermediateCaCertToAsn1(icacTlv).toHex(),
+                            Bytes.toHex(CertificateManager.intermediateCaCertToAsn1(icacTlv)),
                             // @ts-expect-error ASN1 might not be in TlvIntermediateCertificate
-                            certs.ICAC.ASN1.toHex(),
+                            Bytes.toHex(certs.ICAC.ASN1),
                         );
                     });
                 }
@@ -84,9 +84,9 @@ describe("CertificateManager", () => {
                     it("encode operational certificate", () => {
                         const nocTlv = TlvOperationalCertificate.decode(certs.NOC.TLV);
                         assert.equal(
-                            CertificateManager.nodeOperationalCertToAsn1(nocTlv).toHex(),
+                            Bytes.toHex(CertificateManager.nodeOperationalCertToAsn1(nocTlv)),
                             // @ts-expect-error ASN1 might not be in TlvOperationalCertificate
-                            certs.NOC.ASN1.toHex(),
+                            Bytes.toHex(certs.NOC.ASN1),
                         );
                     });
                 }
@@ -131,7 +131,7 @@ describe("CertificateManager", () => {
     describe("special Noc encoding cases", () => {
         it("validates TLV order preserve", () => {
             const NOC_JSON = {
-                serialNumber: ByteArray.fromHex("01"),
+                serialNumber: Bytes.fromHex("01"),
                 signatureAlgorithm: 1,
                 issuer: { rcacId: 0 },
                 notBefore: 734738627,
@@ -143,7 +143,7 @@ describe("CertificateManager", () => {
                 },
                 publicKeyAlgorithm: 1,
                 ellipticCurveIdentifier: 1,
-                ellipticCurvePublicKey: ByteArray.fromHex(
+                ellipticCurvePublicKey: Bytes.fromHex(
                     "047a13da11a960c91abdbe002c6f969f03b88f7f5c58f36f6755c6dce7e1ddd460ab4b2df33f8ed1da1ff5ebf21c3a293c3251241c445b208a22bea0abec369740",
                 ),
                 extensions: {
@@ -160,10 +160,10 @@ describe("CertificateManager", () => {
                         decipherOnly: false,
                     },
                     extendedKeyUsage: [2, 1],
-                    subjectKeyIdentifier: ByteArray.fromHex("50a7b210085872f47492e9442ccb2bfec82097da"),
-                    authorityKeyIdentifier: ByteArray.fromHex("9f833bc968b9c7ce347b1d10f046ebda0aeb0b3e"),
+                    subjectKeyIdentifier: Bytes.fromHex("50a7b210085872f47492e9442ccb2bfec82097da"),
+                    authorityKeyIdentifier: Bytes.fromHex("9f833bc968b9c7ce347b1d10f046ebda0aeb0b3e"),
                 },
-                signature: ByteArray.fromHex(
+                signature: Bytes.fromHex(
                     "3fcd56cf81d769100934b32f6a8b07afddfbf6c32f01e97385f251b8c71bc631a876c56fac76dd3c81449b71a0a450d28d9eaf314ccd3a166b61cddd965829f1",
                 ),
             };
@@ -175,7 +175,7 @@ describe("CertificateManager", () => {
 
             expect(unTlv).to.deep.equal(NOC_JSON);
             expect(Object.keys(unTlv.subject)).to.deep.equal(Object.keys(NOC_JSON.subject));
-            expect(unAsn1.toHex()).to.deep.equal(NOC_ASN1.toHex());
+            expect(Bytes.toHex(unAsn1)).to.deep.equal(Bytes.toHex(NOC_ASN1));
         });
 
         it("generates the correct ASN1 bytes with three different CASE Authenticated Tags", () => {
@@ -195,7 +195,7 @@ describe("CertificateManager", () => {
             };
             const result = CertificateManager.nodeOperationalCertToAsn1(nocWithCat);
 
-            assert.equal(result.toHex(), TEST_NOC_CERT_CAT_ASN1.toHex());
+            assert.equal(Bytes.toHex(result), Bytes.toHex(TEST_NOC_CERT_CAT_ASN1));
         });
 
         it("throws error if more then 3 tags are provided", () => {
@@ -248,7 +248,7 @@ describe("CertificateManager", () => {
                 CERTIFICATE_SETS["Matter 1.2 Specification Certificates"].ICAC.TLV,
             );
             assert.deepEqual(SPECS_ICAC_CERT_TLV, {
-                serialNumber: new ByteArray([45, 180, 68, 133, 86, 65, 174, 223]),
+                serialNumber: new Uint8Array([45, 180, 68, 133, 86, 65, 174, 223]),
                 signatureAlgorithm: 1,
                 issuer: { rcacId: BigInt("14612714909889200129") },
                 notBefore: 656087023,
@@ -256,7 +256,7 @@ describe("CertificateManager", () => {
                 subject: { icacId: BigInt("14612714909889200131") },
                 publicKeyAlgorithm: 1,
                 ellipticCurveIdentifier: 1,
-                ellipticCurvePublicKey: new ByteArray([
+                ellipticCurvePublicKey: new Uint8Array([
                     4, 197, 208, 134, 27, 184, 249, 12, 64, 92, 18, 49, 78, 76, 94, 190, 234, 147, 159, 114, 119, 75,
                     204, 51, 35, 158, 47, 89, 246, 244, 106, 248, 220, 125, 70, 130, 160, 227, 204, 198, 70, 230, 223,
                     41, 234, 134, 191, 86, 42, 231, 32, 168, 152, 51, 125, 56, 63, 50, 192, 160, 158, 65, 96, 25, 234,
@@ -274,14 +274,14 @@ describe("CertificateManager", () => {
                         keyEncipherment: false,
                         nonRepudiation: false,
                     },
-                    subjectKeyIdentifier: new ByteArray([
+                    subjectKeyIdentifier: new Uint8Array([
                         83, 82, 215, 5, 158, 156, 21, 165, 8, 144, 104, 98, 134, 72, 1, 162, 159, 31, 65, 211,
                     ]),
-                    authorityKeyIdentifier: new ByteArray([
+                    authorityKeyIdentifier: new Uint8Array([
                         19, 175, 129, 171, 55, 55, 75, 46, 210, 169, 100, 155, 18, 183, 163, 164, 40, 126, 21, 29,
                     ]),
                 },
-                signature: new ByteArray([
+                signature: new Uint8Array([
                     132, 26, 6, 212, 59, 94, 159, 236, 210, 78, 135, 177, 36, 78, 181, 28, 106, 44, 242, 13, 155, 94,
                     107, 160, 127, 17, 230, 0, 47, 126, 12, 163, 78, 50, 166, 2, 195, 96, 157, 0, 146, 211, 72, 189,
                     189, 25, 138, 17, 70, 70, 189, 65, 207, 16, 55, 131, 100, 26, 226, 94, 63, 35, 253, 38,
@@ -297,12 +297,12 @@ describe("CertificateManager", () => {
             );
 
             const derNode = DerCodec.decode(result);
-            assert.equal(derNode[ELEMENTS_KEY]?.length, 3);
-            const [requestNode, signatureAlgorithmNode, signatureNode] = derNode[ELEMENTS_KEY] as DerNode[];
+            assert.equal(derNode[DerKey.Elements]?.length, 3);
+            const [requestNode, signatureAlgorithmNode, signatureNode] = derNode[DerKey.Elements] as DerNode[];
             assert.deepEqual(DerCodec.encode(signatureAlgorithmNode), DerCodec.encode(X962.EcdsaWithSHA256));
             const requestBytes = DerCodec.encode(requestNode);
             assert.deepEqual(requestBytes, TEST_CSR_REQUEST_ASN1);
-            Crypto.verify(PublicKey(TEST_PUBLIC_KEY), DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
+            Crypto.verify(PublicKey(TEST_PUBLIC_KEY), DerCodec.encode(requestNode), signatureNode[DerKey.Bytes], "der");
         });
     });
 

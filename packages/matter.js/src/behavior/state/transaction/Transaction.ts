@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MaybePromise } from "../../../util/Promises.js";
+import { MaybePromise } from "@project-chip/matter.js-general";
 import { Participant } from "./Participant.js";
 import type { Resource } from "./Resource.js";
 import { Status } from "./Status.js";

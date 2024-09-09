@@ -4,10 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/MatterError.js";
-import { AttributeModel, ClusterModel, FeatureSet, ValueModel } from "../../model/index.js";
-import { FeatureMap } from "../../model/standard/elements/FeatureMap.js";
-import { camelize } from "../../util/String.js";
+import { camelize, InternalError } from "@project-chip/matter.js-general";
+import { AttributeModel, ClusterModel, FeatureMap, FeatureSet, ValueModel } from "@project-chip/matter.js-model";
 import { AccessControl } from "../AccessControl.js";
 import { Val } from "../state/Val.js";
 import { ValueCaster } from "../state/managed/values/ValueCaster.js";

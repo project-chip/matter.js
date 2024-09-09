@@ -10,11 +10,10 @@ import "@project-chip/matter-node.js";
 import { StorageBackendDisk } from "@project-chip/matter-node.js/storage";
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
 import { CommissioningController, MatterServer } from "@project-chip/matter.js";
+import { Logger, StorageContext, StorageManager } from "@project-chip/matter.js-general";
 import { NodeId } from "@project-chip/matter.js/datatype";
 import { CommissioningControllerNodeOptions, PairedNode } from "@project-chip/matter.js/device";
 import { EndpointInterface } from "@project-chip/matter.js/endpoint";
-import { Logger } from "@project-chip/matter.js/log";
-import { StorageContext, StorageManager } from "@project-chip/matter.js/storage";
 
 requireMinNodeVersion(16);
 

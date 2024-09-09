@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterError, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { Message } from "../../codec/MessageCodec.js";
-import { MatterError, UnexpectedDataError } from "../../common/MatterError.js";
 import { ExchangeSendOptions, MessageExchange } from "../../protocol/MessageExchange.js";
 import { SessionContext } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";

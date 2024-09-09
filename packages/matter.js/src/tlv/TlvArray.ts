@@ -4,14 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError } from "../common/MatterError.js";
+import { deepCopy, serialize, UnexpectedDataError } from "@project-chip/matter.js-general";
 import {
     ValidationDatatypeMismatchError,
     ValidationError,
     ValidationOutOfBoundsError,
 } from "../common/ValidationError.js";
-import { deepCopy } from "../util/DeepCopy.js";
-import { serialize } from "../util/String.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvEncodingOptions, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 

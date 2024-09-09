@@ -15,7 +15,7 @@ import {
 } from "../../../behavior/definitions/refrigerator-alarm/RefrigeratorAlarmServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * A refrigerator represents a device that contains one or more cabinets that are capable of chilling or freezing food.

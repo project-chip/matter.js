@@ -4,9 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Environment, StorageService, VariableService } from "@project-chip/matter.js/environment";
-import { Format, Logger } from "@project-chip/matter.js/log";
-import { Network } from "@project-chip/matter.js/net";
+import {
+    Environment,
+    LogFormat,
+    Logger,
+    Network,
+    StorageService,
+    VariableService,
+} from "@project-chip/matter.js-general";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { ImplementationError } from "../exports/common.js";
@@ -61,8 +66,8 @@ export function NodeJsEnvironment() {
     // When no logger format is set, we still use the default, and the process is running in a TTY, use ANSI formatting
     // If a user wants to change the log format he still can do after the environment was initialized (which should be
     // first thing anyway)
-    if (!env.vars.has("logger.format") && Logger.format === Format.PLAIN && process.stdin?.isTTY) {
-        env.vars.set("logger.format", Format.ANSI);
+    if (!env.vars.has("logger.format") && Logger.format === LogFormat.PLAIN && process.stdin?.isTTY) {
+        env.vars.set("logger.format", LogFormat.ANSI);
     }
 
     NodeJsActionTracer.configure(env);

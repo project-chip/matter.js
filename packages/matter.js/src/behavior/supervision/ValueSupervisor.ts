@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../model/definitions/DataModelPath.js";
-import { AsyncObservable } from "../../util/Observable.js";
+import { AsyncObservable } from "@project-chip/matter.js-general";
+import { DataModelPath } from "@project-chip/matter.js-model";
 import type { AccessControl } from "../AccessControl.js";
 import { ActionTracer } from "../context/ActionTracer.js";
 import type { Val } from "../state/Val.js";

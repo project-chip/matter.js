@@ -7,17 +7,10 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import {
-    Attribute,
-    Command,
-    TlvNoResponse,
-    AccessLevel,
-    OptionalAttribute,
-    OptionalEvent,
-    EventPriority
-} from "../Cluster.js";
+import { Attribute, Command, TlvNoResponse, OptionalAttribute, OptionalEvent, EventPriority } from "../Cluster.js";
 import { TlvUInt64, TlvUInt16, TlvUInt32, TlvEnum, TlvUInt8, TlvInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
@@ -25,7 +18,7 @@ import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ThreadNetworkDiagnostics {

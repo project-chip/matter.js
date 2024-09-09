@@ -7,10 +7,11 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { WritableAttribute, AccessLevel, FixedAttribute } from "../Cluster.js";
+import { WritableAttribute, FixedAttribute } from "../Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvArray } from "../../tlv/TlvArray.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace LocalizationConfiguration {

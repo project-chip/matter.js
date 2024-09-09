@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, Storage } from "@project-chip/matter.js-general";
 import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
 import { BooleanStateServer } from "@project-chip/matter.js/behavior/definitions/boolean-state";
 import { CarbonDioxideConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/carbon-dioxide-concentration-measurement";
@@ -62,9 +63,7 @@ import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevi
 import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
-import { Storage } from "@project-chip/matter.js/storage";
 import { NumberTag } from "@project-chip/matter.js/tags/NumberTag";
-import { ByteArray } from "@project-chip/matter.js/util";
 import { TestActivatedCarbonFilterMonitoringServer } from "./cluster/TestActivatedCarbonFilterMonitoringServer.js";
 import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsServer.js";
 import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitoringServer.js";
@@ -164,12 +163,12 @@ export class AllClustersTestInstance implements TestInstance {
     async setupServer(): Promise<ServerNode> {
         Environment.default.get(StorageService).factory = (_namespace: string) => this.storage;
 
-        const networkId = new ByteArray(32);
+        const networkId = new Uint8Array(32);
 
-        let deviceTestEnableKey = ByteArray.fromHex("00112233445566778899aabbccddeeff");
+        let deviceTestEnableKey = Bytes.fromHex("00112233445566778899aabbccddeeff");
         const argsEnableKeyIndex = process.argv.indexOf("--enable-key");
         if (argsEnableKeyIndex !== -1) {
-            deviceTestEnableKey = ByteArray.fromHex(process.argv[argsEnableKeyIndex + 1]);
+            deviceTestEnableKey = Bytes.fromHex(process.argv[argsEnableKeyIndex + 1]);
         }
 
         const serverNode = await ServerNode.create(

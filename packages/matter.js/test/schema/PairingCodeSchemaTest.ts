@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import {
     CommissioningFlowType,
     DiscoveryCapabilitiesSchema,
@@ -15,7 +16,6 @@ import {
 } from "../../src/schema/PairingCodeSchema.js";
 import { TlvField, TlvObject } from "../../src/tlv/TlvObject.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 const QR_CODE = "MT:YNJV7VSC00CMVH7SR00";
 const QR_CODE_DATA: QrCodeData = {
@@ -35,7 +35,7 @@ const QR_CODE_DATA: QrCodeData = {
 const QR_CODE_WITHTLV = "MT:YNJV7VSC00CMVH7E4810AK00";
 const QR_CODE_WITHTLV_DATA: QrCodeData = {
     ...QR_CODE_DATA,
-    tlvData: ByteArray.fromHex("010203"),
+    tlvData: Bytes.fromHex("010203"),
 };
 
 const MULTI_QR_CODE = QR_CODE + "*" + QR_CODE_WITHTLV.slice(3);
@@ -116,7 +116,7 @@ describe("QrPairingCodeCodec", () => {
 
     describe("Encode/Decode TlvData", () => {
         it("encodes and decodes just serialNumber as string", () => {
-            const tlvData = ByteArray.fromHex("152C000A3132333435363738393018"); // from Specs
+            const tlvData = Bytes.fromHex("152C000A3132333435363738393018"); // from Specs
 
             const decoded = QrPairingCodeCodec.decodeTlvData(tlvData);
 
@@ -136,7 +136,7 @@ describe("QrPairingCodeCodec", () => {
 
             const encoded = QrPairingCodeCodec.encodeTlvData(data);
 
-            expect(encoded).deep.equal(ByteArray.fromHex("152600d202964918"));
+            expect(encoded).deep.equal(Bytes.fromHex("152600d202964918"));
 
             const decoded = QrPairingCodeCodec.decodeTlvData(encoded);
 
@@ -144,7 +144,7 @@ describe("QrPairingCodeCodec", () => {
         });
 
         it("encodes and decodes serial and vendor specific field with custom schema", () => {
-            const tlvData = ByteArray.fromHex("152C810656656E646F722C000A3132333435363738393018"); // from Specs
+            const tlvData = Bytes.fromHex("152C810656656E646F722C000A3132333435363738393018"); // from Specs
 
             const customSchema = TlvObject({
                 vendorTag01: TlvField(0x81, TlvString),

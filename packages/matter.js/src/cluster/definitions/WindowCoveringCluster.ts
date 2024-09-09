@@ -15,16 +15,16 @@ import {
     TlvNoResponse,
     Command,
     FixedAttribute,
-    WritableAttribute,
-    AccessLevel
+    WritableAttribute
 } from "../Cluster.js";
 import { TlvUInt16, TlvPercent100ths, TlvPercent, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag, BitFieldEnum } from "../../schema/BitmapSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace WindowCovering {

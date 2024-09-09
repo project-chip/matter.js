@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DatatypeModel, type ClusterModel, type ValueModel } from "../../model/index.js";
+import { DatatypeModel, type ClusterModel, type ValueModel } from "@project-chip/matter.js-model";
 
 /**
  * We model behavior using Matter semantics.  For schema we allow any Matter

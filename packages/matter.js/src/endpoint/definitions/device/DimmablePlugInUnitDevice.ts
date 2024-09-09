@@ -20,7 +20,7 @@ import {
 } from "../../../behavior/definitions/occupancy-sensing/OccupancySensingBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * A Dimmable Plug-In Unit is a device that provides power to another device that is plugged into it, and is capable of

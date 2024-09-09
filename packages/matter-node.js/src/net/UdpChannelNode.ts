@@ -4,9 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Logger } from "@project-chip/matter.js/log";
-import { MAX_UDP_MESSAGE_SIZE, NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
-import { ByteArray } from "@project-chip/matter.js/util";
+import {
+    Diagnostic,
+    Logger,
+    MAX_UDP_MESSAGE_SIZE,
+    NetworkError,
+    UdpChannel,
+    UdpChannelOptions,
+} from "@project-chip/matter.js-general";
 import * as dgram from "dgram";
 import { NetworkNode } from "./NetworkNode.js";
 
@@ -105,8 +110,8 @@ export class UdpChannelNode implements UdpChannel {
         private readonly netInterface?: string,
     ) {}
 
-    onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void) {
-        const messageListener = (data: ByteArray, { address, port }: dgram.RemoteInfo) => {
+    onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: Uint8Array) => void) {
+        const messageListener = (data: Uint8Array, { address, port }: dgram.RemoteInfo) => {
             const netInterface = this.netInterface ?? NetworkNode.getNetInterfaceForIp(address);
             if (netInterface === undefined) return;
             listener(netInterface, address, port, data);
@@ -120,7 +125,7 @@ export class UdpChannelNode implements UdpChannel {
         };
     }
 
-    async send(host: string, port: number, data: ByteArray) {
+    async send(host: string, port: number, data: Uint8Array) {
         return new Promise<void>((resolve, reject) => {
             this.socket.send(data, port, host, error => {
                 if (error !== null) {

@@ -4,11 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic, ImplementationError, Logger, Observable } from "@project-chip/matter.js-general";
 import { ClusterType } from "../../cluster/ClusterType.js";
-import { ImplementationError } from "../../common/MatterError.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
-import { Logger } from "../../log/Logger.js";
-import { Observable } from "../../util/Observable.js";
 import { Behavior } from "../Behavior.js";
 import { ClusterBehavior } from "./ClusterBehavior.js";
 import { introspectionInstanceOf } from "./ClusterBehaviorUtil.js";

@@ -4,15 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError } from "../common/MatterError.js";
-import { ByteArray } from "../util/ByteArray.js";
+import { UnexpectedDataError } from "@project-chip/matter.js-general";
 import { Schema } from "./Schema.js";
 
 const BASE38_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-.";
 
 /** See {@link MatterSpecification.v10.Core} § 5.1.3.1 */
-class Base38Schema extends Schema<ByteArray, string> {
-    protected encodeInternal(bytes: ByteArray): string {
+class Base38Schema extends Schema<Uint8Array, string> {
+    protected encodeInternal(bytes: Uint8Array): string {
         const length = bytes.length;
         let offset = 0;
         const result = new Array<string>();
@@ -41,7 +40,7 @@ class Base38Schema extends Schema<ByteArray, string> {
         return result;
     }
 
-    protected decodeInternal(encoded: string): ByteArray {
+    protected decodeInternal(encoded: string): Uint8Array {
         const encodedLength = encoded.length;
         const remainderEncodedLength = encodedLength % 5;
         let decodeLength = ((encodedLength - remainderEncodedLength) / 5) * 3;
@@ -55,7 +54,7 @@ class Base38Schema extends Schema<ByteArray, string> {
             default:
                 throw new UnexpectedDataError(`Invalid base38 encoded string length: ${encodedLength}`);
         }
-        const result = new ByteArray(decodeLength);
+        const result = new Uint8Array(decodeLength);
         let decodedOffset = 0;
         let encodedOffset = 0;
         while (encodedOffset < encodedLength) {

@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
+import { NotImplementedError, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { ReedSolomon } from "../math/ReedSolomon.js";
-import { ByteArray } from "../util/ByteArray.js";
 import { Schema } from "./Schema.js";
 
 const QR_MASK = [
@@ -139,7 +138,7 @@ export class QrCodeSchema extends Schema<string, string> {
         }
 
         // Convert to bytes
-        const dataBytes = new ByteArray(19);
+        const dataBytes = new Uint8Array(19);
         for (let i = 0; i < 19; i++) {
             dataBytes[i] = Number.parseInt(bitStringBuilder.join("").slice(i * 8, i * 8 + 8), 2);
         }

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NetInterface } from "@project-chip/matter.js-general";
 import { Ble } from "@project-chip/matter.js/ble";
 import { ImplementationError, InstanceBroadcaster, Scanner, TransportInterface } from "@project-chip/matter.js/common";
-import { NetInterface } from "@project-chip/matter.js/net";
 import { BleScanner } from "./BleScanner.js";
 import { ReactNativeBleCentralInterface } from "./ReactNativeBleChannel.js";
 import { ReactNativeBleClient } from "./ReactNativeBleClient.js";

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js/common";
-import { Logger } from "@project-chip/matter.js/log";
+import { InternalError, Logger } from "@project-chip/matter.js-general";
 import {
     AttributeModel,
     ClusterModel,
@@ -16,7 +15,7 @@ import {
     ValueModel,
     conditionToBitmaps,
     translateBitmap,
-} from "@project-chip/matter.js/model";
+} from "@project-chip/matter.js-model";
 import { Block, Entry } from "../util/TsFile.js";
 import { camelize, serialize } from "../util/string.js";
 import { ClusterComponentGenerator } from "./ClusterComponentGenerator.js";
@@ -453,7 +452,7 @@ function generateComplete(file: ClusterFile, variance: ClusterVariance) {
     ["attribute", "command", "event"].forEach(addElements);
 
     // Generate an interface for Complete
-    file.addImport("#/util/Type.js", "Identity");
+    file.addImport("@project-chip/matter.js-general", "Identity");
     const definition = generateExportableTypeAndObject(file.ns, "Complete");
     documentComplete(file.cluster.name, definition);
 }
@@ -503,7 +502,7 @@ function generateAlias(file: ClusterFile) {
  * If TS were to fix this at some point then we can stop doing this.
  */
 export function generateExportableTypeAndObject(target: Block, name: string): Entry {
-    target.file.addImport("#/util/Type.js", "Identity");
+    target.file.addImport("@project-chip/matter.js-general", "Identity");
     const definition = target.atom(`export interface ${name} extends Identity<typeof ${name}Instance> {}`);
     target.undefine(name);
     target.atom(`export const ${name}: ${name} = ${name}Instance`);

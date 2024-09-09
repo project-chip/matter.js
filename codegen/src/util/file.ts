@@ -15,8 +15,9 @@ import { describeList } from "./string.js";
 const DIR_MAPPING = {
     "#cache": Package.workspace.resolve("codegen/.cache"),
     "#intermediate": Package.workspace.resolve("models/src"),
-    "#": Package.workspace.resolve("packages/matter.js/src/"),
-    "#elements": Package.workspace.resolve("packages/matter.js/src/model/standard/elements"),
+    "#": Package.workspace.resolve("packages/matter.js/src"),
+    "#model": Package.workspace.resolve("packages/model/src"),
+    "#elements": Package.workspace.resolve("packages/model/src/standard/elements"),
     "#clusters": Package.workspace.resolve("packages/matter.js/src/cluster/definitions"),
     "#globals": Package.workspace.resolve("packages/matter.js/src/cluster/globals"),
     "#endpoints": Package.workspace.resolve("packages/matter.js/src/endpoint/definitions"),

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Environment, StorageBackendMemory, StorageManager, StorageService } from "@project-chip/matter.js-general";
 import { Behavior } from "../../src/behavior/Behavior.js";
 import { ServerBehaviorBacking } from "../../src/behavior/internal/ServerBacking.js";
 import { Val } from "../../src/behavior/state/Val.js";
@@ -14,15 +15,11 @@ import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { EndpointInitializer } from "../../src/endpoint/properties/EndpointInitializer.js";
 import { PartStore } from "../../src/endpoint/storage/PartStore.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
-import { Environment } from "../../src/environment/Environment.js";
-import { StorageService } from "../../src/environment/StorageService.js";
 import { Node } from "../../src/node/Node.js";
 import { ServerNode } from "../../src/node/ServerNode.js";
 import { IdentityService } from "../../src/node/server/IdentityService.js";
 import { PartStoreService } from "../../src/node/server/storage/PartStoreService.js";
 import { ServerStore } from "../../src/node/server/storage/ServerStore.js";
-import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
-import { StorageManager } from "../../src/storage/StorageManager.js";
 
 export class MockPartInitializer extends EndpointInitializer {
     #nextId = 1;

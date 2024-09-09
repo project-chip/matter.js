@@ -14,7 +14,7 @@ import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvField, TlvOptionalField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace FanControl {

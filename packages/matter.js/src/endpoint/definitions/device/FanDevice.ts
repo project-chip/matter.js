@@ -11,7 +11,7 @@ import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/
 import { FanControlServer as BaseFanControlServer } from "../../../behavior/definitions/fan-control/FanControlServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * A Fan device is typically standalone or mounted on a ceiling or wall and is used to circulate air in a room.

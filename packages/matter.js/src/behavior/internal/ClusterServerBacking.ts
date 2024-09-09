@@ -4,6 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    camelize,
+    Diagnostic,
+    ImplementationError,
+    InternalError,
+    isObject,
+    Logger,
+    MaybePromise,
+} from "@project-chip/matter.js-general";
+import { CommandModel, ElementTag } from "@project-chip/matter.js-model";
 import { Attribute, Command, Event, TlvNoResponse } from "../../cluster/Cluster.js";
 import {
     AttributeServer,
@@ -14,15 +24,8 @@ import { ClusterDatasource } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { Message } from "../../codec/MessageCodec.js";
-import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import type { EndpointServer } from "../../endpoint/EndpointServer.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
-import { Logger } from "../../log/Logger.js";
-import { CommandModel, ElementTag } from "../../model/index.js";
 import { SecureSession } from "../../session/SecureSession.js";
-import { MaybePromise } from "../../util/Promises.js";
-import { camelize } from "../../util/String.js";
-import { isObject } from "../../util/Type.js";
 import { AccessControl } from "../AccessControl.js";
 import { Behavior } from "../Behavior.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
@@ -290,7 +293,7 @@ function createAttributeServer(
 
 function createCommandServer(name: string, definition: Command<any, any, any>, backing: ClusterServerBacking) {
     // TODO: Introduce nicer ways to get command incl caching and such, aka "make api suck less"
-    const schema = backing.type.schema?.member(camelize(name, true), [ElementTag.Command]) as CommandModel | undefined;
+    const schema = backing.type.schema?.member(camelize(name, true), [ElementTag.Command]) as CommandModel;
     if (schema === undefined) {
         throw new ImplementationError(`There is no metadata for command ${name}`);
     }

@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, createPromise, Logger, Time, Timer } from "@project-chip/matter.js-general";
 import { BleError } from "@project-chip/matter.js/ble";
 import { BtpCodec } from "@project-chip/matter.js/codec";
 import { CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "@project-chip/matter.js/common";
 import { VendorId } from "@project-chip/matter.js/datatype";
-import { Logger } from "@project-chip/matter.js/log";
-import { Time, Timer } from "@project-chip/matter.js/time";
-import { ByteArray, createPromise } from "@project-chip/matter.js/util";
 import type { Peripheral } from "@stoprocent/noble";
 import { NobleBleClient } from "./NobleBleClient.js";
 
@@ -91,8 +89,10 @@ export class BleScanner implements Scanner {
         this.finishWaiter(queryKey, true);
     }
 
-    private handleDiscoveredDevice(peripheral: Peripheral, manufacturerServiceData: ByteArray) {
-        logger.debug(`Discovered device ${peripheral.address} ${manufacturerServiceData?.toHex()}`);
+    private handleDiscoveredDevice(peripheral: Peripheral, manufacturerServiceData: Uint8Array) {
+        logger.debug(
+            `Discovered device ${peripheral.address} ${manufacturerServiceData === undefined ? undefined : Bytes.toHex(manufacturerServiceData)}`,
+        );
 
         try {
             const { discriminator, vendorId, productId, hasAdditionalAdvertisementData } =

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { AsyncObservable, Observable } from "@project-chip/matter.js-general";
 import type { ClusterType } from "../../cluster/ClusterType.js";
 import type { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import type { AsyncObservable, Observable } from "../../util/Observable.js";
 import type { Behavior } from "../Behavior.js";
 import type { ActionContext } from "../context/ActionContext.js";
 import type { ClusterOf } from "./ClusterBehaviorUtil.js";

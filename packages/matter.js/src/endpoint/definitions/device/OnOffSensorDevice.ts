@@ -21,7 +21,7 @@ import {
 } from "../../../behavior/definitions/color-control/ColorControlBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * An On/Off Sensor is a measurement and sensing device that, when bound to a lighting device such as a Dimmable Light,

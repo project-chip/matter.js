@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-codegen",
-    "version": "git",
+    "version": "0.0.0-git",
     "description": "Matter.js tooling",
     "private": true,
     "type": "module",
@@ -28,7 +28,8 @@
     },
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "dependencies": {
-        "@project-chip/matter.js": "*",
+        "@project-chip/matter.js-general": "*",
+        "@project-chip/matter.js-model": "*",
         "@project-chip/matter.js-intermediate-models": "*"
     },
     "engines": {

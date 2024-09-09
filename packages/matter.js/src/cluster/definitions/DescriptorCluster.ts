@@ -17,7 +17,7 @@ import { TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Descriptor {

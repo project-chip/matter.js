@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError, InternalError, NotImplementedError } from "@project-chip/matter.js-general";
 import { Behavior } from "../behavior/Behavior.js";
 import { ClusterBehavior } from "../behavior/cluster/ClusterBehavior.js";
 import { BehaviorBacking } from "../behavior/internal/BehaviorBacking.js";
@@ -12,7 +13,6 @@ import { ServerBehaviorBacking } from "../behavior/internal/ServerBacking.js";
 import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
-import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Endpoint } from "./Endpoint.js";

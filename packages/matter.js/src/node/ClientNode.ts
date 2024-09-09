@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Identity, NotImplementedError } from "@project-chip/matter.js-general";
 import { NetworkRuntime } from "../behavior/system/network/NetworkRuntime.js";
-import { NotImplementedError } from "../common/MatterError.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
-import { Identity } from "../util/Type.js";
 import { Node } from "./Node.js";
 
 /**

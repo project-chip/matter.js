@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic, InternalError, MaybePromise } from "@project-chip/matter.js-general";
 import { MatterDevice } from "../../MatterDevice.js";
 import { AccessControl } from "../../behavior/AccessControl.js";
 import { ActionContext } from "../../behavior/context/ActionContext.js";
@@ -17,12 +18,10 @@ import { AnyAttributeServer, AttributeServer } from "../../cluster/server/Attrib
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AnyEventServer } from "../../cluster/server/EventServer.js";
 import { Message } from "../../codec/MessageCodec.js";
-import { InternalError } from "../../common/MatterError.js";
 import { Endpoint } from "../../endpoint/Endpoint.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { EndpointServer } from "../../endpoint/EndpointServer.js";
 import { EndpointLifecycle } from "../../endpoint/properties/EndpointLifecycle.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { AccessDeniedError } from "../../protocol/interaction/AccessControlManager.js";
 import { EventStorageData } from "../../protocol/interaction/EventHandler.js";
@@ -40,7 +39,6 @@ import {
     InteractionServer,
 } from "../../protocol/interaction/InteractionServer.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { MaybePromise } from "../../util/Promises.js";
 import { ServerNode } from "../ServerNode.js";
 
 const activityKey = Symbol("activity");

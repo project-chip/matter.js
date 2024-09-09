@@ -3,14 +3,24 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import {
+    Environment,
+    ImplementationError,
+    InternalError,
+    Logger,
+    Network,
+    ServerAddress,
+    StorageContext,
+    SupportedStorageTypes,
+    SyncStorage,
+    UdpInterface,
+} from "@project-chip/matter.js-general";
 import { MatterController } from "./MatterController.js";
 import { MatterNode } from "./MatterNode.js";
 import { GlobalAttributes } from "./cluster/Cluster.js";
 import { SupportedAttributeClient } from "./cluster/client/AttributeClient.js";
 import { BasicInformation } from "./cluster/definitions/BasicInformationCluster.js";
-import { ImplementationError, InternalError } from "./common/MatterError.js";
 import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData } from "./common/Scanner.js";
-import { ServerAddress } from "./common/ServerAddress.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { FabricId } from "./datatype/FabricId.js";
@@ -18,22 +28,15 @@ import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { CommissioningControllerNodeOptions, PairedNode } from "./device/PairedNode.js";
-import { Environment } from "./environment/Environment.js";
-import { MdnsService } from "./environment/MdnsService.js";
-import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { Network } from "./net/Network.js";
-import { UdpInterface } from "./net/UdpInterface.js";
+import { MdnsService } from "./mdns/MdnsService.js";
 import { ControllerStore } from "./node/client/storage/ControllerStore.js";
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
 import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
-import { SyncStorage } from "./storage/Storage.js";
-import { StorageContext } from "./storage/StorageContext.js";
-import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 
 const logger = new Logger("CommissioningController");
 

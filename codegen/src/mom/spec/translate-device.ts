@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Logger } from "@project-chip/matter.js/log";
-import { DeviceTypeElement, FieldElement, RequirementElement } from "@project-chip/matter.js/model";
+import { Diagnostic, Logger } from "@project-chip/matter.js-general";
+import { DeviceTypeElement, FieldElement, RequirementElement } from "@project-chip/matter.js-model";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
 import { ConstraintStr, Identifier, Integer, LowerIdentifier, Str } from "./html-translators.js";

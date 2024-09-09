@@ -10,7 +10,7 @@ import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definiti
 import { SwitchServer as BaseSwitchServer } from "../../../behavior/definitions/switch/SwitchServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * This defines conformance for the Generic Switch device type.

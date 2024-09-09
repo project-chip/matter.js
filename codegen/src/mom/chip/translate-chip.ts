@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { list, string } from "@project-chip/matter.js/elements";
-import { Logger } from "@project-chip/matter.js/log";
+import { Logger } from "@project-chip/matter.js-general";
 import {
     Access,
     AnyElement,
@@ -19,8 +18,10 @@ import {
     ElementTag,
     EventElement,
     FieldElement,
+    list,
+    string,
     ValueElement,
-} from "@project-chip/matter.js/model";
+} from "@project-chip/matter.js-model";
 import { NumericRanges } from "../../clusters/NumberConstants.js";
 import { camelize } from "../../util/string.js";
 import { TypeMap } from "./type-map.js";

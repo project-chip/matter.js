@@ -4,16 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic, Logger, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { EventPriority } from "../../cluster/Cluster.js";
 import { getClusterById, getClusterEventById } from "../../cluster/ClusterHelper.js";
-import { UnexpectedDataError } from "../../common/MatterError.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { EventNumber } from "../../datatype/EventNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
-import { Logger } from "../../log/Logger.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
 import { TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvEventData, TlvEventReport } from "./InteractionProtocol.js";

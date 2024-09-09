@@ -5,6 +5,8 @@
  */
 
 import {
+    Bytes,
+    Diagnostic,
     DnsCodec,
     DnsMessagePartiallyPreEncoded,
     DnsMessageType,
@@ -12,10 +14,19 @@ import {
     DnsRecord,
     DnsRecordClass,
     DnsRecordType,
+    ImplementationError,
+    Logger,
     MAX_MDNS_MESSAGE_SIZE,
+    Network,
+    ServerAddress,
+    ServerAddressIp,
     SrvRecordValue,
-} from "../codec/DnsCodec.js";
-import { ImplementationError } from "../common/MatterError.js";
+    Time,
+    Timer,
+    UdpMulticastServer,
+    createPromise,
+    isIPv6,
+} from "@project-chip/matter.js-general";
 import {
     CommissionableDevice,
     CommissionableDeviceIdentifiers,
@@ -23,18 +34,9 @@ import {
     OperationalDevice,
     Scanner,
 } from "../common/Scanner.js";
-import { ServerAddress, ServerAddressIp } from "../common/ServerAddress.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { Logger } from "../log/Logger.js";
-import { Network } from "../net/Network.js";
-import { UdpMulticastServer } from "../net/UdpMulticastServer.js";
-import { Time, Timer } from "../time/Time.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { isIPv6 } from "../util/Ip.js";
-import { createPromise } from "../util/Promises.js";
 import {
     MATTER_COMMISSION_SERVICE_QNAME,
     MATTER_SERVICE_QNAME,
@@ -343,8 +345,8 @@ export class MdnsScanner implements Scanner {
         return this.#recordWaiters.has(queryId);
     }
 
-    #createOperationalMatterQName(operationalId: ByteArray, nodeId: NodeId) {
-        const operationalIdString = operationalId.toHex().toUpperCase();
+    #createOperationalMatterQName(operationalId: Uint8Array, nodeId: NodeId) {
+        const operationalIdString = Bytes.toHex(operationalId).toUpperCase();
         return getDeviceMatterQname(operationalIdString, NodeId.toHexString(nodeId));
     }
 
@@ -629,7 +631,7 @@ export class MdnsScanner implements Scanner {
      * Main method to handle all incoming DNS messages.
      * It will parse the message and check if it contains relevant discovery records.
      */
-    #handleDnsMessage(messageBytes: ByteArray, _remoteIp: string, netInterface: string) {
+    #handleDnsMessage(messageBytes: Uint8Array, _remoteIp: string, netInterface: string) {
         if (this.#closing) return;
         const message = DnsCodec.decode(messageBytes);
         if (message === undefined) return; // The message cannot be parsed

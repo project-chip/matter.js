@@ -14,7 +14,7 @@ import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvUInt8, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { OperationalState as OperationalStateNamespace } from "./OperationalStateCluster.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace RvcOperationalState {

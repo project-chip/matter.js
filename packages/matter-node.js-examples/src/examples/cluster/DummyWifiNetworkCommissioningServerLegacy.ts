@@ -11,9 +11,9 @@ import {
     GeneralCommissioningCluster,
     NetworkCommissioning,
 } from "@project-chip/matter.js/cluster";
-import { ByteArray } from "@project-chip/matter.js/util";
+import { Bytes } from "../../../../general/dist/cjs/index.js";
 
-const firstNetworkId = new ByteArray(32);
+const firstNetworkId = new Uint8Array(32);
 
 const WifiNetworkCluster = NetworkCommissioning.Cluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface);
 
@@ -37,7 +37,9 @@ const Server: ClusterServerObj<typeof WifiNetworkCluster> = ClusterServer(
     },
     {
         scanNetworks: async ({ request: { ssid, breadcrumb }, attributes: { lastNetworkingStatus }, endpoint }) => {
-            console.log(`---> scanNetworks called on NetworkCommissioning cluster: ${ssid?.toHex()} ${breadcrumb}`);
+            console.log(
+                `---> scanNetworks called on NetworkCommissioning cluster: ${ssid ? Bytes.toHex(ssid) : undefined} ${breadcrumb}`,
+            );
 
             // Simulate successful scan
             if (breadcrumb !== undefined) {
@@ -59,8 +61,8 @@ const Server: ClusterServerObj<typeof WifiNetworkCluster> = ClusterServer(
                             wpa2Personal: true,
                             wpa3Personal: true,
                         },
-                        ssid: ssid || ByteArray.fromString(getParameter("ble-wifi-scan-ssid") ?? "TestSSID"), // Set a valid existing local Wi-Fi SSID here
-                        bssid: ByteArray.fromString(getParameter("ble-wifi-scan-bssid") ?? "00:00:00:00:00:00"),
+                        ssid: ssid || Bytes.fromString(getParameter("ble-wifi-scan-ssid") ?? "TestSSID"), // Set a valid existing local Wi-Fi SSID here
+                        bssid: Bytes.fromString(getParameter("ble-wifi-scan-bssid") ?? "00:00:00:00:00:00"),
                         channel: 1,
                     },
                 ],
@@ -73,7 +75,7 @@ const Server: ClusterServerObj<typeof WifiNetworkCluster> = ClusterServer(
             session,
         }) => {
             console.log(
-                `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${ssid.toHex()} ${credentials.toHex()} ${breadcrumb}`,
+                `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(ssid)} ${Bytes.toHex(credentials)} ${breadcrumb}`,
             );
 
             session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
@@ -100,7 +102,7 @@ const Server: ClusterServerObj<typeof WifiNetworkCluster> = ClusterServer(
             session,
         }) => {
             console.log(
-                `---> removeNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`,
+                `---> removeNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${breadcrumb}`,
             );
 
             session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
@@ -127,7 +129,7 @@ const Server: ClusterServerObj<typeof WifiNetworkCluster> = ClusterServer(
             session,
         }) => {
             console.log(
-                `---> connectNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`,
+                `---> connectNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${breadcrumb}`,
             );
 
             session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
@@ -162,7 +164,7 @@ const Server: ClusterServerObj<typeof WifiNetworkCluster> = ClusterServer(
             endpoint,
         }) => {
             console.log(
-                `---> reorderNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${networkIndex} ${breadcrumb}`,
+                `---> reorderNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${networkIndex} ${breadcrumb}`,
             );
 
             // Simulate successful connection

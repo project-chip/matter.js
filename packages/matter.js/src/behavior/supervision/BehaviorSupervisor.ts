@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Access, ClusterModel, DatatypeModel, FieldModel, type ValueModel } from "../../model/index.js";
-import { camelize } from "../../util/String.js";
+import { camelize } from "@project-chip/matter.js-general";
+import { Access, ClusterModel, DatatypeModel, FieldModel, type ValueModel } from "@project-chip/matter.js-model";
 import type { Behavior } from "../Behavior.js";
 import type { StateType } from "../state/StateType.js";
 import type { Val } from "../state/Val.js";
