@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const elapsedS = Datatype({
@@ -16,4 +16,4 @@ export const elapsedS = Datatype({
     xref: { document: "core", section: "7.18.2.10" }
 });
 
-Matter.children.push(elapsedS);
+MatterDefinition.children.push(elapsedS);

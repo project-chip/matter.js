@@ -5,11 +5,10 @@
  */
 
 import { Access, Aspect, Conformance, Constraint, Quality } from "../aspects/index.js";
-import { ElementTag, FieldValue, Metatype } from "../definitions/index.js";
-import { AnyElement, FieldElement, ValueElement } from "../elements/index.js";
+import { ElementTag, FieldValue, Metatype } from "../common/index.js";
+import { BaseElement, ValueElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Aspects } from "./Aspects.js";
-import { Children } from "./Children.js";
 import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
 
@@ -17,6 +16,7 @@ import { PropertyModel } from "./PropertyModel.js";
 // runtime.  So we use the references in the Model.constructors factory pool.
 import { camelize } from "@project-chip/matter.js-general";
 import { DefaultValue } from "../logic/DefaultValue.js";
+import { Children } from "./Children.js";
 import { type ClusterModel } from "./ClusterModel.js";
 import { type FieldModel } from "./FieldModel.js";
 
@@ -28,17 +28,17 @@ const QUALITY: unique symbol = Symbol("quality");
 /**
  * Each {@link ValueElement} type has a corresponding implementation that derives from this class.
  */
-export abstract class ValueModel extends Model implements ValueElement {
+export abstract class ValueModel<T extends ValueElement = ValueElement> extends Model<T> implements ValueElement {
     declare byteSize?: ValueElement.ByteSize;
     declare default?: FieldValue;
     declare metatype?: Metatype;
     override isType? = true;
 
-    override get children(): Children<FieldModel, FieldElement> {
-        return super.children as any;
+    override get children(): Children<FieldModel> {
+        return super.children as Children<FieldModel>;
     }
 
-    override set children(children: (FieldModel | FieldElement)[]) {
+    override set children(children: Children.InputIterable<FieldModel>) {
         super.children = children;
     }
 
@@ -301,7 +301,7 @@ export abstract class ValueModel extends Model implements ValueElement {
         if (result.default === undefined) {
             delete result.default;
         }
-        return result as AnyElement;
+        return result as T;
     }
 
     override freeze() {
@@ -312,7 +312,7 @@ export abstract class ValueModel extends Model implements ValueElement {
         super.freeze();
     }
 
-    constructor(definition: ValueElement.Properties) {
+    constructor(definition: BaseElement.Properties<T>) {
         super(definition);
 
         const match = this.type?.match(/^list\[(.*)\]$/);

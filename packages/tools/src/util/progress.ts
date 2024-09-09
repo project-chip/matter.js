@@ -130,7 +130,7 @@ export class Progress {
 
     success(text: string) {
         this.status = Progress.Status.Success;
-        writeStatus(`  ${colors.green("✔")} ${text} ${this.#duration}`);
+        writeStatus(`  ${colors.green("✓")} ${text} ${this.#duration}`);
         this.#start = this.#ongoingText = undefined;
     }
 

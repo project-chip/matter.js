@@ -4,5 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./elements/index.js";
-export * from "./Matter.js";
+export * from "./MatterDefinition.js";

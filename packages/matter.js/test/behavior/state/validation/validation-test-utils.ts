@@ -39,18 +39,18 @@ export function Fields(
 }
 
 export function Features(definition: { [code: string]: string }): AttributeModel {
-    return new AttributeModel({
-        ...FeatureMap,
+    const result = FeatureMap.clone();
 
-        children: Object.entries(definition).map(
-            ([name, description], index) =>
-                new FieldModel({
-                    name,
-                    description,
-                    constraint: index,
-                }),
-        ),
-    });
+    result.children = Object.entries(definition).map(
+        ([name, description], index) =>
+            new FieldModel({
+                name,
+                description,
+                constraint: index,
+            }),
+    );
+
+    return result;
 }
 
 export function Tests(...definition: (Fields | Features | Tests["entries"])[]): Tests {
@@ -78,7 +78,7 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
     const cluster = new ClusterModel({
         name: "Test",
 
-        children: [features ?? new AttributeModel(FeatureMap), ...fields],
+        children: [features ? features.clone() : FeatureMap.clone(), ...fields],
     });
     cluster.supportedFeatures = supports;
 

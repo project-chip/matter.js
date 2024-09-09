@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const energyMWh = Datatype({
@@ -14,4 +14,4 @@ export const energyMWh = Datatype({
     details: "This type represents energy measured in milliwatt-hours.",
     xref: { document: "core", section: "7.18.2.15" }
 });
-Matter.children.push(energyMWh);
+MatterDefinition.children.push(energyMWh);

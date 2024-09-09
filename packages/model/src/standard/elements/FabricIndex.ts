@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { FieldElement as Field } from "../../elements/index.js";
 
 export const FabricIndex = Field({
@@ -24,4 +24,4 @@ export const FabricIndex = Field({
     xref: { document: "core", section: "7.13.7" }
 });
 
-Matter.children.push(FabricIndex);
+MatterDefinition.children.push(FabricIndex);

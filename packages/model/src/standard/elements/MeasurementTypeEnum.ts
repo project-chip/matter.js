@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype, FieldElement as Field } from "../../elements/index.js";
 
 export const MeasurementTypeEnum = Datatype({
@@ -62,4 +62,4 @@ export const MeasurementTypeEnum = Datatype({
     ]
 });
 
-Matter.children.push(MeasurementTypeEnum);
+MatterDefinition.children.push(MeasurementTypeEnum);

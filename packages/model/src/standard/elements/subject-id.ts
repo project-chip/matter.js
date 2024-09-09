@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const subjectId = Datatype({
@@ -16,4 +16,4 @@ export const subjectId = Datatype({
         "references it (as subject-id or SubjectID) from a number of different clusters."
 });
 
-Matter.children.push(subjectId);
+MatterDefinition.children.push(subjectId);

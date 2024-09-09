@@ -7,9 +7,9 @@
 import { camelize, describeList } from "@project-chip/matter.js-general";
 import { Access } from "../aspects/Access.js";
 import { Quality } from "../aspects/Quality.js";
-import { SchemaImplementationError } from "../definitions/errors.js";
-import { ElementTag, FeatureSet, Metatype } from "../definitions/index.js";
-import { Mei } from "../definitions/Mei.js";
+import { SchemaImplementationError } from "../common/errors.js";
+import { ElementTag, FeatureSet, Metatype } from "../common/index.js";
+import { Mei } from "../common/Mei.js";
 import { ClusterElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { ClusterRevision } from "../standard/elements/ClusterRevision.js";
@@ -26,12 +26,20 @@ import { PropertyModel } from "./PropertyModel.js";
 
 const QUALITY = Symbol("quality");
 
-export class ClusterModel extends Model implements ClusterElement {
+export class ClusterModel extends Model<ClusterElement> implements ClusterElement {
     override tag: ClusterElement.Tag = ClusterElement.Tag;
     declare id: Mei;
     declare classification?: ClusterElement.Classification;
     declare pics?: string;
     override isTypeScope = true;
+
+    override get children(): Children<ClusterModel.Child> {
+        return super.children as Children<ClusterModel.Child>;
+    }
+
+    override set children(children: Children.InputIterable<ClusterModel.Child>) {
+        super.children = children;
+    }
 
     get diagnostics() {
         return this.effectiveQuality.diagnostics;
@@ -150,7 +158,7 @@ export class ClusterModel extends Model implements ClusterElement {
 
         if (featureMap.parent !== this) {
             featureMap = featureMap.clone();
-            this.add(featureMap);
+            this.children.push(featureMap);
         }
 
         for (const feature of featureMap.children) {
@@ -176,14 +184,6 @@ export class ClusterModel extends Model implements ClusterElement {
                 `Cannot set unknown feature${featureSet.size > 1 ? "s" : ""} ${describeList("and", ...featureSet)}`,
             );
         }
-    }
-
-    override get children(): Children<ClusterModel.Child, ClusterElement.Child> {
-        return super.children as any;
-    }
-
-    override set children(children: (ClusterModel.Child | ClusterElement.Child)[]) {
-        super.children = children;
     }
 
     get effectiveMetatype() {

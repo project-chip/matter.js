@@ -6,7 +6,7 @@
 
 import { InternalError, Logger } from "@project-chip/matter.js-general";
 import { Conformance } from "../aspects/Conformance.js";
-import { ElementTag, Specification } from "../definitions/index.js";
+import { ElementTag, Specification } from "../common/index.js";
 import { AnyElement } from "../elements/index.js";
 import { Model, ValueModel } from "../models/index.js";
 import { ModelTraversal } from "./ModelTraversal.js";

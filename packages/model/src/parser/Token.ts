@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FieldValue } from "../definitions/index.js";
+import { FieldValue } from "../common/index.js";
 
 /**
  * A single token for the parser.

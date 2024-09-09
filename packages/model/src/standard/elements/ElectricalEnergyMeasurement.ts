@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
@@ -399,4 +399,4 @@ export const ElectricalEnergyMeasurement = Cluster({
     ]
 });
 
-Matter.children.push(ElectricalEnergyMeasurement);
+MatterDefinition.children.push(ElectricalEnergyMeasurement);

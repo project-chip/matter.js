@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const fabricId = Datatype({
@@ -14,4 +14,4 @@ export const fabricId = Datatype({
     details: "A value to identify a fabric.",
     xref: { document: "core", section: "7.18.2.19" }
 });
-Matter.children.push(fabricId);
+MatterDefinition.children.push(fabricId);

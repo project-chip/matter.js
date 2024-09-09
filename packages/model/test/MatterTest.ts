@@ -4,36 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Matter, MatterModel, ValidateModel } from "../../src/index.js";
+import { Matter, ValidateModel } from "../src/index.js";
 
-let matterModel: MatterModel;
 let validationResult: ValidateModel.Result | undefined;
-
-function instantiate() {
-    if (!matterModel) {
-        matterModel = new MatterModel(Matter);
-    }
-    return matterModel;
-}
 
 function validate() {
     if (!validationResult) {
-        validationResult = ValidateModel(instantiate());
+        validationResult = ValidateModel(Matter);
     }
     return validationResult;
 }
 
-describe("Matter", () => {
-    it("instantiates model", () => {
-        expect(() => {
-            instantiate();
-        }).not.throw();
-    });
-
+describe("MatterDefinition", () => {
     it("validates", function () {
-        expect(() => {
-            validate();
-        }).not.throw();
+        validate();
     });
 
     it("has not increased in errors", () => {

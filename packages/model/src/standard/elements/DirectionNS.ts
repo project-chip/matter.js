@@ -6,14 +6,14 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import {
     SemanticNamespaceElement as SemanticNamespace,
     SemanticTagElement as SemanticTag
 } from "../../elements/index.js";
 
 export const DirectionNs = SemanticNamespace({
-    name: "Direction", id: 0x4, mfgCode: undefined,
+    name: "Direction", id: 0x4,
     details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
         "association with a movement in a certain direction relative to the device. Note the difference with " +
         "Chapter 9, Common Position Semantic Tag Namespace.",
@@ -29,4 +29,4 @@ export const DirectionNs = SemanticNamespace({
     ]
 });
 
-Matter.children.push(DirectionNs);
+MatterDefinition.children.push(DirectionNs);

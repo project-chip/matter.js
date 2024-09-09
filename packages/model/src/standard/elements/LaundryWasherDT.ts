@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const LaundryWasherDt = DeviceType({
@@ -56,4 +56,4 @@ export const LaundryWasherDt = DeviceType({
     ]
 });
 
-Matter.children.push(LaundryWasherDt);
+MatterDefinition.children.push(LaundryWasherDt);

@@ -6,7 +6,7 @@
 
 import { InternalError } from "@project-chip/matter.js-general";
 import { Constraint } from "../aspects/index.js";
-import { ElementTag, Metatype, Specification } from "../definitions/index.js";
+import { ElementTag, Metatype, Specification } from "../common/index.js";
 import { AnyElement } from "../elements/index.js";
 import { Model, ValueModel } from "../models/index.js";
 import { ModelVariantTraversal, TraverseMap, VariantDetail } from "./ModelVariantTraversal.js";
@@ -44,7 +44,7 @@ export function MergedModel(
             }
         }
 
-        merged.children = recurse();
+        merged.children = recurse() as Iterable<AnyElement>;
 
         return merged;
     });

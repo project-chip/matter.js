@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const RoomAirConditionerDt = DeviceType({
@@ -63,4 +63,4 @@ export const RoomAirConditionerDt = DeviceType({
     ]
 });
 
-Matter.children.push(RoomAirConditionerDt);
+MatterDefinition.children.push(RoomAirConditionerDt);

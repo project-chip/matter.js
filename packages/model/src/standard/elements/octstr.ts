@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const octstr = Datatype({
@@ -16,4 +16,4 @@ export const octstr = Datatype({
     xref: { document: "core", section: "7.18.1.7" }
 });
 
-Matter.children.push(octstr);
+MatterDefinition.children.push(octstr);

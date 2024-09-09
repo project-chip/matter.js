@@ -6,11 +6,11 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { ClusterElement as Cluster } from "../../elements/index.js";
 
 export const FormaldehydeConcentrationMeasurement = Cluster({
     name: "FormaldehydeConcentrationMeasurement", id: 0x42b, type: "ConcentrationMeasurement",
     pics: "FLDCONC"
 });
-Matter.children.push(FormaldehydeConcentrationMeasurement);
+MatterDefinition.children.push(FormaldehydeConcentrationMeasurement);

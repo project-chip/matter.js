@@ -6,14 +6,14 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import {
     SemanticNamespaceElement as SemanticNamespace,
     SemanticTagElement as SemanticTag
 } from "../../elements/index.js";
 
 export const SwitchesNs = SemanticNamespace({
-    name: "Switches", id: 0x43, mfgCode: undefined,
+    name: "Switches", id: 0x43,
 
     details: "The tags contained in this namespace are restricted for use in the switches domain and shall NOT be " +
         "used in any other domain or context. They are intended to indicate the function of a button on a " +
@@ -46,4 +46,4 @@ export const SwitchesNs = SemanticNamespace({
     ]
 });
 
-Matter.children.push(SwitchesNs);
+MatterDefinition.children.push(SwitchesNs);

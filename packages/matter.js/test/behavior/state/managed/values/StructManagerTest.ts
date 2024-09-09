@@ -58,10 +58,9 @@ const SchrödingersCat = new ClusterModel({
     id: 0xdeadbeef,
     name: "SchrödingersCat",
     children: [
-        {
-            ...FeatureMap,
+        FeatureMap.extend({
             children: [{ tag: "field", name: "LF", description: "Life", constraint: "0" }],
-        },
+        }),
         { tag: "field", name: "Alive", type: "bool", constraint: "true", conformance: "[LF]" },
         { tag: "field", name: "Alive", type: "bool", constraint: "false", conformance: "[!LF]" },
     ],

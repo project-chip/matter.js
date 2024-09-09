@@ -6,11 +6,11 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const percent100ths = Datatype({
     name: "percent100ths", type: "uint16", description: "Percentage units 0.01%", isSeed: true,
     xref: { document: "core", section: "7.18.2" }
 });
-Matter.children.push(percent100ths);
+MatterDefinition.children.push(percent100ths);

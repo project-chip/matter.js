@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype, FieldElement as Field } from "../../elements/index.js";
 
 export const WildcardPathFlagsBitmap = Datatype({
@@ -55,4 +55,4 @@ export const WildcardPathFlagsBitmap = Datatype({
     ]
 });
 
-Matter.children.push(WildcardPathFlagsBitmap);
+MatterDefinition.children.push(WildcardPathFlagsBitmap);

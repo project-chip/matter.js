@@ -6,14 +6,14 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import {
     SemanticNamespaceElement as SemanticNamespace,
     SemanticTagElement as SemanticTag
 } from "../../elements/index.js";
 
 export const LocationNs = SemanticNamespace({
-    name: "Location", id: 0x6, mfgCode: undefined,
+    name: "Location", id: 0x6,
     details: "The tags contained in this namespace may be used in any domain or context, to indicate an " +
         "association with a location of a device (e.g. an outdoor temperature sensor).",
     xref: { document: "namespace", section: "7" },
@@ -38,4 +38,4 @@ export const LocationNs = SemanticNamespace({
     ]
 });
 
-Matter.children.push(LocationNs);
+MatterDefinition.children.push(LocationNs);

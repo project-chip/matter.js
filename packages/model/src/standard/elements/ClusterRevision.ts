@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { AttributeElement as Attribute } from "../../elements/index.js";
 
 export const ClusterRevision = Attribute({
@@ -28,4 +28,4 @@ export const ClusterRevision = Attribute({
     xref: { document: "core", section: "7.13.1" }
 });
 
-Matter.children.push(ClusterRevision);
+MatterDefinition.children.push(ClusterRevision);

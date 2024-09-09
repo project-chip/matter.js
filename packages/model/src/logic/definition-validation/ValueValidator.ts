@@ -5,9 +5,8 @@
  */
 
 import { Access, Conformance, Constraint, Quality } from "../../aspects/index.js";
-import { DefinitionError, FieldValue, Metatype } from "../../definitions/index.js";
-import { ClusterModel, ValueModel } from "../../models/index.js";
-import * as Elements from "../../standard/elements/index.js";
+import { DefinitionError, FieldValue, Metatype } from "../../common/index.js";
+import { ClusterModel, Globals, ValueModel } from "../../models/index.js";
 import { ModelValidator } from "./ModelValidator.js";
 import { ValidationExceptions } from "./ValidationExceptions.js";
 
@@ -142,7 +141,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
         const metatype =
             this.model.type === undefined
                 ? undefined
-                : (Elements as unknown as Record<string, ValueModel>)[this.model.type]?.metatype;
+                : (Globals as unknown as Record<string, ValueModel>)[this.model.type]?.metatype;
         switch (metatype) {
             case Metatype.object:
                 if (!this.model.children.length) {

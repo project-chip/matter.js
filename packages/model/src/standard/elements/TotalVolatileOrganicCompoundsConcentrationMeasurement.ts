@@ -6,11 +6,11 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { ClusterElement as Cluster } from "../../elements/index.js";
 
 export const TotalVolatileOrganicCompoundsConcentrationMeasurement = Cluster({
     name: "TotalVolatileOrganicCompoundsConcentrationMeasurement", id: 0x42e,
     type: "ConcentrationMeasurement", pics: "TVOCCONC"
 });
-Matter.children.push(TotalVolatileOrganicCompoundsConcentrationMeasurement);
+MatterDefinition.children.push(TotalVolatileOrganicCompoundsConcentrationMeasurement);

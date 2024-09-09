@@ -6,11 +6,11 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const single = Datatype({
     name: "single", byteSize: 4, description: "Single precision", isSeed: true, metatype: "float",
     xref: { document: "core", section: "7.18.1" }
 });
-Matter.children.push(single);
+MatterDefinition.children.push(single);

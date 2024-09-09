@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Mei } from "../definitions/Mei.js";
+import { Mei } from "../common/Mei.js";
 import { AttributeElement } from "../elements/index.js";
 import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
@@ -12,7 +12,7 @@ import { PropertyModel } from "./PropertyModel.js";
 // Full set of global IDs per core spec 1.3
 export const GLOBAL_IDS = new Set([0xfffd, 0xfffc, 0xfffb, 0xfffa, 0xfff9, 0xfff8]);
 
-export class AttributeModel extends PropertyModel implements AttributeElement {
+export class AttributeModel extends PropertyModel<AttributeElement> implements AttributeElement {
     override tag: AttributeElement.Tag = AttributeElement.Tag;
     declare id: Mei;
 

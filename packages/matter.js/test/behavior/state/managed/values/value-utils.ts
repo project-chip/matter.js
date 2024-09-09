@@ -5,7 +5,7 @@
  */
 
 import { camelize, Identity, MaybePromise, Observable } from "@project-chip/matter.js-general";
-import { DataModelPath, DatatypeModel, FieldElement } from "@project-chip/matter.js-model";
+import { DataModelPath, FieldElement, FieldModel } from "@project-chip/matter.js-model";
 import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
 import { OnlineContext } from "../../../../../src/behavior/context/server/OnlineContext.js";
 import { Val } from "../../../../../src/behavior/state/Val.js";
@@ -68,7 +68,7 @@ class TestState {}
  * Utility for creating a managed struct via a datasource.
  */
 export function TestStruct(fields: Record<string, string | Partial<FieldElement>>, defaults: Val.Struct = {}) {
-    const supervisor = new RootSupervisor(new DatatypeModel(structOf(fields)));
+    const supervisor = new RootSupervisor(new FieldModel(structOf(fields)));
 
     const notifies: { index: string | undefined; oldValue: Val; newValue: Val }[] = [];
 

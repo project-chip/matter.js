@@ -5,24 +5,27 @@
  */
 
 import { camelize, InternalError } from "@project-chip/matter.js-general";
-import { DefinitionError, ElementTag, Metatype, Specification } from "../definitions/index.js";
+import { DefinitionError, ElementTag, Metatype, Specification } from "../common/index.js";
 import { AnyElement, BaseElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Children } from "./Children.js";
 
 /**
  * A "model" is a class that implements runtime functionality associated with the corresponding element type.
+ *
+ * @template T the element type this model implements
+ * @template C the type of children this model accepts
  */
-export abstract class Model {
+export abstract class Model<T extends BaseElement = BaseElement> {
     abstract readonly tag: ElementTag;
-    declare type?: string;
-    declare isSeed?: boolean;
-    declare description?: string;
-    declare details?: string;
-    declare xref?: Model.CrossReference;
-    declare errors?: DefinitionError[];
-    declare asOf?: Specification.Revision;
-    declare until?: Specification.Revision;
+    type?: string;
+    isSeed?: boolean;
+    description?: string;
+    details?: string;
+    xref?: Model.CrossReference;
+    errors?: DefinitionError[];
+    asOf?: Specification.Revision;
+    until?: Specification.Revision;
     declare id?: number;
     declare name: string;
 
@@ -39,7 +42,16 @@ export abstract class Model {
      */
     isType?: boolean;
 
-    #children?: Children;
+    /**
+     * Normally {@link base} performs lookup based on {@link type}.  If instead a model is installed it is used as the
+     * base.
+     *
+     * The operational base also enables resolution from the operational base's tree.  This enables resolution on
+     * operational models that are not installed in a parent hierarchy.
+     */
+    operationalBase?: Model;
+
+    #children?: Children<Model>;
     #parent?: Model;
 
     /**
@@ -162,9 +174,9 @@ export abstract class Model {
     }
 
     /**
-     * Children can be added as models or elements.
+     * Set the children of the model.
      */
-    set children(children: (Model | AnyElement)[]) {
+    set children(children: Children.InputIterable<Model<AnyElement>>) {
         this.#children = Children(
             children,
 
@@ -209,7 +221,7 @@ export abstract class Model {
     }
 
     /**
-     * Get a Model for my base type, if any.
+     * Get a model for my base type as defined by {@link type}, if any.
      */
     get base() {
         return new ModelTraversal().findBase(this);
@@ -255,13 +267,6 @@ export abstract class Model {
     }
 
     /**
-     * Add a child.  children.push works too but only accepts models.
-     */
-    add(...children: (Model | AnyElement)[]) {
-        this.children.push(...(children as any[]));
-    }
-
-    /**
      * Create a model for an element.
      */
     static create(definition: AnyElement) {
@@ -279,15 +284,15 @@ export abstract class Model {
     /**
      * Retrieve all models of a specific element type from local scope.
      *
-     * @param constructor model class or a predicate object
+     * @param type model class or a predicate object
      * @param key filters to models matching a specific type
      */
-    all<T extends Model>(constructor: Model.Type<T>, key?: number | string) {
-        return this.children.all(constructor, key);
+    all<T extends Model>(type: Model.Type<T>, key?: number | string): T[] {
+        return this.children.all(type, key);
     }
 
     /**
-     * Retrieve a specific model by ID or name.
+     * Retrieve a specific child by ID or name.
      */
     get<T extends Model>(type: Model.Type<T>, key: number | string): T | undefined {
         return this.children.get(type, key);
@@ -326,7 +331,7 @@ export abstract class Model {
     /**
      * Convert to non-class structure.
      */
-    valueOf(): AnyElement {
+    valueOf() {
         const result = {} as { [name: string]: any };
 
         // Return all iterable properties minus metadata
@@ -336,14 +341,17 @@ export abstract class Model {
                 case "errors":
                 case "isTypeScope":
                 case "isType":
+                case "operationalBase":
                     continue;
 
                 default:
-                    result[key] = this[key];
+                    if (this[key] !== undefined && (this[key] !== null || key === "default")) {
+                        result[key] = this[key];
+                    }
             }
         }
 
-        return result as AnyElement;
+        return result as T;
     }
 
     /**
@@ -382,7 +390,27 @@ export abstract class Model {
         return new Type(this);
     }
 
-    constructor(definition: BaseElement) {
+    /**
+     * Create an operational extension of the model.  This creates a new model that inherits from this model for
+     * operational purposes.
+     */
+    extend<This extends Model>(this: This, properties?: Partial<BaseElement.Properties<T>>): This {
+        const constructor = this.constructor as new (properties: unknown) => This;
+
+        const extension = new constructor({
+            id: this.id,
+            name: this.name,
+
+            ...properties,
+
+            tag: this.tag,
+            operationalBase: this,
+        });
+
+        return extension;
+    }
+
+    constructor(definition: Model<T> | BaseElement.Properties<T>) {
         const isClone = definition instanceof Model;
 
         this.#id = definition.id;
@@ -406,8 +434,8 @@ export abstract class Model {
         }
 
         if (isClone) {
-            for (const child of definition.children as Children) {
-                this.children.push(child.clone());
+            for (const child of definition.children) {
+                this.children.push(child.clone() as Model.ChildOf<typeof this>);
             }
         }
     }
@@ -471,6 +499,24 @@ export abstract class Model {
 }
 
 export namespace Model {
+    /**
+     * Obtain the element type of a model type.
+     */
+    export type ElementOf<T> = T extends Model<infer E extends AnyElement> ? E : never;
+
+    /**
+     * Obtain the child type of a model type.
+     */
+    export type ChildOf<T> = T extends { children: Children<infer C> } ? C : never;
+
+    /**
+     * Input model.  In most places elements and models are interchangeable on input.
+     */
+    export type Definition<T extends Model> = ElementOf<T> | T;
+
+    /**
+     * A model constructor.
+     */
     export type Type<T extends Model = Model> = abstract new (...args: any) => T;
 
     export type LookupPredicate<T extends Model> = Type<T> | { type: Type<T>; test: (model: Model) => boolean };

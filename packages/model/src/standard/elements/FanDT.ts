@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const FanDt = DeviceType({
@@ -42,4 +42,4 @@ export const FanDt = DeviceType({
     ]
 });
 
-Matter.children.push(FanDt);
+MatterDefinition.children.push(FanDt);

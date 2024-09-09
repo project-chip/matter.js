@@ -5,7 +5,7 @@
  */
 
 import { Bytes, ImplementationError, ipv4ToBytes, Logger, Time, Timer } from "@project-chip/matter.js-general";
-import { ClusterModel, FieldElement } from "@project-chip/matter.js-model";
+import { FieldElement } from "@project-chip/matter.js-model";
 import { GeneralDiagnostics } from "../../../cluster/definitions/GeneralDiagnosticsCluster.js";
 import { CommandId } from "../../../datatype/CommandId.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
@@ -26,8 +26,9 @@ const logger = Logger.get("GeneralDiagnosticsServer");
 const Base = GeneralDiagnosticsBehavior.with(GeneralDiagnostics.Feature.DataModelTest);
 
 // Enhance the Schema to store the real operational hours counter we internally use and persist this
-const schema = Base.schema?.clone() as ClusterModel;
-schema.add(FieldElement({ name: "totalOperationalHoursCounter", type: "uint64", quality: "N" }));
+const schema = Base.schema!.extend({
+    children: [FieldElement({ name: "totalOperationalHoursCounter", type: "uint64", quality: "N" })],
+});
 
 /**
  * This is the default server implementation of GeneralDiagnosticsBehavior.

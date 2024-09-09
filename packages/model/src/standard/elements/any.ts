@@ -6,11 +6,11 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const any = Datatype({
     name: "any", description: "A datatype that may represent any value.", metatype: "any",
     details: "We use this type in places where the Matter specification allows for values of any type."
 });
-Matter.children.push(any);
+MatterDefinition.children.push(any);

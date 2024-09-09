@@ -5,7 +5,7 @@
  */
 
 import { isDeepEqual, serialize } from "@project-chip/matter.js-general";
-import { DefinitionError } from "../definitions/DefinitionError.js";
+import { DefinitionError } from "../common/DefinitionError.js";
 
 /**
  * An "aspect" is metadata about a Matter element that affects implementation behavior.  Aspects are mostly "qualities"

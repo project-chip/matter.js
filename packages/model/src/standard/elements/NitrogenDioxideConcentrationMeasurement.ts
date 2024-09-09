@@ -6,11 +6,11 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { ClusterElement as Cluster } from "../../elements/index.js";
 
 export const NitrogenDioxideConcentrationMeasurement = Cluster({
     name: "NitrogenDioxideConcentrationMeasurement", id: 0x413, type: "ConcentrationMeasurement",
     pics: "NDOCONC"
 });
-Matter.children.push(NitrogenDioxideConcentrationMeasurement);
+MatterDefinition.children.push(NitrogenDioxideConcentrationMeasurement);

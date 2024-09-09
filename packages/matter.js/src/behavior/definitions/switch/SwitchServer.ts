@@ -5,7 +5,7 @@
  */
 
 import { Observable, Time, Timer } from "@project-chip/matter.js-general";
-import { ClusterModel, FieldElement } from "@project-chip/matter.js-model";
+import { FieldElement } from "@project-chip/matter.js-model";
 import { ClusterType } from "../../../cluster/ClusterType.js";
 import { Switch } from "../../../cluster/definitions/SwitchCluster.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
@@ -21,12 +21,13 @@ const SwitchServerBase = SwitchBehavior.for(Switch.Complete).with(
 );
 
 // Enhance Schema to define conformance for some of the additional state attributes
-const schema = SwitchServerBase.schema?.clone() as ClusterModel;
-schema.add(
-    FieldElement({ name: "longPressDelay", type: "uint32", quality: "M", conformance: "MSL" }),
-    FieldElement({ name: "multiPressDelay", type: "uint32", quality: "M", conformance: "MSM" }),
-    FieldElement({ name: "momentaryNeutralPosition", type: "uint8", quality: "O", conformance: "MS" }),
-);
+const schema = SwitchServerBase.schema!.extend({
+    children: [
+        FieldElement({ name: "longPressDelay", type: "uint32", quality: "M", conformance: "MSL" }),
+        FieldElement({ name: "multiPressDelay", type: "uint32", quality: "M", conformance: "MSM" }),
+        FieldElement({ name: "momentaryNeutralPosition", type: "uint8", quality: "O", conformance: "MS" }),
+    ],
+});
 
 /**
  * This is the default server implementation of {@link SwitchBehavior}.

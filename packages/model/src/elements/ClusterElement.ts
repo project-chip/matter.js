@@ -5,8 +5,8 @@
  */
 
 import { Quality } from "../aspects/Quality.js";
-import { ElementTag } from "../definitions/index.js";
-import { Mei } from "../definitions/Mei.js";
+import { ElementTag } from "../common/index.js";
+import { Mei } from "../common/Mei.js";
 import { AttributeElement } from "./AttributeElement.js";
 import { BaseElement } from "./BaseElement.js";
 import { CommandElement } from "./CommandElement.js";
