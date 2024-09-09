@@ -2,9 +2,10 @@
     "files": [],
     "references": [
         { "path": "packages/tools" },
+        { "path": "packages/general" },
+        { "path": "packages/model" },
         { "path": "packages/matter.js" },
         { "path": "packages/matter.js-react-native"},
-        { "path": "packages/matter-node.js" },
         { "path": "packages/matter-node-ble.js" },
         { "path": "packages/matter-node-shell.js" },
         { "path": "packages/matter-node.js-examples" },
