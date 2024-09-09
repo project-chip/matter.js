@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const ElectricalSensorDt = DeviceType({
@@ -35,4 +35,4 @@ export const ElectricalSensorDt = DeviceType({
     ]
 });
 
-Matter.children.push(ElectricalSensorDt);
+MatterDefinition.children.push(ElectricalSensorDt);

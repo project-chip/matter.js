@@ -4,52 +4,55 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "@project-chip/matter.js-general";
-import { AnyElement, ElementTag } from "../index.js";
+import { camelize, ImplementationError } from "@project-chip/matter.js-general";
+import { AnyElement, BaseElement, ElementTag } from "../index.js";
 import { Model } from "./Model.js";
 
 /**
  * Children of a model.  This is a {@link Model} array with some specialization for model-specific operations.
  *
- * @template M Model types accepted as children
- * @template E Element types accepted as children
+ * @template T the type of model that owns the children
  */
-export interface Children<M extends Model = Model, E extends AnyElement = AnyElement> extends Array<M> {
+export interface Children<T extends Model = Model> extends Array<T> {
     /**
-     * Add a child.
+     * Add children.
      *
      * Operates like a standard array push but we adjust the type to allow insertion of elements as well as models.
      */
-    push(...children: (M | E)[]): number;
+    push(...children: Model.Definition<T>[]): number;
 
     /**
      * Array splice.
      *
      * Allows splicing in elements or models.
      */
-    splice(index: number, deleteCount?: number, ...toAdd: (M | E)[]): M[];
+    splice(index: number, deleteCount?: number, ...toAdd: Model.Definition<T>[]): T[];
 
     /**
      * Access a model of specific type by ID or name.  This is an optimized operation that uses internal index lookup.
      */
-    get<T extends Model>(type: Model.Type<T>, idOrName: number | string): T | undefined;
+    get<C extends Model.ChildOf<T>>(type: Model.Type<C>, idOrName: number | string): C | undefined;
 
     /**
      * Access all models of a specific type, optionally filtered to a specific ID or number.  Even if filtered there
      * may be multiple return values if there are different variants of the element defined.
      */
-    all<T extends Model>(type: Model.Type<T>, idOrName?: number | string): T[];
+    all<C extends Model.ChildOf<T>>(type: Model.Type<C>, idOrName?: number | string): C[];
 
     /**
      * Access a model using a {@link Children.Selector}.  This is an optimized primitive used by various tree traversal
      * algorithms.
      */
-    select(selector: Children.Selector, allowedTags?: Children.TagSelector, except?: Set<Model>): Model | undefined;
+    select(
+        selector: Children.Selector,
+        allowedTags?: Children.TagSelector,
+        except?: Set<Model>,
+    ): Model.ChildOf<T> | undefined;
 
     /**
      * Like {@link select} but retrieves all models for which selection applies.
      */
-    selectAll(selector: Children.Selector, allowedTags?: Children.TagSelector, except?: Set<Model>): Model[];
+    selectAll(selector: Children.Selector, allowedTags?: Children.TagSelector, except?: Set<Model>): Model.ChildOf<T>[];
 
     /**
      * Models invoke this when their ID changes so we can update internal bookkeeping.
@@ -72,14 +75,14 @@ type IndexEntry = Model | Model[];
 /**
  * Invoked by {@link Model} to instantiate a new child array.
  */
-export function Children<M extends Model = Model, E extends AnyElement = AnyElement>(
-    initial: Iterable<M | AnyElement>,
+export function Children<T extends Model = Model>(
+    initial: Children.InputIterable<T>,
     adopt: (child: Model) => void,
     disown: (child: Model) => boolean,
 ) {
     // The actual list of children.  We maintain children as elements until they're accessed.  This allows us to build
     // the full model without instantiating thousands of Models we may never use
-    const children = Array<Model | AnyElement>();
+    const children = Array<Model.Definition<T>>();
 
     // Set to true when we are using the list of children operationally.  After reification the "children" array
     // contains only models
@@ -121,7 +124,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
             if (child instanceof Model) {
                 continue;
             }
-            child = Model.create(child);
+            child = Model.create(child) as T;
             adopt(child);
             children[i] = child;
         }
@@ -131,7 +134,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
     /**
      * Determine if an element has any Model children.  If so we need to upgrade to a model on insertion.
      */
-    function hasModel(child: AnyElement) {
+    function hasModel(child: BaseElement) {
         if (child instanceof Model) {
             return true;
         }
@@ -143,13 +146,13 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
      * elements to models.  If child or any descendents is a model, we reify so models will have the correct parent
      * after insertion.
      */
-    function insertionFormOf(child: Model | AnyElement) {
+    function insertionFormOf(child: Model.Definition<T>) {
         if (child instanceof Model) {
             return child;
         }
 
         if (reified || hasModel(child)) {
-            return Model.create(child);
+            return Model.create(child) as T;
         }
 
         return child;
@@ -245,7 +248,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
      * Add a child of the model.  Adopts the mdodel and adds to any applicable indices.
      */
     function addChild(child: Model) {
-        if (child.parent?.children === children) {
+        if ((child.parent?.children as unknown) === children) {
             return;
         }
 
@@ -459,7 +462,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
 
     // We implement "splice" for efficiency...  The default implementation moves elements one at a time, forcing us to
     // search the array to see if it's already present each time
-    function splice(index: number, deleteCount?: number, ...toAdd: (AnyElement | Model)[]) {
+    function splice(index: number, deleteCount?: number, ...toAdd: Model.Definition<T>[]) {
         // Upgrade elements as necessary and adopt any new models
         toAdd = toAdd.map(child => {
             child = insertionFormOf(child);
@@ -477,7 +480,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
             if (child instanceof Model) {
                 disown(child);
             } else {
-                child = Model.create(child);
+                child = Model.create(child) as T;
             }
             return child;
         });
@@ -490,20 +493,42 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
         Object.freeze(children);
     }
 
+    function validateChild(value: unknown) {
+        if (value instanceof Model) {
+            return;
+        }
+
+        if (value === undefined || value === null) {
+            throw new ImplementationError(`Child cannot be ${value}`);
+        }
+        if (typeof value !== "object") {
+            throw new ImplementationError(`Child must be an object (child is typeof ${typeof value})`);
+        }
+
+        const { tag } = value as AnyElement;
+
+        if (typeof tag !== "string") {
+            throw new ImplementationError(`Child must have a string tag (tag is typeof ${typeof tag})`);
+        }
+        if (tag[0] < "a" || tag[0] > "z" || !(camelize(tag, true) in ElementTag)) {
+            throw new ImplementationError(`Child tag "${tag}" is unknown`);
+        }
+    }
+
     const self = new Proxy(children, {
-        get: (_target, p, receiver) => {
-            if (typeof p === "string" && p.match(/^[0-9]+$/)) {
-                let child = children[p as unknown as number];
+        get: (_target, name, receiver) => {
+            if (typeof name === "string" && name.match(/^[0-9]+$/)) {
+                let child = children[name as unknown as number];
                 if (child && !(child instanceof Model)) {
-                    child = Model.create(child);
+                    child = Model.create(child) as T;
                     addChild(child);
-                    children[p as unknown as number] = child;
+                    children[name as unknown as number] = child;
                 }
 
                 return child;
             }
 
-            switch (p) {
+            switch (name) {
                 case "get":
                     return get;
 
@@ -532,21 +557,25 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
                     return () => `[Children: ${children.length}]`;
             }
 
-            return Reflect.get(children, p, receiver);
+            return Reflect.get(children, name, receiver);
         },
 
-        set: (_target, p, newValue, receiver) => {
-            if (typeof p !== "string" || !p.match(/^[0-9]+$/)) {
-                return Reflect.set(children, p, newValue, receiver);
+        set: (_target, name, value, receiver) => {
+            if (typeof name !== "string" || !name.match(/^[0-9]+$/)) {
+                if (name === "length") {
+                    if (value > children.length) {
+                        // Do not allow preallocation that would create gaps
+                        return true;
+                    }
+                }
+                return Reflect.set(children, name, value, receiver);
             }
 
-            if (typeof newValue !== "object" || newValue === null || !newValue.tag) {
-                throw new ImplementationError("Child must be Model or AnyElement");
-            }
+            validateChild(value);
 
-            const existing = children[p as unknown as number];
+            const existing = children[name as unknown as number];
             if (existing !== undefined) {
-                if (existing === newValue) {
+                if (existing === value) {
                     return true;
                 }
                 if (existing instanceof Model) {
@@ -554,26 +583,35 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
                 }
             }
 
-            if (newValue.parent?.children === self) {
-                const currentIndex = children.indexOf(newValue);
+            let targetIndex = name as unknown as number;
+
+            if (value.parent?.children === self) {
+                const currentIndex = children.indexOf(value);
                 if (currentIndex !== -1) {
                     children.splice(currentIndex, 1);
+
+                    if (currentIndex < targetIndex) {
+                        targetIndex--;
+                    }
                 }
-                return true;
+            } else {
+                value = insertionFormOf(value);
+                if (value instanceof Model) {
+                    addChild(value);
+                }
             }
 
-            newValue = insertionFormOf(newValue);
-
-            children[p as unknown as number] = newValue;
-            if (newValue instanceof Model) {
-                addChild(newValue);
+            if (targetIndex > children.length) {
+                targetIndex = children.length;
             }
+
+            children[targetIndex] = value;
 
             return true;
         },
 
         deleteProperty: (_target, p) => {
-            let child;
+            let child: undefined | Model.Definition<T>;
 
             if (typeof p === "string" && p.match(/^[0-9]+$/)) {
                 child = children[p as unknown as number];
@@ -595,7 +633,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
 
     self.push(...initial);
 
-    return self as Children<M>;
+    return self as Children<T>;
 }
 
 export namespace Children {
@@ -609,4 +647,9 @@ export namespace Children {
      * disable type filtering.
      */
     export type TagSelector = undefined | ElementTag | "*" | ElementTag[];
+
+    /**
+     * An iterable of input definitions.
+     */
+    export type InputIterable<T extends Model> = Iterable<Model.Definition<T>>;
 }

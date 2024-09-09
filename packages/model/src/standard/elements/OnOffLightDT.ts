@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const OnOffLightDt = DeviceType({
@@ -61,4 +61,4 @@ export const OnOffLightDt = DeviceType({
     ]
 });
 
-Matter.children.push(OnOffLightDt);
+MatterDefinition.children.push(OnOffLightDt);

@@ -5,7 +5,7 @@
  */
 
 import { Diagnostic, Logger } from "@project-chip/matter.js-general";
-import { DefinitionError } from "../definitions/index.js";
+import { DefinitionError } from "../common/index.js";
 import { Model } from "../models/index.js";
 import { ModelTraversal } from "./ModelTraversal.js";
 import { ModelValidator } from "./definition-validation/ModelValidator.js";
@@ -59,7 +59,7 @@ export function ValidateModel(model: Model) {
 
         // Need another logging level before enabling this
         // logger.debug(
-        //     `${model.valid ? "✔": "✘"} ${model.name}`,
+        //     `${model.valid ? "✓": "✗"} ${model.name}`,
         //     Diagnostic.dict({
         //         tag: model.tag,
         //         children: model.children.length || undefined,

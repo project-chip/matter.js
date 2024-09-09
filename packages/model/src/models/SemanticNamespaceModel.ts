@@ -4,30 +4,26 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SemanticNamespaceElement, SemanticTagElement } from "../elements/index.js";
+import { SemanticNamespaceElement } from "../elements/index.js";
+import { SemanticTagModel } from "../index.js";
 import { Children } from "./Children.js";
 import { Model } from "./Model.js";
-import { SemanticTagModel } from "./SemanticTagModel.js";
 
-export class SemanticNamespaceModel extends Model implements SemanticNamespaceElement {
+export class SemanticNamespaceModel extends Model<SemanticNamespaceElement> implements SemanticNamespaceElement {
     override tag: SemanticNamespaceElement.Tag = SemanticNamespaceElement.Tag;
     declare id: number;
     mfgCode?: number;
 
-    get endpoints() {
-        return this.children;
+    override get children(): Children<SemanticTagModel> {
+        return super.children as Children<SemanticTagModel>;
     }
 
-    override get children(): Children<SemanticTagModel, SemanticTagElement> {
-        return super.children as any;
-    }
-
-    override set children(children: (SemanticTagModel | SemanticTagElement)[]) {
+    override set children(children: Children.InputIterable<SemanticTagModel>) {
         super.children = children;
     }
 
-    constructor(definition: SemanticNamespaceElement.Properties) {
-        super(definition);
+    get endpoints() {
+        return this.children;
     }
 
     static {

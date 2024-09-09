@@ -5,7 +5,7 @@
  */
 
 import { Access, Aspect, Conformance, Constraint, Quality } from "../aspects/index.js";
-import { FieldElement, RequirementElement } from "../elements/index.js";
+import { RequirementElement } from "../elements/index.js";
 import { Aspects } from "./Aspects.js";
 import { Children } from "./Children.js";
 import { FieldModel } from "./FieldModel.js";
@@ -16,21 +16,21 @@ const CONFORMANCE: unique symbol = Symbol("conformance");
 const ACCESS: unique symbol = Symbol("access");
 const QUALITY: unique symbol = Symbol("quality");
 
-export class RequirementModel extends Model implements RequirementElement {
+export class RequirementModel extends Model<RequirementElement> implements RequirementElement {
     override tag: RequirementElement.Tag = RequirementElement.Tag;
     declare element: RequirementElement.ElementType;
     declare default?: any;
 
+    override get children(): Children<RequirementModel.Child> {
+        return super.children as Children<RequirementModel.Child>;
+    }
+
+    override set children(children: Children.InputIterable<RequirementModel.Child>) {
+        super.children = children;
+    }
+
     override get discriminator() {
         return this.element;
-    }
-
-    override get children(): Children<RequirementModel | FieldModel, RequirementElement | FieldElement> {
-        return super.children as any;
-    }
-
-    override set children(children: (RequirementModel | FieldModel | RequirementElement | FieldElement)[]) {
-        super.children = children;
     }
 
     get access(): Access {
@@ -86,4 +86,8 @@ export class RequirementModel extends Model implements RequirementElement {
     get isMandatory() {
         return this.conformance.isMandatory;
     }
+}
+
+export namespace RequirementModel {
+    export type Child = RequirementModel | FieldModel;
 }

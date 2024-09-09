@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { ClusterElement as Cluster, AttributeElement as Attribute } from "../../elements/index.js";
 
 export const FlowMeasurement = Cluster({
@@ -61,4 +61,4 @@ export const FlowMeasurement = Cluster({
     ]
 });
 
-Matter.children.push(FlowMeasurement);
+MatterDefinition.children.push(FlowMeasurement);

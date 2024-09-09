@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ElementTag, Metatype } from "../definitions/index.js";
+import { ElementTag, Metatype } from "../common/index.js";
 import { BaseElement } from "./BaseElement.js";
 import { FieldElement } from "./FieldElement.js";
 import { ValueElement } from "./ValueElement.js";

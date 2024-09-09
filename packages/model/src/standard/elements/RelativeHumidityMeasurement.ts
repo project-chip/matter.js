@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { ClusterElement as Cluster, AttributeElement as Attribute } from "../../elements/index.js";
 
 export const RelativeHumidityMeasurement = Cluster({
@@ -65,4 +65,4 @@ export const RelativeHumidityMeasurement = Cluster({
     ]
 });
 
-Matter.children.push(RelativeHumidityMeasurement);
+MatterDefinition.children.push(RelativeHumidityMeasurement);

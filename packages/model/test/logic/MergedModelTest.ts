@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterElement, ClusterModel, MatterElement, MatterModel } from "../../src/index.js";
+import { ClusterElement, ClusterModel, Matter, MatterElement, MatterModel } from "../../src/index.js";
 import { MergedModel } from "../../src/logic/index.js";
 
 // Utility function to perform merge.  Type resolution works differently
 // without the global types in MatterModel so we fake that up even though we're
 // only actuall merge the input models
 function merge({ spec, chip }: { spec: MatterElement.Child; chip: MatterElement.Child }) {
-    const specMatter = new MatterModel({ name: "Spec", children: [...MatterModel.seedGlobals, spec] });
-    const chipMatter = new MatterModel({ name: "Chip", children: [...MatterModel.seedGlobals, chip] });
+    const specMatter = new MatterModel({ name: "Spec", children: [...Matter.seedGlobals, spec] });
+    const chipMatter = new MatterModel({ name: "Chip", children: [...Matter.seedGlobals, chip] });
 
     return MergedModel("1.1", {
         spec: specMatter.children[specMatter.children.length - 1],

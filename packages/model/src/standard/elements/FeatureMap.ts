@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { AttributeElement as Attribute } from "../../elements/index.js";
 
 export const FeatureMap = Attribute({
@@ -56,4 +56,4 @@ export const FeatureMap = Attribute({
     xref: { document: "core", section: "7.13.2" }
 });
 
-Matter.children.push(FeatureMap);
+MatterDefinition.children.push(FeatureMap);

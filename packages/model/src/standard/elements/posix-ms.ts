@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const posixMs = Datatype({
@@ -18,4 +18,4 @@ export const posixMs = Datatype({
     xref: { document: "core", section: "7.18.2.7" }
 });
 
-Matter.children.push(posixMs);
+MatterDefinition.children.push(posixMs);

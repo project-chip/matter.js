@@ -248,6 +248,7 @@ export class CommissioningBehavior extends Behavior {
      */
     static override readonly schema = new DatatypeModel({
         name: "CommissioningState",
+        type: "struct",
 
         children: [
             FieldElement({ name: "passcode", type: "uint32", quality: "N" }),

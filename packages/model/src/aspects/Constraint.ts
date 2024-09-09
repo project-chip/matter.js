@@ -5,7 +5,7 @@
  */
 
 import { camelize, isObject } from "@project-chip/matter.js-general";
-import { FieldValue } from "../definitions/index.js";
+import { FieldValue } from "../common/index.js";
 import { Aspect } from "./Aspect.js";
 
 /**

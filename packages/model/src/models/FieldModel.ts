@@ -4,20 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Mei } from "../definitions/Mei.js";
-import { Metatype } from "../definitions/index.js";
+import { Mei } from "../common/Mei.js";
+import { Metatype } from "../common/index.js";
 import { FieldElement } from "../elements/index.js";
 import { Model } from "./Model.js";
 import { PropertyModel } from "./PropertyModel.js";
 import { ValueModel } from "./ValueModel.js";
 
-export class FieldModel extends PropertyModel implements FieldElement {
+export class FieldModel<T extends FieldElement = FieldElement> extends PropertyModel<T> implements FieldElement {
     override tag: FieldElement.Tag = FieldElement.Tag;
     declare id?: Mei;
-
-    constructor(definition: FieldElement.Properties) {
-        super(definition);
-    }
 
     get fabricSensitive() {
         return this.effectiveAccess.fabricSensitive;
@@ -26,7 +22,7 @@ export class FieldModel extends PropertyModel implements FieldElement {
     /**
      * Fields may omit their ID.  In this case we use their index within the parent as the ID.
      */
-    override get effectiveId() {
+    override get effectiveId(): Mei | undefined {
         if (this.id !== undefined) {
             return this.id;
         }

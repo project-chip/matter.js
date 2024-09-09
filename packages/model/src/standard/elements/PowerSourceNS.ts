@@ -6,14 +6,14 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import {
     SemanticNamespaceElement as SemanticNamespace,
     SemanticTagElement as SemanticTag
 } from "../../elements/index.js";
 
 export const PowerSourceNs = SemanticNamespace({
-    name: "PowerSource", id: 0xf, mfgCode: undefined,
+    name: "PowerSource", id: 0xf,
     details: "The tags contained in this namespace are restricted for use in the power source domain and shall " +
         "NOT be used in any other domain or context.",
     xref: { document: "namespace", section: "12" },
@@ -54,4 +54,4 @@ export const PowerSourceNs = SemanticNamespace({
     ]
 });
 
-Matter.children.push(PowerSourceNs);
+MatterDefinition.children.push(PowerSourceNs);

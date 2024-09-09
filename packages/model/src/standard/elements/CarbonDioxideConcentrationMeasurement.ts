@@ -6,11 +6,11 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { ClusterElement as Cluster } from "../../elements/index.js";
 
 export const CarbonDioxideConcentrationMeasurement = Cluster({
     name: "CarbonDioxideConcentrationMeasurement", id: 0x40d, type: "ConcentrationMeasurement",
     pics: "CDOCONC"
 });
-Matter.children.push(CarbonDioxideConcentrationMeasurement);
+MatterDefinition.children.push(CarbonDioxideConcentrationMeasurement);

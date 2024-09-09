@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { AttributeElement as Attribute, FieldElement as Field } from "../../elements/index.js";
 
 export const AttributeList = Attribute({
@@ -18,4 +18,4 @@ export const AttributeList = Attribute({
     children: [Field({ name: "entry", type: "attrib-id" })]
 });
 
-Matter.children.push(AttributeList);
+MatterDefinition.children.push(AttributeList);

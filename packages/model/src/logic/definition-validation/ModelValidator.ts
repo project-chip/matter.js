@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ElementTag } from "../../definitions/index.js";
-import { CommandModel, Model, RequirementModel } from "../../models/index.js";
+import { ElementTag } from "../../common/index.js";
+import { CommandModel, Model, RequirementModel, ValueModel } from "../../models/index.js";
 
 /**
  * Base class for all model validators.
@@ -111,7 +111,7 @@ export class ModelValidator<T extends Model> {
                 } else if (child instanceof RequirementModel) {
                     id = `${id}:${child.element}`;
                 }
-                const identity = `${child.tag};${id};${(child as any).conformance}`;
+                const identity = `${child.tag};${id};${(child as ValueModel).conformance}`;
                 if (identities[identity]) {
                     identities[identity]++;
                 } else {

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const temperature = Datatype({
@@ -39,4 +39,4 @@ export const temperature = Datatype({
     xref: { document: "core", section: "7.18.2.11" }
 });
 
-Matter.children.push(temperature);
+MatterDefinition.children.push(temperature);

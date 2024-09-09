@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
@@ -50,4 +50,4 @@ export const MicrowaveOvenMode = Cluster({
     ]
 });
 
-Matter.children.push(MicrowaveOvenMode);
+MatterDefinition.children.push(MicrowaveOvenMode);

@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Metatype } from "../common/index.js";
 import { DatatypeElement } from "../elements/DatatypeElement.js";
-import { Metatype } from "../index.js";
 import { Model } from "./Model.js";
 import { ValueModel } from "./ValueModel.js";
 
-export class DatatypeModel extends ValueModel implements DatatypeElement {
+export class DatatypeModel extends ValueModel<DatatypeElement> implements DatatypeElement {
     override tag: DatatypeElement.Tag = DatatypeElement.Tag;
     declare id: undefined;
 
@@ -27,3 +27,5 @@ export class DatatypeModel extends ValueModel implements DatatypeElement {
         Model.types[DatatypeElement.Tag] = this;
     }
 }
+const x = {} as DatatypeModel;
+x.children;

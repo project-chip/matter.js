@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ElementTag, Specification } from "../definitions/index.js";
-import type { AnyElement } from "./AnyElement.js";
+import { ElementTag, Specification } from "../common/index.js";
 
 /**
  * Per the Matter specification, an element is a data construct that supports
@@ -52,7 +51,7 @@ export interface BaseElement {
     /**
      * Child elements.
      */
-    children?: AnyElement[];
+    children?: BaseElement[];
 
     /**
      * Is this a global element?  Global elements are available in-scope for every cluster.
@@ -90,7 +89,9 @@ export namespace BaseElement {
     export type ElementForProperties<P> = P extends Properties<infer T> ? T : never;
 
     /**
-     * Element with optional type; used for factory functions and constructors.
+     * Element with optional tag; used for factory functions and constructors.
      */
-    export type Properties<T extends { tag: `${ElementTag}` }> = Omit<T, "tag"> & Partial<Pick<T, "tag">>;
+    export type Properties<T extends BaseElement> = T extends { tag: `${ElementTag}` }
+        ? Omit<T, "tag"> & Partial<Pick<T, "tag">>
+        : T;
 }

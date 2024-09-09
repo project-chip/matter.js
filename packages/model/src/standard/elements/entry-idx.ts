@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const entryIdx = Datatype({
@@ -14,4 +14,4 @@ export const entryIdx = Datatype({
     details: "This is an index for a list data type.",
     xref: { document: "core", section: "7.18.2.33" }
 });
-Matter.children.push(entryIdx);
+MatterDefinition.children.push(entryIdx);

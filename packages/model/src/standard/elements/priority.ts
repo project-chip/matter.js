@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype, FieldElement as Field } from "../../elements/index.js";
 
 export const priority = Datatype({
@@ -29,4 +29,4 @@ export const priority = Datatype({
     ]
 });
 
-Matter.children.push(priority);
+MatterDefinition.children.push(priority);

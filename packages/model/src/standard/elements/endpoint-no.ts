@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const endpointNo = Datatype({
@@ -14,4 +14,4 @@ export const endpointNo = Datatype({
     details: "An unsigned number that indicates an instance of a device type.",
     xref: { document: "core", section: "7.18.2.23" }
 });
-Matter.children.push(endpointNo);
+MatterDefinition.children.push(endpointNo);

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
@@ -72,4 +72,4 @@ export const DishwasherMode = Cluster({
     ]
 });
 
-Matter.children.push(DishwasherMode);
+MatterDefinition.children.push(DishwasherMode);

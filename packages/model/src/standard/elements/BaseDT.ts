@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import {
     DeviceTypeElement as DeviceType,
     FieldElement as Field,
@@ -104,4 +104,4 @@ export const BaseDt = DeviceType({
     ]
 });
 
-Matter.children.push(BaseDt);
+MatterDefinition.children.push(BaseDt);

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype, FieldElement as Field } from "../../elements/index.js";
 
 export const semtag = Datatype({
@@ -67,4 +67,4 @@ export const semtag = Datatype({
     ]
 });
 
-Matter.children.push(semtag);
+MatterDefinition.children.push(semtag);

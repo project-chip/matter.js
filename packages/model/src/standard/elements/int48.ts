@@ -6,11 +6,11 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const int48 = Datatype({
     name: "int48", byteSize: 6, description: "Signed 48-bit integer", isSeed: true, metatype: "integer",
     xref: { document: "core", section: "7.18.1" }
 });
-Matter.children.push(int48);
+MatterDefinition.children.push(int48);

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { AttributeElement as Attribute, FieldElement as Field } from "../../elements/index.js";
 
 export const AcceptedCommandList = Attribute({
@@ -28,4 +28,4 @@ export const AcceptedCommandList = Attribute({
     children: [Field({ name: "entry", type: "command-id" })]
 });
 
-Matter.children.push(AcceptedCommandList);
+MatterDefinition.children.push(AcceptedCommandList);

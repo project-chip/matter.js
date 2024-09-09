@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const actionId = Datatype({
@@ -14,4 +14,4 @@ export const actionId = Datatype({
     details: "An identifier that indicates an action as defined in the Interaction Model specification.",
     xref: { document: "core", section: "7.18.2.31" }
 });
-Matter.children.push(actionId);
+MatterDefinition.children.push(actionId);

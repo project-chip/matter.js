@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ElementTag } from "../../definitions/index.js";
+import { ElementTag } from "../../common/index.js";
 import { RequirementElement } from "../../elements/index.js";
 import { FieldModel, RequirementModel } from "../../models/index.js";
 import { ModelValidator } from "./ModelValidator.js";

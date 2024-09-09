@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const dataVer = Datatype({
@@ -14,4 +14,4 @@ export const dataVer = Datatype({
     details: "An unsigned number that indicates a Data Version.",
     xref: { document: "core", section: "7.18.2.34" }
 });
-Matter.children.push(dataVer);
+MatterDefinition.children.push(dataVer);

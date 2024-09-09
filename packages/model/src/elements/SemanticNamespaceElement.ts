@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ElementTag } from "../definitions/index.js";
+import { ElementTag } from "../common/index.js";
 import { BaseElement } from "./BaseElement.js";
 import { SemanticTagElement } from "./SemanticTagElement.js";
 

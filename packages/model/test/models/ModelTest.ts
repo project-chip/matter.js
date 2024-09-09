@@ -10,10 +10,12 @@ import {
     ClusterModel,
     DatatypeModel,
     FieldModel,
+    Matter,
     MatterModel,
     Metatype,
+    uint16,
+    uint32,
 } from "../../src/index.js";
-import * as Elements from "../../src/standard/elements/index.js";
 
 describe("Model", () => {
     describe("parent", () => {
@@ -47,21 +49,21 @@ describe("Model", () => {
     describe("children", () => {
         it("can be added", () => {
             const parent = new ClusterModel({ name: "Foo" });
-            parent.add({ tag: "datatype", name: "Bar" });
+            parent.children.push({ tag: "datatype", name: "Bar" });
             expect(parent.children.length).equal(1);
             expect(parent.children[0]).instanceof(DatatypeModel);
         });
 
         it("can be added as model", () => {
             const parent = new ClusterModel({ name: "Foo" });
-            parent.add(new DatatypeModel({ name: "Bar" }));
+            parent.children.push(new DatatypeModel({ name: "Bar" }));
             expect(parent.children.length).equal(1);
             expect(parent.children[0]).instanceof(DatatypeModel);
         });
 
         it("can be removed", () => {
             const parent = new ClusterModel({ name: "Foo" });
-            parent.add({ tag: "datatype", name: "Bar" });
+            parent.children.push({ tag: "datatype", name: "Bar" });
             const child = parent.children[0];
             child.parent = undefined;
             expect(child.parent).equal(undefined);
@@ -70,7 +72,7 @@ describe("Model", () => {
 
         it("can be moved", () => {
             const parent = new ClusterModel({ name: "Foo" });
-            parent.add({ tag: "datatype", name: "Bar" });
+            parent.children.push({ tag: "datatype", name: "Bar" });
             const child = parent.children[0];
             const parent2 = new ClusterModel({ name: "Foo2", children: [child] });
             expect(parent.children.length).equal(0);
@@ -182,7 +184,7 @@ describe("Model", () => {
         });
 
         it("is inferred from implied base", () => {
-            expect(Fixtures.feature.base?.name).equal(Elements.uint32.name);
+            expect(Fixtures.feature.base?.name).equal(uint32.name);
         });
 
         it("finds attribute struct", () => {
@@ -191,6 +193,31 @@ describe("Model", () => {
 
         it("is inferred as shadow", () => {
             expect(Fixtures.cluster2Attr2.base).equal(Fixtures.cluster1StructAttr);
+        });
+    });
+
+    describe("detached models", () => {
+        it("resolves types from standard scope", () => {
+            const detached = new DatatypeModel({ name: "Foo", type: "uint8" });
+            expect(detached.parent === undefined);
+            expect(detached.base).equals(Matter.get(DatatypeModel, "uint8"));
+            expect(detached.effectiveMetatype).equals("integer");
+        });
+
+        it("resolves types from operational base scope", () => {
+            const foo = new DatatypeModel({ name: "foo", metatype: "float" });
+            const fooAlias = new DatatypeModel({ name: "fooAlias", type: "foo" });
+            new MatterModel({
+                name: "OtherMatter",
+                children: [foo, fooAlias],
+            });
+
+            expect(fooAlias.base).equals(foo);
+
+            const detached = fooAlias.extend();
+            expect(detached.parent === undefined);
+            expect(detached.operationalBase).equals(fooAlias);
+            expect(detached.effectiveMetatype).equals("float");
         });
     });
 
@@ -250,7 +277,7 @@ describe("Model", () => {
         });
 
         it("infers type", () => {
-            expect(Fixtures.enumValue2.effectiveType).equal(Elements.uint16.name);
+            expect(Fixtures.enumValue2.effectiveType).equal(uint16.name);
         });
     });
 
@@ -348,7 +375,7 @@ namespace Fixtures {
     export const matter = new MatterModel({
         name: "Fake Matter",
         children: [
-            ...MatterModel.seedGlobals,
+            ...Matter.seedGlobals,
             cluster1,
             {
                 tag: "cluster",

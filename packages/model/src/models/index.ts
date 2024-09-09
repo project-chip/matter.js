@@ -13,6 +13,7 @@ export * from "./EndpointModel.js";
 export * from "./EventModel.js";
 export * from "./FabricModel.js";
 export * from "./FieldModel.js";
+export * from "./Globals.js";
 export * from "./MatterModel.js";
 export * from "./Model.js";
 export * from "./NodeModel.js";

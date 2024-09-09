@@ -6,12 +6,23 @@
 
 import { InternalError } from "@project-chip/matter.js-general";
 import { Access, Aspect, Constraint } from "../aspects/index.js";
-import { SchemaImplementationError } from "../definitions/errors.js";
-import { ElementTag, FeatureSet, FieldValue, Metatype } from "../definitions/index.js";
+import { SchemaImplementationError } from "../common/errors.js";
+import { ElementTag, FeatureSet, FieldValue, Metatype } from "../common/index.js";
 import { AnyElement } from "../elements/index.js";
 import { Children } from "../models/Children.js";
 import { PropertyModel, type ClusterModel, type CommandModel, type Model, type ValueModel } from "../models/index.js";
-import * as Elements from "../standard/elements/index.js";
+import {
+    enum16,
+    enum8,
+    map16,
+    map32,
+    map64,
+    map8,
+    uint16,
+    uint32,
+    uint64,
+    uint8,
+} from "../standard/elements/definitions.js";
 
 const OPERATION_DEPTH_LIMIT = 20;
 
@@ -89,26 +100,26 @@ export class ModelTraversal {
         return this.operation(() => {
             let result: string | undefined;
             const name = model.name;
-            this.visitInheritance(parentOf(model), ancestor => {
+            this.visitInheritance(this.findParent(model), ancestor => {
                 // If parented by enum or bitmap, infer type as uint of same size
                 if ((ancestor as { effectiveMetatype?: string }).effectiveMetatype) {
                     switch (ancestor.name) {
-                        case Elements.enum8.name:
-                        case Elements.map8.name:
-                            result = Elements.uint8.name;
+                        case enum8.name:
+                        case map8.name:
+                            result = uint8.name;
                             return false;
 
-                        case Elements.enum16.name:
-                        case Elements.map16.name:
-                            result = Elements.uint16.name;
+                        case enum16.name:
+                        case map16.name:
+                            result = uint16.name;
                             return false;
 
-                        case Elements.map32.name:
-                            result = Elements.uint32.name;
+                        case map32.name:
+                            result = uint32.name;
                             return false;
 
-                        case Elements.map64.name:
-                            result = Elements.uint64.name;
+                        case map64.name:
+                            result = uint64.name;
                             return false;
                     }
                 }
@@ -147,6 +158,10 @@ export class ModelTraversal {
             return;
         }
 
+        if (model.operationalBase) {
+            return model.operationalBase;
+        }
+
         if (memos?.bases.has(model)) {
             return memos.bases.get(model);
         }
@@ -177,7 +192,7 @@ export class ModelTraversal {
             if (path.length === 1) {
                 // Allowed tags represent a priority so search each tag independently
                 for (const tag of model.allowedBaseTags) {
-                    const found = this.findType(parentOf(model), path[0], tag);
+                    const found = this.findType(this.findParent(model), path[0], tag);
                     if (found) {
                         return found;
                     }
@@ -188,7 +203,7 @@ export class ModelTraversal {
             // Qualified path.  Identify the leaf parent then perform name/tag search within.  This is fun because we
             // have to search scopes until we match the full path
             for (const tag of model.allowedBaseTags) {
-                const found = this.findQualifiedType(parentOf(model), path, tag);
+                const found = this.findQualifiedType(this.findParent(model), path, tag);
                 if (found) {
                     return found;
                 }
@@ -252,7 +267,7 @@ export class ModelTraversal {
             if (model.xref) {
                 return model.xref;
             }
-            return this.findXref(parentOf(model));
+            return this.findXref(this.findParent(model));
         });
     }
 
@@ -288,7 +303,7 @@ export class ModelTraversal {
         let shadow: Model | undefined;
 
         this.operationWithDismissal(model, () => {
-            this.visitInheritance(this.findBase(parentOf(model)), parent => {
+            this.visitInheritance(this.findBase(this.findParent(model)), parent => {
                 if (model.id !== undefined && model.tag !== ElementTag.Command) {
                     shadow = parent.children.select(model.id, [model.tag], this.#dismissed);
                     if (shadow) {
@@ -352,7 +367,7 @@ export class ModelTraversal {
                     return;
                 }
 
-                const referenced = this.findMember(parentOf(model), name, [
+                const referenced = this.findMember(this.findParent(model), name, [
                     ElementTag.Attribute,
                     ElementTag.Field,
                 ]) as ValueModel;
@@ -549,7 +564,7 @@ export class ModelTraversal {
                 }
 
                 if ((scope as ValueModel).effectiveMetatype !== Metatype.bitmap) {
-                    scope = parentOf(scope);
+                    scope = this.findParent(scope);
                     continue;
                 }
 
@@ -595,7 +610,7 @@ export class ModelTraversal {
                 }
 
                 // Search parent scope once all inherited scope is searched
-                const parent = parentOf(scope);
+                const parent = this.findParent(scope);
                 if (parent) {
                     queue.push(parent);
                 }
@@ -670,7 +685,7 @@ export class ModelTraversal {
                 }
 
                 // Search parent scope once all inherited scope is searched
-                const parent = parentOf(scope);
+                const parent = this.findParent(scope);
                 if (parent) {
                     queue.push(parent);
                 }
@@ -727,7 +742,7 @@ export class ModelTraversal {
      * Find an owning model of a specific type.
      */
     findOwner<T extends Model>(constructor: Model.Type<T>, model: Model | undefined): T | undefined {
-        const parent = parentOf(model);
+        const parent = this.findParent(model);
 
         if (!parent || parent instanceof constructor) {
             return parent;
@@ -746,7 +761,7 @@ export class ModelTraversal {
             return undefined;
         }
 
-        const parent = parentOf(model);
+        const parent = this.findParent(model);
         if (!parent) {
             return model;
         }
@@ -791,6 +806,53 @@ export class ModelTraversal {
     }
 
     /**
+     * Find the parent for this model.
+     */
+    findParent(model?: Model) {
+        if (model === undefined) {
+            return;
+        }
+
+        if (model.parent) {
+            return model.parent;
+        }
+
+        // MatterModel is the scope root so there is no fallback
+        if (model.tag === ElementTag.Matter) {
+            return undefined;
+        }
+
+        // Identify a fallback scope
+        return this.findScope(model);
+    }
+
+    /**
+     * Find an owner that defines type scope for a model.
+     */
+    findScope(model?: Model): Model | undefined {
+        if (model === undefined) {
+            return;
+        }
+
+        // First, examine parents
+        if (model.parent) {
+            if (model.parent.isTypeScope) {
+                return model.parent;
+            }
+
+            return this.operationWithDismissal(model, () => this.findScope(model.parent));
+        }
+
+        // Next, search operational base hierarchy
+        if (model.operationalBase) {
+            return this.operationWithDismissal(model, () => this.findScope(model.operationalBase));
+        }
+
+        // Finally, fall back to the canonical MatterModel
+        return ModelTraversal.fallbackScope;
+    }
+
+    /**
      * If a model is not owned by a MatterModel, global resolution won't work.  This model acts as a fallback to work
      * around this.
      */
@@ -814,13 +876,6 @@ export class ModelTraversal {
             memos = undefined;
         }
     }
-}
-
-function parentOf(model?: Model) {
-    if (model?.parent === undefined && model?.tag !== ElementTag.Matter) {
-        return ModelTraversal.fallbackScope;
-    }
-    return model?.parent;
 }
 
 interface Memos {

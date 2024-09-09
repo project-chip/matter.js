@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
@@ -376,4 +376,4 @@ export const LevelControl = Cluster({
     ]
 });
 
-Matter.children.push(LevelControl);
+MatterDefinition.children.push(LevelControl);

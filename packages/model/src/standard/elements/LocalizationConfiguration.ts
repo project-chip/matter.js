@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import {
     ClusterElement as Cluster,
     AttributeElement as Attribute,
@@ -57,4 +57,4 @@ export const LocalizationConfiguration = Cluster({
     ]
 });
 
-Matter.children.push(LocalizationConfiguration);
+MatterDefinition.children.push(LocalizationConfiguration);

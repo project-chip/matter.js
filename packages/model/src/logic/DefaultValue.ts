@@ -5,8 +5,9 @@
  */
 
 import { Bytes, camelize, NotImplementedError } from "@project-chip/matter.js-general";
-import { AttributeModel, FieldValue, Metatype } from "../index.js";
-import { ValueModel } from "../models/index.js";
+import { ElementTag, FieldValue, Metatype } from "../common/index.js";
+import { Model } from "../models/Model.js";
+import type { ValueModel } from "../models/ValueModel.js";
 import { FeatureMap } from "../standard/elements/FeatureMap.js";
 
 /**
@@ -98,8 +99,8 @@ function castValue(model: ValueModel, modelDefault?: FieldValue): unknown {
         case Metatype.array:
             if (Array.isArray(modelDefault)) {
                 const entry = model.member("entry");
-                if (entry instanceof ValueModel) {
-                    return modelDefault.map(value => castValue(entry, value));
+                if (entry?.isType) {
+                    return modelDefault.map(value => castValue(entry as ValueModel, value));
                 }
                 return modelDefault;
             }
@@ -243,7 +244,7 @@ function decodeBitmap(model: ValueModel, value: number | bigint) {
     }
 
     let nameGenerator;
-    if (model instanceof AttributeModel && model.id === FeatureMap.id) {
+    if (Model.types[ElementTag.Attribute] && model.id === FeatureMap.id) {
         // Special case for feature map; use the description as the key rather than the name
         nameGenerator = (model: ValueModel) =>
             model.description === undefined ? camelize(model.name) : camelize(model.description);

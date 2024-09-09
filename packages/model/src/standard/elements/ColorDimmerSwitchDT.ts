@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
 export const ColorDimmerSwitchDt = DeviceType({
@@ -52,4 +52,4 @@ export const ColorDimmerSwitchDt = DeviceType({
     ]
 })
 
-Matter.children.push(ColorDimmerSwitchDt);
+MatterDefinition.children.push(ColorDimmerSwitchDt);

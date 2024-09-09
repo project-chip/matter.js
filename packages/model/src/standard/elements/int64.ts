@@ -6,11 +6,11 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Matter } from "../Matter.js";
+import { MatterDefinition } from "../MatterDefinition.js";
 import { DatatypeElement as Datatype } from "../../elements/index.js";
 
 export const int64 = Datatype({
     name: "int64", byteSize: 8, description: "Signed 64-bit integer", isSeed: true, metatype: "integer",
     xref: { document: "core", section: "7.18.1" }
 });
-Matter.children.push(int64);
+MatterDefinition.children.push(int64);
