@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter-node.js-examples",
-    "version": "git",
+    "version": "0.0.0-git",
     "description": "CLI/Reference implementation scripts for Matter protocol for node.js",
     "keywords": [
         "iot",

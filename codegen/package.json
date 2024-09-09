@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-codegen",
-    "version": "git",
+    "version": "0.0.0-git",
     "description": "Matter.js tooling",
     "private": true,
     "type": "module",

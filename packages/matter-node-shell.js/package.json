@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter-node-shell.js",
-    "version": "git",
+    "version": "0.0.0-git",
     "description": "Shell app for Matter controller",
     "keywords": [
         "iot",

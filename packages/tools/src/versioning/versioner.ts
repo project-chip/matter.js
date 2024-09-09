@@ -6,7 +6,7 @@
 
 import colors from "ansi-colors";
 import { existsSync, readFileSync } from "fs";
-import { writeFile } from "fs/promises";
+import { cp, writeFile } from "fs/promises";
 import { Graph } from "../building/graph.js";
 import { execute } from "../running/execute.js";
 import { Package } from "../util/package.js";
@@ -62,6 +62,7 @@ export class Versioner {
             } else {
                 progress?.success(`${what} (no change)`);
             }
+            await cp(this.#pkg.resolve("LICENSE"), node.pkg.resolve("LICENSE"));
         }
     }
 

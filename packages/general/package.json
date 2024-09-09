@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-general",
-    "version": "git",
+    "version": "0.0.0-git",
     "description": "Non-Matter support for Matter.js",
     "keywords": [
         "iot",
