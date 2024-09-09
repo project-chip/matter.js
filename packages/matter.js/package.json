@@ -34,8 +34,8 @@
     },
     "dependencies": {
         "@noble/curves": "^1.5.0",
-        "@project-chip/matter.js-general": "0.10.1-alpha.0-20240903-7cffa11d",
-        "@project-chip/matter.js-model": "0.10.1-alpha.0-20240903-7cffa11d"
+        "@project-chip/matter.js-general": "*",
+        "@project-chip/matter.js-model": "*"
     },
     "devDependencies": {
         "@project-chip/matter.js-tools": "*",

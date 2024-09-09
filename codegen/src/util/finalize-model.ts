@@ -6,6 +6,7 @@
 
 import { isDeepEqual, Logger } from "@project-chip/matter.js-general";
 import {
+    AnyElement,
     AttributeModel,
     ClusterModel,
     CommandModel,
@@ -106,7 +107,7 @@ function patchClusterTypes(cluster: ClusterModel) {
             return;
         }
 
-        cluster.add(
+        cluster.children.push(
             new DatatypeModel({
                 name: model.name,
                 type: model.type,
@@ -222,7 +223,7 @@ function ejectZigbee(model: Model, zigbeeFeatures?: string[]) {
         ejectZigbee(child, zigbeeFeatures);
     }
     if (filtered.length !== model.children.length) {
-        model.children = filtered;
+        model.children = filtered as AnyElement[];
     }
 }
 

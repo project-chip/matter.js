@@ -5,7 +5,7 @@
  */
 
 import { InternalError, serialize } from "@project-chip/matter.js-general";
-import { Specification } from "../../../packages/model/dist/esm/definitions/Specification.js";
+import { Specification } from "@project-chip/matter.js-model";
 import { readMatterFile, relative, writeMatterFile } from "./file.js";
 import { asObjectKey, wordWrap } from "./string.js";
 

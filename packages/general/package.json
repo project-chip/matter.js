@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-general",
-    "version": "0.10.1-alpha.0-20240903-7cffa11d",
+    "version": "git",
     "description": "Non-Matter support for Matter.js",
     "keywords": [
         "iot",
@@ -35,7 +35,7 @@
         "@noble/curves": "^1.5.0"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.10.1-alpha.0-20240903-7cffa11d",
+        "@project-chip/matter.js-tools": "*",
         "typescript": "~5.5.3"
     },
     "files": [

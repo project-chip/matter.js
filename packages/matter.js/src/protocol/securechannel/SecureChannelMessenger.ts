@@ -7,6 +7,7 @@
 import { MatterError, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { Message } from "../../codec/MessageCodec.js";
 import { ExchangeSendOptions, MessageExchange } from "../../protocol/MessageExchange.js";
+import { SessionContext } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import {
     GeneralStatusCode,
@@ -15,7 +16,6 @@ import {
     SECURE_CHANNEL_PROTOCOL_ID,
 } from "./SecureChannelMessages.js";
 import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema.js";
-import { SessionContext } from "../../session/Session.js";
 
 /** Error base Class for all errors related to the status response messages. */
 export class ChannelStatusResponseError extends MatterError {

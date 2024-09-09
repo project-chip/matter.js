@@ -6,7 +6,7 @@
 
 import { StorageBackendMemory, StorageContext } from "@project-chip/matter.js-general";
 import { NodeId } from "@project-chip/matter.js/datatype";
-import { SessionManager } from "@project-chip/matter.js/session";
+import { SessionManager, SessionParameters } from "@project-chip/matter.js/session";
 import * as assert from "assert";
 
 const DUMMY_BYTEARRAY = new Uint8Array();
