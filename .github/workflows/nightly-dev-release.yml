@@ -95,7 +95,7 @@ jobs:
           const dateStr = today.toISOString().split("T")[0].replace(/-/g, "");
           const sha = require("child_process").execSync("git rev-parse --short HEAD").toString("utf8").trim();
 
-          const prevVersion = fs.readFile(`${process.env.GITHUB_WORKSPACE}/version.txt`, "utf8");
+          const prevVersion = fs.readFileSync(`${process.env.GITHUB_WORKSPACE}/version.txt`, "utf8");
 
           const parsed = semver.parse(prevVersion);
           const prereleaseIdentifier = parsed.prerelease[0] || "alpha";

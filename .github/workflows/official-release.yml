@@ -83,7 +83,7 @@ jobs:
             const semver = require('semver');
             const fs = require("fs");
 
-            const prevVersion = fs.readFile(`${process.env.GITHUB_WORKSPACE}/version.txt`, "utf8");
+            const prevVersion = fs.readFileSync(`${process.env.GITHUB_WORKSPACE}/version.txt`, "utf8");
 
             const parsed = semver.parse(prevVersion);
 

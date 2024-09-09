@@ -105,7 +105,7 @@ jobs:
           result-encoding: string
           script: |
             const fs = require('fs');
-            return fs.readFile(`${process.env.GITHUB_WORKSPACE}/version.txt`, "utf8");
+            return fs.readFileSync(`${process.env.GITHUB_WORKSPACE}/version.txt`, "utf8");
 
       - name: Apply new version to package files
         if: steps.automerge.outputs.mergeResult == 'merged'
