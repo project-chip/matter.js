@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningServer } from "@project-chip/matter-node.js";
+import { CommissioningServer } from "@project-chip/matter.js";
 
 import {
     AdministratorCommissioning,

@@ -21,7 +21,7 @@
     },
     "dependencies": {
         "@project-chip/matter.js-general": "*",
-        "@project-chip/matter-node.js": "*",
+        "@project-chip/matter.js-nodejs": "*",
         "@project-chip/matter.js": "*",
         "@project-chip/matter.js-tools": "*"
     }

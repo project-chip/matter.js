@@ -1,0 +1,83 @@
+{
+    "name": "@project-chip/matter-node.js",
+    "version": "0.0.0-git",
+    "description": "Matter protocol for node.js",
+    "keywords": [
+        "iot",
+        "home automation",
+        "matter",
+        "smart device"
+    ],
+    "license": "Apache-2.0",
+    "author": "Project CHIP Authors",
+    "contributors": [
+        "Martin Turon <mturon@google.com>",
+        "Marco Fucci di Napoli <mfucci@gmail.com>",
+        "Ingo Fischer <github@fischer-ka.de>"
+    ],
+    "bugs": {
+        "url": "https://github.com/project-chip/matter.js/issues"
+    },
+    "homepage": "https://github.com/project-chip/matter.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/project-chip/matter.js.git"
+    },
+    "scripts": {
+        "clean": "matter-build clean",
+        "build": "matter-build",
+        "build-clean": "matter-build --clean",
+        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
+    },
+    "dependencies": {
+        "@project-chip/matter.js-general": "*",
+        "@project-chip/matter.js-nodejs": "*",
+        "@project-chip/matter.js": "*"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "files": [
+        "dist/**/*",
+        "src/**/*",
+        "LICENSE",
+        "README.md"
+    ],
+    "type": "module",
+    "exports": {
+        ".": {
+            "require": {
+                "types": "./dist/cjs/export.d.ts",
+                "default": "./dist/cjs/export.js"
+            },
+            "import": {
+                "types": "./dist/esm/export.d.ts",
+                "default": "./dist/esm/export.js"
+            }
+        },
+        "./package.json": "./package.json",
+        "./*": {
+            "require": {
+                "types": "./dist/cjs/*/export.d.ts",
+                "default": "./dist/cjs/*/export.js"
+            },
+            "import": {
+                "types": "./dist/esm/*/export.d.ts",
+                "default": "./dist/esm/*/export.js"
+            }
+        }
+    },
+    "typesVersions": {
+        "*": {
+            ".": [
+                "/dist/cjs/export.d.ts"
+            ],
+            "*": [
+                "/dist/cjs/*/export.d.ts"
+            ]
+        }
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

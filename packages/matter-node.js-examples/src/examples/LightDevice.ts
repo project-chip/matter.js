@@ -8,7 +8,7 @@
 // This demonstrates bringing a "light" device online with matter.js.
 
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import "@project-chip/matter-node.js";
+import "@project-chip/matter.js-nodejs";
 
 import { OnOffLightDevice, OnOffLightRequirements } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { ServerNode } from "@project-chip/matter.js/node";

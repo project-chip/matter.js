@@ -6,7 +6,7 @@
  */
 
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import "@project-chip/matter-node.js";
+import "@project-chip/matter.js-nodejs";
 
 import {
     MovementDirection,

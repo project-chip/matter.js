@@ -6,14 +6,15 @@
     "packages/general",
     "packages/model",
     "packages/matter.js",
-    "packages/matter-node.js",
+    "packages/nodejs",
     "packages/matter-node-ble.js",
     "packages/matter-node-shell.js",
     "packages/matter-node.js-examples",
     "packages/matter.js-react-native",
     "models",
     "codegen",
-    "chip-testing"
+    "chip-testing",
+    "compat/matter-node.js"
   ],
   "scripts": {
     "prepare": "npm run build-clean",

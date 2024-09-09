@@ -16,9 +16,8 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import "@project-chip/matter-node.js";
+import { requireMinNodeVersion } from "@project-chip/matter.js-nodejs";
 
-import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
 import { Time } from "@project-chip/matter.js-general";
 import { BridgedDeviceBasicInformationServer } from "@project-chip/matter.js/behavior/definitions/bridged-device-basic-information";
 import { VendorId } from "@project-chip/matter.js/datatype";

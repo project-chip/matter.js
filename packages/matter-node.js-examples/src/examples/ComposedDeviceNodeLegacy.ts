@@ -21,21 +21,20 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
-
-import { VendorId } from "@project-chip/matter-node.js/datatype";
-import { DeviceTypes, OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
-import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
-import { QrCode } from "@project-chip/matter-node.js/schema";
-import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
-import { Time } from "@project-chip/matter-node.js/time";
 import {
     commandExecutor,
     getIntParameter,
     getParameter,
     hasParameter,
     requireMinNodeVersion,
-} from "@project-chip/matter-node.js/util";
+    StorageBackendDisk,
+} from "@project-chip/matter.js-nodejs";
+
+import { CommissioningServer, MatterServer } from "@project-chip/matter.js";
+import { LogFormat, Logger, LogLevel, StorageManager, Time } from "@project-chip/matter.js-general";
+import { VendorId } from "@project-chip/matter.js/datatype";
+import { DeviceTypes, OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter.js/device";
+import { QrCode } from "@project-chip/matter.js/schema";
 
 const logger = Logger.get("Device");
 
@@ -44,28 +43,28 @@ requireMinNodeVersion(16);
 /** Configure logging */
 switch (getParameter("loglevel")) {
     case "fatal":
-        Logger.defaultLogLevel = Level.FATAL;
+        Logger.defaultLogLevel = LogLevel.FATAL;
         break;
     case "error":
-        Logger.defaultLogLevel = Level.ERROR;
+        Logger.defaultLogLevel = LogLevel.ERROR;
         break;
     case "warn":
-        Logger.defaultLogLevel = Level.WARN;
+        Logger.defaultLogLevel = LogLevel.WARN;
         break;
     case "info":
-        Logger.defaultLogLevel = Level.INFO;
+        Logger.defaultLogLevel = LogLevel.INFO;
         break;
 }
 
 switch (getParameter("logformat")) {
     case "plain":
-        Logger.format = Format.PLAIN;
+        Logger.format = LogFormat.PLAIN;
         break;
     case "html":
-        Logger.format = Format.HTML;
+        Logger.format = LogFormat.HTML;
         break;
     default:
-        if (process.stdin?.isTTY) Logger.format = Format.ANSI;
+        if (process.stdin?.isTTY) Logger.format = LogFormat.ANSI;
 }
 
 const storageLocation = getParameter("store") ?? ".device-node";

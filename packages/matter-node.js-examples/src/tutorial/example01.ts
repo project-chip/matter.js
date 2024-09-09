@@ -1,4 +1,4 @@
-import "@project-chip/matter-node.js";
+import "@project-chip/matter.js-nodejs";
 import { ServerNode } from "@project-chip/matter.js/node";
 
 const node = await ServerNode.create();

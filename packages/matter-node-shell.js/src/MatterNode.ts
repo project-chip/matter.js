@@ -5,10 +5,8 @@
  */
 
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import "@project-chip/matter-node.js";
+import { requireMinNodeVersion, StorageBackendDisk } from "@project-chip/matter.js-nodejs";
 
-import { StorageBackendDisk } from "@project-chip/matter-node.js/storage";
-import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
 import { CommissioningController, MatterServer } from "@project-chip/matter.js";
 import { Logger, StorageContext, StorageManager } from "@project-chip/matter.js-general";
 import { NodeId } from "@project-chip/matter.js/datatype";
