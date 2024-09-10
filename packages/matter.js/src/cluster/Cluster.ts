@@ -910,7 +910,7 @@ export const Cluster = <
     unknown,
 });
 
-type ClusterExtend<
+export type ClusterExtend<
     F extends BitSchema,
     SF extends TypeFromPartialBitSchema<F>,
     A extends Attributes,
