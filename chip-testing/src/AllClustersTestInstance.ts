@@ -4,40 +4,43 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Storage } from "@project-chip/matter.js-general";
-import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
-import { BooleanStateServer } from "@project-chip/matter.js/behavior/definitions/boolean-state";
-import { CarbonDioxideConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/carbon-dioxide-concentration-measurement";
-import { CarbonMonoxideConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/carbon-monoxide-concentration-measurement";
-import { ColorControlServer } from "@project-chip/matter.js/behavior/definitions/color-control";
-import { FixedLabelServer } from "@project-chip/matter.js/behavior/definitions/fixed-label";
-import { FlowMeasurementServer } from "@project-chip/matter.js/behavior/definitions/flow-measurement";
-import { FormaldehydeConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/formaldehyde-concentration-measurement";
-import { IlluminanceMeasurementServer } from "@project-chip/matter.js/behavior/definitions/illuminance-measurement";
-import { LocalizationConfigurationServer } from "@project-chip/matter.js/behavior/definitions/localization-configuration";
-import { ModeSelectServer } from "@project-chip/matter.js/behavior/definitions/mode-select";
-import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
-import { NitrogenDioxideConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/nitrogen-dioxide-concentration-measurement";
-import { OccupancySensingServer } from "@project-chip/matter.js/behavior/definitions/occupancy-sensing";
-import { OzoneConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/ozone-concentration-measurement";
-import { Pm1ConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/pm1-concentration-measurement";
-import { Pm10ConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/pm10-concentration-measurement";
-import { Pm25ConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/pm25-concentration-measurement";
-import { PowerSourceServer } from "@project-chip/matter.js/behavior/definitions/power-source";
-import { PowerTopologyServer } from "@project-chip/matter.js/behavior/definitions/power-topology";
-import { PressureMeasurementServer } from "@project-chip/matter.js/behavior/definitions/pressure-measurement";
-import { PumpConfigurationAndControlServer } from "@project-chip/matter.js/behavior/definitions/pump-configuration-and-control";
-import { RadonConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/radon-concentration-measurement";
-import { RelativeHumidityMeasurementServer } from "@project-chip/matter.js/behavior/definitions/relative-humidity-measurement";
-import { SwitchServer } from "@project-chip/matter.js/behavior/definitions/switch";
-import { TemperatureMeasurementServer } from "@project-chip/matter.js/behavior/definitions/temperature-measurement";
-import { ThermostatUserInterfaceConfigurationServer } from "@project-chip/matter.js/behavior/definitions/thermostat-user-interface-configuration";
-import { TimeFormatLocalizationServer } from "@project-chip/matter.js/behavior/definitions/time-format-localization";
-import { TotalVolatileOrganicCompoundsConcentrationMeasurementServer } from "@project-chip/matter.js/behavior/definitions/total-volatile-organic-compounds-concentration-measurement";
-import { UnitLocalizationServer } from "@project-chip/matter.js/behavior/definitions/unit-localization";
-import { UserLabelServer } from "@project-chip/matter.js/behavior/definitions/user-label";
-import { AirQualityServer } from "@project-chip/matter.js/behaviors/air-quality";
-import { DescriptorServer } from "@project-chip/matter.js/behaviors/descriptor";
+import { Bytes, Storage } from "@matter.js/general";
+import { Endpoint, Environment, NumberTag, ServerNode, StorageService } from "@matter.js/main";
+import {
+    AdministratorCommissioningServer,
+    AirQualityServer,
+    BooleanStateServer,
+    CarbonDioxideConcentrationMeasurementServer,
+    CarbonMonoxideConcentrationMeasurementServer,
+    ColorControlServer,
+    DescriptorServer,
+    FixedLabelServer,
+    FlowMeasurementServer,
+    FormaldehydeConcentrationMeasurementServer,
+    IlluminanceMeasurementServer,
+    LocalizationConfigurationServer,
+    ModeSelectServer,
+    NetworkCommissioningServer,
+    NitrogenDioxideConcentrationMeasurementServer,
+    OccupancySensingServer,
+    OzoneConcentrationMeasurementServer,
+    Pm10ConcentrationMeasurementServer,
+    Pm1ConcentrationMeasurementServer,
+    Pm25ConcentrationMeasurementServer,
+    PowerSourceServer,
+    PowerTopologyServer,
+    PressureMeasurementServer,
+    PumpConfigurationAndControlServer,
+    RadonConcentrationMeasurementServer,
+    RelativeHumidityMeasurementServer,
+    SwitchServer,
+    TemperatureMeasurementServer,
+    ThermostatUserInterfaceConfigurationServer,
+    TimeFormatLocalizationServer,
+    TotalVolatileOrganicCompoundsConcentrationMeasurementServer,
+    UnitLocalizationServer,
+    UserLabelServer,
+} from "@matter.js/main/behaviors";
 import {
     AdministratorCommissioning,
     AirQuality,
@@ -57,13 +60,9 @@ import {
     ThermostatUserInterfaceConfiguration,
     TimeFormatLocalization,
     WindowCovering,
-} from "@project-chip/matter.js/cluster";
-import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
-import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
-import { Endpoint } from "@project-chip/matter.js/endpoint";
-import { Environment, StorageService } from "@project-chip/matter.js/environment";
-import { ServerNode } from "@project-chip/matter.js/node";
-import { NumberTag } from "@project-chip/matter.js/tags/NumberTag";
+} from "@matter.js/main/clusters";
+import { OnOffLightDevice } from "@matter.js/main/devices";
+import { DeviceTypeId, EndpointNumber, VendorId } from "@matter.js/main/types";
 import { TestActivatedCarbonFilterMonitoringServer } from "./cluster/TestActivatedCarbonFilterMonitoringServer.js";
 import { TestGeneralDiagnosticsServer } from "./cluster/TestGeneralDiagnosticsServer.js";
 import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitoringServer.js";

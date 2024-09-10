@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError, Merge } from "@project-chip/matter.js-general";
-import { AccessLevel } from "@project-chip/matter.js-model";
+import { MatterError, Merge } from "#general";
+import { AccessLevel } from "#model";
 import { AttributeId, TlvAttributeId } from "../datatype/AttributeId.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { CommandId, TlvCommandId } from "../datatype/CommandId.js";

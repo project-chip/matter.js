@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js-general";
-import { ClusterModel, DatatypeModel, Model } from "@project-chip/matter.js-model";
+import { decamelize, InternalError } from "#general";
+import { ClusterModel, DatatypeModel, Model } from "#model";
 import { Scope } from "../clusters/Scope.js";
 import { TsFile } from "./TsFile.js";
 import { camelize } from "./string.js";
@@ -98,7 +98,11 @@ export class ScopeFile extends TsFile {
         } else {
             importExpr = `${importName} as ${localName}`;
         }
-        this.addImport(ScopeFile.filenameFor(sourceScope.owner), importExpr);
+        this.addImport(
+            ScopeFile.filenameFor(sourceScope.owner),
+            importExpr,
+            ScopeFile.externalNameFor(sourceScope.owner),
+        );
 
         // Return the expression for local access
         if (importModel === model) {
@@ -117,17 +121,31 @@ export class ScopeFile extends TsFile {
         let name = camelize(model.name, true);
 
         if (model instanceof ClusterModel) {
-            return `#clusters/${name}Cluster.js`;
+            return `!clusters/${decamelize(name)}.js`;
         }
         if (model instanceof DatatypeModel) {
             name = name.replace(/(?:Struct|Enum|Bitmap)$/, "");
 
-            return `#globals/${name}.js`;
+            return `!globals/${name}.js`;
         }
 
         throw new InternalError(
             `Cannot determine filename for ${model.tag} ${model.name} because it is not a cluster or datatype`,
         );
+    }
+
+    static externalNameFor(model: Model) {
+        if (!model.isGlobal) {
+            throw new InternalError(
+                `Cannot determine external name for ${model.tag} ${model.name} because it is not global`,
+            );
+        }
+
+        if (model instanceof ClusterModel) {
+            return `#clusters/${decamelize(model.name)}`;
+        }
+
+        return `#types`;
     }
 }
 

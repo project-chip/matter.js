@@ -11,12 +11,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
--   IMPORTANT: As of 0.10.0 the @project-chip/matter.js module has grown quite large.  This release includes major refactoring that moves functional areas into independent NPM packages.  We have added exports to maintain backwards compatibility but these are not exhaustive.  In some cases you may need to update imports to reference new code locations.
+-   IMPORTANT: As of 0.10.0 the @project-chip/matter.js module has grown quite large.  This release includes major refactoring that moves functional areas into independent NPM packages under the "@matter.js" org.  We have added exports to maintain backwards compatibility but these are not exhaustive.  In some cases you may need to update imports to reference new code locations.
 
 -   matter.js-general:
-    -   General functionality that is not Matter specific previously resided in @project-chip/matter.js.  It now lives in @project-chip/matter.js-general
+    -   General functionality that is not Matter specific previously resided in @project-chip/matter.js.  It now lives in @matter.js/general
     -   BREAKING: The "ByteArray" type is removed, replaced with native-JS Uint8Array and a small collection of utility functions in the "Bytes" namespace
-    -   The Matter object model previously exported as @project-chip/matter.js/model now resides in @project-chip/matter.js-model
+    -   The Matter object model previously exported as @project-chip/matter.js/model now resides in @matter.js/model
 
 -   matter.js-nodejs:
     -   Node specialization is moved to matter.js-nodejs.  matter-node.js remains as a compatibility import.

@@ -4,15 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AttributeId, BasicInformationCluster, EndpointNumber, IdentifyCluster } from "@project-chip/matter.js-types";
+import { BasicInformationCluster, IdentifyCluster } from "#clusters";
 import {
     AttributeClient,
+    ClusterClient,
+    EventClient,
+    InteractionClient,
     SupportedAttributeClient,
+    SupportedEventClient,
     UnknownSupportedAttributeClient,
-} from "../../src/cluster/client/AttributeClient.js";
-import { ClusterClient } from "../../src/cluster/client/ClusterClient.js";
-import { EventClient, SupportedEventClient } from "../../src/cluster/client/EventClient.js";
-import { InteractionClient } from "../../src/protocol/interaction/InteractionClient.js";
+} from "#protocol";
+import { AttributeId, EndpointNumber } from "#types";
 
 describe("ClusterClient structure", () => {
     it("correct attribute clients are used and exposed", () => {

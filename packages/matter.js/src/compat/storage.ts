@@ -14,4 +14,4 @@ export {
     toJson,
     type Storage,
     type SupportedStorageTypes,
-} from "@project-chip/matter.js-general";
+} from "#general";

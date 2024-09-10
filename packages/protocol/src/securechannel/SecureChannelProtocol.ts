@@ -1,0 +1,139 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { Logger, MatterFlowError } from "#general";
+import { StatusCode, StatusResponseError } from "#types";
+import { Message } from "../codec/MessageCodec.js";
+import { MessageExchange } from "../protocol/MessageExchange.js";
+import { ProtocolHandler } from "../protocol/ProtocolHandler.js";
+import { assertSecureSession } from "../session/SecureSession.js";
+import { CaseServer } from "../session/case/CaseServer.js";
+import { MaximumPasePairingErrorsReachedError, PaseServer } from "../session/pase/PaseServer.js";
+import {
+    GeneralStatusCode,
+    ProtocolStatusCode,
+    SECURE_CHANNEL_PROTOCOL_ID,
+    SecureMessageType,
+} from "./SecureChannelMessages.js";
+import { ChannelStatusResponseError, SecureChannelMessenger } from "./SecureChannelMessenger.js";
+import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema.js";
+
+const logger = Logger.get("SecureChannelProtocol");
+
+export class StatusReportOnlySecureChannelProtocol implements ProtocolHandler {
+    getId(): number {
+        return SECURE_CHANNEL_PROTOCOL_ID;
+    }
+
+    async onNewExchange(exchange: MessageExchange, message: Message) {
+        const messageType = message.payloadHeader.messageType;
+
+        switch (messageType) {
+            case SecureMessageType.StatusReport:
+                await this.handleInitialStatusReport(exchange, message);
+                break;
+            default:
+                // We silently ignore incoming Standalone Ack messages that we do not expect here
+                if (messageType !== SecureMessageType.StandaloneAck) {
+                    throw new StatusResponseError(
+                        `Unexpected initial message on secure channel protocol: ${messageType.toString(16)}`,
+                        StatusCode.InvalidAction,
+                    );
+                }
+        }
+    }
+
+    async handleInitialStatusReport(exchange: MessageExchange, message: Message) {
+        const {
+            payloadHeader: { messageType },
+            payload,
+        } = message;
+        if (messageType !== SecureMessageType.StatusReport) {
+            throw new MatterFlowError(
+                `Unexpected message type on secure channel protocol, expected StatusReport: ${messageType.toString(
+                    16,
+                )}`,
+            );
+        }
+
+        const { generalStatus, protocolId, protocolStatus } = TlvSecureChannelStatusMessage.decode(payload);
+        if (generalStatus !== GeneralStatusCode.Success) {
+            throw new ChannelStatusResponseError(
+                `Received general error status (${protocolId})`,
+                generalStatus,
+                protocolStatus,
+            );
+        }
+        if (protocolStatus !== ProtocolStatusCode.CloseSession) {
+            throw new ChannelStatusResponseError(
+                `Received general success status, but protocol status is not CloseSession`,
+                generalStatus,
+                protocolStatus,
+            );
+        }
+
+        const { session } = exchange;
+        assertSecureSession(session);
+        logger.debug(`Peer requested to close session ${session.name}. Remove session now.`);
+        // TODO: and do more - see Core Specs 5.5
+        await session.destroy(false, false);
+    }
+
+    async close() {
+        // Nothing to do
+    }
+}
+
+export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol {
+    private paseCommissioner: PaseServer | undefined;
+    private readonly caseCommissioner = new CaseServer();
+
+    constructor(private commissioningCancelledCallback: () => Promise<void>) {
+        super();
+    }
+
+    setPaseCommissioner(paseServer: PaseServer) {
+        this.paseCommissioner = paseServer;
+    }
+
+    removePaseCommissioner() {
+        this.paseCommissioner = undefined;
+    }
+
+    override async onNewExchange(exchange: MessageExchange, message: Message) {
+        const messageType = message.payloadHeader.messageType;
+
+        switch (messageType) {
+            case SecureMessageType.PbkdfParamRequest:
+                if (this.paseCommissioner === undefined) {
+                    // Cleaner to return an error (ok for chip-tool as it seems)?
+                    // Formally we should not respond at all which leads to retries and such
+                    const messenger = new SecureChannelMessenger(exchange);
+                    await messenger.sendError(ProtocolStatusCode.InvalidParam);
+                    await messenger.close(); // also closes exchange
+                    return;
+                }
+                try {
+                    await this.paseCommissioner.onNewExchange(exchange);
+                } catch (error) {
+                    MaximumPasePairingErrorsReachedError.accept(error);
+
+                    logger.info("Maximum number of PASE pairing errors reached, cancelling commissioning.");
+                    await this.commissioningCancelledCallback();
+                }
+                break;
+            case SecureMessageType.Sigma1:
+                await this.caseCommissioner.onNewExchange(exchange);
+                break;
+            default:
+                await super.onNewExchange(exchange, message);
+        }
+    }
+
+    static isStandaloneAck(protocolId: number, messageType: number) {
+        return protocolId === SECURE_CHANNEL_PROTOCOL_ID && messageType === SecureMessageType.StandaloneAck;
+    }
+}

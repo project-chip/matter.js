@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, deepCopy, ImplementationError, UnexpectedDataError, Verhoeff } from "@project-chip/matter.js-general";
+import { Bytes, deepCopy, ImplementationError, UnexpectedDataError, Verhoeff } from "#general";
 import { VendorId } from "../datatype/VendorId.js";
 import { TlvAny } from "../tlv/TlvAny.js";
 import { TlvType } from "../tlv/TlvCodec.js";

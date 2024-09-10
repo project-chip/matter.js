@@ -6,6 +6,7 @@
 
 export * from "./DataModelPath.js";
 export * from "./DefinitionError.js";
+export * from "./DeviceClassification.js";
 export * from "./ElementTag.js";
 export * from "./errors.js";
 export * from "./FeatureSet.js";

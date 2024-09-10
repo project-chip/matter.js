@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isObject } from "@project-chip/matter.js-general";
-import { AccessLevel } from "@project-chip/matter.js-model";
 import {
     Attribute,
     Command,
@@ -14,18 +12,20 @@ import {
     TlvNoResponse,
     WritableAttribute,
     WritableFabricScopedAttribute,
-} from "../../../src/cluster/Cluster.js";
-import { ClusterType } from "../../../src/cluster/ClusterType.js";
-import { TlvClusterId } from "../../../src/datatype/ClusterId.js";
-import { TlvEndpointNumber } from "../../../src/datatype/EndpointNumber.js";
-import { TlvFabricIndex } from "../../../src/datatype/FabricIndex.js";
-import { TlvGroupId } from "../../../src/datatype/GroupId.js";
-import { TlvNodeId } from "../../../src/datatype/NodeId.js";
-import { BitFlag } from "../../../src/schema/BitmapSchema.js";
-import { TlvArray } from "../../../src/tlv/TlvArray.js";
-import { TlvNoArguments } from "../../../src/tlv/TlvNoArguments.js";
-import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../../../src/tlv/TlvObject.js";
+} from "#cluster/Cluster.js";
+import { ClusterType } from "#cluster/ClusterType.js";
+import { TlvClusterId } from "#datatype/ClusterId.js";
+import { TlvEndpointNumber } from "#datatype/EndpointNumber.js";
+import { TlvFabricIndex } from "#datatype/FabricIndex.js";
+import { TlvGroupId } from "#datatype/GroupId.js";
+import { TlvNodeId } from "#datatype/NodeId.js";
+import { isObject } from "#general";
+import { AccessLevel } from "#model";
+import { BitFlag } from "#schema/BitmapSchema.js";
+import { TlvArray } from "#tlv/TlvArray.js";
+import { TlvNoArguments } from "#tlv/TlvNoArguments.js";
+import { TlvUInt8 } from "#tlv/TlvNumber.js";
+import { TlvField, TlvObject, TlvOptionalField } from "#tlv/TlvObject.js";
 
 // Metadata
 

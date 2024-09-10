@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "@project-chip/matter.js-types/tlv";
+export * from "@matter.js/types/tlv";

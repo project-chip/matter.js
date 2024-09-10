@@ -5,9 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClassExtends } from "@project-chip/matter.js-general";
-import { getIntParameter, getParameter, hasParameter } from "@project-chip/matter.js-nodejs";
-import { Environment } from "@project-chip/matter.js/environment";
+import { ClassExtends, Environment } from "@matter.js/main";
 import { StorageBackendAsyncJsonFile } from "./storage/StorageBackendAsyncJsonFile.js";
 import { StorageBackendSyncJsonFile } from "./storage/StorageBackendSyncJsonFile.js";
 
@@ -22,17 +20,19 @@ export async function startTestApp(
     testInstanceClass: ClassExtends<TestInstance>,
     storageType: typeof StorageBackendSyncJsonFile | typeof StorageBackendAsyncJsonFile = StorageBackendSyncJsonFile,
 ) {
-    const storageName = `/tmp/chip_${getParameter("KVS") ?? "kvs"}`;
+    const vars = Environment.default.vars;
+
+    const storageName = `/tmp/chip_${vars.string("KVS") ?? "kvs"}`;
 
     const storage = new storageType(storageName);
-    if (hasParameter("factoryreset")) {
+    if (vars.boolean("factoryreset")) {
         await storage.clear();
     }
 
     const testInstance = new testInstanceClass(storage, {
         appName,
-        discriminator: getIntParameter("discriminator"),
-        passcode: getIntParameter("passcode"),
+        discriminator: vars.number("discriminator"),
+        passcode: vars.string("passcode"),
     });
 
     await testInstance.setup();

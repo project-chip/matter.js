@@ -22,7 +22,7 @@ import {
     UnexpectedDataError,
     maxValue,
     minValue,
-} from "@project-chip/matter.js-general";
+} from "#general";
 import { ValidationDatatypeMismatchError, ValidationOutOfBoundsError } from "../common/ValidationError.js";
 import { BitSchema, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Schema } from "../schema/Schema.js";

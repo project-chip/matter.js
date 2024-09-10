@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "@project-chip/matter.js-general";
+import { Bytes } from "#general";
 import {
     CommissioningFlowType,
     DiscoveryCapabilitiesSchema,
@@ -13,9 +13,9 @@ import {
     QrCodeData,
     QrCodeTlvDataDefaultFields,
     QrPairingCodeCodec,
-} from "../../src/schema/PairingCodeSchema.js";
-import { TlvField, TlvObject } from "../../src/tlv/TlvObject.js";
-import { TlvString } from "../../src/tlv/TlvString.js";
+} from "#schema/PairingCodeSchema.js";
+import { TlvField, TlvObject } from "#tlv/TlvObject.js";
+import { TlvString } from "#tlv/TlvString.js";
 
 const QR_CODE = "MT:YNJV7VSC00CMVH7SR00";
 const QR_CODE_DATA: QrCodeData = {

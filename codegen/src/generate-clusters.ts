@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js-general";
-import { ClusterModel, MatterModel } from "@project-chip/matter.js-model";
+import { Logger } from "#general";
+import { ClusterModel, MatterModel } from "#model";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { ClusterFile } from "./clusters/ClusterFile.js";
@@ -22,8 +22,8 @@ const args = await yargs(hideBin(process.argv))
     .option("save", { type: "boolean", default: true, describe: "writes the generated model to disk" })
     .strict().argv;
 
-const clusterIndex = new TsFile("#clusters/index");
-const globalIndex = new TsFile("#globals/index");
+const clusterIndex = new TsFile("!clusters/index");
+const globalIndex = new TsFile("!globals/index");
 
 const files = [clusterIndex, globalIndex];
 
@@ -61,8 +61,8 @@ for (const model of MatterModel.standard.children) {
 if (fail) {
     logger.error("Not modifying codebase due to errors");
 } else if (args.save) {
-    clean("#clusters");
-    clean("#globals");
+    clean("!clusters");
+    clean("!globals");
     for (const file of files) {
         file.save();
     }

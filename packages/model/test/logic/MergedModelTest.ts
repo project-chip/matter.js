@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterElement, ClusterModel, Matter, MatterElement, MatterModel } from "../../src/index.js";
-import { MergedModel } from "../../src/logic/index.js";
+import { ClusterElement, ClusterModel, Matter, MatterElement, MatterModel } from "#index.js";
+import { MergedModel } from "#logic/index.js";
 
 // Utility function to perform merge.  Type resolution works differently
 // without the global types in MatterModel so we fake that up even though we're

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Verhoeff } from "../../src/math/Verhoeff.js";
+import { Verhoeff } from "#math/Verhoeff.js";
 
 describe("Verhoeff", () => {
     describe("computeChecksum", () => {

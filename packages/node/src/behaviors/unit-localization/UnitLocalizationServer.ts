@@ -1,0 +1,19 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { UnitLocalization } from "#clusters/unit-localization";
+import { UnitLocalizationBehavior } from "./UnitLocalizationBehavior.js";
+
+/**
+ * This is the default server implementation of {@link UnitLocalizationBehavior}.
+ */
+export class UnitLocalizationServer extends UnitLocalizationBehavior.with("TemperatureUnit") {
+    override initialize() {
+        if (this.state.temperatureUnit === undefined) {
+            this.state.temperatureUnit = UnitLocalization.TempUnit.Celsius;
+        }
+    }
+}

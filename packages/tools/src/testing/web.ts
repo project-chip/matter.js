@@ -6,39 +6,26 @@
 
 import { build } from "esbuild";
 import express from "express";
-import { stat } from "fs/promises";
+import { writeFile } from "fs/promises";
 import http from "http";
 import { AddressInfo } from "net";
 import { relative } from "path";
 import { Browser, chromium, ConsoleMessage, Page } from "playwright";
-import { ignoreError } from "../util/errors.js";
 import { Package } from "../util/package.js";
 import { TestOptions } from "./options.js";
 import { ConsoleProxyReporter, Reporter } from "./reporter.js";
 import type { TestRunner } from "./runner.js";
 
-const libraries = [
-    "chai",
-    "chai-as-promised",
-    "ansi-colors",
-    "@noble/curves/abstract/modular",
-    "@noble/curves/abstract/utils",
-    "@noble/curves/p256",
-    "@project-chip/matter.js-general",
-    "@project-chip/matter.js-model",
-    "@project-chip/matter.js-types",
-];
-
 export async function testWeb(runner: TestRunner, manual: boolean) {
-    await buildLibraries();
-
     const files = runner.loadFiles("esm");
+    const bundlePath = await bundle(files, runner.pkg);
+
     const server = await new Promise<http.Server>((resolve, reject) => {
         try {
             const server = express()
                 .use(express.static(Package.workspace.resolve("node_modules")))
                 .use(express.static(Package.workspace.path))
-                .get("/", (_, res) => res.send(buildIndex(files)))
+                .get("/", (_, res) => res.send(buildIndex(bundlePath)))
                 .listen(0, "localhost", () => resolve(server));
         } catch (e) {
             reject(e);
@@ -133,26 +120,7 @@ function consoleHandler(reporter: Reporter) {
     };
 }
 
-function packageFilename(packageName: string) {
-    return packageName.replace(/^@/, "").replace(/\//g, "_");
-}
-
-function buildIndex(files: string[]) {
-    const importMap = JSON.stringify({
-        imports: Object.fromEntries(
-            libraries.map(name => {
-                let path = `/packages/tools/build/lib/${packageFilename(name)}`;
-                if (!path.endsWith(".js")) {
-                    path = `${path}.js`;
-                }
-                return [name, path];
-            }),
-        ),
-    });
-
-    files = files.map(file => `/${relative(Package.workspace.path, file)}`);
-    const imports = files.map(file => `import ${JSON.stringify(file)}`).join("\n    ");
-
+function buildIndex(bundlePath: string) {
     return `<!DOCTYPE html>
 <html>
 <head>
@@ -162,36 +130,45 @@ function buildIndex(files: string[]) {
 <body>
     <div id="mocha"><h1><a href="javascript:MatterTest.start()">run tests</a></h1></div>
     <script src="mocha/mocha.js"></script>
-    <script type="importmap">
-    ${importMap}
-    </script>
-    <script type="module">
-    ${imports}
-    </script>
+    <script src="${bundlePath}" type="module"></script>
 </body>
 </html>`;
 }
 
-async function buildLibraries() {
-    for (const name of libraries) {
-        let path = `build/lib/${packageFilename(name)}`;
-        if (!path.endsWith(".js")) {
-            path = `${path}.js`;
-        }
-        const outfile = Package.tools.resolve(path);
+async function bundle(files: string[], pkg: Package) {
+    const entrypointPath = pkg.resolve("build/esm/test-entrypoint.js");
+    const bundlePath = pkg.resolve("build/cjs/test-bundle.js");
 
-        if ((await ignoreError("ENOENT", async () => stat(outfile)))?.isFile()) {
-            continue;
-        }
+    const entrypoint = files
+        .map(path => {
+            path = relative(pkg.resolve("build/esm"), path).replace(/\\/g, "/");
+            if (!path.startsWith(".")) {
+                path = `./${path}`;
+            }
+            return `import ${JSON.stringify(path)}`;
+        })
+        .join("\n");
 
-        await build({
-            entryPoints: [Package.workspace.findExport(name)],
-            bundle: true,
-            format: "esm",
-            outfile,
+    // I was unable to get esbuild to resolve the entrypoint using the "stdin" and "absWorkingDir" options.  So we just
+    // write to disk
+    await writeFile(pkg.resolve("build/esm/test-entrypoint.js"), entrypoint);
 
-            // Grr esbuild doesn't respect this
-            //logOverride: { "empty-import-meta": "silent" },
-        });
-    }
+    await build({
+        entryPoints: [entrypointPath],
+        bundle: true,
+        format: "cjs",
+        outfile: bundlePath,
+        external: ["wtfnode"],
+        keepNames: true,
+
+        // This doesn't work...
+        // logOverride: {
+        //     "direct-eval": "silent",
+        // },
+
+        // ...so we do this:
+        logLevel: "error",
+    });
+
+    return pkg.workspace.relative(bundlePath);
 }

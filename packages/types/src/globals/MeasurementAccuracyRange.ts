@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvInt64, TlvPercent100ths, TlvUInt64 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 
 /**
@@ -111,7 +111,7 @@ export const TlvMeasurementAccuracyRange = TlvObject({
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.3.8
      */
-    fixedTypical: TlvOptionalField(7, TlvUInt64),
+    fixedTypical: TlvOptionalField(7, TlvUInt64)
 });
 
 /**

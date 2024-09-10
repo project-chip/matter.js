@@ -1,5 +1,5 @@
 {
-    "name": "@project-chip/matter.js-tools",
+    "name": "@matter.js/tools",
     "version": "0.0.0-git",
     "description": "Matter.js tooling",
     "type": "module",

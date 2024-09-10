@@ -3,19 +3,9 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { extendPublicHandlerMethods, MakeMandatory } from "@project-chip/matter.js-general";
-import {
-    Attributes,
-    BitSchema,
-    Cluster,
-    ClusterId,
-    Commands,
-    Events,
-    Groups,
-    Identify,
-    OnOff,
-    TypeFromPartialBitSchema,
-} from "@project-chip/matter.js-types";
+import { Groups, Identify, OnOff } from "#clusters";
+import { extendPublicHandlerMethods, MakeMandatory } from "#general";
+import { Attributes, BitSchema, Cluster, ClusterId, Commands, Events, TypeFromPartialBitSchema } from "#types";
 import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServerTypes.js";
 import { createDefaultGroupsClusterServer } from "../cluster/server/GroupsServer.js";
 import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";

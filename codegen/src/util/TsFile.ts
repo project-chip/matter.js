@@ -4,14 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, serialize } from "@project-chip/matter.js-general";
-import { Specification } from "@project-chip/matter.js-model";
-import { readMatterFile, relative, writeMatterFile } from "./file.js";
+import { InternalError, serialize } from "#general";
+import { Specification } from "#model";
+import { Package } from "#tools";
+import { relative } from "path";
+import { absolute, readMatterFile, writeMatterFile } from "./file.js";
 import { asObjectKey, wordWrap } from "./string.js";
 
 const HEADER = `/**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-${new Date().getFullYear()} Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -602,8 +604,9 @@ class ExpressionBlock extends NestedBlock {
  * Quick & dirty support for code gen.  Less cumberson than e.g. TS compiler AST
  */
 export class TsFile extends Block {
-    private imports = new Map<string, Array<string>>();
-    private header!: Block;
+    #imports = new Map<string, Array<string>>();
+    #header!: Block;
+    #packageRoot: string;
 
     constructor(
         public name: string,
@@ -615,7 +618,7 @@ export class TsFile extends Block {
 
         super(undefined);
 
-        this.header = this.section();
+        this.#header = this.section();
 
         let header = HEADER;
         if (editable) {
@@ -623,20 +626,22 @@ export class TsFile extends Block {
         } else {
             header += GENERATED_WARNING;
         }
-        this.header.raw(header);
+        this.#header.raw(header);
+
+        this.#packageRoot = new Package({ path: absolute(name) }).path;
     }
 
     get basename() {
         return this.name.replace(/^.*[/\\]/, "");
     }
 
-    addImport(filename: string, name?: string) {
-        filename = this.#resolveImportPath(filename);
+    addImport(filename: string, name?: string, asExternal?: string) {
+        filename = this.#resolveImportPath(filename, asExternal);
 
-        let list = this.imports.get(filename);
+        let list = this.#imports.get(filename);
         if (!list) {
             list = new Array<string>();
-            this.imports.set(filename, list);
+            this.#imports.set(filename, list);
         }
         if (name?.startsWith("*")) {
             if (list.length) {
@@ -675,7 +680,8 @@ export class TsFile extends Block {
 
         if (this.editable) {
             try {
-                if (!readMatterFile(filename).includes(EDITABLE_WARNING)) {
+                const body = readMatterFile(filename);
+                if (!body.includes(EDITABLE_WARNING) && !body.includes(GENERATED_WARNING)) {
                     return;
                 }
             } catch (e) {
@@ -685,9 +691,9 @@ export class TsFile extends Block {
             }
         }
 
-        if (this.imports.size) {
-            const importBlock = this.header.section();
-            this.imports.forEach((symbols, name) => {
+        if (this.#imports.size) {
+            const importBlock = this.#header.section();
+            this.#imports.forEach((symbols, name) => {
                 if (symbols[0]?.startsWith("*")) {
                     importBlock.atom(`import ${symbols[0]} from "${name}"`);
                 } else if (symbols.length) {
@@ -709,16 +715,24 @@ export class TsFile extends Block {
         return this;
     }
 
-    #resolveImportPath(filename: string) {
+    #resolveImportPath(filename: string, asExternal?: string) {
         // The set of imports we allow is intentionally restrictive so we can catch errors more easily.  Extend as
         // necessary
-        if (filename.startsWith(".") || filename.startsWith("#")) {
+        if (filename.startsWith(".") || filename.startsWith("!")) {
             if (!filename.endsWith(".js")) {
                 throw new InternalError(`Local import of ${filename} has no .js suffix`);
             }
+        } else if (filename.startsWith("#")) {
+            return filename;
         } else if (filename.endsWith(".js")) {
-            throw new InternalError(`Local import of ${filename} must start with "#" or "."`);
-        } else if (!filename.startsWith("@project-chip")) {
+            throw new InternalError(`Local import of ${filename} must start with "!", "#" or "."`);
+        } else if (filename.startsWith("@project-chip/")) {
+            return filename.replace(/^@project-chip\/matter-/, "#");
+        } else if (filename.startsWith("@matter.js/")) {
+            // For @matter.js/package we assume an alias of "#package"; for "@matter.js/package/submodule" we assume an
+            // alias of "#submodule"
+            return filename.replace(/^@matter\.js\/(?:[^/]+\/)/, "#");
+        } else {
             throw new InternalError(`Absolute import of ${filename} must start with "@project-chip"`);
         }
 
@@ -726,8 +740,18 @@ export class TsFile extends Block {
             throw new InternalError(`Import of ${filename} has multiple suffices`);
         }
 
-        if (filename.startsWith("#")) {
-            filename = relative(this.name.replace(/\/[^/]+$/, ""), filename);
+        if (filename.startsWith("!")) {
+            const to = absolute(filename);
+            if (!to.startsWith(this.#packageRoot)) {
+                if (asExternal === undefined) {
+                    throw new Error(`No external name provided for reference to "${filename}" from "${this.name}"`);
+                }
+                return asExternal;
+            }
+
+            const from = absolute(this.name.replace(/\/[^/]+$/, ""));
+            filename = relative(from, to);
+
             if (!filename.startsWith(".")) {
                 filename = `./${filename}`;
             }

@@ -4,18 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "@project-chip/matter.js-general";
-import { ValidationError } from "../../src/common/ValidationError.js";
-import { FabricId, TlvFabricId } from "../../src/datatype/FabricId.js";
-import { FabricIndex, TlvFabricIndex } from "../../src/datatype/FabricIndex.js";
-import { TlvAny } from "../../src/tlv/TlvAny.js";
-import { TlvArray } from "../../src/tlv/TlvArray.js";
-import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
-import { TlvNullable } from "../../src/tlv/TlvNullable.js";
-import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../../src/tlv/TlvObject.js";
-import { TypeFromSchema } from "../../src/tlv/TlvSchema.js";
-import { TlvByteString, TlvString } from "../../src/tlv/TlvString.js";
+import { ValidationError } from "#common/ValidationError.js";
+import { FabricId, TlvFabricId } from "#datatype/FabricId.js";
+import { FabricIndex, TlvFabricIndex } from "#datatype/FabricIndex.js";
+import { Bytes } from "#general";
+import { TlvAny } from "#tlv/TlvAny.js";
+import { TlvArray } from "#tlv/TlvArray.js";
+import { TlvBoolean } from "#tlv/TlvBoolean.js";
+import { TlvNullable } from "#tlv/TlvNullable.js";
+import { TlvUInt8 } from "#tlv/TlvNumber.js";
+import { TlvField, TlvObject, TlvOptionalField } from "#tlv/TlvObject.js";
+import { TypeFromSchema } from "#tlv/TlvSchema.js";
+import { TlvByteString, TlvString } from "#tlv/TlvString.js";
 
 const schema = TlvObject({
     /** Mandatory field jsdoc */

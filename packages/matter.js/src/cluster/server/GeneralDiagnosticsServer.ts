@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "#clusters";
 import {
     Bytes,
     ipv4ToBytes,
@@ -13,10 +14,9 @@ import {
     NetworkInterfaceDetailed,
     NotImplementedError,
     Time,
-} from "@project-chip/matter.js-general";
-import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "@project-chip/matter.js-types";
+} from "#general";
+import { AttributeServer } from "#protocol";
 import { WrapCommandHandler } from "../../device/Device.js";
-import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 

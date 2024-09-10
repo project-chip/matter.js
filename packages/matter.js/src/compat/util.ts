@@ -21,4 +21,4 @@ export {
     serialize,
     singleton,
     type Identity,
-} from "@project-chip/matter.js-general";
+} from "#general";

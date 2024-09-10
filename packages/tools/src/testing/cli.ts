@@ -91,10 +91,10 @@ export async function main(argv = process.argv) {
 
     // If no test types are specified explicitly, run all enabled types
     if (!testTypes.size) {
-        if (project.pkg.esm) {
+        if (project.pkg.supportsEsm) {
             testTypes.add(TestType.esm);
         }
-        if (project.pkg.cjs) {
+        if (project.pkg.supportsCjs) {
             testTypes.add(TestType.cjs);
         }
         if (args.web) {

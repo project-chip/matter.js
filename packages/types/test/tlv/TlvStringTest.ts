@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "@project-chip/matter.js-general";
-import { ValidationError } from "../../src/common/ValidationError.js";
-import { TlvAny } from "../../src/tlv/TlvAny.js";
-import { TlvByteString, TlvString } from "../../src/tlv/TlvString.js";
+import { ValidationError } from "#common/ValidationError.js";
+import { Bytes } from "#general";
+import { TlvAny } from "#tlv/TlvAny.js";
+import { TlvByteString, TlvString } from "#tlv/TlvString.js";
 
 type TestVector<I, E> = { [testName: string]: { input: I; out: E } };
 

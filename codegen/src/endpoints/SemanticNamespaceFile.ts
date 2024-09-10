@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SemanticNamespaceModel } from "@project-chip/matter.js-model";
+import { SemanticNamespaceModel } from "#model";
 import { TsFile } from "../util/TsFile.js";
 import { camelize } from "../util/string.js";
 
@@ -12,9 +12,9 @@ export class SemanticNamespaceFile extends TsFile {
     constructor(public model: SemanticNamespaceModel) {
         const objectName = `${camelize(model.name, true)}Tag`;
 
-        super(`#endpoints/tags/${objectName}`);
+        super(`!tags/${objectName}`);
 
-        this.addImport(`#node/endpoint/type/SemanticNamespace.js`, "SemanticNamespace");
+        this.addImport(`!node/endpoint/type/SemanticNamespace.js`, "SemanticNamespace");
 
         const definition = this.expressions(`export const ${objectName} = SemanticNamespace({`, "})");
         definition.document(model);

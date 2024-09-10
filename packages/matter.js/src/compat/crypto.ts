@@ -18,4 +18,4 @@ export {
     PublicKey,
     Spake2p,
     type CryptoDsaEncoding,
-} from "@project-chip/matter.js-general";
+} from "#general";

@@ -4,19 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { asyncNew } from "@project-chip/matter.js-general";
-import {
-    BasicInformation,
-    EndpointNumber,
-    GeneralCommissioning,
-    NetworkCommissioning,
-    OperationalCredentials,
-    TypeFromSchema,
-} from "@project-chip/matter.js-types";
-import { FailsafeContext } from "../../common/FailsafeContext.js";
+import { BasicInformation, GeneralCommissioning, NetworkCommissioning, OperationalCredentials } from "#clusters";
+import { asyncNew } from "#general";
+import { EndpointInterface, Fabric, FailsafeContext } from "#protocol";
+import { EndpointNumber, TypeFromSchema } from "#types";
 import { Endpoint } from "../../device/Endpoint.js";
-import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { Fabric } from "../../fabric/Fabric.js";
 
 /**
  * {@link FailsafeContext} implementation for {@link EndpointInterface} API.

@@ -1,5 +1,5 @@
 {
-    "name": "@project-chip/matter.js-general",
+    "name": "@matter.js/general",
     "version": "0.0.0-git",
     "description": "Non-Matter support for Matter.js",
     "keywords": [
@@ -35,7 +35,7 @@
         "@noble/curves": "^1.5.0"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "*",
+        "@matter.js/tools": "*",
         "typescript": "~5.5.3"
     },
     "files": [
@@ -58,6 +58,9 @@
                 "default": "./dist/cjs/index.js"
             }
         }
+    },
+    "imports": {
+        "#*": "./src/*"
     },
     "types": "dist/esm/index.d.ts",
     "typesVersions": {

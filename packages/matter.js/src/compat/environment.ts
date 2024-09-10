@@ -4,11 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export {
-    Environment,
-    Environmental,
-    RuntimeService,
-    StorageService,
-    VariableService,
-} from "@project-chip/matter.js-general";
-export { MdnsService } from "../mdns/MdnsService.js";
+export { Environment, Environmental, RuntimeService, StorageService, VariableService } from "#general";
+export { MdnsService } from "#protocol";

@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export { Time, type Timer } from "@project-chip/matter.js-general";
+export { Time, Time as TimeNode, type Timer } from "#general";

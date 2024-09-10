@@ -4,30 +4,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Package } from "@project-chip/matter.js-tools";
+import { Package } from "#tools";
 import { createHash } from "crypto";
 import { mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "fs";
-import { dirname, relative as nodeRelative, resolve } from "path";
+import { dirname, isAbsolute, relative as nodeRelative, resolve } from "path";
 import { fileURLToPath } from "url";
-import { describeList } from "./string.js";
 
 // Paths we read/write must be defined here
 const DIR_MAPPING = {
-    "#cache": Package.workspace.resolve("codegen/.cache"),
-    "#intermediate": Package.workspace.resolve("models/src"),
-    "#types": Package.workspace.resolve("packages/types/src"),
-    "#clusters": Package.workspace.resolve("packages/types/src/cluster/definitions"),
-    "#globals": Package.workspace.resolve("packages/types/src/globals"),
-    "#model": Package.workspace.resolve("packages/model/src"),
-    "#elements": Package.workspace.resolve("packages/model/src/standard/elements"),
-
-    // TODO - point these three at "node" package
-    "#node": Package.workspace.resolve("packages/matter.js/src/"),
-    "#endpoints": Package.workspace.resolve("packages/matter.js/src/endpoint/definitions"),
-    "#behaviors": Package.workspace.resolve("packages/matter.js/src/behavior/definitions"),
+    "!cache": Package.workspace.resolve("codegen/.cache"),
+    "!intermediate": Package.workspace.resolve("models/src"),
+    "!types": Package.workspace.resolve("packages/types/src"),
+    "!clusters": Package.workspace.resolve("packages/types/src/clusters"),
+    "!globals": Package.workspace.resolve("packages/types/src/globals"),
+    "!model": Package.workspace.resolve("packages/model/src"),
+    "!elements": Package.workspace.resolve("packages/model/src/standard/elements"),
+    "!node": Package.workspace.resolve("packages/node/src/"),
+    "!behaviors": Package.workspace.resolve("packages/node/src/behaviors"),
+    "!tags": Package.workspace.resolve("packages/node/src/tags"),
 } as { [dirname: string]: string | undefined };
 
-function resolveFromPackage(path: string) {
+export function absolute(path: string) {
+    if (isAbsolute(path)) {
+        return path;
+    }
     const slashAt = path.indexOf("/");
     let dirId, file;
     if (slashAt == -1) {
@@ -37,9 +37,12 @@ function resolveFromPackage(path: string) {
         dirId = path.substring(0, slashAt);
         file = path.substring(slashAt + 1);
     }
+    if (!dirId.startsWith("!")) {
+        throw new Error(`Relative path "${path}" does not have a ! prefix`);
+    }
     const dir = DIR_MAPPING[dirId];
     if (!dir) {
-        throw new Error(`Matter paths must be prefixed with ${describeList("or", ...Object.keys(DIR_MAPPING))}`);
+        throw new Error(`Unsupported ! prefix for "${path}"`);
     }
     if (file) {
         path = `${dir}/${file}`;
@@ -51,15 +54,15 @@ function resolveFromPackage(path: string) {
 }
 
 export function relative(from: string, to: string) {
-    return nodeRelative(resolveFromPackage(from), resolveFromPackage(to));
+    return nodeRelative(absolute(from), absolute(to));
 }
 
 export function readMatterFile(path: string, encoding: BufferEncoding = "utf-8") {
-    return readFileSync(resolveFromPackage(path), { encoding: encoding });
+    return readFileSync(absolute(path), { encoding: encoding });
 }
 
 export function writeMatterFile(path: string, body: any) {
-    path = resolveFromPackage(path);
+    path = absolute(path);
     mkdirSync(dirname(path), { recursive: true });
 
     let currentHash: string | undefined;
@@ -87,7 +90,7 @@ export function writeMatterFile(path: string, body: any) {
 }
 
 export function clean(target: string, suffix = "") {
-    const path = resolveFromPackage(target);
+    const path = absolute(target);
     try {
         readdirSync(path).forEach(f => {
             if (f.endsWith(`${suffix}.ts`)) {
@@ -103,7 +106,7 @@ export function clean(target: string, suffix = "") {
 }
 
 export async function readFileWithCache(name: string, generator: (name: string) => Promise<string>) {
-    name = `#cache/${name}`;
+    name = `!cache/${name}`;
     try {
         return readMatterFile(name);
     } catch (e) {

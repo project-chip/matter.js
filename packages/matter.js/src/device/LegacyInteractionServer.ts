@@ -4,23 +4,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, InternalError, Logger } from "@project-chip/matter.js-general";
-import { AccessLevel } from "@project-chip/matter.js-model";
-import { AccessControlCluster, EndpointNumber, TypeFromSchema } from "@project-chip/matter.js-types";
-import { MatterDevice } from "../MatterDevice.js";
-import { AnyAttributeServer, AttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
-import { CommandServer } from "../cluster/server/CommandServer.js";
-import { AnyEventServer } from "../cluster/server/EventServer.js";
-import { Message } from "../codec/MessageCodec.js";
-import { EndpointInterface } from "../endpoint/EndpointInterface.js";
-import { MessageExchange } from "../protocol/MessageExchange.js";
-import { AccessControlManager, AccessDeniedError } from "../protocol/interaction/AccessControlManager.js";
-import { EventStorageData } from "../protocol/interaction/EventHandler.js";
-import { InteractionEndpointStructure } from "../protocol/interaction/InteractionEndpointStructure.js";
-import { TlvEventFilter } from "../protocol/interaction/InteractionProtocol.js";
-import { AttributePath, CommandPath, EventPath, InteractionServer } from "../protocol/interaction/InteractionServer.js";
-import { SecureSession } from "../session/SecureSession.js";
-import { Session } from "../session/Session.js";
+import { AccessControlCluster } from "#clusters";
+import { Diagnostic, InternalError, Logger } from "#general";
+import { AccessLevel } from "#model";
+import {
+    AccessControlManager,
+    AccessDeniedError,
+    AnyAttributeServer,
+    AnyEventServer,
+    AttributePath,
+    AttributeServer,
+    CommandPath,
+    CommandServer,
+    EndpointInterface,
+    EventPath,
+    EventStorageData,
+    FabricScopedAttributeServer,
+    InteractionEndpointStructure,
+    InteractionServer,
+    Message,
+    MessageExchange,
+    SecureSession,
+    Session,
+} from "#protocol";
+import { EndpointNumber, TlvEventFilter, TypeFromSchema } from "#types";
 import { Endpoint } from "./Endpoint.js";
 
 const logger = Logger.get("LegacyInteractionServer");
@@ -39,7 +46,7 @@ export class LegacyInteractionServer extends InteractionServer {
         this.#endpointStructure = endpointStructure;
     }
 
-    #getAclManager(session: Session<MatterDevice>) {
+    #getAclManager(session: Session) {
         if (this.#aclManager !== undefined) {
             return this.#aclManager;
         }
@@ -62,7 +69,7 @@ export class LegacyInteractionServer extends InteractionServer {
 
     #assertAccess(
         path: AttributePath | EventPath | CommandPath,
-        exchange: MessageExchange<MatterDevice>,
+        exchange: MessageExchange,
         desiredAccessLevel: AccessLevel,
     ) {
         const { endpointId, clusterId } = path;
@@ -71,9 +78,7 @@ export class LegacyInteractionServer extends InteractionServer {
             throw new InternalError("Endpoint not found for ACL check. This should never happen.");
         }
         const aclManager = this.#getAclManager(exchange.session);
-        if (
-            !aclManager.allowsPrivilege(exchange.session as SecureSession<any>, endpoint, clusterId, desiredAccessLevel)
-        ) {
+        if (!aclManager.allowsPrivilege(exchange.session as SecureSession, endpoint, clusterId, desiredAccessLevel)) {
             throw new AccessDeniedError(
                 `Access to ${endpointId}/${Diagnostic.hex(clusterId)} denied on ${exchange.session.name}.`,
             );
@@ -83,7 +88,7 @@ export class LegacyInteractionServer extends InteractionServer {
     protected override async readAttribute(
         path: AttributePath,
         attribute: AnyAttributeServer<any>,
-        exchange: MessageExchange<MatterDevice>,
+        exchange: MessageExchange,
         isFabricFiltered: boolean,
         message: Message,
         endpoint: EndpointInterface,
@@ -93,10 +98,7 @@ export class LegacyInteractionServer extends InteractionServer {
         if (attribute instanceof FabricScopedAttributeServer && !isFabricFiltered) {
             const { value, version } = data;
             return {
-                value: attribute.sanitizeFabricSensitiveFields(
-                    value,
-                    (exchange.session as SecureSession<MatterDevice>).fabric,
-                ),
+                value: attribute.sanitizeFabricSensitiveFields(value, (exchange.session as SecureSession).fabric),
                 version,
             };
         }
@@ -107,7 +109,7 @@ export class LegacyInteractionServer extends InteractionServer {
         path: EventPath,
         eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
         event: AnyEventServer<any, any>,
-        exchange: MessageExchange<MatterDevice>,
+        exchange: MessageExchange,
         isFabricFiltered: boolean,
         message: Message,
         endpoint: EndpointInterface,
@@ -120,7 +122,7 @@ export class LegacyInteractionServer extends InteractionServer {
         path: AttributePath,
         attribute: AttributeServer<any>,
         value: any,
-        exchange: MessageExchange<MatterDevice>,
+        exchange: MessageExchange,
         message: Message,
         endpoint: EndpointInterface,
         receivedWithinTimedInteraction?: boolean,
@@ -142,7 +144,7 @@ export class LegacyInteractionServer extends InteractionServer {
     protected override async invokeCommand(
         path: CommandPath,
         command: CommandServer<any, any>,
-        exchange: MessageExchange<MatterDevice>,
+        exchange: MessageExchange,
         commandFields: any,
         message: Message,
         endpoint: EndpointInterface,

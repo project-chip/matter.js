@@ -4,29 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessLevel } from "@project-chip/matter.js-model";
-import {
-    AttributeId,
-    BasicInformationCluster,
-    FabricId,
-    FabricIndex,
-    NodeId,
-    TlvSchema,
-    TlvUInt8,
-    VendorId,
-} from "@project-chip/matter.js-types";
+import { BasicInformationCluster } from "#clusters";
+import { AccessLevel } from "#model";
 import {
     AttributeServer,
+    ClusterDatasource,
+    EndpointInterface,
+    Fabric,
     FabricScopedAttributeServer,
     FixedAttributeServer,
-} from "../../src/cluster/server/AttributeServer.js";
-import { ClusterDatasource } from "../../src/cluster/server/ClusterServerTypes.js";
-import { Message } from "../../src/codec/MessageCodec.js";
-import { EndpointInterface } from "../../src/endpoint/EndpointInterface.js";
-import { Fabric } from "../../src/fabric/Fabric.js";
-import { MatterDevice } from "../../src/MatterDevice.js";
-import { SecureSession } from "../../src/session/SecureSession.js";
-import { Session } from "../../src/session/Session.js";
+    Message,
+    SecureSession,
+    Session,
+} from "#protocol";
+import { AttributeId, FabricId, FabricIndex, NodeId, TlvSchema, TlvUInt8, VendorId } from "#types";
 import { DUMMY_KEY } from "../support/mock-keys.js";
 
 const ZERO = new Uint8Array(1);
@@ -57,9 +48,9 @@ interface CreateOptions<T> {
     initValue: T;
     defaultValue: T;
     readonly datasource: ClusterDatasource;
-    getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T;
-    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean;
-    validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void;
+    getter?: (session?: Session, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T;
+    setter?: (value: T, session?: Session, endpoint?: EndpointInterface) => boolean;
+    validator?: (value: T, session?: Session, endpoint?: EndpointInterface) => void;
 }
 
 function withDefaults(options: Partial<CreateOptions<number>>) {
@@ -201,9 +192,7 @@ describe("AttributeServerTest", () => {
         it("should throw an error if the value is set non locally and not writable", () => {
             const server = create({ isWritable: false });
             expect(server.getLocal()).equal(3);
-            expect(() => server.set(4, {} as SecureSession<MatterDevice>)).throws(
-                '(136) Attribute "test" is not writable.',
-            );
+            expect(() => server.set(4, {} as SecureSession)).throws('(136) Attribute "test" is not writable.');
         });
 
         it("should return the value from getter", () => {
@@ -220,12 +209,12 @@ describe("AttributeServerTest", () => {
                     return true;
                 },
             });
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
             server.setLocal(5);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 1,
             });
@@ -242,12 +231,12 @@ describe("AttributeServerTest", () => {
                     return false;
                 },
             });
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
             server.setLocal(5);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
@@ -265,12 +254,12 @@ describe("AttributeServerTest", () => {
                 },
             });
 
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
-            server.updated({} as SecureSession<MatterDevice>);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            server.updated({} as SecureSession);
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 1,
             });
@@ -299,12 +288,12 @@ describe("AttributeServerTest", () => {
                 valueTriggered2 = newValue;
                 oldValueTriggered2 = oldValue;
             });
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
             server.setLocal(5);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 1,
             });
@@ -334,12 +323,12 @@ describe("AttributeServerTest", () => {
                 valueTriggered2 = newValue;
                 oldValueTriggered2 = oldValue;
             });
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
             server.setLocal(5);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
@@ -358,12 +347,12 @@ describe("AttributeServerTest", () => {
                     return false;
                 },
             });
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
-            server.updated({} as SecureSession<MatterDevice>);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+            server.updated({} as SecureSession);
+            expect(server.getWithVersion({} as SecureSession, false)).deep.equal({
                 value: 4,
                 version: 1,
             });
@@ -561,7 +550,7 @@ describe("AttributeServerTest", () => {
 
         it("should return value from getter when used non-locally", async () => {
             const server = create({ getter: () => 7 });
-            const testSession = { associatedFabric: testFabric } as SecureSession<MatterDevice>;
+            const testSession = { associatedFabric: testFabric } as SecureSession;
             await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
             expect(server.get(testSession, true)).equal(7);
         });
@@ -572,7 +561,7 @@ describe("AttributeServerTest", () => {
                 getter: () => 7,
                 setter: () => true,
             });
-            const testSession = { associatedFabric: testFabric } as SecureSession<MatterDevice>;
+            const testSession = { associatedFabric: testFabric } as SecureSession;
 
             let valueTriggered: number | undefined = undefined;
             let versionTriggered: number | undefined = undefined;

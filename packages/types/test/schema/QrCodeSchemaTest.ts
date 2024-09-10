@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { QrCode } from "../../src/schema/QrCodeSchema.js";
+import { QrCode } from "#schema/QrCodeSchema.js";
 
 const QR_CODE = [
     "▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",

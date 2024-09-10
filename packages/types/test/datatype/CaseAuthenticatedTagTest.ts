@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CaseAuthenticatedTag } from "../../src/datatype/CaseAuthenticatedTag.js";
+import { CaseAuthenticatedTag } from "#datatype/CaseAuthenticatedTag.js";
 
 describe("CaseAuthenticatedTag", () => {
     it("should create a valid CaseAuthenticatedTag", () => {

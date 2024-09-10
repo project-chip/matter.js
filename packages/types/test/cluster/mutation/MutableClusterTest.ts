@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { IllegalClusterError } from "../../../src/cluster/mutation/ClusterComposer.js";
-import { MutableCluster } from "../../../src/cluster/mutation/MutableCluster.js";
+import { IllegalClusterError } from "#cluster/mutation/ClusterComposer.js";
+import { MutableCluster } from "#cluster/mutation/MutableCluster.js";
 import { TestComposite, expectElementCounts, expectElements1, expectElements2, expectMetadata } from "./util.js";
 
 const TestMutable = MutableCluster(TestComposite);

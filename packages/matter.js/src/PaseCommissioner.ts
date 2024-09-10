@@ -3,20 +3,25 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Environment, ImplementationError, Logger, Network, UdpInterface } from "@project-chip/matter.js-general";
-import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema } from "@project-chip/matter.js-types";
+import { Environment, ImplementationError, Logger, Network, UdpInterface } from "#general";
+import {
+    CommissionableDevice,
+    CommissionableDeviceIdentifiers,
+    ControllerDiscovery,
+    DiscoveryData,
+    FabricJsonObject,
+    MdnsScanner,
+    MdnsService,
+    RootCertificateManager,
+    Scanner,
+} from "#protocol";
+import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema } from "#types";
 import {
     CommissioningControllerOptions,
     ControllerEnvironmentOptions,
     NodeCommissioningOptions,
 } from "./CommissioningController.js";
 import { MatterController } from "./MatterController.js";
-import { RootCertificateManager } from "./certificate/RootCertificateManager.js";
-import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData, Scanner } from "./common/Scanner.js";
-import { FabricJsonObject } from "./fabric/Fabric.js";
-import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { MdnsService } from "./mdns/MdnsService.js";
-import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
 
 const logger = new Logger("PaseCommissioner");
 

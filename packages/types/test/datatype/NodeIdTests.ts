@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError } from "@project-chip/matter.js-general";
-import { CaseAuthenticatedTag } from "../../src/datatype/CaseAuthenticatedTag.js";
-import { NodeId } from "../../src/datatype/NodeId.js";
+import { CaseAuthenticatedTag } from "#datatype/CaseAuthenticatedTag.js";
+import { NodeId } from "#datatype/NodeId.js";
+import { UnexpectedDataError } from "#general";
 
 describe("NodeId", () => {
     it("should create a valid NodeId as BigInt", () => {

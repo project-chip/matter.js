@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "@project-chip/matter.js-types/schema";
+export * from "@matter.js/types/schema";

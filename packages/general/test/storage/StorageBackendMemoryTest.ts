@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StorageError } from "../../src/storage/Storage.js";
-import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
+import { StorageError } from "#storage/Storage.js";
+import { StorageBackendMemory } from "#storage/StorageBackendMemory.js";
 
 const CONTEXTx1 = ["context"];
 const CONTEXTx2 = [...CONTEXTx1, "subcontext"];

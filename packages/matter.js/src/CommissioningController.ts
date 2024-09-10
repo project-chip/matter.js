@@ -3,6 +3,8 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+
+import { BasicInformation } from "#clusters";
 import {
     Environment,
     ImplementationError,
@@ -14,9 +16,21 @@ import {
     SupportedStorageTypes,
     SyncStorage,
     UdpInterface,
-} from "@project-chip/matter.js-general";
+} from "#general";
+import { ControllerStore } from "#node";
 import {
-    BasicInformation,
+    CommissionableDevice,
+    CommissionableDeviceIdentifiers,
+    ControllerCommissioningOptions,
+    ControllerDiscovery,
+    DiscoveryData,
+    InteractionClient,
+    MdnsBroadcaster,
+    MdnsScanner,
+    MdnsService,
+    SupportedAttributeClient,
+} from "#protocol";
+import {
     CaseAuthenticatedTag,
     DiscoveryCapabilitiesBitmap,
     EndpointNumber,
@@ -26,19 +40,10 @@ import {
     NodeId,
     TypeFromPartialBitSchema,
     VendorId,
-} from "@project-chip/matter.js-types";
-import { SupportedAttributeClient } from "./cluster/client/AttributeClient.js";
-import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData } from "./common/Scanner.js";
+} from "#types";
 import { CommissioningControllerNodeOptions, PairedNode } from "./device/PairedNode.js";
 import { MatterController } from "./MatterController.js";
 import { MatterNode } from "./MatterNode.js";
-import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { MdnsService } from "./mdns/MdnsService.js";
-import { ControllerStore } from "./node/client/storage/ControllerStore.js";
-import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
-import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
-import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -112,7 +117,7 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
 /** Options needed to commission a new node */
 export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
     /** Commission related options. */
-    commissioning?: CommissioningOptions;
+    commissioning?: ControllerCommissioningOptions;
 
     /** Discovery related options. */
     discovery: (

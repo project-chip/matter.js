@@ -4,7 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Merge, Storage, SupportedStorageTypes } from "@project-chip/matter.js-general";
+import { Merge } from "#general";
+import {
+    AnyEventServer,
+    AttributeServer,
+    ClusterClientObj,
+    CommandServer,
+    Fabric,
+    FabricScopedAttributeServer,
+    FixedAttributeServer,
+    MatterDeviceSession,
+    Message,
+} from "#protocol";
 import {
     Attribute,
     AttributeId,
@@ -35,19 +46,9 @@ import {
     ResponseType,
     WritableAttribute,
     WritableFabricScopedAttribute,
-} from "@project-chip/matter.js-types";
-import { Message } from "../../codec/MessageCodec.js";
+} from "#types";
 import { Endpoint } from "../../device/Endpoint.js";
-import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { Fabric } from "../../fabric/Fabric.js";
-import { MatterDevice } from "../../MatterDevice.js";
-import { EventHandler } from "../../protocol/interaction/EventHandler.js";
-import { Session } from "../../session/Session.js";
-import { ClusterClientObj } from "../client/ClusterClientTypes.js";
-import { AttributeServer, FabricScopedAttributeServer, FixedAttributeServer } from "./AttributeServer.js";
 import { type ClusterServer } from "./ClusterServer.js";
-import { CommandServer } from "./CommandServer.js";
-import { AnyEventServer } from "./EventServer.js";
 
 /** Cluster attributes accessible on the cluster server */
 type MandatoryAttributeServers<A extends Attributes> = Omit<
@@ -79,10 +80,6 @@ export type AttributeInitialValues<A extends Attributes> = Merge<
     Omit<{ [P in MandatoryAttributeNames<A>]: AttributeJsType<A[P]> }, keyof GlobalAttributes<any>>,
     { [P in OptionalAttributeNames<A>]?: AttributeJsType<A[P]> }
 >;
-export type AttributeServerValues<A extends Attributes> = Merge<
-    { [P in MandatoryAttributeNames<A>]: AttributeJsType<A[P]> },
-    { [P in OptionalAttributeNames<A>]?: AttributeJsType<A[P]> }
->;
 
 type MandatoryCommandNames<C extends Commands> = {
     [K in keyof C]: C[K] extends OptionalCommand<any, any, any> ? never : K;
@@ -94,20 +91,20 @@ type AttributeGetters<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeGetter`]?: (args: {
         attributes: AttributeServers<A>;
         endpoint?: Endpoint;
-        session?: Session<MatterDevice>;
+        session?: MatterDeviceSession;
         isFabricFiltered?: boolean;
     }) => AttributeJsType<A[P]>;
 };
 type AttributeSetters<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeSetter`]?: (
         value: AttributeJsType<A[P]>,
-        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: Session<MatterDevice> },
+        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: MatterDeviceSession },
     ) => boolean;
 };
 type AttributeValidators<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeValidator`]?: (
         value: AttributeJsType<A[P]>,
-        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: Session<MatterDevice> },
+        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: MatterDeviceSession },
     ) => void;
 };
 export type CommandHandler<
@@ -120,7 +117,7 @@ export type CommandHandler<
               request: RequestT;
               attributes: AS;
               events: ES;
-              session: Session<MatterDevice>;
+              session: MatterDeviceSession;
               message: Message;
               endpoint: Endpoint;
           }) => Promise<ResponseT> | ResponseT
@@ -256,17 +253,6 @@ export type SupportedEventsList<E extends Events> = Merge<
     { [P in MandatoryEventNames<E>]: true },
     { [P in OptionalEventNames<E>]?: boolean }
 >;
-
-export interface ClusterDatasource<S extends Storage = any> {
-    readonly version: number;
-    readonly eventHandler?: EventHandler<S>;
-    increaseVersion(): number;
-    changed(key: string, value: SupportedStorageTypes): void;
-}
-
-export namespace ClusterDatasource {
-    export type Factory = (endpoint: EndpointInterface, cluster: ClusterServerObj) => ClusterDatasource;
-}
 
 export type ClusterServerObj<T extends ClusterType = ClusterType> = ClusterServer<T> & {
     /**

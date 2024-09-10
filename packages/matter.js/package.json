@@ -32,13 +32,29 @@
         "coverage": "c8 matter-test esm",
         "embed-examples": "embedme **/README.md"
     },
+    "imports": {
+        "#general": "@matter.js/general",
+        "#model": "@matter.js/model",
+        "#types": "@matter.js/types",
+        "#clusters": "@matter.js/types/clusters",
+        "#protocol": "@matter.js/protocol",
+        "#node": "@matter.js/node",
+        "#behaviors/*": "@matter.js/node/behaviors/*",
+        "#devices/*": "@matter.js/node/devices/*",
+        "#endpoints/*": "@matter.js/node/endpoints/*",
+        "#*": "./src/*"
+    },
     "dependencies": {
         "@noble/curves": "^1.5.0",
-        "@project-chip/matter.js-general": "*",
-        "@project-chip/matter.js-model": "*"
+        "@matter.js/general": "*",
+        "@matter.js/model": "*",
+        "@matter.js/types": "*",
+        "@matter.js/protocol": "*",
+        "@matter.js/node": "*"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "*",
+        "@matter.js/tools": "*",
+        "@matter.js/codegen": "*",
         "@types/chai": "^4.3.16",
         "@types/mocha": "^10.0.7",
         "@types/wtfnode": "^0.7.3",
@@ -68,243 +84,110 @@
             }
         },
         "./package.json": "./package.json",
-        "./behaviors/*": {
+        "./cluster": {
             "import": {
-                "types": "./dist/esm/behavior/definitions/*/export.d.ts",
-                "default": "./dist/esm/behavior/definitions/*/export.js"
+                "types": "./dist/esm/cluster/export.d.ts",
+                "default": "./dist/esm/cluster/export.js"
             },
             "require": {
-                "types": "./dist/cjs/behavior/definitions/*/export.d.ts",
-                "default": "./dist/cjs/behavior/definitions/*/export.js"
+                "types": "./dist/cjs/cluster/export.d.ts",
+                "default": "./dist/cjs/cluster/export.js"
             }
         },
-        "./devices/*": {
+        "./device": {
             "import": {
-                "types": "./dist/esm/endpoint/definitions/device/*.d.ts",
-                "default": "./dist/esm/endpoint/definitions/device/*.js"
+                "types": "./dist/esm/device/export.d.ts",
+                "default": "./dist/esm/device/export.js"
             },
             "require": {
-                "types": "./dist/cjs/endpoint/definitions/device/*.d.ts",
-                "default": "./dist/cjs/endpoint/definitions/device/*.js"
+                "types": "./dist/cjs/device/export.d.ts",
+                "default": "./dist/cjs/device/export.js"
+            }
+        },
+        "./behaviors/*": {
+            "import": {
+                "types": "./dist/esm/compat/behaviors/*.d.ts",
+                "default": "./dist/esm/compat/behaviors/*.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/behaviors/*.d.ts",
+                "default": "./dist/cjs/compat/behaviors/*.js"
+            }
+        },
+        "./behavior/definitions/*": {
+            "import": {
+                "types": "./dist/esm/compat/behaviors/*.d.ts",
+                "default": "./dist/esm/compat/behaviors/*.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/behaviors/*.d.ts",
+                "default": "./dist/cjs/compat/behaviors/*.js"
             }
         },
         "./tags/*": {
             "import": {
-                "types": "./dist/esm/endpoint/definitions/tags/*.d.ts",
-                "default": "./dist/esm/endpoint/definitions/tags/*.js"
+                "types": "./dist/esm/compat/tags/*.d.ts",
+                "default": "./dist/esm/compat/tags/*.js"
             },
             "require": {
-                "types": "./dist/cjs/endpoint/definitions/tags/*.d.ts",
-                "default": "./dist/cjs/endpoint/definitions/tags/*.js"
+                "types": "./dist/cjs/compat/tags/*.d.ts",
+                "default": "./dist/cjs/compat/tags/*.js"
             }
         },
-        "./elements": {
+        "./devices/*": {
             "import": {
-                "types": "./dist/esm/model/standard/elements/index.d.ts",
-                "default": "./dist/esm/model/standard/elements/index.js"
+                "types": "./dist/esm/compat/devices/*.d.ts",
+                "default": "./dist/esm/compat/devices/*.js"
             },
             "require": {
-                "types": "./dist/cjs/model/standard/elements/index.d.ts",
-                "default": "./dist/cjs/model/standard/elements/index.js"
-            }
-        },
-        "./elements/*": {
-            "import": {
-                "types": "./dist/esm/model/standard/elements/*.d.ts",
-                "default": "./dist/esm/model/standard/elements/*.js"
-            },
-            "require": {
-                "types": "./dist/cjs/model/standard/elements/*.d.ts",
-                "default": "./dist/cjs/model/standard/elements/*.js"
+                "types": "./dist/cjs/compat/devices/*.d.ts",
+                "default": "./dist/cjs/compat/devices/*.js"
             }
         },
         "./endpoints/*": {
             "import": {
-                "types": "./dist/esm/endpoint/definitions/system/*.d.ts",
-                "default": "./dist/esm/endpoint/definitions/system/*.js"
+                "types": "./dist/esm/compat/endpoints/*.d.ts",
+                "default": "./dist/esm/compat/endpoints/*.js"
             },
             "require": {
-                "types": "./dist/cjs/endpoint/definitions/system/*.d.ts",
-                "default": "./dist/cjs/endpoint/definitions/system/*.js"
-            }
-        },
-        "./interaction": {
-            "import": {
-                "types": "./dist/esm/protocol/interaction/export.d.ts",
-                "default": "./dist/esm/protocol/interaction/export.js"
-            },
-            "require": {
-                "types": "./dist/cjs/protocol/interaction/export.d.ts",
-                "default": "./dist/cjs/protocol/interaction/export.js"
-            }
-        },
-        "./securechannel": {
-            "import": {
-                "types": "./dist/esm/protocol/securechannel/export.d.ts",
-                "default": "./dist/esm/protocol/securechannel/export.js"
-            },
-            "require": {
-                "types": "./dist/cjs/protocol/securechannel/export.d.ts",
-                "default": "./dist/cjs/protocol/securechannel/export.js"
-            }
-        },
-        "./util": {
-            "import": {
-                "types": "./dist/esm/compat/util.d.ts",
-                "default": "./dist/esm/compat/util.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/util.d.ts",
-                "default": "./dist/cjs/compat/util.js"
-            }
-        },
-        "./log": {
-            "import": {
-                "types": "./dist/esm/compat/log.d.ts",
-                "default": "./dist/esm/compat/log.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/log.d.ts",
-                "default": "./dist/cjs/compat/log.js"
-            }
-        },
-        "./crypto": {
-            "import": {
-                "types": "./dist/esm/compat/crypto.d.ts",
-                "default": "./dist/esm/compat/crypto.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/crypto.d.ts",
-                "default": "./dist/cjs/compat/crypto.js"
-            }
-        },
-        "./model": {
-            "import": {
-                "types": "./dist/esm/compat/model.d.ts",
-                "default": "./dist/esm/compat/model.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/crypto.d.ts",
-                "default": "./dist/cjs/compat/crypto.js"
-            }
-        },
-        "./time": {
-            "import": {
-                "types": "./dist/esm/compat/time.d.ts",
-                "default": "./dist/esm/compat/time.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/time.d.ts",
-                "default": "./dist/cjs/compat/time.js"
-            }
-        },
-        "./environment": {
-            "import": {
-                "types": "./dist/esm/compat/environment.d.ts",
-                "default": "./dist/esm/compat/environment.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/environment.d.ts",
-                "default": "./dist/cjs/compat/environment.js"
-            }
-        },
-        "./math": {
-            "import": {
-                "types": "./dist/esm/compat/math.d.ts",
-                "default": "./dist/esm/compat/math.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/math.d.ts",
-                "default": "./dist/cjs/compat/math.js"
-            }
-        },
-        "./net": {
-            "import": {
-                "types": "./dist/esm/compat/net.d.ts",
-                "default": "./dist/esm/compat/net.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/net.d.ts",
-                "default": "./dist/cjs/compat/net.js"
-            }
-        },
-        "./storage": {
-            "import": {
-                "types": "./dist/esm/compat/storage.d.ts",
-                "default": "./dist/esm/compat/storage.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/storage.d.ts",
-                "default": "./dist/cjs/compat/storage.js"
-            }
-        },
-        "./datatype": {
-            "import": {
-                "types": "./dist/esm/compat/datatype.d.ts",
-                "default": "./dist/esm/compat/datatype.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/datatype.d.ts",
-                "default": "./dist/cjs/compat/datatype.js"
-            }
-        },
-        "./tlv": {
-            "import": {
-                "types": "./dist/esm/compat/tlv.d.ts",
-                "default": "./dist/esm/compat/tlv.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/tlv.d.ts",
-                "default": "./dist/cjs/compat/tlv.js"
-            }
-        },
-        "./schema": {
-            "import": {
-                "types": "./dist/esm/compat/schema.d.ts",
-                "default": "./dist/esm/compat/schema.js"
-            },
-            "require": {
-                "types": "./dist/cjs/compat/schema.d.ts",
-                "default": "./dist/cjs/compat/schema.js"
+                "types": "./dist/cjs/compat/endpoints/*.d.ts",
+                "default": "./dist/cjs/compat/endpoints/*.js"
             }
         },
         "./*": {
             "import": {
-                "types": "./dist/esm/*/export.d.ts",
-                "default": "./dist/esm/*/export.js"
+                "types": "./dist/esm/compat/*.d.ts",
+                "default": "./dist/esm/compat/*.js"
             },
             "require": {
-                "types": "./dist/cjs/*/export.d.ts",
-                "default": "./dist/cjs/*/export.js"
+                "types": "./dist/cjs/compat/*.d.ts",
+                "default": "./dist/cjs/compat/*.js"
             }
         }
     },
     "types": "dist/esm/export.d.ts",
     "typesVersions": {
         "*": {
-            "interaction": [
-                "/dist/cjs/protocol/interaction/export.d.ts"
+            "device/*": [
+                "/dist/cjs/compat/device.d.ts"
             ],
-            "model": [
-                "/dist/cjs/model/index.d.ts"
-            ],
-            "securechannel": [
-                "/dist/cjs/protocol/securechannel/export.d.ts"
-            ],
-            "behaviors/*": [
-                "/dist/cjs/behavior/definitions/*/export.d.ts"
+            "cluster/*": [
+                "/dist/cjs/compat/cluster.d.ts"
             ],
             "devices/*": [
-                "/dist/cjs/endpoint/definitions/device/*.d.ts"
+                "/dist/cjs/compat/devices/*.d.ts"
             ],
             "endpoints/*": [
-                "/dist/cjs/endpoint/definitions/system/*.d.ts"
+                "/dist/cjs/compat/endpoints/system/*.d.ts"
+            ],
+            "behaviors/*": [
+                "/dist/cjs/compat/endpoints/system/*.d.ts"
             ],
             ".": [
                 "/dist/cjs/export.d.ts"
             ],
             "*": [
-                "/dist/cjs/*/export.d.ts"
+                "/dist/cjs/compat/*.d.ts"
             ]
         }
     },

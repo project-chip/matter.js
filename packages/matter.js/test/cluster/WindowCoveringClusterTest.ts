@@ -6,8 +6,9 @@
 
 // Tests WindowCoveringCluster in conjunction with ClusterServer
 
-import { BitFlags, WindowCovering, WindowCoveringCluster } from "@project-chip/matter.js-types";
-import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
+import { ClusterServer } from "#cluster/server/ClusterServer.js";
+import { WindowCovering, WindowCoveringCluster } from "#clusters";
+import { BitFlags } from "#types";
 
 describe("WindowCoveringCluster", () => {
     const WindowCovering_LF_PALF = WindowCoveringCluster.with("Lift", "PositionAwareLift");

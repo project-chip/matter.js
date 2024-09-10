@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "@project-chip/matter.js-general";
-import { TlvAny } from "../../src/tlv/TlvAny.js";
-import { TlvArray } from "../../src/tlv/TlvArray.js";
-import { TlvNullable } from "../../src/tlv/TlvNullable.js";
-import { TlvString } from "../../src/tlv/TlvString.js";
+import { Bytes } from "#general";
+import { TlvAny } from "#tlv/TlvAny.js";
+import { TlvArray } from "#tlv/TlvArray.js";
+import { TlvNullable } from "#tlv/TlvNullable.js";
+import { TlvString } from "#tlv/TlvString.js";
 
 type CodecVector<I, E> = { [valueDescription: string]: { encoded: E; decoded: I } };
 

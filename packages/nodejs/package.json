@@ -1,5 +1,5 @@
 {
-    "name": "@project-chip/matter.js-nodejs",
+    "name": "@matter.js/nodejs",
     "version": "0.0.0-git",
     "description": "Node.js platform support for matter.js",
     "keywords": [
@@ -23,6 +23,9 @@
         "type": "git",
         "url": "https://github.com/project-chip/matter.js.git"
     },
+    "engines": {
+        "node": ">=18.0.0"
+    },
     "scripts": {
         "clean": "matter-build clean",
         "build": "matter-build",
@@ -31,13 +34,26 @@
         "coverage": "c8 matter-test esm",
         "embed-examples": "embedme **/README.md"
     },
+    "imports": {
+        "#general": "@matter.js/general",
+        "#types": "@matter.js/types",
+        "#clusters/*": "@matter.js/types/clusters/*",
+        "#node": "@matter.js/node",
+        "#protocol": "@matter.js/protocol",
+        "#*": "./src/*"
+    },
     "dependencies": {
-        "@project-chip/matter.js-general": "*",
+        "@matter.js/general": "*",
+        "@matter.js/types": "*",
+        "@matter.js/protocol": "*",
+        "@matter.js/node": "*",
+        "@project-chip/matter.js": "*",
         "node-localstorage": "^3.0.5"
     },
     "devDependencies": {
-        "@project-chip/matter.js-model": "*",
-        "@project-chip/matter.js-tools": "*",
+        "@matter.js/model": "*",
+        "@matter.js/protocol": "*",
+        "@matter.js/tools": "*",
         "@types/bytebuffer": "^5.0.49",
         "@types/node-localstorage": "^1.3.3",
         "typescript": "~5.5.3"

@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "@project-chip/matter.js-general";
-import { GroupKeyManagement, StatusCode, StatusResponseError } from "@project-chip/matter.js-types";
-import { assertSecureSession } from "../../session/SecureSession.js";
+import { GroupKeyManagement } from "#clusters";
+import { ImplementationError } from "#general";
+import { assertSecureSession } from "#protocol";
+import { StatusCode, StatusResponseError } from "#types";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 export const GroupKeyManagementClusterHandler: () => ClusterServerHandlers<typeof GroupKeyManagement.Cluster> = () => ({

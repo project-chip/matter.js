@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Conformance } from "../../src/aspects/Conformance.js";
+import { Conformance } from "#aspects/Conformance.js";
 
 const TEST_DEFINITIONS = [
     "M",

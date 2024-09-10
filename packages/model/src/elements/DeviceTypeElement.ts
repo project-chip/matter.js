@@ -5,7 +5,7 @@
  */
 
 import { Mei } from "../common/Mei.js";
-import { ElementTag } from "../common/index.js";
+import { DeviceClassification, ElementTag } from "../common/index.js";
 import { BaseElement } from "./BaseElement.js";
 import { FieldElement } from "./FieldElement.js";
 import { RequirementElement } from "./RequirementElement.js";
@@ -18,7 +18,7 @@ import { RequirementElement } from "./RequirementElement.js";
 export interface DeviceTypeElement extends BaseElement {
     id?: Mei;
     tag: `${DeviceTypeElement.Tag}`;
-    classification: `${DeviceTypeElement.Classification}`;
+    classification: `${DeviceClassification}`;
     category?: string;
     children?: (RequirementElement | FieldElement)[];
 }
@@ -31,12 +31,4 @@ export namespace DeviceTypeElement {
     export type Tag = ElementTag.DeviceType;
     export const Tag = ElementTag.DeviceType;
     export type Properties = BaseElement.Properties<DeviceTypeElement>;
-
-    export enum Classification {
-        Base = "base",
-        Node = "node",
-        Utility = "utility",
-        Simple = "simple",
-        Dynamic = "dynamic",
-    }
 }

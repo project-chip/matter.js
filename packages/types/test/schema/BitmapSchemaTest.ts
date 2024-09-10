@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "@project-chip/matter.js-general";
-import { BitField, BitFieldEnum, BitFlag, BitmapSchema, ByteArrayBitmapSchema } from "../../src/schema/BitmapSchema.js";
+import { Bytes } from "#general";
+import { BitField, BitFieldEnum, BitFlag, BitmapSchema, ByteArrayBitmapSchema } from "#schema/BitmapSchema.js";
 
 describe("BitmapSchema", () => {
     const enum EnumTest {

@@ -4,23 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// Export general Cluster specific types
-export * from "./client/AttributeClient.js";
-export * from "./client/ClusterClient.js";
-export * from "./client/ClusterClientTypes.js";
-export * from "./client/EventClient.js";
-// Export all Client classes
-export * from "@project-chip/matter.js-types";
-export * from "./ClusterHelper.js";
-// Export all Server handler
 export * from "./server/AdministratorCommissioningServer.js";
-export * from "./server/AttributeServer.js";
 export * from "./server/ClusterServer.js";
-// Export all Server classes
 export * from "./server/ClusterServerTypes.js";
-export * from "./server/CommandServer.js";
 export * from "./server/CommissioningServerFailsafeContext.js";
-export * from "./server/EventServer.js";
 export * from "./server/GeneralCommissioningServer.js";
 export * from "./server/GroupKeyManagementServer.js";
 export * from "./server/GroupsServer.js";
@@ -29,12 +16,33 @@ export * from "./server/LevelControlServer.js";
 export * from "./server/OnOffServer.js";
 export * from "./server/OperationalCredentialsServer.js";
 
-// Compatibility with old export locations
-export { AccessLevel } from "@project-chip/matter.js-model";
+// Compat
+export { AccessLevel } from "#model";
 export {
-    Cluster,
-    ClusterComposer,
-    ClusterRegistry,
-    ElementModifier,
-    MutableCluster,
-} from "@project-chip/matter.js-types/cluster";
+    AttributeClient,
+    AttributeServer,
+    BaseAttributeServer,
+    ClusterClient,
+    CommandServer,
+    EventClient,
+    EventServer,
+    FabricScopeError,
+    FabricScopedAttributeServer,
+    FabricSensitiveEventServer,
+    FixedAttributeServer,
+    SupportedAttributeClient,
+    SupportedEventClient,
+    UnknownSupportedAttributeClient,
+    UnknownSupportedEventClient,
+    createAttributeClient,
+    createAttributeServer,
+    createEventClient,
+    type AnyAttributeServer,
+    type AnyEventServer,
+    type AttributeClientValues,
+    type ClusterClientObj,
+    type ClusterDatasource,
+} from "#protocol";
+export { Status } from "#types";
+export * from "@matter.js/types/cluster";
+export * from "@matter.js/types/clusters";

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "@project-chip/matter.js-general";
-import { TlvAny } from "../../src/tlv/TlvAny.js";
-import { TlvArray } from "../../src/tlv/TlvArray.js";
-import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
+import { Bytes } from "#general";
+import { TlvAny } from "#tlv/TlvAny.js";
+import { TlvArray } from "#tlv/TlvArray.js";
+import { TlvBoolean } from "#tlv/TlvBoolean.js";
 import {
     TlvDouble,
     TlvFloat,
@@ -19,11 +19,11 @@ import {
     TlvUInt32,
     TlvUInt64,
     TlvUInt8,
-} from "../../src/tlv/TlvNumber.js";
-import { TlvField, TlvObject } from "../../src/tlv/TlvObject.js";
-import { TlvSchema } from "../../src/tlv/TlvSchema.js";
-import { TlvString } from "../../src/tlv/TlvString.js";
-import { TlvWrapper } from "../../src/tlv/TlvWrapper.js";
+} from "#tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "#tlv/TlvObject.js";
+import { TlvSchema } from "#tlv/TlvSchema.js";
+import { TlvString } from "#tlv/TlvString.js";
+import { TlvWrapper } from "#tlv/TlvWrapper.js";
 
 type TestEntry<T> = {
     name: string;

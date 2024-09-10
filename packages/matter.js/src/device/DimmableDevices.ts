@@ -1,10 +1,10 @@
 // additional commands to be allowed for registering and triggering handlers
 
-import { LevelControl, OnOff } from "@project-chip/matter.js-types";
+import { LevelControl, OnOff } from "#clusters";
 import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServerTypes.js";
 
-import { extendPublicHandlerMethods } from "@project-chip/matter.js-general";
-import { ClusterId } from "@project-chip/matter.js-types";
+import { extendPublicHandlerMethods } from "#general";
+import { ClusterId } from "#types";
 import { createDefaultLevelControlClusterServer } from "../cluster/server/LevelControlServer.js";
 import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.js";
 import { DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.js";

@@ -7,7 +7,7 @@
 // This utility dumps names from the model to make it easier to look for
 // inconsistencies
 
-import { MatterModel } from "@project-chip/matter.js-model";
+import { MatterModel } from "#model";
 
 export async function main() {
     const names = {} as { [name: string]: number };

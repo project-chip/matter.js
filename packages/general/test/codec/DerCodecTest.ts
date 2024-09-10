@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BitByteArray, ContextTagged, DatatypeOverride, DerCodec, DerType } from "../../src/codec/DerCodec.js";
-import { X520, X962 } from "../../src/codec/DerTypes.js";
+import { BitByteArray, ContextTagged, DatatypeOverride, DerCodec, DerType } from "#codec/DerCodec.js";
+import { X520, X962 } from "#codec/DerTypes.js";
 
-import { Bytes } from "../../src/util/Bytes.js";
+import { Bytes } from "#util/Bytes.js";
 
 const DECODED = {
     request: {

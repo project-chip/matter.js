@@ -1,7 +1,7 @@
 # Matter.js Tooling
 
 This package supports build, test and execution infrastructure for other
-`@project-chip/matter.js` packages.
+matter.js packages.
 
 > This package supports all Node.js LTS versions starting with 18.x
 

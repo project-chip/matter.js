@@ -4,37 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    ImplementationError,
-    LogLevel,
-    Logger,
-    StorageBackendMemory,
-    StorageManager,
-    SyncStorage,
-} from "@project-chip/matter.js-general";
-import { Specification } from "@project-chip/matter.js-model";
+import { ClusterServer } from "#cluster/server/ClusterServer.js";
+import { asClusterServerInternal } from "#cluster/server/ClusterServerTypes.js";
 import {
     AdministratorCommissioningCluster,
-    AttributeId,
     BasicInformationCluster,
     BindingCluster,
-    Cluster,
-    ClusterExtend,
-    CommandId,
-    EndpointNumber,
-    FabricIndex,
     GroupsCluster,
     Identify,
     IdentifyCluster,
-    VendorId,
     WindowCovering,
-} from "@project-chip/matter.js-types";
-import { AttributeServer, FixedAttributeServer } from "../../src/cluster/server/AttributeServer.js";
-import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
-import { ClusterDatasource, asClusterServerInternal } from "../../src/cluster/server/ClusterServerTypes.js";
-import { DeviceTypes } from "../../src/device/DeviceTypes.js";
-import { Endpoint } from "../../src/device/Endpoint.js";
-import { Fabric } from "../../src/fabric/Fabric.js";
+} from "#clusters";
+import { DeviceTypes } from "#device/DeviceTypes.js";
+import { Endpoint } from "#device/Endpoint.js";
+import { ImplementationError, LogLevel, Logger, StorageBackendMemory, StorageManager, SyncStorage } from "#general";
+import { Specification } from "#model";
+import { AttributeServer, ClusterDatasource, Fabric, FixedAttributeServer } from "#protocol";
+import { AttributeId, Cluster, ClusterExtend, CommandId, EndpointNumber, FabricIndex, VendorId } from "#types";
 
 describe("ClusterServer structure", () => {
     describe("correct attribute servers are used and exposed", () => {

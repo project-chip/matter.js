@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Val } from "@project-chip/matter.js/behavior/state";
-import { Instrumentation } from "@project-chip/matter.js/behavior/state/managed";
+import { Instrumentation, Val } from "#node";
 import { inspect } from "util";
 
 /**

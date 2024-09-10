@@ -4,29 +4,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AtLeastOne, ImplementationError, InternalError, NotImplementedError } from "@project-chip/matter.js-general";
+import {
+    BasicInformationCluster,
+    BridgedDeviceBasicInformationCluster,
+    DescriptorCluster,
+    FixedLabelCluster,
+    UserLabelCluster,
+} from "#clusters";
+import { AtLeastOne, ImplementationError, InternalError, NotImplementedError } from "#general";
+import { ClusterClientObj, EndpointInterface } from "#protocol";
 import {
     Attributes,
-    BasicInformationCluster,
     BitSchema,
-    BridgedDeviceBasicInformationCluster,
     Cluster,
     ClusterId,
     ClusterType,
     Commands,
-    DescriptorCluster,
     DeviceTypeId,
     EndpointNumber,
     Events,
-    FixedLabelCluster,
     TypeFromPartialBitSchema,
-    UserLabelCluster,
-} from "@project-chip/matter.js-types";
-import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { getClusterNameById } from "../cluster/ClusterHelper.js";
+    getClusterNameById,
+} from "#types";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { ClusterServerObj, asClusterServerInternal } from "../cluster/server/ClusterServerTypes.js";
-import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
 
 export interface EndpointOptions {

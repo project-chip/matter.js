@@ -11,4 +11,4 @@ export {
     LogLevel as Level,
     Logger,
     logLevelFromString as levelFromString,
-} from "@project-chip/matter.js-general";
+} from "#general";

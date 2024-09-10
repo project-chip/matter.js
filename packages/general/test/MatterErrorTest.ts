@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterAggregateError, MatterError } from "../src/MatterError.js";
+import { MatterAggregateError, MatterError } from "#MatterError.js";
 import "../src/log/LogFormat.js";
 
 function errorFrame0() {

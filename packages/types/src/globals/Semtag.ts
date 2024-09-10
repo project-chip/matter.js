@@ -6,12 +6,12 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { TlvField, TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
-import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvString } from "../tlv/TlvString.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
 
 /**
  * Semantic Tag
@@ -66,8 +66,8 @@ export const TlvSemtag = TlvObject({
      *
      * @see {@link MatterSpecification.v13.Core} § 7.18.2.42.4
      */
-    label: TlvOptionalField(3, TlvNullable(TlvString.bound({ maxLength: 64 }))),
-});
+    label: TlvOptionalField(3, TlvNullable(TlvString.bound({ maxLength: 64 })))
+})
 
 /**
  * Semantic Tag

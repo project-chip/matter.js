@@ -5,6 +5,8 @@
  */
 
 import "./testing/global-declarations.js";
+export * from "./building/graph.js";
+export * from "./building/project.js";
 export * from "./testing/mocharc.cjs";
 export * from "./util/package.js";
 export * from "./util/wtf.js";

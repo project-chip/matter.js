@@ -4,10 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, isDeepEqual, Logger, SyncStorage } from "@project-chip/matter.js-general";
+import { AccessControl, AccessControlCluster } from "#clusters";
+import { InternalError, isDeepEqual, Logger, SyncStorage } from "#general";
 import {
-    AccessControl,
-    AccessControlCluster,
+    AclExtensionEntry,
+    assertSecureSession,
+    FabricSensitiveEventServer,
+    genericFabricScopedAttributeGetter,
+    genericFabricScopedAttributeGetterFromFabric,
+    genericFabricScopedAttributeSetterForFabric,
+    MatterDevice,
+} from "#protocol";
+import {
     CaseAuthenticatedTag,
     ClusterId,
     DeviceTypeId,
@@ -19,17 +27,9 @@ import {
     TlvTaggedList,
     TlvType,
     TypeFromBitmapSchema,
-} from "@project-chip/matter.js-types";
-import { AclExtensionEntry } from "../../protocol/interaction/AccessControlManager.js";
-import { assertSecureSession } from "../../session/SecureSession.js";
-import {
-    genericFabricScopedAttributeGetter,
-    genericFabricScopedAttributeGetterFromFabric,
-    genericFabricScopedAttributeSetterForFabric,
-} from "./AttributeServer.js";
+} from "#types";
 import { ClusterServer } from "./ClusterServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
-import { FabricSensitiveEventServer } from "./EventServer.js";
 
 const logger = Logger.get("AccessControlClusterServer");
 
@@ -185,9 +185,9 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
         },
 
         aclAttributeSetter: (value, { session }) => {
-            assertSecureSession(session!);
+            assertSecureSession(session);
             // it can happen internally that we set a value for another fabricIndex, so handle this here
-            const fabric = session.context.getFabricByIndex(
+            const fabric = MatterDevice.of(session).getFabricByIndex(
                 value[0]?.fabricIndex ?? session.associatedFabric.fabricIndex,
             );
             if (fabric === undefined) {
@@ -275,13 +275,13 @@ export const AccessControlClusterHandler: () => ClusterServerHandlers<typeof Acc
         },
 
         extensionAttributeSetter: (value, { session }) => {
-            assertSecureSession(session!);
+            assertSecureSession(session);
             // it can happen internally that we set a value for another fabricIndex, so handle this here
-            const fabric = session.context.getFabricByIndex(
+            const fabric = MatterDevice.of(session).getFabricByIndex(
                 value[0]?.fabricIndex ?? session.associatedFabric.fabricIndex,
             );
             if (fabric === undefined) {
-                throw new InternalError("Fabric not found. SHould never happen");
+                throw new InternalError("Fabric not found. Should never happen");
             }
             const oldValue =
                 genericFabricScopedAttributeGetterFromFabric(

@@ -19,4 +19,4 @@ export {
     type NetworkInterfaceDetails,
     type UdpChannel,
     type UdpChannelOptions,
-} from "@project-chip/matter.js-general";
+} from "#general";

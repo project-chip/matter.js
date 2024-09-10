@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationError } from "../../src/common/ValidationError.js";
-import { TlvAny } from "../../src/tlv/TlvAny.js";
-import { TlvVoid } from "../../src/tlv/TlvVoid.js";
+import { ValidationError } from "#common/ValidationError.js";
+import { TlvAny } from "#tlv/TlvAny.js";
+import { TlvVoid } from "#tlv/TlvVoid.js";
 
 describe("TlvVoid", () => {
     describe("encode", () => {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js-general";
+import { InternalError } from "#general";
 import {
     ClusterModel,
     CommandModel,
@@ -18,7 +18,7 @@ import {
     octstr,
     status,
     ValueModel,
-} from "@project-chip/matter.js-model";
+} from "#model";
 import { ScopeFile } from "../util/ScopeFile.js";
 import { Block, Entry } from "../util/TsFile.js";
 import { asObjectKey, camelize, serialize } from "../util/string.js";
@@ -57,13 +57,13 @@ export class TlvGenerator {
      */
     importTlv(fileOrDirectory: string, name: string, as?: string) {
         if (fileOrDirectory === "datatype") {
-            fileOrDirectory = `#types/${fileOrDirectory}/${name.replace(/^Tlv/, "")}.js`;
+            fileOrDirectory = `!types/${fileOrDirectory}/${name.replace(/^Tlv/, "")}.js`;
         } else if (fileOrDirectory === "tlv") {
-            fileOrDirectory = `#types/${fileOrDirectory}/${name}.js`;
+            fileOrDirectory = `!types/${fileOrDirectory}/${name}.js`;
         } else if (fileOrDirectory === "number") {
-            fileOrDirectory = `#types/tlv/TlvNumber.js`;
+            fileOrDirectory = `!types/tlv/TlvNumber.js`;
         } else {
-            fileOrDirectory = `#types/${fileOrDirectory}.js`;
+            fileOrDirectory = `!types/${fileOrDirectory}.js`;
         }
 
         if (as) {
@@ -297,7 +297,7 @@ export class TlvGenerator {
         }
 
         this.importTlv("tlv", "TlvObject");
-        this.file.addImport("#/tlv/TlvSchema.js", "TypeFromSchema");
+        this.file.addImport("!types/tlv/TlvSchema.js", "TypeFromSchema");
         const intf = this.definitions.atom(
             `export interface ${name.slice(3)} extends TypeFromSchema<typeof ${name}> {}`,
         );

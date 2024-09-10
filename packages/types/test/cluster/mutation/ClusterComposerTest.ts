@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterType } from "../../../src/cluster/ClusterType.js";
-import { OnOff } from "../../../src/cluster/definitions/OnOffCluster.js";
-import { ClusterComposer, IllegalClusterError } from "../../../src/cluster/mutation/ClusterComposer.js";
+import { ClusterType } from "#cluster/ClusterType.js";
+import { ClusterComposer, IllegalClusterError } from "#cluster/mutation/ClusterComposer.js";
+import { OnOff } from "#clusters/on-off.js";
 import {
     ELEMENTS2,
     Elements1ish,

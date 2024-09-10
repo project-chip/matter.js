@@ -5,7 +5,7 @@
  */
 
 /**
- * Path to CHIP-related files files for Docker build, relative to matter.js-tools/src
+ * Path to CHIP-related files files for Docker build, relative to tools/src
  */
 export const DOCKER_BUILD_PATH = "chip";
 

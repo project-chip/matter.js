@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { GroupId, GroupsCluster, IdentifyCluster, StatusCode } from "@project-chip/matter.js-types";
-import { Fabric } from "../../fabric/Fabric.js";
-import { assertSecureSession } from "../../session/SecureSession.js";
+import { GroupsCluster, IdentifyCluster } from "#clusters";
+import { assertSecureSession, Fabric } from "#protocol";
+import { GroupId, StatusCode } from "#types";
 import { ClusterServer } from "./ClusterServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 

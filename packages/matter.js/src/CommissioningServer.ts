@@ -5,6 +5,18 @@
  */
 
 import {
+    AccessControl,
+    AdministratorCommissioning,
+    AdministratorCommissioningCluster,
+    BasicInformationCluster,
+    GeneralCommissioning,
+    GeneralCommissioningCluster,
+    GeneralDiagnostics,
+    GeneralDiagnosticsCluster,
+    GroupKeyManagementCluster,
+    OperationalCredentialsCluster,
+} from "#clusters";
+import {
     Bytes,
     Crypto,
     ImplementationError,
@@ -17,49 +29,46 @@ import {
     SupportedStorageTypes,
     SyncStorage,
     UdpInterface,
-} from "@project-chip/matter.js-general";
-import { Specification } from "@project-chip/matter.js-model";
+} from "#general";
+import { Specification } from "#model";
 import {
-    AccessControl,
-    AdministratorCommissioning,
-    AdministratorCommissioningCluster,
-    BasicInformationCluster,
+    AttestationCertificateManager,
+    Ble,
+    CertificationDeclarationManager,
+    ClusterClientObj,
+    ClusterDatasource,
+    DeviceCertification,
+    EndpointInterface,
+    EventHandler,
+    Fabric,
+    genericFabricScopedAttributeGetterFromFabric,
+    genericFabricScopedAttributeSetterForFabric,
+    InteractionEndpointStructure,
+    MatterDevice,
+    MdnsBroadcaster,
+    MdnsInstanceBroadcaster,
+    MdnsScanner,
+    PaseClient,
+} from "#protocol";
+import {
     ClusterType,
     CommissioningFlowType,
     DiscoveryCapabilitiesBitmap,
     DiscoveryCapabilitiesSchema,
     EndpointNumber,
     FabricIndex,
-    GeneralCommissioning,
-    GeneralCommissioningCluster,
-    GeneralDiagnostics,
-    GeneralDiagnosticsCluster,
-    GroupKeyManagementCluster,
     ManualPairingCodeCodec,
-    OperationalCredentialsCluster,
     ProductDescription,
     QrPairingCodeCodec,
     TypeFromBitSchema,
     TypeFromPartialBitSchema,
     VendorId,
-} from "@project-chip/matter.js-types";
-import { MatterDevice } from "./MatterDevice.js";
-import { MatterNode } from "./MatterNode.js";
-import { DeviceCertification } from "./behavior/definitions/operational-credentials/DeviceCertification.js";
-import { Ble } from "./ble/Ble.js";
-import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
-import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
-import { ClusterClientObj } from "./cluster/client/ClusterClientTypes.js";
+} from "#types";
 import { createDefaultAccessControlClusterServer } from "./cluster/server/AccessControlServer.js";
 import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
-import {
-    genericFabricScopedAttributeGetterFromFabric,
-    genericFabricScopedAttributeSetterForFabric,
-} from "./cluster/server/AttributeServer.js";
 import { ClusterServer } from "./cluster/server/ClusterServer.js";
 import {
     AttributeInitialValues,
-    ClusterDatasource,
     ClusterServerHandlers,
     ClusterServerObj,
 } from "./cluster/server/ClusterServerTypes.js";
@@ -71,14 +80,7 @@ import { Aggregator } from "./device/Aggregator.js";
 import { Device, RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { LegacyInteractionServer } from "./device/LegacyInteractionServer.js";
-import { EndpointInterface } from "./endpoint/EndpointInterface.js";
-import { Fabric } from "./fabric/Fabric.js";
-import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
-import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { EventHandler } from "./protocol/interaction/EventHandler.js";
-import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
-import { PaseClient } from "./session/pase/PaseClient.js";
+import { MatterNode } from "./MatterNode.js";
 
 const logger = Logger.get("CommissioningServer");
 

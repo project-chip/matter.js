@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "@project-chip/matter.js-general";
-import { ValidationDatatypeMismatchError } from "../../src/common/ValidationError.js";
-import { TlvAny } from "../../src/tlv/TlvAny.js";
-import { TlvType } from "../../src/tlv/TlvCodec.js";
+import { ValidationDatatypeMismatchError } from "#common/ValidationError.js";
+import { Bytes } from "#general";
+import { TlvAny } from "#tlv/TlvAny.js";
+import { TlvType } from "#tlv/TlvCodec.js";
 
 type CodecVector<I, E> = { [valueDescription: string]: { encoded: I; decoded: E } };
 

@@ -4,16 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Storage } from "@project-chip/matter.js-general";
-import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
-import { BridgedDeviceBasicInformationServer } from "@project-chip/matter.js/behavior/definitions/bridged-device-basic-information";
-import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
-import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@project-chip/matter.js/cluster";
-import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
-import { Endpoint } from "@project-chip/matter.js/endpoint";
-import { AggregatorEndpoint, DimmableLightDevice } from "@project-chip/matter.js/endpoint/definitions";
-import { Environment, StorageService } from "@project-chip/matter.js/environment";
-import { ServerNode } from "@project-chip/matter.js/node";
+import { Storage } from "@matter.js/general";
+import { Endpoint, Environment, ServerNode, StorageService } from "@matter.js/main";
+import { AdministratorCommissioningServer } from "@matter.js/main/behaviors/administrator-commissioning";
+import { BridgedDeviceBasicInformationServer } from "@matter.js/main/behaviors/bridged-device-basic-information";
+import { NetworkCommissioningServer } from "@matter.js/main/behaviors/network-commissioning";
+import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@matter.js/main/clusters";
+import { DimmableLightDevice } from "@matter.js/main/devices/dimmable-light";
+import { AggregatorEndpoint } from "@matter.js/main/endpoints/aggregator";
+import { DeviceTypeId, VendorId } from "@matter.js/main/types";
 import { TestInstance } from "./GenericTestApp.js";
 
 export class BridgeTestInstance implements TestInstance {

@@ -20,7 +20,7 @@ import {
     UINT32_MAX,
     UINT8_MAX,
     UnexpectedDataError,
-} from "@project-chip/matter.js-general";
+} from "#general";
 import { BitField, BitFieldEnum, BitmapSchema } from "../schema/BitmapSchema.js";
 
 /**

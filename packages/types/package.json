@@ -1,5 +1,5 @@
 {
-    "name": "@project-chip/matter.js-types",
+    "name": "@matter.js/types",
     "version": "0.0.0-git",
     "description": "Definitions for Matter application",
     "keywords": [
@@ -33,10 +33,11 @@
     },
     "dependencies": {
         "@noble/curves": "^1.5.0",
-        "@project-chip/matter.js-general": "*"
+        "@matter.js/general": "*",
+        "@matter.js/model": "*"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "*",
+        "@matter.js/tools": "*",
         "typescript": "~5.5.3"
     },
     "files": [
@@ -59,6 +60,18 @@
                 "default": "./dist/cjs/index.js"
             }
         },
+
+        "./clusters/*": {
+            "import": {
+                "types": "./dist/esm/clusters/*.d.ts",
+                "default": "./dist/esm/clusters/*.js"
+            },
+            "require": {
+                "types": "./dist/cjs/clusters/*.d.ts",
+                "default": "./dist/cjs/clusters/*.js"
+            }
+        },
+        
         "./*": {
             "import": {
                 "types": "./dist/esm/*/index.d.ts",
@@ -69,6 +82,11 @@
                 "default": "./dist/cjs/*/index.js"
             }
         }
+    },
+    "imports": {
+        "#general": "@matter.js/general",
+        "#model": "@matter.js/model",
+        "#*": "./src/*"
     },
     "types": "dist/esm/index.d.ts",
     "typesVersions": {

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "@project-chip/matter.js-general";
-import { ValidationError } from "../../src/common/ValidationError.js";
-import { TlvAny } from "../../src/tlv/TlvAny.js";
+import { ValidationError } from "#common/ValidationError.js";
+import { Bytes } from "#general";
+import { TlvAny } from "#tlv/TlvAny.js";
 import {
     TlvDouble,
     TlvFloat,
@@ -15,7 +15,7 @@ import {
     TlvNumericSchema,
     TlvUInt32,
     TlvUInt64,
-} from "../../src/tlv/TlvNumber.js";
+} from "#tlv/TlvNumber.js";
 
 type CodecVectorNumber<I, E> = {
     [valueDescription: string]: { schema: TlvNumberSchema; encoded: I; decoded: E };

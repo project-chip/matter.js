@@ -4,12 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, Logger, Time, Timer } from "@project-chip/matter.js-general";
-import { AccessLevel } from "@project-chip/matter.js-model";
+import { AdministratorCommissioning } from "#clusters";
+import { InternalError, Logger, Time, Timer } from "#general";
+import { AccessLevel } from "#model";
+import { AttributeServer, MatterDevice, PaseServer, Session } from "#protocol";
 import {
-    AdministratorCommissioning,
     Command,
     FabricIndex,
+    MAXIMUM_COMMISSIONING_TIMEOUT_S,
+    MINIMUM_COMMISSIONING_TIMEOUT_S,
+    PAKE_PASSCODE_VERIFIER_LENGTH,
     StatusCode,
     StatusResponseError,
     TlvByteString,
@@ -19,16 +23,7 @@ import {
     TlvUInt16,
     TlvUInt32,
     VendorId,
-} from "@project-chip/matter.js-types";
-import { MatterDevice } from "../../MatterDevice.js";
-import {
-    MAXIMUM_COMMISSIONING_TIMEOUT_S,
-    MINIMUM_COMMISSIONING_TIMEOUT_S,
-    PAKE_PASSCODE_VERIFIER_LENGTH,
-} from "../../behavior/definitions/administrator-commissioning/AdministratorCommissioningConstants.js";
-import { Session } from "../../session/Session.js";
-import { PaseServer } from "../../session/pase/PaseServer.js";
-import { AttributeServer } from "./AttributeServer.js";
+} from "#types";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("AdministratorCommissioningServer");
@@ -79,7 +74,7 @@ class AdministratorCommissioningManager {
      * Called whenever a Commissioning/Announcement Window is opened by this cluster. This method starts the timer and
      * adjusts the needed attributes.
      */
-    initializeCommissioningWindow(commissioningTimeout: number, session: Session<MatterDevice>) {
+    initializeCommissioningWindow(commissioningTimeout: number, session: Session) {
         if (this.commissioningWindowTimeout !== undefined) {
             // Should never happen, but let's make sure
             throw new InternalError("Commissioning window already initialized.");
@@ -139,7 +134,7 @@ class AdministratorCommissioningManager {
         iterations: number,
         salt: Uint8Array,
         commissioningTimeout: number,
-        session: Session<MatterDevice>,
+        session: Session,
     ) {
         // We monkey patched the Tlv definition above, so take care about correct error handling
         if (pakeVerifier.length !== PAKE_PASSCODE_VERIFIER_LENGTH) {
@@ -164,7 +159,7 @@ class AdministratorCommissioningManager {
             );
         }
 
-        const device = session.context;
+        const device = MatterDevice.of(session);
 
         this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
@@ -182,8 +177,8 @@ class AdministratorCommissioningManager {
     }
 
     /** This method opens a Basic Commissioning Window. The default passcode is used. */
-    async openBasicCommissioningWindow(commissioningTimeout: number, session: Session<MatterDevice>) {
-        const device = session.context;
+    async openBasicCommissioningWindow(commissioningTimeout: number, session: Session) {
+        const device = MatterDevice.of(session);
 
         this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
@@ -213,13 +208,13 @@ class AdministratorCommissioningManager {
     }
 
     /** This method is used to close a commissioning window. */
-    async closeCommissioningWindow(session: Session<MatterDevice>) {
+    async closeCommissioningWindow(session: Session) {
         this.endCommissioning();
-        await session.context.endCommissioning();
+        await MatterDevice.of(session).endCommissioning();
     }
 
     /** This method is used to revoke a commissioning window. */
-    async revokeCommissioning(session: Session<MatterDevice>) {
+    async revokeCommissioning(session: Session) {
         if (this.commissioningWindowTimeout === undefined) {
             throw new StatusResponseError(
                 "No commissioning window is opened that could be revoked.",
@@ -230,7 +225,7 @@ class AdministratorCommissioningManager {
         logger.debug("Revoking commissioning window.");
         await this.closeCommissioningWindow(session);
 
-        const device = session.context;
+        const device = MatterDevice.of(session);
         if (device.isFailsafeArmed()) {
             await device.failsafeContext.close();
         }

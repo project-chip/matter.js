@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, InternalError, Merge, UnexpectedDataError } from "@project-chip/matter.js-general";
-import { FabricIndex } from "@project-chip/matter.js-model";
+import { ImplementationError, InternalError, Merge, UnexpectedDataError } from "#general";
+import { FabricIndex } from "#model";
 import {
     ValidationDatatypeMismatchError,
     ValidationError,

@@ -1,5 +1,5 @@
 {
-    "name": "@project-chip/matter.js-intermediate-models",
+    "name": "@matter.js/intermediate-models",
     "version": "0.0.0-git",
     "description": "Matter.js intermediate models",
     "private": true,
@@ -30,7 +30,7 @@
     },
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "devDependencies": {
-        "@project-chip/matter.js-tools": "*",
-        "@project-chip/matter.js-model": "*"
+        "@matter.js/tools": "*",
+        "@matter.js/model": "*"
     }
 }

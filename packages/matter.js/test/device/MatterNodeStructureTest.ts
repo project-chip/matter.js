@@ -4,15 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    Bytes,
-    ImplementationError,
-    serialize,
-    StorageBackendMemory,
-    StorageContext,
-    StorageManager,
-} from "@project-chip/matter.js-general";
-import { ClusterModel, MatterModel, Specification } from "@project-chip/matter.js-model";
+import { AdministratorCommissioningHandler } from "#cluster/server/AdministratorCommissioningServer.js";
+import { ClusterServer } from "#cluster/server/ClusterServer.js";
+import { GeneralCommissioningClusterHandler } from "#cluster/server/GeneralCommissioningServer.js";
+import { GroupKeyManagementClusterHandler } from "#cluster/server/GroupKeyManagementServer.js";
+import { OperationalCredentialsClusterHandler } from "#cluster/server/OperationalCredentialsServer.js";
 import {
     AccessControlCluster,
     AdministratorCommissioning,
@@ -20,9 +16,6 @@ import {
     BindingCluster,
     BridgedDeviceBasicInformationCluster,
     DescriptorCluster,
-    DeviceTypeId,
-    EndpointNumber,
-    FabricIndex,
     FixedLabelCluster,
     GeneralCommissioning,
     GeneralDiagnostics,
@@ -33,23 +26,18 @@ import {
     NetworkCommissioning,
     OnOffCluster,
     OperationalCredentialsCluster,
-    VendorId,
-} from "@project-chip/matter.js-types";
-import { AdministratorCommissioningHandler } from "../../src/cluster/server/AdministratorCommissioningServer.js";
-import { AttributeServer } from "../../src/cluster/server/AttributeServer.js";
-import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
-import { GeneralCommissioningClusterHandler } from "../../src/cluster/server/GeneralCommissioningServer.js";
-import { GroupKeyManagementClusterHandler } from "../../src/cluster/server/GroupKeyManagementServer.js";
-import { OperationalCredentialsClusterHandler } from "../../src/cluster/server/OperationalCredentialsServer.js";
-import { CommissioningServer } from "../../src/CommissioningServer.js";
-import { Aggregator } from "../../src/device/Aggregator.js";
-import { ComposedDevice } from "../../src/device/ComposedDevice.js";
-import { RootEndpoint } from "../../src/device/Device.js";
-import { DeviceTypes } from "../../src/device/DeviceTypes.js";
-import { Endpoint } from "../../src/device/Endpoint.js";
-import { OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
-import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
-import { attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
+} from "#clusters";
+import { CommissioningServer } from "#CommissioningServer.js";
+import { Aggregator } from "#device/Aggregator.js";
+import { ComposedDevice } from "#device/ComposedDevice.js";
+import { RootEndpoint } from "#device/Device.js";
+import { DeviceTypes } from "#device/DeviceTypes.js";
+import { Endpoint } from "#device/Endpoint.js";
+import { OnOffPluginUnitDevice } from "#device/OnOffDevices.js";
+import { Bytes, ImplementationError, serialize, StorageBackendMemory, StorageContext, StorageManager } from "#general";
+import { ClusterModel, MatterModel, Specification } from "#model";
+import { attributePathToId, AttributeServer, InteractionEndpointStructure } from "#protocol";
+import { DeviceTypeId, EndpointNumber, FabricIndex, VendorId } from "#types";
 import { DUMMY_KEY, PRIVATE_KEY } from "../support/mock-keys.js";
 
 function addRequiredRootClusters(

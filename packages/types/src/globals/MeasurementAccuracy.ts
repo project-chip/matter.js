@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvEnum, TlvInt64 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TypeFromSchema } from "../tlv/TlvSchema.js";
-import { TlvMeasurementAccuracyRange } from "./MeasurementAccuracyRange.js";
 import { MeasurementType } from "./MeasurementType.js";
+import { TlvEnum, TlvInt64 } from "../tlv/TlvNumber.js";
+import { TlvBoolean } from "../tlv/TlvBoolean.js";
+import { TlvArray } from "../tlv/TlvArray.js";
+import { TlvMeasurementAccuracyRange } from "./MeasurementAccuracyRange.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
 
 /**
  * This struct represents the set of accuracy ranges for a given measurement, the maximum and minimum values for the
@@ -54,7 +54,7 @@ export const TlvMeasurementAccuracy = TlvObject({
      *
      * @see {@link MatterSpecification.v13.Cluster} § 2.1.4.4.5
      */
-    accuracyRanges: TlvField(4, TlvArray(TlvMeasurementAccuracyRange, { minLength: 1 })),
+    accuracyRanges: TlvField(4, TlvArray(TlvMeasurementAccuracyRange, { minLength: 1 }))
 });
 
 /**

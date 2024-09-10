@@ -4,15 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    Branded,
-    Bytes,
-    Crypto,
-    DataWriter,
-    Endian,
-    toBigInt,
-    UnexpectedDataError,
-} from "@project-chip/matter.js-general";
+import { Branded, Bytes, Crypto, DataWriter, Endian, toBigInt, UnexpectedDataError } from "#general";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { CaseAuthenticatedTag } from "./CaseAuthenticatedTag.js";

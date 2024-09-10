@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { StorageBackendDisk } from "#storage/StorageBackendDisk.js";
 import * as assert from "assert";
 import { readFile, stat } from "fs/promises";
 import { LocalStorage } from "node-localstorage";
 import { tmpdir } from "os";
 import { resolve } from "path";
-import { StorageBackendDisk } from "../../src/storage/StorageBackendDisk.js";
 
 const TEST_STORAGE_LOCATION = resolve(tmpdir(), "matterjs-test-storage");
 

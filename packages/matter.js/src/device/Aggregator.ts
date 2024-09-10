@@ -3,8 +3,8 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { ImplementationError } from "@project-chip/matter.js-general";
-import { BridgedDeviceBasicInformationCluster } from "@project-chip/matter.js-types";
+import { BridgedDeviceBasicInformationCluster } from "#clusters";
+import { ImplementationError } from "#general";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { AttributeInitialValues } from "../cluster/server/ClusterServerTypes.js";
 import { ComposedDevice } from "./ComposedDevice.js";

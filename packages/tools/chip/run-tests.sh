@@ -26,7 +26,7 @@ fi
 
 source ~/.nvm/nvm.sh >/dev/null
 cd /matter.js
-node /matter.js/packages/matter.js-tools/bin/prepare-chip.js
+node /matter.js/packages/tools/bin/prepare-chip.js
 
 cd /connectedhomeip
 source scripts/activate.sh >/dev/null

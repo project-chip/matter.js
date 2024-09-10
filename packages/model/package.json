@@ -1,5 +1,5 @@
 {
-    "name": "@project-chip/matter.js-model",
+    "name": "@matter.js/model",
     "version": "0.0.0-git",
     "description": "Matter data model",
     "keywords": [
@@ -33,10 +33,10 @@
     },
     "dependencies": {
         "@noble/curves": "^1.5.0",
-        "@project-chip/matter.js-general": "*"
+        "@matter.js/general": "*"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "*",
+        "@matter.js/tools": "*",
         "typescript": "~5.5.3"
     },
     "files": [
@@ -59,6 +59,11 @@
                 "default": "./dist/cjs/index.js"
             }
         }
+    },
+    "imports": {
+        "#general": "@matter.js/general",
+        "#model": "@matter.js/model",
+        "#*": "./src/*"
     },
     "types": "dist/esm/index.d.ts",
     "typesVersions": {

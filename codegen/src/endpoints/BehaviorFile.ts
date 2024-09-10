@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { decamelize, Logger } from "@project-chip/matter.js-general";
-import { ClusterModel, ClusterVariance, CommandModel } from "@project-chip/matter.js-model";
+import { decamelize, Logger } from "#general";
+import { ClusterModel, ClusterVariance, CommandModel } from "#model";
 import { TsFile } from "../util/TsFile.js";
 
 const logger = Logger.get("BehaviorFile");
@@ -29,8 +29,8 @@ export class BehaviorFile extends TsFile {
     private generate() {
         logger.info(`${this.cluster.name} → ${this.name}.ts`);
 
-        this.addImport(`#clusters/${this.cluster.name}Cluster.js`, this.cluster.name);
-        this.addImport("#/behavior/cluster/ClusterBehavior.js", "ClusterBehavior");
+        this.addImport(`#clusters/${decamelize(this.cluster.name)}`, this.cluster.name);
+        this.addImport("!node/behavior/cluster/ClusterBehavior.js", "ClusterBehavior");
 
         const builder = this.builder(`export const ${this.cluster.name}Behavior = ClusterBehavior`);
 
@@ -53,7 +53,7 @@ export class BehaviorFile extends TsFile {
         // Inject the cluster and appropriate documentation
         let extraDocs;
         if (this.variance.requiresFeatures) {
-            this.addImport(`#types/cluster/ClusterType.js`, "ClusterType");
+            this.addImport(`#types`, "ClusterType");
             builder.atom(`for(ClusterType(${this.cluster.name}.Base))`);
             extraDocs =
                 `${this.cluster.name}.Cluster requires you to enable one or more optional features.  ` +

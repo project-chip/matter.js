@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export { ReedSolomon, Verhoeff } from "@project-chip/matter.js-general";
+export { ReedSolomon, Verhoeff } from "#general";

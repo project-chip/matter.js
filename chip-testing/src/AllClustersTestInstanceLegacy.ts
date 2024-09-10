@@ -6,7 +6,7 @@
 
 import { CommissioningServer, MatterServer } from "@project-chip/matter.js";
 
-import { Storage, StorageManager } from "@project-chip/matter.js-general";
+import { Storage, StorageManager } from "@matter.js/general";
 
 import {
     AdministratorCommissioning,

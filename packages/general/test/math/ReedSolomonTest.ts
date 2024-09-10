@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ReedSolomon } from "../../src/math/ReedSolomon.js";
-import { Bytes } from "../../src/util/Bytes.js";
+import { ReedSolomon } from "#math/ReedSolomon.js";
+import { Bytes } from "#util/Bytes.js";
 
 describe("ReedSolomon", () => {
     describe("computeErrorCorrection", () => {

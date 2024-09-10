@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { TlvOptionalField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 
 /**
@@ -36,7 +36,7 @@ export const TlvTod = TlvObject({
     /**
      * Hundredth of the current second.
      */
-    hundredths: TlvOptionalField(3, TlvUInt8.bound({ max: 99 })),
+    hundredths: TlvOptionalField(3, TlvUInt8.bound({ max: 99 }))
 });
 
 /**

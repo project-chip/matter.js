@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataReader, DataWriter, Endian } from "@project-chip/matter.js-general";
+import { DataReader, DataWriter, Endian } from "#general";
 import { Schema } from "../schema/Schema.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvTypeLength } from "./TlvCodec.js";
 

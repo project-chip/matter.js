@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as MatterClusters from "@project-chip/matter.js-types";
-import { ClusterId, DeviceTypeId } from "@project-chip/matter.js-types";
+import * as MatterClusters from "#clusters";
+import { ClusterId, DeviceTypeId } from "#types";
 
 /**
- * This represents a Root Node for devices.
- *
- * @see {@link MatterSpecification.v10.Device} § 1.1.5
+ * General device classification categories.
  */
 export enum DeviceClasses {
     /** Node device type. */

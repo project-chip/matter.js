@@ -1,7 +1,7 @@
 {
     "name": "@project-chip/matter-node.js",
     "version": "0.0.0-git",
-    "description": "Matter protocol for node.js",
+    "description": "Deprecated matter.js support for Node.js",
     "keywords": [
         "iot",
         "home automation",
@@ -30,8 +30,8 @@
         "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
     },
     "dependencies": {
-        "@project-chip/matter.js-general": "*",
-        "@project-chip/matter.js-nodejs": "*",
+        "@matter.js/general": "*",
+        "@matter.js/nodejs": "*",
         "@project-chip/matter.js": "*"
     },
     "engines": {

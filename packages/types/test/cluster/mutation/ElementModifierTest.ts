@@ -13,11 +13,11 @@ import {
     OptionalAttribute,
     OptionalCommand,
     OptionalEvent,
-} from "../../../src/cluster/Cluster.js";
-import { ClusterType } from "../../../src/cluster/ClusterType.js";
-import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";
-import { TlvBoolean } from "../../../src/tlv/TlvBoolean.js";
-import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
+} from "#cluster/Cluster.js";
+import { ClusterType } from "#cluster/ClusterType.js";
+import { ElementModifier } from "#cluster/mutation/ElementModifier.js";
+import { TlvBoolean } from "#tlv/TlvBoolean.js";
+import { TlvUInt8 } from "#tlv/TlvNumber.js";
 import { Elements1ish, TestBase, stripFunctions } from "./util.js";
 
 describe("ElementModifier", () => {
