@@ -164,6 +164,7 @@ type MakeAttributeMandatory<A extends Attribute<any, any>> =
           : A extends OptionalAttribute<infer T, any>
             ? Attribute<T, any>
             : A;
+
 type MakeAttributesMandatory<T extends Attributes, C extends OptionalAttributeConf<T>> = {
     [K in keyof T]: K extends keyof C ? MakeAttributeMandatory<T[K]> : T[K];
 };
@@ -178,7 +179,8 @@ const MakeAttributesMandatory = <T extends Attributes, C extends OptionalAttribu
     }
     return result as MakeAttributesMandatory<T, C>;
 };
-type UseOptionalAttributes<
+
+export type UseOptionalAttributes<
     C extends Cluster<any, any, any, any, any>,
     A extends OptionalAttributeConf<C["attributes"]>,
 > = Cluster<
