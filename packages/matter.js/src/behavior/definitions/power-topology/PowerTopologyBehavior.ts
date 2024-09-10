@@ -6,9 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { PowerTopology } from "../../../cluster/definitions/PowerTopologyCluster.js";
+import { PowerTopology } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * PowerTopologyBehavior is the base class for objects that support interaction with {@link PowerTopology.Cluster}.

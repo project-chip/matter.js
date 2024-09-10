@@ -3,15 +3,17 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { BasicInformation } from "../../../src/cluster/definitions/BasicInformationCluster.js";
-import { ClusterId } from "../../../src/datatype/ClusterId.js";
-import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
-import { EventId } from "../../../src/datatype/EventId.js";
-import { EventNumber } from "../../../src/datatype/EventNumber.js";
+import {
+    BasicInformation,
+    ClusterId,
+    EndpointNumber,
+    EventId,
+    EventNumber,
+    TlvVoid,
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
 import { normalizeAndDecodeEventData, normalizeEventData } from "../../../src/protocol/interaction/EventDataDecoder.js";
 import { TlvEventData } from "../../../src/protocol/interaction/InteractionProtocol.js";
-import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
-import { TlvVoid } from "../../../src/tlv/TlvVoid.js";
 
 describe("EventDataDecoder", () => {
     describe("normalizeEventData", () => {

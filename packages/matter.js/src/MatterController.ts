@@ -33,18 +33,27 @@ import {
     serverAddressToString,
 } from "@project-chip/matter.js-general";
 import { Specification } from "@project-chip/matter.js-model";
+import {
+    CaseAuthenticatedTag,
+    DiscoveryCapabilitiesBitmap,
+    EndpointNumber,
+    FabricId,
+    FabricIndex,
+    GeneralCommissioning,
+    NodeId,
+    TlvEnum,
+    TlvField,
+    TlvObject,
+    TlvString,
+    TypeFromPartialBitSchema,
+    TypeFromSchema,
+    VendorId,
+} from "@project-chip/matter.js-types";
 import { NodeCommissioningOptions } from "./CommissioningController.js";
 import { Ble } from "./ble/Ble.js";
 import { RootCertificateManager } from "./certificate/RootCertificateManager.js";
 import { ClusterClient } from "./cluster/client/ClusterClient.js";
-import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
 import { CommissionableDevice, DiscoveryData, Scanner } from "./common/Scanner.js";
-import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
-import { EndpointNumber } from "./datatype/EndpointNumber.js";
-import { FabricId } from "./datatype/FabricId.js";
-import { FabricIndex } from "./datatype/FabricIndex.js";
-import { NodeId } from "./datatype/NodeId.js";
-import { VendorId } from "./datatype/VendorId.js";
 import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
@@ -60,8 +69,6 @@ import { RetransmissionLimitReachedError } from "./protocol/MessageExchange.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChannelMessages.js";
 import { StatusReportOnlySecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
-import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
-import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
 import {
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,
@@ -72,10 +79,6 @@ import {
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
-import { TlvEnum } from "./tlv/TlvNumber.js";
-import { TlvField, TlvObject } from "./tlv/TlvObject.js";
-import { TypeFromSchema } from "./tlv/TlvSchema.js";
-import { TlvString } from "./tlv/TlvString.js";
 
 const TlvCommissioningSuccessFailureResponse = TlvObject({
     /** Contain the result of the operation. */

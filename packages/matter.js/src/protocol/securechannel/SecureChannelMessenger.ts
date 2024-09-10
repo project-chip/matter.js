@@ -5,10 +5,10 @@
  */
 
 import { MatterError, UnexpectedDataError } from "@project-chip/matter.js-general";
+import { TlvSchema } from "@project-chip/matter.js-types";
 import { Message } from "../../codec/MessageCodec.js";
 import { ExchangeSendOptions, MessageExchange } from "../../protocol/MessageExchange.js";
 import { SessionContext } from "../../session/Session.js";
-import { TlvSchema } from "../../tlv/TlvSchema.js";
 import {
     GeneralStatusCode,
     MessageType,

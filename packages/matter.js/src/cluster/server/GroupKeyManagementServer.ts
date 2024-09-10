@@ -5,9 +5,8 @@
  */
 
 import { ImplementationError } from "@project-chip/matter.js-general";
-import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
+import { GroupKeyManagement, StatusCode, StatusResponseError } from "@project-chip/matter.js-types";
 import { assertSecureSession } from "../../session/SecureSession.js";
-import { GroupKeyManagement } from "../definitions/GroupKeyManagementCluster.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 export const GroupKeyManagementClusterHandler: () => ClusterServerHandlers<typeof GroupKeyManagement.Cluster> = () => ({

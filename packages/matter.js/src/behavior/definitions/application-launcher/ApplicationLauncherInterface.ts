@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { ApplicationLauncher } from "../../../cluster/definitions/ApplicationLauncherCluster.js";
+import { ApplicationLauncher } from "@project-chip/matter.js-types";
 
 export namespace ApplicationLauncherInterface {
     export interface Base {

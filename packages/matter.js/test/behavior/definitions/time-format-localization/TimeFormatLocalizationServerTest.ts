@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TimeFormatLocalization } from "@project-chip/matter.js-types";
 import { TimeFormatLocalizationServer } from "../../../../src/behavior/definitions/time-format-localization/TimeFormatLocalizationServer.js";
 import { ConstraintError } from "../../../../src/behavior/errors.js";
-import { TimeFormatLocalization } from "../../../../src/cluster/definitions/TimeFormatLocalizationCluster.js";
 import { ServerNode } from "../../../../src/node/ServerNode.js";
 import { MockServerNode } from "../../../node/mock-server-node.js";
 

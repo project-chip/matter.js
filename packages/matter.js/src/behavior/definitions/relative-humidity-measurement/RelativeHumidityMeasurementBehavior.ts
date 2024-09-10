@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { RelativeHumidityMeasurement } from "../../../cluster/definitions/RelativeHumidityMeasurementCluster.js";
+import { RelativeHumidityMeasurement } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

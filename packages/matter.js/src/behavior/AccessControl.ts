@@ -5,10 +5,7 @@
  */
 
 import { Access, AccessLevel, DataModelPath, ElementTag, ValueModel } from "@project-chip/matter.js-model";
-import { ClusterId } from "../datatype/ClusterId.js";
-import { FabricIndex } from "../datatype/FabricIndex.js";
-import { SubjectId } from "../datatype/SubjectId.js";
-import { StatusCode } from "../protocol/interaction/StatusCode.js";
+import { ClusterId, FabricIndex, StatusCode, SubjectId } from "@project-chip/matter.js-types";
 import { InvokeError, ReadError, SchemaImplementationError, WriteError } from "./errors.js";
 import { Schema } from "./supervision/Schema.js";
 

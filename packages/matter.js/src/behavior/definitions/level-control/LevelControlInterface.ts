@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { LevelControl } from "../../../cluster/definitions/LevelControlCluster.js";
+import { LevelControl } from "@project-chip/matter.js-types";
 
 export namespace LevelControlInterface {
     export interface Base {

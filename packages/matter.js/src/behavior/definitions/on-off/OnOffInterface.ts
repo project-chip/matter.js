@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { OnOff } from "../../../cluster/definitions/OnOffCluster.js";
+import { OnOff } from "@project-chip/matter.js-types";
 
 export namespace OnOffInterface {
     export interface Base {

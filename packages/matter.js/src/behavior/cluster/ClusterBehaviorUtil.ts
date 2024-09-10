@@ -14,8 +14,7 @@ import {
     Metatype,
     ValueModel,
 } from "@project-chip/matter.js-model";
-import { Attribute } from "../../cluster/Cluster.js";
-import { ClusterType } from "../../cluster/ClusterType.js";
+import { Attribute, ClusterType } from "@project-chip/matter.js-types";
 import { Behavior } from "../Behavior.js";
 import { DerivedState } from "../state/StateType.js";
 import { Val } from "../state/Val.js";

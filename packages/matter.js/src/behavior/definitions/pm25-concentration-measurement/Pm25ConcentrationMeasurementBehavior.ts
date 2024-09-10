@@ -6,9 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Pm25ConcentrationMeasurement } from "../../../cluster/definitions/Pm25ConcentrationMeasurementCluster.js";
+import { Pm25ConcentrationMeasurement } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * Pm25ConcentrationMeasurementBehavior is the base class for objects that support interaction with {@link

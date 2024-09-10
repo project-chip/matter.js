@@ -5,15 +5,20 @@
  */
 
 import { Diagnostic, Logger, UnexpectedDataError } from "@project-chip/matter.js-general";
-import { Attribute, AttributeError, AttributeJsType } from "../../cluster/Cluster.js";
+import {
+    ArraySchema,
+    Attribute,
+    AttributeError,
+    AttributeId,
+    AttributeJsType,
+    ClusterId,
+    EndpointNumber,
+    NodeId,
+    TlvAny,
+    TlvSchema,
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
 import { getClusterAttributeById, getClusterById } from "../../cluster/ClusterHelper.js";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { NodeId } from "../../datatype/NodeId.js";
-import { TlvAny } from "../../tlv/TlvAny.js";
-import { ArraySchema } from "../../tlv/TlvArray.js";
-import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvAttributeData, TlvAttributeReport } from "./InteractionProtocol.js";
 
 const logger = Logger.get("AttributeDataDecoder");

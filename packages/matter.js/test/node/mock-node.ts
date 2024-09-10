@@ -5,12 +5,12 @@
  */
 
 import { Environment, StorageBackendMemory, StorageManager, StorageService } from "@project-chip/matter.js-general";
+import { EndpointNumber } from "@project-chip/matter.js-types";
 import { Behavior } from "../../src/behavior/Behavior.js";
 import { ServerBehaviorBacking } from "../../src/behavior/internal/ServerBacking.js";
 import { Val } from "../../src/behavior/state/Val.js";
 import { Datasource } from "../../src/behavior/state/managed/Datasource.js";
 import { Transaction } from "../../src/behavior/state/transaction/Transaction.js";
-import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { EndpointInitializer } from "../../src/endpoint/properties/EndpointInitializer.js";
 import { PartStore } from "../../src/endpoint/storage/PartStore.js";

@@ -11,16 +11,13 @@ import {
     MatterFlowError,
     UnexpectedDataError,
 } from "@project-chip/matter.js-general";
-import type { MatterDevice } from "../MatterDevice.js";
-import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { VendorId } from "../datatype/VendorId.js";
+import { CaseAuthenticatedTag, NodeId, ValidationError, VendorId } from "@project-chip/matter.js-types";
 import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
 import { FabricManager } from "../fabric/FabricManager.js";
+import type { MatterDevice } from "../MatterDevice.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { SessionManager } from "../session/SessionManager.js";
 import { FailsafeTimer, MatterFabricConflictError } from "./FailsafeTimer.js";
-import { ValidationError } from "./ValidationError.js";
 
 const logger = Logger.get("FailsafeContext");
 

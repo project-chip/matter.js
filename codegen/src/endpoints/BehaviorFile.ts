@@ -53,7 +53,7 @@ export class BehaviorFile extends TsFile {
         // Inject the cluster and appropriate documentation
         let extraDocs;
         if (this.variance.requiresFeatures) {
-            this.addImport(`#/cluster/ClusterType.js`, "ClusterType");
+            this.addImport(`#types/cluster/ClusterType.js`, "ClusterType");
             builder.atom(`for(ClusterType(${this.cluster.name}.Base))`);
             extraDocs =
                 `${this.cluster.name}.Cluster requires you to enable one or more optional features.  ` +

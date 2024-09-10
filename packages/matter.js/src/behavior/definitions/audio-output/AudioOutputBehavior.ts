@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { AudioOutput } from "../../../cluster/definitions/AudioOutputCluster.js";
+import { AudioOutput } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { AudioOutputInterface } from "./AudioOutputInterface.js";
 

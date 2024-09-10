@@ -6,10 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { TemperatureControl } from "../../../cluster/definitions/TemperatureControlCluster.js";
+import { TemperatureControl } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { TemperatureControlInterface } from "./TemperatureControlInterface.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * TemperatureControlBehavior is the base class for objects that support interaction with {@link

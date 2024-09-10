@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { LocalizationConfiguration } from "../../../cluster/definitions/LocalizationConfigurationCluster.js";
+import { LocalizationConfiguration } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

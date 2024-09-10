@@ -5,7 +5,7 @@
  */
 
 import { Diagnostic, ImplementationError, Logger, Observable } from "@project-chip/matter.js-general";
-import { ClusterType } from "../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 import { Behavior } from "../Behavior.js";
 import { ClusterBehavior } from "./ClusterBehavior.js";
 import { introspectionInstanceOf } from "./ClusterBehaviorUtil.js";

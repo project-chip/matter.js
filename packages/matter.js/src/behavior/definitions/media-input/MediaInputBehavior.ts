@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MediaInput } from "../../../cluster/definitions/MediaInputCluster.js";
+import { MediaInput } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { MediaInputInterface } from "./MediaInputInterface.js";
 

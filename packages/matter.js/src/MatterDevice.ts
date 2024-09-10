@@ -10,12 +10,12 @@
  * @deprecated
  */
 
+import { AdministratorCommissioning } from "@project-chip/matter.js-types";
 import {
     DEVICE_ANNOUNCEMENT_DURATION_MS,
     DEVICE_ANNOUNCEMENT_INTERVAL_MS,
 } from "./behavior/definitions/administrator-commissioning/AdministratorCommissioningConstants.js";
 import { CommissioningOptions } from "./behavior/system/commissioning/CommissioningOptions.js";
-import { AdministratorCommissioning } from "./cluster/definitions/AdministratorCommissioningCluster.js";
 
 import {
     Channel,
@@ -37,18 +37,16 @@ import {
     isNetworkInterface,
 } from "@project-chip/matter.js-general";
 import { Specification } from "@project-chip/matter.js-model";
+import { FabricIndex, NodeId, StatusCode, StatusResponseError } from "@project-chip/matter.js-types";
 import { FailsafeContext } from "./common/FailsafeContext.js";
 import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
 import { Scanner } from "./common/Scanner.js";
-import { FabricIndex } from "./datatype/FabricIndex.js";
-import { NodeId } from "./datatype/NodeId.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { FabricAction, FabricManager } from "./fabric/FabricManager.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
 import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
 import { DEFAULT_MAX_PATHS_PER_INVOKE } from "./protocol/interaction/InteractionServer.js";
-import { StatusCode, StatusResponseError } from "./protocol/interaction/StatusCode.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import {
     SESSION_ACTIVE_INTERVAL_MS,

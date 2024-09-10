@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { BridgedDeviceBasicInformation } from "../../../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
+import { BridgedDeviceBasicInformation } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

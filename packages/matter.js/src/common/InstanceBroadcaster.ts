@@ -4,10 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ProductDescription } from "../behavior/system/product-description/ProductDescription.js";
-import { VendorId } from "../datatype/VendorId.js";
+import {
+    BitFlag,
+    BitmapSchema,
+    ProductDescription,
+    TypeFromPartialBitSchema,
+    VendorId,
+} from "@project-chip/matter.js-types";
 import { Fabric } from "../fabric/Fabric.js";
-import { BitFlag, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 
 export const PairingHintBitmap = {
     /**

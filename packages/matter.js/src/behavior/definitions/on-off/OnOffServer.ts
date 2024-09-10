@@ -5,8 +5,7 @@
  */
 
 import { MaybePromise, Time, Timer } from "@project-chip/matter.js-general";
-import { OnOff } from "../../../cluster/definitions/OnOffCluster.js";
-import { GeneralDiagnostics } from "../../../cluster/definitions/index.js";
+import { GeneralDiagnostics, OnOff } from "@project-chip/matter.js-types";
 import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
 import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagnosticsBehavior.js";
 import { OnOffBehavior } from "./OnOffBehavior.js";

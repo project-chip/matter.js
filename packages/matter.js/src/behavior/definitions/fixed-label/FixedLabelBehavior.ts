@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { FixedLabel } from "../../../cluster/definitions/FixedLabelCluster.js";
+import { FixedLabel } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

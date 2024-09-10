@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { KeypadInput } from "../../../cluster/definitions/KeypadInputCluster.js";
+import { KeypadInput } from "@project-chip/matter.js-types";
 
 export namespace KeypadInputInterface {
     export interface Base {

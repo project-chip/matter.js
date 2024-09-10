@@ -6,10 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { NetworkCommissioning } from "../../../cluster/definitions/NetworkCommissioningCluster.js";
+import { NetworkCommissioning } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { NetworkCommissioningInterface } from "./NetworkCommissioningInterface.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * NetworkCommissioningBehavior is the base class for objects that support interaction with {@link

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { TimeSynchronization } from "../../../cluster/definitions/TimeSynchronizationCluster.js";
+import { TimeSynchronization } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { TimeSynchronizationInterface } from "./TimeSynchronizationInterface.js";
 

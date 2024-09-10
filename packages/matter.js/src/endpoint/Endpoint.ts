@@ -16,10 +16,10 @@ import {
     UninitializedDependencyError,
 } from "@project-chip/matter.js-general";
 import { DataModelPath } from "@project-chip/matter.js-model";
+import { EndpointNumber } from "@project-chip/matter.js-types";
 import { Behavior } from "../behavior/Behavior.js";
 import { NodeActivity } from "../behavior/context/NodeActivity.js";
 import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import type { Node } from "../node/Node.js";
 import { IdentityService } from "../node/server/IdentityService.js";
 import { Agent } from "./Agent.js";

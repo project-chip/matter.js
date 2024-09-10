@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { EntryIndex } from "../../datatype/EntryIndex.js";
-import { FieldId } from "../../datatype/FieldId.js";
+import { AttributeId, EntryIndex, FieldId } from "@project-chip/matter.js-types";
 import { BasePath } from "./BasePath.js";
 
 export namespace AttributePath {

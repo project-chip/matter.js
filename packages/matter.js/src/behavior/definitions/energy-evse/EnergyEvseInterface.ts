@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { EnergyEvse } from "../../../cluster/definitions/EnergyEvseCluster.js";
+import { EnergyEvse } from "@project-chip/matter.js-types";
 
 export namespace EnergyEvseInterface {
     export interface Base {

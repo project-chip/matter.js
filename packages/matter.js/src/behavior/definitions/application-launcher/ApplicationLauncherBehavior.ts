@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ApplicationLauncher } from "../../../cluster/definitions/ApplicationLauncherCluster.js";
+import { ApplicationLauncher } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ApplicationLauncherInterface } from "./ApplicationLauncherInterface.js";
 

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { EventPriority } from "../../cluster/Cluster.js";
-import { EventNumber } from "../../datatype/EventNumber.js";
+import { EventNumber, EventPriority } from "@project-chip/matter.js-types";
 import { EventPath } from "../paths/EventPath.js";
 import { BasePayload } from "./BasePayload.js";
 

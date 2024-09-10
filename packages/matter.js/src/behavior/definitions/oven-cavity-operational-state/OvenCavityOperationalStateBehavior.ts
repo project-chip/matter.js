@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { OvenCavityOperationalState } from "../../../cluster/definitions/OvenCavityOperationalStateCluster.js";
+import { OvenCavityOperationalState } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

@@ -63,24 +63,6 @@
     "types": "dist/esm/index.d.ts",
     "typesVersions": {
         "*": {
-            "interaction": [
-                "/dist/cjs/protocol/interaction/export.d.ts"
-            ],
-            "model": [
-                "/dist/cjs/model/index.d.ts"
-            ],
-            "securechannel": [
-                "/dist/cjs/protocol/securechannel/export.d.ts"
-            ],
-            "behaviors/*": [
-                "/dist/cjs/behavior/definitions/*/export.d.ts"
-            ],
-            "devices/*": [
-                "/dist/cjs/endpoint/definitions/device/*.d.ts"
-            ],
-            "endpoints/*": [
-                "/dist/cjs/endpoint/definitions/system/*.d.ts"
-            ],
             ".": [
                 "/dist/cjs/export.d.ts"
             ],

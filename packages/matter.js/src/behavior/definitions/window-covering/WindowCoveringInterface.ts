@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { WindowCovering } from "../../../cluster/definitions/WindowCoveringCluster.js";
+import { WindowCovering } from "@project-chip/matter.js-types";
 
 export namespace WindowCoveringInterface {
     export interface Base {

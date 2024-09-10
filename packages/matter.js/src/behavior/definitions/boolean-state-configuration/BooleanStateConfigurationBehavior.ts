@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { BooleanStateConfiguration } from "../../../cluster/definitions/BooleanStateConfigurationCluster.js";
+import { BooleanStateConfiguration } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { BooleanStateConfigurationInterface } from "./BooleanStateConfigurationInterface.js";
 

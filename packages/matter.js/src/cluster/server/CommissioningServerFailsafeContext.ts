@@ -5,16 +5,18 @@
  */
 
 import { asyncNew } from "@project-chip/matter.js-general";
+import {
+    BasicInformation,
+    EndpointNumber,
+    GeneralCommissioning,
+    NetworkCommissioning,
+    OperationalCredentials,
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
 import { FailsafeContext } from "../../common/FailsafeContext.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { BasicInformation } from "../definitions/BasicInformationCluster.js";
-import { GeneralCommissioning } from "../definitions/GeneralCommissioningCluster.js";
-import { NetworkCommissioning } from "../definitions/NetworkCommissioningCluster.js";
-import { OperationalCredentials } from "../definitions/OperationalCredentialsCluster.js";
 
 /**
  * {@link FailsafeContext} implementation for {@link EndpointInterface} API.

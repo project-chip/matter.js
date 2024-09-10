@@ -4,12 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { ClusterType } from "../../cluster/ClusterType.js";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { CommandId } from "../../datatype/CommandId.js";
-import { EventId } from "../../datatype/EventId.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import type { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import type { ClusterType, TypeFromSchema } from "@project-chip/matter.js-types";
+import { AttributeId, BitSchema, CommandId, EventId, TypeFromPartialBitSchema } from "@project-chip/matter.js-types";
 import type { Behavior } from "../Behavior.js";
 import type { ClusterOf } from "./ClusterBehaviorUtil.js";
 

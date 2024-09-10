@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DeviceTypeId } from "../../../datatype/DeviceTypeId.js";
-import { VendorId } from "../../../datatype/VendorId.js";
+import { DeviceTypeId, ProductDescription, VendorId } from "@project-chip/matter.js-types";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { Agent } from "../../../endpoint/Agent.js";
 import { AggregatorEndpoint } from "../../../endpoint/definitions/system/AggregatorEndpoint.js";
@@ -14,7 +13,6 @@ import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.
 import { Behavior } from "../../Behavior.js";
 import { BasicInformationBehavior } from "../../definitions/basic-information/BasicInformationBehavior.js";
 import { DescriptorBehavior } from "../../definitions/descriptor/DescriptorBehavior.js";
-import { ProductDescription } from "./ProductDescription.js";
 
 /**
  * Supplies key product information used in advertisements and commissioning.

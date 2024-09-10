@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DeviceTypeId } from "../../../src/datatype/DeviceTypeId.js";
+import { DeviceTypeId } from "@project-chip/matter.js-types";
 import { DeviceClasses } from "../../../src/device/DeviceTypes.js";
 import { SupportedBehaviors } from "../../../src/endpoint/properties/SupportedBehaviors.js";
 import { MutableEndpoint } from "../../../src/endpoint/type/MutableEndpoint.js";

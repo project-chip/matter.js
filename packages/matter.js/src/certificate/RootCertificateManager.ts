@@ -16,9 +16,7 @@ import {
     asyncNew,
     toHex,
 } from "@project-chip/matter.js-general";
-import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
-import { FabricId } from "../datatype/FabricId.js";
-import { NodeId } from "../datatype/NodeId.js";
+import { CaseAuthenticatedTag, FabricId, NodeId } from "@project-chip/matter.js-types";
 import {
     CertificateManager,
     OperationalCertificate,

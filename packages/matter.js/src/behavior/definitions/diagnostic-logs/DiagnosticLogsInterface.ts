@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { DiagnosticLogs } from "../../../cluster/definitions/DiagnosticLogsCluster.js";
+import { DiagnosticLogs } from "@project-chip/matter.js-types";
 
 export namespace DiagnosticLogsInterface {
     export interface Base {

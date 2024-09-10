@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { ImplementationError } from "@project-chip/matter.js-general";
-import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/index.js";
+import { BridgedDeviceBasicInformationCluster } from "@project-chip/matter.js-types";
 import { Device } from "./Device.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
 import { Endpoint, EndpointOptions } from "./Endpoint.js";

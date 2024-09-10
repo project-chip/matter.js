@@ -5,16 +5,19 @@
  */
 import { Logger, MatterFlowError, toHex } from "@project-chip/matter.js-general";
 import { AccessLevel } from "@project-chip/matter.js-model";
-import { AccessControl } from "../../cluster/definitions/AccessControlCluster.js";
-import { CaseAuthenticatedTag } from "../../datatype/CaseAuthenticatedTag.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { NodeId } from "../../datatype/NodeId.js";
+import {
+    AccessControl,
+    CaseAuthenticatedTag,
+    ClusterId,
+    FabricIndex,
+    NodeId,
+    StatusCode,
+    StatusResponseError,
+    TypeFromBitmapSchema,
+} from "@project-chip/matter.js-types";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { TypeFromBitmapSchema } from "../../schema/BitmapSchema.js";
 import { SecureSession } from "../../session/SecureSession.js";
-import { StatusCode, StatusResponseError } from "./StatusCode.js";
 
 const logger = Logger.get("AccessControlManager");
 

@@ -4,12 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterType } from "../cluster/ClusterType.js";
+import { ClusterId, ClusterType, DeviceTypeId, EndpointNumber } from "@project-chip/matter.js-types";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
-import { ClusterId } from "../datatype/ClusterId.js";
-import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
 
 /**
  * The primary interface for Matter.js endpoint implementations.

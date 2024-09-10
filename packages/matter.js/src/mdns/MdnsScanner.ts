@@ -27,6 +27,7 @@ import {
     createPromise,
     isIPv6,
 } from "@project-chip/matter.js-general";
+import { NodeId, VendorId } from "@project-chip/matter.js-types";
 import {
     CommissionableDevice,
     CommissionableDeviceIdentifiers,
@@ -34,8 +35,6 @@ import {
     OperationalDevice,
     Scanner,
 } from "../common/Scanner.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { VendorId } from "../datatype/VendorId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import {
     MATTER_COMMISSION_SERVICE_QNAME,

@@ -6,10 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { SmokeCoAlarm } from "../../../cluster/definitions/SmokeCoAlarmCluster.js";
+import { SmokeCoAlarm } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { SmokeCoAlarmInterface } from "./SmokeCoAlarmInterface.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * SmokeCoAlarmBehavior is the base class for objects that support interaction with {@link SmokeCoAlarm.Cluster}.

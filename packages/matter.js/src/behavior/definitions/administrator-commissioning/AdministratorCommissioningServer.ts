@@ -6,15 +6,21 @@
 
 import { InternalError, Logger, Time, Timer } from "@project-chip/matter.js-general";
 import { AccessLevel } from "@project-chip/matter.js-model";
-import { MatterDevice } from "../../../MatterDevice.js";
-import { Command, TlvNoResponse } from "../../../cluster/Cluster.js";
-import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
+import {
+    AdministratorCommissioning,
+    Command,
+    StatusCode,
+    StatusResponseError,
+    TlvByteString,
+    TlvField,
+    TlvNoResponse,
+    TlvObject,
+    TlvUInt16,
+    TlvUInt32,
+} from "@project-chip/matter.js-types";
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
-import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
+import { MatterDevice } from "../../../MatterDevice.js";
 import { PaseServer } from "../../../session/pase/PaseServer.js";
-import { TlvUInt16, TlvUInt32 } from "../../../tlv/TlvNumber.js";
-import { TlvField, TlvObject } from "../../../tlv/TlvObject.js";
-import { TlvByteString } from "../../../tlv/TlvString.js";
 import { NetworkServer } from "../../system/network/NetworkServer.js";
 import { AdministratorCommissioningBehavior } from "./AdministratorCommissioningBehavior.js";
 import {

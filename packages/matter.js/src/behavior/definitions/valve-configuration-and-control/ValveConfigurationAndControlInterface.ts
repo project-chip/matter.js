@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { ValveConfigurationAndControl } from "../../../cluster/definitions/ValveConfigurationAndControlCluster.js";
+import { ValveConfigurationAndControl } from "@project-chip/matter.js-types";
 
 export namespace ValveConfigurationAndControlInterface {
     export interface Base {

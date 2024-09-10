@@ -5,7 +5,7 @@
  */
 
 import { Channel, Logger, MatterError } from "@project-chip/matter.js-general";
-import { NodeId } from "../datatype/NodeId.js";
+import { NodeId } from "@project-chip/matter.js-types";
 import { Fabric } from "../fabric/Fabric.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";

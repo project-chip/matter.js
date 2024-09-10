@@ -6,14 +6,13 @@
 
 import { MaybePromise } from "@project-chip/matter.js-general";
 import { ClusterModel, DataModelPath, FeatureMap, FeatureSet, FieldElement } from "@project-chip/matter.js-model";
+import { FabricIndex, NodeId } from "@project-chip/matter.js-types";
 import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
 import { OfflineContext } from "../../../../../src/behavior/context/server/OfflineContext.js";
 import { ConstraintError } from "../../../../../src/behavior/errors.js";
 import { Datasource } from "../../../../../src/behavior/state/managed/Datasource.js";
 import { Val } from "../../../../../src/behavior/state/Val.js";
 import { RootSupervisor } from "../../../../../src/behavior/supervision/RootSupervisor.js";
-import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
-import { NodeId } from "../../../../../src/datatype/NodeId.js";
 import { aclEndpoint, TestStruct } from "./value-utils.js";
 
 export type Nested = {

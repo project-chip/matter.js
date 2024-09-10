@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ColorControl } from "../../../cluster/definitions/ColorControlCluster.js";
+import { ColorControl } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ColorControlInterface } from "./ColorControlInterface.js";
 

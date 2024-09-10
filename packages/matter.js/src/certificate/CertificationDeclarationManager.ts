@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { Bytes, PrivateKey } from "@project-chip/matter.js-general";
-import { VendorId } from "../datatype/VendorId.js";
+import { VendorId } from "@project-chip/matter.js-types";
 import { CertificateManager, TlvCertificationDeclaration } from "./CertificateManager.js";
 
 // This is the private key from Appendix F of the Matter 1.1 Core Specification.

@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as MatterClusters from "../cluster/definitions/index.js";
-import { ClusterId } from "../datatype/ClusterId.js";
-import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
+import * as MatterClusters from "@project-chip/matter.js-types";
+import { ClusterId, DeviceTypeId } from "@project-chip/matter.js-types";
 
 /**
  * This represents a Root Node for devices.

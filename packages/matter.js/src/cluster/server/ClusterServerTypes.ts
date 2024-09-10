@@ -5,25 +5,18 @@
  */
 
 import { Merge, Storage, SupportedStorageTypes } from "@project-chip/matter.js-general";
-import { Message } from "../../codec/MessageCodec.js";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { CommandId } from "../../datatype/CommandId.js";
-import { EventId } from "../../datatype/EventId.js";
-import { Endpoint } from "../../device/Endpoint.js";
-import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { Fabric } from "../../fabric/Fabric.js";
-import { MatterDevice } from "../../MatterDevice.js";
-import { EventHandler } from "../../protocol/interaction/EventHandler.js";
-import { Session } from "../../session/Session.js";
-import { ClusterClientObj } from "../client/ClusterClientTypes.js";
 import {
     Attribute,
+    AttributeId,
     AttributeJsType,
     Attributes,
     Cluster,
+    ClusterId,
+    ClusterType,
     Command,
+    CommandId,
     Commands,
+    EventId,
     Events,
     EventType,
     FabricScopedAttribute,
@@ -42,8 +35,15 @@ import {
     ResponseType,
     WritableAttribute,
     WritableFabricScopedAttribute,
-} from "../Cluster.js";
-import { ClusterType } from "../ClusterType.js";
+} from "@project-chip/matter.js-types";
+import { Message } from "../../codec/MessageCodec.js";
+import { Endpoint } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
+import { Fabric } from "../../fabric/Fabric.js";
+import { MatterDevice } from "../../MatterDevice.js";
+import { EventHandler } from "../../protocol/interaction/EventHandler.js";
+import { Session } from "../../session/Session.js";
+import { ClusterClientObj } from "../client/ClusterClientTypes.js";
 import { AttributeServer, FabricScopedAttributeServer, FixedAttributeServer } from "./AttributeServer.js";
 import { type ClusterServer } from "./ClusterServer.js";
 import { CommandServer } from "./CommandServer.js";

@@ -6,15 +6,19 @@
 
 import { capitalize, ImplementationError, InternalError, Logger, MaybePromise } from "@project-chip/matter.js-general";
 import { AccessLevel } from "@project-chip/matter.js-model";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { CommandId } from "../../datatype/CommandId.js";
-import { EventId } from "../../datatype/EventId.js";
+import {
+    AttributeId,
+    BitSchema,
+    ClusterId,
+    ClusterType,
+    CommandId,
+    ConditionalFeatureList,
+    EventId,
+    TlvNoResponse,
+    TypeFromPartialBitSchema,
+} from "@project-chip/matter.js-types";
 import { Endpoint } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { ConditionalFeatureList, TlvNoResponse } from "../Cluster.js";
-import { ClusterType } from "../ClusterType.js";
 import { createAttributeServer } from "./AttributeServer.js";
 import {
     AttributeInitialValues,

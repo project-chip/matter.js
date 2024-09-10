@@ -13,27 +13,29 @@ import {
     Time,
     UnexpectedDataError,
 } from "@project-chip/matter.js-general";
+import {
+    BasicInformation,
+    ClusterId,
+    ClusterType,
+    Descriptor,
+    EndpointNumber,
+    GeneralCommissioning,
+    NetworkCommissioning,
+    NodeId,
+    OperationalCredentials,
+    StatusResponseError,
+    TimeSynchronizationCluster,
+    TypeFromPartialBitSchema,
+    TypeFromSchema,
+    VendorId,
+} from "@project-chip/matter.js-types";
 import { TlvCertSigningRequest } from "../behavior/definitions/operational-credentials/OperationalCredentialsTypes.js";
 import { CertificateManager } from "../certificate/CertificateManager.js";
 import { RootCertificateManager } from "../certificate/RootCertificateManager.js";
-import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClient } from "../cluster/client/ClusterClient.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
-import { Descriptor } from "../cluster/definitions/DescriptorCluster.js";
-import { GeneralCommissioning } from "../cluster/definitions/GeneralCommissioningCluster.js";
-import { NetworkCommissioning } from "../cluster/definitions/NetworkCommissioningCluster.js";
-import { OperationalCredentials } from "../cluster/definitions/OperationalCredentialsCluster.js";
-import { TimeSynchronizationCluster } from "../cluster/definitions/TimeSynchronizationCluster.js";
-import { ClusterId } from "../datatype/ClusterId.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { VendorId } from "../datatype/VendorId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { InteractionClient } from "./interaction/InteractionClient.js";
-import { StatusResponseError } from "./interaction/StatusCode.js";
 
 const logger = Logger.get("ControllerCommissioner");
 

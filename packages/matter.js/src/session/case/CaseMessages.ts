@@ -10,9 +10,7 @@ import {
     CRYPTO_HASH_LEN_BYTES,
     CRYPTO_PUBLIC_KEY_SIZE_BYTES,
 } from "@project-chip/matter.js-general";
-import { TlvUInt16 } from "../../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
-import { TlvByteString } from "../../tlv/TlvString.js";
+import { TlvByteString, TlvField, TlvObject, TlvOptionalField, TlvUInt16 } from "@project-chip/matter.js-types";
 import { TlvSessionParameters } from "../pase/PaseMessages.js";
 
 const CASE_SIGNATURE_LENGTH = CRYPTO_GROUP_SIZE_BYTES * 2;

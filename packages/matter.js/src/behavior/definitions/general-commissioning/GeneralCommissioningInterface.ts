@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { GeneralCommissioning } from "../../../cluster/definitions/GeneralCommissioningCluster.js";
+import { GeneralCommissioning } from "@project-chip/matter.js-types";
 
 export namespace GeneralCommissioningInterface {
     export interface Base {

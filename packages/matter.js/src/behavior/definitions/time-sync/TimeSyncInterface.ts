@@ -7,8 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
-import { TimeSynchronization } from "../../../cluster/definitions/TimeSynchronizationCluster.js";
+import { TypeFromSchema } from "@project-chip/matter.js-types";
+import { TimeSynchronization } from "@project-chip/matter.js-types";
 
 /**
  * This command may be issued by Administrator to set the time. If the Commissioner does not have a valid time source,

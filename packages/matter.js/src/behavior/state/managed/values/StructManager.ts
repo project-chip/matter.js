@@ -6,7 +6,7 @@
 
 import { camelize, GeneratedClass, ImplementationError, isObject } from "@project-chip/matter.js-general";
 import { Access, ElementTag, Metatype, ValueModel } from "@project-chip/matter.js-model";
-import { FabricIndex } from "../../../../datatype/FabricIndex.js";
+import { FabricIndex } from "@project-chip/matter.js-types";
 import { AccessControl } from "../../../AccessControl.js";
 import { PhantomReferenceError, SchemaImplementationError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";

@@ -15,9 +15,9 @@ import {
     TransportInterface,
     UdpInterface,
 } from "@project-chip/matter.js-general";
+import { NodeId } from "@project-chip/matter.js-types";
 import { MatterController } from "../MatterController.js";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
-import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { INTERACTION_PROTOCOL_ID } from "../protocol/interaction/InteractionServer.js";
 import { SecureSession } from "../session/SecureSession.js";

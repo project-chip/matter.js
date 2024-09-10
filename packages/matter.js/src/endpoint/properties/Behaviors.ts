@@ -19,6 +19,7 @@ import {
     UninitializedDependencyError,
 } from "@project-chip/matter.js-general";
 import { FeatureSet } from "@project-chip/matter.js-model";
+import { ClusterType } from "@project-chip/matter.js-types";
 import { Behavior } from "../../behavior/Behavior.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ValidatedElements } from "../../behavior/cluster/ValidatedElements.js";
@@ -30,7 +31,6 @@ import { DescriptorServer } from "../../behavior/definitions/descriptor/Descript
 import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import { Val } from "../../behavior/state/Val.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
-import { ClusterType } from "../../cluster/ClusterType.js";
 import type { Agent } from "../Agent.js";
 import type { Endpoint } from "../Endpoint.js";
 import { EndpointVariableService } from "../EndpointVariableService.js";

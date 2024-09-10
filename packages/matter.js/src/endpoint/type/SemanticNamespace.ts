@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Semtag } from "../../cluster/globals/Semtag.js";
-import { VendorId } from "../../datatype/VendorId.js";
+import { Semtag, VendorId } from "@project-chip/matter.js-types";
 
 /**
  * A Matter "semantic namespace" is a discrete set of {@link Semtag} definitions.

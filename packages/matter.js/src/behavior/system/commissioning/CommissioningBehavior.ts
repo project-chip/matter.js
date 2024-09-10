@@ -14,8 +14,15 @@ import {
     Observable,
 } from "@project-chip/matter.js-general";
 import { DatatypeModel, FieldElement } from "@project-chip/matter.js-model";
+import {
+    CommissioningFlowType,
+    DiscoveryCapabilitiesSchema,
+    FabricIndex,
+    ManualPairingCodeCodec,
+    QrCode,
+    QrPairingCodeCodec,
+} from "@project-chip/matter.js-types";
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
-import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import type { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { ExposedFabricInformation } from "../../../fabric/Fabric.js";
@@ -23,13 +30,6 @@ import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
 import type { Node } from "../../../node/Node.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { ServerNode } from "../../../node/ServerNode.js";
-import {
-    CommissioningFlowType,
-    DiscoveryCapabilitiesSchema,
-    ManualPairingCodeCodec,
-    QrPairingCodeCodec,
-} from "../../../schema/PairingCodeSchema.js";
-import { QrCode } from "../../../schema/QrCodeSchema.js";
 import { PaseClient } from "../../../session/pase/PaseClient.js";
 import { Behavior } from "../../Behavior.js";
 import { ActionContext } from "../../context/ActionContext.js";

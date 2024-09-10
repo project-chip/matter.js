@@ -5,8 +5,8 @@
  */
 
 import { NamedHandler, NotImplementedError } from "@project-chip/matter.js-general";
+import { LevelControl } from "@project-chip/matter.js-types";
 import { WrapCommandHandler } from "../../device/Device.js";
-import { LevelControl } from "../definitions/LevelControlCluster.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServerTypes.js";
 

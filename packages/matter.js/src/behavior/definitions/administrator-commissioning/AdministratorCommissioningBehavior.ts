@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
+import { AdministratorCommissioning } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { AdministratorCommissioningInterface } from "./AdministratorCommissioningInterface.js";
 

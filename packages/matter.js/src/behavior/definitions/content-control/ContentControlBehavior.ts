@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ContentControl } from "../../../cluster/definitions/ContentControlCluster.js";
+import { ContentControl } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ContentControlInterface } from "./ContentControlInterface.js";
 

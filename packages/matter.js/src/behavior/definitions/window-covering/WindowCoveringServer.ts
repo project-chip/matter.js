@@ -5,10 +5,13 @@
  */
 
 import { ImplementationError, isDeepEqual, Logger, MaybePromise } from "@project-chip/matter.js-general";
-import { ClusterType } from "../../../cluster/ClusterType.js";
-import { WindowCovering } from "../../../cluster/definitions/WindowCoveringCluster.js";
-import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
-import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
+import {
+    ClusterType,
+    StatusCode,
+    StatusResponseError,
+    TypeFromPartialBitSchema,
+    WindowCovering,
+} from "@project-chip/matter.js-types";
 import { WindowCoveringBehavior } from "./WindowCoveringBehavior.js";
 
 const logger = Logger.get("WindowCoveringServer");

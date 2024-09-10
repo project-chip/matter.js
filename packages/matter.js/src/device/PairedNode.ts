@@ -3,8 +3,8 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { Attributes } from "@project-chip/matter.js-types";
 import { CommissioningController } from "../CommissioningController.js";
-import { Attributes } from "../cluster/Cluster.js";
 import { ClusterClientObj, asClusterClientInternal, isClusterClient } from "../cluster/client/ClusterClientTypes.js";
 
 import {
@@ -17,13 +17,24 @@ import {
     MatterError,
     Time,
 } from "@project-chip/matter.js-general";
+import {
+    AdministratorCommissioning,
+    BasicInformation,
+    ClusterId,
+    ClusterType,
+    CommissioningFlowType,
+    DescriptorCluster,
+    DiscoveryCapabilitiesSchema,
+    EndpointNumber,
+    ManualPairingCodeCodec,
+    NodeId,
+    OperationalCredentials,
+    QrPairingCodeCodec,
+    StatusCode,
+    StatusResponseError,
+} from "@project-chip/matter.js-types";
 import { getClusterById } from "../cluster/ClusterHelper.js";
-import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClient } from "../cluster/client/ClusterClient.js";
-import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
-import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
-import { OperationalCredentials } from "../cluster/definitions/OperationalCredentialsCluster.js";
-import { AdministratorCommissioning } from "../cluster/definitions/index.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import {
     AttributeInitialValues,
@@ -31,9 +42,6 @@ import {
     ClusterServerObj,
     isClusterServer,
 } from "../cluster/server/ClusterServerTypes.js";
-import { ClusterId } from "../datatype/ClusterId.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { NodeId } from "../datatype/NodeId.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import {
     DecodedAttributeReportValue,
@@ -41,13 +49,6 @@ import {
 } from "../protocol/interaction/AttributeDataDecoder.js";
 import { DecodedEventReportValue } from "../protocol/interaction/EventDataDecoder.js";
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
-import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
-import {
-    CommissioningFlowType,
-    DiscoveryCapabilitiesSchema,
-    ManualPairingCodeCodec,
-    QrPairingCodeCodec,
-} from "../schema/PairingCodeSchema.js";
 import { PaseClient } from "../session/pase/PaseClient.js";
 import { Aggregator } from "./Aggregator.js";
 import { ComposedDevice } from "./ComposedDevice.js";

@@ -17,8 +17,8 @@ import {
     Timer,
     createPromise,
 } from "@project-chip/matter.js-general";
+import { NodeId, StatusCode, StatusResponseError } from "@project-chip/matter.js-types";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
-import { NodeId } from "../datatype/NodeId.js";
 import {
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,
@@ -28,7 +28,6 @@ import {
     SessionParameters,
 } from "../session/Session.js";
 import { ChannelNotConnectedError, MessageChannel } from "./ExchangeManager.js";
-import { StatusCode, StatusResponseError } from "./interaction/StatusCode.js";
 import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
 import { SecureChannelProtocol } from "./securechannel/SecureChannelProtocol.js";
 

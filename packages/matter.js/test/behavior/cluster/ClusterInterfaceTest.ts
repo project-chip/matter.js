@@ -5,10 +5,9 @@
  */
 
 import { MaybePromise } from "@project-chip/matter.js-general";
+import { BitFlag, ClusterType } from "@project-chip/matter.js-types";
 import { ClusterInterface } from "../../../src/behavior/cluster/ClusterInterface.js";
 import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
-import { ClusterType } from "../../../src/cluster/ClusterType.js";
-import { BitFlag } from "../../../src/schema/BitmapSchema.js";
 import { MyCluster } from "./cluster-behavior-test-util.js";
 
 const FeaturedCluster = ClusterType({

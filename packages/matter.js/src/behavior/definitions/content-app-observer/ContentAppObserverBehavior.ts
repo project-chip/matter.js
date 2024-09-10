@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ContentAppObserver } from "../../../cluster/definitions/ContentAppObserverCluster.js";
+import { ContentAppObserver } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ContentAppObserverInterface } from "./ContentAppObserverInterface.js";
 

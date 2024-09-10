@@ -6,20 +6,23 @@
 
 import { deepCopy, InternalError, isDeepEqual, Logger } from "@project-chip/matter.js-general";
 import { AccessLevel } from "@project-chip/matter.js-model";
-import { AccessControl as AccessControlTypes } from "../../../cluster/definitions/AccessControlCluster.js";
-import { CaseAuthenticatedTag } from "../../../datatype/CaseAuthenticatedTag.js";
-import { ClusterId } from "../../../datatype/ClusterId.js";
-import { DeviceTypeId } from "../../../datatype/DeviceTypeId.js";
-import { EndpointNumber } from "../../../datatype/EndpointNumber.js";
-import { GroupId } from "../../../datatype/GroupId.js";
-import { NodeId } from "../../../datatype/NodeId.js";
+import {
+    AccessControl as AccessControlTypes,
+    CaseAuthenticatedTag,
+    ClusterId,
+    DeviceTypeId,
+    EndpointNumber,
+    GroupId,
+    NodeId,
+    StatusCode,
+    StatusResponseError,
+    TlvTaggedList,
+    TlvType,
+} from "@project-chip/matter.js-types";
 import { EndpointInterface } from "../../../endpoint/EndpointInterface.js";
 import { FabricManager } from "../../../fabric/FabricManager.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { AccessControlManager, IncomingSubjectDescriptor } from "../../../protocol/interaction/AccessControlManager.js";
-import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
-import { TlvType } from "../../../tlv/TlvCodec.js";
-import { TlvTaggedList } from "../../../tlv/TlvObject.js";
 import { AccessControl } from "../../AccessControl.js";
 import { ActionContext } from "../../context/ActionContext.js";
 import { AccessControlBehavior } from "./AccessControlBehavior.js";

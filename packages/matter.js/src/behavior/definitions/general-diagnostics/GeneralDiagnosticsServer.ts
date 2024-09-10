@@ -6,14 +6,12 @@
 
 import { Bytes, ImplementationError, ipv4ToBytes, Logger, Time, Timer } from "@project-chip/matter.js-general";
 import { FieldElement } from "@project-chip/matter.js-model";
-import { GeneralDiagnostics } from "../../../cluster/definitions/GeneralDiagnosticsCluster.js";
-import { CommandId } from "../../../datatype/CommandId.js";
+import { CommandId, GeneralDiagnostics, StatusCode, StatusResponseError } from "@project-chip/matter.js-types";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { MdnsService } from "../../../mdns/MdnsService.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { TlvInvokeResponse } from "../../../protocol/interaction/InteractionProtocol.js";
 import { INTERACTION_MODEL_REVISION } from "../../../protocol/interaction/InteractionServer.js";
-import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { NetworkServer } from "../../system/network/NetworkServer.js";

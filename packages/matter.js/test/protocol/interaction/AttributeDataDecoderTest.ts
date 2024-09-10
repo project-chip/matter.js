@@ -5,11 +5,19 @@
  */
 
 import { Bytes } from "@project-chip/matter.js-general";
-import { AttributeId } from "../../../src/datatype/AttributeId.js";
-import { ClusterId } from "../../../src/datatype/ClusterId.js";
-import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
-import { EventId } from "../../../src/datatype/EventId.js";
-import { VendorId } from "../../../src/datatype/VendorId.js";
+import {
+    AttributeId,
+    ClusterId,
+    EndpointNumber,
+    EventId,
+    TlvArray,
+    TlvField,
+    TlvNullable,
+    TlvObject,
+    TlvUInt8,
+    TypeFromSchema,
+    VendorId,
+} from "@project-chip/matter.js-types";
 import {
     decodeUnknownAttributeValue,
     normalizeAndDecodeReadAttributeReport,
@@ -20,11 +28,6 @@ import {
     TlvAttributeReport,
     TlvDataReport,
 } from "../../../src/protocol/interaction/InteractionProtocol.js";
-import { TlvArray } from "../../../src/tlv/TlvArray.js";
-import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
-import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
-import { TlvField, TlvObject } from "../../../src/tlv/TlvObject.js";
-import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
 
 const TlvAclTestSchema = TlvObject({
     privilege: TlvField(1, TlvUInt8),

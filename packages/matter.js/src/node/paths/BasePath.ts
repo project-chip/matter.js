@@ -4,10 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { GroupId } from "../../datatype/GroupId.js";
-import { NodeId } from "../../datatype/NodeId.js";
+import { ClusterId, EndpointNumber, GroupId, NodeId } from "@project-chip/matter.js-types";
 
 export namespace BasePath {
     /**

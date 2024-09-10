@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningFlowType } from "../../../schema/PairingCodeSchema.js";
-import { ProductDescription } from "../product-description/ProductDescription.js";
+import { CommissioningFlowType, ProductDescription } from "@project-chip/matter.js-types";
 
 /**
  * Configuration for initial node commissioning.

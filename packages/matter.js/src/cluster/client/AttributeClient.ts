@@ -6,14 +6,17 @@
 
 import { ImplementationError } from "@project-chip/matter.js-general";
 import { FabricIndex as FabricIndexElement } from "@project-chip/matter.js-model";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { FabricIndex } from "../../datatype/FabricIndex.js";
+import {
+    Attribute,
+    AttributeError,
+    AttributeId,
+    ClusterId,
+    EndpointNumber,
+    FabricIndex,
+    TlvSchema,
+} from "@project-chip/matter.js-types";
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
 import { NoAssociatedFabricError } from "../../session/SecureSession.js";
-import { TlvSchema } from "../../tlv/TlvSchema.js";
-import { Attribute, AttributeError } from "../Cluster.js";
 
 /**
  * Factory function to create an AttributeClient for a given attribute.

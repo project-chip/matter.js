@@ -5,10 +5,15 @@
  */
 
 import { CRYPTO_HASH_LEN_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "@project-chip/matter.js-general";
-import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
-import { TlvByteString } from "../../tlv/TlvString.js";
+import {
+    TlvBoolean,
+    TlvByteString,
+    TlvField,
+    TlvObject,
+    TlvOptionalField,
+    TlvUInt16,
+    TlvUInt32,
+} from "@project-chip/matter.js-types";
 
 /** @see {@link MatterSpecification.v13.Core} § 4.12.8 */
 export const TlvSessionParameters = TlvObject({

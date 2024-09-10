@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { RvcOperationalState } from "../../../cluster/definitions/RvcOperationalStateCluster.js";
+import { RvcOperationalState } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { RvcOperationalStateInterface } from "./RvcOperationalStateInterface.js";
 

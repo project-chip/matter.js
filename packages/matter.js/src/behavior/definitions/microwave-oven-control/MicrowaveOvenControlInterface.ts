@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { MicrowaveOvenControl } from "../../../cluster/definitions/MicrowaveOvenControlCluster.js";
+import { MicrowaveOvenControl } from "@project-chip/matter.js-types";
 
 export namespace MicrowaveOvenControlInterface {
     export interface Base {

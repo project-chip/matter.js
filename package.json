@@ -5,6 +5,7 @@
     "packages/tools",
     "packages/general",
     "packages/model",
+    "packages/types",
     "packages/matter.js",
     "packages/nodejs",
     "packages/matter-node-ble.js",

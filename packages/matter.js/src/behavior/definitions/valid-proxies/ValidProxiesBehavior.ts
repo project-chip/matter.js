@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ValidProxies } from "../../../cluster/definitions/ValidProxiesCluster.js";
+import { ValidProxies } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ValidProxiesInterface } from "./ValidProxiesInterface.js";
 

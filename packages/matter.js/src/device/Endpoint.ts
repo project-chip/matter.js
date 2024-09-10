@@ -5,22 +5,28 @@
  */
 
 import { AtLeastOne, ImplementationError, InternalError, NotImplementedError } from "@project-chip/matter.js-general";
-import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
-import { getClusterNameById } from "../cluster/ClusterHelper.js";
-import { ClusterType } from "../cluster/ClusterType.js";
+import {
+    Attributes,
+    BasicInformationCluster,
+    BitSchema,
+    BridgedDeviceBasicInformationCluster,
+    Cluster,
+    ClusterId,
+    ClusterType,
+    Commands,
+    DescriptorCluster,
+    DeviceTypeId,
+    EndpointNumber,
+    Events,
+    FixedLabelCluster,
+    TypeFromPartialBitSchema,
+    UserLabelCluster,
+} from "@project-chip/matter.js-types";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { BasicInformationCluster } from "../cluster/definitions/BasicInformationCluster.js";
-import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
-import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
-import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
-import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
+import { getClusterNameById } from "../cluster/ClusterHelper.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { ClusterServerObj, asClusterServerInternal } from "../cluster/server/ClusterServerTypes.js";
-import { ClusterId } from "../datatype/ClusterId.js";
-import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
 
 export interface EndpointOptions {

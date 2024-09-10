@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { TargetNavigator } from "../../../cluster/definitions/TargetNavigatorCluster.js";
+import { TargetNavigator } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { TargetNavigatorInterface } from "./TargetNavigatorInterface.js";
 

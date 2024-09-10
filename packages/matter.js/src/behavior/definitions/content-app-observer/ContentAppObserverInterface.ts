@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { ContentAppObserver } from "../../../cluster/definitions/ContentAppObserverCluster.js";
+import { ContentAppObserver } from "@project-chip/matter.js-types";
 
 export namespace ContentAppObserverInterface {
     export interface Base {

@@ -6,9 +6,7 @@
 
 import { Observable, Time, Timer } from "@project-chip/matter.js-general";
 import { FieldElement } from "@project-chip/matter.js-model";
-import { ClusterType } from "../../../cluster/ClusterType.js";
-import { Switch } from "../../../cluster/definitions/SwitchCluster.js";
-import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
+import { ClusterType, StatusCode, StatusResponseError, Switch } from "@project-chip/matter.js-types";
 import { ActionContext } from "../../context/ActionContext.js";
 import { SwitchBehavior } from "./SwitchBehavior.js";
 

@@ -14,10 +14,7 @@ import {
     Observable,
     StorageContext,
 } from "@project-chip/matter.js-general";
-import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
-import { FabricId } from "../datatype/FabricId.js";
-import { FabricIndex } from "../datatype/FabricIndex.js";
-import { NodeId } from "../datatype/NodeId.js";
+import { CaseAuthenticatedTag, FabricId, FabricIndex, NodeId } from "@project-chip/matter.js-types";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { InsecureSession } from "./InsecureSession.js";

@@ -13,14 +13,19 @@ import {
     Timer,
     isObject,
 } from "@project-chip/matter.js-general";
+import {
+    EventNumber,
+    NodeId,
+    StatusCode,
+    StatusResponseError,
+    TlvSchema,
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
 import { MatterDevice } from "../../MatterDevice.js";
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { AnyEventServer, FabricSensitiveEventServer } from "../../cluster/server/EventServer.js";
-import { EventNumber } from "../../datatype/EventNumber.js";
-import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { SecureSession } from "../../session/SecureSession.js";
-import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { RetransmissionLimitReachedError } from "../MessageExchange.js";
 import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
 import { EventStorageData } from "./EventHandler.js";
@@ -45,7 +50,6 @@ import {
     clusterPathToId,
     eventPathToId,
 } from "./InteractionServer.js";
-import { StatusCode, StatusResponseError } from "./StatusCode.js";
 import { MAX_INTERVAL_PUBLISHER_LIMIT_S, SubscriptionOptions } from "./SubscriptionOptions.js";
 
 const logger = Logger.get("SubscriptionHandler");

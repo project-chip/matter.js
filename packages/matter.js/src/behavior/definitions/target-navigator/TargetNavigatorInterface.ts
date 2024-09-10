@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { TargetNavigator } from "../../../cluster/definitions/TargetNavigatorCluster.js";
+import { TargetNavigator } from "@project-chip/matter.js-types";
 
 export namespace TargetNavigatorInterface {
     export interface Base {

@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { ModeBase } from "../../../cluster/definitions/ModeBaseCluster.js";
+import { ModeBase } from "@project-chip/matter.js-types";
 
 export namespace ModeBaseInterface {
     export interface Base {

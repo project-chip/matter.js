@@ -13,7 +13,7 @@ import {
     Metatype,
     ValueModel,
 } from "@project-chip/matter.js-model";
-import { StatusCode } from "../../../protocol/interaction/StatusCode.js";
+import { StatusCode } from "@project-chip/matter.js-types";
 import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
 import { Schema } from "../../supervision/Schema.js";

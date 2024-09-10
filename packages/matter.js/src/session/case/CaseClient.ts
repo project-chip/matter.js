@@ -5,9 +5,9 @@
  */
 
 import { Bytes, Crypto, Diagnostic, Logger, PublicKey, UnexpectedDataError } from "@project-chip/matter.js-general";
+import { NodeId } from "@project-chip/matter.js-types";
 import { MatterController } from "../../MatterController.js";
 import { TlvIntermediateCertificate, TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
-import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import {

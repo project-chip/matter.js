@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { AccountLogin } from "../../../cluster/definitions/AccountLoginCluster.js";
+import { AccountLogin } from "@project-chip/matter.js-types";
 
 export namespace AccountLoginInterface {
     export interface Base {

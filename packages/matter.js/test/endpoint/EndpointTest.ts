@@ -4,12 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AccessControl, BasicInformation, WindowCoveringCluster } from "@project-chip/matter.js-types";
 import { BasicInformationServer } from "../../src/behavior/definitions/basic-information/BasicInformationServer.js";
 import { WindowCoveringServer } from "../../src/behavior/definitions/window-covering/WindowCoveringServer.js";
 import { IndexBehavior } from "../../src/behavior/system/index/IndexBehavior.js";
-import { AccessControl } from "../../src/cluster/definitions/AccessControlCluster.js";
-import { BasicInformation } from "../../src/cluster/definitions/BasicInformationCluster.js";
-import { WindowCoveringCluster } from "../../src/cluster/definitions/WindowCoveringCluster.js";
 import { Agent } from "../../src/endpoint/Agent.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { TemperatureSensorDevice } from "../../src/endpoint/definitions/device/TemperatureSensorDevice.js";

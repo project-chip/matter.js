@@ -5,8 +5,8 @@
  */
 
 import { NamedHandler, NotImplementedError, Time, Timer } from "@project-chip/matter.js-general";
+import { OnOff } from "@project-chip/matter.js-types";
 import { WrapCommandHandler } from "../../device/Device.js";
-import { OnOff } from "../definitions/OnOffCluster.js";
 import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServerTypes.js";

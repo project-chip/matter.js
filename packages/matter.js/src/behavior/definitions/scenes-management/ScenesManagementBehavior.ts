@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ScenesManagement } from "../../../cluster/definitions/ScenesManagementCluster.js";
+import { ScenesManagement } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ScenesManagementInterface } from "./ScenesManagementInterface.js";
 

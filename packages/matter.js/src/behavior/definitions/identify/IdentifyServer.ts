@@ -5,7 +5,7 @@
  */
 
 import { Observable, Time, Timer } from "@project-chip/matter.js-general";
-import { Identify } from "../../../cluster/definitions/IdentifyCluster.js";
+import { Identify } from "@project-chip/matter.js-types";
 import { IdentifyBehavior } from "./IdentifyBehavior.js";
 
 /**

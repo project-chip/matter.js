@@ -8,9 +8,9 @@
 
 import {
     TotalVolatileOrganicCompoundsConcentrationMeasurement
-} from "../../../cluster/definitions/TotalVolatileOrganicCompoundsConcentrationMeasurementCluster.js";
+} from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * TotalVolatileOrganicCompoundsConcentrationMeasurementBehavior is the base class for objects that support interaction

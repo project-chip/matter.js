@@ -6,10 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Thermostat } from "../../../cluster/definitions/ThermostatCluster.js";
+import { Thermostat } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ThermostatInterface } from "./ThermostatInterface.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * ThermostatBehavior is the base class for objects that support interaction with {@link Thermostat.Cluster}.

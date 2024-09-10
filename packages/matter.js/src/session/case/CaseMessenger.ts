@@ -5,11 +5,11 @@
  */
 
 import { MatterFlowError } from "@project-chip/matter.js-general";
+import { TypeFromSchema } from "@project-chip/matter.js-types";
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { MessageType } from "../../protocol/securechannel/SecureChannelMessages.js";
 import { SecureChannelMessenger } from "../../protocol/securechannel/SecureChannelMessenger.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvCaseSigma1, TlvCaseSigma2, TlvCaseSigma2Resume, TlvCaseSigma3 } from "./CaseMessages.js";
 
 export class CaseServerMessenger extends SecureChannelMessenger<MatterDevice> {

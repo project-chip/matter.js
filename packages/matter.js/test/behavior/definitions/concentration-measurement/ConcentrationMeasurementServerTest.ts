@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ConcentrationMeasurement, FanControl } from "@project-chip/matter.js-types";
 import { CarbonDioxideConcentrationMeasurementServer } from "../../../../src/behavior/definitions/carbon-dioxide-concentration-measurement/CarbonDioxideConcentrationMeasurementServer.js";
 import { CarbonMonoxideConcentrationMeasurementServer } from "../../../../src/behavior/definitions/carbon-monoxide-concentration-measurement/CarbonMonoxideConcentrationMeasurementServer.js";
-import { ConcentrationMeasurement } from "../../../../src/cluster/definitions/ConcentrationMeasurementCluster.js";
-import { FanControl } from "../../../../src/cluster/definitions/FanControlCluster.js";
 import { AirPurifierDevice } from "../../../../src/endpoint/definitions/device/AirPurifierDevice.js";
 import { Endpoint } from "../../../../src/endpoint/Endpoint.js";
 import { MockServerNode } from "../../../node/mock-server-node.js";

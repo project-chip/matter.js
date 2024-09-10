@@ -5,7 +5,7 @@
  */
 
 import { Logger } from "@project-chip/matter.js-general";
-import { TimeFormatLocalization } from "../../../cluster/definitions/TimeFormatLocalizationCluster.js";
+import { TimeFormatLocalization } from "@project-chip/matter.js-types";
 import { TimeFormatLocalizationBehavior } from "./TimeFormatLocalizationBehavior.js";
 
 const logger = Logger.get("TimeFormatLocalizationServer");

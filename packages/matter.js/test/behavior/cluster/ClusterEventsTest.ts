@@ -5,6 +5,7 @@
  */
 
 import { AsyncObservable, EventEmitter, MaybePromise, Observable } from "@project-chip/matter.js-general";
+import { BasicInformation, ClusterType } from "@project-chip/matter.js-types";
 import { Behavior } from "../../../src/behavior/Behavior.js";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import { ClusterOf } from "../../../src/behavior/cluster/ClusterBehaviorUtil.js";
@@ -12,8 +13,6 @@ import { ClusterEvents } from "../../../src/behavior/cluster/ClusterEvents.js";
 import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
 import { BasicInformationBehavior } from "../../../src/behavior/definitions/basic-information/BasicInformationBehavior.js";
 import { BasicInformationServer } from "../../../src/behavior/definitions/basic-information/BasicInformationServer.js";
-import { ClusterType } from "../../../src/cluster/ClusterType.js";
-import { BasicInformation } from "../../../src/cluster/definitions/BasicInformationCluster.js";
 import { MyCluster, MySchema } from "./cluster-behavior-test-util.js";
 
 const MyClusterWithOptEvent = MyCluster.enable({ events: { optEv: true } });

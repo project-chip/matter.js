@@ -4,12 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { Logger, MatterFlowError } from "@project-chip/matter.js-general";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { NodeId } from "../../datatype/NodeId.js";
-import { ArraySchema } from "../../tlv/TlvArray.js";
-import { TlvEncodingOptions, TlvSchema, TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import {
+    ArraySchema,
+    AttributeId,
+    ClusterId,
+    EndpointNumber,
+    NodeId,
+    TlvEncodingOptions,
+    TlvSchema,
+    TlvStream,
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
 import {
     TlvAttributePath,
     TlvAttributeReport,

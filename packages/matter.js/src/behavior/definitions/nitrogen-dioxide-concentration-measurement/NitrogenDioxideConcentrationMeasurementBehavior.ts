@@ -8,9 +8,9 @@
 
 import {
     NitrogenDioxideConcentrationMeasurement
-} from "../../../cluster/definitions/NitrogenDioxideConcentrationMeasurementCluster.js";
+} from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * NitrogenDioxideConcentrationMeasurementBehavior is the base class for objects that support interaction with {@link

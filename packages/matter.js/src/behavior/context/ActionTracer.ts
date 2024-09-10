@@ -5,7 +5,7 @@
  */
 
 import { DataModelPath } from "@project-chip/matter.js-model";
-import { StatusCode } from "../../protocol/interaction/StatusCode.js";
+import { StatusCode } from "@project-chip/matter.js-types";
 import { Val } from "../state/Val.js";
 
 /**

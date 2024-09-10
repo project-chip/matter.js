@@ -5,7 +5,7 @@
  */
 
 import { Diagnostic, Logger } from "@project-chip/matter.js-general";
-import { GlobalAttributes } from "../cluster/Cluster.js";
+import { GlobalAttributes } from "@project-chip/matter.js-types";
 import { SupportedAttributeClient, UnknownSupportedAttributeClient } from "../cluster/client/AttributeClient.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { SupportedEventClient, UnknownSupportedEventClient } from "../cluster/client/EventClient.js";

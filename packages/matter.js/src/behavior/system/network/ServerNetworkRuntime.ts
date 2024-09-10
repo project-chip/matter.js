@@ -14,10 +14,10 @@ import {
     TransportInterface,
     UdpInterface,
 } from "@project-chip/matter.js-general";
+import { FabricIndex } from "@project-chip/matter.js-types";
 import { MatterDevice } from "../../../MatterDevice.js";
 import { Ble } from "../../../ble/Ble.js";
 import { InstanceBroadcaster } from "../../../common/InstanceBroadcaster.js";
-import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
 import { MdnsService } from "../../../mdns/MdnsService.js";

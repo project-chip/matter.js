@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { Groups } from "../../../cluster/definitions/GroupsCluster.js";
+import { Groups } from "@project-chip/matter.js-types";
 
 export namespace GroupsInterface {
     export interface Base {

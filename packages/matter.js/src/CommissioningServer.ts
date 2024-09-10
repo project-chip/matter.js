@@ -19,28 +19,37 @@ import {
     UdpInterface,
 } from "@project-chip/matter.js-general";
 import { Specification } from "@project-chip/matter.js-model";
+import {
+    AccessControl,
+    AdministratorCommissioning,
+    AdministratorCommissioningCluster,
+    BasicInformationCluster,
+    ClusterType,
+    CommissioningFlowType,
+    DiscoveryCapabilitiesBitmap,
+    DiscoveryCapabilitiesSchema,
+    EndpointNumber,
+    FabricIndex,
+    GeneralCommissioning,
+    GeneralCommissioningCluster,
+    GeneralDiagnostics,
+    GeneralDiagnosticsCluster,
+    GroupKeyManagementCluster,
+    ManualPairingCodeCodec,
+    OperationalCredentialsCluster,
+    ProductDescription,
+    QrPairingCodeCodec,
+    TypeFromBitSchema,
+    TypeFromPartialBitSchema,
+    VendorId,
+} from "@project-chip/matter.js-types";
 import { MatterDevice } from "./MatterDevice.js";
 import { MatterNode } from "./MatterNode.js";
 import { DeviceCertification } from "./behavior/definitions/operational-credentials/DeviceCertification.js";
-import { ProductDescription } from "./behavior/system/product-description/ProductDescription.js";
 import { Ble } from "./ble/Ble.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
-import { ClusterType } from "./cluster/ClusterType.js";
 import { ClusterClientObj } from "./cluster/client/ClusterClientTypes.js";
-import { AccessControl } from "./cluster/definitions/AccessControlCluster.js";
-import {
-    AdministratorCommissioning,
-    AdministratorCommissioningCluster,
-} from "./cluster/definitions/AdministratorCommissioningCluster.js";
-import { BasicInformationCluster } from "./cluster/definitions/BasicInformationCluster.js";
-import {
-    GeneralCommissioning,
-    GeneralCommissioningCluster,
-} from "./cluster/definitions/GeneralCommissioningCluster.js";
-import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "./cluster/definitions/GeneralDiagnosticsCluster.js";
-import { GroupKeyManagementCluster } from "./cluster/definitions/GroupKeyManagementCluster.js";
-import { OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
 import { createDefaultAccessControlClusterServer } from "./cluster/server/AccessControlServer.js";
 import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
 import {
@@ -58,9 +67,6 @@ import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralComm
 import { createDefaultGeneralDiagnosticsClusterServer } from "./cluster/server/GeneralDiagnosticsServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
 import { OperationalCredentialsClusterHandler } from "./cluster/server/OperationalCredentialsServer.js";
-import { EndpointNumber } from "./datatype/EndpointNumber.js";
-import { FabricIndex } from "./datatype/FabricIndex.js";
-import { VendorId } from "./datatype/VendorId.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { Device, RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
@@ -72,14 +78,6 @@ import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { EventHandler } from "./protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
-import { TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
-import {
-    CommissioningFlowType,
-    DiscoveryCapabilitiesBitmap,
-    DiscoveryCapabilitiesSchema,
-    ManualPairingCodeCodec,
-    QrPairingCodeCodec,
-} from "./schema/PairingCodeSchema.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
 
 const logger = Logger.get("CommissioningServer");

@@ -6,13 +6,12 @@
 
 import { Diagnostic, InternalError, Logger } from "@project-chip/matter.js-general";
 import { AccessLevel } from "@project-chip/matter.js-model";
+import { AccessControlCluster, EndpointNumber, TypeFromSchema } from "@project-chip/matter.js-types";
 import { MatterDevice } from "../MatterDevice.js";
-import { AccessControlCluster } from "../cluster/definitions/index.js";
 import { AnyAttributeServer, AttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
 import { CommandServer } from "../cluster/server/CommandServer.js";
 import { AnyEventServer } from "../cluster/server/EventServer.js";
 import { Message } from "../codec/MessageCodec.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { MessageExchange } from "../protocol/MessageExchange.js";
 import { AccessControlManager, AccessDeniedError } from "../protocol/interaction/AccessControlManager.js";
@@ -22,7 +21,6 @@ import { TlvEventFilter } from "../protocol/interaction/InteractionProtocol.js";
 import { AttributePath, CommandPath, EventPath, InteractionServer } from "../protocol/interaction/InteractionServer.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
-import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Endpoint } from "./Endpoint.js";
 
 const logger = Logger.get("LegacyInteractionServer");

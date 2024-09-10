@@ -14,14 +14,12 @@ import {
     Logger,
     MatterFlowError,
 } from "@project-chip/matter.js-general";
+import { CaseAuthenticatedTag, NodeId, StatusCode, StatusResponseError } from "@project-chip/matter.js-types";
 import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
-import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
-import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
+import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateEncryptedWithoutRollover } from "../protocol/MessageReceptionState.js";
-import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
-import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
 import { Session, SessionContext, SessionParameterOptions } from "./Session.js";
 
 const logger = Logger.get("SecureSession");

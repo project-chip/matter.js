@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ValveConfigurationAndControl } from "../../../cluster/definitions/ValveConfigurationAndControlCluster.js";
+import { ValveConfigurationAndControl } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ValveConfigurationAndControlInterface } from "./ValveConfigurationAndControlInterface.js";
 

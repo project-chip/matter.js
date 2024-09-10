@@ -5,6 +5,7 @@
  */
 
 import { Bytes } from "@project-chip/matter.js-general";
+import { TypeFromSchema } from "@project-chip/matter.js-types";
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { MessageType } from "../../protocol/securechannel/SecureChannelMessages.js";
@@ -12,7 +13,6 @@ import {
     DEFAULT_NORMAL_PROCESSING_TIME_MS,
     SecureChannelMessenger,
 } from "../../protocol/securechannel/SecureChannelMessenger.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {
     TlvPasePake1,
     TlvPasePake2,

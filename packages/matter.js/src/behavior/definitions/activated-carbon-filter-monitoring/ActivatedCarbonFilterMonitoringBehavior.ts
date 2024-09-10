@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ActivatedCarbonFilterMonitoring } from "../../../cluster/definitions/ActivatedCarbonFilterMonitoringCluster.js";
+import { ActivatedCarbonFilterMonitoring } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ResourceMonitoringInterface } from "../resource-monitoring/ResourceMonitoringInterface.js";
 

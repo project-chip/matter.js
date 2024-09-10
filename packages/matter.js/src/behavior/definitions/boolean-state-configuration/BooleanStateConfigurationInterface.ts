@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { BooleanStateConfiguration } from "../../../cluster/definitions/BooleanStateConfigurationCluster.js";
+import { BooleanStateConfiguration } from "@project-chip/matter.js-types";
 
 export namespace BooleanStateConfigurationInterface {
     export interface VisualOrAudible {

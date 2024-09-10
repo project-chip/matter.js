@@ -5,10 +5,17 @@
  */
 
 import { ImplementationError, Logger, MatterFlowError, UnexpectedDataError } from "@project-chip/matter.js-general";
+import {
+    Status,
+    StatusCode,
+    StatusResponseError,
+    TlvAny,
+    TlvSchema,
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
+import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
-import { Status } from "../../cluster/globals/index.js";
-import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
 import {
     ExchangeSendOptions,
@@ -17,8 +24,6 @@ import {
     UnexpectedMessageError,
 } from "../../protocol/MessageExchange.js";
 import { SessionContext } from "../../session/Session.js";
-import { TlvAny } from "../../tlv/TlvAny.js";
-import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {
     DataReportPayload,
     canAttributePayloadBeChunked,
@@ -42,7 +47,6 @@ import {
     TlvWriteResponse,
 } from "./InteractionProtocol.js";
 import { INTERACTION_MODEL_REVISION } from "./InteractionServer.js";
-import { StatusCode, StatusResponseError } from "./StatusCode.js";
 
 export enum MessageType {
     StatusResponse = 0x01,

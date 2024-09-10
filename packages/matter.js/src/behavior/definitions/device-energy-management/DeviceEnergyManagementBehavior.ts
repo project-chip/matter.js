@@ -6,10 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { DeviceEnergyManagement } from "../../../cluster/definitions/DeviceEnergyManagementCluster.js";
+import { DeviceEnergyManagement } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { DeviceEnergyManagementInterface } from "./DeviceEnergyManagementInterface.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * DeviceEnergyManagementBehavior is the base class for objects that support interaction with {@link

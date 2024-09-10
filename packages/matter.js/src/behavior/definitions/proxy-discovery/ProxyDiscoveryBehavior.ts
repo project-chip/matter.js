@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ProxyDiscovery } from "../../../cluster/definitions/ProxyDiscoveryCluster.js";
+import { ProxyDiscovery } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ProxyDiscoveryInterface } from "./ProxyDiscoveryInterface.js";
 

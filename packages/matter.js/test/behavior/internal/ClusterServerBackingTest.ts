@@ -6,26 +6,35 @@
 
 import { Bytes } from "@project-chip/matter.js-general";
 import { AcceptedCommandList, FeatureMap, GeneratedCommandList } from "@project-chip/matter.js-model";
+import {
+    AccessControl,
+    AttributeId,
+    BasicInformation,
+    ClusterId,
+    CommandId,
+    EndpointNumber,
+    FabricId,
+    FabricIndex,
+    NetworkCommissioning,
+    NodeId,
+    OnOff,
+    OperationalCredentials,
+    Status,
+    StatusCode,
+    TlvArray,
+    TlvEnum,
+    TlvField,
+    TlvNullable,
+    TlvObject,
+    TlvSubjectId,
+    TypeFromSchema,
+    VendorId,
+} from "@project-chip/matter.js-types";
 import { MatterDevice } from "../../../src/MatterDevice.js";
 import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
 import { OnOffServer } from "../../../src/behavior/definitions/on-off/OnOffServer.js";
 import { NetworkServer } from "../../../src/behavior/system/network/NetworkServer.js";
-import { AccessControl } from "../../../src/cluster/definitions/AccessControlCluster.js";
-import { BasicInformation } from "../../../src/cluster/definitions/BasicInformationCluster.js";
-import { NetworkCommissioning } from "../../../src/cluster/definitions/NetworkCommissioningCluster.js";
-import { OnOff } from "../../../src/cluster/definitions/OnOffCluster.js";
-import { OperationalCredentials } from "../../../src/cluster/definitions/OperationalCredentialsCluster.js";
-import { Status } from "../../../src/cluster/globals/Status.js";
 import { Message, SessionType } from "../../../src/codec/MessageCodec.js";
-import { AttributeId } from "../../../src/datatype/AttributeId.js";
-import { ClusterId } from "../../../src/datatype/ClusterId.js";
-import { CommandId } from "../../../src/datatype/CommandId.js";
-import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
-import { FabricId } from "../../../src/datatype/FabricId.js";
-import { FabricIndex } from "../../../src/datatype/FabricIndex.js";
-import { NodeId } from "../../../src/datatype/NodeId.js";
-import { TlvSubjectId } from "../../../src/datatype/SubjectId.js";
-import { VendorId } from "../../../src/datatype/VendorId.js";
 import { OnOffLightDevice } from "../../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { Fabric, FabricBuilder } from "../../../src/fabric/Fabric.js";
 import { FabricManager } from "../../../src/fabric/FabricManager.js";
@@ -43,12 +52,6 @@ import {
     TlvWriteRequest,
 } from "../../../src/protocol/interaction/InteractionProtocol.js";
 import { INTERACTION_MODEL_REVISION } from "../../../src/protocol/interaction/InteractionServer.js";
-import { StatusCode } from "../../../src/protocol/interaction/StatusCode.js";
-import { TlvArray } from "../../../src/tlv/TlvArray.js";
-import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
-import { TlvEnum } from "../../../src/tlv/TlvNumber.js";
-import { TlvField, TlvObject } from "../../../src/tlv/TlvObject.js";
-import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
 import { MockServerNode } from "../../node/mock-server-node.js";
 
 const ROOT_CERT = Bytes.fromHex(

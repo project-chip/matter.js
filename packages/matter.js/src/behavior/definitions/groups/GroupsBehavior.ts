@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Groups } from "../../../cluster/definitions/GroupsCluster.js";
+import { Groups } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { GroupsInterface } from "./GroupsInterface.js";
 

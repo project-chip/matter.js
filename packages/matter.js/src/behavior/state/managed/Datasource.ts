@@ -15,7 +15,7 @@ import {
     Observable,
 } from "@project-chip/matter.js-general";
 import { AccessLevel, DataModelPath } from "@project-chip/matter.js-model";
-import { ClusterId } from "../../../datatype/ClusterId.js";
+import { ClusterId } from "@project-chip/matter.js-types";
 import { AccessControl } from "../../AccessControl.js";
 import { ExpiredReferenceError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";

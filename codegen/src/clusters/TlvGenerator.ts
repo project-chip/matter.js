@@ -57,13 +57,13 @@ export class TlvGenerator {
      */
     importTlv(fileOrDirectory: string, name: string, as?: string) {
         if (fileOrDirectory === "datatype") {
-            fileOrDirectory = `#/${fileOrDirectory}/${name.replace(/^Tlv/, "")}.js`;
+            fileOrDirectory = `#types/${fileOrDirectory}/${name.replace(/^Tlv/, "")}.js`;
         } else if (fileOrDirectory === "tlv") {
-            fileOrDirectory = `#/${fileOrDirectory}/${name}.js`;
+            fileOrDirectory = `#types/${fileOrDirectory}/${name}.js`;
         } else if (fileOrDirectory === "number") {
-            fileOrDirectory = `#/tlv/TlvNumber.js`;
+            fileOrDirectory = `#types/tlv/TlvNumber.js`;
         } else {
-            fileOrDirectory = `#/${fileOrDirectory}.js`;
+            fileOrDirectory = `#types/${fileOrDirectory}.js`;
         }
 
         if (as) {
@@ -360,13 +360,13 @@ export class TlvGenerator {
         // instead of the local one.  So always reference the global one until we see something different
         if (this.owner !== model && defining.isGlobal && defining.name === status.name) {
             let as;
-            if (this.owner?.get(DatatypeModel, "StatusCodeEnum")) {
-                // StatusCode would conflict with local type so import as an alias
-                as = "GlobalStatusCode";
+            if (this.owner?.get(DatatypeModel, "Status")) {
+                // Status would conflict with local type so import as an alias
+                as = "GlobalStatus";
             }
 
-            this.importTlv("protocol/interaction/StatusCode", "StatusCode", as);
-            return as ?? "StatusCode";
+            this.importTlv("globals/Status", "Status", as);
+            return as ?? "Status";
         }
 
         // If the model is not local, import rather than define

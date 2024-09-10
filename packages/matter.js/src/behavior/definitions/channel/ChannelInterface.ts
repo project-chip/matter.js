@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { Channel } from "../../../cluster/definitions/ChannelCluster.js";
+import { Channel } from "@project-chip/matter.js-types";
 
 export namespace ChannelInterface {
     export interface Base {

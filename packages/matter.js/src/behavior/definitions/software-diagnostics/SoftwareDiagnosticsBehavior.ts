@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { SoftwareDiagnostics } from "../../../cluster/definitions/SoftwareDiagnosticsCluster.js";
+import { SoftwareDiagnostics } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { SoftwareDiagnosticsInterface } from "./SoftwareDiagnosticsInterface.js";
 

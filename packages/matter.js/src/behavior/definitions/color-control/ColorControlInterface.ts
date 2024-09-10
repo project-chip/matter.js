@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { ColorControl } from "../../../cluster/definitions/ColorControlCluster.js";
+import { ColorControl } from "@project-chip/matter.js-types";
 
 export namespace ColorControlInterface {
     export interface HueSaturation {

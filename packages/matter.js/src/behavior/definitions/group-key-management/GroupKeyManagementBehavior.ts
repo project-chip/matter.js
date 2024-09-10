@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { GroupKeyManagement } from "../../../cluster/definitions/GroupKeyManagementCluster.js";
+import { GroupKeyManagement } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { GroupKeyManagementInterface } from "./GroupKeyManagementInterface.js";
 

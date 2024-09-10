@@ -11,11 +11,8 @@ import {
     MaybePromise,
     Observable,
 } from "@project-chip/matter.js-general";
-import { ClusterType } from "../../cluster/ClusterType.js";
-import { ClusterComposer } from "../../cluster/mutation/ClusterComposer.js";
-import { ElementModifier } from "../../cluster/mutation/ElementModifier.js";
+import { ClusterComposer, ClusterType, ElementModifier, TypeFromBitSchema } from "@project-chip/matter.js-types";
 import type { Agent } from "../../endpoint/Agent.js";
-import { TypeFromBitSchema } from "../../schema/BitmapSchema.js";
 import { Behavior } from "../Behavior.js";
 import type { BehaviorBacking } from "../internal/BehaviorBacking.js";
 import type { RootSupervisor } from "../supervision/RootSupervisor.js";

@@ -5,13 +5,13 @@
  */
 
 import { Logger, MatterFlowError } from "@project-chip/matter.js-general";
+import { StatusCode, StatusResponseError } from "@project-chip/matter.js-types";
 import { Message } from "../../codec/MessageCodec.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { CaseServer } from "../../session/case/CaseServer.js";
 import { MaximumPasePairingErrorsReachedError, PaseServer } from "../../session/pase/PaseServer.js";
-import { StatusCode, StatusResponseError } from "../interaction/StatusCode.js";
 import {
     GeneralStatusCode,
     MessageType,

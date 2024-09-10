@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Actions } from "../../../cluster/definitions/ActionsCluster.js";
+import { Actions } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ActionsInterface } from "./ActionsInterface.js";
 

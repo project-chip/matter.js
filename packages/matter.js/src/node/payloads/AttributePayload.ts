@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataVersion } from "../../datatype/DataVersion.js";
+import { DataVersion } from "@project-chip/matter.js-types";
 import { AttributePath } from "../paths/AttributePath.js";
 import { BasePayload } from "./BasePayload.js";
 

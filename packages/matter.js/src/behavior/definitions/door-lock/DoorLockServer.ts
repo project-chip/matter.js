@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DoorLock } from "../../../cluster/definitions/DoorLockCluster.js";
+import { DoorLock } from "@project-chip/matter.js-types";
 import { DoorLockBehavior } from "./DoorLockBehavior.js";
 import LockState = DoorLock.LockState;
 

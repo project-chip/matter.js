@@ -13,8 +13,23 @@ import {
     MatterModel,
     Specification,
 } from "@project-chip/matter.js-model";
-import { MatterDevice } from "../../MatterDevice.js";
-import { TlvNoResponse } from "../../cluster/Cluster.js";
+import {
+    ArraySchema,
+    AttributeId,
+    ClusterId,
+    CommandId,
+    EndpointNumber,
+    EventId,
+    EventNumber,
+    NodeId,
+    StatusCode,
+    StatusResponseError,
+    TlvAny,
+    TlvNoArguments,
+    TlvNoResponse,
+    TypeFromSchema,
+    ValidationError,
+} from "@project-chip/matter.js-types";
 import {
     AnyAttributeServer,
     AttributeServer,
@@ -23,22 +38,11 @@ import {
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AnyEventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
-import { ValidationError } from "../../common/ValidationError.js";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { CommandId } from "../../datatype/CommandId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { EventId } from "../../datatype/EventId.js";
-import { EventNumber } from "../../datatype/EventNumber.js";
-import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
+import { MatterDevice } from "../../MatterDevice.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
-import { TlvAny } from "../../tlv/TlvAny.js";
-import { ArraySchema } from "../../tlv/TlvArray.js";
-import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {
     decodeAttributeValueWithSchema,
     decodeListAttributeValueWithSchema,
@@ -67,7 +71,6 @@ import {
     TlvInvokeResponseForSend,
     TlvSubscribeResponse,
 } from "./InteractionProtocol.js";
-import { StatusCode, StatusResponseError } from "./StatusCode.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 import { SubscriptionOptions } from "./SubscriptionOptions.js";
 

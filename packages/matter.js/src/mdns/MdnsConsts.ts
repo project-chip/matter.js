@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { VendorId } from "../datatype/VendorId.js";
+import { VendorId } from "@project-chip/matter.js-types";
 
 export const SERVICE_DISCOVERY_QNAME = "_services._dns-sd._udp.local";
 export const MATTER_COMMISSION_SERVICE_QNAME = "_matterc._udp.local";

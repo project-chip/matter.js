@@ -20,20 +20,22 @@ import {
     SupportedStorageTypes,
 } from "@project-chip/matter.js-general";
 import {
+    CaseAuthenticatedTag,
+    Cluster,
+    FabricId,
+    FabricIndex,
+    GroupKeyManagement,
+    NodeId,
+    TypeFromSchema,
+    VendorId,
+} from "@project-chip/matter.js-types";
+import {
     CertificateManager,
     TlvIntermediateCertificate,
     TlvOperationalCertificate,
     TlvRootCertificate,
 } from "../certificate/CertificateManager.js";
-import { Cluster } from "../cluster/Cluster.js";
-import { GroupKeyManagement } from "../cluster/definitions/GroupKeyManagementCluster.js";
-import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
-import { FabricId } from "../datatype/FabricId.js";
-import { FabricIndex } from "../datatype/FabricIndex.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { VendorId } from "../datatype/VendorId.js";
 import { SecureSession } from "../session/SecureSession.js";
-import { TypeFromSchema } from "../tlv/TlvSchema.js";
 
 const logger = Logger.get("Fabric");
 

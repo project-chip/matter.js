@@ -14,7 +14,7 @@ export class SemanticNamespaceFile extends TsFile {
 
         super(`#endpoints/tags/${objectName}`);
 
-        this.addImport(`#/endpoint/type/SemanticNamespace.js`, "SemanticNamespace");
+        this.addImport(`#node/endpoint/type/SemanticNamespace.js`, "SemanticNamespace");
 
         const definition = this.expressions(`export const ${objectName} = SemanticNamespace({`, "})");
         definition.document(model);

@@ -14,19 +14,28 @@ import {
     Time,
 } from "@project-chip/matter.js-general";
 import { AccessLevel, ClusterModel, EventModel, MatterModel } from "@project-chip/matter.js-model";
+import {
+    Attributes,
+    BitSchema,
+    Cluster,
+    ClusterId,
+    Commands,
+    Event,
+    EventId,
+    EventPriority,
+    Events,
+    FabricIndex,
+    TlvSchema,
+    TypeFromPartialBitSchema,
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
 import { MatterDevice } from "../../MatterDevice.js";
 import { Message } from "../../codec/MessageCodec.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EventId } from "../../datatype/EventId.js";
-import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { EventData, EventHandler, EventStorageData } from "../../protocol/interaction/EventHandler.js";
 import { TlvEventFilter } from "../../protocol/interaction/InteractionProtocol.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
-import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { Attributes, Cluster, Commands, Event, EventPriority, Events } from "../Cluster.js";
 
 export type AnyEventServer<T, S extends Storage> = EventServer<T, S> | FabricSensitiveEventServer<T, S>;
 

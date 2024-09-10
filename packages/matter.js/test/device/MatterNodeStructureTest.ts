@@ -13,32 +13,35 @@ import {
     StorageManager,
 } from "@project-chip/matter.js-general";
 import { ClusterModel, MatterModel, Specification } from "@project-chip/matter.js-model";
-import { CommissioningServer } from "../../src/CommissioningServer.js";
-import { AccessControlCluster } from "../../src/cluster/definitions/AccessControlCluster.js";
-import { AdministratorCommissioning } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
-import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
-import { BindingCluster } from "../../src/cluster/definitions/BindingCluster.js";
-import { BridgedDeviceBasicInformationCluster } from "../../src/cluster/definitions/BridgedDeviceBasicInformationCluster.js";
-import { DescriptorCluster } from "../../src/cluster/definitions/DescriptorCluster.js";
-import { FixedLabelCluster } from "../../src/cluster/definitions/FixedLabelCluster.js";
-import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
-import { GeneralDiagnostics } from "../../src/cluster/definitions/GeneralDiagnosticsCluster.js";
-import { GroupKeyManagementCluster } from "../../src/cluster/definitions/GroupKeyManagementCluster.js";
-import { GroupsCluster } from "../../src/cluster/definitions/GroupsCluster.js";
-import { Identify, IdentifyCluster } from "../../src/cluster/definitions/IdentifyCluster.js";
-import { NetworkCommissioning } from "../../src/cluster/definitions/NetworkCommissioningCluster.js";
-import { OnOffCluster } from "../../src/cluster/definitions/OnOffCluster.js";
-import { OperationalCredentialsCluster } from "../../src/cluster/definitions/OperationalCredentialsCluster.js";
+import {
+    AccessControlCluster,
+    AdministratorCommissioning,
+    BasicInformationCluster,
+    BindingCluster,
+    BridgedDeviceBasicInformationCluster,
+    DescriptorCluster,
+    DeviceTypeId,
+    EndpointNumber,
+    FabricIndex,
+    FixedLabelCluster,
+    GeneralCommissioning,
+    GeneralDiagnostics,
+    GroupKeyManagementCluster,
+    GroupsCluster,
+    Identify,
+    IdentifyCluster,
+    NetworkCommissioning,
+    OnOffCluster,
+    OperationalCredentialsCluster,
+    VendorId,
+} from "@project-chip/matter.js-types";
 import { AdministratorCommissioningHandler } from "../../src/cluster/server/AdministratorCommissioningServer.js";
 import { AttributeServer } from "../../src/cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
 import { GeneralCommissioningClusterHandler } from "../../src/cluster/server/GeneralCommissioningServer.js";
 import { GroupKeyManagementClusterHandler } from "../../src/cluster/server/GroupKeyManagementServer.js";
 import { OperationalCredentialsClusterHandler } from "../../src/cluster/server/OperationalCredentialsServer.js";
-import { DeviceTypeId } from "../../src/datatype/DeviceTypeId.js";
-import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
-import { FabricIndex } from "../../src/datatype/FabricIndex.js";
-import { VendorId } from "../../src/datatype/VendorId.js";
+import { CommissioningServer } from "../../src/CommissioningServer.js";
 import { Aggregator } from "../../src/device/Aggregator.js";
 import { ComposedDevice } from "../../src/device/ComposedDevice.js";
 import { RootEndpoint } from "../../src/device/Device.js";

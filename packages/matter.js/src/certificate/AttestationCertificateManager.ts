@@ -5,7 +5,7 @@
  */
 
 import { Bytes, Crypto, PrivateKey, Time, toHex } from "@project-chip/matter.js-general";
-import { VendorId } from "../datatype/VendorId.js";
+import { VendorId } from "@project-chip/matter.js-types";
 import { CertificateManager, jsToMatterDate } from "./CertificateManager.js";
 import {
     TestCert_PAA_NoVID_PrivateKey,

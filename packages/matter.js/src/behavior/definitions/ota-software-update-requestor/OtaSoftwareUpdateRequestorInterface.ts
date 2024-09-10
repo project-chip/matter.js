@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { OtaSoftwareUpdateRequestor } from "../../../cluster/definitions/OtaSoftwareUpdateRequestorCluster.js";
+import { OtaSoftwareUpdateRequestor } from "@project-chip/matter.js-types";
 
 export namespace OtaSoftwareUpdateRequestorInterface {
     export interface Base {

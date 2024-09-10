@@ -13,12 +13,15 @@ import {
     Time,
     Timer,
 } from "@project-chip/matter.js-general";
-import { ClusterType } from "../../../cluster/ClusterType.js";
-import { ColorControl } from "../../../cluster/definitions/ColorControlCluster.js";
-import { GeneralDiagnostics } from "../../../cluster/definitions/index.js";
+import {
+    ClusterType,
+    ColorControl,
+    GeneralDiagnostics,
+    StatusCode,
+    StatusResponseError,
+    TypeFromPartialBitSchema,
+} from "@project-chip/matter.js-types";
 import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
-import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
-import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagnosticsBehavior.js";
 import { OnOffServer } from "../on-off/OnOffServer.js";
 import { ColorControlBehavior } from "./ColorControlBehavior.js";

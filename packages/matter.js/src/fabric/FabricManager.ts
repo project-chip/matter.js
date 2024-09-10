@@ -14,7 +14,7 @@ import {
     Observable,
     StorageContext,
 } from "@project-chip/matter.js-general";
-import { FabricIndex } from "../datatype/FabricIndex.js";
+import { FabricIndex } from "@project-chip/matter.js-types";
 import { Fabric, FabricJsonObject } from "./Fabric.js";
 
 /** Specific Error for when a fabric is not found. */

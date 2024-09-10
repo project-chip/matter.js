@@ -5,15 +5,18 @@
  */
 
 import { Diagnostic, Logger, UnexpectedDataError } from "@project-chip/matter.js-general";
-import { EventPriority } from "../../cluster/Cluster.js";
+import {
+    ClusterId,
+    EndpointNumber,
+    EventId,
+    EventNumber,
+    EventPriority,
+    NodeId,
+    TlvAny,
+    TlvStream,
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
 import { getClusterById, getClusterEventById } from "../../cluster/ClusterHelper.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { EventId } from "../../datatype/EventId.js";
-import { EventNumber } from "../../datatype/EventNumber.js";
-import { NodeId } from "../../datatype/NodeId.js";
-import { TlvAny } from "../../tlv/TlvAny.js";
-import { TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvEventData, TlvEventReport } from "./InteractionProtocol.js";
 
 const logger = Logger.get("EventDataDecoder");

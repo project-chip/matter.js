@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { ScenesManagement } from "../../../cluster/definitions/ScenesManagementCluster.js";
+import { ScenesManagement } from "@project-chip/matter.js-types";
 
 export namespace ScenesManagementInterface {
     export interface Base {

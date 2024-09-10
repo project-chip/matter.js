@@ -13,21 +13,25 @@ import {
     SyncStorage,
 } from "@project-chip/matter.js-general";
 import { Specification } from "@project-chip/matter.js-model";
-import { Cluster, ClusterExtend } from "../../src/cluster/Cluster.js";
-import { AdministratorCommissioningCluster } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
-import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
-import { BindingCluster } from "../../src/cluster/definitions/BindingCluster.js";
-import { GroupsCluster } from "../../src/cluster/definitions/GroupsCluster.js";
-import { Identify, IdentifyCluster } from "../../src/cluster/definitions/IdentifyCluster.js";
-import { WindowCovering } from "../../src/cluster/definitions/WindowCoveringCluster.js";
+import {
+    AdministratorCommissioningCluster,
+    AttributeId,
+    BasicInformationCluster,
+    BindingCluster,
+    Cluster,
+    ClusterExtend,
+    CommandId,
+    EndpointNumber,
+    FabricIndex,
+    GroupsCluster,
+    Identify,
+    IdentifyCluster,
+    VendorId,
+    WindowCovering,
+} from "@project-chip/matter.js-types";
 import { AttributeServer, FixedAttributeServer } from "../../src/cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
 import { ClusterDatasource, asClusterServerInternal } from "../../src/cluster/server/ClusterServerTypes.js";
-import { AttributeId } from "../../src/datatype/AttributeId.js";
-import { CommandId } from "../../src/datatype/CommandId.js";
-import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
-import { FabricIndex } from "../../src/datatype/FabricIndex.js";
-import { VendorId } from "../../src/datatype/VendorId.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { Fabric } from "../../src/fabric/Fabric.js";

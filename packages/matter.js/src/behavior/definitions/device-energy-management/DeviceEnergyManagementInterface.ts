@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { DeviceEnergyManagement } from "../../../cluster/definitions/DeviceEnergyManagementCluster.js";
+import { DeviceEnergyManagement } from "@project-chip/matter.js-types";
 
 export namespace DeviceEnergyManagementInterface {
     export interface PowerAdjustment {

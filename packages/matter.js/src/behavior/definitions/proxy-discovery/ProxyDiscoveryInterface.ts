@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { ProxyDiscovery } from "../../../cluster/definitions/ProxyDiscoveryCluster.js";
+import { ProxyDiscovery } from "@project-chip/matter.js-types";
 
 export namespace ProxyDiscoveryInterface {
     export interface Base {

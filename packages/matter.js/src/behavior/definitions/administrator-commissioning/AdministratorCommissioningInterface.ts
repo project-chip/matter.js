@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
+import { AdministratorCommissioning } from "@project-chip/matter.js-types";
 
 export namespace AdministratorCommissioningInterface {
     export interface Base {

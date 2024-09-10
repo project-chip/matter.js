@@ -5,8 +5,8 @@
  */
 
 import { Time } from "@project-chip/matter.js-general";
+import { NodeId } from "@project-chip/matter.js-types";
 import { DecodedMessage, DecodedPacket, Message, Packet } from "../codec/MessageCodec.js";
-import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionState } from "../protocol/MessageReceptionState.js";

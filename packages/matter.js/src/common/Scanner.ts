@@ -5,8 +5,7 @@
  */
 
 import { ServerAddress, ServerAddressIp } from "@project-chip/matter.js-general";
-import { NodeId } from "../datatype/NodeId.js";
-import { VendorId } from "../datatype/VendorId.js";
+import { NodeId, VendorId } from "@project-chip/matter.js-types";
 import { Fabric } from "../fabric/Fabric.js";
 
 /**

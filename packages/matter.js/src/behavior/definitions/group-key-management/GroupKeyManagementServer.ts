@@ -5,8 +5,7 @@
  */
 
 import { ImplementationError } from "@project-chip/matter.js-general";
-import { GroupKeyManagement } from "../../../cluster/definitions/GroupKeyManagementCluster.js";
-import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
+import { GroupKeyManagement, StatusCode, StatusResponseError } from "@project-chip/matter.js-types";
 import { GroupKeyManagementBehavior } from "./GroupKeyManagementBehavior.js";
 
 /**

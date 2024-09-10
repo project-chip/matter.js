@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { EventId } from "../../datatype/EventId.js";
+import { EventId } from "@project-chip/matter.js-types";
 import { BasePath } from "./BasePath.js";
 
 export namespace EventPath {

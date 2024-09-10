@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Messages } from "../../../cluster/definitions/MessagesCluster.js";
+import { Messages } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { MessagesInterface } from "./MessagesInterface.js";
 

@@ -5,6 +5,7 @@
  */
 
 import { Diagnostic, InternalError, MaybePromise } from "@project-chip/matter.js-general";
+import { AccessControlCluster, TypeFromSchema } from "@project-chip/matter.js-types";
 import { MatterDevice } from "../../MatterDevice.js";
 import { AccessControl } from "../../behavior/AccessControl.js";
 import { ActionContext } from "../../behavior/context/ActionContext.js";
@@ -13,7 +14,6 @@ import { NodeActivity } from "../../behavior/context/NodeActivity.js";
 import { OnlineContext } from "../../behavior/context/server/OnlineContext.js";
 import { AccessControlServer } from "../../behavior/definitions/access-control/AccessControlServer.js";
 import { BasicInformationServer } from "../../behavior/definitions/basic-information/BasicInformationServer.js";
-import { AccessControlCluster } from "../../cluster/definitions/AccessControlCluster.js";
 import { AnyAttributeServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AnyEventServer } from "../../cluster/server/EventServer.js";
@@ -38,7 +38,6 @@ import {
     EventPath,
     InteractionServer,
 } from "../../protocol/interaction/InteractionServer.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { ServerNode } from "../ServerNode.js";
 
 const activityKey = Symbol("activity");

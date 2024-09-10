@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { OnOff } from "../../../cluster/definitions/OnOffCluster.js";
+import { OnOff } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { OnOffInterface } from "./OnOffInterface.js";
 

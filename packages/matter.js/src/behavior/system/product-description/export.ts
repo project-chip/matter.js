@@ -4,5 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./ProductDescription.js";
 export * from "./ProductDescriptionServer.js";

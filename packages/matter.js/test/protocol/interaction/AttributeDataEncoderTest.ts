@@ -4,17 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AttributeId } from "../../../src/datatype/AttributeId.js";
-import { ClusterId, TlvClusterId } from "../../../src/datatype/ClusterId.js";
-import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
+import {
+    AttributeId,
+    ClusterId,
+    EndpointNumber,
+    TlvArray,
+    TlvClusterId,
+    TlvString,
+    TlvUInt8,
+} from "@project-chip/matter.js-types";
 import {
     AttributeReportPayload,
     chunkAttributePayload,
     compressAttributeDataReportTags,
 } from "../../../src/protocol/interaction/AttributeDataEncoder.js";
-import { TlvArray } from "../../../src/tlv/TlvArray.js";
-import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
-import { TlvString } from "../../../src/tlv/TlvString.js";
 
 describe("AttributeDataEncoder", () => {
     describe("tag compression for attribute DataReport payloads", () => {

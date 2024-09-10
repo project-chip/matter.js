@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ClusterId, DeviceTypeId, EndpointNumber } from "@project-chip/matter.js-types";
 import { NodeActivity } from "../../../../src/behavior/context/NodeActivity.js";
 import { DescriptorBehavior } from "../../../../src/behavior/definitions/descriptor/DescriptorBehavior.js";
 import { DescriptorServer } from "../../../../src/behavior/definitions/descriptor/DescriptorServer.js";
 import { OnOffServer } from "../../../../src/behavior/definitions/on-off/OnOffServer.js";
-import { ClusterId } from "../../../../src/datatype/ClusterId.js";
-import { DeviceTypeId } from "../../../../src/datatype/DeviceTypeId.js";
-import { EndpointNumber } from "../../../../src/datatype/EndpointNumber.js";
 import { Endpoint } from "../../../../src/endpoint/Endpoint.js";
 import { ColorTemperatureLightDevice } from "../../../../src/endpoint/definitions/device/ColorTemperatureLightDevice.js";
 import { OnOffLightDevice } from "../../../../src/endpoint/definitions/device/OnOffLightDevice.js";

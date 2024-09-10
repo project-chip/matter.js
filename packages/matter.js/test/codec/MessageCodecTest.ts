@@ -5,8 +5,8 @@
  */
 
 import { Bytes } from "@project-chip/matter.js-general";
+import { NodeId } from "@project-chip/matter.js-types";
 import { Message, MessageCodec } from "../../src/codec/MessageCodec.js";
-import { NodeId } from "../../src/datatype/NodeId.js";
 
 const ENCODED = Bytes.fromHex(
     "040000000a4ff2177ea0c8a7cb6a63520520d3640000153001204715a406c6b0496ad52039e347db8528cb69a1cb2fce6f2318552ae65e103aca250233dc240300280435052501881325022c011818",

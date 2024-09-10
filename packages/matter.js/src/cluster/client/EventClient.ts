@@ -4,13 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { EventId } from "../../datatype/EventId.js";
-import { EventNumber } from "../../datatype/EventNumber.js";
+import { ClusterId, EndpointNumber, Event, EventId, EventNumber } from "@project-chip/matter.js-types";
 import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
-import { Event } from "../Cluster.js";
 
 /**
  * Factory function to create an EVentClient for a given event.

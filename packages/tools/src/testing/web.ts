@@ -26,6 +26,7 @@ const libraries = [
     "@noble/curves/p256",
     "@project-chip/matter.js-general",
     "@project-chip/matter.js-model",
+    "@project-chip/matter.js-types",
 ];
 
 export async function testWeb(runner: TestRunner, manual: boolean) {

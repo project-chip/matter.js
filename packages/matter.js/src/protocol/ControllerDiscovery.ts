@@ -5,6 +5,7 @@
  */
 
 import { anyPromise, ClassExtends, Logger, MatterError, serverAddressToString } from "@project-chip/matter.js-general";
+import { NodeId } from "@project-chip/matter.js-types";
 import {
     AddressTypeFromDevice,
     CommissionableDevice,
@@ -13,7 +14,6 @@ import {
     OperationalDevice,
     Scanner,
 } from "../common/Scanner.js";
-import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { PairRetransmissionLimitReachedError } from "../MatterController.js";
 import { MdnsScanner } from "../mdns/MdnsScanner.js";

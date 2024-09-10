@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
+import { OperationalCredentials } from "@project-chip/matter.js-types";
 
 export namespace OperationalCredentialsInterface {
     export interface Base {

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { IlluminanceMeasurement } from "../../../cluster/definitions/IlluminanceMeasurementCluster.js";
+import { IlluminanceMeasurement } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

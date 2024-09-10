@@ -8,7 +8,7 @@
 
 import {
     RefrigeratorAndTemperatureControlledCabinetMode
-} from "../../../cluster/definitions/RefrigeratorAndTemperatureControlledCabinetModeCluster.js";
+} from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

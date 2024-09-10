@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { IcdManagement } from "../../../cluster/definitions/IcdManagementCluster.js";
+import { IcdManagement } from "@project-chip/matter.js-types";
 
 export namespace IcdManagementInterface {
     export interface Base {

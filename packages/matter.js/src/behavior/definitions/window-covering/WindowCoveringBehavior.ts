@@ -6,10 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { WindowCovering } from "../../../cluster/definitions/WindowCoveringCluster.js";
+import { WindowCovering } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { WindowCoveringInterface } from "./WindowCoveringInterface.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * WindowCoveringBehavior is the base class for objects that support interaction with {@link WindowCovering.Cluster}.

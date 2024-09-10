@@ -6,18 +6,15 @@
 
 import { Diagnostic, ImplementationError, InternalError, MaybePromise } from "@project-chip/matter.js-general";
 import { AccessLevel } from "@project-chip/matter.js-model";
+import { FabricIndex, NodeId, StatusResponseError, SubjectId } from "@project-chip/matter.js-types";
 import { MatterDevice } from "../../../MatterDevice.js";
 import type { Message } from "../../../codec/MessageCodec.js";
-import { FabricIndex } from "../../../datatype/FabricIndex.js";
-import { NodeId } from "../../../datatype/NodeId.js";
-import { SubjectId } from "../../../datatype/SubjectId.js";
 import { Agent } from "../../../endpoint/Agent.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { EndpointInterface } from "../../../endpoint/EndpointInterface.js";
 import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
 import { EndpointType } from "../../../endpoint/type/EndpointType.js";
 import { MessageExchange } from "../../../protocol/MessageExchange.js";
-import { StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
 import { AccessControl } from "../../AccessControl.js";
 import { AccessControlServer } from "../../definitions/access-control/AccessControlServer.js";

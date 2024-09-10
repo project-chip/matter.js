@@ -16,7 +16,7 @@ import {
     Timer,
     UnexpectedDataError,
 } from "@project-chip/matter.js-general";
-import { NodeId } from "../../datatype/NodeId.js";
+import { NodeId } from "@project-chip/matter.js-types";
 import { MatterDevice } from "../../MatterDevice.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";

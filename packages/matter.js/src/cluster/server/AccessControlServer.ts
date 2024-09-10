@@ -5,19 +5,23 @@
  */
 
 import { InternalError, isDeepEqual, Logger, SyncStorage } from "@project-chip/matter.js-general";
-import { CaseAuthenticatedTag } from "../../datatype/CaseAuthenticatedTag.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { DeviceTypeId } from "../../datatype/DeviceTypeId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { GroupId } from "../../datatype/GroupId.js";
-import { NodeId } from "../../datatype/NodeId.js";
+import {
+    AccessControl,
+    AccessControlCluster,
+    CaseAuthenticatedTag,
+    ClusterId,
+    DeviceTypeId,
+    EndpointNumber,
+    GroupId,
+    NodeId,
+    StatusCode,
+    StatusResponseError,
+    TlvTaggedList,
+    TlvType,
+    TypeFromBitmapSchema,
+} from "@project-chip/matter.js-types";
 import { AclExtensionEntry } from "../../protocol/interaction/AccessControlManager.js";
-import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
-import { TypeFromBitmapSchema } from "../../schema/BitmapSchema.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
-import { TlvType } from "../../tlv/TlvCodec.js";
-import { TlvTaggedList } from "../../tlv/TlvObject.js";
-import { AccessControl, AccessControlCluster } from "../definitions/AccessControlCluster.js";
 import {
     genericFabricScopedAttributeGetter,
     genericFabricScopedAttributeGetterFromFabric,

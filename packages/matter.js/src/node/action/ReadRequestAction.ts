@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataVersion } from "../../datatype/DataVersion.js";
-import { EventNumber } from "../../datatype/EventNumber.js";
-import { NodeId } from "../../datatype/NodeId.js";
+import { DataVersion, EventNumber, NodeId } from "@project-chip/matter.js-types";
 import { AttributePath } from "../paths/AttributePath.js";
 import { EventPath } from "../paths/EventPath.js";
 

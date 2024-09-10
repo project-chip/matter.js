@@ -15,11 +15,14 @@ import { describeList } from "./string.js";
 const DIR_MAPPING = {
     "#cache": Package.workspace.resolve("codegen/.cache"),
     "#intermediate": Package.workspace.resolve("models/src"),
-    "#": Package.workspace.resolve("packages/matter.js/src"),
+    "#types": Package.workspace.resolve("packages/types/src"),
+    "#clusters": Package.workspace.resolve("packages/types/src/cluster/definitions"),
+    "#globals": Package.workspace.resolve("packages/types/src/globals"),
     "#model": Package.workspace.resolve("packages/model/src"),
     "#elements": Package.workspace.resolve("packages/model/src/standard/elements"),
-    "#clusters": Package.workspace.resolve("packages/matter.js/src/cluster/definitions"),
-    "#globals": Package.workspace.resolve("packages/matter.js/src/cluster/globals"),
+
+    // TODO - point these three at "node" package
+    "#node": Package.workspace.resolve("packages/matter.js/src/"),
     "#endpoints": Package.workspace.resolve("packages/matter.js/src/endpoint/definitions"),
     "#behaviors": Package.workspace.resolve("packages/matter.js/src/behavior/definitions"),
 } as { [dirname: string]: string | undefined };

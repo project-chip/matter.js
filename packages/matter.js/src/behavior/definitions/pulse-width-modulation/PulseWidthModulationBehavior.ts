@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { PulseWidthModulation } from "../../../cluster/definitions/PulseWidthModulationCluster.js";
+import { PulseWidthModulation } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { LevelControlInterface } from "../level-control/LevelControlInterface.js";
 

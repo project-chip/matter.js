@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { TimeFormatLocalization } from "../../../cluster/definitions/TimeFormatLocalizationCluster.js";
+import { TimeFormatLocalization } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

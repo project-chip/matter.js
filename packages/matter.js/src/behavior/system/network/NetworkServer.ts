@@ -5,10 +5,9 @@
  */
 
 import { ImplementationError, Logger } from "@project-chip/matter.js-general";
+import { DiscoveryCapabilitiesBitmap, TypeFromPartialBitSchema } from "@project-chip/matter.js-types";
 import { Ble } from "../../../ble/Ble.js";
 import { SubscriptionOptions } from "../../../protocol/interaction/SubscriptionOptions.js";
-import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
-import { DiscoveryCapabilitiesBitmap } from "../../../schema/PairingCodeSchema.js";
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
 import { ServerNetworkRuntime } from "./ServerNetworkRuntime.js";

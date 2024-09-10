@@ -6,14 +6,12 @@
 
 import { Logger } from "@project-chip/matter.js-general";
 import { AccessLevel, FabricIndex } from "@project-chip/matter.js-model";
+import { CommandId, StatusCode, TlvSchema, TlvStream } from "@project-chip/matter.js-types";
 import { MatterDevice } from "../../MatterDevice.js";
 import { Message } from "../../codec/MessageCodec.js";
-import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { StatusCode } from "../../protocol/interaction/StatusCode.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
-import { TlvSchema, TlvStream } from "../../tlv/TlvSchema.js";
 
 const logger = Logger.get("CommandServer");
 

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Channel } from "../../../cluster/definitions/ChannelCluster.js";
+import { Channel } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ChannelInterface } from "./ChannelInterface.js";
 

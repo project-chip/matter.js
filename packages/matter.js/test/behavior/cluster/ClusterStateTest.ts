@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ClusterType } from "@project-chip/matter.js-types";
 import { Behavior } from "../../../src/behavior/Behavior.js";
 import { ClusterState } from "../../../src/behavior/cluster/ClusterState.js";
-import { ClusterType } from "../../../src/cluster/ClusterType.js";
 import { MyCluster } from "./cluster-behavior-test-util.js";
 
 describe("ClusterState", () => {

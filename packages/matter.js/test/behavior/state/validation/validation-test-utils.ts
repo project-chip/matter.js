@@ -14,9 +14,9 @@ import {
     FieldElement,
     FieldModel,
 } from "@project-chip/matter.js-model";
+import { StatusResponseError } from "@project-chip/matter.js-types";
 import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
 import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
-import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
 
 export function Fields(
     ...definition: {

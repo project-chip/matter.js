@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { MediaPlayback } from "../../../cluster/definitions/MediaPlaybackCluster.js";
+import { MediaPlayback } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { MediaPlaybackInterface } from "./MediaPlaybackInterface.js";
 

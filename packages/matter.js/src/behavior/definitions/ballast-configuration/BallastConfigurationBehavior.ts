@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { BallastConfiguration } from "../../../cluster/definitions/BallastConfigurationCluster.js";
+import { BallastConfiguration } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

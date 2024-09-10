@@ -14,8 +14,8 @@ import {
     NotImplementedError,
     Time,
 } from "@project-chip/matter.js-general";
+import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "@project-chip/matter.js-types";
 import { WrapCommandHandler } from "../../device/Device.js";
-import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "../definitions/GeneralDiagnosticsCluster.js";
 import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";

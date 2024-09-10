@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { EthernetNetworkDiagnostics } from "../../../cluster/definitions/EthernetNetworkDiagnosticsCluster.js";
+import { EthernetNetworkDiagnostics } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { EthernetNetworkDiagnosticsInterface } from "./EthernetNetworkDiagnosticsInterface.js";
 

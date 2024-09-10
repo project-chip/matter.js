@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { AlarmBase } from "../../../cluster/definitions/AlarmBaseCluster.js";
+import { AlarmBase } from "@project-chip/matter.js-types";
 
 export namespace RefrigeratorAlarmInterface {
     export interface Reset {

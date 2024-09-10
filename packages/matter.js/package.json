@@ -138,16 +138,6 @@
                 "default": "./dist/cjs/protocol/interaction/export.js"
             }
         },
-        "./model": {
-            "import": {
-                "types": "./dist/esm/model/export.d.ts",
-                "default": "./dist/esm/model/export.js"
-            },
-            "require": {
-                "types": "./dist/cjs/model/export.d.ts",
-                "default": "./dist/cjs/model/export.js"
-            }
-        },
         "./securechannel": {
             "import": {
                 "types": "./dist/esm/protocol/securechannel/export.d.ts",
@@ -156,6 +146,126 @@
             "require": {
                 "types": "./dist/cjs/protocol/securechannel/export.d.ts",
                 "default": "./dist/cjs/protocol/securechannel/export.js"
+            }
+        },
+        "./util": {
+            "import": {
+                "types": "./dist/esm/compat/util.d.ts",
+                "default": "./dist/esm/compat/util.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/util.d.ts",
+                "default": "./dist/cjs/compat/util.js"
+            }
+        },
+        "./log": {
+            "import": {
+                "types": "./dist/esm/compat/log.d.ts",
+                "default": "./dist/esm/compat/log.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/log.d.ts",
+                "default": "./dist/cjs/compat/log.js"
+            }
+        },
+        "./crypto": {
+            "import": {
+                "types": "./dist/esm/compat/crypto.d.ts",
+                "default": "./dist/esm/compat/crypto.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/crypto.d.ts",
+                "default": "./dist/cjs/compat/crypto.js"
+            }
+        },
+        "./model": {
+            "import": {
+                "types": "./dist/esm/compat/model.d.ts",
+                "default": "./dist/esm/compat/model.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/crypto.d.ts",
+                "default": "./dist/cjs/compat/crypto.js"
+            }
+        },
+        "./time": {
+            "import": {
+                "types": "./dist/esm/compat/time.d.ts",
+                "default": "./dist/esm/compat/time.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/time.d.ts",
+                "default": "./dist/cjs/compat/time.js"
+            }
+        },
+        "./environment": {
+            "import": {
+                "types": "./dist/esm/compat/environment.d.ts",
+                "default": "./dist/esm/compat/environment.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/environment.d.ts",
+                "default": "./dist/cjs/compat/environment.js"
+            }
+        },
+        "./math": {
+            "import": {
+                "types": "./dist/esm/compat/math.d.ts",
+                "default": "./dist/esm/compat/math.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/math.d.ts",
+                "default": "./dist/cjs/compat/math.js"
+            }
+        },
+        "./net": {
+            "import": {
+                "types": "./dist/esm/compat/net.d.ts",
+                "default": "./dist/esm/compat/net.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/net.d.ts",
+                "default": "./dist/cjs/compat/net.js"
+            }
+        },
+        "./storage": {
+            "import": {
+                "types": "./dist/esm/compat/storage.d.ts",
+                "default": "./dist/esm/compat/storage.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/storage.d.ts",
+                "default": "./dist/cjs/compat/storage.js"
+            }
+        },
+        "./datatype": {
+            "import": {
+                "types": "./dist/esm/compat/datatype.d.ts",
+                "default": "./dist/esm/compat/datatype.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/datatype.d.ts",
+                "default": "./dist/cjs/compat/datatype.js"
+            }
+        },
+        "./tlv": {
+            "import": {
+                "types": "./dist/esm/compat/tlv.d.ts",
+                "default": "./dist/esm/compat/tlv.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/tlv.d.ts",
+                "default": "./dist/cjs/compat/tlv.js"
+            }
+        },
+        "./schema": {
+            "import": {
+                "types": "./dist/esm/compat/schema.d.ts",
+                "default": "./dist/esm/compat/schema.js"
+            },
+            "require": {
+                "types": "./dist/cjs/compat/schema.d.ts",
+                "default": "./dist/cjs/compat/schema.js"
             }
         },
         "./*": {

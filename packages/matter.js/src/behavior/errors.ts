@@ -5,7 +5,7 @@
  */
 
 import { SchemaErrorPath, ValueModel } from "@project-chip/matter.js-model";
-import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
+import { StatusCode, StatusResponseError } from "@project-chip/matter.js-types";
 import { Schema } from "./supervision/Schema.js";
 
 export { SchemaImplementationError } from "@project-chip/matter.js-model";

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { IcdManagement } from "../../../cluster/definitions/IcdManagementCluster.js";
+import { IcdManagement } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { IcdManagementInterface } from "./IcdManagementInterface.js";
 

@@ -5,6 +5,7 @@
  */
 
 import { MaybePromise } from "@project-chip/matter.js-general";
+import { StatusCode, StatusResponseError } from "@project-chip/matter.js-types";
 import {
     FinalizationError,
     SynchronousTransactionConflictError,
@@ -14,7 +15,6 @@ import { Participant } from "../../../../src/behavior/state/transaction/Particip
 import { Resource } from "../../../../src/behavior/state/transaction/Resource.js";
 import { Status } from "../../../../src/behavior/state/transaction/Status.js";
 import { Transaction } from "../../../../src/behavior/state/transaction/Transaction.js";
-import { StatusCode, StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
 
 class TestResource implements Resource {
     lockedBy?: Transaction;

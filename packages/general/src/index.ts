@@ -13,4 +13,5 @@ export * from "./net/index.js";
 export * from "./storage/index.js";
 export * from "./time/index.js";
 export * from "./util/index.js";
+export * from "./math/index.js";
 import "./polyfills/index.js";

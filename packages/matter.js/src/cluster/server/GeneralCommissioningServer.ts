@@ -5,10 +5,13 @@
  */
 
 import { ImplementationError, Logger, MatterFlowError } from "@project-chip/matter.js-general";
+import {
+    AdministratorCommissioning,
+    BasicInformationCluster,
+    GeneralCommissioning,
+    GeneralCommissioningCluster,
+} from "@project-chip/matter.js-types";
 import { assertSecureSession } from "../../session/SecureSession.js";
-import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
-import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
-import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { CommissioningServerFailsafeContext } from "./CommissioningServerFailsafeContext.js";
 

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Semtag } from "../../../src/cluster/globals/Semtag.js";
+import { Semtag } from "@project-chip/matter.js-types";
 import { RefrigeratorTag } from "../../../src/endpoint/definitions/tags/RefrigeratorTag.js";
 import { SemanticNamespace } from "../../../src/endpoint/type/SemanticNamespace.js";
 

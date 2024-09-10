@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ModeSelect } from "../../../cluster/definitions/ModeSelectCluster.js";
+import { ModeSelect } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { ModeSelectInterface } from "./ModeSelectInterface.js";
 

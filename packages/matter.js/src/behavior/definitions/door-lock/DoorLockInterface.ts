@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { DoorLock } from "../../../cluster/definitions/DoorLockCluster.js";
+import { DoorLock } from "@project-chip/matter.js-types";
 
 export namespace DoorLockInterface {
     export interface Base {

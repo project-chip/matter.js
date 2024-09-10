@@ -12,26 +12,28 @@ import {
     Timer,
     UnexpectedDataError,
 } from "@project-chip/matter.js-general";
-import { MatterController } from "../../MatterController.js";
 import {
     Attribute,
+    AttributeId,
     AttributeJsType,
+    ClusterId,
     Command,
+    EndpointNumber,
     Event,
+    EventId,
+    EventNumber,
+    NodeId,
     RequestType,
     ResponseType,
+    StatusCode,
+    StatusResponseError,
     TlvNoResponse,
-} from "../../cluster/Cluster.js";
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
 import { resolveAttributeName, resolveCommandName, resolveEventName } from "../../cluster/ClusterHelper.js";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { EventId } from "../../datatype/EventId.js";
-import { EventNumber } from "../../datatype/EventNumber.js";
-import { NodeId } from "../../datatype/NodeId.js";
+import { MatterController } from "../../MatterController.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
 import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
 import { DecodedEventData, DecodedEventReportValue, normalizeAndDecodeReadEventReport } from "./EventDataDecoder.js";
@@ -48,7 +50,6 @@ import {
     attributePathToId,
     clusterPathToId,
 } from "./InteractionServer.js";
-import { StatusCode, StatusResponseError } from "./StatusCode.js";
 
 const logger = Logger.get("InteractionClient");
 

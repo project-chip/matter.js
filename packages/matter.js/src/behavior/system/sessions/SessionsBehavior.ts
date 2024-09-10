@@ -5,7 +5,7 @@
  */
 
 import { EventEmitter, Observable } from "@project-chip/matter.js-general";
-import { NodeId } from "../../../datatype/NodeId.js";
+import { NodeId } from "@project-chip/matter.js-types";
 import { ExposedFabricInformation } from "../../../fabric/Fabric.js";
 import type { ServerNode } from "../../../node/ServerNode.js";
 import { SecureSession } from "../../../session/SecureSession.js";

@@ -5,7 +5,7 @@
  */
 
 import { DataReader, DataWriter, Endian } from "@project-chip/matter.js-general";
-import { Schema } from "../../schema/Schema.js";
+import { Schema } from "@project-chip/matter.js-types";
 import { GeneralStatusCode, ProtocolStatusCode } from "./SecureChannelMessages.js";
 
 export type StatusMessage = {

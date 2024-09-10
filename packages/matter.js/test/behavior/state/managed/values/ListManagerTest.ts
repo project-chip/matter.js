@@ -5,9 +5,8 @@
  */
 
 import { MaybePromise } from "@project-chip/matter.js-general";
+import { FabricIndex, NodeId } from "@project-chip/matter.js-types";
 import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
-import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
-import { NodeId } from "../../../../../src/datatype/NodeId.js";
 import { TestStruct, aclEndpoint, listOf, structOf } from "./value-utils.js";
 
 export type ValueList = { value: number }[];

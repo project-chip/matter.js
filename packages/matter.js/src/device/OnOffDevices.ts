@@ -4,16 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { extendPublicHandlerMethods, MakeMandatory } from "@project-chip/matter.js-general";
-import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
-import { Groups } from "../cluster/definitions/GroupsCluster.js";
-import { Identify } from "../cluster/definitions/IdentifyCluster.js";
-import { OnOff } from "../cluster/definitions/OnOffCluster.js";
+import {
+    Attributes,
+    BitSchema,
+    Cluster,
+    ClusterId,
+    Commands,
+    Events,
+    Groups,
+    Identify,
+    OnOff,
+    TypeFromPartialBitSchema,
+} from "@project-chip/matter.js-types";
 import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServerTypes.js";
 import { createDefaultGroupsClusterServer } from "../cluster/server/GroupsServer.js";
 import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";
 import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.js";
-import { ClusterId } from "../datatype/ClusterId.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Device } from "./Device.js";
 import { DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.js";
 import { EndpointOptions } from "./Endpoint.js";

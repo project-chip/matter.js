@@ -6,9 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { EnergyPreference } from "../../../cluster/definitions/EnergyPreferenceCluster.js";
+import { EnergyPreference } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * EnergyPreferenceBehavior is the base class for objects that support interaction with {@link

@@ -6,9 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { RadonConcentrationMeasurement } from "../../../cluster/definitions/RadonConcentrationMeasurementCluster.js";
+import { RadonConcentrationMeasurement } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * RadonConcentrationMeasurementBehavior is the base class for objects that support interaction with {@link

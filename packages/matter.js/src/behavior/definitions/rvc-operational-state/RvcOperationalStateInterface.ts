@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { OperationalState as OperationalStateNamespace } from "../../../cluster/definitions/OperationalStateCluster.js";
+import { OperationalState as OperationalStateNamespace } from "@project-chip/matter.js-types";
 
 export namespace RvcOperationalStateInterface {
     export interface Base {

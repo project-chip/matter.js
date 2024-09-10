@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { LowPower } from "../../../cluster/definitions/LowPowerCluster.js";
+import { LowPower } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { LowPowerInterface } from "./LowPowerInterface.js";
 

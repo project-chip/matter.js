@@ -8,7 +8,7 @@
 
 import {
     ThermostatUserInterfaceConfiguration
-} from "../../../cluster/definitions/ThermostatUserInterfaceConfigurationCluster.js";
+} from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

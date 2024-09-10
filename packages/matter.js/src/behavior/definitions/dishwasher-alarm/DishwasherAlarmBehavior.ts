@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { DishwasherAlarm } from "../../../cluster/definitions/DishwasherAlarmCluster.js";
+import { DishwasherAlarm } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

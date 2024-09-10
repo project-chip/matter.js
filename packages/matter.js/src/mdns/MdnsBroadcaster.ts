@@ -21,6 +21,7 @@ import {
     isIPv4,
     isIPv6,
 } from "@project-chip/matter.js-general";
+import { FabricIndex, NodeId, TypeFromPartialBitSchema } from "@project-chip/matter.js-types";
 import {
     CommissionerInstanceData,
     CommissioningModeInstanceData,
@@ -28,10 +29,7 @@ import {
     PairingHintBitmap,
     PairingHintBitmapSchema,
 } from "../common/InstanceBroadcaster.js";
-import { FabricIndex } from "../datatype/FabricIndex.js";
-import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import {
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,

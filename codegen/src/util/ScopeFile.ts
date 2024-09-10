@@ -114,13 +114,15 @@ export class ScopeFile extends TsFile {
             );
         }
 
-        const name = camelize(model.name, true);
+        let name = camelize(model.name, true);
 
         if (model instanceof ClusterModel) {
             return `#clusters/${name}Cluster.js`;
         }
         if (model instanceof DatatypeModel) {
-            return `#globals/${name.replace(/(?:Struct|Enum|Bitmap)$/, "")}.js`;
+            name = name.replace(/(?:Struct|Enum|Bitmap)$/, "");
+
+            return `#globals/${name}.js`;
         }
 
         throw new InternalError(

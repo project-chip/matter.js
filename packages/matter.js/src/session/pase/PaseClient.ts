@@ -13,9 +13,9 @@ import {
     Spake2p,
     UnexpectedDataError,
 } from "@project-chip/matter.js-general";
+import { NodeId } from "@project-chip/matter.js-types";
 import { MatterController } from "../../MatterController.js";
 import { CommissioningOptions } from "../../behavior/system/commissioning/CommissioningOptions.js";
-import { NodeId } from "../../datatype/NodeId.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { DEFAULT_PASSCODE_ID, PaseClientMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 

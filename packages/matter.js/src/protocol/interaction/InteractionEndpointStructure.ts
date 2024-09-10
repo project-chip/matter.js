@@ -14,20 +14,24 @@ import {
     GeneratedCommandList,
     MatterModel,
 } from "@project-chip/matter.js-model";
+import {
+    AttributeId,
+    ClusterId,
+    CommandId,
+    EndpointNumber,
+    EventId,
+    Mei,
+    NodeId,
+    StatusCode,
+    StatusResponseError,
+    TypeFromPartialBitSchema,
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
 import { AnyAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AnyEventServer } from "../../cluster/server/EventServer.js";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { CommandId } from "../../datatype/CommandId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { EventId } from "../../datatype/EventId.js";
-import { Mei } from "../../datatype/ManufacturerExtensibleIdentifier.js";
-import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath, WildcardPathFlagsBitmap } from "./InteractionProtocol.js";
 import {
     AttributePath,
@@ -41,7 +45,6 @@ import {
     eventPathToId,
     genericElementPathToId,
 } from "./InteractionServer.js";
-import { StatusCode, StatusResponseError } from "./StatusCode.js";
 
 /**
  * List of global attributes to skip when the WildcardSkipGlobalAttributes bit is set in an Wildcard Path Flags

@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { GeneralDiagnostics } from "../../../cluster/definitions/GeneralDiagnosticsCluster.js";
+import { GeneralDiagnostics } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { GeneralDiagnosticsInterface } from "./GeneralDiagnosticsInterface.js";
 

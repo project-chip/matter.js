@@ -16,10 +16,9 @@ import {
     StorageBackendMemory,
     StorageService,
 } from "@project-chip/matter.js-general";
+import { FabricIndex, NodeId } from "@project-chip/matter.js-types";
 import { MatterDevice } from "../../src/MatterDevice.js";
 import { OnlineContext } from "../../src/behavior/context/server/OnlineContext.js";
-import { FabricIndex } from "../../src/datatype/FabricIndex.js";
-import { NodeId } from "../../src/datatype/NodeId.js";
 import { Agent } from "../../src/endpoint/Agent.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";

@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvUInt32 } from "../../../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../../../tlv/TlvObject.js";
-import { TlvByteString } from "../../../tlv/TlvString.js";
+import { TlvByteString, TlvField, TlvObject, TlvOptionalField, TlvUInt32 } from "@project-chip/matter.js-types";
 
 /** @see {@link MatterSpecification.v11.Core} § 11.17.5.4 */
 export const TlvAttestation = TlvObject({

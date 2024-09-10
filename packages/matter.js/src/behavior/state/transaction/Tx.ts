@@ -13,7 +13,7 @@ import {
     Observable,
     ReadOnlyError,
 } from "@project-chip/matter.js-general";
-import { StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
+import { StatusResponseError } from "@project-chip/matter.js-types";
 import { FinalizationError, TransactionDestroyedError, TransactionFlowError } from "./Errors.js";
 import type { Participant } from "./Participant.js";
 import type { Resource } from "./Resource.js";

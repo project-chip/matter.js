@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { OperationalState } from "../../../cluster/definitions/OperationalStateCluster.js";
+import { OperationalState } from "@project-chip/matter.js-types";
 
 export namespace OperationalStateInterface {
     export interface Base {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnitLocalization } from "../../../cluster/definitions/UnitLocalizationCluster.js";
+import { UnitLocalization } from "@project-chip/matter.js-types";
 import { UnitLocalizationBehavior } from "./UnitLocalizationBehavior.js";
 
 /**

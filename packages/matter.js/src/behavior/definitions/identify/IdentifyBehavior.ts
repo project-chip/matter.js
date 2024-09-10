@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Identify } from "../../../cluster/definitions/IdentifyCluster.js";
+import { Identify } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { IdentifyInterface } from "./IdentifyInterface.js";
 

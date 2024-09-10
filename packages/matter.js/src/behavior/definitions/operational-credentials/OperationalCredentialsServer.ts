@@ -6,23 +6,28 @@
 
 import { CryptoVerifyError, Logger, MatterFlowError, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { AccessLevel } from "@project-chip/matter.js-model";
+import {
+    AccessControl,
+    Command,
+    FabricIndex,
+    OperationalCredentials,
+    StatusCode,
+    StatusResponseError,
+    TlvBoolean,
+    TlvByteString,
+    TlvField,
+    TlvObject,
+    TlvOptionalField,
+    ValidationError,
+} from "@project-chip/matter.js-types";
 import { CertificateError } from "../../../certificate/CertificateManager.js";
-import { Command } from "../../../cluster/Cluster.js";
-import { AccessControl } from "../../../cluster/definitions/AccessControlCluster.js";
-import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
 import { MatterFabricInvalidAdminSubjectError } from "../../../common/FailsafeContext.js";
 import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
-import { ValidationError } from "../../../common/ValidationError.js";
-import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { Fabric, PublicKeyError } from "../../../fabric/Fabric.js";
 import { FabricAction, FabricManager, FabricTableFullError } from "../../../fabric/FabricManager.js";
 import type { Node } from "../../../node/Node.js";
-import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
-import { TlvBoolean } from "../../../tlv/TlvBoolean.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../../../tlv/TlvObject.js";
-import { TlvByteString } from "../../../tlv/TlvString.js";
 import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { CommissioningBehavior } from "../../system/commissioning/CommissioningBehavior.js";

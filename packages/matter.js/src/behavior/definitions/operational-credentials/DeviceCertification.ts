@@ -5,11 +5,11 @@
  */
 
 import { Construction, Crypto, ImplementationError, InternalError, PrivateKey } from "@project-chip/matter.js-general";
+import { ProductDescription } from "@project-chip/matter.js-types";
 import { MatterDevice } from "../../../MatterDevice.js";
 import { AttestationCertificateManager } from "../../../certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "../../../certificate/CertificationDeclarationManager.js";
 import { SecureSession } from "../../../session/SecureSession.js";
-import { ProductDescription } from "../../system/product-description/ProductDescription.js";
 
 /**
  * Device certification used by the OperationalCredentials cluster.

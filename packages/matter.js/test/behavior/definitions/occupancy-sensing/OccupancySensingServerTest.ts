@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { OccupancySensing } from "@project-chip/matter.js-types";
 import { OccupancySensingServer } from "../../../../src/behavior/definitions/occupancy-sensing/OccupancySensingServer.js";
-import { OccupancySensing } from "../../../../src/cluster/definitions/OccupancySensingCluster.js";
 import { MockEndpoint } from "../../../endpoint/mock-endpoint.js";
 
 describe("OccupancySensingServer", () => {

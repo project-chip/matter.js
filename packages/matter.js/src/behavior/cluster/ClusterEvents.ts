@@ -5,8 +5,7 @@
  */
 
 import type { AsyncObservable, Observable } from "@project-chip/matter.js-general";
-import type { ClusterType } from "../../cluster/ClusterType.js";
-import type { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import type { ClusterType, TypeFromSchema } from "@project-chip/matter.js-types";
 import type { Behavior } from "../Behavior.js";
 import type { ActionContext } from "../context/ActionContext.js";
 import type { ClusterOf } from "./ClusterBehaviorUtil.js";

@@ -4,31 +4,34 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { EventPriority } from "../../cluster/Cluster.js";
-import { TlvAttributeId } from "../../datatype/AttributeId.js";
-import { TlvClusterId } from "../../datatype/ClusterId.js";
-import { TlvCommandId } from "../../datatype/CommandId.js";
-import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
-import { TlvEventId } from "../../datatype/EventId.js";
-import { TlvEventNumber } from "../../datatype/EventNumber.js";
-import { TlvNodeId } from "../../datatype/NodeId.js";
-import { BitFlag } from "../../schema/BitmapSchema.js";
-import { TlvAny } from "../../tlv/TlvAny.js";
-import { TlvArray } from "../../tlv/TlvArray.js";
-import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { TlvNullable } from "../../tlv/TlvNullable.js";
 import {
+    BitFlag,
+    EventPriority,
+    StatusCode,
+    TlvAny,
+    TlvArray,
+    TlvAttributeId,
     TlvBitmap,
+    TlvBoolean,
+    TlvClusterId,
+    TlvCommandId,
+    TlvEndpointNumber,
     TlvEnum,
+    TlvEventId,
+    TlvEventNumber,
+    TlvField,
+    TlvNodeId,
+    TlvNullable,
+    TlvObject,
+    TlvOptionalField,
     TlvPosixMs,
     TlvSysTimeMS,
+    TlvTaggedList,
     TlvUInt16,
     TlvUInt32,
     TlvUInt64,
     TlvUInt8,
-} from "../../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField, TlvTaggedList } from "../../tlv/TlvObject.js";
-import { StatusCode } from "./StatusCode.js";
+} from "@project-chip/matter.js-types";
 
 // Data structures
 

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { WindowCovering } from "@project-chip/matter.js-types";
 import { WindowCoveringServer } from "../../../../src/behavior/definitions/window-covering/WindowCoveringServer.js";
-import { WindowCovering } from "../../../../src/cluster/definitions/WindowCoveringCluster.js";
 import { MockEndpoint } from "../../../endpoint/mock-endpoint.js";
 
 class TestWindowCoveringServer extends WindowCoveringServer.with(

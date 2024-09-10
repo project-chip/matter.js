@@ -13,6 +13,16 @@ import {
     Observable,
 } from "@project-chip/matter.js-general";
 import { AttributeElement, ClusterModel } from "@project-chip/matter.js-model";
+import {
+    Attribute,
+    ClusterId,
+    ClusterType,
+    ElementModifier,
+    TlvBoolean,
+    TlvInt32,
+    TlvNullable,
+    TlvString,
+} from "@project-chip/matter.js-types";
 import { Behavior } from "../../../src/behavior/Behavior.js";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
@@ -21,14 +31,6 @@ import { LevelControlServer } from "../../../src/behavior/definitions/level-cont
 import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
 import { OnOffServer } from "../../../src/behavior/definitions/on-off/OnOffServer.js";
 import { StateType } from "../../../src/behavior/state/StateType.js";
-import { Attribute } from "../../../src/cluster/Cluster.js";
-import { ClusterType } from "../../../src/cluster/ClusterType.js";
-import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";
-import { ClusterId } from "../../../src/datatype/ClusterId.js";
-import { TlvBoolean } from "../../../src/tlv/TlvBoolean.js";
-import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
-import { TlvInt32 } from "../../../src/tlv/TlvNumber.js";
-import { TlvString } from "../../../src/tlv/TlvString.js";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
 

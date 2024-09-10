@@ -15,8 +15,7 @@ import {
     NetworkSimulator,
     UdpChannel,
 } from "@project-chip/matter.js-general";
-import { NodeId } from "../../src/datatype/NodeId.js";
-import { VendorId } from "../../src/datatype/VendorId.js";
+import { NodeId, VendorId } from "@project-chip/matter.js-types";
 import { Fabric } from "../../src/fabric/Fabric.js";
 import { MdnsBroadcaster } from "../../src/mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "../../src/mdns/MdnsScanner.js";

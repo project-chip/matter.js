@@ -14,7 +14,7 @@ import {
     MaybePromise,
 } from "@project-chip/matter.js-general";
 import { CommandModel, ElementTag } from "@project-chip/matter.js-model";
-import { Attribute, Command, Event, TlvNoResponse } from "../../cluster/Cluster.js";
+import { Attribute, Command, Event, TlvNoResponse } from "@project-chip/matter.js-types";
 import {
     AttributeServer,
     createAttributeServer as ConstructAttributeServer,

@@ -5,11 +5,14 @@
  */
 
 import { cropValueRange, Logger, MaybePromise, Time, Timer } from "@project-chip/matter.js-general";
-import { LevelControl } from "../../../cluster/definitions/LevelControlCluster.js";
-import { GeneralDiagnostics } from "../../../cluster/definitions/index.js";
+import {
+    GeneralDiagnostics,
+    LevelControl,
+    StatusCode,
+    StatusResponseError,
+    TypeFromPartialBitSchema,
+} from "@project-chip/matter.js-types";
 import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
-import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
-import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { ColorControlServer } from "../color-control/ColorControlServer.js";
 import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagnosticsBehavior.js";
 import { OnOffServer } from "../on-off/OnOffServer.js";

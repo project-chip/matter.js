@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { FanControl, ResourceMonitoring } from "@project-chip/matter.js-types";
 import { HepaFilterMonitoringServer } from "../../../../src/behavior/definitions/hepa-filter-monitoring/HepaFilterMonitoringServer.js";
-import { FanControl } from "../../../../src/cluster/definitions/FanControlCluster.js";
-import { ResourceMonitoring } from "../../../../src/cluster/definitions/ResourceMonitoringCluster.js";
 import { AirPurifierDevice } from "../../../../src/endpoint/definitions/device/AirPurifierDevice.js";
 import { MockServerNode } from "../../../node/mock-server-node.js";
 

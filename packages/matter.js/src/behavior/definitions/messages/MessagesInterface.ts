@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { Messages } from "../../../cluster/definitions/MessagesCluster.js";
+import { Messages } from "@project-chip/matter.js-types";
 
 export namespace MessagesInterface {
     export interface Base {

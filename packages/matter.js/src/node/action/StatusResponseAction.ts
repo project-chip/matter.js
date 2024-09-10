@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StatusCode } from "../../protocol/interaction/StatusCode.js";
+import { StatusCode } from "@project-chip/matter.js-types";
 
 /**
  * Reports status for actions with no other response and errors for actions

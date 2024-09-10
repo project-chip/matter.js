@@ -6,7 +6,7 @@
 
 import { isObject, serialize } from "@project-chip/matter.js-general";
 import { Access, DataModelPath, ValueModel } from "@project-chip/matter.js-model";
-import { StatusCode } from "../../../../protocol/interaction/StatusCode.js";
+import { StatusCode } from "@project-chip/matter.js-types";
 import { AccessControl } from "../../../AccessControl.js";
 import { ExpiredReferenceError, ReadError, SchemaImplementationError, WriteError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";

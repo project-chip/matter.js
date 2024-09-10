@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { RefrigeratorAlarm } from "../../../cluster/definitions/RefrigeratorAlarmCluster.js";
+import { RefrigeratorAlarm } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { RefrigeratorAlarmInterface } from "./RefrigeratorAlarmInterface.js";
 

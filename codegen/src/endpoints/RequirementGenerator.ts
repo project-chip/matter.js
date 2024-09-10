@@ -125,7 +125,7 @@ export class RequirementGenerator {
 
     #generateOne(detail: ClusterDetail, target: Block) {
         let name;
-        const prefix = `#/behavior/definitions/${decamelize(detail.definition.name)}/${detail.definition.name}`;
+        const prefix = `#behaviors/${decamelize(detail.definition.name)}/${detail.definition.name}`;
         if (this.type === "server") {
             name = `${detail.definition.name}Server`;
             this.file.addImport(`${prefix}Server.js`, `${name} as Base${name}`);

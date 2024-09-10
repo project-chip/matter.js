@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { Identify } from "../../../cluster/definitions/IdentifyCluster.js";
+import { Identify } from "@project-chip/matter.js-types";
 
 export namespace IdentifyInterface {
     export interface Base {

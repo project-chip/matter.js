@@ -8,9 +8,9 @@
 
 import {
     FormaldehydeConcentrationMeasurement
-} from "../../../cluster/definitions/FormaldehydeConcentrationMeasurementCluster.js";
+} from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
-import { ClusterType } from "../../../cluster/ClusterType.js";
+import { ClusterType } from "@project-chip/matter.js-types";
 
 /**
  * FormaldehydeConcentrationMeasurementBehavior is the base class for objects that support interaction with {@link

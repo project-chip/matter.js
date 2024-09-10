@@ -28,24 +28,35 @@ import {
     X520,
     X962,
 } from "@project-chip/matter.js-general";
-import { CaseAuthenticatedTag, TlvCaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
-import { FabricId, TlvFabricId } from "../datatype/FabricId.js";
-import { NodeId, TlvNodeId } from "../datatype/NodeId.js";
-import { TlvVendorId, VendorId } from "../datatype/VendorId.js";
-import { BitFlag, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvBitmap, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
 import {
+    BitFlag,
+    BitmapSchema,
+    CaseAuthenticatedTag,
+    FabricId,
+    NodeId,
+    TlvArray,
+    TlvBitmap,
+    TlvBoolean,
+    TlvByteString,
+    TlvCaseAuthenticatedTag,
+    TlvFabricId,
     TlvField,
+    TlvNodeId,
     TlvObject,
     TlvObjectWithMaxSize,
     TlvOptionalField,
     TlvOptionalRepeatedField,
+    TlvString,
     TlvTaggedList,
-} from "../tlv/TlvObject.js";
-import { TypeFromSchema } from "../tlv/TlvSchema.js";
-import { TlvByteString, TlvString } from "../tlv/TlvString.js";
+    TlvUInt16,
+    TlvUInt32,
+    TlvUInt64,
+    TlvUInt8,
+    TlvVendorId,
+    TypeFromPartialBitSchema,
+    TypeFromSchema,
+    VendorId,
+} from "@project-chip/matter.js-types";
 
 const logger = Logger.get("CertificateManager");
 

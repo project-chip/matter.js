@@ -6,22 +6,28 @@
 
 import { InternalError, Logger, Time, Timer } from "@project-chip/matter.js-general";
 import { AccessLevel } from "@project-chip/matter.js-model";
+import {
+    AdministratorCommissioning,
+    Command,
+    FabricIndex,
+    StatusCode,
+    StatusResponseError,
+    TlvByteString,
+    TlvField,
+    TlvNoResponse,
+    TlvObject,
+    TlvUInt16,
+    TlvUInt32,
+    VendorId,
+} from "@project-chip/matter.js-types";
 import { MatterDevice } from "../../MatterDevice.js";
 import {
     MAXIMUM_COMMISSIONING_TIMEOUT_S,
     MINIMUM_COMMISSIONING_TIMEOUT_S,
     PAKE_PASSCODE_VERIFIER_LENGTH,
 } from "../../behavior/definitions/administrator-commissioning/AdministratorCommissioningConstants.js";
-import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { VendorId } from "../../datatype/VendorId.js";
-import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { Session } from "../../session/Session.js";
 import { PaseServer } from "../../session/pase/PaseServer.js";
-import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
-import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
-import { TlvByteString } from "../../tlv/TlvString.js";
-import { Command, TlvNoResponse } from "../Cluster.js";
-import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
 import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 

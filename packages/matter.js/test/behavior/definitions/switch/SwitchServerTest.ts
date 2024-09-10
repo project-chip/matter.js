@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Switch } from "@project-chip/matter.js-types";
 import { SwitchServer } from "../../../../src/behavior/definitions/switch/SwitchServer.js";
-import { Switch } from "../../../../src/cluster/definitions/SwitchCluster.js";
 import { MockEndpoint } from "../../../endpoint/mock-endpoint.js";
 
 function createEventCatcher(device: MockEndpoint<any>) {

@@ -10,23 +10,13 @@ export * from "./client/ClusterClient.js";
 export * from "./client/ClusterClientTypes.js";
 export * from "./client/EventClient.js";
 // Export all Client classes
-export * from "./Cluster.js";
+export * from "@project-chip/matter.js-types";
 export * from "./ClusterHelper.js";
-export * from "./ClusterRegistry.js";
-export * from "./ClusterType.js";
-export * from "./mutation/ClusterComposer.js";
-export * from "./mutation/ElementModifier.js";
-export * from "./mutation/MutableCluster.js";
-// Export all Cluster definitions
-export * from "./definitions/index.js";
-// Export all globals
-export * from "./globals/index.js";
 // Export all Server handler
 export * from "./server/AdministratorCommissioningServer.js";
 export * from "./server/AttributeServer.js";
 export * from "./server/ClusterServer.js";
 // Export all Server classes
-export { AccessLevel } from "@project-chip/matter.js-model";
 export * from "./server/ClusterServerTypes.js";
 export * from "./server/CommandServer.js";
 export * from "./server/CommissioningServerFailsafeContext.js";
@@ -38,3 +28,13 @@ export * from "./server/IdentifyServer.js";
 export * from "./server/LevelControlServer.js";
 export * from "./server/OnOffServer.js";
 export * from "./server/OperationalCredentialsServer.js";
+
+// Compatibility with old export locations
+export { AccessLevel } from "@project-chip/matter.js-model";
+export {
+    Cluster,
+    ClusterComposer,
+    ClusterRegistry,
+    ElementModifier,
+    MutableCluster,
+} from "@project-chip/matter.js-types/cluster";

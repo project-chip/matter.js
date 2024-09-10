@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { ContentLauncher } from "../../../cluster/definitions/ContentLauncherCluster.js";
+import { ContentLauncher } from "@project-chip/matter.js-types";
 
 export namespace ContentLauncherInterface {
     export interface UrlPlayback {

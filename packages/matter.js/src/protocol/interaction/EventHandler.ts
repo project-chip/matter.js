@@ -12,14 +12,16 @@ import {
     StorageContext,
     StorageOperationResult,
 } from "@project-chip/matter.js-general";
-import { EventPriority } from "../../cluster/Cluster.js";
+import {
+    ClusterId,
+    EndpointNumber,
+    EventId,
+    EventNumber,
+    EventPriority,
+    FabricIndex,
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
 import { resolveEventName } from "../../cluster/ClusterHelper.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { EventId } from "../../datatype/EventId.js";
-import { EventNumber } from "../../datatype/EventNumber.js";
-import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvEventFilter, TlvEventPath } from "./InteractionProtocol.js";
 
 const logger = Logger.get("EventHandler");

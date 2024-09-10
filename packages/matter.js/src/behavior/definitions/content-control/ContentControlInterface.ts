@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { ContentControl } from "../../../cluster/definitions/ContentControlCluster.js";
+import { ContentControl } from "@project-chip/matter.js-types";
 
 export namespace ContentControlInterface {
     export interface Base {

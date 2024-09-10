@@ -7,8 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "@project-chip/matter.js-general";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
-import { LevelControl } from "../../../cluster/definitions/LevelControlCluster.js";
+import { TypeFromSchema } from "@project-chip/matter.js-types";
+import { LevelControl } from "@project-chip/matter.js-types";
 
 /**
  * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.1

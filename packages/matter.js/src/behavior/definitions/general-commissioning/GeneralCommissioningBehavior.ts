@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { GeneralCommissioning } from "../../../cluster/definitions/GeneralCommissioningCluster.js";
+import { GeneralCommissioning } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { GeneralCommissioningInterface } from "./GeneralCommissioningInterface.js";
 

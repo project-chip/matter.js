@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { AccountLogin } from "../../../cluster/definitions/AccountLoginCluster.js";
+import { AccountLogin } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { AccountLoginInterface } from "./AccountLoginInterface.js";
 

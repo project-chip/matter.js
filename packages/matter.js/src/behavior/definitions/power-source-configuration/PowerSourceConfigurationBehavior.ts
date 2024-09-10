@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { PowerSourceConfiguration } from "../../../cluster/definitions/PowerSourceConfigurationCluster.js";
+import { PowerSourceConfiguration } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 
 /**

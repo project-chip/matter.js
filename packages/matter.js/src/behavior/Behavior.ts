@@ -12,7 +12,7 @@ import {
     NotImplementedError,
     Observable,
 } from "@project-chip/matter.js-general";
-import type { ClusterType } from "../cluster/ClusterType.js";
+import type { ClusterType } from "@project-chip/matter.js-types";
 import { Agent, INSTALL_BEHAVIOR } from "../endpoint/Agent.js";
 import { assertSecureSession } from "../session/SecureSession.js";
 import { Reactor } from "./Reactor.js";

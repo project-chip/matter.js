@@ -16,16 +16,13 @@ import {
     MockUdpChannel,
     PrivateKey,
 } from "@project-chip/matter.js-general";
+import { GeneralCommissioning, NodeId, PumpConfigurationAndControl, VendorId } from "@project-chip/matter.js-types";
 import { BasicInformationBehavior } from "../../src/behavior/definitions/basic-information/BasicInformationBehavior.js";
 import { DescriptorBehavior } from "../../src/behavior/definitions/descriptor/DescriptorBehavior.js";
 import { PumpConfigurationAndControlServer } from "../../src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlServer.js";
 import { CommissioningBehavior } from "../../src/behavior/system/commissioning/CommissioningBehavior.js";
 import { AttestationCertificateManager } from "../../src/certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "../../src/certificate/CertificationDeclarationManager.js";
-import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
-import { PumpConfigurationAndControl } from "../../src/cluster/definitions/PumpConfigurationAndControlCluster.js";
-import { NodeId } from "../../src/datatype/NodeId.js";
-import { VendorId } from "../../src/datatype/VendorId.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { LightSensorDevice } from "../../src/endpoint/definitions/device/LightSensorDevice.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";

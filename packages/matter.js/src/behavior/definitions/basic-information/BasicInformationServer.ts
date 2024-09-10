@@ -6,8 +6,7 @@
 
 import { Diagnostic, Logger, Observable } from "@project-chip/matter.js-general";
 import { Specification } from "@project-chip/matter.js-model";
-import { BasicInformation } from "../../../cluster/definitions/BasicInformationCluster.js";
-import { VendorId } from "../../../datatype/VendorId.js";
+import { BasicInformation, VendorId } from "@project-chip/matter.js-types";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { FabricManager } from "../../../fabric/FabricManager.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";

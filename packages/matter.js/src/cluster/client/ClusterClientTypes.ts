@@ -4,21 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { Merge } from "@project-chip/matter.js-general";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { CommandId } from "../../datatype/CommandId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { EventId } from "../../datatype/EventId.js";
-import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
-import { TlvEventFilter } from "../../protocol/interaction/InteractionProtocol.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {
     Attribute,
+    AttributeId,
     AttributeJsType,
     Attributes,
+    BitSchema,
+    ClusterId,
+    ClusterType,
     Command,
+    CommandId,
     Commands,
+    EndpointNumber,
+    EventId,
     EventType,
     Events,
     GlobalAttributeNames,
@@ -31,9 +29,12 @@ import {
     OptionalWritableAttribute,
     RequestType,
     ResponseType,
+    TypeFromPartialBitSchema,
+    TypeFromSchema,
     WritableAttribute,
-} from "../Cluster.js";
-import { ClusterType } from "../ClusterType.js";
+} from "@project-chip/matter.js-types";
+import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
+import { TlvEventFilter } from "../../protocol/interaction/InteractionProtocol.js";
 import { ClusterServerObj } from "../server/ClusterServerTypes.js";
 import { AttributeClient } from "./AttributeClient.js";
 import { EventClient } from "./EventClient.js";

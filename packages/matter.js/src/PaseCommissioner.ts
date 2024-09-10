@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { Environment, ImplementationError, Logger, Network, UdpInterface } from "@project-chip/matter.js-general";
+import { DiscoveryCapabilitiesBitmap, NodeId, TypeFromPartialBitSchema } from "@project-chip/matter.js-types";
 import {
     CommissioningControllerOptions,
     ControllerEnvironmentOptions,
@@ -12,13 +13,10 @@ import {
 import { MatterController } from "./MatterController.js";
 import { RootCertificateManager } from "./certificate/RootCertificateManager.js";
 import { CommissionableDevice, CommissionableDeviceIdentifiers, DiscoveryData, Scanner } from "./common/Scanner.js";
-import { NodeId } from "./datatype/NodeId.js";
 import { FabricJsonObject } from "./fabric/Fabric.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { MdnsService } from "./mdns/MdnsService.js";
 import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
-import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
-import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
 
 const logger = new Logger("PaseCommissioner");
 

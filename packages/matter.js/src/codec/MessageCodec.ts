@@ -13,8 +13,7 @@ import {
     NotImplementedError,
     UnexpectedDataError,
 } from "@project-chip/matter.js-general";
-import { GroupId } from "../datatype/GroupId.js";
-import { NodeId } from "../datatype/NodeId.js";
+import { GroupId, NodeId } from "@project-chip/matter.js-types";
 
 export interface PacketHeader {
     sessionId: number;

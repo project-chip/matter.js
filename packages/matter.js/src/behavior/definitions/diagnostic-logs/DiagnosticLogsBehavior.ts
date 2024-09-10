@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { DiagnosticLogs } from "../../../cluster/definitions/DiagnosticLogsCluster.js";
+import { DiagnosticLogs } from "@project-chip/matter.js-types";
 import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { DiagnosticLogsInterface } from "./DiagnosticLogsInterface.js";
 

@@ -6,14 +6,16 @@
 
 import { ImplementationError, isDeepEqual } from "@project-chip/matter.js-general";
 import { DeviceTypeModel, MatterModel } from "@project-chip/matter.js-model";
-import { Descriptor } from "../../../cluster/definitions/DescriptorCluster.js";
-import { Semtag } from "../../../cluster/globals/Semtag.js";
-import { ClusterId } from "../../../datatype/ClusterId.js";
-import { DeviceTypeId } from "../../../datatype/DeviceTypeId.js";
-import { EndpointNumber } from "../../../datatype/EndpointNumber.js";
+import {
+    ClusterId,
+    Descriptor,
+    DeviceTypeId,
+    EndpointNumber,
+    Semtag,
+    TypeFromSchema,
+} from "@project-chip/matter.js-types";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { EndpointLifecycle } from "../../../endpoint/properties/EndpointLifecycle.js";
-import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { IndexBehavior } from "../../system/index/IndexBehavior.js";
 import { DescriptorBehavior } from "./DescriptorBehavior.js";
 

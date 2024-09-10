@@ -1,0 +1,84 @@
+{
+    "name": "@project-chip/matter.js-types",
+    "version": "0.0.0-git",
+    "description": "Definitions for Matter application",
+    "keywords": [
+        "iot",
+        "home automation",
+        "matter",
+        "smart device"
+    ],
+    "license": "Apache-2.0",
+    "author": "Project CHIP Authors",
+    "contributors": [
+        "Martin Turon <mturon@google.com>",
+        "Marco Fucci di Napoli <mfucci@gmail.com>",
+        "Ingo Fischer <github@fischer-ka.de>"
+    ],
+    "bugs": {
+        "url": "https://github.com/project-chip/matter.js/issues"
+    },
+    "homepage": "https://github.com/project-chip/matter.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/project-chip/matter.js.git"
+    },
+    "scripts": {
+        "clean": "matter-build clean",
+        "build": "matter-build",
+        "build-clean": "matter-build --clean",
+        "test": "matter-test -w",
+        "coverage": "c8 matter-test esm",
+        "embed-examples": "embedme **/README.md"
+    },
+    "dependencies": {
+        "@noble/curves": "^1.5.0",
+        "@project-chip/matter.js-general": "*"
+    },
+    "devDependencies": {
+        "@project-chip/matter.js-tools": "*",
+        "typescript": "~5.5.3"
+    },
+    "files": [
+        "dist/**/*",
+        "src/**/*",
+        "LICENSE",
+        "README.md"
+    ],
+    "type": "module",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./dist/esm/index.d.ts",
+                "default": "./dist/esm/index.js"
+            },
+            "require": {
+                "types": "./dist/cjs/index.d.ts",
+                "default": "./dist/cjs/index.js"
+            }
+        },
+        "./*": {
+            "import": {
+                "types": "./dist/esm/*/index.d.ts",
+                "default": "./dist/esm/*/index.js"
+            },
+            "require": {
+                "types": "./dist/cjs/*/index.d.ts",
+                "default": "./dist/cjs/*/index.js"
+            }
+        }
+    },
+    "types": "dist/esm/index.d.ts",
+    "typesVersions": {
+        "*": {
+            ".": [
+                "/dist/cjs/export.d.ts"
+            ]
+        }
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

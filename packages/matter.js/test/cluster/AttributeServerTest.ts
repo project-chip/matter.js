@@ -5,7 +5,16 @@
  */
 
 import { AccessLevel } from "@project-chip/matter.js-model";
-import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
+import {
+    AttributeId,
+    BasicInformationCluster,
+    FabricId,
+    FabricIndex,
+    NodeId,
+    TlvSchema,
+    TlvUInt8,
+    VendorId,
+} from "@project-chip/matter.js-types";
 import {
     AttributeServer,
     FabricScopedAttributeServer,
@@ -13,18 +22,11 @@ import {
 } from "../../src/cluster/server/AttributeServer.js";
 import { ClusterDatasource } from "../../src/cluster/server/ClusterServerTypes.js";
 import { Message } from "../../src/codec/MessageCodec.js";
-import { AttributeId } from "../../src/datatype/AttributeId.js";
-import { FabricId } from "../../src/datatype/FabricId.js";
-import { FabricIndex } from "../../src/datatype/FabricIndex.js";
-import { NodeId } from "../../src/datatype/NodeId.js";
-import { VendorId } from "../../src/datatype/VendorId.js";
 import { EndpointInterface } from "../../src/endpoint/EndpointInterface.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
 import { MatterDevice } from "../../src/MatterDevice.js";
 import { SecureSession } from "../../src/session/SecureSession.js";
 import { Session } from "../../src/session/Session.js";
-import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
-import { TlvSchema } from "../../src/tlv/TlvSchema.js";
 import { DUMMY_KEY } from "../support/mock-keys.js";
 
 const ZERO = new Uint8Array(1);

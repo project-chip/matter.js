@@ -12,22 +12,22 @@ import {
     EventElement,
     FieldElement,
 } from "@project-chip/matter.js-model";
-import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import {
     Attribute,
+    BitFlag,
     Command,
     Event,
     EventPriority,
+    MutableCluster,
     OptionalAttribute,
     OptionalCommand,
     OptionalEvent,
+    TlvBoolean,
     TlvNoResponse,
-} from "../../../src/cluster/Cluster.js";
-import { MutableCluster } from "../../../src/cluster/mutation/MutableCluster.js";
-import { BitFlag } from "../../../src/schema/BitmapSchema.js";
-import { TlvBoolean } from "../../../src/tlv/TlvBoolean.js";
-import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
-import { TlvString } from "../../../src/tlv/TlvString.js";
+    TlvString,
+    TlvUInt8,
+} from "@project-chip/matter.js-types";
+import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 
 export namespace My {
     export enum Feature {
