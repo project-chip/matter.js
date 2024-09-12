@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, Logger, MatterFlowError, UnexpectedDataError } from "@project-chip/matter.js-general";
+import { Logger, MatterFlowError, NoResponseTimeoutError, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { Status } from "../../cluster/globals/index.js";
@@ -211,12 +211,12 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
                 errorStatusCode = error.code;
-            } else if (error instanceof RetransmissionLimitReachedError) {
+            } else if (error instanceof NoResponseTimeoutError) {
                 logger.info(error);
             } else {
                 logger.warn(error);
             }
-            if (!isGroupSession && !(error instanceof RetransmissionLimitReachedError)) {
+            if (!isGroupSession && !(error instanceof NoResponseTimeoutError)) {
                 await this.sendStatus(errorStatusCode);
             }
         } finally {

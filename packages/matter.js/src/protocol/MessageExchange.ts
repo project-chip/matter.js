@@ -12,6 +12,7 @@ import {
     Logger,
     MatterError,
     MatterFlowError,
+    NoResponseTimeoutError,
     Queue,
     Time,
     Timer,
@@ -34,7 +35,7 @@ import { SecureChannelProtocol } from "./securechannel/SecureChannelProtocol.js"
 
 const logger = Logger.get("MessageExchange");
 
-export class RetransmissionLimitReachedError extends MatterError {}
+export class RetransmissionLimitReachedError extends NoResponseTimeoutError {}
 
 export class UnexpectedMessageError extends MatterError {
     public constructor(

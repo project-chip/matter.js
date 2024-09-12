@@ -19,6 +19,7 @@ import {
     Logger,
     NetInterface,
     NoProviderError,
+    NoResponseTimeoutError,
     ServerAddress,
     ServerAddressIp,
     StorageBackendMemory,
@@ -471,7 +472,7 @@ export class MatterController implements SessionContext {
             try {
                 paseSecureChannel = await this.initializePaseSecureChannel(knownAddress, passcode);
             } catch (error) {
-                RetransmissionLimitReachedError.accept(error);
+                NoResponseTimeoutError.accept(error);
             }
         }
         if (paseSecureChannel === undefined) {
@@ -483,7 +484,7 @@ export class MatterController implements SessionContext {
 
             const { result } = await ControllerDiscovery.iterateServerAddresses(
                 discoveredDevices,
-                RetransmissionLimitReachedError,
+                NoResponseTimeoutError,
                 async () =>
                     scannersToUse.flatMap(scanner => scanner.getDiscoveredCommissionableDevices(identifierData)),
                 async (address, device) => {
@@ -710,7 +711,7 @@ export class MatterController implements SessionContext {
             return channel;
         } catch (error) {
             if (
-                error instanceof RetransmissionLimitReachedError ||
+                error instanceof NoResponseTimeoutError ||
                 (error instanceof Error && error.message.includes("EHOSTUNREACH"))
             ) {
                 logger.debug(`Failed to resume device connection with ${ip}:${port}, discover the device ...`, error);
@@ -792,7 +793,7 @@ export class MatterController implements SessionContext {
 
             const { result } = await ControllerDiscovery.iterateServerAddresses(
                 [scanResult],
-                PairRetransmissionLimitReachedError,
+                NoResponseTimeoutError,
                 async () => {
                     const device = mdnsScanner.getDiscoveredOperationalDevice(this.fabric, peerNodeId);
                     return device !== undefined ? [device] : [];
@@ -826,7 +827,7 @@ export class MatterController implements SessionContext {
             return await this.connectOrDiscoverNode(peerNodeId, operationalAddress, timeoutSeconds, discoveryData);
         } catch (error) {
             if (
-                (error instanceof DiscoveryError || error instanceof PairRetransmissionLimitReachedError) &&
+                (error instanceof DiscoveryError || error instanceof NoResponseTimeoutError) &&
                 this.commissionedNodes.has(peerNodeId)
             ) {
                 logger.info(`Resume failed, remove all sessions for node ${peerNodeId}`);
@@ -878,7 +879,7 @@ export class MatterController implements SessionContext {
                 throw e;
             }
         } catch (e) {
-            RetransmissionLimitReachedError.accept(e);
+            NoResponseTimeoutError.accept(e);
 
             // Convert error
             throw new PairRetransmissionLimitReachedError(e.message);

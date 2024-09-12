@@ -9,6 +9,7 @@ import {
     Logger,
     MaybePromise,
     NetworkError,
+    NoResponseTimeoutError,
     Time,
     Timer,
     isObject,
@@ -21,7 +22,7 @@ import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { RetransmissionLimitReachedError } from "../MessageExchange.js";
+import { NoChannelError } from "../ChannelManager.js";
 import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
 import { EventStorageData } from "./EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
@@ -555,7 +556,11 @@ export class SubscriptionHandler {
                     `Sending update failed 3 times in a row, canceling subscription ${this.subscriptionId} and let controller subscribe again.`,
                 );
                 this.sendNextUpdateImmediately = false;
-                if (error instanceof RetransmissionLimitReachedError || error instanceof NetworkError) {
+                if (
+                    error instanceof NoResponseTimeoutError ||
+                    error instanceof NetworkError ||
+                    error instanceof NoChannelError
+                ) {
                     // We could not send at all, consider session as dead
                     await this.session.destroy(false);
                 } else {
