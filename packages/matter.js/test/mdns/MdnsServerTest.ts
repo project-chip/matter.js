@@ -12,14 +12,13 @@ import {
     DnsRecord,
     DnsRecordClass,
     DnsRecordType,
+    MockNetwork,
+    NetworkSimulator,
     PtrRecord,
     SrvRecord,
     TxtRecord,
-} from "../../src/codec/DnsCodec.js";
+} from "@project-chip/matter.js-general";
 import { AnnouncementType, MdnsServer } from "../../src/mdns/MdnsServer.js";
-import { NetworkFake } from "../../src/net/fake/NetworkFake.js";
-import { FAKE_INTERFACE_NAME } from "../../src/net/fake/SimulatedNetwork.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 const CLIENT_IPv4 = "192.168.200.2";
 const CLIENT_MAC = "CA:FE:00:00:BE:EF";
@@ -29,14 +28,14 @@ const DUMMY_QNAME = "a.b.c.d";
 
 describe("MdnsServer", () => {
     const clientIps = [CLIENT_IPv4];
-    const clientNetwork = new NetworkFake(CLIENT_MAC, clientIps);
+    const clientNetwork = new MockNetwork(CLIENT_MAC, clientIps);
 
-    let send: (message: ByteArray, remoteIp: string, netInterface: string) => void;
-    let onResponse: (message: ByteArray, netInterface?: string, unicastTarget?: string) => Promise<void>;
+    let send: (message: Uint8Array, remoteIp: string, netInterface: string) => void;
+    let onResponse: (message: Uint8Array, netInterface?: string, unicastTarget?: string) => Promise<void>;
     const udpServerSimulator = {
-        onMessage: (listener: (message: ByteArray, remoteIp: string, netInterface: string) => void) =>
+        onMessage: (listener: (message: Uint8Array, remoteIp: string, netInterface: string) => void) =>
             (send = listener),
-        send: (message: ByteArray, netInterface?: string, unicastTarget?: string) =>
+        send: (message: Uint8Array, netInterface?: string, unicastTarget?: string) =>
             onResponse(message, netInterface, unicastTarget),
         close: () => {},
     } as any;
@@ -45,7 +44,7 @@ describe("MdnsServer", () => {
 
     beforeEach(async () => {
         await MockTime.advance(130_000); // More then 2 minutes in the future for the difference calculation vs 120s ttl
-        mdnsServer = new MdnsServer(clientNetwork, udpServerSimulator, "fakeInterface");
+        mdnsServer = new MdnsServer(clientNetwork, udpServerSimulator, NetworkSimulator.INTERFACE_NAME);
 
         await mdnsServer.setRecordsGenerator(PORT, AnnouncementType.Commissionable, async () => [
             PtrRecord(DUMMY_QNAME, "abcd"),
@@ -58,7 +57,7 @@ describe("MdnsServer", () => {
     describe("Server responds to standard queries for different types", () => {
         it("server responds to an ANY query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -74,7 +73,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -93,7 +92,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -101,7 +100,7 @@ describe("MdnsServer", () => {
 
         it("server responds to an PTR query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -117,7 +116,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -136,7 +135,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -144,7 +143,7 @@ describe("MdnsServer", () => {
 
         it("server responds to an SRV query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -160,7 +159,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -175,7 +174,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -183,7 +182,7 @@ describe("MdnsServer", () => {
 
         it("server responds to an A query with A record only", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -199,7 +198,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -214,7 +213,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -224,7 +223,7 @@ describe("MdnsServer", () => {
     describe("Answer suppression", () => {
         it("suppress one answers in an ANY query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -241,7 +240,7 @@ describe("MdnsServer", () => {
                     answers: [PtrRecord(DUMMY_QNAME, "abcd")],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -259,7 +258,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -267,7 +266,7 @@ describe("MdnsServer", () => {
 
         it("suppress some answers in an ANY query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -284,7 +283,7 @@ describe("MdnsServer", () => {
                     answers: [TxtRecord(DUMMY_QNAME, [`A=1`, `B=2`]), PtrRecord(DUMMY_QNAME, "abcd")],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -299,7 +298,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -307,7 +306,7 @@ describe("MdnsServer", () => {
 
         it("suppress full answer in an ANY query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -329,7 +328,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             expect(responses).deep.equal([]);
@@ -337,7 +336,7 @@ describe("MdnsServer", () => {
 
         it("suppress full answer in an A query", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -354,7 +353,7 @@ describe("MdnsServer", () => {
                     answers: [ARecord("abcd.local", DUMMY_IP)],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             expect(responses).deep.equal([]);
@@ -364,7 +363,7 @@ describe("MdnsServer", () => {
     describe("Handle duplicate messages", () => {
         it("server suppress response to same ANY query when 0ms delay", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -380,7 +379,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -399,7 +398,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -418,7 +417,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             expect(responses).deep.equal([]);
@@ -426,7 +425,7 @@ describe("MdnsServer", () => {
 
         it("server suppress response to same ANY query when up to 1s delay", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -442,7 +441,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -461,7 +460,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -481,7 +480,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             expect(responses).deep.equal([]);
@@ -489,7 +488,7 @@ describe("MdnsServer", () => {
 
         it("server do not suppress response from same ANY query when > 1s delay", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -505,7 +504,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             const EXPEECTED_RESPONSE = [
@@ -522,7 +521,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ];
@@ -546,7 +545,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -556,7 +555,7 @@ describe("MdnsServer", () => {
 
         it("server also suppress response to different query with same records when 0ms delay", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -572,7 +571,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -591,7 +590,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -610,7 +609,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             expect(responses).deep.equal([]);
@@ -618,7 +617,7 @@ describe("MdnsServer", () => {
 
         it("server do not suppress additional records to different query when 0ms delay", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -634,7 +633,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -649,7 +648,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -668,7 +667,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -687,7 +686,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -720,16 +719,16 @@ describe("MdnsServer", () => {
                 authorities: [],
                 queries: [],
             },
-            netInterface: FAKE_INTERFACE_NAME,
+            netInterface: NetworkSimulator.INTERFACE_NAME,
         };
 
         it("server responds to an ANY query as unicast if requested as multicast if query never sent as multicast", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
-            send(DnsCodec.encode(QUERY), DUMMY_IP, FAKE_INTERFACE_NAME);
+            send(DnsCodec.encode(QUERY), DUMMY_IP, NetworkSimulator.INTERFACE_NAME);
 
             await MockTime.yield3();
 
@@ -738,16 +737,16 @@ describe("MdnsServer", () => {
 
         it("server responds to an ANY query as unicast if requested and after a multicast query with 1/4 of ttl", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
-            send(DnsCodec.encode(QUERY), DUMMY_IP, FAKE_INTERFACE_NAME);
+            send(DnsCodec.encode(QUERY), DUMMY_IP, NetworkSimulator.INTERFACE_NAME);
 
             await MockTime.yield3();
             await MockTime.advance(29_000); // less than 1/4 of ttl
 
-            send(DnsCodec.encode(QUERY), DUMMY_IP, FAKE_INTERFACE_NAME);
+            send(DnsCodec.encode(QUERY), DUMMY_IP, NetworkSimulator.INTERFACE_NAME);
 
             await MockTime.yield3();
 
@@ -759,16 +758,16 @@ describe("MdnsServer", () => {
 
         it("server responds to an ANY query as multicast even if requested as unicast and after a multicast query with more than 1/4 of ttl", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
-            send(DnsCodec.encode(QUERY), DUMMY_IP, FAKE_INTERFACE_NAME);
+            send(DnsCodec.encode(QUERY), DUMMY_IP, NetworkSimulator.INTERFACE_NAME);
 
             await MockTime.yield3();
             await MockTime.advance(31_000); // less than 1/4 of ttl
 
-            send(DnsCodec.encode(QUERY), DUMMY_IP, FAKE_INTERFACE_NAME);
+            send(DnsCodec.encode(QUERY), DUMMY_IP, NetworkSimulator.INTERFACE_NAME);
 
             await MockTime.yield3();
 
@@ -782,7 +781,7 @@ describe("MdnsServer", () => {
     describe("Server splits response into multiple packets when answer gets too big", () => {
         it("include as many answers as possible and potentially leave additionalRecords out", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -820,7 +819,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -835,7 +834,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);
@@ -843,7 +842,7 @@ describe("MdnsServer", () => {
 
         it("split answers into multiple responses and add additional records in last one", async () => {
             const responses = new Array<{ message?: DnsMessage; netInterface?: string; uniCastTarget?: string }>();
-            onResponse = async (message: ByteArray, netInterface?: string, uniCastTarget?: string) => {
+            onResponse = async (message: Uint8Array, netInterface?: string, uniCastTarget?: string) => {
                 responses.push({ message: DnsCodec.decode(message), netInterface, uniCastTarget });
             };
 
@@ -881,7 +880,7 @@ describe("MdnsServer", () => {
                     ],
                 }),
                 DUMMY_IP,
-                FAKE_INTERFACE_NAME,
+                NetworkSimulator.INTERFACE_NAME,
             );
 
             await MockTime.yield3();
@@ -896,7 +895,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
                 {
@@ -908,7 +907,7 @@ describe("MdnsServer", () => {
                         authorities: [],
                         queries: [],
                     },
-                    netInterface: FAKE_INTERFACE_NAME,
+                    netInterface: NetworkSimulator.INTERFACE_NAME,
                     uniCastTarget: undefined,
                 },
             ]);

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "../../../log/Logger.js";
-import { describeList } from "../../../util/String.js";
+import { describeList, Logger } from "@project-chip/matter.js-general";
 import { SynchronousTransactionConflictError, TransactionDeadlockError, TransactionFlowError } from "./Errors.js";
 import { Resource } from "./Resource.js";
 import type { Transaction } from "./Transaction.js";

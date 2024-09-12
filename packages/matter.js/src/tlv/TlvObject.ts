@@ -4,16 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, InternalError, UnexpectedDataError } from "../common/MatterError.js";
+import { ImplementationError, InternalError, Merge, UnexpectedDataError } from "@project-chip/matter.js-general";
+import { FabricIndex } from "@project-chip/matter.js-model";
 import {
     ValidationDatatypeMismatchError,
     ValidationError,
     ValidationMandatoryFieldMissingError,
     ValidationOutOfBoundsError,
 } from "../common/ValidationError.js";
-import { FabricIndex } from "../model/standard/elements/FabricIndex.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { Merge } from "../util/Type.js";
 import { TlvAny } from "./TlvAny.js";
 import { LengthConstraints } from "./TlvArray.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
@@ -304,7 +302,7 @@ export class ObjectSchemaWithMaxSize<F extends TlvFields> extends ObjectSchema<F
         super(fieldDefinitions, type, allowProtocolSpecificTags);
     }
 
-    override encode(value: TypeFromFields<F>): ByteArray {
+    override encode(value: TypeFromFields<F>): Uint8Array {
         const encoded = super.encode(value);
         if (encoded.length > this.maxSize) {
             throw new ImplementationError(

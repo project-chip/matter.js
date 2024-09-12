@@ -4,7 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AAAARecord, ARecord, DnsRecord, PtrRecord, SrvRecord, TxtRecord } from "../codec/DnsCodec.js";
+import {
+    AAAARecord,
+    ARecord,
+    BasicSet,
+    Bytes,
+    Crypto,
+    Diagnostic,
+    DnsRecord,
+    ImplementationError,
+    Logger,
+    Network,
+    PtrRecord,
+    SrvRecord,
+    TxtRecord,
+    isIPv4,
+    isIPv6,
+} from "@project-chip/matter.js-general";
 import {
     CommissionerInstanceData,
     CommissioningModeInstanceData,
@@ -12,22 +28,15 @@ import {
     PairingHintBitmap,
     PairingHintBitmapSchema,
 } from "../common/InstanceBroadcaster.js";
-import { ImplementationError } from "../common/MatterError.js";
-import { Crypto } from "../crypto/Crypto.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { Logger } from "../log/Logger.js";
-import { Network } from "../net/Network.js";
 import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import {
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,
     SESSION_IDLE_INTERVAL_MS,
 } from "../session/Session.js";
-import { isIPv4, isIPv6 } from "../util/Ip.js";
-import { BasicSet } from "../util/Set.js";
 import {
     MATTER_COMMISSIONER_SERVICE_QNAME,
     MATTER_COMMISSION_SERVICE_QNAME,
@@ -174,7 +183,7 @@ export class MdnsBroadcaster {
         this.#activeCommissioningAnnouncements.add(announcedNetPort);
 
         const shortDiscriminator = (discriminator >> 8) & 0x0f;
-        const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
+        const instanceId = Bytes.toHex(Crypto.getRandomData(8)).toUpperCase();
         const vendorQname = getVendorQname(vendorId);
         const deviceTypeQname = getDeviceTypeQname(deviceType);
         const shortDiscriminatorQname = getShortDiscriminatorQname(shortDiscriminator);
@@ -270,14 +279,14 @@ export class MdnsBroadcaster {
             const records: DnsRecord<any>[] = [PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_SERVICE_QNAME)];
             fabrics.forEach(fabric => {
                 const { operationalId, nodeId } = fabric;
-                const operationalIdString = operationalId.toHex().toUpperCase();
+                const operationalIdString = Bytes.toHex(operationalId).toUpperCase();
                 const fabricQname = getFabricQname(operationalIdString);
                 const deviceMatterQname = getDeviceMatterQname(operationalIdString, NodeId.toHexString(nodeId));
 
                 logger.debug(
                     "Announcement Generator: Fabric",
                     Diagnostic.dict({
-                        id: `${operationalId.toHex()}/${nodeId}`,
+                        id: `${Bytes.toHex(operationalId)}/${nodeId}`,
                         qname: deviceMatterQname,
                         port: announcedNetPort,
                         interface: netInterface,
@@ -324,7 +333,7 @@ export class MdnsBroadcaster {
             }),
         );
 
-        const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
+        const instanceId = Bytes.toHex(Crypto.getRandomData(8)).toUpperCase();
         const deviceTypeQname = `_T${deviceType}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
         const vendorQname = `_V${vendorId}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
         const deviceQname = `${instanceId}.${MATTER_COMMISSIONER_SERVICE_QNAME}`;

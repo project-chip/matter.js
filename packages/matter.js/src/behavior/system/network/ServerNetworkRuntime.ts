@@ -4,17 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    ImplementationError,
+    InterfaceType,
+    InternalError,
+    Network,
+    NetworkInterface,
+    NetworkInterfaceDetailed,
+    TransportInterface,
+    UdpInterface,
+} from "@project-chip/matter.js-general";
 import { MatterDevice } from "../../../MatterDevice.js";
 import { Ble } from "../../../ble/Ble.js";
 import { InstanceBroadcaster } from "../../../common/InstanceBroadcaster.js";
-import { ImplementationError, InternalError } from "../../../common/MatterError.js";
-import { TransportInterface } from "../../../common/TransportInterface.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
-import { MdnsService } from "../../../environment/MdnsService.js";
 import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
-import { InterfaceType, Network, NetworkInterface, NetworkInterfaceDetailed } from "../../../net/Network.js";
-import { UdpInterface } from "../../../net/UdpInterface.js";
+import { MdnsService } from "../../../mdns/MdnsService.js";
 import { ServerNode } from "../../../node/ServerNode.js";
 import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
 import { ServerStore } from "../../../node/server/storage/ServerStore.js";

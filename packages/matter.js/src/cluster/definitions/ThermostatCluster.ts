@@ -13,7 +13,6 @@ import {
     OptionalAttribute,
     WritableAttribute,
     OptionalWritableAttribute,
-    AccessLevel,
     FixedAttribute,
     Command,
     TlvNoResponse
@@ -30,12 +29,13 @@ import {
     TlvUInt32
 } from "../../tlv/TlvNumber.js";
 import { BitsFromPartial, BitFlag, BitField } from "../../schema/BitmapSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace Thermostat {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningServer } from "@project-chip/matter-node.js";
+import { CommissioningServer } from "@project-chip/matter.js";
 
 import {
     AdministratorCommissioning,
@@ -15,7 +15,6 @@ import {
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { Aggregator, DimmableLightDevice } from "@project-chip/matter.js/device";
-import { ByteArray } from "@project-chip/matter.js/util";
 import { AllClustersTestInstanceLegacy } from "./AllClustersTestInstanceLegacy.js";
 
 export class BridgeTestInstanceLegacy extends AllClustersTestInstanceLegacy {
@@ -65,7 +64,7 @@ export class BridgeTestInstanceLegacy extends AllClustersTestInstanceLegacy {
             ),
         );
 
-        const networkId = new ByteArray(32);
+        const networkId = new Uint8Array(32);
         commissioningServer.addRootClusterServer(
             ClusterServer(
                 NetworkCommissioning.Cluster.with("EthernetNetworkInterface"),

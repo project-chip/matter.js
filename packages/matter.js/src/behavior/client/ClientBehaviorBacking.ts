@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NotImplementedError } from "../../common/MatterError.js";
+import { NotImplementedError } from "@project-chip/matter.js-general";
 import { Endpoint } from "../../endpoint/Endpoint.js";
 import { Behavior } from "../Behavior.js";
 import { BehaviorBacking } from "../internal/BehaviorBacking.js";

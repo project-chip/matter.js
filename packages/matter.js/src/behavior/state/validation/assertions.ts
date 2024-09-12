@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SchemaErrorPath } from "../../../model/index.js";
-import { ByteArray } from "../../../util/ByteArray.js";
-import { isObject } from "../../../util/Type.js";
+import { isObject } from "@project-chip/matter.js-general";
+import { SchemaErrorPath } from "@project-chip/matter.js-model";
 import { DatatypeError } from "../../errors.js";
 import { Val } from "../Val.js";
 
@@ -45,15 +44,15 @@ export function assertString(value: Val, path: SchemaErrorPath): asserts value i
     throw new DatatypeError(path, "a string", value);
 }
 
-export function assertBytes(value: Val, path: SchemaErrorPath): asserts value is ByteArray {
-    if (value instanceof ByteArray) {
+export function assertBytes(value: Val, path: SchemaErrorPath): asserts value is Uint8Array {
+    if (value instanceof Uint8Array) {
         return;
     }
     throw new DatatypeError(path, "a byte array", value);
 }
 
-export function assertSequence(value: Val, path: SchemaErrorPath): asserts value is string | ByteArray {
-    if (typeof value === "string" || value instanceof ByteArray) {
+export function assertSequence(value: Val, path: SchemaErrorPath): asserts value is string | Uint8Array {
+    if (typeof value === "string" || value instanceof Uint8Array) {
         return;
     }
     throw new DatatypeError(path, "a string or byte array", value);

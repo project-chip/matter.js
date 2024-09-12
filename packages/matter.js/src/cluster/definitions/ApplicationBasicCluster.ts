@@ -7,14 +7,15 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { OptionalFixedAttribute, FixedAttribute, Attribute, AccessLevel } from "../Cluster.js";
+import { OptionalFixedAttribute, FixedAttribute, Attribute } from "../Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
-import { Identity } from "../../util/Type.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ApplicationBasic {

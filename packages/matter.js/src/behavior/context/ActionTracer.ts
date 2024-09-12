@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../model/definitions/DataModelPath.js";
+import { DataModelPath } from "@project-chip/matter.js-model";
 import { StatusCode } from "../../protocol/interaction/StatusCode.js";
 import { Val } from "../state/Val.js";
 

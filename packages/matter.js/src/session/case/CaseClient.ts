@@ -4,17 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, Crypto, Diagnostic, Logger, PublicKey, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { MatterController } from "../../MatterController.js";
 import { TlvIntermediateCertificate, TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
-import { UnexpectedDataError } from "../../common/MatterError.js";
-import { Crypto } from "../../crypto/Crypto.js";
-import { PublicKey } from "../../crypto/Key.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
-import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
-import { ByteArray } from "../../util/ByteArray.js";
 import {
     KDFSR1_KEY_INFO,
     KDFSR2_INFO,
@@ -54,10 +49,10 @@ export class CaseClient {
             const { sharedSecret, resumptionId } = resumptionRecord;
             const resumeKey = await Crypto.hkdf(
                 sharedSecret,
-                ByteArray.concat(initiatorRandom, resumptionId),
+                Bytes.concat(initiatorRandom, resumptionId),
                 KDFSR1_KEY_INFO,
             );
-            const initiatorResumeMic = Crypto.encrypt(resumeKey, new ByteArray(0), RESUME1_MIC_NONCE);
+            const initiatorResumeMic = Crypto.encrypt(resumeKey, new Uint8Array(0), RESUME1_MIC_NONCE);
             sigma1Bytes = await messenger.sendSigma1({
                 initiatorSessionId,
                 destinationId: fabric.getDestinationId(peerNodeId, initiatorRandom),
@@ -91,11 +86,11 @@ export class CaseClient {
                 ...(resumptionSessionParams ?? {}),
             };
 
-            const resumeSalt = ByteArray.concat(initiatorRandom, resumptionId);
+            const resumeSalt = Bytes.concat(initiatorRandom, resumptionId);
             const resumeKey = await Crypto.hkdf(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
             Crypto.decrypt(resumeKey, resumeMic, RESUME2_MIC_NONCE);
 
-            const secureSessionSalt = ByteArray.concat(initiatorRandom, resumptionRecord.resumptionId);
+            const secureSessionSalt = Bytes.concat(initiatorRandom, resumptionRecord.resumptionId);
             secureSession = await client.sessionManager.createSecureSession({
                 sessionId: initiatorSessionId,
                 fabric,
@@ -130,7 +125,7 @@ export class CaseClient {
                 ...(responderSessionParams ?? {}),
             };
             const sharedSecret = Crypto.ecdhGenerateSecret(peerEcdhPublicKey, ecdh);
-            const sigma2Salt = ByteArray.concat(
+            const sigma2Salt = Bytes.concat(
                 operationalIdentityProtectionKey,
                 responderRandom,
                 peerEcdhPublicKey,
@@ -186,10 +181,7 @@ export class CaseClient {
             fabric.verifyCredentials(peerNewOpCert, peerIntermediateCACert);
 
             // Generate and send sigma3
-            const sigma3Salt = ByteArray.concat(
-                operationalIdentityProtectionKey,
-                Crypto.hash([sigma1Bytes, sigma2Bytes]),
-            );
+            const sigma3Salt = Bytes.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes]));
             const sigma3Key = await Crypto.hkdf(sharedSecret, sigma3Salt, KDFSR3_INFO);
             const signatureData = TlvSignedData.encode({
                 nodeOpCert,
@@ -204,7 +196,7 @@ export class CaseClient {
             await messenger.waitForSuccess("Success after CASE Sigma3");
 
             // All good! Create secure session
-            const secureSessionSalt = ByteArray.concat(
+            const secureSessionSalt = Bytes.concat(
                 operationalIdentityProtectionKey,
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );

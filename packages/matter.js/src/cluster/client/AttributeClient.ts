@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../../common/MatterError.js";
+import { ImplementationError } from "@project-chip/matter.js-general";
+import { FabricIndex as FabricIndexElement } from "@project-chip/matter.js-model";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { FabricIndex as FabricIndexElement } from "../../model/standard/elements/FabricIndex.js";
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
 import { NoAssociatedFabricError } from "../../session/SecureSession.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";

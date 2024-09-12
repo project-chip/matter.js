@@ -4,8 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./Storage.js";
-export * from "./StorageBackendMemory.js";
-export * from "./StorageContext.js";
-export * from "./StorageManager.js";
-export * from "./StringifyTools.js";
+export {
+    StorageBackendMemory,
+    StorageContext,
+    StorageError,
+    StorageManager,
+    SyncStorage,
+    fromJson,
+    toJson,
+    type Storage,
+    type SupportedStorageTypes,
+} from "@project-chip/matter.js-general";

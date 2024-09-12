@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js/common";
-import { Specification } from "@project-chip/matter.js/model";
-import { serialize } from "@project-chip/matter.js/util";
+import { InternalError, serialize } from "@project-chip/matter.js-general";
+import { Specification } from "@project-chip/matter.js-model";
 import { readMatterFile, relative, writeMatterFile } from "./file.js";
 import { asObjectKey, wordWrap } from "./string.js";
 
@@ -639,7 +638,17 @@ export class TsFile extends Block {
             list = new Array<string>();
             this.imports.set(filename, list);
         }
-        if (name && !list.includes(name)) {
+        if (name?.startsWith("*")) {
+            if (list.length) {
+                throw new Error(`Cannot import "${name}" because imports individual names`);
+            }
+            list.push(name);
+            this.nameDefined(name.replace(/\* as /, ""));
+        } else if (name && !list.includes(name)) {
+            if (list[0]?.startsWith("*")) {
+                throw new Error(`Cannot import "${name}" because imports *`);
+            }
+
             list.push(name);
 
             name = name.replace(/^\w+ as /, "");
@@ -679,7 +688,9 @@ export class TsFile extends Block {
         if (this.imports.size) {
             const importBlock = this.header.section();
             this.imports.forEach((symbols, name) => {
-                if (symbols.length) {
+                if (symbols[0]?.startsWith("*")) {
+                    importBlock.atom(`import ${symbols[0]} from "${name}"`);
+                } else if (symbols.length) {
                     const imp = importBlock.expressions("import {", `} from "${name}"`);
                     imp.shouldGroup = true;
                     symbols.forEach(s => imp.atom(s));

@@ -1,10 +1,13 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { deepCopy, Environment, InternalError, Observer } from "@project-chip/matter.js-general";
 import { Behavior } from "../../src/behavior/Behavior.js";
-import { InternalError } from "../../src/common/MatterError.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
-import { Environment } from "../../src/environment/Environment.js";
-import { deepCopy } from "../../src/util/DeepCopy.js";
-import { Observer } from "../../src/util/Observable.js";
 import { MockEndpointType } from "../behavior/mock-behavior.js";
 import { MockServerNode } from "../node/mock-server-node.js";
 

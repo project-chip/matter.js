@@ -16,7 +16,7 @@ import {
 } from "../../../behavior/definitions/scenes-management/ScenesManagementBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * A Door Lock Controller is a device capable of controlling a door lock.

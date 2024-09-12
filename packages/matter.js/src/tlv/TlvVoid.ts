@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../common/MatterError.js";
+import { InternalError } from "@project-chip/matter.js-general";
 import { ValidationDatatypeMismatchError } from "../common/ValidationError.js";
 import { TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";

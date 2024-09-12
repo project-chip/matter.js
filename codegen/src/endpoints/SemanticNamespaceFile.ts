@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SemanticNamespaceModel } from "@project-chip/matter.js/model";
+import { SemanticNamespaceModel } from "@project-chip/matter.js-model";
 import { TsFile } from "../util/TsFile.js";
 import { camelize } from "../util/string.js";
 

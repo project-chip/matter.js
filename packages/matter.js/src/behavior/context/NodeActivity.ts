@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic } from "../../log/Diagnostic.js";
-import { Observable } from "../../util/Observable.js";
+import { Diagnostic, Observable } from "@project-chip/matter.js-general";
 
 /**
  * Tracks activity associated with a node.

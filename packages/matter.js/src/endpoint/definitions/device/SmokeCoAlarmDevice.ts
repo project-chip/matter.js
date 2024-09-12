@@ -22,7 +22,7 @@ import {
 } from "../../../behavior/definitions/carbon-monoxide-concentration-measurement/CarbonMonoxideConcentrationMeasurementServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * A Smoke CO Alarm device is capable of sensing smoke, carbon monoxide or both. It is capable of issuing a visual and

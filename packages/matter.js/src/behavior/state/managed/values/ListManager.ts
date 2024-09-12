@@ -4,11 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../../../model/definitions/DataModelPath.js";
-import { Access, ValueModel } from "../../../../model/index.js";
+import { isObject, serialize } from "@project-chip/matter.js-general";
+import { Access, DataModelPath, ValueModel } from "@project-chip/matter.js-model";
 import { StatusCode } from "../../../../protocol/interaction/StatusCode.js";
-import { serialize } from "../../../../util/String.js";
-import { isObject } from "../../../../util/Type.js";
 import { AccessControl } from "../../../AccessControl.js";
 import { ExpiredReferenceError, ReadError, SchemaImplementationError, WriteError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";

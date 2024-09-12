@@ -4,12 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../../../model/definitions/DataModelPath.js";
-import { ValueModel } from "../../../../model/models/ValueModel.js";
-import { FeatureMap } from "../../../../model/standard/elements/FeatureMap.js";
-import { GeneratedClass } from "../../../../util/GeneratedClass.js";
-import { camelize } from "../../../../util/String.js";
-import { isObject } from "../../../../util/Type.js";
+import { camelize, GeneratedClass, isObject } from "@project-chip/matter.js-general";
+import { DataModelPath, FeatureMap, ValueModel } from "@project-chip/matter.js-model";
 import { ConstraintError, PhantomReferenceError, SchemaImplementationError } from "../../../errors.js";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { Schema } from "../../../supervision/Schema.js";

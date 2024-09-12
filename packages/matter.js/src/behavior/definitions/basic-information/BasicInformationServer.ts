@@ -4,16 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic, Logger, Observable } from "@project-chip/matter.js-general";
+import { Specification } from "@project-chip/matter.js-model";
 import { BasicInformation } from "../../../cluster/definitions/BasicInformationCluster.js";
 import { VendorId } from "../../../datatype/VendorId.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { FabricManager } from "../../../fabric/FabricManager.js";
-import { Diagnostic } from "../../../log/Diagnostic.js";
-import { Logger } from "../../../log/Logger.js";
-import { Specification } from "../../../model/definitions/Specification.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { DEFAULT_MAX_PATHS_PER_INVOKE } from "../../../protocol/interaction/InteractionServer.js";
-import { Observable } from "../../../util/Observable.js";
 import { ActionContext } from "../../context/ActionContext.js";
 import { BasicInformationBehavior } from "./BasicInformationBehavior.js";
 

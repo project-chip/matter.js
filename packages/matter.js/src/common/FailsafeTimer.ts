@@ -4,11 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger, MatterFlowError, Time, Timer } from "@project-chip/matter.js-general";
 import { Fabric } from "../fabric/Fabric.js";
-import { Logger } from "../log/Logger.js";
-import { Time, Timer } from "../time/Time.js";
 import type { FailsafeContext } from "./FailsafeContext.js";
-import { MatterFlowError } from "./MatterError.js";
 
 export class MatterFabricConflictError extends MatterFlowError {}
 

@@ -16,7 +16,7 @@ import {
 } from "../../../behavior/definitions/activated-carbon-filter-monitoring/ActivatedCarbonFilterMonitoringServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * An Extractor Hood is a device that is generally installed above a cooking surface in residential kitchens. An

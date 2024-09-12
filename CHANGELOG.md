@@ -11,6 +11,19 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 
+-   IMPORTANT: As of 0.10.0 the @project-chip/matter.js module has grown quite large.  This release includes major refactoring that moves functional areas into independent NPM packages.  We have added exports to maintain backwards compatibility but these are not exhaustive.  In some cases you may need to update imports to reference new code locations.
+
+-   matter.js-general:
+    -   General functionality that is not Matter specific previously resided in @project-chip/matter.js.  It now lives in @project-chip/matter.js-general
+    -   BREAKING: The "ByteArray" type is removed, replaced with native-JS Uint8Array and a small collection of utility functions in the "Bytes" namespace
+    -   The Matter object model previously exported as @project-chip/matter.js/model now resides in @project-chip/matter.js-model
+
+-   matter.js-nodejs:
+    -   Node specialization is moved to matter.js-nodejs.  matter-node.js remains as a compatibility import.
+    -   BREAKING: The previously deprecated re-exports in matter-node.js from matter.js are removed.
+
+## 0.10.1 (2024-09-08)
+
 -   Matter-Core functionality:
     -   Enhancement: Added an "expected processing time" for interactions to be executed by the peer
     -   Enhancement: Added additional wait time after last resubmission was done to allow a full resubmission cycle from the peer

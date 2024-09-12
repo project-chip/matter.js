@@ -4,18 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { ReedSolomon } from "../../src/math/ReedSolomon.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 describe("ReedSolomon", () => {
     describe("computeErrorCorrection", () => {
         it("computes the correct error correction bytes", () => {
             const result = new ReedSolomon().computeErrorCorrection(
-                ByteArray.fromHex("40d2754776173206272696c6c69670ec"),
+                Bytes.fromHex("40d2754776173206272696c6c69670ec"),
                 10,
             );
 
-            expect(result.toHex()).equal("bc2a90136bafeffd4be0");
+            expect(Bytes.toHex(result)).equal("bc2a90136bafeffd4be0");
         });
     });
 });

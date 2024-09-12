@@ -4,14 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError } from "../common/MatterError.js";
-import { Crypto } from "../crypto/Crypto.js";
+import {
+    Branded,
+    Bytes,
+    Crypto,
+    DataWriter,
+    Endian,
+    toBigInt,
+    UnexpectedDataError,
+} from "@project-chip/matter.js-general";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { Endian } from "../util/ByteArray.js";
-import { DataWriter } from "../util/DataWriter.js";
-import { toBigInt } from "../util/Number.js";
-import { Branded } from "../util/Type.js";
 import { CaseAuthenticatedTag } from "./CaseAuthenticatedTag.js";
 
 /**
@@ -39,7 +42,7 @@ export namespace NodeId {
     export const toHexString = (nodeId: NodeId) => {
         const writer = new DataWriter(Endian.Big);
         writer.writeUInt64(nodeId);
-        return writer.toByteArray().toHex().toUpperCase();
+        return Bytes.toHex(writer.toByteArray()).toUpperCase();
     };
 
     /**

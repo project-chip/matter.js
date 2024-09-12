@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError } from "@project-chip/matter.js/common";
-import { commandlineParser } from "@project-chip/matter.js/util";
+import { MatterError } from "@project-chip/matter.js-general";
 import readline from "readline";
 import type { Argv } from "yargs";
 import yargs from "yargs/yargs";
 import { MatterNode } from "../MatterNode.js";
 import { exit } from "../app";
+import { commandlineParser } from "../util/CommandlineParser.js";
 import cmdAttributes from "./cmd_cluster-attributes";
 import cmdCommands from "./cmd_cluster-commands";
 import cmdEvents from "./cmd_cluster-events";

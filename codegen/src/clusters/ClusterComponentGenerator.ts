@@ -16,7 +16,7 @@ import {
     Model,
     NamedComponent,
     ValueModel,
-} from "@project-chip/matter.js/model";
+} from "@project-chip/matter.js-model";
 import { Block } from "../util/TsFile.js";
 import { camelize } from "../util/string.js";
 import { ClusterFile } from "./ClusterFile.js";
@@ -199,7 +199,7 @@ export class ClusterComponentGenerator {
     }
 
     private mapPrivilege(privilege: Access.Privilege) {
-        this.file.addImport("#/cluster/Cluster.js", "AccessLevel");
+        this.file.addImport("@project-chip/matter.js-model", "AccessLevel");
         return `AccessLevel.${Access.PrivilegeName[privilege]}`;
     }
 

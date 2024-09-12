@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
-import { ClusterModel, ClusterVariance, MatterModel, RequirementModel } from "@project-chip/matter.js/model";
-import { decamelize } from "@project-chip/matter.js/util";
+import { decamelize, Logger } from "@project-chip/matter.js-general";
+import { ClusterModel, ClusterVariance, MatterModel, RequirementModel } from "@project-chip/matter.js-model";
 import { Block } from "../util/TsFile.js";
 import { ClusterRequirements } from "./ClusterRequirements.js";
 import { EndpointFile } from "./EndpointFile.js";

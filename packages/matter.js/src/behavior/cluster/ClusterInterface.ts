@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { MaybePromise } from "@project-chip/matter.js-general";
 import type { ClusterType } from "../../cluster/ClusterType.js";
 import type { ClusterComposer } from "../../cluster/mutation/ClusterComposer.js";
 import type { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import type { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import type { MaybePromise } from "../../util/Promises.js";
 
 /**
  * This type defines methods for a behavior grouped by named cluster component.

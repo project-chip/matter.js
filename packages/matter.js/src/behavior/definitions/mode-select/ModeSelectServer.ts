@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger } from "@project-chip/matter.js-general";
 import { ClusterType } from "../../../cluster/ClusterType.js";
 import { GeneralDiagnostics } from "../../../cluster/definitions/GeneralDiagnosticsCluster.js";
 import { ModeSelect } from "../../../cluster/definitions/ModeSelectCluster.js";
 import { OnOff } from "../../../cluster/definitions/OnOffCluster.js";
 import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
-import { Logger } from "../../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagnosticsBehavior.js";
 import { OnOffServer } from "../on-off/OnOffServer.js";

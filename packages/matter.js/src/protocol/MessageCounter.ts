@@ -4,10 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../common/MatterError.js";
-import { Crypto } from "../crypto/Crypto.js";
-import { StorageContext } from "../storage/StorageContext.js";
-import { Construction, asyncNew } from "../util/Construction.js";
+import { Construction, Crypto, InternalError, StorageContext, asyncNew } from "@project-chip/matter.js-general";
 
 /** Maximum 32 bit counter value. */
 export const MAX_COUNTER_VALUE_32BIT = 0xfffffffe;

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError } from "../../../common/MatterError.js";
+import { MatterError } from "@project-chip/matter.js-general";
 import type { Behavior } from "../../Behavior.js";
 import type { ActionContext } from "../../context/ActionContext.js";
 import type { OfflineContext } from "../../context/server/OfflineContext.js";

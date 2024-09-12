@@ -17,23 +17,33 @@ import {
 import { CommissioningOptions } from "./behavior/system/commissioning/CommissioningOptions.js";
 import { AdministratorCommissioning } from "./cluster/definitions/AdministratorCommissioningCluster.js";
 
-import { Channel } from "./common/Channel.js";
+import {
+    Channel,
+    Construction,
+    Crypto,
+    Diagnostic,
+    InternalError,
+    Lifecycle,
+    Logger,
+    MatterFlowError,
+    Mutex,
+    NetInterface,
+    NetworkError,
+    StorageContext,
+    Time,
+    Timer,
+    TransportInterface,
+    asyncNew,
+    isNetworkInterface,
+} from "@project-chip/matter.js-general";
+import { Specification } from "@project-chip/matter.js-model";
 import { FailsafeContext } from "./common/FailsafeContext.js";
 import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
-import { Lifecycle } from "./common/Lifecycle.js";
-import { InternalError, MatterFlowError } from "./common/MatterError.js";
 import { Scanner } from "./common/Scanner.js";
-import { TransportInterface } from "./common/TransportInterface.js";
-import { Crypto } from "./crypto/Crypto.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { FabricAction, FabricManager } from "./fabric/FabricManager.js";
-import { Diagnostic } from "./log/Diagnostic.js";
-import { Logger } from "./log/Logger.js";
-import { Specification } from "./model/index.js";
-import { NetInterface, isNetworkInterface } from "./net/NetInterface.js";
-import { NetworkError } from "./net/Network.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
 import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
@@ -50,11 +60,6 @@ import {
 } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
-import { StorageContext } from "./storage/StorageContext.js";
-import { Time, Timer } from "./time/Time.js";
-import { ByteArray } from "./util/ByteArray.js";
-import { Construction, asyncNew } from "./util/Construction.js";
-import { Mutex } from "./util/Mutex.js";
 
 const logger = Logger.get("MatterDevice");
 
@@ -447,7 +452,7 @@ export class MatterDevice implements SessionContext {
         return this.#sessionManager.getNextAvailableSessionId();
     }
 
-    findFabricFromDestinationId(destinationId: ByteArray, peerRandom: ByteArray) {
+    findFabricFromDestinationId(destinationId: Uint8Array, peerRandom: Uint8Array) {
         return this.#fabricManager.findFabricFromDestinationId(destinationId, peerRandom);
     }
 
@@ -466,7 +471,7 @@ export class MatterDevice implements SessionContext {
         return this.exchangeManager.initiateExchange(fabric, nodeId, protocolId);
     }
 
-    findResumptionRecordById(resumptionId: ByteArray) {
+    findResumptionRecordById(resumptionId: Uint8Array) {
         return this.#sessionManager.findResumptionRecordById(resumptionId);
     }
 
@@ -552,7 +557,7 @@ export class MatterDevice implements SessionContext {
         fabric: Fabric,
         nodeId: NodeId,
         timeOutSeconds = 5,
-    ): Promise<undefined | { session: Session<MatterDevice>; channel: Channel<ByteArray> }> {
+    ): Promise<undefined | { session: Session<MatterDevice>; channel: Channel<Uint8Array> }> {
         // TODO: return the first not undefined answer or undefined
         const device = await this.scanners[0].findOperationalDevice(fabric, nodeId, timeOutSeconds);
         if (device === undefined) return undefined;

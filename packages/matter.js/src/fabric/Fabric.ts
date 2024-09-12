@@ -5,6 +5,21 @@
  */
 
 import {
+    BinaryKeyPair,
+    Bytes,
+    Crypto,
+    DataWriter,
+    Endian,
+    InternalError,
+    Key,
+    Logger,
+    MatterError,
+    MatterFlowError,
+    MaybePromise,
+    PrivateKey,
+    SupportedStorageTypes,
+} from "@project-chip/matter.js-general";
+import {
     CertificateManager,
     TlvIntermediateCertificate,
     TlvOperationalCertificate,
@@ -12,26 +27,18 @@ import {
 } from "../certificate/CertificateManager.js";
 import { Cluster } from "../cluster/Cluster.js";
 import { GroupKeyManagement } from "../cluster/definitions/GroupKeyManagementCluster.js";
-import { InternalError, MatterError, MatterFlowError } from "../common/MatterError.js";
-import { Crypto } from "../crypto/Crypto.js";
-import { BinaryKeyPair, Key, PrivateKey } from "../crypto/Key.js";
 import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { FabricId } from "../datatype/FabricId.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
-import { Logger } from "../log/Logger.js";
 import { SecureSession } from "../session/SecureSession.js";
-import { SupportedStorageTypes } from "../storage/StringifyTools.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
-import { ByteArray, Endian } from "../util/ByteArray.js";
-import { DataWriter } from "../util/DataWriter.js";
-import { MaybePromise } from "../util/Promises.js";
 
 const logger = Logger.get("Fabric");
 
-const COMPRESSED_FABRIC_ID_INFO = ByteArray.fromString("CompressedFabric");
-const GROUP_SECURITY_INFO = ByteArray.fromString("GroupKey v1.0");
+const COMPRESSED_FABRIC_ID_INFO = Bytes.fromString("CompressedFabric");
+const GROUP_SECURITY_INFO = Bytes.fromString("GroupKey v1.0");
 
 export class PublicKeyError extends MatterError {}
 
@@ -40,25 +47,25 @@ export type FabricJsonObject = {
     fabricId: FabricId;
     nodeId: NodeId;
     rootNodeId: NodeId;
-    operationalId: ByteArray;
-    rootPublicKey: ByteArray;
+    operationalId: Uint8Array;
+    rootPublicKey: Uint8Array;
     keyPair: BinaryKeyPair;
     rootVendorId: VendorId;
-    rootCert: ByteArray;
-    identityProtectionKey: ByteArray;
-    operationalIdentityProtectionKey: ByteArray;
-    intermediateCACert: ByteArray | undefined;
-    operationalCert: ByteArray;
+    rootCert: Uint8Array;
+    identityProtectionKey: Uint8Array;
+    operationalIdentityProtectionKey: Uint8Array;
+    intermediateCACert: Uint8Array | undefined;
+    operationalCert: Uint8Array;
     label: string;
     scopedClusterData: Map<number, Map<string, SupportedStorageTypes>>;
 };
 
 type OperationalGroupKeySet = TypeFromSchema<typeof GroupKeyManagement.TlvGroupKeySet> & {
-    operationalEpochKey0: ByteArray;
+    operationalEpochKey0: Uint8Array;
     groupSessionId0: number | null;
-    operationalEpochKey1: ByteArray | null;
+    operationalEpochKey1: Uint8Array | null;
     groupSessionId1: number | null;
-    operationalEpochKey2: ByteArray | null;
+    operationalEpochKey2: Uint8Array | null;
     groupSessionId2: number | null;
 };
 
@@ -114,15 +121,15 @@ export class Fabric {
         readonly fabricId: FabricId,
         readonly nodeId: NodeId,
         readonly rootNodeId: NodeId,
-        readonly operationalId: ByteArray,
-        readonly rootPublicKey: ByteArray,
+        readonly operationalId: Uint8Array,
+        readonly rootPublicKey: Uint8Array,
         keyPair: Key,
         readonly rootVendorId: VendorId,
-        readonly rootCert: ByteArray,
-        readonly identityProtectionKey: ByteArray,
-        readonly operationalIdentityProtectionKey: ByteArray,
-        readonly intermediateCACert: ByteArray | undefined,
-        readonly operationalCert: ByteArray,
+        readonly rootCert: Uint8Array,
+        readonly identityProtectionKey: Uint8Array,
+        readonly operationalIdentityProtectionKey: Uint8Array,
+        readonly intermediateCACert: Uint8Array | undefined,
+        readonly operationalCert: Uint8Array,
         public label: string,
         scopedClusterData?: Map<number, Map<string, SupportedStorageTypes>>,
     ) {
@@ -179,11 +186,11 @@ export class Fabric {
         return this.#keyPair.publicKey;
     }
 
-    sign(data: ByteArray) {
+    sign(data: Uint8Array) {
         return Crypto.sign(this.#keyPair, data);
     }
 
-    verifyCredentials(operationalCert: ByteArray, intermediateCACert?: ByteArray) {
+    verifyCredentials(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
         if (intermediateCACert === undefined) {
             // Validate NOC Certificate against Root Certificate
             CertificateManager.verifyNodeOperationalCertificate(
@@ -206,15 +213,18 @@ export class Fabric {
         }
     }
 
-    matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: ByteArray) {
-        return this.fabricId === fabricId && this.rootPublicKey?.equals(rootPublicKey);
+    matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: Uint8Array) {
+        return this.fabricId === fabricId && Bytes.areEqual(this.rootPublicKey, rootPublicKey);
     }
 
     matchesKeyPair(keyPair: Key) {
-        return this.#keyPair.publicKey.equals(keyPair.publicKey) && this.#keyPair.privateKey.equals(keyPair.privateKey);
+        return (
+            Bytes.areEqual(this.#keyPair.publicKey, keyPair.publicKey) &&
+            Bytes.areEqual(this.#keyPair.privateKey, keyPair.privateKey)
+        );
     }
 
-    getDestinationId(nodeId: NodeId, random: ByteArray) {
+    getDestinationId(nodeId: NodeId, random: Uint8Array) {
         const writer = new DataWriter(Endian.Little);
         writer.writeByteArray(random);
         writer.writeByteArray(this.rootPublicKey);
@@ -351,14 +361,14 @@ export class Fabric {
 export class FabricBuilder {
     #keyPair = Crypto.createKeyPair();
     #rootVendorId?: VendorId;
-    #rootCert?: ByteArray;
-    #intermediateCACert?: ByteArray;
-    #operationalCert?: ByteArray;
+    #rootCert?: Uint8Array;
+    #intermediateCACert?: Uint8Array;
+    #operationalCert?: Uint8Array;
     #fabricId?: FabricId;
     #nodeId?: NodeId;
     #rootNodeId?: NodeId;
-    #rootPublicKey?: ByteArray;
-    #identityProtectionKey?: ByteArray;
+    #rootPublicKey?: Uint8Array;
+    #identityProtectionKey?: Uint8Array;
     #fabricIndex?: FabricIndex;
     #label = "";
 
@@ -374,7 +384,7 @@ export class FabricBuilder {
         return CertificateManager.createCertificateSigningRequest(this.#keyPair);
     }
 
-    setRootCert(rootCert: ByteArray) {
+    setRootCert(rootCert: Uint8Array) {
         const decodedRootCertificate = TlvRootCertificate.decode(rootCert);
         CertificateManager.verifyRootCertificate(decodedRootCertificate);
         this.#rootCert = rootCert;
@@ -391,7 +401,7 @@ export class FabricBuilder {
         return this.#rootCert !== undefined;
     }
 
-    setOperationalCert(operationalCert: ByteArray, intermediateCACert?: ByteArray) {
+    setOperationalCert(operationalCert: Uint8Array, intermediateCACert?: Uint8Array) {
         if (intermediateCACert !== undefined && intermediateCACert.length === 0) {
             intermediateCACert = undefined;
         }
@@ -406,7 +416,7 @@ export class FabricBuilder {
             CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
         }
 
-        if (!ellipticCurvePublicKey.equals(this.#keyPair.publicKey)) {
+        if (!Bytes.areEqual(ellipticCurvePublicKey, this.#keyPair.publicKey)) {
             throw new PublicKeyError("Operational Certificate does not match public key.");
         }
 
@@ -449,7 +459,7 @@ export class FabricBuilder {
         return this;
     }
 
-    setIdentityProtectionKey(key: ByteArray) {
+    setIdentityProtectionKey(key: Uint8Array) {
         this.#identityProtectionKey = key;
         return this;
     }

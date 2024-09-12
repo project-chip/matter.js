@@ -18,7 +18,7 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * An Electrical Sensor device measures the electrical power and/or energy being imported and/or exported.

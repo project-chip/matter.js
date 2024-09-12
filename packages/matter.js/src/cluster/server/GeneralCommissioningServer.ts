@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
-import { Logger } from "../../log/Logger.js";
+import { ImplementationError, Logger, MatterFlowError } from "@project-chip/matter.js-general";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";

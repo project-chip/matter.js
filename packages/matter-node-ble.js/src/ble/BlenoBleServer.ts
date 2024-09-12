@@ -5,6 +5,7 @@
  */
 
 import { require } from "@project-chip/matter-node-ble.js/require";
+import { Channel, InternalError, Logger, Time, createPromise } from "@project-chip/matter.js-general";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
@@ -16,11 +17,7 @@ import {
     BtpFlowError,
     BtpSessionHandler,
 } from "@project-chip/matter.js/ble";
-import { Channel, InternalError } from "@project-chip/matter.js/common";
-import { Logger } from "@project-chip/matter.js/log";
 import { ChannelNotConnectedError } from "@project-chip/matter.js/protocol";
-import { Time } from "@project-chip/matter.js/time";
-import { ByteArray, createPromise } from "@project-chip/matter.js/util";
 import { BleOptions } from "./BleNode.js";
 
 const logger = Logger.get("BlenoBleServer");
@@ -126,7 +123,7 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
  * Note: Bleno is only supporting a single connection at a time right now - mainly because it also only can announce
  * one BLE device at a time!
  */
-export class BlenoBleServer extends BleChannel<ByteArray> {
+export class BlenoBleServer extends BleChannel<Uint8Array> {
     private state = "unknown";
     isAdvertising = false;
     private additionalAdvertisingData: Buffer = Buffer.alloc(0);
@@ -135,7 +132,7 @@ export class BlenoBleServer extends BleChannel<ByteArray> {
     private latestHandshakePayload: Buffer | undefined;
     private btpSession: BtpSessionHandler | undefined;
 
-    private onMatterMessageListener: ((socket: Channel<ByteArray>, data: ByteArray) => void) | undefined;
+    private onMatterMessageListener: ((socket: Channel<Uint8Array>, data: Uint8Array) => void) | undefined;
     private writeConformationResolver: ((value: void) => void) | undefined;
 
     private clientAddress: string | undefined;
@@ -236,7 +233,7 @@ export class BlenoBleServer extends BleChannel<ByteArray> {
         } else {
             if (this.btpSession !== undefined) {
                 logger.debug(`Received Matter data for BTP Session: ${data.toString("hex")}`);
-                void this.btpSession.handleIncomingBleData(new ByteArray(data));
+                void this.btpSession.handleIncomingBleData(new Uint8Array(data));
             } else {
                 throw new BtpFlowError(
                     `Received Matter data but no BTP session was initialized: ${data.toString("hex")}`,
@@ -267,10 +264,10 @@ export class BlenoBleServer extends BleChannel<ByteArray> {
 
         this.btpSession = await BtpSessionHandler.createFromHandshakeRequest(
             Math.min(Bleno.mtu - 3, maxValueSize),
-            new ByteArray(this.latestHandshakePayload),
+            new Uint8Array(this.latestHandshakePayload),
 
             // callback to write data to characteristic C2
-            async (data: ByteArray) => {
+            async (data: Uint8Array) => {
                 updateValueCallback(Buffer.from(data.buffer));
                 const { promise, resolver } = createPromise<void>();
                 this.writeConformationResolver = resolver;
@@ -282,7 +279,7 @@ export class BlenoBleServer extends BleChannel<ByteArray> {
             async () => this.close(),
 
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
-            async (data: ByteArray) => {
+            async (data: Uint8Array) => {
                 if (this.onMatterMessageListener === undefined) {
                     throw new InternalError(`No listener registered for Matter messages`);
                 }
@@ -315,7 +312,7 @@ export class BlenoBleServer extends BleChannel<ByteArray> {
         }
     }
 
-    async advertise(advertiseData: ByteArray, additionalAdvertisementData?: ByteArray) {
+    async advertise(advertiseData: Uint8Array, additionalAdvertisementData?: Uint8Array) {
         this.advertisingData = Buffer.from(advertiseData.buffer);
 
         if (additionalAdvertisementData) {
@@ -352,7 +349,7 @@ export class BlenoBleServer extends BleChannel<ByteArray> {
         }
     }
 
-    setMatterMessageListener(listener: (socket: Channel<ByteArray>, data: ByteArray) => void) {
+    setMatterMessageListener(listener: (socket: Channel<Uint8Array>, data: Uint8Array) => void) {
         if (this.onMatterMessageListener !== undefined) {
             throw new InternalError(`onData listener already set`);
         }
@@ -386,20 +383,20 @@ export class BlenoBleServer extends BleChannel<ByteArray> {
         });*/
     }
 
-    // Channel<ByteArray>
+    // Channel<Uint8Array>
     /**
      * Send a Matter message to the connected device - need to do BTP assembly first.
      *
      * @param data
      */
-    async send(data: ByteArray) {
+    async send(data: Uint8Array) {
         if (this.btpSession === undefined) {
             throw new ChannelNotConnectedError(`Cannot send data, no BTP session initialized`);
         }
         await this.btpSession.sendMatterMessage(data);
     }
 
-    // Channel<ByteArray>
+    // Channel<Uint8Array>
     get name() {
         return `${this.type}://${this.clientAddress}`;
     }

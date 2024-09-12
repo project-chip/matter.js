@@ -4,10 +4,10 @@ import { LevelControl } from "../cluster/definitions/LevelControlCluster.js";
 import { OnOff } from "../cluster/definitions/OnOffCluster.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServerTypes.js";
 
+import { extendPublicHandlerMethods } from "@project-chip/matter.js-general";
 import { createDefaultLevelControlClusterServer } from "../cluster/server/LevelControlServer.js";
 import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.js";
 import { ClusterId } from "../datatype/ClusterId.js";
-import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
 import { DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.js";
 import { EndpointOptions } from "./Endpoint.js";
 import { OnOffBaseDevice, getClusterInitialAttributeValues } from "./OnOffDevices.js";

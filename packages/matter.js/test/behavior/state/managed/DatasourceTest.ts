@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AsyncObservable, MaybePromise, Observable } from "@project-chip/matter.js-general";
+import { DataModelPath, DatatypeModel, FieldElement, FieldModel } from "@project-chip/matter.js-model";
 import { ActionContext } from "../../../../src/behavior/context/ActionContext.js";
 import { NodeActivity } from "../../../../src/behavior/context/NodeActivity.js";
 import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
@@ -14,10 +16,6 @@ import { FinalizationError } from "../../../../src/behavior/state/transaction/Er
 import { BehaviorSupervisor } from "../../../../src/behavior/supervision/BehaviorSupervisor.js";
 import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../../../src/behavior/supervision/ValueSupervisor.js";
-import { DataModelPath } from "../../../../src/model/definitions/DataModelPath.js";
-import { DatatypeModel, FieldElement, FieldModel } from "../../../../src/model/index.js";
-import { AsyncObservable, Observable } from "../../../../src/util/Observable.js";
-import { MaybePromise } from "../../../../src/util/Promises.js";
 
 class MyState {
     foo = "bar";

@@ -4,13 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./Channel.js";
+export {
+    ImplementationError,
+    InternalError,
+    Lifecycle,
+    MatterAggregateError,
+    MatterError,
+    MatterFlowError,
+    NoProviderError,
+    NotImplementedError,
+    ReadOnlyError,
+    UnexpectedDataError,
+    type Channel,
+    type Destructable,
+    type ServerAddress,
+    type TransportInterface,
+} from "@project-chip/matter.js-general";
 export * from "./FailsafeContext.js";
 export * from "./FailsafeTimer.js";
 export * from "./InstanceBroadcaster.js";
-export * from "./Lifecycle.js";
-export * from "./MatterError.js";
 export * from "./Scanner.js";
-export * from "./ServerAddress.js";
-export * from "./TransportInterface.js";
 export * from "./ValidationError.js";

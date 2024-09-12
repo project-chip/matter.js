@@ -4,13 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes, DataReader, Diagnostic, Endian, Logger, MatterError, Time } from "@project-chip/matter.js-general";
 import { BtpCodec } from "../codec/BtpCodec.js";
-import { MatterError } from "../common/MatterError.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { Logger } from "../log/Logger.js";
-import { Time } from "../time/Time.js";
-import { ByteArray, Endian } from "../util/ByteArray.js";
-import { DataReader } from "../util/DataReader.js";
 import {
     BLE_MAXIMUM_BTP_MTU,
     BLE_MINIMUM_ATT_MTU,
@@ -31,7 +26,7 @@ const logger = Logger.get("BtpSessionHandler");
 
 export class BtpSessionHandler {
     private currentIncomingSegmentedMsgLength: number | undefined;
-    private currentIncomingSegmentedPayload: ByteArray | undefined;
+    private currentIncomingSegmentedPayload: Uint8Array | undefined;
     private prevIncomingSequenceNumber = 255; // Incoming Sequence Number received. Set to 255 to start at 0
     private prevIncomingAckNumber = -1; // Previous ackNumber received
     private readonly ackReceiveTimer = Time.getTimer("BTP ack timeout", BTP_ACK_TIMEOUT_MS, () =>
@@ -54,10 +49,10 @@ export class BtpSessionHandler {
     /** Factory method to create a new BTPSessionHandler from a received handshake request */
     static async createFromHandshakeRequest(
         maxDataSize: number | undefined,
-        handshakeRequestPayload: ByteArray,
-        writeBleCallback: (data: ByteArray) => Promise<void>,
+        handshakeRequestPayload: Uint8Array,
+        writeBleCallback: (data: Uint8Array) => Promise<void>,
         disconnectBleCallback: () => Promise<void>,
-        handleMatterMessagePayload: (data: ByteArray) => Promise<void>,
+        handleMatterMessagePayload: (data: Uint8Array) => Promise<void>,
     ): Promise<BtpSessionHandler> {
         // Decode handshake request
         const handshakeRequest = BtpCodec.decodeBtpHandshakeRequest(handshakeRequestPayload);
@@ -122,10 +117,10 @@ export class BtpSessionHandler {
     }
 
     static async createAsCentral(
-        handshakeResponsePayload: ByteArray,
-        writeBleCallback: (data: ByteArray) => Promise<void>,
+        handshakeResponsePayload: Uint8Array,
+        writeBleCallback: (data: Uint8Array) => Promise<void>,
         disconnectBleCallback: () => Promise<void>,
-        handleMatterMessagePayload: (data: ByteArray) => Promise<void>,
+        handleMatterMessagePayload: (data: Uint8Array) => Promise<void>,
     ) {
         const handshakeRequest = BtpCodec.decodeBtpHandshakeResponsePayload(handshakeResponsePayload);
 
@@ -161,9 +156,9 @@ export class BtpSessionHandler {
         btpVersion: number,
         private readonly fragmentSize: number,
         private readonly clientWindowSize: number,
-        private readonly writeBleCallback: (data: ByteArray) => Promise<void>,
+        private readonly writeBleCallback: (data: Uint8Array) => Promise<void>,
         private readonly disconnectBleCallback: () => Promise<void>,
-        private readonly handleMatterMessagePayload: (data: ByteArray) => Promise<void>,
+        private readonly handleMatterMessagePayload: (data: Uint8Array) => Promise<void>,
     ) {
         if (btpVersion !== 4) {
             throw new BtpProtocolError(`Unsupported BTP version ${btpVersion}`);
@@ -184,7 +179,7 @@ export class BtpSessionHandler {
      *
      * @param data ByteArray containing the data
      */
-    public async handleIncomingBleData(data: ByteArray) {
+    public async handleIncomingBleData(data: Uint8Array) {
         if (!this.isActive) {
             logger.debug(`BTP session is not active, ignoring incoming BLE data`);
             return;
@@ -269,7 +264,7 @@ export class BtpSessionHandler {
                 if (segmentPayload.length === 0) {
                     throw new BtpProtocolError(`BTP Continuing or ending packet received without payload.`);
                 }
-                this.currentIncomingSegmentedPayload = ByteArray.concat(
+                this.currentIncomingSegmentedPayload = Bytes.concat(
                     this.currentIncomingSegmentedPayload,
                     segmentPayload,
                 );
@@ -311,11 +306,11 @@ export class BtpSessionHandler {
      *
      * @param data ByteArray containing the Matter message
      */
-    public async sendMatterMessage(data: ByteArray) {
+    public async sendMatterMessage(data: Uint8Array) {
         if (!this.isActive) {
             throw new BtpFlowError("BTP session is not active");
         }
-        logger.debug(`Got Matter message to send via BLE transport: ${data.toHex()}`);
+        logger.debug(`Got Matter message to send via BLE transport: ${Bytes.toHex(data)}`);
 
         if (data.length === 0) {
             throw new BtpFlowError("BTP packet must not be empty");
@@ -389,7 +384,7 @@ export class BtpSessionHandler {
 
             logger.debug(`Sending BTP packet: ${Logger.toJSON(btpPacket)}`);
             const packet = BtpCodec.encodeBtpPacket(btpPacket);
-            logger.debug(`Sending BTP packet raw: ${packet.toHex()}`);
+            logger.debug(`Sending BTP packet raw: ${Bytes.toHex(packet)}`);
 
             await this.writeBleCallback(packet);
 

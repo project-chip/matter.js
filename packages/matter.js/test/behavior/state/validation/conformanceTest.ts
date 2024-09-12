@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { FieldElement } from "@project-chip/matter.js-model";
 import { ConformanceError } from "../../../../src/behavior/errors.js";
-import { FieldElement } from "../../../../src/model/index.js";
 import { Features, Fields, Tests, testValidation } from "./validation-test-utils.js";
 
 function missing(conformance: string, fieldName = "test") {

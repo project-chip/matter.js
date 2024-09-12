@@ -4,8 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./Diagnostic.js";
-export * from "./DiagnosticSource.js";
-export * from "./Format.js";
-export * from "./Level.js";
-export * from "./Logger.js";
+export {
+    Diagnostic,
+    DiagnosticSource,
+    LogFormat as Format,
+    LogLevel as Level,
+    Logger,
+    logLevelFromString as levelFromString,
+} from "@project-chip/matter.js-general";

@@ -4,15 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic, Logger, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { Attribute, AttributeError, AttributeJsType } from "../../cluster/Cluster.js";
 import { getClusterAttributeById, getClusterById } from "../../cluster/ClusterHelper.js";
-import { UnexpectedDataError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
-import { Logger } from "../../log/Logger.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";

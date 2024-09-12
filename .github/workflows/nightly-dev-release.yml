@@ -89,12 +89,13 @@ jobs:
         result-encoding: string
         script: |
           const semver = require("semver");
+          const fs = require("fs");
           const now = new Date();
           const today = new Date(now.getTime() - now.getTimezoneOffset()*60000);
           const dateStr = today.toISOString().split("T")[0].replace(/-/g, "");
           const sha = require("child_process").execSync("git rev-parse --short HEAD").toString("utf8").trim();
 
-          const prevVersion = require(`${process.env.GITHUB_WORKSPACE}/lerna.json`).version;
+          const prevVersion = fs.readFileSync(`${process.env.GITHUB_WORKSPACE}/version.txt`, "utf8");
 
           const parsed = semver.parse(prevVersion);
           const prereleaseIdentifier = parsed.prerelease[0] || "alpha";
@@ -121,14 +122,15 @@ jobs:
       run: |        
         git config --global user.email "github-automation@fischer-ka.de"
         git config --global user.name "Github Action"
-                
-        git add .
-        git commit -m "v${VERSION}" && npx lerna version ${VERSION} --no-push --exact --ignore-scripts --no-commit-hooks --yes --amend --force-publish || npx lerna version ${VERSION} --exact --no-push --ignore-scripts --no-commit-hooks --yes --force-publish
+        
+        npm run version -- --set ${VERSION}
+        git add version.txt
+        git commit -m "v${VERSION}"
 
     - name: Create Pull Request
       if: steps.changes.outputs.result == 'ok'
       id: cpr
-      uses: peter-evans/create-pull-request@v6
+      uses: peter-evans/create-pull-request@v7
       with:
         token: ${{ secrets.PR_TOKEN }}
         commit-message: "[NIGHTLY DEV RELEASE] ${{ steps.version.outputs.result }}"

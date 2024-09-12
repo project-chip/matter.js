@@ -4,30 +4,28 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError, Logger } from "@project-chip/matter.js-general";
 import { BtpCodec } from "@project-chip/matter.js/codec";
 import {
     CommissionerInstanceData,
     CommissioningModeInstanceData,
-    ImplementationError,
     InstanceBroadcaster,
 } from "@project-chip/matter.js/common";
 import { VendorId } from "@project-chip/matter.js/datatype";
-import { Logger } from "@project-chip/matter.js/log";
-import { ByteArray } from "@project-chip/matter.js/util";
 import { BlenoBleServer } from "./BlenoBleServer.js";
 
 const logger = Logger.get("BleBroadcaster");
 
 export class BleBroadcaster implements InstanceBroadcaster {
     #blenoServer: BlenoBleServer;
-    #additionalAdvertisementData?: ByteArray;
+    #additionalAdvertisementData?: Uint8Array;
     #vendorId: VendorId | undefined;
     #productId: number | undefined;
     #discriminator: number | undefined;
     #advertise = false;
     #isClosed = false;
 
-    constructor(blenoServer: BlenoBleServer, additionalAdvertisementData?: ByteArray) {
+    constructor(blenoServer: BlenoBleServer, additionalAdvertisementData?: Uint8Array) {
         this.#blenoServer = blenoServer;
         this.#additionalAdvertisementData = additionalAdvertisementData;
     }

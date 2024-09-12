@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { EventEmitter, Observable, Timer } from "@project-chip/matter.js-general";
 import type { Endpoint } from "../../../endpoint/Endpoint.js";
 import { EndpointLifecycle } from "../../../endpoint/properties/EndpointLifecycle.js";
 import { IdentityService } from "../../../node/server/IdentityService.js";
-import { Timer } from "../../../time/Time.js";
-import { EventEmitter, Observable } from "../../../util/Observable.js";
 import { Behavior } from "../../Behavior.js";
 
 /**

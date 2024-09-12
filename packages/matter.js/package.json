@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js",
-    "version": "0.10.1-alpha.0-20240906-86b97420",
+    "version": "0.0.0-git",
     "description": "Matter protocol in pure js",
     "keywords": [
         "iot",
@@ -33,10 +33,12 @@
         "embed-examples": "embedme **/README.md"
     },
     "dependencies": {
-        "@noble/curves": "^1.5.0"
+        "@noble/curves": "^1.5.0",
+        "@project-chip/matter.js-general": "*",
+        "@project-chip/matter.js-model": "*"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.10.1-alpha.0-20240906-86b97420",
+        "@project-chip/matter.js-tools": "*",
         "@types/chai": "^4.3.16",
         "@types/mocha": "^10.0.7",
         "@types/wtfnode": "^0.7.3",
@@ -138,12 +140,12 @@
         },
         "./model": {
             "import": {
-                "types": "./dist/esm/model/index.d.ts",
-                "default": "./dist/esm/model/index.js"
+                "types": "./dist/esm/model/export.d.ts",
+                "default": "./dist/esm/model/export.js"
             },
             "require": {
-                "types": "./dist/cjs/model/index.d.ts",
-                "default": "./dist/cjs/model/index.js"
+                "types": "./dist/cjs/model/export.d.ts",
+                "default": "./dist/cjs/model/export.js"
             }
         },
         "./securechannel": {

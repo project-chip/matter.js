@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js/common";
 import {
+    InternalError,
     MaybeAsyncStorage,
     StorageBackendMemory,
     SupportedStorageTypes,
     fromJson,
     toJson,
-} from "@project-chip/matter.js/storage";
+} from "@project-chip/matter.js-general";
 import { readFile, writeFile } from "fs/promises";
 
 export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {

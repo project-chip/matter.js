@@ -9,7 +9,6 @@
 import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     WritableFabricScopedAttribute,
-    AccessLevel,
     Attribute,
     OptionalCommand,
     TlvNoResponse,
@@ -22,12 +21,13 @@ import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvEnum, TlvUInt8, TlvUInt32, TlvUInt16, TlvUInt64, TlvInt64 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace OtaSoftwareUpdateRequestor {

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError } from "@project-chip/matter.js-general";
 import { OfflineContext } from "../../behavior/context/server/OfflineContext.js";
 import { IndexBehavior } from "../../behavior/system/index/IndexBehavior.js";
-import { ImplementationError } from "../../common/MatterError.js";
 import { Endpoint } from "../../endpoint/Endpoint.js";
 
 /**

@@ -4,21 +4,25 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    Channel,
+    Crypto,
+    ImplementationError,
+    Logger,
+    MatterError,
+    MatterFlowError,
+    NotImplementedError,
+    TransportInterface,
+    UdpInterface,
+} from "@project-chip/matter.js-general";
 import { MatterController } from "../MatterController.js";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
-import { Channel } from "../common/Channel.js";
-import { ImplementationError, MatterError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
-import { Listener, TransportInterface } from "../common/TransportInterface.js";
-import { Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { Logger } from "../log/Logger.js";
-import { UdpInterface } from "../net/UdpInterface.js";
 import { INTERACTION_PROTOCOL_ID } from "../protocol/interaction/InteractionServer.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session, SessionContext } from "../session/Session.js";
 import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
-import { ByteArray } from "../util/ByteArray.js";
 import { ChannelManager } from "./ChannelManager.js";
 import { MessageExchange } from "./MessageExchange.js";
 import { DuplicateMessageError } from "./MessageReceptionState.js";
@@ -35,7 +39,7 @@ export class MessageChannel<ContextT extends SessionContext> implements Channel<
     #closeCallback?: () => Promise<void>;
 
     constructor(
-        readonly channel: Channel<ByteArray>,
+        readonly channel: Channel<Uint8Array>,
         readonly session: Session<ContextT>,
         closeCallback?: () => Promise<void>,
     ) {
@@ -94,7 +98,7 @@ export class ExchangeManager<ContextT extends SessionContext> {
     private readonly exchangeCounter = new ExchangeCounter();
     private readonly exchanges = new Map<number, MessageExchange<ContextT>>();
     private readonly protocols = new Map<number, ProtocolHandler<ContextT>>();
-    private readonly transportListeners = new Array<Listener>();
+    private readonly transportListeners = new Array<TransportInterface.Listener>();
     private readonly closingSessions = new Set<number>();
 
     constructor(
@@ -163,7 +167,7 @@ export class ExchangeManager<ContextT extends SessionContext> {
         this.exchanges.clear();
     }
 
-    private async onMessage(channel: Channel<ByteArray>, messageBytes: ByteArray) {
+    private async onMessage(channel: Channel<Uint8Array>, messageBytes: Uint8Array) {
         const packet = MessageCodec.decodePacket(messageBytes);
 
         if (packet.header.sessionType === SessionType.Group)
@@ -233,6 +237,16 @@ export class ExchangeManager<ContextT extends SessionContext> {
             const protocolHandler = this.protocols.get(message.payloadHeader.protocolId);
 
             if (protocolHandler !== undefined && message.payloadHeader.isInitiatorMessage && !isDuplicate) {
+                if (
+                    message.payloadHeader.messageType == MessageType.StandaloneAck &&
+                    !message.payloadHeader.requiresAck
+                ) {
+                    logger.debug(
+                        `Ignoring unsolicited standalone ack message ${messageId} for protocol ${message.payloadHeader.protocolId} and exchange id ${message.payloadHeader.exchangeId}.`,
+                    );
+                    return;
+                }
+
                 const exchange = MessageExchange.fromInitialMessage(
                     await this.channelManager.getOrCreateChannel(channel, session),
                     message,
@@ -246,7 +260,7 @@ export class ExchangeManager<ContextT extends SessionContext> {
                     message,
                 );
                 this.#addExchange(exchangeIndex, exchange);
-                await exchange.send(MessageType.StandaloneAck, new ByteArray(0), {
+                await exchange.send(MessageType.StandaloneAck, new Uint8Array(0), {
                     includeAcknowledgeMessageId: message.packetHeader.messageId,
                 });
                 await exchange.close();

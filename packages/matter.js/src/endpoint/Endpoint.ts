@@ -4,21 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    Construction,
+    Diagnostic,
+    Environment,
+    Immutable,
+    ImplementationError,
+    Lifecycle,
+    Logger,
+    MaybePromise,
+    UninitializedDependencyError,
+} from "@project-chip/matter.js-general";
+import { DataModelPath } from "@project-chip/matter.js-model";
 import { Behavior } from "../behavior/Behavior.js";
 import { NodeActivity } from "../behavior/context/NodeActivity.js";
 import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
-import { Lifecycle, UninitializedDependencyError } from "../common/Lifecycle.js";
-import { ImplementationError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { Environment } from "../environment/Environment.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { Logger } from "../log/Logger.js";
-import { DataModelPath } from "../model/definitions/DataModelPath.js";
 import type { Node } from "../node/Node.js";
 import { IdentityService } from "../node/server/IdentityService.js";
-import { Construction } from "../util/Construction.js";
-import { MaybePromise } from "../util/Promises.js";
-import { Immutable } from "../util/Type.js";
 import { Agent } from "./Agent.js";
 import { RootEndpoint } from "./definitions/system/RootEndpoint.js";
 import { Behaviors } from "./properties/Behaviors.js";

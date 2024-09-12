@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, UnexpectedDataError } from "../common/MatterError.js";
+import { Bytes, deepCopy, ImplementationError, UnexpectedDataError } from "@project-chip/matter.js-general";
 import { VendorId } from "../datatype/VendorId.js";
 import { Verhoeff } from "../math/Verhoeff.js";
 import { TlvAny } from "../tlv/TlvAny.js";
@@ -13,8 +13,6 @@ import { TlvUInt16, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { deepCopy } from "../util/DeepCopy.js";
 import { Base38 } from "./Base38Schema.js";
 import {
     BitField,
@@ -65,7 +63,7 @@ export type QrCodeData = TypeFromBitmapSchema<typeof QrCodeDataSchema> & {
      * Variable length TLV data. Zero length if TLV is not included. This data is byte-aligned.
      * All elements SHALL be housed within an anonymous top-level structure container.
      */
-    tlvData?: ByteArray;
+    tlvData?: Uint8Array;
 };
 
 /**
@@ -103,7 +101,7 @@ class QrPairingCodeSchema extends Schema<QrCodeData[], string> {
                     const { tlvData } = payloadData;
                     const data =
                         tlvData !== undefined && tlvData.length > 0
-                            ? ByteArray.concat(QrCodeDataSchema.encode(payloadData), tlvData)
+                            ? Bytes.concat(QrCodeDataSchema.encode(payloadData), tlvData)
                             : QrCodeDataSchema.encode(payloadData);
                     return Base38.encode(data);
                 })
@@ -132,7 +130,7 @@ class QrPairingCodeSchema extends Schema<QrCodeData[], string> {
      * @param data Encoded TLV data
      * @param schema The schema to use for decoding the TLV data, by default a schema with the QrCodeTlvDataDefaultFields is used
      */
-    decodeTlvData(data: ByteArray, schema: TlvSchema<any> = TlvObject(QrCodeTlvDataDefaultFields)) {
+    decodeTlvData(data: Uint8Array, schema: TlvSchema<any> = TlvObject(QrCodeTlvDataDefaultFields)) {
         const decoded = schema.decode(data);
         if (decoded.serialNumber !== undefined) {
             if (

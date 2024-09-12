@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../../model/definitions/DataModelPath.js";
-import { Conformance, SchemaErrorPath, SchemaImplementationError } from "../../../model/index.js";
+import { Conformance, DataModelPath, SchemaErrorPath, SchemaImplementationError } from "@project-chip/matter.js-model";
 import { Schema } from "../../supervision/Schema.js";
 import { Val } from "../Val.js";
 import { ValidationLocation } from "./location.js";

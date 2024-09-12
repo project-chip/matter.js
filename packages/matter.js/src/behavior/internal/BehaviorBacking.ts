@@ -4,15 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Lifecycle } from "../../common/Lifecycle.js";
-import { ImplementationError } from "../../common/MatterError.js";
+import {
+    Construction,
+    EventEmitter,
+    ImplementationError,
+    Lifecycle,
+    Logger,
+    MaybePromise,
+    Observable,
+} from "@project-chip/matter.js-general";
 import { type Agent } from "../../endpoint/Agent.js";
 import type { Endpoint } from "../../endpoint/Endpoint.js";
 import { BehaviorInitializationError } from "../../endpoint/errors.js";
-import { Logger } from "../../log/Logger.js";
-import { Construction } from "../../util/Construction.js";
-import { EventEmitter, Observable } from "../../util/Observable.js";
-import { MaybePromise } from "../../util/Promises.js";
 import type { Behavior } from "../Behavior.js";
 import { Reactor } from "../Reactor.js";
 import { Datasource } from "../state/managed/Datasource.js";

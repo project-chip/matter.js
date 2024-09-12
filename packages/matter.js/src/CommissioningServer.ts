@@ -4,6 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    Bytes,
+    Crypto,
+    ImplementationError,
+    InternalError,
+    Logger,
+    NamedHandler,
+    Network,
+    NoProviderError,
+    StorageContext,
+    SupportedStorageTypes,
+    SyncStorage,
+    UdpInterface,
+} from "@project-chip/matter.js-general";
+import { Specification } from "@project-chip/matter.js-model";
 import { MatterDevice } from "./MatterDevice.js";
 import { MatterNode } from "./MatterNode.js";
 import { DeviceCertification } from "./behavior/definitions/operational-credentials/DeviceCertification.js";
@@ -43,8 +58,6 @@ import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralComm
 import { createDefaultGeneralDiagnosticsClusterServer } from "./cluster/server/GeneralDiagnosticsServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
 import { OperationalCredentialsClusterHandler } from "./cluster/server/OperationalCredentialsServer.js";
-import { ImplementationError, InternalError, NoProviderError } from "./common/MatterError.js";
-import { Crypto } from "./crypto/Crypto.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { VendorId } from "./datatype/VendorId.js";
@@ -54,13 +67,9 @@ import { Endpoint } from "./device/Endpoint.js";
 import { LegacyInteractionServer } from "./device/LegacyInteractionServer.js";
 import { EndpointInterface } from "./endpoint/EndpointInterface.js";
 import { Fabric } from "./fabric/Fabric.js";
-import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { Specification } from "./model/definitions/Specification.js";
-import { Network } from "./net/Network.js";
-import { UdpInterface } from "./net/UdpInterface.js";
 import { EventHandler } from "./protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
 import { TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
@@ -72,11 +81,6 @@ import {
     QrPairingCodeCodec,
 } from "./schema/PairingCodeSchema.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
-import { SyncStorage } from "./storage/Storage.js";
-import { StorageContext } from "./storage/StorageContext.js";
-import { SupportedStorageTypes } from "./storage/StringifyTools.js";
-import { ByteArray } from "./util/ByteArray.js";
-import { NamedHandler } from "./util/NamedHandler.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -126,7 +130,7 @@ export interface CommissioningServerOptions {
     flowType?: CommissioningFlowType;
 
     /** Optional Vendor specific additional BLE Advertisement data. */
-    additionalBleAdvertisementData?: ByteArray;
+    additionalBleAdvertisementData?: Uint8Array;
 
     /** Should the device directly be announced automatically by the MatterServer of manually via announce(). */
     delayedAnnouncement?: boolean;
@@ -280,7 +284,7 @@ export class CommissioningServer extends MatterNode {
                 caseSessionsPerFabric: 3, // TODO get that limit from Sessionmanager or such or sync with it, add limit? Just a minima?
                 subscriptionsPerFabric: 3, // TODO get that limit from Interactionserver? Respect it? It is just a minima?
             },
-            serialNumber: `matter.js-${Crypto.get().getRandomData(4).toHex()}`,
+            serialNumber: `matter.js-${Bytes.toHex(Crypto.get().getRandomData(4))}`,
             specificationVersion: Specification.SPECIFICATION_VERSION,
             maxPathsPerInvoke: 1,
 

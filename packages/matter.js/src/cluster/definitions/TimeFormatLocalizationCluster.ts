@@ -7,11 +7,12 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { WritableAttribute, AccessLevel, FixedAttribute } from "../Cluster.js";
+import { WritableAttribute, FixedAttribute } from "../Cluster.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace TimeFormatLocalization {

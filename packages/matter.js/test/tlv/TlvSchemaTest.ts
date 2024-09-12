@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvArray } from "../../src/tlv/TlvArray.js";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
@@ -23,7 +24,6 @@ import { TlvField, TlvObject } from "../../src/tlv/TlvObject.js";
 import { TlvSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
 import { TlvWrapper } from "../../src/tlv/TlvWrapper.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 type TestEntry<T> = {
     name: string;
@@ -149,7 +149,7 @@ function testTlvSchemaEncode(testEntry: TestEntry<any>) {
 
     it(testName, () => {
         const tlvByteArray = schema.encode(jsObj);
-        const tlvHex = tlvByteArray.toHex();
+        const tlvHex = Bytes.toHex(tlvByteArray);
         expect(tlvHex).equal(tlv);
     });
 }
@@ -169,7 +169,7 @@ function testTlvSchemaDecode(testEntry: TestEntry<any>) {
     const testName = "TlvSchema.decode " + name;
 
     it(testName, () => {
-        const tlvBuffer = ByteArray.fromHex(tlv);
+        const tlvBuffer = Bytes.fromHex(tlv);
         const decoded = schema.decode(tlvBuffer);
         expect(decoded).deep.equal(jsObj);
     });

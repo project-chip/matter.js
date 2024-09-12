@@ -4,14 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../src/common/MatterError.js";
-import { Crypto } from "../../src/crypto/Crypto.js";
+import {
+    Crypto,
+    DataWriter,
+    Endian,
+    InternalError,
+    StorageBackendMemory,
+    StorageContext,
+    StorageManager,
+} from "@project-chip/matter.js-general";
 import { MAX_COUNTER_VALUE_32BIT, MessageCounter, PersistedMessageCounter } from "../../src/protocol/MessageCounter.js";
-import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
-import { StorageContext } from "../../src/storage/StorageContext.js";
-import { StorageManager } from "../../src/storage/StorageManager.js";
-import { Endian } from "../../src/util/ByteArray.js";
-import { DataWriter } from "../../src/util/DataWriter.js";
 
 describe("MessageCounter", () => {
     let realGetRandomData = Crypto.get().getRandomData;

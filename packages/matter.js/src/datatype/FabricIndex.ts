@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Branded } from "@project-chip/matter.js-general";
 import { TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { Branded } from "../util/Type.js";
 
 /**
  * Each fabric supported on a node is referenced by fabric-index that is unique on the node. This

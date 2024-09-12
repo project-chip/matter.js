@@ -11,7 +11,6 @@ import {
     Attribute,
     OptionalAttribute,
     OptionalWritableAttribute,
-    AccessLevel,
     Event,
     EventPriority,
     OptionalEvent,
@@ -20,12 +19,13 @@ import {
     TlvNoResponse
 } from "../Cluster.js";
 import { TlvEnum, TlvEpochS } from "../../tlv/TlvNumber.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace SmokeCoAlarm {

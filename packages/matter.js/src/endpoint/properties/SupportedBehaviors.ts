@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { camelize, ImplementationError } from "@project-chip/matter.js-general";
 import { Behavior } from "../../behavior/Behavior.js";
 import { DescriptorBehavior } from "../../behavior/definitions/descriptor/DescriptorBehavior.js";
-import { ImplementationError } from "../../common/MatterError.js";
-import { camelize } from "../../util/String.js";
 
 /**
  * A set of behaviors an endpoint supports.

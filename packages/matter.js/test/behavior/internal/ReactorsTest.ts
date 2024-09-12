@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Environment, MaybePromise, Observable } from "@project-chip/matter.js-general";
 import { Behavior } from "../../../src/behavior/Behavior.js";
 import { Reactor } from "../../../src/behavior/Reactor.js";
 import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
@@ -11,9 +12,6 @@ import { Contextual } from "../../../src/behavior/context/Contextual.js";
 import { NodeActivity } from "../../../src/behavior/context/NodeActivity.js";
 import { BehaviorBacking } from "../../../src/behavior/internal/BehaviorBacking.js";
 import { Reactors } from "../../../src/behavior/internal/Reactors.js";
-import { Environment } from "../../../src/environment/Environment.js";
-import { Observable } from "../../../src/util/Observable.js";
-import { MaybePromise } from "../../../src/util/Promises.js";
 
 class MockAgent {
     behavior: Behavior;

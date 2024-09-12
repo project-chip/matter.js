@@ -4,6 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    Bytes,
+    CrashedDependenciesError,
+    Crypto,
+    DnsCodec,
+    DnsMessage,
+    DnsRecordType,
+    Environment,
+    Key,
+    MockUdpChannel,
+    PrivateKey,
+} from "@project-chip/matter.js-general";
 import { BasicInformationBehavior } from "../../src/behavior/definitions/basic-information/BasicInformationBehavior.js";
 import { DescriptorBehavior } from "../../src/behavior/definitions/descriptor/DescriptorBehavior.js";
 import { PumpConfigurationAndControlServer } from "../../src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlServer.js";
@@ -12,10 +24,6 @@ import { AttestationCertificateManager } from "../../src/certificate/Attestation
 import { CertificationDeclarationManager } from "../../src/certificate/CertificationDeclarationManager.js";
 import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
 import { PumpConfigurationAndControl } from "../../src/cluster/definitions/PumpConfigurationAndControlCluster.js";
-import { DnsCodec, DnsMessage, DnsRecordType } from "../../src/codec/DnsCodec.js";
-import { CrashedDependenciesError } from "../../src/common/Lifecycle.js";
-import { Crypto } from "../../src/crypto/Crypto.js";
-import { Key, PrivateKey } from "../../src/crypto/Key.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
@@ -24,17 +32,14 @@ import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLig
 import { PumpDevice } from "../../src/endpoint/definitions/device/PumpDevice.js";
 import { AggregatorEndpoint } from "../../src/endpoint/definitions/system/AggregatorEndpoint.js";
 import { EndpointBehaviorsError, EndpointPartsError } from "../../src/endpoint/errors.js";
-import { Environment } from "../../src/environment/Environment.js";
 import { FabricManager } from "../../src/fabric/FabricManager.js";
-import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
 import { ServerNode } from "../../src/node/ServerNode.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 import { MockServerNode } from "./mock-server-node.js";
 
 let commissionForFabricNumber: number | undefined = undefined;
 
 Crypto.get().createKeyPair = () => {
-    const DEFAULT_SEC1_KEY = ByteArray.fromHex(
+    const DEFAULT_SEC1_KEY = Bytes.fromHex(
         "30770201010420aef3484116e9481ec57be0472df41bf499064e5024ad869eca5e889802d48075a00a06082a8648ce3d030107a144034200043c398922452b55caf389c25bd1bca4656952ccb90e8869249ad8474653014cbf95d687965e036b521c51037e6b8cedefca1eb44046694fa08882eed6519decba",
     );
 
@@ -151,13 +156,13 @@ describe("ServerNode", () => {
     });
 
     it("announces and expires correctly", async () => {
-        const scannerChannel = await UdpChannelFake.create(MockServerNode.createNetwork(2), {
+        const scannerChannel = await MockUdpChannel.create(MockServerNode.createNetwork(2), {
             listeningPort: 5353,
             listeningAddress: "ff02::fb",
             type: "udp6",
         });
 
-        const advertisementReceived = new Promise<ByteArray>(resolve =>
+        const advertisementReceived = new Promise<Uint8Array>(resolve =>
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolve(data)),
         );
 
@@ -204,7 +209,7 @@ describe("ServerNode", () => {
         expect(additional(DnsRecordType.A)).equals("10.10.10.1");
         expect(additional(DnsRecordType.SRV)?.port).equals(operationalPort);
 
-        const expirationReceived = new Promise<ByteArray>(resolve =>
+        const expirationReceived = new Promise<Uint8Array>(resolve =>
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolve(data)),
         );
 
@@ -574,7 +579,7 @@ async function commission(existingNode?: MockServerNode, number = 0) {
 
 namespace Fixtures {
     function u(hex: string) {
-        return ByteArray.fromHex(hex);
+        return Bytes.fromHex(hex);
     }
 
     export const failsafeLengthS = 60;

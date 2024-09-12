@@ -3,6 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { extendPublicHandlerMethods, MakeMandatory } from "@project-chip/matter.js-general";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { Groups } from "../cluster/definitions/GroupsCluster.js";
 import { Identify } from "../cluster/definitions/IdentifyCluster.js";
@@ -13,8 +14,6 @@ import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifySe
 import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
-import { MakeMandatory } from "../util/Type.js";
 import { Device } from "./Device.js";
 import { DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.js";
 import { EndpointOptions } from "./Endpoint.js";

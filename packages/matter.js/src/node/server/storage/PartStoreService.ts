@@ -4,13 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Lifecycle } from "../../../common/Lifecycle.js";
-import { ImplementationError, InternalError } from "../../../common/MatterError.js";
+import type { StorageContext } from "@project-chip/matter.js-general";
+import {
+    Construction,
+    ImplementationError,
+    InternalError,
+    Lifecycle,
+    Logger,
+    asyncNew,
+} from "@project-chip/matter.js-general";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { PartStore } from "../../../endpoint/storage/PartStore.js";
-import { Logger } from "../../../log/Logger.js";
-import type { StorageContext } from "../../../storage/StorageContext.js";
-import { Construction, asyncNew } from "../../../util/Construction.js";
 import { IdentityConflictError } from "../IdentityService.js";
 import { ServerPartStore } from "./ServerPartStore.js";
 

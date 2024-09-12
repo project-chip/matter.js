@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Storage } from "@project-chip/matter.js-general";
 import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
 import { BridgedDeviceBasicInformationServer } from "@project-chip/matter.js/behavior/definitions/bridged-device-basic-information";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
@@ -13,8 +14,6 @@ import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { AggregatorEndpoint, DimmableLightDevice } from "@project-chip/matter.js/endpoint/definitions";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
-import { Storage } from "@project-chip/matter.js/storage";
-import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
 
 export class BridgeTestInstance implements TestInstance {
@@ -89,7 +88,7 @@ export class BridgeTestInstance implements TestInstance {
     async setupServer(): Promise<ServerNode> {
         Environment.default.get(StorageService).factory = (_namespace: string) => this.storage;
 
-        const networkId = new ByteArray(32);
+        const networkId = new Uint8Array(32);
 
         const serverNode = await ServerNode.create(
             ServerNode.RootEndpoint.with(

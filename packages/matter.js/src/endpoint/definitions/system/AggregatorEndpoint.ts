@@ -12,7 +12,7 @@ import { ActionsServer as BaseActionsServer } from "../../../behavior/definition
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * This device type aggregates endpoints as a collection. Clusters on the endpoint indicating this device type provide

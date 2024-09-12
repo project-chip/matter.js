@@ -4,26 +4,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    Bytes,
+    CRYPTO_SYMMETRIC_KEY_LENGTH,
+    Crypto,
+    DataWriter,
+    Diagnostic,
+    Endian,
+    Logger,
+    MatterFlowError,
+} from "@project-chip/matter.js-general";
 import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
-import { MatterFlowError } from "../common/MatterError.js";
-import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "../crypto/Crypto.js";
 import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { Logger } from "../log/Logger.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateEncryptedWithoutRollover } from "../protocol/MessageReceptionState.js";
 import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
-import { ByteArray, Endian } from "../util/ByteArray.js";
-import { DataWriter } from "../util/DataWriter.js";
 import { Session, SessionContext, SessionParameterOptions } from "./Session.js";
 
 const logger = Logger.get("SecureSession");
 
-const SESSION_KEYS_INFO = ByteArray.fromString("SessionKeys");
-const SESSION_RESUMPTION_KEYS_INFO = ByteArray.fromString("SessionResumptionKeys");
+const SESSION_KEYS_INFO = Bytes.fromString("SessionKeys");
+const SESSION_RESUMPTION_KEYS_INFO = Bytes.fromString("SessionResumptionKeys");
 
 export class NoAssociatedFabricError extends StatusResponseError {
     constructor(message: string) {
@@ -40,9 +44,9 @@ export class SecureSession<T extends SessionContext> extends Session<T> {
     #fabric: Fabric | undefined;
     readonly #peerNodeId: NodeId;
     readonly #peerSessionId: number;
-    readonly #decryptKey: ByteArray;
-    readonly #encryptKey: ByteArray;
-    readonly #attestationKey: ByteArray;
+    readonly #decryptKey: Uint8Array;
+    readonly #encryptKey: Uint8Array;
+    readonly #attestationKey: Uint8Array;
     readonly #subscriptionChangedCallback: () => void;
     #caseAuthenticatedTags: CaseAuthenticatedTag[];
     readonly supportsMRP = true;
@@ -53,8 +57,8 @@ export class SecureSession<T extends SessionContext> extends Session<T> {
         fabric: Fabric | undefined;
         peerNodeId: NodeId;
         peerSessionId: number;
-        sharedSecret: ByteArray;
-        salt: ByteArray;
+        sharedSecret: Uint8Array;
+        salt: Uint8Array;
         isInitiator: boolean;
         isResumption: boolean;
         closeCallback: () => Promise<void>;
@@ -109,9 +113,9 @@ export class SecureSession<T extends SessionContext> extends Session<T> {
         fabric: Fabric | undefined;
         peerNodeId: NodeId;
         peerSessionId: number;
-        decryptKey: ByteArray;
-        encryptKey: ByteArray;
-        attestationKey: ByteArray;
+        decryptKey: Uint8Array;
+        encryptKey: Uint8Array;
+        attestationKey: Uint8Array;
         closeCallback: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
         sessionParameters?: SessionParameterOptions;
@@ -197,9 +201,11 @@ export class SecureSession<T extends SessionContext> extends Session<T> {
         await this.end(true, closeAfterExchangeFinished);
     }
 
-    decode({ header, applicationPayload, messageExtension }: DecodedPacket, aad: ByteArray): DecodedMessage {
+    decode({ header, applicationPayload, messageExtension }: DecodedPacket, aad: Uint8Array): DecodedMessage {
         if (header.hasMessageExtensions) {
-            logger.info(`Message extensions are not supported. Ignoring ${messageExtension?.toHex()}`);
+            logger.info(
+                `Message extensions are not supported. Ignoring ${messageExtension ? Bytes.toHex(messageExtension) : undefined}`,
+            );
         }
         const nonce = this.generateNonce(header.securityFlags, header.messageId, this.#peerNodeId);
         const message = MessageCodec.decodePayload({
@@ -208,7 +214,9 @@ export class SecureSession<T extends SessionContext> extends Session<T> {
         });
 
         if (message.payloadHeader.hasSecuredExtension) {
-            logger.info(`Secured extensions are not supported. Ignoring ${message.securityExtension?.toHex()}`);
+            logger.info(
+                `Secured extensions are not supported. Ignoring ${message.securityExtension ? Bytes.toHex(message.securityExtension) : undefined}`,
+            );
         }
 
         return message;
@@ -226,7 +234,7 @@ export class SecureSession<T extends SessionContext> extends Session<T> {
         return { header, applicationPayload: Crypto.encrypt(this.#encryptKey, applicationPayload, nonce, headerBytes) };
     }
 
-    get attestationChallengeKey(): ByteArray {
+    get attestationChallengeKey(): Uint8Array {
         return this.#attestationKey;
     }
 

@@ -13,7 +13,6 @@ import {
     FixedAttribute,
     FabricScopedAttribute,
     Command,
-    AccessLevel,
     TlvNoResponse,
     OptionalCommand
 } from "../Cluster.js";
@@ -41,7 +40,8 @@ import { TlvString } from "../../tlv/TlvString.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvAttributeId } from "../../datatype/AttributeId.js";
 import { StatusCode } from "../../protocol/interaction/StatusCode.js";
-import { Identity } from "../../util/Type.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ScenesManagement {

@@ -9,7 +9,6 @@
 import { MutableCluster } from "../mutation/MutableCluster.js";
 import {
     WritableFabricScopedAttribute,
-    AccessLevel,
     OptionalWritableFabricScopedAttribute,
     FixedAttribute,
     Event,
@@ -25,9 +24,10 @@ import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvDeviceTypeId } from "../../datatype/DeviceTypeId.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace AccessControl {

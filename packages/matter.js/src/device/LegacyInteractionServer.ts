@@ -4,18 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic, InternalError, Logger } from "@project-chip/matter.js-general";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { MatterDevice } from "../MatterDevice.js";
-import { AccessLevel } from "../cluster/Cluster.js";
 import { AccessControlCluster } from "../cluster/definitions/index.js";
 import { AnyAttributeServer, AttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
 import { CommandServer } from "../cluster/server/CommandServer.js";
 import { AnyEventServer } from "../cluster/server/EventServer.js";
 import { Message } from "../codec/MessageCodec.js";
-import { InternalError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { Logger } from "../log/Logger.js";
 import { MessageExchange } from "../protocol/MessageExchange.js";
 import { AccessControlManager, AccessDeniedError } from "../protocol/interaction/AccessControlManager.js";
 import { EventStorageData } from "../protocol/interaction/EventHandler.js";

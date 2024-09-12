@@ -6,7 +6,7 @@
 
 const LIST_INDENT = 2;
 
-export { camelize, describeList, serialize } from "@project-chip/matter.js/util";
+export { camelize, describeList, serialize } from "@project-chip/matter.js-general";
 
 /**
  * Performs word wrap.  Input is assumed to be a series of paragraphs separated

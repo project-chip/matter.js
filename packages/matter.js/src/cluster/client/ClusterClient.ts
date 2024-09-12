@@ -4,21 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { capitalize, Diagnostic, Logger, Merge } from "@project-chip/matter.js-general";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
-import { Logger } from "../../log/Logger.js";
 import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
 import { TlvEventFilter } from "../../protocol/interaction/InteractionProtocol.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { capitalize } from "../../util/String.js";
-import { Merge } from "../../util/Type.js";
 import { Attribute, Command, Event, GlobalAttributes, UnknownAttribute, UnknownEvent } from "../Cluster.js";
 import { ClusterType } from "../ClusterType.js";
 import { AttributeServerValues } from "../server/ClusterServerTypes.js";

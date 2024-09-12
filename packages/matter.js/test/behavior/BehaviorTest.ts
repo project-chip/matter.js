@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { BasicObservable, EventEmitter, Observable } from "@project-chip/matter.js-general";
 import { Behavior } from "../../src/behavior/Behavior.js";
 import { BehaviorBacking } from "../../src/behavior/internal/BehaviorBacking.js";
 import { Agent } from "../../src/endpoint/Agent.js";
-import { BasicObservable, EventEmitter, Observable } from "../../src/util/Observable.js";
 import { MockEndpoint } from "../endpoint/mock-endpoint.js";
 
 class TestBehavior extends Behavior {

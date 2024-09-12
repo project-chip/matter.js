@@ -4,15 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Construction, Crypto, ImplementationError, InternalError, PrivateKey } from "@project-chip/matter.js-general";
 import { MatterDevice } from "../../../MatterDevice.js";
 import { AttestationCertificateManager } from "../../../certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "../../../certificate/CertificationDeclarationManager.js";
-import { ImplementationError, InternalError } from "../../../common/MatterError.js";
-import { Crypto } from "../../../crypto/Crypto.js";
-import { PrivateKey } from "../../../crypto/Key.js";
 import { SecureSession } from "../../../session/SecureSession.js";
-import { ByteArray } from "../../../util/ByteArray.js";
-import { Construction } from "../../../util/Construction.js";
 import { ProductDescription } from "../../system/product-description/ProductDescription.js";
 
 /**
@@ -20,9 +16,9 @@ import { ProductDescription } from "../../system/product-description/ProductDesc
  */
 export class DeviceCertification {
     #privateKey?: PrivateKey;
-    #certificate?: ByteArray;
-    #intermediateCertificate?: ByteArray;
-    #declaration?: ByteArray;
+    #certificate?: Uint8Array;
+    #intermediateCertificate?: Uint8Array;
+    #declaration?: Uint8Array;
     readonly #construction: Construction<DeviceCertification>;
 
     get construction() {
@@ -74,13 +70,13 @@ export class DeviceCertification {
     }
 
     #initializeFromConfig(config: DeviceCertification.Configuration) {
-        this.#privateKey = config.privateKey instanceof ByteArray ? PrivateKey(config.privateKey) : config.privateKey;
+        this.#privateKey = config.privateKey instanceof Uint8Array ? PrivateKey(config.privateKey) : config.privateKey;
         this.#certificate = config.certificate;
         this.#intermediateCertificate = config.intermediateCertificate;
         this.#declaration = config.declaration;
     }
 
-    sign(session: SecureSession<MatterDevice>, data: ByteArray) {
+    sign(session: SecureSession<MatterDevice>, data: Uint8Array) {
         return Crypto.sign(this.#assertInitialized().privateKey, [data, session.attestationChallengeKey]);
     }
 
@@ -111,10 +107,10 @@ export class DeviceCertification {
 
 export namespace DeviceCertification {
     export interface Configuration {
-        privateKey: PrivateKey | ByteArray;
-        certificate: ByteArray;
-        intermediateCertificate: ByteArray;
-        declaration: ByteArray;
+        privateKey: PrivateKey | Uint8Array;
+        certificate: Uint8Array;
+        intermediateCertificate: Uint8Array;
+        declaration: Uint8Array;
     }
 
     export type Definition = Configuration | (() => Promise<Configuration>);

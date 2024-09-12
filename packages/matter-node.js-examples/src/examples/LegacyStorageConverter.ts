@@ -5,10 +5,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import "@project-chip/matter-node.js";
-import { StorageBackendDisk } from "@project-chip/matter-node.js/storage";
+import { StorageBackendDisk } from "@project-chip/matter.js-nodejs";
+
+import { Time } from "@project-chip/matter.js-general";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
-import { Time } from "@project-chip/matter.js/time";
 import { LocalStorage } from "node-localstorage";
 
 const environment = Environment.default;

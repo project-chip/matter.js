@@ -7,10 +7,11 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
-import { Attribute, OptionalWritableAttribute, AccessLevel } from "../Cluster.js";
+import { Attribute, OptionalWritableAttribute } from "../Cluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvUInt8, TlvBitmap, TlvEnum, TlvUInt16 } from "../../tlv/TlvNumber.js";
-import { Identity } from "../../util/Type.js";
+import { AccessLevel } from "@project-chip/matter.js-model";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace OccupancySensing {

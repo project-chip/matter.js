@@ -17,7 +17,7 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { MediaPlayback } from "./MediaPlaybackCluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ContentLauncher {

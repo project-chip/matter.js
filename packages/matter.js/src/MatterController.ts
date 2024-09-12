@@ -10,16 +10,35 @@
  * @deprecated
  */
 
+import {
+    CRYPTO_SYMMETRIC_KEY_LENGTH,
+    Channel,
+    Construction,
+    Crypto,
+    ImplementationError,
+    Logger,
+    NetInterface,
+    NoProviderError,
+    ServerAddress,
+    ServerAddressIp,
+    StorageBackendMemory,
+    StorageContext,
+    StorageManager,
+    SupportedStorageTypes,
+    Time,
+    Timer,
+    anyPromise,
+    createPromise,
+    isIPv6,
+    serverAddressToString,
+} from "@project-chip/matter.js-general";
+import { Specification } from "@project-chip/matter.js-model";
 import { NodeCommissioningOptions } from "./CommissioningController.js";
 import { Ble } from "./ble/Ble.js";
 import { RootCertificateManager } from "./certificate/RootCertificateManager.js";
 import { ClusterClient } from "./cluster/client/ClusterClient.js";
 import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
-import { Channel } from "./common/Channel.js";
-import { ImplementationError, NoProviderError } from "./common/MatterError.js";
 import { CommissionableDevice, DiscoveryData, Scanner } from "./common/Scanner.js";
-import { ServerAddress, ServerAddressIp, serverAddressToString } from "./common/ServerAddress.js";
-import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "./crypto/Crypto.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { FabricId } from "./datatype/FabricId.js";
@@ -27,10 +46,7 @@ import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric.js";
-import { Logger } from "./log/Logger.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { Specification } from "./model/definitions/Specification.js";
-import { NetInterface } from "./net/NetInterface.js";
 import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
 import {
     CommissioningError,
@@ -56,19 +72,10 @@ import {
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
-import { StorageBackendMemory } from "./storage/StorageBackendMemory.js";
-import { StorageContext } from "./storage/StorageContext.js";
-import { StorageManager } from "./storage/StorageManager.js";
-import { SupportedStorageTypes } from "./storage/StringifyTools.js";
-import { Time, Timer } from "./time/Time.js";
 import { TlvEnum } from "./tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "./tlv/TlvObject.js";
 import { TypeFromSchema } from "./tlv/TlvSchema.js";
 import { TlvString } from "./tlv/TlvString.js";
-import { ByteArray } from "./util/ByteArray.js";
-import { Construction } from "./util/Construction.js";
-import { isIPv6 } from "./util/Ip.js";
-import { anyPromise, createPromise } from "./util/Promises.js";
 
 const TlvCommissioningSuccessFailureResponse = TlvObject({
     /** Contain the result of the operation. */
@@ -522,7 +529,7 @@ export class MatterController implements SessionContext {
         passcode: number,
         device?: CommissionableDevice,
     ): Promise<MessageChannel<MatterController>> {
-        let paseChannel: Channel<ByteArray>;
+        let paseChannel: Channel<Uint8Array>;
         if (device !== undefined) {
             logger.info(`Commissioning device`, MdnsScanner.discoveryDataDiagnostics(device));
         }
@@ -974,7 +981,7 @@ export class MatterController implements SessionContext {
         return this.sessionManager.getNextAvailableSessionId();
     }
 
-    getResumptionRecord(resumptionId: ByteArray) {
+    getResumptionRecord(resumptionId: Uint8Array) {
         return this.sessionManager.findResumptionRecordById(resumptionId);
     }
 

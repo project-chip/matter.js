@@ -4,17 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "../crypto/Crypto.js";
-import { BinaryKeyPair, PrivateKey } from "../crypto/Key.js";
+import {
+    BinaryKeyPair,
+    Bytes,
+    Construction,
+    Crypto,
+    Logger,
+    PrivateKey,
+    StorageContext,
+    Time,
+    asyncNew,
+    toHex,
+} from "@project-chip/matter.js-general";
 import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { FabricId } from "../datatype/FabricId.js";
 import { NodeId } from "../datatype/NodeId.js";
-import { Logger } from "../log/Logger.js";
-import { StorageContext } from "../storage/StorageContext.js";
-import { Time } from "../time/Time.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { Construction, asyncNew } from "../util/Construction.js";
-import { toHex } from "../util/Number.js";
 import {
     CertificateManager,
     OperationalCertificate,
@@ -95,7 +99,7 @@ export class RootCertificateManager {
     private generateRootCert() {
         const now = Time.get().now();
         const unsignedCertificate: Unsigned<RootCertificate> = {
-            serialNumber: ByteArray.fromHex(toHex(this.rootCertId)),
+            serialNumber: Bytes.fromHex(toHex(this.rootCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
@@ -119,7 +123,7 @@ export class RootCertificateManager {
     }
 
     generateNoc(
-        publicKey: ByteArray,
+        publicKey: Uint8Array,
         fabricId: FabricId,
         nodeId: NodeId,
         caseAuthenticatedTags?: CaseAuthenticatedTag[],
@@ -127,7 +131,7 @@ export class RootCertificateManager {
         const now = Time.get().now();
         const certId = this.nextCertificateId++;
         const unsignedCertificate: Unsigned<OperationalCertificate> = {
-            serialNumber: ByteArray.fromHex(toHex(certId)),
+            serialNumber: Bytes.fromHex(toHex(certId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
@@ -160,8 +164,8 @@ export namespace RootCertificateManager {
     export type Data = {
         rootCertId: bigint;
         rootKeyPair: BinaryKeyPair;
-        rootKeyIdentifier: ByteArray;
-        rootCertBytes: ByteArray;
+        rootKeyIdentifier: Uint8Array;
+        rootCertBytes: Uint8Array;
         nextCertificateId: bigint;
     };
 }

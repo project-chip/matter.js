@@ -4,13 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Properties } from "@project-chip/matter.js-general";
+import {
+    AttributeModel,
+    ClusterModel,
+    DataModelPath,
+    FeatureMap,
+    FeatureSet,
+    FieldElement,
+    FieldModel,
+} from "@project-chip/matter.js-model";
 import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
 import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
-import { DataModelPath } from "../../../../src/model/definitions/DataModelPath.js";
-import { AttributeModel, ClusterModel, FeatureSet, FieldElement, FieldModel } from "../../../../src/model/index.js";
-import { FeatureMap } from "../../../../src/model/standard/elements/FeatureMap.js";
 import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
-import { Properties } from "../../../../src/util/Type.js";
 
 export function Fields(
     ...definition: {
@@ -33,18 +39,18 @@ export function Fields(
 }
 
 export function Features(definition: { [code: string]: string }): AttributeModel {
-    return new AttributeModel({
-        ...FeatureMap,
+    const result = FeatureMap.clone();
 
-        children: Object.entries(definition).map(
-            ([name, description], index) =>
-                new FieldModel({
-                    name,
-                    description,
-                    constraint: index,
-                }),
-        ),
-    });
+    result.children = Object.entries(definition).map(
+        ([name, description], index) =>
+            new FieldModel({
+                name,
+                description,
+                constraint: index,
+            }),
+    );
+
+    return result;
 }
 
 export function Tests(...definition: (Fields | Features | Tests["entries"])[]): Tests {
@@ -72,7 +78,7 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
     const cluster = new ClusterModel({
         name: "Test",
 
-        children: [features ?? new AttributeModel(FeatureMap), ...fields],
+        children: [features ? features.clone() : FeatureMap.clone(), ...fields],
     });
     cluster.supportedFeatures = supports;
 

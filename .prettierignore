@@ -2,7 +2,7 @@
 **/build/**
 models/src/chip.ts
 models/src/spec.ts
-packages/matter.js/src/model/standard/elements/*
+packages/model/src/standard/elements/*
 packages/matter.js/src/cluster/definitions/*
 packages/matter.js/src/cluster/globals/*
 packages/matter.js/src/endpoint/definitions/*

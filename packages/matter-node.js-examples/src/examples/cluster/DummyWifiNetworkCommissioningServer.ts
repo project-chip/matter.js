@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { GeneralCommissioningBehavior } from "@project-chip/matter.js/behavior/definitions/general-commissioning";
 import { NetworkCommissioningBehavior } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { NetworkCommissioning } from "@project-chip/matter.js/cluster";
-import { ByteArray } from "@project-chip/matter.js/util";
 
-const firstNetworkId = new ByteArray(32);
+const firstNetworkId = new Uint8Array(32);
 
 /**
  * This represents a Dummy version of a Wifi Network Commissioning Cluster Server without real Wifi related logic, beside
@@ -20,7 +20,9 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
     NetworkCommissioning.Feature.WiFiNetworkInterface,
 ) {
     override scanNetworks({ ssid, breadcrumb }: NetworkCommissioning.ScanNetworksRequest) {
-        console.log(`---> scanNetworks called on NetworkCommissioning cluster: ${ssid?.toHex()} ${breadcrumb}`);
+        console.log(
+            `---> scanNetworks called on NetworkCommissioning cluster: ${ssid ? Bytes.toHex(ssid) : undefined} ${breadcrumb}`,
+        );
 
         // Simulate successful scan
         if (breadcrumb !== undefined) {
@@ -42,10 +44,8 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
                         wpa2Personal: true,
                         wpa3Personal: true,
                     },
-                    ssid: ssid || ByteArray.fromString(this.endpoint.env.vars.get("ble.wifi.scanSsid") ?? "TestSSID"), // Set a valid existing local Wi-Fi SSID here
-                    bssid: ByteArray.fromString(
-                        this.endpoint.env.vars.get("ble.wifi.scanBssid") ?? "00:00:00:00:00:00",
-                    ),
+                    ssid: ssid || Bytes.fromString(this.endpoint.env.vars.get("ble.wifi.scanSsid") ?? "TestSSID"), // Set a valid existing local Wi-Fi SSID here
+                    bssid: Bytes.fromString(this.endpoint.env.vars.get("ble.wifi.scanBssid") ?? "00:00:00:00:00:00"),
                     channel: 1,
                 },
             ],
@@ -58,7 +58,7 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
         breadcrumb,
     }: NetworkCommissioning.AddOrUpdateWiFiNetworkRequest) {
         console.log(
-            `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${ssid.toHex()} ${credentials.toHex()} ${breadcrumb}`,
+            `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(ssid)} ${Bytes.toHex(credentials)} ${breadcrumb}`,
         );
 
         this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
@@ -80,7 +80,9 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
     }
 
     override removeNetwork({ networkId, breadcrumb }: NetworkCommissioning.RemoveNetworkRequest) {
-        console.log(`---> removeNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
+        console.log(
+            `---> removeNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${breadcrumb}`,
+        );
 
         this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
@@ -101,7 +103,9 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
     }
 
     override async connectNetwork({ networkId, breadcrumb }: NetworkCommissioning.ConnectNetworkRequest) {
-        console.log(`---> connectNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
+        console.log(
+            `---> connectNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${breadcrumb}`,
+        );
 
         this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
@@ -130,7 +134,7 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
 
     override reorderNetwork({ networkId, networkIndex, breadcrumb }: NetworkCommissioning.ReorderNetworkRequest) {
         console.log(
-            `---> reorderNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${networkIndex} ${breadcrumb}`,
+            `---> reorderNetwork called on NetworkCommissioning cluster: ${Bytes.toHex(networkId)} ${networkIndex} ${breadcrumb}`,
         );
 
         // Simulate successful connection

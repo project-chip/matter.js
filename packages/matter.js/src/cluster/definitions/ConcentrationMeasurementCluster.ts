@@ -11,7 +11,7 @@ import { Attribute, OptionalAttribute, FixedAttribute } from "../Cluster.js";
 import { TlvFloat, TlvEnum, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 export namespace ConcentrationMeasurement {
     /**

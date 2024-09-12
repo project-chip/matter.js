@@ -4,11 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataModelPath } from "../../../model/definitions/DataModelPath.js";
-import { AttributeModel, ClusterModel, Metatype, ValueModel } from "../../../model/index.js";
-import { FeatureMap } from "../../../model/standard/elements/FeatureMap.js";
+import { camelize } from "@project-chip/matter.js-general";
+import {
+    AttributeModel,
+    ClusterModel,
+    DataModelPath,
+    FeatureMap,
+    Metatype,
+    ValueModel,
+} from "@project-chip/matter.js-model";
 import { StatusCode } from "../../../protocol/interaction/StatusCode.js";
-import { camelize } from "../../../util/String.js";
 import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
 import { Schema } from "../../supervision/Schema.js";
@@ -96,7 +101,7 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
 
         default:
             throw new SchemaImplementationError(
-                DataModelPath((schema as Schema).path),
+                DataModelPath((schema as unknown as Schema).path),
                 `Unsupported validation metatype ${metatype}`,
             );
     }

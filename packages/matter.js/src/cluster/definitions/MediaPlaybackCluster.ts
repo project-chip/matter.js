@@ -17,7 +17,7 @@ import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace MediaPlayback {

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Branded } from "@project-chip/matter.js-general";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { Branded } from "../util/Type.js";
 
 /**
  * An "event number" is an increasing 64-bit unsigned integer assigned to

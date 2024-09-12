@@ -23,7 +23,7 @@ import { TlvUInt8, TlvBitmap, TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace BooleanStateConfiguration {

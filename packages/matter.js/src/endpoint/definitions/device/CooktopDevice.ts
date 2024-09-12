@@ -10,7 +10,7 @@ import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on
 import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * A cooktop is a cooking surface that heats food either by transferring currents from an electromagnetic field located

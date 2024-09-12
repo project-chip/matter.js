@@ -9,7 +9,7 @@
 import { MutableCluster } from "../mutation/MutableCluster.js";
 import { Command, TlvNoResponse } from "../Cluster.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace LowPower {

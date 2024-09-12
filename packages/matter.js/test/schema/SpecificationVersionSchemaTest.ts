@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Specification } from "../../src/model/index.js";
+import { Specification } from "@project-chip/matter.js-model";
 import { SpecificationVersion } from "../../src/schema/SpecificationVersionSchema.js";
 
 describe("SpecificationVersionSchema", () => {

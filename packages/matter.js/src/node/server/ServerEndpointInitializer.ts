@@ -4,15 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Environment, InternalError, Logger } from "@project-chip/matter.js-general";
 import { Behavior } from "../../behavior/Behavior.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
 import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
-import { InternalError } from "../../common/MatterError.js";
 import { Endpoint } from "../../endpoint/Endpoint.js";
 import { EndpointServer } from "../../endpoint/EndpointServer.js";
 import { EndpointInitializer } from "../../endpoint/properties/EndpointInitializer.js";
-import { Environment } from "../../environment/Environment.js";
-import { Logger } from "../../log/Logger.js";
 import { ServerStore } from "./storage/ServerStore.js";
 
 const logger = Logger.get("BehaviorInit");

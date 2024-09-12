@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterRevision } from "@project-chip/matter.js/elements/ClusterRevision";
-import { FeatureMap } from "@project-chip/matter.js/elements/FeatureMap";
-import { Diagnostic, Logger } from "@project-chip/matter.js/log";
+import { Diagnostic, Logger } from "@project-chip/matter.js-general";
 import {
     AttributeElement,
     ClusterElement,
+    ClusterRevision,
     CommandElement,
     DatatypeElement,
     EventElement,
+    FeatureMap,
     FieldElement,
-} from "@project-chip/matter.js/model";
+} from "@project-chip/matter.js-model";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
 import {

@@ -4,6 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Identity, MaybePromise } from "@project-chip/matter.js-general";
+import {
+    AttributeElement,
+    ClusterElement,
+    ClusterModel,
+    CommandElement,
+    EventElement,
+    FieldElement,
+} from "@project-chip/matter.js-model";
 import { ClusterBehavior } from "@project-chip/matter.js/behavior/cluster";
 import {
     Attribute,
@@ -14,16 +23,7 @@ import {
     MutableCluster,
 } from "@project-chip/matter.js/cluster";
 import { ClusterId, VendorId } from "@project-chip/matter.js/datatype";
-import {
-    AttributeElement,
-    ClusterElement,
-    ClusterModel,
-    CommandElement,
-    EventElement,
-    FieldElement,
-} from "@project-chip/matter.js/model";
 import { TlvField, TlvInt16, TlvNullable, TlvObject, TlvString, TypeFromSchema } from "@project-chip/matter.js/tlv";
-import { Identity, MaybePromise } from "@project-chip/matter.js/util";
 
 /** Define the Cluster ID, custom clusters use a special extended formt that also contains the Vendor Id */
 const myFancyClusterId = ClusterId.buildVendorSpecific(VendorId(0xfff4), 0xfc00);

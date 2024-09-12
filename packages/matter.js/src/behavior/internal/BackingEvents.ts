@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { EventEmitter, GeneratedClass, Observable, ObservableProxy } from "@project-chip/matter.js-general";
 import type { Endpoint } from "../../endpoint/Endpoint.js";
-import { GeneratedClass } from "../../util/GeneratedClass.js";
-import { EventEmitter, Observable, ObservableProxy } from "../../util/Observable.js";
 import { BehaviorBacking } from "./BehaviorBacking.js";
 
 type Implementation = new (target: EventEmitter) => EventEmitter;

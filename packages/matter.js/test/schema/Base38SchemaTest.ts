@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { Base38 } from "../../src/schema/Base38Schema.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 const ENCODED = "-MOA57ZU02IT2L2BJ00";
-const DECODED = ByteArray.fromHex("88ffa7915040004751dd02");
+const DECODED = Bytes.fromHex("88ffa7915040004751dd02");
 
 describe("Base38Schema", () => {
     describe("encode", () => {
@@ -23,7 +23,7 @@ describe("Base38Schema", () => {
         it("encodes a string", () => {
             const result = Base38.decode(ENCODED);
 
-            expect(result.toHex()).equal(DECODED.toHex());
+            expect(Bytes.toHex(result)).equal(Bytes.toHex(DECODED));
         });
     });
 });

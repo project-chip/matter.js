@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Observable, Time, Timer } from "@project-chip/matter.js-general";
+import { FieldElement } from "@project-chip/matter.js-model";
 import { ClusterType } from "../../../cluster/ClusterType.js";
 import { Switch } from "../../../cluster/definitions/SwitchCluster.js";
-import { FieldElement } from "../../../model/elements/FieldElement.js";
-import { ClusterModel } from "../../../model/index.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
-import { Time, Timer } from "../../../time/Time.js";
-import { Observable } from "../../../util/Observable.js";
 import { ActionContext } from "../../context/ActionContext.js";
 import { SwitchBehavior } from "./SwitchBehavior.js";
 
@@ -23,12 +21,13 @@ const SwitchServerBase = SwitchBehavior.for(Switch.Complete).with(
 );
 
 // Enhance Schema to define conformance for some of the additional state attributes
-const schema = SwitchServerBase.schema?.clone() as ClusterModel;
-schema.add(
-    FieldElement({ name: "longPressDelay", type: "uint32", quality: "M", conformance: "MSL" }),
-    FieldElement({ name: "multiPressDelay", type: "uint32", quality: "M", conformance: "MSM" }),
-    FieldElement({ name: "momentaryNeutralPosition", type: "uint8", quality: "O", conformance: "MS" }),
-);
+const schema = SwitchServerBase.schema!.extend({
+    children: [
+        FieldElement({ name: "longPressDelay", type: "uint32", quality: "M", conformance: "MSL" }),
+        FieldElement({ name: "multiPressDelay", type: "uint32", quality: "M", conformance: "MSM" }),
+        FieldElement({ name: "momentaryNeutralPosition", type: "uint8", quality: "O", conformance: "MS" }),
+    ],
+});
 
 /**
  * This is the default server implementation of {@link SwitchBehavior}.

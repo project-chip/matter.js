@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Metatype } from "../../../../model/definitions/index.js";
+import { Metatype } from "@project-chip/matter.js-model";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import type { Schema } from "../../../supervision/Schema.js";
 import { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";

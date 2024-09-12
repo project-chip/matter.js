@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { ValidationError } from "../../src/common/ValidationError.js";
 import { FabricIndex, TlvFabricIndex } from "../../src/datatype/FabricIndex.js";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
@@ -20,7 +21,6 @@ import {
 } from "../../src/tlv/TlvObject.js";
 import { TypeFromSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 const schema = TlvObject({
     /** Mandatory field jsdoc */
@@ -100,7 +100,7 @@ describe("TlvObject tests", () => {
             for (const valueDescription in codecVector) {
                 const { encoded, decoded } = codecVector[valueDescription];
                 it(`encodes ${valueDescription}`, () => {
-                    expect(schema.encode(decoded).toHex()).equal(encoded);
+                    expect(Bytes.toHex(schema.encode(decoded))).equal(encoded);
                 });
             }
         });
@@ -109,7 +109,7 @@ describe("TlvObject tests", () => {
             for (const valueDescription in codecVector) {
                 const { encoded, decoded } = codecVector[valueDescription];
                 it(`decodes ${valueDescription}`, () => {
-                    expect(schema.decode(ByteArray.fromHex(encoded))).deep.equal(decoded);
+                    expect(schema.decode(Bytes.fromHex(encoded))).deep.equal(decoded);
                 });
             }
 
@@ -308,28 +308,28 @@ describe("TlvObject tests", () => {
         it("encode and decode list with optional fields", () => {
             const data = { optionalField: "test" };
             const encoded = schemaListOptional.encode(data);
-            expect(encoded.toHex()).equal("172c01047465737418");
+            expect(Bytes.toHex(encoded)).equal("172c01047465737418");
             expect(schemaListOptional.decode(encoded)).deep.equal(data);
         });
 
         it("encode and decode list with optional and required fields in list order", () => {
             const data = { optionalField: "test", requiredField: "testreq" };
             const encoded = schemaListRequiredAndOptional.encode(data);
-            expect(encoded.toHex()).equal("172c0104746573742c02077465737472657118");
+            expect(Bytes.toHex(encoded)).equal("172c0104746573742c02077465737472657118");
             expect(schemaListRequiredAndOptional.decode(encoded)).deep.equal(data);
         });
 
         it("encode and decode list with optional and required fields in switched order", () => {
             const data = { requiredField: "testreq", optionalField: "test" };
             const encoded = schemaListRequiredAndOptional.encode(data);
-            expect(encoded.toHex()).equal("172c0207746573747265712c01047465737418");
+            expect(Bytes.toHex(encoded)).equal("172c0207746573747265712c01047465737418");
             expect(schemaListRequiredAndOptional.decode(encoded)).deep.equal(data);
         });
 
         it("encode and decode list with optional and required fields without optional field", () => {
             const data = { requiredField: "testreq" };
             const encoded = schemaListRequiredAndOptional.encode(data);
-            expect(encoded.toHex()).equal("172c02077465737472657118");
+            expect(Bytes.toHex(encoded)).equal("172c02077465737472657118");
             expect(schemaListRequiredAndOptional.decode(encoded)).deep.equal(data);
         });
 
@@ -339,7 +339,7 @@ describe("TlvObject tests", () => {
                 optionalRepeatedField: ["test1", "test2"],
             };
             const encoded = schemaListOptionalRepeated.encode(data);
-            expect(encoded.toHex()).equal("172c0104746573742c020574657374312c0205746573743218");
+            expect(Bytes.toHex(encoded)).equal("172c0104746573742c020574657374312c0205746573743218");
             expect(schemaListOptionalRepeated.decode(encoded)).deep.equal(data);
         });
 
@@ -349,7 +349,7 @@ describe("TlvObject tests", () => {
                 optionalRepeatedField: ["test1", "test2"],
             };
             const encoded = schemaListOptionalRepeatedLimit.encode(data);
-            expect(encoded.toHex()).equal("172c0104746573742c020574657374312c0205746573743218");
+            expect(Bytes.toHex(encoded)).equal("172c0104746573742c020574657374312c0205746573743218");
             expect(schemaListOptionalRepeatedLimit.decode(encoded)).deep.equal(data);
         });
 
@@ -367,7 +367,7 @@ describe("TlvObject tests", () => {
                 requiredField: "test",
                 repeatedField: ["test1", "test2", "test3"],
             });
-            expect(encoded.toHex()).equal("172c0104746573742c020574657374312c020574657374322c0205746573743318");
+            expect(Bytes.toHex(encoded)).equal("172c0104746573742c020574657374312c020574657374322c0205746573743318");
 
             expect(() => schemaListOptionalRepeatedLimit.decode(encoded)).throw(
                 "Repeated field list for optionalRepeatedField is too long: 3, max 2.",
@@ -380,7 +380,7 @@ describe("TlvObject tests", () => {
                 repeatedField: ["test1", "test2"],
             };
             const encoded = schemaListRepeatedLimited.encode(data);
-            expect(encoded.toHex()).equal("172c0104746573742c020574657374312c0205746573743218");
+            expect(Bytes.toHex(encoded)).equal("172c0104746573742c020574657374312c0205746573743218");
             expect(schemaListRepeatedLimited.decode(encoded)).deep.equal(data);
         });
 
@@ -390,7 +390,7 @@ describe("TlvObject tests", () => {
                 requiredField: "test",
             };
             const encoded = schemaListRepeatedLimited.encode(data);
-            expect(encoded.toHex()).equal("172c020574657374312c020574657374322c01047465737418");
+            expect(Bytes.toHex(encoded)).equal("172c020574657374312c020574657374322c01047465737418");
             expect(schemaListRepeatedLimited.decode(encoded)).deep.equal(data);
         });
 
@@ -400,7 +400,7 @@ describe("TlvObject tests", () => {
                 repeatedField: ["test1", "test2"],
             };
             const encoded = schemaListRepeatedLimited.encode(data);
-            expect(encoded.toHex()).equal("172c0104746573742c020574657374312c0205746573743218");
+            expect(Bytes.toHex(encoded)).equal("172c0104746573742c020574657374312c0205746573743218");
             expect(schemaListRepeatedLimited.decode(encoded)).deep.equal(data);
         });
 
@@ -410,7 +410,7 @@ describe("TlvObject tests", () => {
                 repeatedField: ["test1"],
             };
             const encoded = schemaListRepeatedLimited.encode(data);
-            expect(encoded.toHex()).equal("172c0104746573742c0205746573743118");
+            expect(Bytes.toHex(encoded)).equal("172c0104746573742c0205746573743118");
             expect(schemaListRepeatedLimited.decode(encoded)).deep.equal(data);
         });
 
@@ -435,7 +435,7 @@ describe("TlvObject tests", () => {
                 requiredField: "test",
                 repeatedField: ["test1", "test2", "test3"],
             });
-            expect(encoded.toHex()).equal("172c0104746573742c020574657374312c020574657374322c0205746573743318");
+            expect(Bytes.toHex(encoded)).equal("172c0104746573742c020574657374312c020574657374322c0205746573743318");
 
             // Decode with limit
             expect(() => schemaListRepeatedLimited.decode(encoded)).throw(
@@ -449,14 +449,14 @@ describe("TlvObject tests", () => {
                 requiredField: "test",
             };
             const encoded = schemaListRepeatedLimited.encode(data);
-            expect(encoded.toHex()).equal("172c020574657374312c01047465737418");
+            expect(Bytes.toHex(encoded)).equal("172c020574657374312c01047465737418");
             expect(schemaListRepeatedLimited.decode(encoded)).deep.equal(data);
         });
     });
 
     describe("Tlv Lists with protocol specific tags", () => {
         it("decodes list with protocol specific tags", () => {
-            const data = ByteArray.fromHex(
+            const data = Bytes.fromHex(
                 "17D00000F1FF01003D48656C6C6F20576F726C642E205468697320697320612073696E676C6520656C656D656E74206C6976696E6720617320612063686172737472696E670018",
             );
             const result = TlvTaggedList({} /* No fields, sufficient for validation */, true).decode(data);
@@ -464,7 +464,7 @@ describe("TlvObject tests", () => {
         });
 
         it("fails when protocol specific tags are not allowed", () => {
-            const data = ByteArray.fromHex(
+            const data = Bytes.fromHex(
                 "17D00000F1FF01003D48656C6C6F20576F726C642E205468697320697320612073696E676C6520656C656D656E74206C6976696E6720617320612063686172737472696E670018",
             );
             expect(() => TlvTaggedList({} /* No fields, sufficient for validation */, false).decode(data)).to.throw(

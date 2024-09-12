@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvArray } from "../../src/tlv/TlvArray.js";
 import { TlvNullable } from "../../src/tlv/TlvNullable.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 type CodecVector<I, E> = { [valueDescription: string]: { encoded: E; decoded: I } };
 
@@ -24,7 +24,7 @@ describe("TlvNullable", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(schema.encode(decoded).toHex()).equal(encoded);
+                expect(Bytes.toHex(schema.encode(decoded))).equal(encoded);
             });
         }
     });
@@ -43,7 +43,7 @@ describe("TlvNullable", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(schema.decode(ByteArray.fromHex(encoded))).equal(decoded);
+                expect(schema.decode(Bytes.fromHex(encoded))).equal(decoded);
             });
         }
     });

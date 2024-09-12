@@ -4,25 +4,35 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    ImplementationError,
+    InternalError,
+    Logger,
+    MatterError,
+    MaybePromise,
+    camelize,
+    isDeepEqual,
+} from "@project-chip/matter.js-general";
+import {
+    AccessLevel,
+    AttributeModel,
+    ClusterModel,
+    DatatypeModel,
+    FabricIndex,
+    MatterModel,
+} from "@project-chip/matter.js-model";
 import { MatterDevice } from "../../MatterDevice.js";
 import { Message } from "../../codec/MessageCodec.js";
-import { ImplementationError, InternalError, MatterError } from "../../common/MatterError.js";
 import { ValidationError } from "../../common/ValidationError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { Logger } from "../../log/Logger.js";
-import { AttributeModel, ClusterModel, DatatypeModel, MatterModel } from "../../model/index.js";
-import { FabricIndex } from "../../model/standard/elements/FabricIndex.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
-import { isDeepEqual } from "../../util/DeepEqual.js";
-import { MaybePromise } from "../../util/Promises.js";
-import { camelize } from "../../util/String.js";
-import { AccessLevel, Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
+import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
 import { ClusterDatasource } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("AttributeServer");

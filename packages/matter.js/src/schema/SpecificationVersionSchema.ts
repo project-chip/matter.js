@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "../util/ByteArray.js";
-import { toHex } from "../util/Number.js";
+import { Bytes, toHex } from "@project-chip/matter.js-general";
 import { BitField, ByteArrayBitmapSchema } from "./BitmapSchema.js";
 
 export type SpecificationVersion = {
@@ -23,6 +22,6 @@ const SpecificationVersionSchema = ByteArrayBitmapSchema({
 
 export namespace SpecificationVersion {
     export const encode = (version: SpecificationVersion) =>
-        parseInt(SpecificationVersionSchema.encode({ ...version, reserved: 0 }).toHex(), 16);
-    export const decode = (version: number) => SpecificationVersionSchema.decode(ByteArray.fromHex(toHex(version)));
+        parseInt(Bytes.toHex(SpecificationVersionSchema.encode({ ...version, reserved: 0 })), 16);
+    export const decode = (version: number) => SpecificationVersionSchema.decode(Bytes.fromHex(toHex(version)));
 }

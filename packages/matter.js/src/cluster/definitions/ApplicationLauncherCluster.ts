@@ -16,7 +16,7 @@ import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace ApplicationLauncher {

@@ -4,6 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    Bytes,
+    ChannelType,
+    Crypto,
+    Logger,
+    MatterError,
+    Time,
+    UnexpectedDataError,
+} from "@project-chip/matter.js-general";
 import { TlvCertSigningRequest } from "../behavior/definitions/operational-credentials/OperationalCredentialsTypes.js";
 import { CertificateManager } from "../certificate/CertificateManager.js";
 import { RootCertificateManager } from "../certificate/RootCertificateManager.js";
@@ -16,19 +25,13 @@ import { GeneralCommissioning } from "../cluster/definitions/GeneralCommissionin
 import { NetworkCommissioning } from "../cluster/definitions/NetworkCommissioningCluster.js";
 import { OperationalCredentials } from "../cluster/definitions/OperationalCredentialsCluster.js";
 import { TimeSynchronizationCluster } from "../cluster/definitions/TimeSynchronizationCluster.js";
-import { ChannelType } from "../common/Channel.js";
-import { MatterError, UnexpectedDataError } from "../common/MatterError.js";
-import { Crypto } from "../crypto/Crypto.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { Logger } from "../log/Logger.js";
 import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { Time } from "../time/Time.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
-import { ByteArray } from "../util/ByteArray.js";
 import { InteractionClient } from "./interaction/InteractionClient.js";
 import { StatusResponseError } from "./interaction/StatusCode.js";
 
@@ -716,7 +719,7 @@ export class ControllerCommissioner {
             await operationalCredentialsClusterClient.addNoc(
                 {
                     nocValue: peerOperationalCert,
-                    icacValue: new ByteArray(0),
+                    icacValue: new Uint8Array(0),
                     ipkValue: this.fabric.identityProtectionKey,
                     adminVendorId: this.adminVendorId,
                     caseAdminSubject: this.fabric.rootNodeId,
@@ -840,8 +843,8 @@ export class ControllerCommissioner {
             EndpointNumber(0),
             true,
         );
-        const ssid = ByteArray.fromString(this.commissioningOptions.wifiNetwork.wifiSsid);
-        const credentials = ByteArray.fromString(this.commissioningOptions.wifiNetwork.wifiCredentials);
+        const ssid = Bytes.fromString(this.commissioningOptions.wifiNetwork.wifiSsid);
+        const credentials = Bytes.fromString(this.commissioningOptions.wifiNetwork.wifiCredentials);
 
         const { networkingStatus, wiFiScanResults, debugText } = await networkCommissioningClusterClient.scanNetworks(
             {
@@ -891,7 +894,7 @@ export class ControllerCommissioner {
             logger.debug(
                 `Commissionee is already connected to WiFi network ${
                     this.commissioningOptions.wifiNetwork.wifiSsid
-                } (networkId ${networkId.toHex()})`,
+                } (networkId ${Bytes.toHex(networkId)})`,
             );
             return {
                 code: CommissioningStepResultCode.Success,
@@ -914,7 +917,7 @@ export class ControllerCommissioner {
         logger.debug(
             `Commissionee successfully connected to WiFi network ${
                 this.commissioningOptions.wifiNetwork.wifiSsid
-            } (networkId ${networkId.toHex()})`,
+            } (networkId ${Bytes.toHex(networkId)})`,
         );
 
         return {
@@ -1010,7 +1013,7 @@ export class ControllerCommissioner {
             networkIndex,
         } = await networkCommissioningClusterClient.addOrUpdateThreadNetwork(
             {
-                operationalDataset: ByteArray.fromHex(this.commissioningOptions.threadNetwork.operationalDataset),
+                operationalDataset: Bytes.fromHex(this.commissioningOptions.threadNetwork.operationalDataset),
                 breadcrumb: this.lastBreadcrumb++,
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
@@ -1034,7 +1037,7 @@ export class ControllerCommissioner {
             logger.debug(
                 `Commissionee is already connected to Thread network ${
                     this.commissioningOptions.threadNetwork.networkName
-                } (networkId ${networkId.toHex()})`,
+                } (networkId ${Bytes.toHex(networkId)})`,
             );
             return {
                 code: CommissioningStepResultCode.Success,
@@ -1058,7 +1061,7 @@ export class ControllerCommissioner {
         logger.debug(
             `Commissionee successfully connected to Thread network ${
                 this.commissioningOptions.threadNetwork.networkName
-            } (networkId ${networkId.toHex()})`,
+            } (networkId ${Bytes.toHex(networkId)})`,
         );
 
         return {

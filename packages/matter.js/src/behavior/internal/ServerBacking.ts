@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FieldValue } from "../../model/index.js";
+import { camelize } from "@project-chip/matter.js-general";
+import { FieldValue } from "@project-chip/matter.js-model";
 import { ServerStore } from "../../node/server/storage/ServerStore.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
-import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
 import { Val } from "../state/Val.js";
 import { Datasource } from "../state/managed/Datasource.js";

@@ -4,14 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AsyncObservable, camelize, GeneratedClass, ImplementationError } from "@project-chip/matter.js-general";
+import {
+    ClusterModel,
+    ElementTag,
+    FeatureMap,
+    FeatureSet,
+    Matter,
+    Metatype,
+    ValueModel,
+} from "@project-chip/matter.js-model";
 import { Attribute } from "../../cluster/Cluster.js";
 import { ClusterType } from "../../cluster/ClusterType.js";
-import { ImplementationError } from "../../common/MatterError.js";
-import { ClusterModel, ElementTag, FeatureSet, Matter, Metatype, ValueModel } from "../../model/index.js";
-import { FeatureMap } from "../../model/standard/elements/FeatureMap.js";
-import { GeneratedClass } from "../../util/GeneratedClass.js";
-import { AsyncObservable } from "../../util/Observable.js";
-import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
 import { DerivedState } from "../state/StateType.js";
 import { Val } from "../state/Val.js";
@@ -257,7 +261,7 @@ function createDerivedEvents(cluster: ClusterType, base: Behavior.Type, stateNam
 
         initialize() {
             for (const name of names) {
-                (this as any)[name] = AsyncObservable();
+                (this as Record<string, AsyncObservable>)[name] = AsyncObservable();
             }
         },
     });

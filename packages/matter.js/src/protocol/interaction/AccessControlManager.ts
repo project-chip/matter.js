@@ -3,19 +3,17 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { AccessLevel } from "../../cluster/Cluster.js";
+import { Logger, MatterFlowError, toHex } from "@project-chip/matter.js-general";
+import { AccessLevel } from "@project-chip/matter.js-model";
 import { AccessControl } from "../../cluster/definitions/AccessControlCluster.js";
-import { MatterFlowError } from "../../common/MatterError.js";
 import { CaseAuthenticatedTag } from "../../datatype/CaseAuthenticatedTag.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { Logger } from "../../log/Logger.js";
 import { TypeFromBitmapSchema } from "../../schema/BitmapSchema.js";
 import { SecureSession } from "../../session/SecureSession.js";
-import { toHex } from "../../util/Number.js";
 import { StatusCode, StatusResponseError } from "./StatusCode.js";
 
 const logger = Logger.get("AccessControlManager");

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MAX_UDP_MESSAGE_SIZE } from "../net/UdpChannel.js";
+import { MAX_UDP_MESSAGE_SIZE } from "@project-chip/matter.js-general";
 
 /** @see {@link MatterSpecification.v11.Core} § 4.17.3.2 */
 export const BLE_MATTER_SERVICE_UUID = "fff6";

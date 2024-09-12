@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NetInterface, TransportInterface } from "@project-chip/matter.js-general";
 import { Ble } from "@project-chip/matter.js/ble";
-import { InstanceBroadcaster, Scanner, TransportInterface } from "@project-chip/matter.js/common";
-import { NetInterface } from "@project-chip/matter.js/net";
-import { ByteArray } from "@project-chip/matter.js/util";
+import { InstanceBroadcaster, Scanner } from "@project-chip/matter.js/common";
 import { BleBroadcaster } from "./BleBroadcaster.js";
 import { BlePeripheralInterface } from "./BlePeripheralInterface.js";
 import { BleScanner } from "./BleScanner.js";
@@ -41,7 +40,7 @@ export class BleNode extends Ble {
         return new NobleBleCentralInterface();
     }
 
-    getBleBroadcaster(additionalAdvertisementData?: ByteArray): InstanceBroadcaster {
+    getBleBroadcaster(additionalAdvertisementData?: Uint8Array): InstanceBroadcaster {
         if (this.blePeripheral === undefined) {
             this.blePeripheral = new BlenoBleServer(this.options);
         }

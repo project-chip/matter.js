@@ -8,7 +8,7 @@
 
 import { MutableCluster } from "../mutation/MutableCluster.js";
 import { ConcentrationMeasurement } from "./ConcentrationMeasurementCluster.js";
-import { Identity } from "../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 import { ClusterRegistry } from "../ClusterRegistry.js";
 
 export namespace OzoneConcentrationMeasurement {

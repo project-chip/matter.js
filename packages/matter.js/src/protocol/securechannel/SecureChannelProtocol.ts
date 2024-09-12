@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger, MatterFlowError } from "@project-chip/matter.js-general";
 import { Message } from "../../codec/MessageCodec.js";
-import { MatterFlowError } from "../../common/MatterError.js";
-import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { assertSecureSession } from "../../session/SecureSession.js";

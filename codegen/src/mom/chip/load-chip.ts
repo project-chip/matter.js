@@ -3,15 +3,15 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Logger } from "@project-chip/matter.js/log";
+import { Logger } from "@project-chip/matter.js-general";
 import {
     AnyElement,
     ClusterElement,
     DatatypeElement,
-    MatterModel,
+    Matter,
     Metatype,
     ValueElement,
-} from "@project-chip/matter.js/model";
+} from "@project-chip/matter.js-model";
 import { readFileSync } from "fs";
 import { JSDOM } from "jsdom";
 import { homedir } from "os";
@@ -50,7 +50,7 @@ export async function loadChip(version: string): Promise<ClusterElement[]> {
 // duplicate type names in Matter that it works.  This routine installs datatypes into proper cluster scope
 function installDatatypes(elements: AnyElement[]) {
     const globals = {} as { [name: string]: AnyElement };
-    Object.values(MatterModel.seedGlobals).forEach(g => (globals[g.name] = g));
+    Object.values(Matter.seedGlobals).forEach(g => (globals[g.name] = g));
 
     const datatypes = {} as { [name: string]: DatatypeElement };
     elements.forEach(e => {
@@ -111,7 +111,7 @@ function installDatatypes(elements: AnyElement[]) {
             const type = (c as ValueElement).type;
 
             if (type) {
-                installChildren(type, c);
+                installChildren(type, c as AnyElement);
 
                 if (type && !globals[type] && !alreadyInstalled.has(type)) {
                     alreadyInstalled.add(type);
@@ -127,7 +127,7 @@ function installDatatypes(elements: AnyElement[]) {
                 }
             }
 
-            install(into, c, alreadyInstalled);
+            install(into, c as AnyElement, alreadyInstalled);
         });
     }
 

@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { MatterDevice } from "../../MatterDevice.js";
-import type { AccessLevel } from "../../cluster/Cluster.js";
+import type { AccessLevel } from "@project-chip/matter.js-model";
 import type { Message } from "../../codec/MessageCodec.js";
 import type { Agent } from "../../endpoint/Agent.js";
 import type { Endpoint } from "../../endpoint/Endpoint.js";
 import type { EndpointType } from "../../endpoint/type/EndpointType.js";
+import type { MatterDevice } from "../../MatterDevice.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import type { SecureSession } from "../../session/SecureSession.js";
 import type { ValueSupervisor } from "../supervision/ValueSupervisor.js";

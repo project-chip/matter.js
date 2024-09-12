@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Bytes } from "@project-chip/matter.js-general";
 import { ValidationError } from "../../src/common/ValidationError.js";
 import { FabricId, TlvFabricId } from "../../src/datatype/FabricId.js";
 import { FabricIndex, TlvFabricIndex } from "../../src/datatype/FabricIndex.js";
@@ -15,7 +16,6 @@ import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../src/tlv/TlvObject.js";
 import { TypeFromSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvByteString, TlvString } from "../../src/tlv/TlvString.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 
 const schema = TlvObject({
     /** Mandatory field jsdoc */
@@ -55,8 +55,8 @@ const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
     "an object with all fields": {
         decoded: {
             arrayField: [
-                { mandatoryNumber: 1, optionalByteString: ByteArray.fromHex("000000") },
-                { mandatoryNumber: 2, optionalByteString: ByteArray.fromHex("999999") },
+                { mandatoryNumber: 1, optionalByteString: Bytes.fromHex("000000") },
+                { mandatoryNumber: 2, optionalByteString: Bytes.fromHex("999999") },
             ],
             optionalString: "test",
             nullableBoolean: true,
@@ -75,8 +75,8 @@ const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
     "an object without wrapped fields": {
         decoded: {
             arrayField: [
-                { mandatoryNumber: 1, optionalByteString: ByteArray.fromHex("000000") },
-                { mandatoryNumber: 2, optionalByteString: ByteArray.fromHex("999999") },
+                { mandatoryNumber: 1, optionalByteString: Bytes.fromHex("000000") },
+                { mandatoryNumber: 2, optionalByteString: Bytes.fromHex("999999") },
             ],
             optionalString: "test",
             nullableBoolean: true,
@@ -152,7 +152,7 @@ describe("TlvObject", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(schema.encode(decoded).toHex()).equal(encoded);
+                expect(Bytes.toHex(schema.encode(decoded))).equal(encoded);
             });
         }
     });
@@ -161,7 +161,7 @@ describe("TlvObject", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(schema.decode(ByteArray.fromHex(encoded))).deep.equal(decoded);
+                expect(schema.decode(Bytes.fromHex(encoded))).deep.equal(decoded);
             });
         }
     });

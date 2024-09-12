@@ -5,9 +5,14 @@
  */
 import dgram from "react-native-udp";
 
-import { Diagnostic, Logger } from "@project-chip/matter.js/log";
-import { MAX_UDP_MESSAGE_SIZE, NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
-import { ByteArray } from "@project-chip/matter.js/util";
+import {
+    Diagnostic,
+    Logger,
+    MAX_UDP_MESSAGE_SIZE,
+    NetworkError,
+    UdpChannel,
+    UdpChannelOptions,
+} from "@project-chip/matter.js-general";
 import { NetworkReactNative } from "./NetworkReactNative.js";
 
 const logger = Logger.get("UdpChannelNode");
@@ -42,11 +47,11 @@ interface Socket {
     setBroadcast(flag: boolean): void;
     setMulticastInterface(interfaceAddress: string): void;
     addMembership(multicastAddress: string, multicastInterface?: string): void;
-    on(event: "message", listener: (msg: ByteArray, rinfo: RemoteInfo) => void): void;
+    on(event: "message", listener: (msg: Uint8Array, rinfo: RemoteInfo) => void): void;
     on(event: "error", listener: (error: Error) => void): void;
-    removeListener(event: "message", listener: (msg: ByteArray, rinfo: RemoteInfo) => void): void;
+    removeListener(event: "message", listener: (msg: Uint8Array, rinfo: RemoteInfo) => void): void;
     removeListener(event: "error", listener: (error: Error) => void): void;
-    send(msg: ByteArray, port: number, address: string, callback: (error: Error | null) => void): void;
+    send(msg: Uint8Array, port: number, address: string, callback: (error: Error | null) => void): void;
     close(): void;
     address(): { address: string; port: number };
 }
@@ -149,8 +154,8 @@ export class UdpChannelReactNative implements UdpChannel {
         private readonly netInterface?: string,
     ) {}
 
-    onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void) {
-        const messageListener = async (data: ByteArray, { address, port }: RemoteInfo) => {
+    onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: Uint8Array) => void) {
+        const messageListener = async (data: Uint8Array, { address, port }: RemoteInfo) => {
             const netInterface = this.netInterface ?? (await NetworkReactNative.getNetInterfaceForIp(address));
             if (netInterface === undefined) return;
             listener(netInterface, address, port, data);
@@ -166,7 +171,7 @@ export class UdpChannelReactNative implements UdpChannel {
         };
     }
 
-    async send(host: string, port: number, data: ByteArray) {
+    async send(host: string, port: number, data: Uint8Array) {
         return new Promise<void>((resolve, reject) => {
             this.socket.send(data, port, host, error => {
                 if (error !== null) {

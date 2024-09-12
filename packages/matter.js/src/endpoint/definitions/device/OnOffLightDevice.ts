@@ -20,7 +20,7 @@ import {
 } from "../../../behavior/definitions/occupancy-sensing/OccupancySensingBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
-import { Identity } from "../../../util/Type.js";
+import { Identity } from "@project-chip/matter.js-general";
 
 /**
  * The On/Off Light is a lighting device that is capable of being switched on or off by means of a bound controller

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Access, ClusterModel, DatatypeModel, FieldModel, type ValueModel } from "../../model/index.js";
-import { camelize } from "../../util/String.js";
+import { camelize } from "@project-chip/matter.js-general";
+import { Access, FieldModel } from "@project-chip/matter.js-model";
 import type { Behavior } from "../Behavior.js";
 import type { StateType } from "../state/StateType.js";
 import type { Val } from "../state/Val.js";
@@ -28,30 +28,10 @@ import { Schema } from "./Schema.js";
 export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSupervisor {
     const logical = options.schema ?? Schema.empty;
 
-    // Copy children so we can extend
-    const children = logical.children.map(child => child.clone());
+    const schema = logical.extend({ name: `${camelize(options.id, true)}$State` });
 
     // Add fields for programmatic extensions
-    addExtensionFields(logical, new options.State(), children);
-
-    // Create the root operational schema
-    let schema: Schema;
-    if (logical instanceof ClusterModel) {
-        schema = new ClusterModel({
-            ...logical,
-            name: `${camelize(options.id, true)}$State`,
-            children,
-        });
-    } else {
-        schema = new DatatypeModel({
-            ...logical,
-            type: logical.type ?? "struct",
-            name: `${camelize(options.id, true)}$State`,
-            children,
-        });
-    }
-
-    schema.freeze();
+    addExtensionFields(schema, new options.State());
 
     return new RootSupervisor(schema);
 }
@@ -75,9 +55,9 @@ export namespace BehaviorSupervisor {
  * Note 3: We can't do anything with types either.  This means e.g. writing to subfields won't behave as expected.
  * Really to do things correctly behavior authors should hand-craft schema.  Or maybe we do something with decorators?.
  */
-function addExtensionFields(base: Schema, defaultState: Val.Struct, children: ValueModel[]) {
+function addExtensionFields(schema: Schema, defaultState: Val.Struct) {
     const props = new Set<string>();
-    for (const field of base.activeMembers) {
+    for (const field of schema.activeMembers) {
         props.add(camelize(field.name));
     }
 
@@ -111,7 +91,7 @@ function addExtensionFields(base: Schema, defaultState: Val.Struct, children: Va
                     field.quality = "F";
                 }
 
-                children.push(field);
+                schema.children.push(field);
             }
         }
 

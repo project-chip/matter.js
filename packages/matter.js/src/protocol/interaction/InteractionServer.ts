@@ -4,6 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Crypto, Diagnostic, InternalError, Logger, MatterFlowError } from "@project-chip/matter.js-general";
+import {
+    AttributeModel,
+    ClusterModel,
+    CommandModel,
+    GLOBAL_IDS,
+    MatterModel,
+    Specification,
+} from "@project-chip/matter.js-model";
 import { MatterDevice } from "../../MatterDevice.js";
 import { TlvNoResponse } from "../../cluster/Cluster.js";
 import {
@@ -14,9 +23,7 @@ import {
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AnyEventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
-import { InternalError, MatterFlowError } from "../../common/MatterError.js";
 import { ValidationError } from "../../common/ValidationError.js";
-import { Crypto } from "../../crypto/Crypto.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
@@ -25,10 +32,6 @@ import { EventId } from "../../datatype/EventId.js";
 import { EventNumber } from "../../datatype/EventNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
-import { Logger } from "../../log/Logger.js";
-import { Specification } from "../../model/definitions/Specification.js";
-import { AttributeModel, ClusterModel, CommandModel, GLOBAL_IDS, MatterModel } from "../../model/index.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
