@@ -64,6 +64,7 @@ Devices created with matter.js/matter-node.js have been tested with:
 - **Home Assistant - Matter integration**: Fully working
 - **Aqara Hub M3**: Aqara currently seem to not allow to pair test devices, so matter.js open source devices are not working with Aqara Hub M3. Please contact Aqara and request this feature.
 - **Yandex Smart Home**: Yandex currently seem to not allow to pair test devices, so matter.js open source devices are not working with Yandex SMart Home. Please contact Yandex and request this feature.
+- **flic**: Fully working
 
 Matter.js based projects show up as "uncertified test devices" in the ecosystems. This is because the devices are not certified by the Connectivity Standards Alliance (CSA) and are not part of the official Matter certification program. However, the devices are fully functional and can be used in the ecosystems. The ecosystems usually inform the user about the uncertified status of the device. Please see [Pairing and Usage Information](./docs/ECOSYSTEMS.md##pairing-and-usage-information) for more details.
 
