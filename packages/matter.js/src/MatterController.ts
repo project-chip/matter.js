@@ -970,6 +970,9 @@ export class MatterController implements SessionContext {
         }
         return new InteractionClient(
             new ExchangeProvider(this.exchangeManager, channel, async () => {
+                if (!this.channelManager.hasChannel(this.fabric, peerNodeId)) {
+                    throw new RetransmissionLimitReachedError(`Device ${peerNodeId} is currently not reachable.`);
+                }
                 await this.channelManager.removeAllNodeChannels(this.fabric, peerNodeId);
                 await this.resume(peerNodeId, 60); // Channel reconnection only waits limited time
                 return this.channelManager.getChannel(this.fabric, peerNodeId);

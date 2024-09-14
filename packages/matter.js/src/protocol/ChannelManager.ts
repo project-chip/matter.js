@@ -65,6 +65,10 @@ export class ChannelManager {
         }
     }
 
+    hasChannel(fabric: Fabric, nodeId: NodeId) {
+        return this.#channels.get(this.#getChannelKey(fabric, nodeId))?.length;
+    }
+
     getChannel(fabric: Fabric, nodeId: NodeId, session?: Session<any>) {
         let results = this.#channels.get(this.#getChannelKey(fabric, nodeId)) ?? [];
         if (session !== undefined) {
