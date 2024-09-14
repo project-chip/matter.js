@@ -12,6 +12,7 @@ import {
     UdpChannel,
     UdpChannelOptions,
 } from "@project-chip/matter.js-general";
+import { RetransmissionLimitReachedError } from "@project-chip/matter.js/protocol";
 import * as dgram from "dgram";
 import { NetworkNode } from "./NetworkNode.js";
 
@@ -129,7 +130,10 @@ export class UdpChannelNode implements UdpChannel {
         return new Promise<void>((resolve, reject) => {
             this.socket.send(data, port, host, error => {
                 if (error !== null) {
-                    const netError = new NetworkError(error.message);
+                    const netError =
+                        error instanceof Error && error.message.includes("EHOSTUNREACH")
+                            ? new RetransmissionLimitReachedError(error.message)
+                            : new NetworkError(error.message);
                     netError.stack = error.stack;
                     reject(netError);
                     return;
