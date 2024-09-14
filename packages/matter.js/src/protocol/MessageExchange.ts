@@ -174,7 +174,6 @@ export class MessageExchange<ContextT extends SessionContext> {
     readonly #exchangeId: number;
     readonly #protocolId: number;
     readonly #closed = AsyncObservable<[]>();
-    #isClosing = false;
     readonly #useMRP: boolean;
 
     constructor(
