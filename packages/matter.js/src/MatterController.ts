@@ -680,7 +680,11 @@ export class MatterController implements SessionContext {
                     throw new CommissioningSuccessfullyFinished();
                 }
                 // Look for the device broadcast over MDNS and do CASE pairing
-                return await this.connect(peerNodeId, { timeoutSeconds: 120, discoveryData }); // Wait maximum 120s to find the operational device for commissioning process
+                return await this.connect(peerNodeId, {
+                    discoveryType: NodeDiscoveryType.TimedDiscovery,
+                    timeoutSeconds: 120,
+                    discoveryData,
+                }); // Wait maximum 120s to find the operational device for commissioning process
             },
         );
 
@@ -704,7 +708,11 @@ export class MatterController implements SessionContext {
      */
     async completeCommissioning(peerNodeId: NodeId, discoveryData?: DiscoveryData) {
         // Look for the device broadcast over MDNS and do CASE pairing
-        const interactionClient = await this.connect(peerNodeId, { timeoutSeconds: 120, discoveryData }); // Wait maximum 120s to find the operational device for commissioning process
+        const interactionClient = await this.connect(peerNodeId, {
+            discoveryType: NodeDiscoveryType.TimedDiscovery,
+            timeoutSeconds: 120,
+            discoveryData,
+        }); // Wait maximum 120s to find the operational device for commissioning process
         const generalCommissioningClusterClient = ClusterClient(
             GeneralCommissioning.Cluster,
             EndpointNumber(0),
