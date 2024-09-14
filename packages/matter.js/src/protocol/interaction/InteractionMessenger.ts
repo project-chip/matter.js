@@ -9,7 +9,7 @@ import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { Status } from "../../cluster/globals/index.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
-import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
+import { ChannelNotConnectedError, ExchangeProvider } from "../../protocol/ExchangeManager.js";
 import {
     ExchangeSendOptions,
     MessageExchange,
@@ -432,23 +432,26 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
 
     /** Implements a send method with an automatic reconnection mechanism */
     override async send(messageType: number, payload: Uint8Array, options?: ExchangeSendOptions) {
-        if (this.exchange.channel.closed) {
-            throw new RetransmissionLimitReachedError(
-                "The exchange channel is closed. Please connect the device first.",
-            );
-        }
         try {
+            if (this.exchange.channel.closed) {
+                throw new ChannelNotConnectedError("The exchange channel is closed. Please connect the device first.");
+            }
+
             return await this.exchange.send(messageType, payload, options);
         } catch (error) {
-            RetransmissionLimitReachedError.accept(error);
-
-            // When retransmission failed (most likely due to a lost connection or invalid session),
-            // try to reconnect if possible and resend the message once
-            logger.info("Retransmission limit reached, trying to reconnect and resend the message.");
-            await this.exchange.close();
-            if (await this.exchangeProvider.reconnectChannel()) {
-                this.exchange = this.exchangeProvider.initiateExchange();
-                return await this.exchange.send(messageType, payload, options);
+            if (error instanceof RetransmissionLimitReachedError || error instanceof ChannelNotConnectedError) {
+                // When retransmission failed (most likely due to a lost connection or invalid session),
+                // try to reconnect if possible and resend the message once
+                logger.info(
+                    `${error instanceof RetransmissionLimitReachedError ? "Retransmission limit reached" : "Channel not connected"}, trying to reconnect and resend the message.`,
+                );
+                await this.exchange.close();
+                if (await this.exchangeProvider.reconnectChannel()) {
+                    this.exchange = this.exchangeProvider.initiateExchange();
+                    return await this.exchange.send(messageType, payload, options);
+                }
+            } else {
+                throw error;
             }
         }
     }
