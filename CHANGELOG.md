@@ -18,6 +18,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   BREAKING: The "ByteArray" type is removed, replaced with native-JS Uint8Array and a small collection of utility functions in the "Bytes" namespace
     -   The Matter object model previously exported as @project-chip/matter.js/model now resides in @project-chip/matter.js-model
 
+-   matter.js-protocol:
+    -   Limits the number of parallel exchanges to 5 
+
 -   matter.js-nodejs:
     -   Node specialization is moved to matter.js-nodejs.  matter-node.js remains as a compatibility import.
     -   BREAKING: The previously deprecated re-exports in matter-node.js from matter.js are removed.

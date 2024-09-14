@@ -165,6 +165,7 @@ export class MessageExchange<ContextT extends SessionContext> {
     #retransmissionTimer: Timer | undefined;
     #retransmissionCounter = 0;
     #closeTimer: Timer | undefined;
+    #isClosing = false;
     #timedInteractionTimer: Timer | undefined;
 
     readonly #peerSessionId: number;
@@ -219,6 +220,14 @@ export class MessageExchange<ContextT extends SessionContext> {
 
     get closed() {
         return this.#closed;
+    }
+
+    get isClosing() {
+        return this.#isClosing;
+    }
+
+    get id() {
+        return this.#exchangeId;
     }
 
     /**
@@ -613,6 +622,7 @@ export class MessageExchange<ContextT extends SessionContext> {
 
     async close() {
         if (this.#closeTimer !== undefined) return; // close was already called
+        this.#isClosing = true;
 
         if (this.#receivedMessageToAck !== undefined) {
             this.#receivedMessageAckTimer.stop();
@@ -643,6 +653,7 @@ export class MessageExchange<ContextT extends SessionContext> {
     }
 
     private async closeInternal() {
+        this.#isClosing = true;
         this.#retransmissionTimer?.stop();
         this.#closeTimer?.stop();
         this.#timedInteractionTimer?.stop();
