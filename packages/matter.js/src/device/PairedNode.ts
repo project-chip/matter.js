@@ -212,7 +212,6 @@ export class PairedNode {
      * Force a reconnection to the device. This method is mainly used internally to reconnect after the active session
      * was closed or the device went offline and was detected as being online again.
      */
-        this.setConnectionState(NodeStateInformation.Reconnecting);
     async reconnect(connectOptions?: CommissioningControllerNodeOptions) {
         if (connectOptions !== undefined) {
             this.options = connectOptions;
