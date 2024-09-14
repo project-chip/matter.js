@@ -33,8 +33,9 @@ export class CaseClient {
         exchange: MessageExchange<MatterController>,
         fabric: Fabric,
         peerNodeId: NodeId,
+        expectedProcessingTimeMs?: number,
     ) {
-        const messenger = new CaseClientMessenger(exchange);
+        const messenger = new CaseClientMessenger(exchange, expectedProcessingTimeMs);
 
         // Generate pairing info
         const initiatorRandom = Crypto.getRandom();

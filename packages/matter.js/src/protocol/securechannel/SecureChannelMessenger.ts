@@ -35,7 +35,14 @@ export const EXPECTED_CRYPTO_PROCESSING_TIME_MS = 30_000;
 export const DEFAULT_NORMAL_PROCESSING_TIME_MS = 2_000;
 
 export class SecureChannelMessenger<ContextT extends SessionContext> {
-    constructor(protected readonly exchange: MessageExchange<ContextT>) {}
+    #defaultExpectedProcessingTimeMs: number;
+
+    constructor(
+        protected readonly exchange: MessageExchange<ContextT>,
+        defaultExpectedProcessingTimeMs = EXPECTED_CRYPTO_PROCESSING_TIME_MS,
+    ) {
+        this.#defaultExpectedProcessingTimeMs = defaultExpectedProcessingTimeMs;
+    }
 
     /**
      * Waits for the next message and returns it.
@@ -44,7 +51,7 @@ export class SecureChannelMessenger<ContextT extends SessionContext> {
     async nextMessage(
         expectedMessageInfo: string,
         expectedMessageType?: number,
-        expectedProcessingTimeMs = EXPECTED_CRYPTO_PROCESSING_TIME_MS,
+        expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
     ) {
         const message = await this.exchange.nextMessage(expectedProcessingTimeMs);
         const messageType = message.payloadHeader.messageType;
@@ -64,7 +71,7 @@ export class SecureChannelMessenger<ContextT extends SessionContext> {
         expectedMessageType: number,
         schema: TlvSchema<T>,
         expectedMessageInfo: string,
-        expectedProcessingTimeMs = EXPECTED_CRYPTO_PROCESSING_TIME_MS,
+        expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
     ) {
         return schema.decode(
             (await this.nextMessage(expectedMessageInfo, expectedMessageType, expectedProcessingTimeMs)).payload,
@@ -75,7 +82,10 @@ export class SecureChannelMessenger<ContextT extends SessionContext> {
      * Waits for the next message and returns it.
      * When no expectedProcessingTimeMs is provided, the default value of EXPECTED_CRYPTO_PROCESSING_TIME_MS is used.
      */
-    async waitForSuccess(expectedMessageInfo: string, expectedProcessingTimeMs = EXPECTED_CRYPTO_PROCESSING_TIME_MS) {
+    async waitForSuccess(
+        expectedMessageInfo: string,
+        expectedProcessingTimeMs = this.#defaultExpectedProcessingTimeMs,
+    ) {
         // If the status is not Success, this would throw an Error.
         await this.nextMessage(expectedMessageInfo, MessageType.StatusReport, expectedProcessingTimeMs);
     }
@@ -88,7 +98,7 @@ export class SecureChannelMessenger<ContextT extends SessionContext> {
     async send<T>(message: T, type: number, schema: TlvSchema<T>, options?: ExchangeSendOptions) {
         options = {
             ...options,
-            expectedProcessingTimeMs: options?.expectedProcessingTimeMs ?? EXPECTED_CRYPTO_PROCESSING_TIME_MS,
+            expectedProcessingTimeMs: options?.expectedProcessingTimeMs ?? this.#defaultExpectedProcessingTimeMs,
         };
         const payload = schema.encode(message);
         await this.exchange.send(type, payload, options);
