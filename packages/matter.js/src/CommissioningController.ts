@@ -15,7 +15,7 @@ import {
     SyncStorage,
     UdpInterface,
 } from "@project-chip/matter.js-general";
-import { MatterController } from "./MatterController.js";
+import { MatterController, NodeDiscoveryType } from "./MatterController.js";
 import { MatterNode } from "./MatterNode.js";
 import { GlobalAttributes } from "./cluster/Cluster.js";
 import { SupportedAttributeClient } from "./cluster/client/AttributeClient.js";
@@ -354,7 +354,7 @@ export class CommissioningController extends MatterNode {
             nodeId,
             this,
             connectOptions,
-            async () => this.createInteractionClient(nodeId),
+            async (discoveryType?: NodeDiscoveryType) => this.createInteractionClient(nodeId, discoveryType),
             handler => this.sessionDisconnectedHandler.set(nodeId, handler),
         );
         this.connectedNodes.set(nodeId, pairedNode);
@@ -476,9 +476,9 @@ export class CommissioningController extends MatterNode {
      * Creates and Return a new InteractionClient to communicate with a node. This is mainly used internally and should
      * not be used directly. See the PairedNode class for the public API.
      */
-    async createInteractionClient(nodeId: NodeId): Promise<InteractionClient> {
+    async createInteractionClient(nodeId: NodeId, discoveryType?: NodeDiscoveryType): Promise<InteractionClient> {
         const controller = this.assertControllerIsStarted();
-        return controller.connect(nodeId);
+        return controller.connect(nodeId, { discoveryType });
     }
 
     /** Returns the PairedNode instance for a given node id, if this node is connected. */
