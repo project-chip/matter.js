@@ -9,6 +9,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+
+-   Matter-Core functionality:
+    -   Fix: Fixes channel cleanup
+    -   Fix: Fixes Subscription error handling
+
 ## 0.10.1 (2024-09-08)
 
 -   Matter-Core functionality:

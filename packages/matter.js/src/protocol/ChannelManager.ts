@@ -46,25 +46,20 @@ export class ChannelManager {
         channel.closeCallback = async () => this.removeChannel(fabric, nodeId, channel.session);
         const channelsKey = this.#getChannelKey(fabric, nodeId);
         const currentChannels = this.#channels.get(channelsKey) ?? [];
-        if (currentChannels.length >= this.#caseSessionsPerFabricAndNode) {
+        currentChannels.push(channel);
+        this.#channels.set(channelsKey, currentChannels);
+        if (currentChannels.length > this.#caseSessionsPerFabricAndNode) {
             const oldestChannel = this.#findLeastActiveChannel(currentChannels);
-            currentChannels.splice(currentChannels.indexOf(oldestChannel), 1);
-            currentChannels.push(channel);
-            this.#channels.set(channelsKey, currentChannels);
 
+            const { session: oldSession } = oldestChannel;
             // Should always be the case
-            const { session } = oldestChannel;
-            if (session.id !== oldestChannel.session.id) {
-                logger.debug(
-                    `Existing channel for fabricIndex ${fabric.fabricIndex} and node ${nodeId} with session ${session.name} gets replaced. Consider former session already inactive and so close it.`,
-                );
-                await session.destroy(false, false);
+            if (channel.session.id !== oldSession.id) {
+                await oldSession.destroy(false, false);
             }
-            logger.info(`Close oldest channel for fabric ${fabric.fabricIndex} node ${nodeId}`);
+            logger.info(
+                `Close oldest channel for fabric ${fabric.fabricIndex} node ${nodeId} (from session ${oldSession.id})`,
+            );
             await oldestChannel.close();
-        } else {
-            currentChannels.push(channel);
-            this.#channels.set(channelsKey, currentChannels);
         }
     }
 
@@ -73,7 +68,10 @@ export class ChannelManager {
         if (session !== undefined) {
             results = results.filter(channel => channel.session.id === session.id);
         }
-        if (results.length === 0) throw new NoChannelError(`Can't find a channel to node ${nodeId}`);
+        if (results.length === 0)
+            throw new NoChannelError(
+                `Can't find a channel to node ${nodeId}${session !== undefined ? ` and session ${session.id}` : ""}`,
+            );
         return results[results.length - 1]; // Return the latest added channel (or the one belonging to the session requested)
     }
 
@@ -107,6 +105,10 @@ export class ChannelManager {
         const channelEntryIndex = fabricChannels.findIndex(
             ({ session: entrySession }) => entrySession.id === session.id,
         );
+        if (channelEntryIndex === -1) {
+            // Seems already removed
+            return;
+        }
         const channelEntry = fabricChannels.splice(channelEntryIndex, 1)[0];
         if (channelEntry === undefined) {
             return;
