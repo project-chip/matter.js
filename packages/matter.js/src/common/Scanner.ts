@@ -150,7 +150,7 @@ export interface Scanner {
      * Cancel a running discovery of commissionable devices. The waiter promises are resolved as if the timeout would
      * be over.
      */
-    cancelCommissionableDeviceDiscovery(identifier: CommissionableDeviceIdentifiers): void;
+    cancelCommissionableDeviceDiscovery(identifier: CommissionableDeviceIdentifiers, resolvePromise?: boolean): void;
 
     /** Close the scanner server and free resources. */
     close(): void;
