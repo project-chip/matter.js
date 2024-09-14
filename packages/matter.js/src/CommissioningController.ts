@@ -345,7 +345,7 @@ export class CommissioningController extends MatterNode {
         const existingNode = this.connectedNodes.get(nodeId);
         if (existingNode !== undefined) {
             if (!existingNode.isConnected) {
-                await existingNode.reconnect();
+                await existingNode.reconnect(connectOptions);
             }
             return existingNode;
         }
