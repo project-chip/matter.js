@@ -174,6 +174,7 @@ export class MessageExchange<ContextT extends SessionContext> {
     readonly #exchangeId: number;
     readonly #protocolId: number;
     readonly #closed = AsyncObservable<[]>();
+    #isClosing = false;
     readonly #useMRP: boolean;
 
     constructor(
@@ -529,19 +530,23 @@ export class MessageExchange<ContextT extends SessionContext> {
 
         this.channel
             .send(message)
-            .then(() => {
-                this.#retransmissionTimer = Time.getTimer("Message retransmission", resubmissionBackoffTime, () =>
-                    this.retransmitMessage(message, expectedProcessingTimeMs),
-                ).start();
-            })
+            .then(() => this.initializeResubmission(message, resubmissionBackoffTime, expectedProcessingTimeMs))
             .catch(error => {
                 logger.error("An error happened when retransmitting a message", error);
                 if (error instanceof ChannelNotConnectedError) {
                     this.closeInternal().catch(error =>
                         logger.error("An error happened when closing the exchange", error),
                     );
+                } else {
+                    this.initializeResubmission(message, resubmissionBackoffTime, expectedProcessingTimeMs);
                 }
             });
+    }
+
+    initializeResubmission(message: Message, resubmissionBackoffTime: number, expectedProcessingTimeMs?: number) {
+        this.#retransmissionTimer = Time.getTimer("Message retransmission", resubmissionBackoffTime, () =>
+            this.retransmitMessage(message, expectedProcessingTimeMs),
+        ).start();
     }
 
     async destroy() {
