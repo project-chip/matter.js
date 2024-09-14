@@ -177,7 +177,9 @@ export class SubscriptionHandler {
         this.#sendIntervalMs = sendInterval;
 
         this.updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () => this.prepareDataUpdate()); // will be started later
-        this.sendDelayTimer = Time.getTimer("Subscription delay", 50, () => this.sendUpdate()); // will be started later
+        this.sendDelayTimer = Time.getTimer("Subscription delay", 50, () =>
+            this.sendUpdate().catch(error => logger.warn("Sending subscription update failed:", error)),
+        ); // will be started later
     }
 
     private determineSendingIntervals(
@@ -860,13 +862,13 @@ export class SubscriptionHandler {
                     this.isFabricFiltered,
                 );
             }
-        } catch (e) {
-            if (StatusResponseError.is(e, StatusCode.InvalidSubscription, StatusCode.Failure)) {
+        } catch (error) {
+            if (StatusResponseError.is(error, StatusCode.InvalidSubscription, StatusCode.Failure)) {
                 logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
                 await this.cancel(false, true);
             } else {
+                StatusResponseError.accept(error);
                 await this.cancel(false);
-                throw e;
             }
         } finally {
             await messenger.close();
