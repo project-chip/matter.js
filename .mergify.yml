@@ -16,7 +16,7 @@ pull_request_rules:
         - "check-success=pullapprove"
         - "check-skipped=pullapprove"
         - "check-neutral=pullapprove"
-      - label!="autmated pr"             # Don't auto merge automated PRs, other processes do this
+      - label!="automated pr"             # Don't auto merge automated PRs, other processes do this
     actions:
       merge:
         method: squash
