@@ -9,12 +9,19 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+
+## __WORK IN PROGRESS__
+
+-   matter.js API:
+    -   Fix: Prevent trying to access PowerTopology attribute which is not always present
+    -   Fix: Always add the endpoint device types first to the device type list
+
 ## 0.10.3 (2024-09-15)
 
 -   Matter-Core functionality:
     -   Fix: Fixes channel cleanup
     -   Fix: Fixes Subscription error handling
-
+    
 ## 0.10.1 (2024-09-08)
 
 -   Matter-Core functionality:
