@@ -22,6 +22,9 @@ The main work (all changes without a GitHub username in brackets in the below li
     -   Node specialization is moved to matter.js-nodejs.  matter-node.js remains as a compatibility import.
     -   BREAKING: The previously deprecated re-exports in matter-node.js from matter.js are removed.
 
+-   matter-node-shell.js:
+    -   Enhancement: Added option to specify if attributes are loaded from remote or locally 
+
 ## 0.10.1 (2024-09-08)
 
 -   Matter-Core functionality:
