@@ -25,6 +25,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   matter-node-shell.js:
     -   Enhancement: Added option to specify if attributes are loaded from remote or locally 
 
+## 0.10.3 (2024-09-15)
+
+-   Matter-Core functionality:
+    -   Fix: Fixes channel cleanup
+    -   Fix: Fixes Subscription error handling
+
 ## 0.10.1 (2024-09-08)
 
 -   Matter-Core functionality:
