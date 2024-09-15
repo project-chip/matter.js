@@ -208,6 +208,9 @@ export class PairedNode {
             return;
         this.connectionState = state;
         this.options.stateInformationCallback?.(this.nodeId, state);
+        if (state === NodeStateInformation.Disconnected) {
+            this.reconnectDelayTimer.stop();
+        }
     }
 
     /**
@@ -257,9 +260,13 @@ export class PairedNode {
             } catch (error) {
                 MatterError.accept(error);
 
-                if (this.connectionState === NodeStateInformation.Disconnected) {
+                if (
+                    this.connectionState === NodeStateInformation.Disconnected ||
+                    this.connectionState === NodeStateInformation.Decommissioned
+                ) {
                     this.reconnectionInProgress = false;
-                    throw new MatterError("No reconnection desired because requested status is Disconnected.");
+                    logger.info("No reconnection desired because requested status is Disconnected.");
+                    return;
                 }
                 if (error instanceof ChannelStatusResponseError) {
                     logger.info(`Node ${this.nodeId}: Error while establishing new Session, retry in 5s ...`, error);
@@ -825,6 +832,8 @@ export class PairedNode {
     }
 
     close() {
+        this.reconnectDelayTimer.stop();
+        this.updateEndpointStructureTimer.stop();
         this.interactionClient?.close();
         this.setConnectionState(NodeStateInformation.Disconnected);
     }

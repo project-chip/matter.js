@@ -328,9 +328,11 @@ describe("Integration Test", () => {
             assert.equal(sessionInfo[0].fabric.fabricIndex, FabricIndex(1));
             assert.equal(sessionInfo[0].nodeId, nodeId);
 
-            assert.equal(nodeStateChangesController1Node1.length, 1);
+            assert.equal(nodeStateChangesController1Node1.length, 2);
             assert.equal(nodeStateChangesController1Node1[0].nodeId, nodeId);
-            assert.equal(nodeStateChangesController1Node1[0].nodeState, NodeStateInformation.Connected);
+            assert.equal(nodeStateChangesController1Node1[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController1Node1[1].nodeId, nodeId);
+            assert.equal(nodeStateChangesController1Node1[1].nodeState, NodeStateInformation.Connected);
         }).timeout(10000);
 
         it("We can connect to the new commissioned device", async () => {
@@ -347,7 +349,7 @@ describe("Integration Test", () => {
             assert.equal(sessionInfo[0].fabric.fabricIndex, FabricIndex(1));
             assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 0);
 
-            assert.deepEqual(nodeStateChangesController1Node1.length, 1); // no new entry, stay connected
+            assert.deepEqual(nodeStateChangesController1Node1.length, 2); // no new entry, stay connected
         });
 
         it("Subscribe to all Attributes and bind updates to them", async () => {
@@ -1367,9 +1369,11 @@ describe("Integration Test", () => {
             assert.ok(sessionInfo[0].fabric);
             assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 0);
 
-            assert.equal(nodeStateChangesController1Node2.length, 1);
+            assert.equal(nodeStateChangesController1Node2.length, 2);
             assert.equal(nodeStateChangesController1Node2[0].nodeId, nodeId);
-            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.Connected);
+            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController1Node2[1].nodeId, nodeId);
+            assert.equal(nodeStateChangesController1Node2[1].nodeState, NodeStateInformation.Connected);
         });
 
         it("We can connect to the new commissioned device", async () => {
@@ -1385,7 +1389,8 @@ describe("Integration Test", () => {
             assert.ok(sessionInfo[0].fabric);
             assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 0);
 
-            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.Connected);
+            assert.equal(nodeStateChangesController1Node2[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController1Node2[1].nodeState, NodeStateInformation.Connected);
         });
 
         it("Subscribe to all Attributes and bind updates to them for second device", async () => {
@@ -1653,8 +1658,9 @@ describe("Integration Test", () => {
             assert.equal(sessionInfo[1].numberOfActiveSubscriptions, 0);
             assert.equal(commissioningChangedCallsServer2.length, 1);
 
-            assert.equal(nodeStateChangesController2Node1.length, 1);
-            assert.equal(nodeStateChangesController2Node1[0].nodeState, NodeStateInformation.Connected);
+            assert.equal(nodeStateChangesController2Node1.length, 2);
+            assert.equal(nodeStateChangesController2Node1[0].nodeState, NodeStateInformation.WaitingForDeviceDiscovery);
+            assert.equal(nodeStateChangesController2Node1[1].nodeState, NodeStateInformation.Connected);
         }).timeout(10_000);
 
         it("verify that the server storage got updated", async () => {
@@ -1962,9 +1968,9 @@ describe("Integration Test", () => {
             assert.equal(commissioningChangedCallsServer[2].fabricIndex, FabricIndex(1));
             assert.equal(commissioningChangedCallsServer2.length, 1);
 
-            assert.equal(nodeStateChangesController1Node1.length, 3);
-            assert.equal(nodeStateChangesController1Node1[1].nodeState, NodeStateInformation.Disconnected);
-            assert.equal(nodeStateChangesController1Node1[2].nodeState, NodeStateInformation.Decommissioned);
+            assert.equal(nodeStateChangesController1Node1.length, 4);
+            assert.equal(nodeStateChangesController1Node1[2].nodeState, NodeStateInformation.Disconnected);
+            assert.equal(nodeStateChangesController1Node1[3].nodeState, NodeStateInformation.Decommissioned);
         });
 
         it("read and remove second node by removing fabric from device unplanned and doing factory reset", async () => {
@@ -2011,9 +2017,8 @@ describe("Integration Test", () => {
             assert.equal(commissioningChangedCallsServer2.length, 2);
             assert.equal(commissioningChangedCallsServer2[1].fabricIndex, FabricIndex(1));
 
-            assert.equal(nodeStateChangesController1Node2.length, 2);
-            //assert.equal(nodeStateChangesController1Node2[1].nodeState, NodeStateInformation.Reconnecting);
-            assert.equal(nodeStateChangesController1Node2[1].nodeState, NodeStateInformation.Disconnected);
+            assert.equal(nodeStateChangesController1Node2.length, 4);
+            assert.equal(nodeStateChangesController1Node2[3].nodeState, NodeStateInformation.Disconnected);
         }).timeout(30_000);
 
         it("controller storage is updated for removed nodes", async () => {
