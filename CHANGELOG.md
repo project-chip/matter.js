@@ -10,7 +10,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -->
 
 
-## __WORK IN PROGRESS__
+## 0.10.4 (2024-09-16)
 
 -   matter.js API:
     -   Fix: Prevent trying to access PowerTopology attribute which is not always present
