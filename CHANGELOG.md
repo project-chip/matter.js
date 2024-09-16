@@ -25,6 +25,12 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   matter-node-shell.js:
     -   Enhancement: Added option to specify if attributes are loaded from remote or locally 
 
+## 0.10.4 (2024-09-16)
+
+-   matter.js API:
+    -   Fix: Prevent trying to access PowerTopology attribute which is not always present
+    -   Fix: Always add the endpoint device types first to the device type list
+
 ## 0.10.3 (2024-09-15)
 
 -   Matter-Core functionality:
