@@ -17,7 +17,8 @@
     "scripts": {
         "clean": "matter-build clean",
         "build": "matter-build",
-        "build-clean": "matter-build --clean"
+        "build-clean": "matter-build --clean",
+        "wip-test": "matter-test esm"
     },
     "dependencies": {
         "@matter.js/main": "*",

@@ -69,7 +69,7 @@ import { TestHepaFilterMonitoringServer } from "./cluster/TestHEPAFilterMonitori
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
 import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
-import { TestInstance } from "./GenericTestApp.js";
+import { log, TestInstance } from "./GenericTestApp.js";
 import { NamedPipeCommandHandler } from "./NamedPipeCommandHandler.js";
 
 export class AllClustersTestInstance implements TestInstance {
@@ -99,7 +99,7 @@ export class AllClustersTestInstance implements TestInstance {
             );
             await this.#namedPipeHandler.listen();
         } catch (error) {
-            console.log("Error creating named pipe:", error);
+            log.error("Error creating named pipe:", error);
         }
     }
 
@@ -110,11 +110,11 @@ export class AllClustersTestInstance implements TestInstance {
             await this.#setupNamedPipe();
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
-            console.log(error);
-            console.log((error as Error).stack);
+            log.error(error);
+            log.error((error as Error).stack);
             throw error;
         }
-        console.log(`======> ${this.appName}: Setup done`);
+        log.directive(`======> ${this.appName}: Setup done`);
     }
 
     /** Start the test instance MatterServer with the included device. */
@@ -130,18 +130,18 @@ export class AllClustersTestInstance implements TestInstance {
             await this.serverNode.start();
             const { qrPairingCode } = this.serverNode.state.commissioning.pairingCodes;
             // Magic logging chip testing waits for
-            console.log(`SetupQRCode: [${qrPairingCode}]`);
-            console.log();
+            log.directive(`SetupQRCode: [${qrPairingCode}]`);
+            log.directive();
             // Magic logging chip testing waits for
-            console.log("mDNS service published:");
-            console.log();
+            log.directive("mDNS service published:");
+            log.directive();
 
-            console.log(`======> ${this.appName}: Instance started`);
+            log.directive(`======> ${this.appName}: Instance started`);
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
-            console.log(error);
+            log.error(error);
         }
-        console.log("=====>>> STARTED");
+        log.directive("=====>>> STARTED");
     }
 
     /** Stop the test instance MatterServer and the device. */
@@ -154,9 +154,9 @@ export class AllClustersTestInstance implements TestInstance {
         try {
             await this.#namedPipeHandler?.close();
         } catch (error) {
-            console.log("Error closing named pipe:", error);
+            log.error("Error closing named pipe:", error);
         }
-        console.log(`======> ${this.appName}: Instance stopped`);
+        log.directive(`======> ${this.appName}: Instance stopped`);
     }
 
     async setupServer(): Promise<ServerNode> {

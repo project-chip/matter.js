@@ -13,7 +13,7 @@ import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } fr
 import { DimmableLightDevice } from "@matter.js/main/devices/dimmable-light";
 import { AggregatorEndpoint } from "@matter.js/main/endpoints/aggregator";
 import { DeviceTypeId, VendorId } from "@matter.js/main/types";
-import { TestInstance } from "./GenericTestApp.js";
+import { log, TestInstance } from "./GenericTestApp.js";
 
 export class BridgeTestInstance implements TestInstance {
     serverNode: ServerNode | undefined;
@@ -40,11 +40,11 @@ export class BridgeTestInstance implements TestInstance {
             this.serverNode = await this.setupServer();
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
-            console.log(error);
-            console.log((error as Error).stack);
+            log.error(error);
+            log.error((error as Error).stack);
             throw error;
         }
-        console.log(`======> ${this.appName}: Setup done`);
+        log.directive(`======> ${this.appName}: Setup done`);
     }
 
     /** Start the test instance MatterServer with the included device. */
@@ -60,18 +60,18 @@ export class BridgeTestInstance implements TestInstance {
             await this.serverNode.start();
             const { qrPairingCode } = this.serverNode.state.commissioning.pairingCodes;
             // Magic logging chip testing waits for
-            console.log(`SetupQRCode: [${qrPairingCode}]`);
-            console.log();
+            log.directive(`SetupQRCode: [${qrPairingCode}]`);
+            log.directive();
             // Magic logging chip testing waits for
-            console.log("mDNS service published:");
-            console.log();
+            log.directive("mDNS service published:");
+            log.directive();
 
-            console.log(`======> ${this.appName}: Instance started`);
+            log.directive(`======> ${this.appName}: Instance started`);
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
-            console.log(error);
+            log.error(error);
         }
-        console.log("=====>>> STARTED");
+        log.directive("=====>>> STARTED");
     }
 
     /** Stop the test instance MatterServer and the device. */
@@ -81,7 +81,7 @@ export class BridgeTestInstance implements TestInstance {
         //this.serverNode.cancel();
         //await this.serverNode.lifecycle.act;
         this.serverNode = undefined;
-        console.log(`======> ${this.appName}: Instance stopped`);
+        log.directive(`======> ${this.appName}: Instance stopped`);
     }
 
     async setupServer(): Promise<ServerNode> {

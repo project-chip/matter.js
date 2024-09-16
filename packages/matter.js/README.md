@@ -21,7 +21,7 @@ This library exports the Matter protocol functionality as well as some helper fu
 
 | Export                                  | Description                                                                                                                                                                                         |
 |-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `@project-chip/node`                    | Exports the API to implement a Device or a Controller.                                                                                                                                              |
+| `@project-chip/matter.js`           | Exports the API to implement a Device or a Controller.                                                                                                                                              |
 | `@project-chip/matter.js/behavior`      | Exports Behavior classes (New API) as framework to implement all relevant Logic for clusters and internal logic. Contains auto-generated class structures and also Cluster default implementations. |
 | `@project-chip/matter.js/certificate`   | Exports Certificate (Root-/PAA/PAI/IAC/DA-Certificates) related functionality                                                                                                                       |
 | `@project-chip/matter.js/cluster`       | Exports Matter Cluster definitions and Default Cluster-Handlers                                                                                                                                     |

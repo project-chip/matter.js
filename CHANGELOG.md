@@ -13,14 +13,41 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 -   IMPORTANT: As of 0.10.0 the @project-chip/matter.js module has grown quite large.  This release includes major refactoring that moves functional areas into independent NPM packages under the "@matter.js" org.  We have added exports to maintain backwards compatibility but these are not exhaustive.  In some cases you may need to update imports to reference new code locations.
 
--   matter.js-general:
-    -   General functionality that is not Matter specific previously resided in @project-chip/matter.js.  It now lives in @matter.js/general
-    -   BREAKING: The "ByteArray" type is removed, replaced with native-JS Uint8Array and a small collection of utility functions in the "Bytes" namespace
-    -   The Matter object model previously exported as @project-chip/matter.js/model now resides in @matter.js/model
+-   Cross-module changes
+    -   Matter.js now uses aliases via `package.json` "imports" field.  This is an internal change that simplifies imports but should not affect consumers
+    -   Previously we used a mix of snake-case and CamelCase for sub-package exports.  We have now standardized on snake case.  Compatibility packages (see below) continue to support the original module names
 
--   matter.js-nodejs:
-    -   Node specialization is moved to matter.js-nodejs.  matter-node.js remains as a compatibility import.
+-   @matter.js/general:
+    -   General functionality that is not Matter specific previously resided in `@project-chip/matter.js`.  It now lives in `@matter.js/general`
+    -   BREAKING: The "ByteArray" type is removed, replaced with native-JS Uint8Array and a small collection of utility functions in the "Bytes" namespace
+    -   Feature: The default "Time" implementation is now fully functional across all standard JS runtimes
+
+-   @matter.js/model:
+    -   The Matter object model previously exported as `@project-chip/matter.js/model` now resides in `@matter.js/model`
+    -   Individual elements exported by name are now models (fully funcitonal classes) rather than elements (raw JSON data).  This should be backwards compatible but makes them more useful operationally
+
+-   @matter.js/types:
+    -   Various definitions previously defined in `@project-chip/matter.js` now reside in `@matter.js/types`.  This includes most TLV structures, cluster definitions, and various support types
+    -   Clusters are not exported in `@project-chip/matter.js`.  You can import via `@project-chip/types/clusters` or individually (e.g. `@project-chip/types/clusters/window-covering`)
+
+-   @matter.js/protocol:
+    -   Low-level Matter logic previously defined in `@project-chip/matter.js` now resides in `@matter.js/protocol`.  This includes network communication, fabric management and cluster invocation, read/write, events, etc.
+    -   BREAKING: Various types that were previously specialized with template parameters are no longer generic.  This should be largely transparent to API consumers.  Compatibility exports still support the generic parameters in some, but not all, cases.
+
+-   @matter.js/node:
+    -   The high-level APIs previously defined in `@project-chip/matter.js` now reside in `@matter.js/node`.  The Node API includes node management, behavior definitions and endpoint definitions
+    -   We export behaviors under `@matter.js/node/behaviors` or individually (e.g. `@matter.js/node/behaviors/on-off`)
+    -   We export device type definitions for system endpoints and devices under `@matter.js/node/endpoints` and `@matter.js/node/devices` respectively.  You may also import these via inddex or individually
+
+-   @matter.js/nodejs:
+    -   Node.js specialization is moved here.  `@project-chip/matter-node.js` remains as a compatibility import.
     -   BREAKING: The previously deprecated re-exports in matter-node.js from matter.js are removed.
+
+-   @matter.js/nodejs-ble
+    -   The BLE specialization for Node.js is moved here.  `@project-chip/matter-node-ble.js` remains as a compatibility import.
+
+-   @matter.js/main:
+    -   This package is a new "one-and-done" dependency for applications.  It automatically loads platform specialization and reexports pacakages above as appropriate
 
 ## 0.10.1 (2024-09-08)
 

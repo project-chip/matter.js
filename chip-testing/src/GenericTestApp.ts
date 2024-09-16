@@ -6,8 +6,34 @@
  */
 
 import { ClassExtends, Environment } from "@matter.js/main";
+import { ValidationError } from "@matter.js/main/types";
 import { StorageBackendAsyncJsonFile } from "./storage/StorageBackendAsyncJsonFile.js";
 import { StorageBackendSyncJsonFile } from "./storage/StorageBackendSyncJsonFile.js";
+
+// TODO - the get*Parameter calls are deprecated along with matter-node.js so copied here temporarily.  Replace with
+// yargs ?
+const commandArguments = process.argv.slice(2);
+
+export function getParameter(name: string) {
+    let markerIndex = commandArguments.indexOf(`-${name}`);
+    if (markerIndex === -1) markerIndex = commandArguments.indexOf(`--${name}`);
+    if (markerIndex === -1 || markerIndex + 1 === commandArguments.length) return undefined;
+    return commandArguments[markerIndex + 1];
+}
+
+export function hasParameter(name: string) {
+    let markerIncluded = commandArguments.includes(`-${name}`);
+    if (!markerIncluded) markerIncluded = commandArguments.includes(`--${name}`);
+    return markerIncluded;
+}
+
+export function getIntParameter(name: string) {
+    const value = getParameter(name);
+    if (value === undefined) return undefined;
+    const intValue = parseInt(value, 10);
+    if (isNaN(intValue)) throw new ValidationError(`Invalid value for parameter ${name}: ${value} is not a number`);
+    return intValue;
+}
 
 export interface TestInstance {
     setup: () => Promise<void>;
@@ -15,24 +41,32 @@ export interface TestInstance {
     stop: () => Promise<void>;
 }
 
+export namespace log {
+    export function directive(...args: unknown[]) {
+        console.log(...args);
+    }
+
+    export function error(...args: unknown[]) {
+        console.log(args);
+    }
+}
+
 export async function startTestApp(
     appName: string,
     testInstanceClass: ClassExtends<TestInstance>,
     storageType: typeof StorageBackendSyncJsonFile | typeof StorageBackendAsyncJsonFile = StorageBackendSyncJsonFile,
 ) {
-    const vars = Environment.default.vars;
-
-    const storageName = `/tmp/chip_${vars.string("KVS") ?? "kvs"}`;
+    const storageName = `/tmp/chip_${getParameter("KVS") ?? "kvs"}`;
 
     const storage = new storageType(storageName);
-    if (vars.boolean("factoryreset")) {
+    if (hasParameter("factoryreset")) {
         await storage.clear();
     }
 
     const testInstance = new testInstanceClass(storage, {
         appName,
-        discriminator: vars.number("discriminator"),
-        passcode: vars.string("passcode"),
+        discriminator: getIntParameter("discriminator"),
+        passcode: getIntParameter("passcode"),
     });
 
     await testInstance.setup();

@@ -4,5 +4,5 @@
         "outDir": "../build/test",
         "types": ["node", "mocha", "@matter.js/tools"]
     },
-    "references": [{ "path": "../../matter.js-tools" }, { "path": "../src" }]
+    "references": [{ "path": "../../tools" }, { "path": "../src" }]
 }
