@@ -9,11 +9,9 @@
         "smart device"
     ],
     "license": "Apache-2.0",
-    "author": "Project CHIP Authors",
+    "author": "matter.js authors",
     "contributors": [
-        "Martin Turon <mturon@google.com>",
-        "Marco Fucci di Napoli <mfucci@gmail.com>",
-        "Ingo Fischer <github@fischer-ka.de>"
+        "Greg Lauckhart <greg@lauckhart.com>"
     ],
     "bugs": {
         "url": "https://github.com/project-chip/matter.js/issues"

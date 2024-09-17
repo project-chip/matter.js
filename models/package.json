@@ -23,7 +23,11 @@
         "type": "git",
         "url": "git+https://github.com/project-chip/matter.js.git"
     },
-    "author": "Project CHIP Authors",
+    "author": "matter.js authors",
+    "contributors": [
+        "Ingo Fischer <github@fischer-ka.de>",
+        "Greg Lauckhart <greg@lauckhart.com>"
+    ],
     "license": "Apache-2.0",
     "bugs": {
         "url": "https://github.com/project-chip/matter.js/issues"

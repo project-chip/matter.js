@@ -9,7 +9,7 @@
         "smart device"
     ],
     "license": "Apache-2.0",
-    "author": "Project CHIP Authors",
+    "author": "matter.js authors",
     "contributors": [
         "Martin Turon <mturon@google.com>",
         "Ingo Fischer <github@fischer-ka.de>"

@@ -10,7 +10,7 @@
         "ble"
     ],
     "license": "Apache-2.0",
-    "author": "Project CHIP Authors",
+    "author": "matter.js authors",
     "contributors": [
         "Ingo Fischer <github@fischer-ka.de>"
     ],
