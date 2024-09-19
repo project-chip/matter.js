@@ -33,7 +33,6 @@ export abstract class NetworkRuntime {
     }
 
     async [Construction.construct]() {
-        await this.#owner.act(agent => this.owner.lifecycle.finalized.emit(agent.context));
         await this.start();
         await this.#owner.act(agent => this.owner.lifecycle.online.emit(agent.context));
     }

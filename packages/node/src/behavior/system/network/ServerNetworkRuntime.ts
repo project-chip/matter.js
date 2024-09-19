@@ -309,6 +309,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.addBroadcasters(matterDevice);
 
         await this.owner.set({ network: { operationalPort: this.operationalPort } });
+        await this.owner.act(agent => this.owner.lifecycle.finalized.emit(agent.context));
 
         await this.openAdvertisementWindow();
     }
