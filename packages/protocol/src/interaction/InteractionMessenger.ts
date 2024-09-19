@@ -71,6 +71,10 @@ const logger = Logger.get("InteractionMessenger");
 class InteractionMessenger {
     constructor(protected exchange: MessageExchange) {}
 
+    calculateMaximumPeerResponseTime(expectedProcessingTimeMs?: number) {
+        return this.exchange.calculateMaximumPeerResponseTime(expectedProcessingTimeMs);
+    }
+
     send(messageType: number, payload: Uint8Array, options?: ExchangeSendOptions) {
         return this.exchange.send(messageType, payload, options);
     }

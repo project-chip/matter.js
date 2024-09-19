@@ -90,7 +90,7 @@ const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
  * from chip implementation. This is basically the default used with different names, also kExpectedLowProcessingTime or
  * kExpectedSigma1ProcessingTime.
  */
-const DEFAULT_EXPECTED_PROCESSING_TIME_MS = 2_000;
+export const DEFAULT_EXPECTED_PROCESSING_TIME_MS = 2_000;
 
 /**
  * The buffer time in milliseconds to add to the peer response time to also consider network delays and other factors.
@@ -429,7 +429,7 @@ export class MessageExchange {
                 if (!this.#useMRP) {
                     throw new MatterFlowError("No response expected for this message exchange because UDP and no MRP.");
                 }
-                timeout = this.#maximumPeerResponseTime(expectedProcessingTimeMs);
+                timeout = this.calculateMaximumPeerResponseTime(expectedProcessingTimeMs);
                 break;
             case "ble":
                 // chip sdk uses BTP_ACK_TIMEOUT_MS which is wrong in my eyes, so we use static 30s as like TCP here
@@ -467,7 +467,7 @@ export class MessageExchange {
         );
     }
 
-    #maximumPeerResponseTime(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS) {
+    calculateMaximumPeerResponseTime(expectedProcessingTimeMs = DEFAULT_EXPECTED_PROCESSING_TIME_MS) {
         // We use the expected processing time and deduct the time we already waited since last resubmission
         let finalWaitTime = expectedProcessingTimeMs;
 
@@ -488,7 +488,7 @@ export class MessageExchange {
             if (expectedProcessingTimeMs !== undefined) {
                 // We already have waited after the last message was sent, so deduct this time from the final wait time
                 const finalWaitTime =
-                    this.#maximumPeerResponseTime(expectedProcessingTimeMs) -
+                    this.calculateMaximumPeerResponseTime(expectedProcessingTimeMs) -
                     (this.#retransmissionTimer?.intervalMs ?? 0);
                 if (finalWaitTime > 0) {
                     this.#retransmissionCounter--; // We will not resubmit the message again
