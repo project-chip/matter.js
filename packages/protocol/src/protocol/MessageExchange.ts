@@ -12,6 +12,7 @@ import {
     Logger,
     MatterError,
     MatterFlowError,
+    NoResponseTimeoutError,
     Queue,
     Time,
     Timer,
@@ -32,7 +33,7 @@ import { ChannelNotConnectedError, MessageChannel } from "./ExchangeManager.js";
 
 const logger = Logger.get("MessageExchange");
 
-export class RetransmissionLimitReachedError extends MatterError {}
+export class RetransmissionLimitReachedError extends NoResponseTimeoutError {}
 
 export class UnexpectedMessageError extends MatterError {
     public constructor(
@@ -443,20 +444,6 @@ export class MessageExchange {
         return this.#messagesQueue.read(timeout);
     }
 
-    async waitFor(messageType: number, timeoutMs = 180_000) {
-        const message = await this.#messagesQueue.read(timeoutMs);
-        const {
-            payloadHeader: { messageType: receivedMessageType },
-        } = message;
-        if (receivedMessageType !== messageType)
-            throw new MatterFlowError(
-                `Received unexpected message type ${receivedMessageType.toString(16)}. Expected ${messageType.toString(
-                    16,
-                )}`,
-            );
-        return message;
-    }
-
     /**
      * Calculates the backoff time for a resubmission based on the current retransmission count.
      * If no session parameters are provided, the parameters of the current session are used.
@@ -543,19 +530,23 @@ export class MessageExchange {
 
         this.channel
             .send(message)
-            .then(() => {
-                this.#retransmissionTimer = Time.getTimer("Message retransmission", resubmissionBackoffTime, () =>
-                    this.retransmitMessage(message, expectedProcessingTimeMs),
-                ).start();
-            })
+            .then(() => this.initializeResubmission(message, resubmissionBackoffTime, expectedProcessingTimeMs))
             .catch(error => {
                 logger.error("An error happened when retransmitting a message", error);
                 if (error instanceof ChannelNotConnectedError) {
                     this.closeInternal().catch(error =>
                         logger.error("An error happened when closing the exchange", error),
                     );
+                } else {
+                    this.initializeResubmission(message, resubmissionBackoffTime, expectedProcessingTimeMs);
                 }
             });
+    }
+
+    initializeResubmission(message: Message, resubmissionBackoffTime: number, expectedProcessingTimeMs?: number) {
+        this.#retransmissionTimer = Time.getTimer("Message retransmission", resubmissionBackoffTime, () =>
+            this.retransmitMessage(message, expectedProcessingTimeMs),
+        ).start();
     }
 
     async destroy() {

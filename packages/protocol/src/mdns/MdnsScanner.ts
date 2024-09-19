@@ -383,14 +383,14 @@ export class MdnsScanner implements Scanner {
         return storedDevice;
     }
 
-    cancelOperationalDeviceDiscovery(fabric: Fabric, nodeId: NodeId) {
+    cancelOperationalDeviceDiscovery(fabric: Fabric, nodeId: NodeId, resolvePromise = true) {
         const deviceMatterQname = this.#createOperationalMatterQName(fabric.operationalId, nodeId);
-        this.#finishWaiter(deviceMatterQname, true);
+        this.#finishWaiter(deviceMatterQname, resolvePromise);
     }
 
-    cancelCommissionableDeviceDiscovery(identifier: CommissionableDeviceIdentifiers) {
+    cancelCommissionableDeviceDiscovery(identifier: CommissionableDeviceIdentifiers, resolvePromise = true) {
         const queryId = this.#buildCommissionableQueryIdentifier(identifier);
-        this.#finishWaiter(queryId, true);
+        this.#finishWaiter(queryId, resolvePromise);
     }
 
     getDiscoveredOperationalDevice({ operationalId }: Fabric, nodeId: NodeId) {

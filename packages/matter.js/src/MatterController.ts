@@ -20,6 +20,7 @@ import {
     Logger,
     NetInterface,
     NoProviderError,
+    NoResponseTimeoutError,
     ServerAddress,
     ServerAddressIp,
     StorageBackendMemory,
@@ -103,16 +104,37 @@ export type CommissionedNodeDetails = {
     basicInformationData?: Record<string, SupportedStorageTypes>;
 };
 
+type DiscoveryOptions = {
+    discoveryType?: NodeDiscoveryType;
+    timeoutSeconds?: number;
+    discoveryData?: DiscoveryData;
+};
+
 const DEFAULT_FABRIC_INDEX = FabricIndex(1);
 const DEFAULT_FABRIC_ID = FabricId(1);
 const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xfff1);
 
-const RECONNECTION_POLLING_INTERVAL = 10 * 60 * 1000; // 10 minutes
+const RECONNECTION_POLLING_INTERVAL_MS = 600_000; // 10 minutes
+const RETRANSMISSION_DISCOVERY_TIMEOUT_MS = 5_000;
 
 const CONTROLLER_CONNECTIONS_PER_FABRIC_AND_NODE = 3;
 const CONTROLLER_MAX_PATHS_PER_INVOKE = 10;
 
 const logger = Logger.get("MatterController");
+
+export enum NodeDiscoveryType {
+    /** No discovery is done, in calls means that only known addresses are tried. */
+    None = 0,
+
+    /** Retransmission discovery means that we ignore known addresses and start a query for 5s. */
+    RetransmissionDiscovery = 1,
+
+    /** Timed discovery means that the device is discovered for a defined timeframe, including known addresses. */
+    TimedDiscovery = 2,
+
+    /** Full discovery means that the device is discovered until it is found, excluding known addresses. */
+    FullDiscovery = 3,
+}
 
 export class MatterController implements SessionContext {
     public static async create(options: {
@@ -273,6 +295,14 @@ export class MatterController implements SessionContext {
     private readonly fabric: Fabric;
     private readonly adminVendorId: VendorId;
     private readonly sessionClosedCallback?: (peerNodeId: NodeId) => void;
+    readonly #runningNodeDiscoveries = new Map<
+        NodeId,
+        {
+            type: NodeDiscoveryType;
+            promises?: (() => Promise<MessageChannel>)[];
+            timer?: Timer;
+        }
+    >();
 
     get construction() {
         return this.#construction;
@@ -480,7 +510,7 @@ export class MatterController implements SessionContext {
             try {
                 paseSecureChannel = await this.initializePaseSecureChannel(knownAddress, passcode);
             } catch (error) {
-                RetransmissionLimitReachedError.accept(error);
+                NoResponseTimeoutError.accept(error);
             }
         }
         if (paseSecureChannel === undefined) {
@@ -492,7 +522,7 @@ export class MatterController implements SessionContext {
 
             const { result } = await ControllerDiscovery.iterateServerAddresses(
                 discoveredDevices,
-                RetransmissionLimitReachedError,
+                NoResponseTimeoutError,
                 async () =>
                     scannersToUse.flatMap(scanner => scanner.getDiscoveredCommissionableDevices(identifierData)),
                 async (address, device) => {
@@ -659,7 +689,11 @@ export class MatterController implements SessionContext {
                     throw new CommissioningSuccessfullyFinished();
                 }
                 // Look for the device broadcast over MDNS and do CASE pairing
-                return await this.connect(peerNodeId, 120, discoveryData); // Wait maximum 120s to find the operational device for commissioning process
+                return await this.connect(peerNodeId, {
+                    discoveryType: NodeDiscoveryType.TimedDiscovery,
+                    timeoutSeconds: 120,
+                    discoveryData,
+                }); // Wait maximum 120s to find the operational device for commissioning process
             },
         );
 
@@ -683,7 +717,11 @@ export class MatterController implements SessionContext {
      */
     async completeCommissioning(peerNodeId: NodeId, discoveryData?: DiscoveryData) {
         // Look for the device broadcast over MDNS and do CASE pairing
-        const interactionClient = await this.connect(peerNodeId, 120, discoveryData); // Wait maximum 120s to find the operational device for commissioning process
+        const interactionClient = await this.connect(peerNodeId, {
+            discoveryType: NodeDiscoveryType.TimedDiscovery,
+            timeoutSeconds: 120,
+            discoveryData,
+        }); // Wait maximum 120s to find the operational device for commissioning process
         const generalCommissioningClusterClient = ClusterClient(
             GeneralCommissioning.Cluster,
             EndpointNumber(0),
@@ -702,27 +740,46 @@ export class MatterController implements SessionContext {
         await this.fabricStorage?.set("fabric", this.fabric.toStorageObject());
     }
 
-    handleResubmissionStarted(_peerNodeId: NodeId) {
-        // TODO discover the device again
+    handleResubmissionStarted(peerNodeId: NodeId) {
+        if (this.#runningNodeDiscoveries.has(peerNodeId)) {
+            // We already discover for this node, so we do not need to start a new discovery
+            return;
+        }
+        this.#runningNodeDiscoveries.set(peerNodeId, { type: NodeDiscoveryType.RetransmissionDiscovery });
+        this.mdnsScanner
+            ?.findOperationalDevice(this.fabric, peerNodeId, RETRANSMISSION_DISCOVERY_TIMEOUT_MS, true)
+            .catch(error => {
+                logger.error(`Failed to discover device ${peerNodeId} after resubmission started.`, error);
+            })
+            .finally(() => {
+                if (this.#runningNodeDiscoveries.get(peerNodeId)?.type === NodeDiscoveryType.RetransmissionDiscovery) {
+                    this.#runningNodeDiscoveries.delete(peerNodeId);
+                }
+            });
     }
 
-    private async reconnectLastKnownAddress(
+    private async reconnectKnownAddress(
         peerNodeId: NodeId,
         operationalAddress: ServerAddressIp,
         discoveryData?: DiscoveryData,
+        expectedProcessingTimeMs?: number,
     ): Promise<MessageChannel | undefined> {
         const { ip, port } = operationalAddress;
         try {
-            logger.debug(`Resume device connection to configured server at ${ip}:${port}`);
-            const channel = await this.pair(peerNodeId, operationalAddress, discoveryData);
+            logger.debug(
+                `Resume device connection to configured server at ${ip}:${port}${expectedProcessingTimeMs !== undefined ? ` with expected processing time of ${expectedProcessingTimeMs}ms` : ""} ...`,
+            );
+            const channel = await this.pair(peerNodeId, operationalAddress, discoveryData, expectedProcessingTimeMs);
             await this.setOperationalDeviceData(peerNodeId, operationalAddress);
             return channel;
         } catch (error) {
-            if (
-                error instanceof RetransmissionLimitReachedError ||
-                (error instanceof Error && error.message.includes("EHOSTUNREACH"))
-            ) {
-                logger.debug(`Failed to resume device connection with ${ip}:${port}, discover the device ...`, error);
+            if (error instanceof NoResponseTimeoutError) {
+                logger.debug(
+                    `Failed to resume connection to node ${peerNodeId} connection with ${ip}:${port}, discover the device ...`,
+                    error,
+                );
+                // We remove all sessions, this also informs the PairedNode class
+                await this.sessionManager.removeAllSessionsForNode(peerNodeId);
                 return undefined;
             } else {
                 throw error;
@@ -733,50 +790,98 @@ export class MatterController implements SessionContext {
     private async connectOrDiscoverNode(
         peerNodeId: NodeId,
         operationalAddress?: ServerAddressIp,
-        timeoutSeconds?: number,
-        discoveryData?: DiscoveryData,
+        discoveryOptions: DiscoveryOptions = {},
     ) {
+        const {
+            discoveryType: requestedDiscoveryType = NodeDiscoveryType.FullDiscovery,
+            timeoutSeconds,
+            discoveryData = this.commissionedNodes.get(peerNodeId)?.discoveryData,
+        } = discoveryOptions;
+        if (timeoutSeconds !== undefined && requestedDiscoveryType !== NodeDiscoveryType.TimedDiscovery) {
+            throw new ImplementationError("Cannot set timeout without timed discovery.");
+        }
+        if (requestedDiscoveryType === NodeDiscoveryType.RetransmissionDiscovery) {
+            throw new ImplementationError("Cannot set retransmission discovery type.");
+        }
+
         if (this.mdnsScanner === undefined) {
             throw new ImplementationError("Cannot discover device without mDNS scanner.");
         }
         const mdnsScanner = this.mdnsScanner;
 
-        const discoveryPromises = new Array<() => Promise<MessageChannel>>();
+        const existingDiscoveryDetails = this.#runningNodeDiscoveries.get(peerNodeId) ?? {
+            type: NodeDiscoveryType.None,
+        };
 
-        // Additionally to general discovery we also try to poll the formerly known operational address
-        let reconnectionPollingTimer: Timer | undefined;
+        // If we currently run another "lower" retransmission type we cancel it
+        if (
+            existingDiscoveryDetails.type !== NodeDiscoveryType.None &&
+            existingDiscoveryDetails.type < requestedDiscoveryType
+        ) {
+            mdnsScanner.cancelOperationalDeviceDiscovery(this.fabric, peerNodeId);
+            this.#runningNodeDiscoveries.delete(peerNodeId);
+            existingDiscoveryDetails.type = NodeDiscoveryType.None;
+        }
 
-        if (operationalAddress !== undefined) {
-            const directReconnection = await this.reconnectLastKnownAddress(
-                peerNodeId,
-                operationalAddress,
-                discoveryData,
-            );
+        const { type: runningDiscoveryType, promises } = existingDiscoveryDetails;
+
+        // If we have a last known address try to reach the device directly when we are not already discovering
+        // In worst case parallel cases we do this step twice, but that's ok
+        if (
+            operationalAddress !== undefined &&
+            (runningDiscoveryType === NodeDiscoveryType.None || requestedDiscoveryType === NodeDiscoveryType.None)
+        ) {
+            const directReconnection = await this.reconnectKnownAddress(peerNodeId, operationalAddress, discoveryData);
             if (directReconnection !== undefined) {
                 return directReconnection;
             }
+            if (requestedDiscoveryType === NodeDiscoveryType.None) {
+                throw new DiscoveryError(`Node ${peerNodeId} is not reachable right now.`);
+            }
+        }
 
-            if (timeoutSeconds === undefined) {
+        if (promises !== undefined) {
+            if (runningDiscoveryType > requestedDiscoveryType) {
+                // We already run a "longer" discovery, so we know it is unreachable for now
+                throw new DiscoveryError(
+                    `Node ${peerNodeId} is not reachable right now and discovery already running.`,
+                );
+            } else {
+                // If we are already discovering this node, so we reuse promises
+                return await anyPromise(promises);
+            }
+        }
+
+        const discoveryPromises = new Array<() => Promise<MessageChannel>>();
+        let reconnectionPollingTimer: Timer | undefined;
+
+        if (operationalAddress !== undefined) {
+            // Additionally to general discovery we also try to poll the formerly known operational address
+            if (requestedDiscoveryType === NodeDiscoveryType.FullDiscovery) {
                 const { promise, resolver, rejecter } = createPromise<MessageChannel>();
 
                 reconnectionPollingTimer = Time.getPeriodicTimer(
                     "Controller reconnect",
-                    RECONNECTION_POLLING_INTERVAL,
+                    RECONNECTION_POLLING_INTERVAL_MS,
                     async () => {
                         try {
                             logger.debug(`Polling for device at ${serverAddressToString(operationalAddress)} ...`);
-                            const result = await this.reconnectLastKnownAddress(
+                            const result = await this.reconnectKnownAddress(
                                 peerNodeId,
                                 operationalAddress,
                                 discoveryData,
                             );
                             if (result !== undefined && reconnectionPollingTimer?.isRunning) {
                                 reconnectionPollingTimer?.stop();
+                                mdnsScanner.cancelOperationalDeviceDiscovery(this.fabric, peerNodeId);
+                                this.#runningNodeDiscoveries.delete(peerNodeId);
                                 resolver(result);
                             }
                         } catch (error) {
                             if (reconnectionPollingTimer?.isRunning) {
                                 reconnectionPollingTimer?.stop();
+                                mdnsScanner.cancelOperationalDeviceDiscovery(this.fabric, peerNodeId);
+                                this.#runningNodeDiscoveries.delete(peerNodeId);
                                 rejecter(error);
                             }
                         }
@@ -795,13 +900,13 @@ export class MatterController implements SessionContext {
                 timeoutSeconds,
                 timeoutSeconds === undefined,
             );
-            if (reconnectionPollingTimer?.isRunning) {
-                reconnectionPollingTimer?.stop();
-            }
+            const { timer } = this.#runningNodeDiscoveries.get(peerNodeId) ?? {};
+            timer?.stop();
+            this.#runningNodeDiscoveries.delete(peerNodeId);
 
             const { result } = await ControllerDiscovery.iterateServerAddresses(
                 [scanResult],
-                PairRetransmissionLimitReachedError,
+                NoResponseTimeoutError,
                 async () => {
                     const device = mdnsScanner.getDiscoveredOperationalDevice(this.fabric, peerNodeId);
                     return device !== undefined ? [device] : [];
@@ -819,7 +924,13 @@ export class MatterController implements SessionContext {
             return result;
         });
 
-        return await anyPromise(discoveryPromises);
+        this.#runningNodeDiscoveries.set(peerNodeId, {
+            type: requestedDiscoveryType,
+            promises: discoveryPromises,
+            timer: reconnectionPollingTimer,
+        });
+
+        return await anyPromise(discoveryPromises).finally(() => this.#runningNodeDiscoveries.delete(peerNodeId));
     }
 
     /**
@@ -828,14 +939,14 @@ export class MatterController implements SessionContext {
      * device is discovered again using its operational instance details.
      * It returns the operational MessageChannel on success.
      */
-    private async resume(peerNodeId: NodeId, timeoutSeconds?: number, discoveryData?: DiscoveryData) {
+    private async resume(peerNodeId: NodeId, discoveryOptions?: DiscoveryOptions) {
         const operationalAddress = this.getLastOperationalAddress(peerNodeId);
 
         try {
-            return await this.connectOrDiscoverNode(peerNodeId, operationalAddress, timeoutSeconds, discoveryData);
+            return await this.connectOrDiscoverNode(peerNodeId, operationalAddress, discoveryOptions);
         } catch (error) {
             if (
-                (error instanceof DiscoveryError || error instanceof PairRetransmissionLimitReachedError) &&
+                (error instanceof DiscoveryError || error instanceof NoResponseTimeoutError) &&
                 this.commissionedNodes.has(peerNodeId)
             ) {
                 logger.info(`Resume failed, remove all sessions for node ${peerNodeId}`);
@@ -847,7 +958,12 @@ export class MatterController implements SessionContext {
     }
 
     /** Pair with an operational device (already commissioned) and establish a CASE session. */
-    private async pair(peerNodeId: NodeId, operationalServerAddress: ServerAddressIp, discoveryData?: DiscoveryData) {
+    private async pair(
+        peerNodeId: NodeId,
+        operationalServerAddress: ServerAddressIp,
+        discoveryData?: DiscoveryData,
+        expectedProcessingTimeMs?: number,
+    ) {
         const { ip, port } = operationalServerAddress;
         // Do CASE pairing
         const isIpv6Address = isIPv6(ip);
@@ -881,13 +997,19 @@ export class MatterController implements SessionContext {
             );
 
             try {
-                operationalSecureSession = await this.caseClient.pair(this, exchange, this.fabric, peerNodeId);
+                operationalSecureSession = await this.caseClient.pair(
+                    this,
+                    exchange,
+                    this.fabric,
+                    peerNodeId,
+                    expectedProcessingTimeMs,
+                );
             } catch (e) {
                 await exchange.close();
                 throw e;
             }
         } catch (e) {
-            RetransmissionLimitReachedError.accept(e);
+            NoResponseTimeoutError.accept(e);
 
             // Convert error
             throw new PairRetransmissionLimitReachedError(e.message);
@@ -963,10 +1085,8 @@ export class MatterController implements SessionContext {
      * Connect to the device by opening a channel and creating a new CASE session if necessary.
      * Returns a InteractionClient on success.
      */
-    async connect(peerNodeId: NodeId, timeoutSeconds?: number, discoveryData?: DiscoveryData) {
-        if (discoveryData == undefined) {
-            discoveryData = this.commissionedNodes.get(peerNodeId)?.discoveryData;
-        }
+    async connect(peerNodeId: NodeId, discoveryOptions: DiscoveryOptions) {
+        const { discoveryData } = discoveryOptions;
 
         let channel: MessageChannel;
         try {
@@ -974,12 +1094,46 @@ export class MatterController implements SessionContext {
         } catch (error) {
             NoChannelError.accept(error);
 
-            channel = await this.resume(peerNodeId, timeoutSeconds, discoveryData);
+            channel = await this.resume(peerNodeId, discoveryOptions);
         }
         return new InteractionClient(
             new ExchangeProvider(this.exchangeManager, channel, async () => {
+                if (!this.channelManager.hasChannel(this.fabric, peerNodeId)) {
+                    throw new RetransmissionLimitReachedError(`Device ${peerNodeId} is currently not reachable.`);
+                }
                 await this.channelManager.removeAllNodeChannels(this.fabric, peerNodeId);
-                await this.resume(peerNodeId, 60); // Channel reconnection only waits limited time
+
+                const discoveredAddresses = this.mdnsScanner?.getDiscoveredOperationalDevice(this.fabric, peerNodeId);
+                const lastKnownAddress = this.getLastOperationalAddress(peerNodeId);
+
+                if (
+                    lastKnownAddress !== undefined &&
+                    discoveredAddresses !== undefined &&
+                    discoveredAddresses.addresses.some(
+                        ({ ip, port }) => ip === lastKnownAddress.ip && port === lastKnownAddress.port,
+                    )
+                ) {
+                    // We found the same address, so assume somehow cached response because we just tried to connect,
+                    // and it failed, so clear list
+                    discoveredAddresses.addresses.length = 0;
+                }
+
+                // Try to use first result for one last try before we need to reconnect
+                const operationalAddress = discoveredAddresses?.addresses[0];
+                if (operationalAddress === undefined) {
+                    logger.info(
+                        `Re-Discovering device failed (no address found), remove all sessions for node ${peerNodeId}`,
+                    );
+                    // We remove all sessions, this also informs the PairedNode class
+                    await this.sessionManager.removeAllSessionsForNode(peerNodeId);
+                    throw new RetransmissionLimitReachedError(`No operational address found for node ${peerNodeId}`);
+                }
+                if (
+                    (await this.reconnectKnownAddress(peerNodeId, operationalAddress, discoveryData, 2_000)) ===
+                    undefined
+                ) {
+                    throw new RetransmissionLimitReachedError(`Device ${peerNodeId} is not reachable.`);
+                }
                 return this.channelManager.getChannel(this.fabric, peerNodeId);
             }),
             peerNodeId,
@@ -1007,6 +1161,10 @@ export class MatterController implements SessionContext {
     }
 
     async close() {
+        for (const [nodeId, { timer }] of this.#runningNodeDiscoveries.entries()) {
+            timer?.stop();
+            this.mdnsScanner?.cancelOperationalDeviceDiscovery(this.fabric, nodeId, false); // This ends discovery without triggering promises
+        }
         await this.exchangeManager.close();
         await this.sessionManager.close();
         await this.channelManager.close();

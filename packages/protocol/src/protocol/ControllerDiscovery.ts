@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { anyPromise, ClassExtends, Logger, MatterError, serverAddressToString } from "#general";
+import { anyPromise, ClassExtends, Logger, NoResponseTimeoutError, serverAddressToString } from "#general";
 import { NodeId } from "#types";
 import {
     AddressTypeFromDevice,
@@ -21,7 +21,7 @@ import { RetransmissionLimitReachedError } from "./MessageExchange.js";
 
 const logger = Logger.get("ControllerDiscovery");
 
-export class DiscoveryError extends MatterError {}
+export class DiscoveryError extends RetransmissionLimitReachedError {}
 
 /**
  * Special Error instance used to detect if the retransmission limit was reached during pairing for case or pase.
@@ -162,7 +162,7 @@ export class ControllerDiscovery {
             try {
                 return { result: await func(address, device), resultAddress: address, resultDevice: device };
             } catch (error) {
-                if (error instanceof errorType || (error instanceof Error && error.message.includes("EHOSTUNREACH"))) {
+                if (error instanceof errorType || error instanceof NoResponseTimeoutError) {
                     logger.debug(`Failed to communicate with ${serverKey}, try other servers ...`, error);
                 } else {
                     throw error;
@@ -210,10 +210,7 @@ export class ControllerDiscovery {
                         return result;
                     }
                 } catch (error) {
-                    if (
-                        error instanceof errorType ||
-                        (error instanceof Error && error.message.includes("EHOSTUNREACH"))
-                    ) {
+                    if (error instanceof errorType || error instanceof NoResponseTimeoutError) {
                         logger.debug(`Failed to communicate with ${serverKey}, try next server ...`, error);
                     } else {
                         throw error;

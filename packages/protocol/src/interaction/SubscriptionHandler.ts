@@ -4,7 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, Logger, MaybePromise, NetworkError, Time, Timer, isObject } from "#general";
+import {
+    InternalError,
+    Logger,
+    MaybePromise,
+    NetworkError,
+    NoResponseTimeoutError,
+    Time,
+    Timer,
+    isObject,
+} from "#general";
 import {
     EventNumber,
     NodeId,
@@ -23,7 +32,7 @@ import { MatterDevice } from "../MatterDevice.js";
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
 import { AnyEventServer, FabricSensitiveEventServer } from "../cluster/server/EventServer.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { RetransmissionLimitReachedError } from "../protocol/MessageExchange.js";
+import { NoChannelError } from "../protocol/ChannelManager.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
 import { EventStorageData } from "./EventHandler.js";
@@ -170,7 +179,9 @@ export class SubscriptionHandler {
         this.#sendIntervalMs = sendInterval;
 
         this.updateTimer = Time.getTimer("Subscription update", this.#sendIntervalMs, () => this.prepareDataUpdate()); // will be started later
-        this.sendDelayTimer = Time.getTimer("Subscription delay", 50, () => this.sendUpdate()); // will be started later
+        this.sendDelayTimer = Time.getTimer("Subscription delay", 50, () =>
+            this.sendUpdate().catch(error => logger.warn("Sending subscription update failed:", error)),
+        ); // will be started later
     }
 
     private determineSendingIntervals(
@@ -549,7 +560,11 @@ export class SubscriptionHandler {
                     `Sending update failed 3 times in a row, canceling subscription ${this.subscriptionId} and let controller subscribe again.`,
                 );
                 this.sendNextUpdateImmediately = false;
-                if (error instanceof RetransmissionLimitReachedError || error instanceof NetworkError) {
+                if (
+                    error instanceof NoResponseTimeoutError ||
+                    error instanceof NetworkError ||
+                    error instanceof NoChannelError
+                ) {
                     // We could not send at all, consider session as dead
                     await this.session.destroy(false);
                 } else {
@@ -849,13 +864,14 @@ export class SubscriptionHandler {
                     this.isFabricFiltered,
                 );
             }
-        } catch (e) {
-            if (StatusResponseError.is(e, StatusCode.InvalidSubscription, StatusCode.Failure)) {
+        } catch (error) {
+            if (StatusResponseError.is(error, StatusCode.InvalidSubscription, StatusCode.Failure)) {
                 logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
                 await this.cancel(false, true);
             } else {
+                StatusResponseError.accept(error);
+                logger.info(`Subscription ${this.subscriptionId} update failed:`, error);
                 await this.cancel(false);
-                throw e;
             }
         } finally {
             await messenger.close();

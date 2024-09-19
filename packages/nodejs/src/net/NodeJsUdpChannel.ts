@@ -5,6 +5,7 @@
  */
 
 import { Diagnostic, Logger, MAX_UDP_MESSAGE_SIZE, NetworkError, UdpChannel, UdpChannelOptions } from "#general";
+import { RetransmissionLimitReachedError } from "#protocol";
 import * as dgram from "dgram";
 import { NodeJsNetwork } from "./NodeJsNetwork.js";
 
@@ -122,7 +123,10 @@ export class NodeJsUdpChannel implements UdpChannel {
         return new Promise<void>((resolve, reject) => {
             this.socket.send(data, port, host, error => {
                 if (error !== null) {
-                    const netError = new NetworkError(error.message);
+                    const netError =
+                        error instanceof Error && "code" in error && error.code === "EHOSTUNREACH"
+                            ? new RetransmissionLimitReachedError(error.message)
+                            : new NetworkError(error.message);
                     netError.stack = error.stack;
                     reject(netError);
                     return;
