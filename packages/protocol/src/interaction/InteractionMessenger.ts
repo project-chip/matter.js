@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, Logger, MatterFlowError, UnexpectedDataError } from "#general";
+import { Logger, MatterFlowError, NoResponseTimeoutError, UnexpectedDataError } from "#general";
 import {
     Status,
     StatusCode,
@@ -27,7 +27,7 @@ import {
     TypeFromSchema,
 } from "#types";
 import { Message, SessionType } from "../codec/MessageCodec.js";
-import { ExchangeProvider } from "../protocol/ExchangeManager.js";
+import { ChannelNotConnectedError, ExchangeProvider } from "../protocol/ExchangeManager.js";
 import {
     ExchangeSendOptions,
     MessageExchange,
@@ -202,12 +202,12 @@ export class InteractionServerMessenger extends InteractionMessenger {
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
                 errorStatusCode = error.code;
-            } else if (error instanceof RetransmissionLimitReachedError) {
+            } else if (error instanceof NoResponseTimeoutError) {
                 logger.info(error);
             } else {
                 logger.warn(error);
             }
-            if (!isGroupSession && !(error instanceof RetransmissionLimitReachedError)) {
+            if (!isGroupSession && !(error instanceof NoResponseTimeoutError)) {
                 await this.sendStatus(errorStatusCode);
             }
         } finally {
@@ -356,13 +356,31 @@ export class InteractionServerMessenger extends InteractionMessenger {
 }
 
 export class IncomingInteractionClientMessenger extends InteractionMessenger {
+    async waitFor(messageType: number, timeoutMs?: number) {
+        const message = await this.nextMessage(timeoutMs);
+        const {
+            payloadHeader: { messageType: receivedMessageType },
+        } = message;
+        if (receivedMessageType !== messageType) {
+            if (receivedMessageType === MessageType.StatusResponse) {
+                const statusCode = TlvStatusResponse.decode(message.payload).status;
+                throw new StatusResponseError(`Received status response ${statusCode}`, statusCode);
+            }
+            throw new MatterFlowError(
+                `Received unexpected message type ${receivedMessageType.toString(16)}. Expected ${messageType.toString(
+                    16,
+                )}`,
+            );
+        }
+        return message;
+    }
     async readDataReports(sendFinalAckMessage = true): Promise<DataReport> {
         let subscriptionId: number | undefined;
         const attributeValues: TypeFromSchema<typeof TlvAttributeReport>[] = [];
         const eventValues: TypeFromSchema<typeof TlvEventReport>[] = [];
 
         while (true) {
-            const dataReportMessage = await this.exchange.waitFor(MessageType.ReportData);
+            const dataReportMessage = await this.waitFor(MessageType.ReportData);
             const report = TlvDataReport.decode(dataReportMessage.payload);
             if (subscriptionId === undefined && report.subscriptionId !== undefined) {
                 subscriptionId = report.subscriptionId;
@@ -404,22 +422,27 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
 
     /** Implements a send method with an automatic reconnection mechanism */
     override async send(messageType: number, payload: Uint8Array, options?: ExchangeSendOptions) {
-        if (this.exchange.channel.closed) {
-            throw new ImplementationError("The exchange channel is closed. Please connect the device first.");
-        }
         try {
+            if (this.exchange.channel.closed) {
+                throw new ChannelNotConnectedError("The exchange channel is closed. Please connect the device first.");
+            }
+
             return await this.exchange.send(messageType, payload, options);
         } catch (error) {
-            // When retransmission failed (most likely due to a lost connection or invalid session),
-            // try to reconnect if possible and resend the message once
-            if (error instanceof RetransmissionLimitReachedError) {
+            if (error instanceof RetransmissionLimitReachedError || error instanceof ChannelNotConnectedError) {
+                // When retransmission failed (most likely due to a lost connection or invalid session),
+                // try to reconnect if possible and resend the message once
+                logger.info(
+                    `${error instanceof RetransmissionLimitReachedError ? "Retransmission limit reached" : "Channel not connected"}, trying to reconnect and resend the message.`,
+                );
                 await this.exchange.close();
                 if (await this.exchangeProvider.reconnectChannel()) {
                     this.exchange = this.exchangeProvider.initiateExchange();
-                    return await this.exchange.send(messageType, payload);
+                    return await this.exchange.send(messageType, payload, options);
                 }
+            } else {
+                throw error;
             }
-            throw error;
         }
     }
 

@@ -28,8 +28,14 @@ import { CaseClientMessenger } from "./CaseMessenger.js";
 const logger = Logger.get("CaseClient");
 
 export class CaseClient {
-    async pair(client: SessionContext, exchange: MessageExchange, fabric: Fabric, peerNodeId: NodeId) {
-        const messenger = new CaseClientMessenger(exchange);
+    async pair(
+        client: SessionContext,
+        exchange: MessageExchange,
+        fabric: Fabric,
+        peerNodeId: NodeId,
+        expectedProcessingTimeMs?: number,
+    ) {
+        const messenger = new CaseClientMessenger(exchange, expectedProcessingTimeMs);
 
         // Generate pairing info
         const initiatorRandom = Crypto.getRandom();
