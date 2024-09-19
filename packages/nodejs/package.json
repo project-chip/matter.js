@@ -22,7 +22,7 @@
     "homepage": "https://github.com/project-chip/matter.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/project-chip/matter.js.git"
+        "url": "git+https://github.com/project-chip/matter.js.git"
     },
     "engines": {
         "node": ">=18.0.0"

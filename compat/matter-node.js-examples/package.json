@@ -21,7 +21,7 @@
     "homepage": "https://github.com/project-chip/matter.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/project-chip/matter.js.git"
+        "url": "git+https://github.com/project-chip/matter.js.git"
     },
     "scripts": {
         "clean": "matter-build clean",
@@ -35,12 +35,12 @@
         "matter-legacystorageconverter": "matter-run src/examples/LegacyStorageConverter.ts"
     },
     "bin": {
-        "matter-device-legacy": "./dist/esm/examples/DeviceNodeLegacy.js",
-        "matter-bridge-legacy": "./dist/esm/examples/BridgedDevicesNodeLegacy.js",
-        "matter-composeddevice-legacy": "./dist/esm/examples/ComposedDeviceNodeLegacy.js",
-        "matter-multidevice-legacy": "./dist/esm/examples/MultiDeviceNodeLegacy.js",
-        "matter-controller-legacy": "./dist/esm/examples/ControllerNodeLegacy.js",
-        "matter-legacystorageconverter": "./dist/esm/examples/LegacyStorageConverter.js"
+        "matter-device-legacy": "dist/esm/examples/DeviceNodeLegacy.js",
+        "matter-bridge-legacy": "dist/esm/examples/BridgedDevicesNodeLegacy.js",
+        "matter-composeddevice-legacy": "dist/esm/examples/ComposedDeviceNodeLegacy.js",
+        "matter-multidevice-legacy": "dist/esm/examples/MultiDeviceNodeLegacy.js",
+        "matter-controller-legacy": "dist/esm/examples/ControllerNodeLegacy.js",
+        "matter-legacystorageconverter": "dist/esm/examples/LegacyStorageConverter.js"
     },
     "devDependencies": {
         "typescript": "~5.5.3",

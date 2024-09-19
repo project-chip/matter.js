@@ -7,7 +7,7 @@
 import { readFileSync, statSync } from "fs";
 import { readdir, stat, writeFile } from "fs/promises";
 import { glob } from "glob";
-import { dirname, relative, resolve } from "path";
+import { dirname, join, relative, resolve } from "path";
 import { ignoreError, ignoreErrorSync } from "./errors.js";
 import { Progress } from "./progress.js";
 import { toolsPath } from "./tools-path.cjs";
@@ -235,7 +235,7 @@ export class Package {
     }
 
     async save() {
-        await this.writeFile("package.json", JSON.stringify(this.json, undefined, 4));
+        await this.writeFile(join(this.path, "package.json"), JSON.stringify(this.json, undefined, 4));
     }
 
     #maybeStat(path: string) {
