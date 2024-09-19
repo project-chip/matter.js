@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic } from "../../src/log/Diagnostic.js";
-import { LogFormat } from "../../src/log/LogFormat.js";
-import { LogLevel } from "../../src/log/LogLevel.js";
-import { Logger, consoleLogger } from "../../src/log/Logger.js";
-import { Bytes } from "../../src/util/Bytes.js";
+import { Diagnostic } from "#log/Diagnostic.js";
+import { LogFormat } from "#log/LogFormat.js";
+import { LogLevel } from "#log/LogLevel.js";
+import { Logger, consoleLogger } from "#log/Logger.js";
+import { Bytes } from "#util/Bytes.js";
 
 const LOGGER_NAME = "UnitTest";
 

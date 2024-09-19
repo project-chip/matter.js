@@ -137,25 +137,25 @@ This will install all dependencies and create symlinks between the packages, so 
 On Windows in order to successfully build all the packages (tested on Windows 11 Pro) make sure that to have installed Node.js 18+, the windows-build-tools and node-gyp version 10.
 On Non-Windows platforms and having Python 3.12+ installed please also make sure to use npm 10.2.3+.
 
-### To use matter(-node).js in own projects
+### To use matter.js in your own project
 
-To use matter.js in own projects you simply use matter-node.js as dependency in your project. This package also re-exports all interfaces from matter.js, so it is not needed to use matter.js directly. If you need BLE support you can use matter-node-ble.js as additional dependency.
+To use matter.js you import `@matter.js/main` as dependency in your project. This package re-exports functionality from other packages, so it is not necessary to have multiple dependencies. If you need BLE support you can use `@matter.js/nodejs-ble` as additional dependency.
 
 ```bash
-npm install @project-chip/matter-node.js --save
+npm install @matter.js/main --save
 ```
 
 If your project is not based on Node.js you need to implement the platform specific parts. See [How to use matter.js in own projects](#how-to-use-matterjs-in-own-projects) for more details.
 
 ### To try out the Node.js based Examples
 
-if you just want to try out the Node.js based examples you can use the following commands:
+if you just want to try out the examples on Node.js you can use the following commands:
 
 ```bash
-npm install @project-chip/matter-node.js-examples
+npm install @matter.js/examples
 ```
 
-Please refer to the Examples Readme on how to use the examples: [matter-node.js-examples](packages/matter-node.js-examples/README.md)
+Please refer to the Examples readme on how to use the examples: [@matter.js/examples](packages/examples/README.md)
 
 ## Code style
 

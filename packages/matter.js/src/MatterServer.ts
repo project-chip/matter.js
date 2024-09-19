@@ -3,12 +3,11 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Logger, Network, NetworkError, StorageManager, SyncStorage } from "@project-chip/matter.js-general";
+import { Logger, Network, NetworkError, StorageManager, SyncStorage } from "#general";
+import { MdnsBroadcaster, MdnsScanner } from "#protocol";
 import { CommissioningController } from "./CommissioningController.js";
 import { CommissioningServer } from "./CommissioningServer.js";
 import { MatterNode } from "./MatterNode.js";
-import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { MdnsScanner } from "./mdns/MdnsScanner.js";
 
 const logger = Logger.get("MatterServer");
 

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "../../src/util/Bytes.js";
-import { isDeepEqual } from "../../src/util/DeepEqual.js";
+import { Bytes } from "#util/Bytes.js";
+import { isDeepEqual } from "#util/DeepEqual.js";
 import { NumberId } from "./fake-brands.js";
 
 describe("DeepEqual", () => {

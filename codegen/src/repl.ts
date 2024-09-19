@@ -10,7 +10,7 @@ import { homedir } from "os";
 import { join } from "path";
 import repl from "repl";
 
-import * as model from "@project-chip/matter.js-model";
+import * as model from "#model";
 
 export async function main() {
     (global as any).model = model;

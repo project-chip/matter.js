@@ -3,12 +3,17 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Bytes, MAX_UDP_MESSAGE_SIZE, Queue } from "@project-chip/matter.js-general";
-import { Message, SessionType } from "@project-chip/matter.js/codec";
-import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
-import { Fabric } from "@project-chip/matter.js/fabric";
-import { ExchangeSendOptions, MATTER_MESSAGE_OVERHEAD, MessageExchange } from "@project-chip/matter.js/protocol";
-import { SecureSession } from "@project-chip/matter.js/session";
+import { Bytes, MAX_UDP_MESSAGE_SIZE, Queue } from "#general";
+import {
+    ExchangeSendOptions,
+    Fabric,
+    MATTER_MESSAGE_OVERHEAD,
+    Message,
+    MessageExchange,
+    SecureSession,
+    SessionType,
+} from "#protocol";
+import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
 import { KEY } from "../cluster/ClusterServerTestingUtil.js";
 
 export function createTestFabric() {
@@ -36,7 +41,7 @@ class DummyMessageExchange {
     maxPayloadSize = MAX_UDP_MESSAGE_SIZE - MATTER_MESSAGE_OVERHEAD;
 
     constructor(
-        public session: SecureSession<any>,
+        public session: SecureSession,
         public hasTimedInteractionFlag = false,
         public timedInteractionExpired = false,
         public writeCallback?: (
@@ -97,7 +102,10 @@ export async function createDummyMessageExchange(
     closeCallback?: () => void,
 ) {
     const session = await SecureSession.create({
-        context: { getFabrics: () => [] } as any,
+        context: {
+            getFabrics: () => [],
+            _mockDevice: true,
+        } as any,
         id: 1,
         fabric: testFabric,
         peerNodeId: NodeId(BigInt(1)),
@@ -118,7 +126,7 @@ export async function createDummyMessageExchange(
         writeCallback,
         clearTimedInteractionCallback,
         closeCallback,
-    ) as unknown as MessageExchange<any>;
+    ) as unknown as MessageExchange;
 }
 
 export const DummyUnicastMessage = {

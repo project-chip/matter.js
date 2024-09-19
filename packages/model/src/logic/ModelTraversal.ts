@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js-general";
+import { InternalError } from "@matter.js/general";
 import { Access, Aspect, Constraint } from "../aspects/index.js";
 import { SchemaImplementationError } from "../common/errors.js";
 import { ElementTag, FeatureSet, FieldValue, Metatype } from "../common/index.js";

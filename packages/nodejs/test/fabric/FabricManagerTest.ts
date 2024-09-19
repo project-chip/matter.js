@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterFlowError, StorageBackendMemory, StorageManager } from "@project-chip/matter.js-general";
-import { FabricIndex } from "@project-chip/matter.js/datatype";
-import { FabricManager, FabricNotFoundError, FabricTableFullError } from "@project-chip/matter.js/fabric";
+import { MatterFlowError, StorageBackendMemory, StorageManager } from "#general";
+import { FabricManager, FabricNotFoundError, FabricTableFullError } from "#protocol";
+import { FabricIndex } from "#types";
 import * as assert from "assert";
 import { buildFabric } from "./FabricTestingUtil.js";
 

@@ -4,14 +4,52 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Crypto, StorageBackendMemory, StorageContext, StorageManager, SyncStorage } from "#general";
 import {
-    Crypto,
-    StorageBackendMemory,
-    StorageContext,
-    StorageManager,
-    SyncStorage,
-} from "@project-chip/matter.js-general";
-import { Specification } from "@project-chip/matter.js-model";
+    DataReportPayload,
+    EventHandler,
+    INTERACTION_MODEL_REVISION,
+    InteractionEndpointStructure,
+    InteractionServer,
+    InteractionServerMessenger,
+    InvokeRequest,
+    InvokeResponse,
+    MessageType,
+    ReadRequest,
+    SubscribeRequest,
+    WriteRequest,
+    WriteResponse,
+} from "#protocol";
+import {
+    AttributeId,
+    ClusterId,
+    CommandId,
+    EndpointNumber,
+    EventId,
+    EventNumber,
+    FabricIndex,
+    StatusCode,
+    StatusResponseError,
+    TlvArray,
+    TlvClusterId,
+    TlvFabricIndex,
+    TlvField,
+    TlvInvokeResponse,
+    TlvNoArguments,
+    TlvNullable,
+    TlvObject,
+    TlvOptionalField,
+    TlvStatusResponse,
+    TlvString,
+    TlvUInt16,
+    TlvUInt8,
+    TlvVendorId,
+    TypeFromBitmapSchema,
+    TypeFromPartialBitSchema,
+    VendorId,
+    WildcardPathFlagsBitmap,
+} from "#types";
+import { Specification } from "@matter.js/model";
 import {
     AccessControlCluster,
     AccessLevel,
@@ -26,52 +64,7 @@ import {
     WiFiNetworkDiagnosticsCluster,
     WritableAttribute,
 } from "@project-chip/matter.js/cluster";
-import {
-    AttributeId,
-    ClusterId,
-    CommandId,
-    EndpointNumber,
-    EventId,
-    EventNumber,
-    FabricIndex,
-    TlvClusterId,
-    TlvFabricIndex,
-    TlvVendorId,
-    VendorId,
-} from "@project-chip/matter.js/datatype";
 import { DeviceClasses, DeviceTypeDefinition, Endpoint } from "@project-chip/matter.js/device";
-import {
-    DataReportPayload,
-    EventHandler,
-    INTERACTION_MODEL_REVISION,
-    InteractionEndpointStructure,
-    InteractionServer,
-    InteractionServerMessenger,
-    InvokeRequest,
-    InvokeResponse,
-    MessageType,
-    ReadRequest,
-    StatusCode,
-    StatusResponseError,
-    SubscribeRequest,
-    TlvInvokeResponse,
-    TlvStatusResponse,
-    WildcardPathFlagsBitmap,
-    WriteRequest,
-    WriteResponse,
-} from "@project-chip/matter.js/interaction";
-import { TypeFromBitmapSchema, TypeFromPartialBitSchema } from "@project-chip/matter.js/schema";
-import {
-    TlvArray,
-    TlvField,
-    TlvNoArguments,
-    TlvNullable,
-    TlvObject,
-    TlvOptionalField,
-    TlvString,
-    TlvUInt16,
-    TlvUInt8,
-} from "@project-chip/matter.js/tlv";
 import * as assert from "assert";
 import {
     DummyGroupcastMessage,

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Logger } from "@project-chip/matter.js-general";
-import { Specification } from "@project-chip/matter.js-model";
+import { Diagnostic, Logger } from "#general";
+import { Specification } from "#model";
 import { readFileSync } from "fs";
 import { JSDOM } from "jsdom";
 import { Str } from "./html-translators.js";

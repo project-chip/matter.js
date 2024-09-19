@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NamedHandler, NotImplementedError } from "@project-chip/matter.js-general";
+import { LevelControl } from "#clusters";
+import { NamedHandler, NotImplementedError } from "#general";
 import { WrapCommandHandler } from "../../device/Device.js";
-import { LevelControl } from "../definitions/LevelControlCluster.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServerTypes.js";
 

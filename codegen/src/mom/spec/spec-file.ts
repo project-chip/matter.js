@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js-general";
+import { Logger } from "#general";
 import { lstatSync, readdirSync } from "fs";
 import { homedir } from "os";
 import { resolve } from "path";

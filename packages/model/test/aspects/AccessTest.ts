@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Access } from "../../src/aspects/Access.js";
+import { Access } from "#aspects/Access.js";
 
 const FLAG_PERMUTATIONS: [string, Access.Ast][] = [
     ["R", { rw: Access.Rw.Read }],

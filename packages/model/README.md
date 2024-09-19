@@ -38,14 +38,14 @@ to use if you need to work with the data model beyond simple data modeling. Our 
 Obtain a working instance of the model:
 
 ```ts
-import { MatterModel } from "@project-chip/matter.js/model";
+import { MatterModel } from "@matter.js/model";
 const matter = new MatterModel();
 ```
 
 Retrieve standard definitions from the model:
 
 ```ts
-import { DatatypeModel, ClusterModel } from "@project-chip/matter.js/model";
+import { DatatypeModel, ClusterModel } from "@matter.js/model";
 const OnOffCluster = matter.get(ClusterModel, "OnOff");
 const uint8 = matter.get(DatatypeModel, "uint8");
 ```

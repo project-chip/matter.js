@@ -13,8 +13,8 @@ import {
     PtrRecord,
     SrvRecord,
     TxtRecord,
-} from "../../src/codec/DnsCodec.js";
-import { Bytes } from "../../src/util/Bytes.js";
+} from "#codec/DnsCodec.js";
+import { Bytes } from "#util/Bytes.js";
 
 const DNS_RESPONSE: DnsMessage = {
     transactionId: 0,

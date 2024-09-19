@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { PrivateKey } from "@project-chip/matter.js-general";
+import { PrivateKey } from "#general";
 
 export const PRIVATE_KEY = new Uint8Array(32);
 PRIVATE_KEY[31] = 1; // EC doesn't like all-zero private key
