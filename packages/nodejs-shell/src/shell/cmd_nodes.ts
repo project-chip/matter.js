@@ -116,7 +116,7 @@ export default function commands(theNode: MatterNode) {
                 )
                 .command(
                     "connect <node-id> [min-subscription-interval] [max-subscription-interval]",
-                    "Connects to one or all cmmissioned nodes",
+                    "Connects to one or all commissioned nodes",
                     yargs => {
                         return yargs
                             .positional("node-id", {
