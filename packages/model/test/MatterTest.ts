@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Matter, ValidateModel } from "../src/index.js";
+import { Matter, ValidateModel } from "#index.js";
 
 let validationResult: ValidateModel.Result | undefined;
 

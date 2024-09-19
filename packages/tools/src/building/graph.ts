@@ -21,8 +21,16 @@ import { Project } from "./project.js";
 export class Graph {
     protected constructor(readonly nodes: Graph.Node[]) {}
 
-    static async load(workspace = Package.workspace) {
-        const nodeMap = await this.#loadNodes(workspace);
+    get(name: string) {
+        const node = this.nodes.find(node => node.pkg.name === name);
+        if (node === undefined) {
+            throw new Error(`Cannot locate package "${name}"`);
+        }
+        return node;
+    }
+
+    static async load(pkg = Package.workspace) {
+        const nodeMap = await this.#loadNodes(pkg.workspace);
         return await this.#createGraph(Object.values(nodeMap));
     }
 
@@ -114,7 +122,7 @@ export class Graph {
             graph.nodes.map(async node => {
                 node.buildTime = await node.pkg.lastModified("build/timestamp");
 
-                node.modifyTime = await node.pkg.lastModified("package-lock.json", "src", "test");
+                node.modifyTime = await node.pkg.lastModified("package.json", "src", "test");
 
                 return node;
             }),
@@ -165,8 +173,8 @@ export class Graph {
         for (const name in allDeps) {
             for (const dep of allDeps[name]) {
                 const depNode = nodeMap[dep];
-                // Note -- allow nodes to reference themselves, seems to be
-                // necessary on tools for use of tsc
+
+                // Note -- allow nodes to reference themselves, seems to be necessary on tools for use of tsc
                 if (depNode && depNode !== nodeMap[name]) {
                     nodeMap[name].dependencies.push(depNode);
                 }
@@ -195,5 +203,5 @@ function formatTime(time: number) {
 }
 
 function formatDep(node: Graph.Node) {
-    return node.pkg.name.replace(/^@project-chip\//, "");
+    return node.pkg.name.replace(/^@(?:project-chip|matter\.js)\//, "");
 }

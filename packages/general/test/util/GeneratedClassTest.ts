@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { GeneratedClass } from "../../src/util/GeneratedClass.js";
+import { GeneratedClass } from "#util/GeneratedClass.js";
 
 describe("GeneratedClass", () => {
     it("names classes correctly", () => {

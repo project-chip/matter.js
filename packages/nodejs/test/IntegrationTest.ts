@@ -6,7 +6,6 @@
 
 import * as assert from "assert";
 
-import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
 import {
     Bytes,
     createPromise,
@@ -17,8 +16,9 @@ import {
     StorageBackendMemory,
     StorageManager,
     Time,
-} from "@project-chip/matter.js-general";
-import { Specification } from "@project-chip/matter.js-model";
+} from "@matter.js/general";
+import { Specification } from "@matter.js/model";
+import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
 import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
 import {
     AdministratorCommissioning,
@@ -54,8 +54,7 @@ import {
 } from "@project-chip/matter.js/interaction";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
-import { CryptoNode } from "../src/crypto/CryptoNode.js";
-import { TimeNode } from "../src/time/TimeNode.js";
+import { NodeJsCrypto } from "../src/crypto/NodeJsCrypto.js";
 
 const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
 //const SERVER_IPv4 = "192.168.200.1";
@@ -125,7 +124,7 @@ describe("Integration Test", () => {
         MockTime.reset(TIME_START);
 
         originalCrypto = Crypto.get;
-        Crypto.get = singleton(() => new CryptoNode());
+        Crypto.get = singleton(() => new NodeJsCrypto());
 
         Network.get = () => clientNetwork;
 
@@ -284,7 +283,7 @@ describe("Integration Test", () => {
             // During commissioning too much magic happens, MockTime do not work in this case
             // So use normal Time implementation and Reset for the following tests
             const mockTimeInstance = Time.get();
-            Time.get = singleton(() => new TimeNode());
+            Time.get = singleton(() => new Time());
 
             assert.equal(commissioningChangedCallsServer.length, 0);
             assert.equal(sessionChangedCallsServer.length, 0);
@@ -1334,7 +1333,7 @@ describe("Integration Test", () => {
             // During commissioning too much magic happens, MockTime do not work in this case
             // So use normal Time implementation and Reset for the following tests
             const mockTimeInstance = Time.get();
-            Time.get = singleton(() => new TimeNode());
+            Time.get = singleton(() => new Time());
 
             const existingNodes = commissioningController.getCommissionedNodes();
 
@@ -1557,7 +1556,7 @@ describe("Integration Test", () => {
             // During commissioning too much magic happens, MockTime do not work in this case
             // So use normal Time implementation and Reset for the following tests
             mockTimeInstance = Time.get();
-            Time.get = singleton(() => new TimeNode());
+            Time.get = singleton(() => new Time());
         });
 
         it("try to open a basic commissioning window which is not supported", async () => {
@@ -1981,7 +1980,7 @@ describe("Integration Test", () => {
 
             // For next test we need to use the real Time implementation
             const mockTimeInstance = Time.get();
-            Time.get = singleton(() => new TimeNode());
+            Time.get = singleton(() => new Time());
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex });
             assert.equal(result.statusCode, OperationalCredentials.NodeOperationalCertStatus.Ok);
@@ -2042,7 +2041,7 @@ describe("Integration Test", () => {
         // TODO: Change that again to MockTime
         // For closing all down we need to use the real Time implementation
         const mockTimeInstance = Time.get();
-        Time.get = singleton(() => new TimeNode());
+        Time.get = singleton(() => new Time());
 
         await matterServer.close();
         await matterClient.close();

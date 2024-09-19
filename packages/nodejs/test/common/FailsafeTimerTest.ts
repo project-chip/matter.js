@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { createPromise } from "@project-chip/matter.js-general";
+import { createPromise } from "#general";
 import { FailsafeTimer } from "@project-chip/matter.js/common";
 import * as assert from "assert";
 

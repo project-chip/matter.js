@@ -56,18 +56,28 @@ export class Builder {
             await progress.run("Clean", () => project.clean());
         }
 
+        if (!targets.has(Target.types) && !targets.has(Target.esm) && !targets.has(Target.cjs)) {
+            return;
+        }
+
+        const config = await project.loadConfig();
+
+        await config.before?.({ project, progress });
+
         if (targets.has(Target.types)) {
             const refresh = progress.refresh.bind(progress);
             try {
-                if (project.pkg.library) {
-                    await progress.run(`Generate ${colors.bold("type declarations")}`, () =>
+                if (project.pkg.isLibrary) {
+                    await progress.run(`Generate ${progress.emphasize("type declarations")}`, () =>
                         project.buildDeclarations(refresh),
                     );
-                    await progress.run(`Install ${colors.bold("type declarations")}`, () =>
+                    await progress.run(`Install ${progress.emphasize("type declarations")}`, () =>
                         project.installDeclarations(),
                     );
                 } else {
-                    await progress.run(`Validating ${colors.bold("types")}`, () => project.validateTypes(refresh));
+                    await progress.run(`Validating ${progress.emphasize("types")}`, () =>
+                        project.validateTypes(refresh),
+                    );
                 }
             } catch (e) {
                 if (e instanceof BuildError) {
@@ -87,6 +97,8 @@ export class Builder {
             await this.#transpile(project, progress, Target.cjs);
         }
 
+        await config.after?.({ project, progress });
+
         // Only update timestamp when there are no explicit targets so we know it's a full build
         if (!this.options.targets?.length) {
             await project.recordBuildTime();
@@ -95,11 +107,11 @@ export class Builder {
 
     async #transpile(project: Project, progress: Progress, format: "esm" | "cjs") {
         const fmt = format.toUpperCase();
-        await progress.run(`Transpile ${colors.bold("library")} to ${colors.bold(fmt)}`, () =>
+        await progress.run(`Transpile ${progress.emphasize("library")} to ${colors.bold(fmt)}`, () =>
             project.buildSource(format),
         );
-        if (project.pkg.tests) {
-            await progress.run(`Transpile ${colors.bold("tests")} to ${colors.bold(fmt)}`, () =>
+        if (project.pkg.hasTests) {
+            await progress.run(`Transpile ${progress.emphasize("tests")} to ${colors.bold(fmt)}`, () =>
                 project.buildTests(format),
             );
         }
@@ -111,19 +123,19 @@ export class Builder {
         if (!targets.size) {
             targets.add(Target.types);
 
-            if (project.pkg.esm) {
+            if (project.pkg.supportsEsm) {
                 targets.add(Target.esm);
             }
 
-            if (project.pkg.cjs) {
+            if (project.pkg.supportsCjs) {
                 targets.add(Target.cjs);
             }
         } else {
-            if (!project.pkg.esm) {
+            if (!project.pkg.supportsEsm) {
                 targets.delete(Target.esm);
             }
 
-            if (!project.pkg.cjs) {
+            if (!project.pkg.supportsCjs) {
                 targets.delete(Target.cjs);
             }
         }

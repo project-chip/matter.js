@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Environment } from "../../src/environment/Environment.js";
-import { VariableService } from "../../src/environment/VariableService.js";
+import { Environment } from "#environment/Environment.js";
+import { VariableService } from "#environment/VariableService.js";
 
 describe("VariableService", () => {
     function testVars(setup: (vars: VariableService) => void) {

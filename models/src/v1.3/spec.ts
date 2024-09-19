@@ -18,7 +18,7 @@ import {
     RequirementElement as Requirement,
     SemanticNamespaceElement as SemanticNamespace,
     SemanticTagElement as SemanticTag,
-} from "@project-chip/matter.js-model";
+} from "@matter.js/model";
 
 export const SpecMatter = Matter({
     name: "SpecMatter",

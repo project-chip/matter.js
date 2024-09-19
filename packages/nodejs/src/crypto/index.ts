@@ -5,4 +5,4 @@
  */
 
 import "./register.js";
-export * from "./CryptoNode.js";
+export * from "./NodeJsCrypto.js";

@@ -4,14 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    fromJson,
-    StorageBackendMemory,
-    StorageError,
-    SupportedStorageTypes,
-    Time,
-    toJson,
-} from "@project-chip/matter.js-general";
+import { fromJson, StorageBackendMemory, StorageError, SupportedStorageTypes, Time, toJson } from "#general";
 import { readFile, writeFile } from "fs/promises";
 
 export class StorageBackendJsonFile extends StorageBackendMemory {

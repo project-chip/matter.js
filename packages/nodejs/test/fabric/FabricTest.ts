@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto } from "@project-chip/matter.js-general";
-import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
-import { Fabric } from "@project-chip/matter.js/fabric";
-import { SecureSession } from "@project-chip/matter.js/session";
+import { Bytes, Crypto } from "#general";
+import { Fabric, SecureSession } from "#protocol";
+import { FabricId, FabricIndex, NodeId, VendorId } from "#types";
 import * as assert from "assert";
 import { buildFabric } from "./FabricTestingUtil.js";
 

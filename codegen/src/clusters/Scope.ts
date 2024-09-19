@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js-general";
+import { InternalError } from "#general";
 import {
     ClusterModel,
     CommandModel,
@@ -16,7 +16,7 @@ import {
     Metatype,
     Model,
     ValueModel,
-} from "@project-chip/matter.js-model";
+} from "#model";
 import { camelize } from "../util/string.js";
 
 /**

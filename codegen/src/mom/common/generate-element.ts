@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Model } from "@project-chip/matter.js-model";
+import { Model } from "#model";
 import { Block } from "../../util/TsFile.js";
 import { camelize, serialize, wordWrap } from "../../util/string.js";
 

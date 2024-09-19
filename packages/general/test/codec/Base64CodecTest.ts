@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Base64 } from "../../src/codec/Base64Codec.js";
+import { Base64 } from "#codec/Base64Codec.js";
 
 const tests = {
     zero: {

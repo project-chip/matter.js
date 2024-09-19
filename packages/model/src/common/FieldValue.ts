@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes as ByteUtils, serialize as stringSerialize, UnexpectedDataError } from "@project-chip/matter.js-general";
+import { Bytes as ByteUtils, serialize as stringSerialize, UnexpectedDataError } from "@matter.js/general";
 import type { Metatype } from "./Metatype.js";
 
 /**

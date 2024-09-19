@@ -6,8 +6,8 @@
 
 // Generates the runtime Matter model
 
-import { InternalError, Logger } from "@project-chip/matter.js-general";
-import { LocalMatter } from "@project-chip/matter.js-intermediate-models";
+import { InternalError, Logger } from "#general";
+import { LocalMatter } from "#intermediate-models";
 import {
     AttributeModel,
     DatatypeModel,
@@ -18,7 +18,7 @@ import {
     Model,
     Specification,
     TraverseMap,
-} from "@project-chip/matter.js-model";
+} from "#model";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { generateElement } from "./mom/common/generate-element.js";
@@ -67,11 +67,11 @@ function elementIdentifierName(element: Model) {
 function generateElementFile(element: Model) {
     logger.debug(element.name);
 
-    const file = new TsFile(`#elements/${elementDiscriminatedName(element)}`);
+    const file = new TsFile(`!elements/${elementDiscriminatedName(element)}`);
 
     file.addImport(`../MatterDefinition.js`, `MatterDefinition`);
     const exportName = elementIdentifierName(element);
-    generateElement(file, "#model/elements/index.js", element, `export const ${exportName} = `);
+    generateElement(file, "!model/elements/index.js", element, `export const ${exportName} = `);
     file.atom(`MatterDefinition.children.push(${exportName})`);
 
     if (args.save) {
@@ -80,7 +80,7 @@ function generateElementFile(element: Model) {
 }
 
 function generateDefinitions(elements: Model[]) {
-    const file = new TsFile(`#elements/definitions`);
+    const file = new TsFile(`!elements/definitions`);
     for (const element of elements) {
         file.addReexport(`./${elementDiscriminatedName(element)}.js`);
     }
@@ -91,7 +91,7 @@ function generateDefinitions(elements: Model[]) {
 }
 
 function generateModels(elements: Model[]) {
-    const file = new TsFile(`#elements/models`);
+    const file = new TsFile(`!elements/models`);
     file.addImport("./definitions.js", "* as definitions");
     for (const element of elements) {
         const type = `${camelize(element.tag, true)}Model`;
@@ -106,7 +106,7 @@ function generateModels(elements: Model[]) {
 }
 
 async function importModel(source: string) {
-    return (await import(`@project-chip/matter.js-intermediate-models/v${args.revision}/${source}`))[
+    return (await import(`@matter.js/intermediate-models/v${args.revision}/${source}`))[
         `${camelize(source, true)}Matter`
     ] as MatterElement;
 }
@@ -138,7 +138,7 @@ if (
 
 logger.info("remove matter model elements");
 if (args.save) {
-    clean("#elements");
+    clean("!elements");
 }
 
 logger.info("generate matter model");

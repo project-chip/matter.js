@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { int64, Metatype, uint64, ValueModel } from "@project-chip/matter.js-model";
+import { int64, Metatype, uint64, ValueModel } from "#model";
 import { ScopeFile } from "../util/ScopeFile.js";
 
 /**

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { MdnsScanner } from "./mdns/MdnsScanner.js";
+import { MdnsBroadcaster, MdnsScanner } from "#protocol";
 
 /**
  * Abstract base class that represents a node in the matter ecosystem.

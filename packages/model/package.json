@@ -1,5 +1,5 @@
 {
-    "name": "@project-chip/matter.js-model",
+    "name": "@matter.js/model",
     "version": "0.0.0-git",
     "description": "Matter data model",
     "keywords": [
@@ -9,11 +9,12 @@
         "smart device"
     ],
     "license": "Apache-2.0",
-    "author": "Project CHIP Authors",
+    "author": "matter.js authors",
     "contributors": [
+        "Greg Lauckhart <greg@lauckhart.com>",
+        "Ingo Fischer <github@fischer-ka.de>",
         "Martin Turon <mturon@google.com>",
-        "Marco Fucci di Napoli <mfucci@gmail.com>",
-        "Ingo Fischer <github@fischer-ka.de>"
+        "Marco Fucci di Napoli <mfucci@gmail.com>"
     ],
     "bugs": {
         "url": "https://github.com/project-chip/matter.js/issues"
@@ -33,10 +34,10 @@
     },
     "dependencies": {
         "@noble/curves": "^1.5.0",
-        "@project-chip/matter.js-general": "*"
+        "@matter.js/general": "*"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "*",
+        "@matter.js/tools": "*",
         "typescript": "~5.5.3"
     },
     "files": [
@@ -60,27 +61,14 @@
             }
         }
     },
+    "imports": {
+        "#general": "@matter.js/general",
+        "#model": "@matter.js/model",
+        "#*": "./src/*"
+    },
     "types": "dist/esm/index.d.ts",
     "typesVersions": {
         "*": {
-            "interaction": [
-                "/dist/cjs/protocol/interaction/export.d.ts"
-            ],
-            "model": [
-                "/dist/cjs/model/index.d.ts"
-            ],
-            "securechannel": [
-                "/dist/cjs/protocol/securechannel/export.d.ts"
-            ],
-            "behaviors/*": [
-                "/dist/cjs/behavior/definitions/*/export.d.ts"
-            ],
-            "devices/*": [
-                "/dist/cjs/endpoint/definitions/device/*.d.ts"
-            ],
-            "endpoints/*": [
-                "/dist/cjs/endpoint/definitions/system/*.d.ts"
-            ],
             ".": [
                 "/dist/cjs/export.d.ts"
             ],

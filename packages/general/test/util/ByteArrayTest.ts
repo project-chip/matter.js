@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "../../src/util/Bytes.js";
+import { Bytes } from "#util/Bytes.js";
 
 describe("ByteArray", () => {
     describe("fromHex", () => {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes } from "@project-chip/matter.js-general";
+import { Bytes } from "#general";
 
 export const CERTIFICATE_SETS = {
     "General Test Certificates": {
