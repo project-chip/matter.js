@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Crypto, Spake2p } from "@project-chip/matter.js-general";
-import { SPAKE_CONTEXT } from "@project-chip/matter.js/session";
+import { Bytes, Crypto, Spake2p } from "#general";
+import { SPAKE_CONTEXT } from "#protocol";
 
 describe("PasePairing", () => {
     describe("Test PASE Spake2 process", () => {

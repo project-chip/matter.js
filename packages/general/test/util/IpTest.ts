@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ipv4ToBytes, ipv4ToNumber, ipv6ToArray, ipv6ToBytes, onSameNetwork } from "../../src/util/Ip.js";
+import { ipv4ToBytes, ipv4ToNumber, ipv6ToArray, ipv6ToBytes, onSameNetwork } from "#util/Ip.js";
 
 describe("IP", () => {
     describe("iPv4ToNumber", () => {

@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { createPromise } from "@project-chip/matter.js-general";
+import { createPromise } from "#general";
+import { Fabric, FabricJsonObject, Message, SecureSession, SessionType } from "#protocol";
+import { EndpointNumber, GroupId, StatusCode, ValidationOutOfBoundsError } from "#types";
 import {
     ClusterServer,
     ClusterServerObj,
@@ -12,20 +14,14 @@ import {
     GroupsClusterHandler,
     Identify,
 } from "@project-chip/matter.js/cluster";
-import { Message, SessionType } from "@project-chip/matter.js/codec";
-import { ValidationOutOfBoundsError } from "@project-chip/matter.js/common";
-import { EndpointNumber, GroupId } from "@project-chip/matter.js/datatype";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
-import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { StatusCode } from "@project-chip/matter.js/interaction";
-import { SecureSession } from "@project-chip/matter.js/session";
 import * as assert from "assert";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil.js";
 
 describe("Groups Server test", () => {
     let groupsServer: ClusterServerObj<GroupsCluster> | undefined;
     let testFabric: Fabric | undefined;
-    let testSession: SecureSession<any> | undefined;
+    let testSession: SecureSession | undefined;
     let endpoint: Endpoint | undefined;
     let endpoint2: Endpoint | undefined;
 

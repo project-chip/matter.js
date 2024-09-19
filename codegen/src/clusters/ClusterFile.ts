@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterModel } from "@project-chip/matter.js-model";
+import { ClusterModel } from "#model";
 import { ScopeFile } from "../util/ScopeFile.js";
 import { Block } from "../util/TsFile.js";
 

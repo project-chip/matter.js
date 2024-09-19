@@ -16,7 +16,7 @@ import {
     FieldElement as Field,
     MatterElement as Matter,
     RequirementElement as Requirement,
-} from "@project-chip/matter.js-model";
+} from "@matter.js/model";
 
 export const SpecMatter = Matter({
     name: "SpecMatter",

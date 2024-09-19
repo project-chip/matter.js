@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isObject } from "@project-chip/matter.js-general";
-import { SwitchServer } from "@project-chip/matter.js/behaviors/switch";
-import { Endpoint } from "@project-chip/matter.js/endpoint";
-import { ServerNode } from "@project-chip/matter.js/node";
+import { isObject } from "@matter.js/general";
+import { SwitchServer } from "@matter.js/main/behaviors";
+import { Endpoint, ServerNode } from "@matter.js/node";
 import { execSync } from "child_process";
 import { constants } from "node:fs";
 import { FileHandle, open, unlink } from "node:fs/promises";

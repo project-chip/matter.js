@@ -12,10 +12,10 @@ import {
     Network,
     StorageService,
     VariableService,
-} from "@project-chip/matter.js-general";
+} from "#general";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
-import { NetworkNode } from "../net/NetworkNode.js";
+import { NodeJsNetwork } from "../net/NodeJsNetwork.js";
 import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
 import { NodeJsActionTracer } from "./NodeJsActionTracer.js";
 import { ProcessManager } from "./ProcessManager.js";
@@ -111,7 +111,7 @@ function configureStorage(env: Environment) {
 }
 
 function configureNetwork(env: Environment) {
-    env.set(Network, new NetworkNode());
+    env.set(Network, new NodeJsNetwork());
 }
 
 export function loadConfigFile(vars: VariableService) {

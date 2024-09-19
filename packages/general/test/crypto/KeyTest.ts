@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CurveType, Key, KeyType } from "../../src/crypto/Key.js";
-import { Bytes } from "../../src/util/Bytes.js";
+import { CurveType, Key, KeyType } from "#crypto/Key.js";
+import { Bytes } from "#util/Bytes.js";
 
 describe("Key", () => {
     describe("sec1", () => {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isDeepEqual, Logger } from "@project-chip/matter.js-general";
+import { isDeepEqual, Logger } from "#general";
 import {
     AnyElement,
     AttributeModel,
@@ -18,7 +18,7 @@ import {
     status as statusType,
     ValidateModel,
     ValueModel,
-} from "@project-chip/matter.js-model";
+} from "#model";
 
 const logger = Logger.get("create-model");
 

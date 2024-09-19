@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Logger } from "@project-chip/matter.js-general";
+import { Diagnostic, Logger } from "#general";
 import {
     AttributeElement,
     ClusterElement,
@@ -14,7 +14,7 @@ import {
     EventElement,
     FeatureMap,
     FieldElement,
-} from "@project-chip/matter.js-model";
+} from "#model";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
 import {

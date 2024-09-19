@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Bytes, Key, PrivateKey, PublicKey } from "@project-chip/matter.js-general";
+import { NodeJsCrypto } from "#crypto/NodeJsCrypto.js";
+import { Bytes, Key, PrivateKey, PublicKey } from "#general";
 import * as assert from "assert";
 import * as crypto from "crypto";
-import { CryptoNode } from "../../src/crypto/CryptoNode.js";
 
 const KEY = Bytes.fromHex("abf227feffea8c38e688ddcbffc459f1");
 const ENCRYPTED_DATA = Bytes.fromHex("c4527bd6965518e8382edbbd28f27f42492d0766124f9961a772");
@@ -34,7 +34,7 @@ const SEC1_KEY = Bytes.fromHex(
     "30770201010420aef3484116e9481ec57be0472df41bf499064e5024ad869eca5e889802d48075a00a06082a8648ce3d030107a144034200043c398922452b55caf389c25bd1bca4656952ccb90e8869249ad8474653014cbf95d687965e036b521c51037e6b8cedefca1eb44046694fa08882eed6519decba",
 );
 
-const cryptoNode = new CryptoNode();
+const cryptoNode = new NodeJsCrypto();
 
 describe("Crypto", () => {
     describe("encrypt", () => {

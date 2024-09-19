@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { camelize, InternalError } from "@project-chip/matter.js-general";
+import { camelize, ImplementationError, InternalError } from "#general";
 import { DefinitionError, ElementTag, Metatype, Specification } from "../common/index.js";
 import { AnyElement, BaseElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
@@ -411,6 +411,10 @@ export abstract class Model<T extends BaseElement = BaseElement> {
     }
 
     constructor(definition: Model<T> | BaseElement.Properties<T>) {
+        if (typeof definition !== "object") {
+            throw new ImplementationError(`Model definition must be an object, not "${typeof definition}"`);
+        }
+
         const isClone = definition instanceof Model;
 
         this.#id = definition.id;

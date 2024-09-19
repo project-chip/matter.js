@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js-general";
-import { DeviceTypeElement, DeviceTypeModel } from "@project-chip/matter.js-model";
+import { decamelize, Logger } from "#general";
+import { DeviceClassification, DeviceTypeModel } from "#model";
 import { Block, TsFile } from "../util/TsFile.js";
 import { clean } from "../util/file.js";
 import { describeList, serialize } from "../util/string.js";
@@ -22,18 +22,20 @@ export class EndpointFile extends TsFile {
     definitions: Block;
     interfaceLocation: Block;
 
-    constructor(public model: DeviceTypeModel) {
+    constructor(
+        public model: DeviceTypeModel,
+        indices: Record<string, TsFile>,
+    ) {
         let path;
         let name;
         let specName;
 
-        if (
-            model.classification === DeviceTypeElement.Classification.Simple &&
-            !SYSTEM_ENDPOINT_TYPES.has(model.name)
-        ) {
+        let indexName;
+        if (model.classification === DeviceClassification.Simple && !SYSTEM_ENDPOINT_TYPES.has(model.name)) {
             specName = model.name;
             name = `${model.name}Device`;
-            path = `device/${name}`;
+            path = `devices/${decamelize(model.name)}`;
+            indexName = "devices";
         } else {
             if (model.name === "RootNode") {
                 specName = "Root";
@@ -41,10 +43,17 @@ export class EndpointFile extends TsFile {
                 specName = model.name;
             }
             name = `${specName}Endpoint`;
-            path = `system/${name}`;
+            path = `endpoints/${decamelize(specName)}`;
+            indexName = "endpoints";
         }
 
-        super(`#endpoints/${path}`);
+        super(`!node/${path}`);
+
+        let index = indices[indexName];
+        if (index === undefined) {
+            index = indices[indexName] = new TsFile(`!node/${indexName}/index`);
+        }
+        index.addReexport(`${this.name}.js`);
 
         this.definitionName = name;
         this.requirementsName = `${specName}Requirements`;
@@ -59,8 +68,8 @@ export class EndpointFile extends TsFile {
     }
 
     static clean() {
-        clean("#endpoints/system");
-        clean("#endpoints/device");
+        clean("!node/endpoints");
+        clean("!node/devices");
     }
 
     private generate() {
@@ -94,14 +103,14 @@ export class EndpointFile extends TsFile {
     }
 
     private generateServer(requirements: RequirementGenerator) {
-        this.addImport("#/endpoint/type/MutableEndpoint.js", "MutableEndpoint");
+        this.addImport("!node/endpoint/type/MutableEndpoint.js", "MutableEndpoint");
         const definition = this.expressions(`export const ${this.definitionName}Definition = MutableEndpoint({`, "})");
         definition.atom("name", serialize(this.model.name));
         definition.atom("deviceType", `0x${this.model.id.toString(16)}`);
         definition.atom("deviceRevision", this.model.revision);
         this.addDeviceClass(definition);
 
-        this.addImport("#/endpoint/properties/SupportedBehaviors.js", "SupportedBehaviors");
+        this.addImport("!node/endpoint/properties/SupportedBehaviors.js", "SupportedBehaviors");
         definition.atom(`requirements: ${this.requirementsName}`);
         const behaviors = definition.expressions("behaviors: SupportedBehaviors(", ")");
 
@@ -111,7 +120,7 @@ export class EndpointFile extends TsFile {
             }
         }
 
-        this.addImport("@project-chip/matter.js-general", "Identity");
+        this.addImport("#general", "Identity");
         const intf = this.interfaceLocation.atom(
             `export interface ${this.definitionName} extends Identity<typeof ${this.definitionName}Definition> {}`,
         );
@@ -142,15 +151,15 @@ export class EndpointFile extends TsFile {
     private addDeviceClass(definition: Block) {
         let deviceClass;
         switch (this.model.classification) {
-            case DeviceTypeElement.Classification.Dynamic:
+            case DeviceClassification.Dynamic:
                 deviceClass = "Dynamic";
                 break;
 
-            case DeviceTypeElement.Classification.Node:
+            case DeviceClassification.Node:
                 deviceClass = "Node";
                 break;
 
-            case DeviceTypeElement.Classification.Utility:
+            case DeviceClassification.Utility:
                 deviceClass = "Utility";
                 break;
 
@@ -159,7 +168,7 @@ export class EndpointFile extends TsFile {
                 return;
         }
 
-        this.addImport("#/device/DeviceTypes.js", "DeviceClasses");
-        definition.atom("deviceClass", `DeviceClasses.${deviceClass}`);
+        this.addImport("#model", "DeviceClassification");
+        definition.atom("deviceClass", `DeviceClassification.${deviceClass}`);
     }
 }

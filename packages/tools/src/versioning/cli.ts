@@ -28,7 +28,7 @@ export async function main(argv = process.argv) {
 
     progress.startup(`Release ${versioner.version}`, versioner.pkg);
     if (args.set) {
-        await progress.run(`Set version to ${versioner.version}`, () => versioner.set());
+        await progress.run(`Set version to ${progress.emphasize(versioner.version)}`, () => versioner.set());
     }
 
     if (args.apply) {
@@ -36,7 +36,7 @@ export async function main(argv = process.argv) {
     }
 
     if (args.tag) {
-        await progress.run(`Tagging version ${versioner.version}`, () => versioner.tag());
+        await progress.run(`Tagging version ${progress.emphasize(versioner.version)}`, () => versioner.tag());
     }
 
     progress.shutdown();

@@ -1,5 +1,5 @@
 {
-    "name": "@project-chip/matter.js-general",
+    "name": "@matter.js/general",
     "version": "0.0.0-git",
     "description": "Non-Matter support for Matter.js",
     "keywords": [
@@ -9,11 +9,12 @@
         "smart device"
     ],
     "license": "Apache-2.0",
-    "author": "Project CHIP Authors",
+    "author": "matter.js authors",
     "contributors": [
+        "Ingo Fischer <github@fischer-ka.de>",
+        "Greg Lauckhart <greg@lauckhart.com>",
         "Martin Turon <mturon@google.com>",
-        "Marco Fucci di Napoli <mfucci@gmail.com>",
-        "Ingo Fischer <github@fischer-ka.de>"
+        "Marco Fucci di Napoli <mfucci@gmail.com>"
     ],
     "bugs": {
         "url": "https://github.com/project-chip/matter.js/issues"
@@ -35,7 +36,7 @@
         "@noble/curves": "^1.5.0"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "*",
+        "@matter.js/tools": "*",
         "typescript": "~5.5.3"
     },
     "files": [
@@ -58,6 +59,9 @@
                 "default": "./dist/cjs/index.js"
             }
         }
+    },
+    "imports": {
+        "#*": "./src/*"
     },
     "types": "dist/esm/index.d.ts",
     "typesVersions": {
