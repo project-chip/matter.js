@@ -3,8 +3,8 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { ActivatedCarbonFilterMonitoringServer } from "@project-chip/matter.js/behavior/definitions/activated-carbon-filter-monitoring";
-import { ResourceMonitoring } from "@project-chip/matter.js/cluster";
+import { ActivatedCarbonFilterMonitoringServer } from "@matter.js/main/behaviors/activated-carbon-filter-monitoring";
+import { ResourceMonitoring } from "@matter.js/main/clusters/resource-monitoring";
 
 const TestActivatedCarbonFilterMonitoringServerBase = ActivatedCarbonFilterMonitoringServer.with(
     ResourceMonitoring.Feature.Condition,

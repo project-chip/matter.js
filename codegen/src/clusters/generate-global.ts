@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js-general";
-import { DatatypeModel, Model } from "@project-chip/matter.js-model";
+import { InternalError } from "#general";
+import { DatatypeModel, Model } from "#model";
 import { ScopeFile } from "../util/ScopeFile.js";
 import { TlvGenerator } from "./TlvGenerator.js";
 

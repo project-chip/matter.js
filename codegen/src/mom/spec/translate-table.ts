@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger, isObject } from "@project-chip/matter.js-general";
-import { AnyElement, FieldElement, Specification } from "@project-chip/matter.js-model";
+import { Logger, isObject } from "#general";
+import { AnyElement, FieldElement, Specification } from "#model";
 import { addDocumentation } from "./add-documentation.js";
 import { Str } from "./html-translators.js";
 import { HtmlReference, Table } from "./spec-types.js";

@@ -9,3 +9,6 @@ export * from "./CommissioningServer.js";
 export * from "./MatterNode.js";
 export * from "./MatterServer.js";
 export * from "./PaseCommissioner.js";
+
+// Compat
+export { MatterDevice } from "#protocol";

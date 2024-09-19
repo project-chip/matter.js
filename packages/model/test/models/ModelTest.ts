@@ -15,7 +15,7 @@ import {
     Metatype,
     uint16,
     uint32,
-} from "../../src/index.js";
+} from "#index.js";
 
 describe("Model", () => {
     describe("parent", () => {

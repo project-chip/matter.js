@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { DeviceClassification } from "../common/DeviceClassification.js";
 import { Mei } from "../common/Mei.js";
 import { DeviceTypeElement } from "../elements/index.js";
 import { Children } from "./Children.js";
@@ -14,7 +15,7 @@ import { RequirementModel } from "./RequirementModel.js";
 export class DeviceTypeModel extends Model<DeviceTypeElement> implements DeviceTypeElement {
     override tag: DeviceTypeElement.Tag = DeviceTypeElement.Tag;
     declare id: Mei;
-    declare classification: DeviceTypeElement.Classification;
+    declare classification: DeviceClassification;
 
     override get children(): Children<DeviceTypeModel.Child> {
         return super.children as Children<DeviceTypeModel.Child>;

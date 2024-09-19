@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SemanticNamespaceElement, SemanticTagElement } from "@project-chip/matter.js-model";
+import { SemanticNamespaceElement, SemanticTagElement } from "#model";
 import { addDocumentation } from "./add-documentation.js";
 import { Identifier, Integer, Str } from "./html-translators.js";
 import { HtmlReference } from "./spec-types.js";

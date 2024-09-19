@@ -4,4 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export { StorageBackendDisk, StorageBackendJsonFile } from "@project-chip/matter.js-nodejs";
+export { StorageManager, type Storage } from "@matter.js/general";
+export { StorageBackendDisk, StorageBackendJsonFile } from "@matter.js/nodejs";

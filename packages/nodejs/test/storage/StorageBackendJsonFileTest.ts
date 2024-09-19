@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { StorageBackendJsonFile } from "#storage/StorageBackendJsonFile.js";
 import * as assert from "assert";
 import { readFile, unlink } from "fs/promises";
 import { tmpdir } from "os";
 import { resolve } from "path";
-import { StorageBackendJsonFile } from "../../src/storage/StorageBackendJsonFile.js";
 
 const TEST_STORAGE_LOCATION = resolve(tmpdir(), "matterjs-test-storage.json");
 

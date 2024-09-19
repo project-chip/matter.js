@@ -6,6 +6,9 @@
 
 type TimerCallback = () => any;
 
+type MockTimeLike = typeof MockTime;
+export interface MockTime extends MockTimeLike {}
+
 // Must match matter.js Timer interface
 class MockTimer {
     name = "Test";
@@ -63,38 +66,50 @@ function isAsync(fn: (...args: any) => any): fn is (...args: any) => Promise<any
     return fn.constructor.name === "AsyncFunction";
 }
 
+let callbacks = new Array<{ atMs: number; callback: TimerCallback }>();
+let nowMs = 0;
+let real = undefined as unknown;
+let enabled = true;
+
 // Must match matter.js Time interface
-export class MockTime {
-    private callbacks = new Array<{ atMs: number; callback: TimerCallback }>();
-    private timeMs: number;
+export const MockTime = {
+    get activeImplementation(): unknown {
+        return enabled ? this : (real ?? this);
+    },
 
-    constructor(private startTimeMs: number) {
-        this.timeMs = this.startTimeMs;
-    }
-
-    reset(time = this.startTimeMs) {
-        this.callbacks = [];
-        this.timeMs = time;
-
-        // Some tests use "real" time implementation, ensure this can't leak across suites
+    disable() {
+        enabled = false;
         reinstallTime?.();
-    }
+    },
+
+    enable() {
+        enabled = true;
+        reinstallTime?.();
+    },
+
+    reset(time = 0) {
+        callbacks = [];
+        nowMs = time;
+
+        // Ensure time reverts to correct implementation across suites
+        reinstallTime?.();
+    },
 
     now(): Date {
-        return new Date(this.timeMs);
-    }
+        return new Date(nowMs);
+    },
 
-    nowMs(): number {
-        return this.timeMs;
-    }
+    nowMs() {
+        return nowMs;
+    },
 
     getTimer(_name: string, durationMs: number, callback: TimerCallback): MockTimer {
         return new MockTimer(this, durationMs, callback);
-    }
+    },
 
     getPeriodicTimer(_name: string, intervalMs: number, callback: TimerCallback): MockTimer {
         return new MockInterval(this, intervalMs, callback);
-    }
+    },
 
     /**
      * Resolve a promise with time dependency.
@@ -155,25 +170,25 @@ export class MockTime {
         }
 
         return result as T;
-    }
+    },
 
     /**
      * Move time forward.  Runs tasks scheduled during this interval.
      */
     async advance(ms: number) {
-        const newTimeMs = this.timeMs + ms;
+        const newTimeMs = nowMs + ms;
 
         while (true) {
-            if (this.callbacks.length === 0) break;
-            const { atMs, callback } = this.callbacks[0];
+            if (callbacks.length === 0) break;
+            const { atMs, callback } = callbacks[0];
             if (atMs > newTimeMs) break;
-            this.callbacks.shift();
-            this.timeMs = atMs;
+            callbacks.shift();
+            nowMs = atMs;
             await callback();
         }
 
-        this.timeMs = newTimeMs;
-    }
+        nowMs = newTimeMs;
+    },
 
     /**
      * Yield to scheduled microtasks.  This means that all code paths waiting
@@ -182,7 +197,7 @@ export class MockTime {
      */
     async yield() {
         await Promise.resolve();
-    }
+    },
 
     /**
      * Due to its implementation, an older version of yield() would actually
@@ -196,7 +211,7 @@ export class MockTime {
         await Promise.resolve();
         await Promise.resolve();
         await Promise.resolve();
-    }
+    },
 
     /**
      * Hook a method and invoke a callback just before the method completes.
@@ -254,24 +269,26 @@ export class MockTime {
                 return result.resolve;
             } as any;
         }
-    }
+    },
 
     callbackAtTime(atMs: number, callback: TimerCallback) {
-        this.callbacks.push({ atMs, callback });
-        this.callbacks.sort(({ atMs: atMsA }, { atMs: atMsB }) => atMsA - atMsB);
-    }
+        callbacks.push({ atMs, callback });
+        callbacks.sort(({ atMs: atMsA }, { atMs: atMsB }) => atMsA - atMsB);
+    },
 
     removeCallback(callbackToRemove: TimerCallback) {
-        const index = this.callbacks.findIndex(({ callback }) => callbackToRemove === callback);
+        const index = callbacks.findIndex(({ callback }) => callbackToRemove === callback);
         if (index === -1) return;
-        this.callbacks.splice(index, 1);
-    }
-}
+        callbacks.splice(index, 1);
+    },
+};
 
 let reinstallTime: undefined | (() => void);
 
-export const TheMockTime = new MockTime(0);
-export function timeSetup(Time: { get: () => MockTime }) {
-    reinstallTime = () => (Time.get = () => TheMockTime);
+export function timeSetup(Time: { get(): unknown }) {
+    real = Time.get();
+    reinstallTime = () => (Time.get = () => MockTime.activeImplementation);
     reinstallTime();
 }
+
+Object.assign(globalThis, { MockTime });

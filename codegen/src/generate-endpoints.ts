@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { decamelize } from "@project-chip/matter.js-general";
-import { ClusterModel, ClusterVariance, CommandModel, MatterModel } from "@project-chip/matter.js-model";
+import { decamelize } from "#general";
+import { ClusterModel, ClusterVariance, CommandModel, MatterModel } from "#model";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { BehaviorFile } from "./endpoints/BehaviorFile.js";
@@ -22,58 +22,67 @@ const args = await yargs(hideBin(process.argv))
     .option("behaviors", { type: "boolean", describe: "generate behavior files" })
     .option("servers", { type: "boolean", describe: "generate server files" })
     .option("endpoints", { type: "boolean", describe: "generate endpoint type files" })
+    .option("tags", { type: "boolean", describe: "generate semantic tag files" })
     .option("save", { type: "boolean", default: true, describe: "writes the generated model to disk" })
     .strict().argv;
 
-if (!args.interfaces && !args.behaviors && !args.server && !args.endpoints) {
-    args.interfaces = args.behaviors = args.servers = args.endpoints = true;
+if (!args.interfaces && !args.behaviors && !args.server && !args.endpoints && !args.tags) {
+    args.interfaces = args.behaviors = args.servers = args.endpoints = args.tags = true;
 }
 
-for (const cluster of MatterModel.standard.clusters) {
-    const base = cluster.base;
+if (args.behaviors) {
+    const index = new TsFile(`!behaviors/index`);
 
-    const isAlias = base && !cluster.children.length;
-    const isAbstract = cluster.id === undefined;
+    for (const cluster of MatterModel.standard.clusters) {
+        const base = cluster.base;
 
-    const variance = ClusterVariance(isAlias ? (base as ClusterModel) : cluster);
-    const dir = `#behaviors/${decamelize(cluster.name)}`;
+        const isAlias = base && !cluster.children.length;
+        const isAbstract = cluster.id === undefined;
 
-    const exports = new TsFile(`${dir}/export`);
-    if (!isAlias && cluster.all(CommandModel).length) {
-        generateClusterFile(dir, InterfaceFile, cluster, exports, variance);
+        const variance = ClusterVariance(isAlias ? (base as ClusterModel) : cluster);
+        const dir = `!behaviors/${decamelize(cluster.name)}`;
+
+        const exports = new TsFile(`${dir}/index`, true);
+        if (!isAlias && cluster.all(CommandModel).length) {
+            generateClusterFile(dir, InterfaceFile, cluster, exports, variance);
+        }
+
+        if (!isAbstract) {
+            generateClusterFile(dir, BehaviorFile, cluster, exports, variance);
+            generateClusterFile(dir, ServerFile, cluster, exports, variance);
+        }
+
+        save(exports);
+
+        index.addReexport(`${exports.name}.js`);
     }
 
-    if (!isAbstract) {
-        generateClusterFile(dir, BehaviorFile, cluster, exports, variance);
-        generateClusterFile(dir, ServerFile, cluster, exports, variance);
-    }
-
-    if (args.save) {
-        exports.save();
-    }
-}
-
-if (args.save) {
-    EndpointFile.clean();
+    save(index);
 }
 
 if (args.endpoints) {
-    const endpointExports = new TsFile("#endpoints/export");
-    for (const device of MatterModel.standard.deviceTypes) {
-        const file = new EndpointFile(device);
-        if (args.save) {
-            file.save();
-        }
-
-        endpointExports.addReexport(`${file.name}.js`);
+    if (args.save) {
+        EndpointFile.clean();
     }
+
+    const endpointIndices = {} as Record<string, TsFile>;
+
+    for (const device of MatterModel.standard.deviceTypes) {
+        const file = new EndpointFile(device, endpointIndices);
+        save(file);
+    }
+
+    Object.values(endpointIndices).forEach(save);
+}
+
+if (args.tags) {
+    const tagIndex = new TsFile("!tags/index");
     for (const ns of MatterModel.standard.semanticNamespaces) {
         const file = new SemanticNamespaceFile(ns);
-        if (args.save) {
-            file.save();
-        }
-        endpointExports.addReexport(`${file.name}.js`);
+        save(file);
+        tagIndex.addReexport(`${file.name}.js`);
     }
+    save(tagIndex);
 }
 
 function generateClusterFile(
@@ -89,9 +98,13 @@ function generateClusterFile(
     const filename = `${dir}/${cluster.name}${type.baseName}`;
     if (args[`${type.baseName.toLowerCase()}s`]) {
         const file = new type(filename, cluster, variance);
-        if (args.save) {
-            file.save();
-        }
+        save(file);
     }
     exports.addReexport(`${filename}.js`);
+}
+
+function save(file: TsFile) {
+    if (args.save) {
+        file.save();
+    }
 }

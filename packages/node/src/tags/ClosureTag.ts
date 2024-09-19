@@ -1,0 +1,36 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*** THIS FILE IS GENERATED, DO NOT EDIT ***/
+
+import { SemanticNamespace } from "../endpoint/type/SemanticNamespace.js";
+
+/**
+ * The tags contained in this namespace may be used in any domain or context, to indicate an association with a feature
+ * of a Closure, e.g. the button to activate opening a garage door.
+ *
+ * @see {@link MatterSpecification.v13.Namespace} § 2
+ */
+export const ClosureTag = SemanticNamespace({
+    id: 0x1,
+
+    tags: {
+        /**
+         * Move toward open position
+         */
+        Opening: { id: 0x0, label: "Opening" },
+
+        /**
+         * Move toward closed position
+         */
+        Closing: { id: 0x1, label: "Closing" },
+
+        /**
+         * Stop any movement
+         */
+        Stop: { id: 0x2, label: "Stop" }
+    }
+});

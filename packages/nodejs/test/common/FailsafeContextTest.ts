@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { EndpointNumber } from "#types";
 import {
     ClusterServer,
     CommissioningServerFailsafeContext,
     NetworkCommissioning,
 } from "@project-chip/matter.js/cluster";
-import { EndpointNumber } from "@project-chip/matter.js/datatype";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
 import * as assert from "assert";
 

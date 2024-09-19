@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Diagnostic, Logger } from "@project-chip/matter.js-general";
-import { DeviceTypeElement, FieldElement, RequirementElement } from "@project-chip/matter.js-model";
+import { Diagnostic, Logger } from "#general";
+import { DeviceClassification, DeviceTypeElement, FieldElement, RequirementElement } from "#model";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
 import { ConstraintStr, Identifier, Integer, LowerIdentifier, Str } from "./html-translators.js";
@@ -43,7 +43,7 @@ function createDevice(deviceRef: DeviceReference) {
     if (deviceRef.name === "Base") {
         return DeviceTypeElement({
             name: "Base",
-            classification: DeviceTypeElement.Classification.Base,
+            classification: DeviceClassification.Base,
             xref: deviceRef.xref,
         });
     }
@@ -63,13 +63,13 @@ function createDevice(deviceRef: DeviceReference) {
 
     let classification;
     if (metadata.class === "simple") {
-        classification = DeviceTypeElement.Classification.Simple;
+        classification = DeviceClassification.Simple;
     } else if (metadata.class === "dynamicutility") {
-        classification = DeviceTypeElement.Classification.Dynamic;
+        classification = DeviceClassification.Dynamic;
     } else if (metadata.class === "node") {
-        classification = DeviceTypeElement.Classification.Node;
+        classification = DeviceClassification.Node;
     } else if (metadata.class === "utility") {
-        classification = DeviceTypeElement.Classification.Utility;
+        classification = DeviceClassification.Utility;
     }
 
     if (!classification) {

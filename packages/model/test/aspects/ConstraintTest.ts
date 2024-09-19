@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Constraint } from "../../src/aspects/Constraint.js";
+import { Constraint } from "#aspects/Constraint.js";
 
 const TEST_CONSTRAINTS: [text: string, ast: Constraint.Ast, expectedText?: string][] = [
     ["0", { value: 0 }],
