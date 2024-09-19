@@ -32,9 +32,10 @@ export class PowerTopologyServerLogic extends PowerTopologyBase {
             this.agent.get(DescriptorServer).addDeviceTypes("ElectricalSensor");
         }
 
-        this.#assertActiveEndpointsAllowed(this.state.activeEndpoints);
-
-        this.reactTo(this.events.activeEndpoints$Changing, this.#assertActiveEndpointsAllowed);
+        if (this.state.activeEndpoints !== undefined) {
+            this.#assertActiveEndpointsAllowed(this.state.activeEndpoints);
+            this.reactTo(this.events.activeEndpoints$Changing, this.#assertActiveEndpointsAllowed);
+        }
     }
 
     #assertActiveEndpointsAllowed(list: EndpointNumber[]) {
