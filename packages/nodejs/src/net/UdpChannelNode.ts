@@ -131,7 +131,7 @@ export class UdpChannelNode implements UdpChannel {
             this.socket.send(data, port, host, error => {
                 if (error !== null) {
                     const netError =
-                        error instanceof Error && error.message.includes("EHOSTUNREACH")
+                        error instanceof Error && "code" in error && error.code === "EHOSTUNREACH"
                             ? new RetransmissionLimitReachedError(error.message)
                             : new NetworkError(error.message);
                     netError.stack = error.stack;

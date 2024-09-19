@@ -868,6 +868,7 @@ export class SubscriptionHandler {
                 await this.cancel(false, true);
             } else {
                 StatusResponseError.accept(error);
+                logger.info(`Subscription ${this.subscriptionId} update failed:`, error);
                 await this.cancel(false);
             }
         } finally {
