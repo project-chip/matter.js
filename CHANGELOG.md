@@ -46,6 +46,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter.js/nodejs-ble
     -   The BLE specialization for Node.js is moved here.  `@project-chip/matter-node-ble.js` remains as a compatibility import.
 
+-   matter.js-protocol:
+    -   Limits the number of parallel exchanges to 5
+
 -   @matter.js/main:
     -   This package is a new "one-and-done" dependency for applications.  It automatically loads platform specialization and reexports pacakages above as appropriate
 
