@@ -115,6 +115,7 @@ To unpair a node use `commission unpair <node-id>`. This will remove the node fr
 The shell supports reading and writing attributes (top level command `attributes` or `a` as alias), reading events (`events`/`e`) and invoking commands (`commands`/`c`) on the node. Below these top level commands the full list of the officially defined clusters is available to be used. See the help for the relevant cluster for more details.
 
 For reading attributes also a bulk read for all attributes is supported and with the `by-id` variant you can read and attribute from any cluster including custom clusters.
+Attribute reads are done locally (when connected with a subscription and attribute is subscribable) by default. For remote reads (always from the node) add the `--remote` parameter. Unknown attributes or attributes from unknown clusters are always read remotely.
 
 Writing attributes and executing commands (when the request requires data) these can be provided as JSON when it is no simple type. The shell will try to parse the JSON and send the data to the node. Binary data and Numbers >56bit needs to be provided as strings in this JSON and are automatically converted.
 For convenience reasons any number in the value to write or invoke data can be provided as hex string by prefixing it with `0x` (e.g. `"0x1234"`) and is then also converted automatically.
@@ -122,7 +123,8 @@ When sending complex JSON content ideally use single quotes around the json beca
 
 Some examples:
 
--   `attributes basicinformation read all 5000 0` reads all attributes from the Basic Information cluster from node 5000 endpoint 0
+-   `attributes basicinformation read all 5000 0` reads all attributes from the Basic Information cluster from node 5000 endpoint 0 (reads values locally when connected with subscription, else remote)
+-   `attributes basicinformation read all 5000 0 --remote` reads all attributes from the Basic Information cluster from node 5000 endpoint 0 always from remote (also when connected with a subscription)
 -   `attributes basicinformation read nodelabel 5000 0` reads the attribute "nodelabel" from the Basic Information cluster from node 5000 endpoint 0
 -   `attributes basicinformation read 0x5 5000 0` reads the attribute "nodelabel" (aliased with it's hex attribute id) from the Basic Information cluster from node 5000 endpoint 0
 -   `attributes by-id 0x28 read 0x5 5000 0` also reads the attribute "nodelabel" from the Basic Information cluster from node 5000 endpoint 0, but as generic read from the cluster with id 0x28 (also the decimal value 40 can be used)
