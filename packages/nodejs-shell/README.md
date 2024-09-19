@@ -45,6 +45,7 @@ matter-node> help
   attributes                               Read and Write attributes
   events                                   Read events
   commands                                 Invoke commands
+  tlv                                      TLV decoding tools
   exit                                     Exit
 ```
 
