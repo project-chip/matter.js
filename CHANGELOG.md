@@ -47,6 +47,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 -   @matter.js/protocol:
     -   Low-level Matter logic previously defined in `@project-chip/matter.js` now resides in `@matter.js/protocol`.  This includes network communication, fabric management and cluster invocation, read/write, events, etc.
     -   BREAKING: Various types that were previously specialized with template parameters are no longer generic.  This should be largely transparent to API consumers.  Compatibility exports still support the generic parameters in some, but not all, cases.
+    -   Limits the number of parallel exchanges to 5
 
 -   @matter.js/types:
     -   Various definitions previously defined in `@project-chip/matter.js` now reside in `@matter.js/types`.  This includes most TLV structures, cluster definitions, and various support types
