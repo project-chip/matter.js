@@ -22,7 +22,7 @@
     "homepage": "https://github.com/project-chip/matter.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/project-chip/matter.js.git"
+        "url": "git+https://github.com/project-chip/matter.js.git"
     },
     "scripts": {
         "clean": "matter-build clean",

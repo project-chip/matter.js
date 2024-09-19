@@ -22,7 +22,7 @@
     "homepage": "https://github.com/project-chip/matter.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/project-chip/matter.js.git"
+        "url": "git+https://github.com/project-chip/matter.js.git"
     },
     "scripts": {
         "clean": "matter-build clean",
@@ -61,7 +61,6 @@
                 "default": "./dist/cjs/index.js"
             }
         },
-
         "./clusters/*": {
             "import": {
                 "types": "./dist/esm/clusters/*.d.ts",
@@ -72,7 +71,6 @@
                 "default": "./dist/cjs/clusters/*.js"
             }
         },
-        
         "./*": {
             "import": {
                 "types": "./dist/esm/*/index.d.ts",

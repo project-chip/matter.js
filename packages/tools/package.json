@@ -11,10 +11,10 @@
         "version": "node bin/version.js"
     },
     "bin": {
-        "matter-build": "./bin/build.js",
-        "matter-test": "./bin/test.js",
-        "matter-run": "./bin/run.js",
-        "matter-version": "./bin/version.js"
+        "matter-build": "bin/build.js",
+        "matter-test": "bin/test.js",
+        "matter-run": "bin/run.js",
+        "matter-version": "bin/version.js"
     },
     "exports": {
         ".": {
