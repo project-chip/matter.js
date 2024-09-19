@@ -4,13 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    anyPromise,
-    ClassExtends,
-    Logger,
-    NoResponseTimeoutError,
-    serverAddressToString,
-} from "#general";
+import { anyPromise, ClassExtends, Logger, NoResponseTimeoutError, serverAddressToString } from "#general";
 import { NodeId } from "#types";
 import {
     AddressTypeFromDevice,
